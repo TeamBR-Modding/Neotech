@@ -1,16 +1,17 @@
 package com.dyonovan.jatm.client.gui.generators;
 
-import com.dyonovan.jatm.client.gui.BaseGui;
 import com.dyonovan.jatm.common.container.generators.ContainerGenerator;
 import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
 import com.dyonovan.jatm.lib.Constants;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
-public class GuiGenerator extends BaseGui {
+public class GuiGenerator extends GuiContainer {
 
     private TileGenerator tile;
     private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/generator.png");
@@ -34,27 +35,27 @@ public class GuiGenerator extends BaseGui {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F); //Could do some fun colors and transparency here
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(background);
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_CULL_FACE);
         //Render RF energy
         int heightRF = tile.energyRF.getEnergyStored() * 52 / tile.energyRF.getMaxEnergyStored();
-
         Tessellator tessRF = Tessellator.getInstance();
-        tessRF.getWorldRenderer().startDrawingQuads();
-        tessRF.getWorldRenderer().addVertexWithUV(x + 8, y + 78, 0, 0.6875F, 0.35546875F);
-        tessRF.getWorldRenderer().addVertexWithUV(x + 24, y + 78, 0, 0.75F, 0.35546875F);
-        tessRF.getWorldRenderer().addVertexWithUV(x + 24, y + 78 - heightRF, 0, 0.75F, (float) (91 - heightRF) / 256); //256);
-        tessRF.getWorldRenderer().addVertexWithUV(x + 8, y + 78 - heightRF, 0, 0.6875F, (float) (91 - heightRF) / 256);
+        WorldRenderer worldRenderer = tessRF.getWorldRenderer();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.addVertexWithUV(x + 62, y + 34, 50, (float) (176 / 256), (float) (30 / 256));
+        worldRenderer.addVertexWithUV(x + 114 - heightRF, y + 34, 50, (float) ((228 - heightRF) / 256), (float) (30 / 256));
+        worldRenderer.addVertexWithUV(x + 114 - heightRF, y + 18, 50, (float) ((228 - heightRF) / 256), (float) (14 / 256));
+        worldRenderer.addVertexWithUV(x + 62, y + 18, 50, (float) (176 / 256), (float) (14 / 256));
         tessRF.draw();
-
-        super.drawGuiContainerBackgroundLayer(f, i, j);
+        GL11.glPopMatrix();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float par3) {
         super.drawScreen(mouseX, mouseY, par3);
-
 
     }
 }

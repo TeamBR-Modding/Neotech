@@ -2,36 +2,32 @@ package com.dyonovan.jatm.common.tileentity.generator;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import com.dyonovan.jatm.common.container.generators.ContainerGenerator;
-import com.dyonovan.jatm.common.tileentity.InventoryTile;
-import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.*;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox, ISidedInventory {
 
     public EnergyStorage energyRF;
-    public InventoryTile inventory;
+    public ItemStack[] inventory;
     private int currentBurnTime;
     private int totalBurnTime;
 
@@ -46,23 +42,20 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     public TileGenerator() {
         energyRF = new EnergyStorage(10000, 20);
-        inventory = new InventoryTile(1);
+        inventory = new ItemStack[1];
         currentBurnTime = 0;
         totalBurnTime = 0;
         test = 10;
     }
 
     public void generatePower() {
-        if (currentBurnTime > 0 || canRun()) {
+        if (currentBurnTime > 0 || (canRun() && inventory[0] != null)) {
             if (currentBurnTime == 0) {
-                totalBurnTime = getFuelValue(inventory.getStackInSlot(FUEL_SLOT));
+                totalBurnTime = getFuelValue(inventory[0]);
                 if (totalBurnTime == 0) return;
                 currentBurnTime = 1;
-
-
-                inventory.getStackInSlot(FUEL_SLOT).stackSize -= 1;
-                if (inventory.getStackInSlot(FUEL_SLOT).stackSize == 1) inventory.clearStackInSlot(FUEL_SLOT);
-
+                if (inventory[0].stackSize == 1) inventory[0] = null;
+                else inventory[0].stackSize -= 1;
                 worldObj.markBlockForUpdate(this.pos);
             }
             if (currentBurnTime > 0 && currentBurnTime < totalBurnTime) {
@@ -73,13 +66,12 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
                 currentBurnTime = 0;
                 totalBurnTime = 0;
             }
-
         }
 
     }
 
     public boolean canRun() {
-        return energyRF.getEnergyStored() < energyRF.getMaxEnergyStored() && inventory.getStackInSlot(FUEL_SLOT) != null;
+        return energyRF.getEnergyStored() < energyRF.getMaxEnergyStored();
     }
 
     private int getFuelValue(ItemStack itemStack) {
@@ -157,18 +149,44 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
-        inventory.readFromNBT(tag, this);
         currentBurnTime = tag.getInteger("CurrentBurnTime");
         totalBurnTime = tag.getInteger("TotalBurnTime");
+
+        NBTTagList itemsTag = tag.getTagList("Items", 10);
+        for (int i = 0; i < itemsTag.tagCount(); i++)
+        {
+            NBTTagCompound nbtTagCompound1 = itemsTag.getCompoundTagAt(i);
+            NBTBase nbt = nbtTagCompound1.getTag("Slot");
+            int j;
+            if ((nbt instanceof NBTTagByte)) {
+                j = nbtTagCompound1.getByte("Slot") & 0xFF;
+            } else {
+                j = nbtTagCompound1.getShort("Slot");
+            }
+            if ((j >= 0) && (j < this.inventory.length)) {
+                this.inventory[j] = ItemStack.loadItemStackFromNBT(nbtTagCompound1);
+            }
+        }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
-        inventory.writeToNBT(tag);
         tag.setInteger("CurrentBurnTime", currentBurnTime);
         tag.setInteger("TotalBurnTime", totalBurnTime);
+
+        NBTTagList nbtTagList = new NBTTagList();
+        for (int i = 0; i < this.inventory.length; i++) {
+            if (this.inventory[i] != null)
+            {
+                NBTTagCompound nbtTagCompound1 = new NBTTagCompound();
+                nbtTagCompound1.setShort("Slot", (short)i);
+                this.inventory[i].writeToNBT(nbtTagCompound1);
+                nbtTagList.appendTag(nbtTagCompound1);
+            }
+        }
+        tag.setTag("Items", nbtTagList);
     }
 
     /*******************************************************************************************************************
@@ -192,12 +210,12 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public int getSizeInventory() {
-        return inventory.getSizeInventory();
+        return inventory.length;
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        return inventory.getStackInSlot(index);
+        return inventory[index];
     }
 
     @Override
@@ -224,7 +242,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        inventory.setStackInSlot(stack, index);
+        inventory[index] = stack;
     }
 
     @Override
@@ -283,8 +301,8 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public void clear() {
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-            inventory.setStackInSlot(null, i);
+        for (int i = 0; i < inventory.length; i++) {
+            inventory[i] = null;
         }
     }
 
