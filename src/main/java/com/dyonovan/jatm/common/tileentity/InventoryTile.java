@@ -19,6 +19,7 @@ public class InventoryTile {
     public void setStackInSlot(ItemStack stack, int slot) {
         inventory[slot] = stack;
     }
+    public void clearStackInSlot(int slot) { inventory[slot] = null; }
     public int getSizeInventory() {
         return inventory.length;
     }

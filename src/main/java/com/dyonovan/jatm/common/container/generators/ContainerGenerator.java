@@ -1,8 +1,9 @@
 package com.dyonovan.jatm.common.container.generators;
 
 import com.dyonovan.jatm.common.container.BaseContainer;
-import com.dyonovan.jatm.common.tileentity.TileGenerator;
+import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceFuel;
 
 public class ContainerGenerator extends BaseContainer {
@@ -13,14 +14,7 @@ public class ContainerGenerator extends BaseContainer {
 
         this.tile = tileGenerator;
 
-        addSlotToContainer(new SlotFurnaceFuel(inventory, 0, 67, 44));
+        addSlotToContainer(new SlotFurnaceFuel(tileGenerator, TileGenerator.FUEL_SLOT, 80, 53));
         bindPlayerInventory(inventory, 8, 84);
-    }
-
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-
-
     }
 }

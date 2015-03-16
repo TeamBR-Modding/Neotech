@@ -1,15 +1,20 @@
-package com.dyonovan.jatm.common.tileentity;
+package com.dyonovan.jatm.common.tileentity.generator;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import com.dyonovan.jatm.common.container.generators.ContainerGenerator;
+import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import com.dyonovan.jatm.lib.Constants;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -20,6 +25,7 @@ import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox, ISidedInventory {
@@ -36,8 +42,10 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
      */
     private static final int RF_TICK = 20;
 
+    public static final int FUEL_SLOT = 0;
+
     public TileGenerator() {
-        energyRF = new EnergyStorage(10000, 80);
+        energyRF = new EnergyStorage(10000, 20);
         inventory = new InventoryTile(1);
         currentBurnTime = 0;
         totalBurnTime = 0;
@@ -47,13 +55,15 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
     public void generatePower() {
         if (currentBurnTime > 0 || canRun()) {
             if (currentBurnTime == 0) {
-                totalBurnTime = GameRegistry.getFuelValue(inventory.getStackInSlot(0));
+                totalBurnTime = getFuelValue(inventory.getStackInSlot(FUEL_SLOT));
                 if (totalBurnTime == 0) return;
                 currentBurnTime = 1;
 
-                if (inventory.getStackInSlot(0).stackSize == 1) inventory.setStackInSlot(null, 0);
-                else inventory.getStackInSlot(0).stackSize -= 1;
-                this.markDirty();
+
+                inventory.getStackInSlot(FUEL_SLOT).stackSize -= 1;
+                if (inventory.getStackInSlot(FUEL_SLOT).stackSize == 1) inventory.clearStackInSlot(FUEL_SLOT);
+
+                worldObj.markBlockForUpdate(this.pos);
             }
             if (currentBurnTime > 0 && currentBurnTime < totalBurnTime) {
                 energyRF.modifyEnergyStored(RF_TICK);
@@ -63,12 +73,45 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
                 currentBurnTime = 0;
                 totalBurnTime = 0;
             }
+
         }
 
     }
 
     public boolean canRun() {
-        return energyRF.getEnergyStored() < energyRF.getMaxEnergyStored() && inventory.getStackInSlot(0) != null;
+        return energyRF.getEnergyStored() < energyRF.getMaxEnergyStored() && inventory.getStackInSlot(FUEL_SLOT) != null;
+    }
+
+    private int getFuelValue(ItemStack itemStack) {
+        if (itemStack == null) return 0;
+
+        Item item = itemStack.getItem();
+        if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air) {
+            Block block = Block.getBlockFromItem(item);
+            if (block == Blocks.wooden_slab)
+            {
+                return 150;
+            }
+
+            if (block.getMaterial() == Material.wood)
+            {
+                return 300;
+            }
+
+            if (block == Blocks.coal_block)
+            {
+                return 16000;
+            }
+        }
+        if (item instanceof ItemTool && ((ItemTool)item).getToolMaterialName().equals("WOOD")) return 200;
+        if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD")) return 200;
+        if (item instanceof ItemHoe && ((ItemHoe)item).getMaterialName().equals("WOOD")) return 200;
+        if (item == Items.stick) return 100;
+        if (item == Items.coal) return 1600;
+        if (item == Items.lava_bucket) return 20000;
+        if (item == Item.getItemFromBlock(Blocks.sapling)) return 100;
+        if (item == Items.blaze_rod) return 2400;
+        return net.minecraftforge.fml.common.registry.GameRegistry.getFuelValue(itemStack);
     }
 
     /*******************************************************************************************************************
@@ -264,7 +307,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
     public Packet getDescriptionPacket() {
         NBTTagCompound tag = new NBTTagCompound();
         this.writeToNBT(tag);
-        return new S35PacketUpdateTileEntity(this.getPos(), 1, tag);
+        return new S35PacketUpdateTileEntity(this.pos, 1, tag);
     }
 
     @Override

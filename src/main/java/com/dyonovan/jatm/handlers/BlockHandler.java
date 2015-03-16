@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.handlers;
 
 import com.dyonovan.jatm.common.blocks.BlockGenerator;
-import com.dyonovan.jatm.common.tileentity.TileGenerator;
+import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 

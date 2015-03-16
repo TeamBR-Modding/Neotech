@@ -2,7 +2,7 @@ package com.dyonovan.jatm.handlers;
 
 import com.dyonovan.jatm.client.gui.generators.GuiGenerator;
 import com.dyonovan.jatm.common.container.generators.ContainerGenerator;
-import com.dyonovan.jatm.common.tileentity.TileGenerator;
+import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;

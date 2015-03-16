@@ -2,7 +2,7 @@ package com.dyonovan.jatm.client.gui.generators;
 
 import com.dyonovan.jatm.client.gui.BaseGui;
 import com.dyonovan.jatm.common.container.generators.ContainerGenerator;
-import com.dyonovan.jatm.common.tileentity.TileGenerator;
+import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -24,7 +24,7 @@ public class GuiGenerator extends BaseGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         final String invTitle = "RF Generator";
-        fontRendererObj.drawString(invTitle, (fontRendererObj.getStringWidth(invTitle) / 2), 6, 4210752);
+        fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 05, ySize - 96 + 2, 4210752);
     }
 
@@ -48,7 +48,7 @@ public class GuiGenerator extends BaseGui {
         tessRF.getWorldRenderer().addVertexWithUV(x + 8, y + 78 - heightRF, 0, 0.6875F, (float) (91 - heightRF) / 256);
         tessRF.draw();
 
-        //super.drawGuiContainerBackgroundLayer(f, i, j);
+        super.drawGuiContainerBackgroundLayer(f, i, j);
     }
 
     @Override
