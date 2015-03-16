@@ -1,6 +1,6 @@
 package com.dyonovan.jatm.handlers;
 
-import com.dyonovan.jatm.blocks.BlockGenerator;
+import com.dyonovan.jatm.common.blocks.BlockGenerator;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;

@@ -1,24 +1,35 @@
-package com.dyonovan.jatm.tileentity;
+package com.dyonovan.jatm.common.tileentity;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import com.dyonovan.jatm.common.container.generators.ContainerGenerator;
+import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityLockable;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox, ISidedInventory {
 
-    protected EnergyStorage energyRF;
+    public EnergyStorage energyRF;
     public InventoryTile inventory;
     private int currentBurnTime;
     private int totalBurnTime;
+
+    public int test;
 
     /**
      * Energy Use per Tick
@@ -30,6 +41,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
         inventory = new InventoryTile(1);
         currentBurnTime = 0;
         totalBurnTime = 0;
+        test = 10;
     }
 
     public void generatePower() {
@@ -112,7 +124,8 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
         inventory.writeToNBT(tag);
-
+        tag.setInteger("CurrentBurnTime", currentBurnTime);
+        tag.setInteger("TotalBurnTime", totalBurnTime);
     }
 
     /*******************************************************************************************************************
@@ -233,8 +246,8 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
     }
 
     @Override
-    public String getName() {
-        return null;
+    public String getCommandSenderName() {
+        return "container.modernalchemy:generator.name";
     }
 
     @Override
@@ -244,8 +257,19 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public IChatComponent getDisplayName() {
-        return null;
+        return new ChatComponentTranslation(this.getCommandSenderName());
     }
 
+    @Override
+    public Packet getDescriptionPacket() {
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeToNBT(tag);
+        return new S35PacketUpdateTileEntity(this.getPos(), 1, tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.getNbtCompound());
+    }
 
 }

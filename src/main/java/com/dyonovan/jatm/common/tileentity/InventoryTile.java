@@ -1,4 +1,4 @@
-package com.dyonovan.jatm.tileentity;
+package com.dyonovan.jatm.common.tileentity;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
