@@ -1,5 +1,8 @@
 {
   "variants": {
-    "normal": { "model": "jatm:blockGenerator" }
+      "facing=north": { "model": "jatm:blockGenerator" },
+      "facing=south": { "model": "jatm:blockGenerator", "y": 180 },
+      "facing=west":  { "model": "jatm:blockGenerator", "y": 270 },
+      "facing=east":  { "model": "jatm:blockGenerator", "y": 90 }
   }
 }

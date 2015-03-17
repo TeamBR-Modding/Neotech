@@ -1,21 +1,27 @@
 package com.dyonovan.jatm.common.blocks;
 
 import com.dyonovan.jatm.JATM;
+import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
 import com.dyonovan.jatm.handlers.GuiHandler;
 import com.dyonovan.jatm.lib.Constants;
-import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockGenerator extends BlockContainer {
 
+    public static final PropertyDirection PROPERTYFACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     private final String name = "blockGenerator";
 
     public BlockGenerator() {
@@ -56,9 +62,33 @@ public class BlockGenerator extends BlockContainer {
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState blockState) {
-        super.onBlockAdded(world, pos, blockState);
-        world.markBlockForUpdate(pos);
+    protected BlockState createBlockState()
+    {
+        return new BlockState(this, new IProperty[] {PROPERTYFACING});
     }
 
+    @Override
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+    {
+        int playerFacingDirection = (placer == null) ? 0 : MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3;
+        EnumFacing enumfacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
+        return this.getDefaultState().withProperty(PROPERTYFACING, enumfacing);
+    }
+
+    public IBlockState getStateFromMeta(int meta)
+    {
+        EnumFacing enumfacing = EnumFacing.getFront(meta);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+        {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        return this.getDefaultState().withProperty(PROPERTYFACING, enumfacing);
+    }
+
+    public int getMetaFromState(IBlockState state)
+    {
+        return ((EnumFacing)state.getValue(PROPERTYFACING)).getIndex();
+    }
 }

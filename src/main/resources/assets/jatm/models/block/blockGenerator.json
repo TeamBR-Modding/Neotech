@@ -1,6 +1,8 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/orientable",
   "textures": {
-    "all": "jatm:blocks/blockGenerator"
+    "front": "jatm:blocks/blockGenerator_front",
+    "top": "jatm:blocks/blockGenerator_side",
+    "side": "jatm:blocks/blockGenerator_side"
   }
 }

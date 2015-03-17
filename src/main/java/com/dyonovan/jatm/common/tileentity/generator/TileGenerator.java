@@ -20,6 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
 
 public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox, ISidedInventory {
 
@@ -44,6 +45,9 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public void update() {
+        if (!this.hasWorldObj()) return;
+        World world = this.getWorld();
+        if (world.isRemote) return;
         if (currentBurnTime > 0 || (energyRF.getEnergyStored() < energyRF.getMaxEnergyStored() && inventory != null)) {
             if (currentBurnTime == 0) {
                 totalBurnTime = getFuelValue(inventory.getStackInSlot(FUEL_SLOT));
@@ -60,6 +64,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
                 currentBurnTime = 0;
                 totalBurnTime = 0;
             }
+            world.markBlockForUpdate(this.pos);
         }
     }
 
