@@ -30,7 +30,7 @@ public class JATM {
     public static CreativeTabs tabJATM = new CreativeTabs("tabJATM") {
         @Override
         public Item getTabIconItem() {
-            return Items.diamond;
+            return Item.getItemFromBlock(BlockHandler.electricFurnace);
         }
     };
 

@@ -12,8 +12,6 @@ import net.minecraft.world.World;
 
 public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerListBox {
 
-    public EnergyStorage energyRF;
-    public InventoryTile inventory;
     public int currentProcessTime;
     private ItemStack input, output;
 
@@ -28,15 +26,21 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         inventory = new InventoryTile(2);
     }
 
-    private void doSmelt() {
+    @Override
+    public void update() {
+        if (!this.hasWorldObj()) return;
+        World world = this.getWorld();
+        if (world.isRemote) return;
+
         if (canSmelt() || currentProcessTime > 0) {
             if (currentProcessTime == 0) {
                 input = inventory.getStackInSlot(INPUT_SLOT);
                 currentProcessTime = 1;
             }
             if (currentProcessTime > 0 && currentProcessTime < TOTAL_PROCESS_TIME) {
-                if (inventory.getStackInSlot(INPUT_SLOT) == null || inventory.getStackInSlot(INPUT_SLOT).isItemEqual(input)) {
+                if (inventory.getStackInSlot(INPUT_SLOT) == null || !inventory.getStackInSlot(INPUT_SLOT).isItemEqual(input)) {
                     currentProcessTime = 0;
+                    world.markBlockForUpdate(this.pos);
                     return;
                 }
                 if (energyRF.getEnergyStored() >= RF_TICK ) {
@@ -48,9 +52,10 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                 inventory.modifyStack(INPUT_SLOT, -1);
                 if (inventory.getStackInSlot(OUTPUT_SLOT) == null)
                     inventory.setStackInSlot(output, OUTPUT_SLOT);
-                else inventory.getStackInSlot(OUTPUT_SLOT).stackSize += output.stackSize;
+                else inventory.getStackInSlot(OUTPUT_SLOT).stackSize += 1;
                 currentProcessTime = 0;
             }
+            world.markBlockForUpdate(this.pos);
         }
     }
 
@@ -69,7 +74,9 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return energyRF.receiveEnergy(maxReceive, simulate);
+        int actual = energyRF.receiveEnergy(maxReceive, simulate);
+        if (actual > 0) this.getWorld().markBlockForUpdate(this.pos);
+        return actual;
     }
 
     @Override
@@ -135,14 +142,6 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     /*******************************************************************************************************************
      **************************************** Tile Functions ***********************************************************
      *******************************************************************************************************************/
-
-    @Override
-    public void update() {
-        if (!this.hasWorldObj()) return;
-        World world = this.getWorld();
-        if (world.isRemote) return;
-        doSmelt();
-    }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {

@@ -54,6 +54,7 @@ public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUp
                 TileEntity tile = world.getTileEntity(this.pos.offset(dir));
                 if (tile instanceof IEnergyReceiver) {
                     energyRF.extractEnergy(((IEnergyHandler) tile).receiveEnergy(dir, energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
+                    world.markBlockForUpdate(this.pos);
                 }
             }
         }
@@ -200,7 +201,7 @@ public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUp
             }
             itemstack = itemstack.splitStack(count);
         }
-        worldObj.markBlockForUpdate(this.getPos());
+        this.getWorld().markBlockForUpdate(this.getPos());
         return itemstack;
     }
 

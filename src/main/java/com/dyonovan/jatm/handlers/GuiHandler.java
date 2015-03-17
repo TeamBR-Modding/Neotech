@@ -1,8 +1,8 @@
 package com.dyonovan.jatm.handlers;
 
-import com.dyonovan.jatm.client.gui.GuiElectricFurnace;
+import com.dyonovan.jatm.client.gui.machine.GuiElectricFurnace;
 import com.dyonovan.jatm.client.gui.generators.GuiCoalGenerator;
-import com.dyonovan.jatm.common.container.ContainerElectricFurnace;
+import com.dyonovan.jatm.common.container.machine.ContainerElectricFurnace;
 import com.dyonovan.jatm.common.container.generators.ContainerCoalGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileCoalGenerator;
