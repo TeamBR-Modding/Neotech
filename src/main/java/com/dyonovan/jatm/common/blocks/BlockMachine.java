@@ -1,12 +1,9 @@
 package com.dyonovan.jatm.common.blocks;
 
 import com.dyonovan.jatm.JATM;
-import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
-import com.dyonovan.jatm.handlers.GuiHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -17,20 +14,23 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
-public class BlockGenerator extends BlockContainer {
+public class BlockMachine extends BlockContainer {
 
-    public static final PropertyDirection PROPERTYFACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    private final String name = "blockGenerator";
+    public static final PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    private String name;
+    private int guiID;
+    protected Class<? extends TileEntity> tileClass;
 
-    public BlockGenerator() {
+    public BlockMachine(String name, Class<? extends TileEntity> tileClass, int guiID) {
         super(Material.iron);
-        GameRegistry.registerBlock(this, name);
-
         this.setUnlocalizedName(Constants.MODID + "_" + name);
         this.setCreativeTab(JATM.tabJATM);
         this.setHardness(1.5F);
+
+        this.name = name;
+        this.tileClass = tileClass;
+        this.guiID = guiID;
     }
 
     public String getName() {
@@ -39,7 +39,12 @@ public class BlockGenerator extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileGenerator();
+        try {
+            return tileClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -53,10 +58,10 @@ public class BlockGenerator extends BlockContainer {
 
         if (world.isRemote) return true;
         else {
-            TileGenerator tile = (TileGenerator)world.getTileEntity(pos);
+            TileEntity tile =  world.getTileEntity(pos);
             if (tile != null) {
-                player.openGui(JATM.instance, GuiHandler.GENERATOR_GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
-                            }
+                player.openGui(JATM.instance, guiID, world, pos.getX(), pos.getY(), pos.getZ());
+            }
         }
         return true;
     }
@@ -64,7 +69,7 @@ public class BlockGenerator extends BlockContainer {
     @Override
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {PROPERTYFACING});
+        return new BlockState(this, PROPERTY_FACING);
     }
 
     @Override
@@ -72,7 +77,7 @@ public class BlockGenerator extends BlockContainer {
     {
         int playerFacingDirection = (placer == null) ? 0 : MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3;
         EnumFacing enumfacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
-        return this.getDefaultState().withProperty(PROPERTYFACING, enumfacing);
+        return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);
     }
 
     public IBlockState getStateFromMeta(int meta)
@@ -84,11 +89,11 @@ public class BlockGenerator extends BlockContainer {
             enumfacing = EnumFacing.NORTH;
         }
 
-        return this.getDefaultState().withProperty(PROPERTYFACING, enumfacing);
+        return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);
     }
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((EnumFacing)state.getValue(PROPERTYFACING)).getIndex();
+        return ((EnumFacing)state.getValue(PROPERTY_FACING)).getIndex();
     }
 }
