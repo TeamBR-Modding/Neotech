@@ -1,0 +1,8 @@
+{
+  "variants": {
+      "facing=north": { "model": "jatm:electricFurnace" },
+      "facing=south": { "model": "jatm:electricFurnace", "y": 180 },
+      "facing=west":  { "model": "jatm:electricFurnace", "y": 270 },
+      "facing=east":  { "model": "jatm:electricFurnace", "y": 90 }
+  }
+}

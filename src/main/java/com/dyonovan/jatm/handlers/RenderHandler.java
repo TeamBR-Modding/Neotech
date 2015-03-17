@@ -12,6 +12,7 @@ public class RenderHandler {
     public static void init() {
         //coalGenerator
         register(BlockHandler.coalGenerator, ((BlockMachine) BlockHandler.coalGenerator).getName());
+        register(BlockHandler.electricFurnace, ((BlockMachine) BlockHandler.coalGenerator).getName());
     }
 
     public static void register(Block block, String blockName) {

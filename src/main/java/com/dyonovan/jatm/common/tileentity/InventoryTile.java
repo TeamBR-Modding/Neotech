@@ -22,6 +22,10 @@ public class InventoryTile {
     public int getSizeInventory() {
         return inventory.length;
     }
+    public void modifyStack(int slot, int amount) {
+        inventory[slot].stackSize = inventory[slot].stackSize + amount;
+        if (inventory[slot].stackSize == 0) inventory[slot] = null;
+    }
     public ItemStack [] getValues() { return inventory; }
     public void clear() {
         for(int i = 0; i < inventory.length; i++)
