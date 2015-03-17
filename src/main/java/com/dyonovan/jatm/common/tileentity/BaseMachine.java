@@ -2,7 +2,6 @@ package com.dyonovan.jatm.common.tileentity;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
-import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -24,27 +23,27 @@ public class BaseMachine extends TileEntity implements IEnergyHandler, ISidedInv
      *******************************************************************************************************************/
 
     @Override
-    public int receiveEnergy(EnumFaceDirection from, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         return 0;
     }
 
     @Override
-    public int extractEnergy(EnumFaceDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         return 0;
     }
 
     @Override
-    public int getEnergyStored(EnumFaceDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         return energyRF.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(EnumFaceDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         return energyRF.getMaxEnergyStored();
     }
 
     @Override
-    public boolean canConnectEnergy(EnumFaceDirection from) {
+    public boolean canConnectEnergy(EnumFacing from) {
         return false;
     }
 

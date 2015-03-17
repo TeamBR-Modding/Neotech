@@ -3,7 +3,6 @@ package com.dyonovan.jatm.common.tileentity.machine;
 import cofh.api.energy.EnergyStorage;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
-import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -69,12 +68,12 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
      *******************************************************************************************************************/
 
     @Override
-    public int receiveEnergy(EnumFaceDirection from, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         return energyRF.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
-    public int extractEnergy(EnumFaceDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         return 0;
     }
 
@@ -89,17 +88,17 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
 
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return true;
+        return index == 0;
     }
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return true;
+        return index == 1;
     }
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return false;//TODO
+        return FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(INPUT_SLOT)) != null;
     }
 
     @Override

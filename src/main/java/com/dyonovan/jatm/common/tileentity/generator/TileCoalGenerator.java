@@ -2,10 +2,10 @@ package com.dyonovan.jatm.common.tileentity.generator;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -48,6 +48,16 @@ public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUp
         if (!this.hasWorldObj()) return;
         World world = this.getWorld();
         if (world.isRemote) return;
+
+        if ((energyRF.getEnergyStored() > 0)) {
+            for (EnumFacing dir : EnumFacing.VALUES) {
+                TileEntity tile = world.getTileEntity(this.pos.offset(dir));
+                if (tile instanceof IEnergyReceiver) {
+                    energyRF.extractEnergy(((IEnergyHandler) tile).receiveEnergy(dir, energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
+                }
+            }
+        }
+
         if (currentBurnTime > 0 || (energyRF.getEnergyStored() < energyRF.getMaxEnergyStored() && inventory != null)) {
             if (currentBurnTime == 0) {
                 totalBurnTime = getFuelValue(inventory.getStackInSlot(FUEL_SLOT));
@@ -106,27 +116,27 @@ public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUp
      *******************************************************************************************************************/
 
     @Override
-    public int receiveEnergy(EnumFaceDirection from, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         return 0;
     }
 
     @Override
-    public int extractEnergy(EnumFaceDirection from, int maxExtract, boolean simulate) {
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         return energyRF.extractEnergy(maxExtract, simulate);
     }
 
     @Override
-    public int getEnergyStored(EnumFaceDirection from) {
+    public int getEnergyStored(EnumFacing from) {
         return energyRF.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(EnumFaceDirection from) {
+    public int getMaxEnergyStored(EnumFacing from) {
         return energyRF.getMaxEnergyStored();
     }
 
     @Override
-    public boolean canConnectEnergy(EnumFaceDirection from) {
+    public boolean canConnectEnergy(EnumFacing from) {
         return true;
     }
 
