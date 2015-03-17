@@ -3,7 +3,6 @@ package com.dyonovan.jatm.common.container.generators;
 import com.dyonovan.jatm.common.container.BaseContainer;
 import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceFuel;
 
 public class ContainerGenerator extends BaseContainer {
@@ -18,3 +17,4 @@ public class ContainerGenerator extends BaseContainer {
         bindPlayerInventory(inventory, 8, 84);
     }
 }
+

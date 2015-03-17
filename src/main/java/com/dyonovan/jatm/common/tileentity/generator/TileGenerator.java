@@ -2,6 +2,7 @@ package com.dyonovan.jatm.common.tileentity.generator;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.EnumFaceDirection;
@@ -10,10 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -22,19 +20,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox, ISidedInventory {
 
     public EnergyStorage energyRF;
-    public ItemStack[] inventory;
-    private int currentBurnTime;
-    private int totalBurnTime;
-
-    public int test;
+    public InventoryTile inventory;
+    public int currentBurnTime;
+    public int totalBurnTime;
 
     /**
-     * Energy Use per Tick
+     * Energy Creation per Tick
      */
     private static final int RF_TICK = 20;
 
@@ -42,21 +37,20 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     public TileGenerator() {
         energyRF = new EnergyStorage(10000, 20);
-        inventory = new ItemStack[1];
         currentBurnTime = 0;
         totalBurnTime = 0;
-        test = 10;
+        inventory = new InventoryTile(1);
     }
 
-    public void generatePower() {
-        if (currentBurnTime > 0 || (canRun() && inventory[0] != null)) {
+    @Override
+    public void update() {
+        if (currentBurnTime > 0 || (energyRF.getEnergyStored() < energyRF.getMaxEnergyStored() && inventory != null)) {
             if (currentBurnTime == 0) {
-                totalBurnTime = getFuelValue(inventory[0]);
+                totalBurnTime = getFuelValue(inventory.getStackInSlot(FUEL_SLOT));
                 if (totalBurnTime == 0) return;
                 currentBurnTime = 1;
-                if (inventory[0].stackSize == 1) inventory[0] = null;
-                else inventory[0].stackSize -= 1;
-                worldObj.markBlockForUpdate(this.pos);
+                if (inventory.getStackInSlot(FUEL_SLOT).stackSize == 1) inventory.setStackInSlot(null, FUEL_SLOT);
+                else inventory.getStackInSlot(FUEL_SLOT).stackSize -= 1;
             }
             if (currentBurnTime > 0 && currentBurnTime < totalBurnTime) {
                 energyRF.modifyEnergyStored(RF_TICK);
@@ -67,12 +61,8 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
                 totalBurnTime = 0;
             }
         }
-
     }
 
-    public boolean canRun() {
-        return energyRF.getEnergyStored() < energyRF.getMaxEnergyStored();
-    }
 
     private int getFuelValue(ItemStack itemStack) {
         if (itemStack == null) return 0;
@@ -138,55 +128,23 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
     /*******************************************************************************************************************
      **************************************** Tile Functions ***********************************************************
      *******************************************************************************************************************/
-    @Override
-    public void update() {
-        if (!worldObj.isRemote) return;
-
-        generatePower();
-    }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
+        inventory.readFromNBT(tag, this);
         currentBurnTime = tag.getInteger("CurrentBurnTime");
         totalBurnTime = tag.getInteger("TotalBurnTime");
-
-        NBTTagList itemsTag = tag.getTagList("Items", 10);
-        for (int i = 0; i < itemsTag.tagCount(); i++)
-        {
-            NBTTagCompound nbtTagCompound1 = itemsTag.getCompoundTagAt(i);
-            NBTBase nbt = nbtTagCompound1.getTag("Slot");
-            int j;
-            if ((nbt instanceof NBTTagByte)) {
-                j = nbtTagCompound1.getByte("Slot") & 0xFF;
-            } else {
-                j = nbtTagCompound1.getShort("Slot");
-            }
-            if ((j >= 0) && (j < this.inventory.length)) {
-                this.inventory[j] = ItemStack.loadItemStackFromNBT(nbtTagCompound1);
-            }
-        }
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
+        inventory.writeToNBT(tag);
         tag.setInteger("CurrentBurnTime", currentBurnTime);
         tag.setInteger("TotalBurnTime", totalBurnTime);
-
-        NBTTagList nbtTagList = new NBTTagList();
-        for (int i = 0; i < this.inventory.length; i++) {
-            if (this.inventory[i] != null)
-            {
-                NBTTagCompound nbtTagCompound1 = new NBTTagCompound();
-                nbtTagCompound1.setShort("Slot", (short)i);
-                this.inventory[i].writeToNBT(nbtTagCompound1);
-                nbtTagList.appendTag(nbtTagCompound1);
-            }
-        }
-        tag.setTag("Items", nbtTagList);
     }
 
     /*******************************************************************************************************************
@@ -210,12 +168,12 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public int getSizeInventory() {
-        return inventory.length;
+        return 1;
     }
 
     @Override
     public ItemStack getStackInSlot(int index) {
-        return inventory[index];
+        return inventory.getStackInSlot(index);
     }
 
     @Override
@@ -227,7 +185,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
             }
             itemstack = itemstack.splitStack(count);
         }
-        super.markDirty();
+        worldObj.markBlockForUpdate(this.getPos());
         return itemstack;
     }
 
@@ -242,7 +200,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public void setInventorySlotContents(int index, ItemStack stack) {
-        inventory[index] = stack;
+        inventory.setStackInSlot(stack, index);
     }
 
     @Override
@@ -267,7 +225,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return GameRegistry.getFuelValue(stack) > 0;
+        return getFuelValue(stack) > 0;
     }
 
     @Override
@@ -301,9 +259,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     @Override
     public void clear() {
-        for (int i = 0; i < inventory.length; i++) {
-            inventory[i] = null;
-        }
+        inventory.setStackInSlot(null, 0);
     }
 
     @Override
