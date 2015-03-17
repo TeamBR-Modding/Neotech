@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.client.gui.generators;
 
-import com.dyonovan.jatm.common.container.generators.ContainerGenerator;
-import com.dyonovan.jatm.common.tileentity.generator.TileGenerator;
+import com.dyonovan.jatm.common.container.generators.ContainerCoalGenerator;
+import com.dyonovan.jatm.common.tileentity.generator.TileCoalGenerator;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -9,15 +9,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
-public class GuiGenerator extends GuiContainer {
+public class GuiCoalGenerator extends GuiContainer {
 
-    private TileGenerator tile;
-    private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/generator.png");
+    private TileCoalGenerator tile;
+    private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/coal_generator.png");
 
-    public GuiGenerator(InventoryPlayer inventoryPlayer, TileGenerator tileGenerator) {
-        super(new ContainerGenerator(inventoryPlayer, tileGenerator));
+    public GuiCoalGenerator(InventoryPlayer inventoryPlayer, TileCoalGenerator tileCoalGenerator) {
+        super(new ContainerCoalGenerator(inventoryPlayer, tileCoalGenerator));
 
-        this.tile = tileGenerator;
+        this.tile = tileCoalGenerator;
     }
 
     @Override

@@ -10,8 +10,8 @@ import net.minecraft.item.Item;
 public class RenderHandler {
 
     public static void init() {
-        //blockGenerator
-        register(BlockHandler.blockGenerator, ((BlockMachine) BlockHandler.blockGenerator).getName());
+        //coalGenerator
+        register(BlockHandler.coalGenerator, ((BlockMachine) BlockHandler.coalGenerator).getName());
     }
 
     public static void register(Block block, String blockName) {

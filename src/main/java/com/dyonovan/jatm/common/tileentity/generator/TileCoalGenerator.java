@@ -22,7 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 
-public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox, ISidedInventory {
+public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox, ISidedInventory {
 
     public EnergyStorage energyRF;
     public InventoryTile inventory;
@@ -36,7 +36,7 @@ public class TileGenerator extends TileEntity implements IEnergyHandler, IUpdate
 
     public static final int FUEL_SLOT = 0;
 
-    public TileGenerator() {
+    public TileCoalGenerator() {
         energyRF = new EnergyStorage(10000, 20);
         currentBurnTime = 0;
         totalBurnTime = 0;

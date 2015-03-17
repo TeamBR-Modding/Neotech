@@ -1,5 +1,5 @@
 {
-  "parent": "jatm:block/blockGenerator",
+  "parent": "jatm:block/coalGenerator",
   "display": {
     "thirdperson": {
       "rotation": [ 10, -45, 170 ],
