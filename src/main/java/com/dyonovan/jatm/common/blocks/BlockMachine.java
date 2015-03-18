@@ -24,7 +24,7 @@ public class BlockMachine extends BlockContainer {
 
     public BlockMachine(String name, Class<? extends TileEntity> tileClass, int guiID) {
         super(Material.iron);
-        this.setUnlocalizedName(Constants.MODID + "_" + name);
+        this.setUnlocalizedName(Constants.MODID + ":" + name);
         this.setCreativeTab(JATM.tabJATM);
         this.setHardness(1.5F);
 

@@ -1,13 +1,9 @@
 package com.dyonovan.jatm;
 
-import com.dyonovan.jatm.handlers.BlockHandler;
-import com.dyonovan.jatm.handlers.CraftingHandler;
-import com.dyonovan.jatm.handlers.GuiHandler;
-import com.dyonovan.jatm.handlers.RenderHandler;
+import com.dyonovan.jatm.handlers.*;
 import com.dyonovan.jatm.lib.Constants;
 import com.dyonovan.jatm.common.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -38,8 +34,9 @@ public class JATM {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        BlockHandler.init();
-        CraftingHandler.init();
+        BlockHandler.preInit();
+        ItemHandler.PreInit();
+        CraftingHandler.preInit();
     }
 
     @Mod.EventHandler

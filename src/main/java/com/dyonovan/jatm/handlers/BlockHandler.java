@@ -12,7 +12,7 @@ public class BlockHandler {
 
     public static Block coalGenerator, electricFurnace, electricCrusher;
 
-    public static void init() {
+    public static void preInit() {
 
         registerBlock(coalGenerator = new BlockMachine("coalGenerator", TileCoalGenerator.class, GuiHandler.COAL_GENERATOR_GUI_ID),
                 "coalGenerator", TileCoalGenerator.class);

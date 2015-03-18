@@ -5,7 +5,10 @@ import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -32,10 +35,10 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         World world = this.getWorld();
         if (world.isRemote) return;
 
-        if (canSmelt() || currentProcessTime > 0) {
+        if (currentProcessTime > 0 || canSmelt()) {
             if (currentProcessTime == 0) {
-                input = inventory.getStackInSlot(INPUT_SLOT);
                 currentProcessTime = 1;
+                input = inventory.getStackInSlot(INPUT_SLOT);
             }
             if (currentProcessTime > 0 && currentProcessTime < TOTAL_PROCESS_TIME) {
                 if (inventory.getStackInSlot(INPUT_SLOT) == null || !inventory.getStackInSlot(INPUT_SLOT).isItemEqual(input)) {
@@ -63,9 +66,11 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         if (inventory.getStackInSlot(INPUT_SLOT) == null) return false;
 
         output = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(INPUT_SLOT));
-        return output != null && !(inventory.getStackInSlot(OUTPUT_SLOT) != null &&
+
+        return  output != null && !(inventory.getStackInSlot(OUTPUT_SLOT) != null &&
                 !inventory.getStackInSlot(OUTPUT_SLOT).isItemEqual(output) &&
                 inventory.getStackInSlot(OUTPUT_SLOT).stackSize < inventory.getStackInSlot(OUTPUT_SLOT).getMaxStackSize());
+
     }
 
     /*******************************************************************************************************************
@@ -148,6 +153,26 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
         inventory.readFromNBT(tag, this);
+        NBTTagList itemsTag = tag.getTagList("Stacks", 10);
+        for (int i = 0; i < itemsTag.tagCount(); i++)
+        {
+            NBTTagCompound nbtTagCompound1 = itemsTag.getCompoundTagAt(i);
+            NBTBase nbt = nbtTagCompound1.getTag("Stack");
+            int j;
+            if ((nbt instanceof NBTTagByte)) {
+                j = nbtTagCompound1.getByte("Stack") & 0xFF;
+            } else {
+                j = nbtTagCompound1.getShort("Stack");
+            }
+            switch (j) {
+                case 0:
+                    input = ItemStack.loadItemStackFromNBT(nbtTagCompound1);
+                    break;
+                case 1:
+                    output = ItemStack.loadItemStackFromNBT(nbtTagCompound1);
+                    break;
+            }
+        }
         currentProcessTime = tag.getInteger("CurrentProcessTime");
     }
 
@@ -156,6 +181,24 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
         inventory.writeToNBT(tag);
+        NBTTagList nbtTagList = new NBTTagList();
+        for (int i = 0; i < 2; i++) {
+            NBTTagCompound nbtTagCompound1 = new NBTTagCompound();
+            nbtTagCompound1.setShort("Stack", (short)i);
+            switch (i)
+            {
+                case 0:
+                    if (input != null)
+                        input.writeToNBT(nbtTagCompound1);
+                    break;
+                case 1:
+                    if (output != null)
+                        output.writeToNBT(nbtTagCompound1);
+                    break;
+            }
+            nbtTagList.appendTag(nbtTagCompound1);
+        }
+        tag.setTag("Stacks", nbtTagList);
         tag.setInteger("CurrentProcessTime", currentProcessTime);
     }
 }
