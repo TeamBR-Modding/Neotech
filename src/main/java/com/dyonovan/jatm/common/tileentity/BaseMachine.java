@@ -44,7 +44,7 @@ public class BaseMachine extends TileEntity implements IEnergyHandler, ISidedInv
 
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
-        return false;
+        return true;
     }
 
     @Override
