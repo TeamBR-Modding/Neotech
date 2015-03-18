@@ -2,3 +2,4 @@ itemGroup.tabJATM=Just Another Tech Mod
 
 tile.jatm_coalGenerator.name=Furnace Generator
 tile.jatm_electricFurnace.name=Electric Furnace
+tile.jatm_electricCrusher.name=Electric Crusher

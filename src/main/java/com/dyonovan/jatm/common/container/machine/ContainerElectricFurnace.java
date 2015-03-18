@@ -8,10 +8,7 @@ import net.minecraft.inventory.SlotFurnaceOutput;
 
 public class ContainerElectricFurnace extends BaseContainer {
 
-    TileElectricFurnace tile;
-
     public ContainerElectricFurnace(InventoryPlayer inventory, TileElectricFurnace tileEntity) {
-        this.tile = tileEntity;
 
         addSlotToContainer(new Slot(tileEntity, TileElectricFurnace.INPUT_SLOT, 57, 34));
         addSlotToContainer(new SlotFurnaceOutput(inventory.player, tileEntity, TileElectricFurnace.OUTPUT_SLOT, 117, 34));

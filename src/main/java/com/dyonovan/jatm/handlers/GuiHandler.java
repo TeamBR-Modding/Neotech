@@ -1,9 +1,12 @@
 package com.dyonovan.jatm.handlers;
 
+import com.dyonovan.jatm.client.gui.machine.GuiElectricCrusher;
 import com.dyonovan.jatm.client.gui.machine.GuiElectricFurnace;
 import com.dyonovan.jatm.client.gui.generators.GuiCoalGenerator;
+import com.dyonovan.jatm.common.container.machine.ContainerElectricCrusher;
 import com.dyonovan.jatm.common.container.machine.ContainerElectricFurnace;
 import com.dyonovan.jatm.common.container.generators.ContainerCoalGenerator;
+import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileCoalGenerator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +18,7 @@ public class GuiHandler implements IGuiHandler {
 
     public static final int COAL_GENERATOR_GUI_ID = 0;
     public static final int ELECTRIC_FURNACE_GUI_ID = 1;
+    public static final int ELECTRIC_CRUSHER_GUI_ID = 2;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -23,6 +27,8 @@ public class GuiHandler implements IGuiHandler {
                 return new ContainerCoalGenerator(player.inventory, (TileCoalGenerator) world.getTileEntity(new BlockPos(x, y, z)));
             case ELECTRIC_FURNACE_GUI_ID:
                 return new ContainerElectricFurnace(player.inventory, (TileElectricFurnace) world.getTileEntity(new BlockPos(x, y, z)));
+            case ELECTRIC_CRUSHER_GUI_ID:
+                return new ContainerElectricCrusher(player.inventory, (TileElectricCrusher) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }
@@ -34,6 +40,8 @@ public class GuiHandler implements IGuiHandler {
                 return new GuiCoalGenerator(player.inventory, (TileCoalGenerator) world.getTileEntity(new BlockPos(x, y, z)));
             case ELECTRIC_FURNACE_GUI_ID:
                 return new GuiElectricFurnace(player.inventory, (TileElectricFurnace) world.getTileEntity(new BlockPos(x, y, z)));
+            case ELECTRIC_CRUSHER_GUI_ID:
+                return new GuiElectricCrusher(player.inventory, (TileElectricCrusher) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }

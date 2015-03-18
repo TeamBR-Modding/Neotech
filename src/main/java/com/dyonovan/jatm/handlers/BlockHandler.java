@@ -1,6 +1,7 @@
 package com.dyonovan.jatm.handlers;
 
 import com.dyonovan.jatm.common.blocks.BlockMachine;
+import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileCoalGenerator;
 import net.minecraft.block.Block;
@@ -9,7 +10,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockHandler {
 
-    public static Block coalGenerator, electricFurnace;
+    public static Block coalGenerator, electricFurnace, electricCrusher;
 
     public static void init() {
 
@@ -17,6 +18,8 @@ public class BlockHandler {
                 "coalGenerator", TileCoalGenerator.class);
         registerBlock(electricFurnace = new BlockMachine("electricFurnace", TileElectricFurnace.class, GuiHandler.ELECTRIC_FURNACE_GUI_ID),
                 "electricFurnace", TileElectricFurnace.class);
+        registerBlock(electricCrusher = new BlockMachine("electricCrusher", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
+                "electricCrusher", TileElectricCrusher.class);
 
 
     }

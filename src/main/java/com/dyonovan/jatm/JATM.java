@@ -1,6 +1,7 @@
 package com.dyonovan.jatm;
 
 import com.dyonovan.jatm.handlers.BlockHandler;
+import com.dyonovan.jatm.handlers.CraftingHandler;
 import com.dyonovan.jatm.handlers.GuiHandler;
 import com.dyonovan.jatm.handlers.RenderHandler;
 import com.dyonovan.jatm.lib.Constants;
@@ -38,6 +39,7 @@ public class JATM {
     public void preInit(FMLPreInitializationEvent event)
     {
         BlockHandler.init();
+        CraftingHandler.init();
     }
 
     @Mod.EventHandler
