@@ -4,6 +4,7 @@ import com.dyonovan.jatm.common.container.machine.ContainerElectricCrusher;
 import com.dyonovan.jatm.common.container.machine.ContainerElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
+import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
@@ -12,6 +13,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiElectricCrusher extends GuiContainer {
 
@@ -55,5 +59,20 @@ public class GuiElectricCrusher extends GuiContainer {
         //Progress Arrow
         int arrow = tile.currentProcessTime != 0 ? tile.currentProcessTime * 24 / TileElectricFurnace.TOTAL_PROCESS_TIME : 0;
         this.drawTexturedModalRect(x + 79, y + 34, 176, 0, arrow + 1, 16);
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float par3) {
+        super.drawScreen(mouseX, mouseY, par3);
+
+        int x = (this.width - this.xSize) / 2;
+        int y = (this.height - this.ySize) / 2;
+
+        if (GuiHelper.isInBounds(mouseX, mouseY, x + 18, y + 16, x + 34, y + 68)) {
+            List<String> toolTip = new ArrayList<>();
+            toolTip.add(GuiHelper.GuiColor.YELLOW + "Energy");
+            toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
+            drawHoveringText(toolTip, mouseX, mouseY);
+        }
     }
 }

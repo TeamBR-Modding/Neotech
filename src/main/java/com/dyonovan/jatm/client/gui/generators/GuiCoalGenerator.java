@@ -2,12 +2,16 @@ package com.dyonovan.jatm.client.gui.generators;
 
 import com.dyonovan.jatm.common.container.generators.ContainerCoalGenerator;
 import com.dyonovan.jatm.common.tileentity.generator.TileCoalGenerator;
+import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiCoalGenerator extends GuiContainer {
 
@@ -50,5 +54,15 @@ public class GuiCoalGenerator extends GuiContainer {
     @Override
     public void drawScreen(int mouseX, int mouseY, float par3) {
         super.drawScreen(mouseX, mouseY, par3);
+
+        int x = (this.width - this.xSize) / 2;
+        int y = (this.height - this.ySize) / 2;
+
+        if (GuiHelper.isInBounds(mouseX, mouseY, x + 62, y + 18, x + 114, y + 34)) {
+            List<String> toolTip = new ArrayList<>();
+            toolTip.add(GuiHelper.GuiColor.YELLOW + "Energy");
+            toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
+            drawHoveringText(toolTip, mouseX, mouseY);
+        }
     }
 }
