@@ -1,0 +1,8 @@
+{
+  "variants": {
+      "facing=north": { "model": "jatm:lavaGenerator" },
+      "facing=south": { "model": "jatm:lavaGenerator", "y": 180 },
+      "facing=west":  { "model": "jatm:lavaGenerator", "y": 270 },
+      "facing=east":  { "model": "jatm:lavaGenerator", "y": 90 }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "front": "jatm:blocks/lavaGenerator_front",
+    "top": "jatm:blocks/lavaGenerator_side",
+    "side": "jatm:blocks/lavaGenerator_side"
+  }
+}
