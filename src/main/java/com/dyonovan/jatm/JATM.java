@@ -1,5 +1,6 @@
 package com.dyonovan.jatm;
 
+import com.dyonovan.jatm.client.modelfactory.ModelGenerator;
 import com.dyonovan.jatm.handlers.*;
 import com.dyonovan.jatm.lib.Constants;
 import com.dyonovan.jatm.common.CommonProxy;
@@ -21,7 +22,7 @@ public class JATM {
     public static JATM instance;
 
     @SidedProxy(clientSide = "com.dyonovan.jatm.client.ClientProxy",
-                serverSide = "com.dyonovan.jatm.common.CommonProxy")
+            serverSide = "com.dyonovan.jatm.common.CommonProxy")
     public static CommonProxy proxy;
 
     public static CreativeTabs tabJATM = new CreativeTabs("tabJATM") {
@@ -45,6 +46,8 @@ public class JATM {
         if (event.getSide() == Side.CLIENT) {
             RenderHandler.init();
         }
+        ModelGenerator.register();
+
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 

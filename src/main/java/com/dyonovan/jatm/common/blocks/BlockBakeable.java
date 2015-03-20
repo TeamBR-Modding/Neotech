@@ -3,9 +3,14 @@ package com.dyonovan.jatm.common.blocks;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class BlockBakeable extends BlockContainer {
     private String name;
@@ -23,9 +28,21 @@ public abstract class BlockBakeable extends BlockContainer {
     }
 
     public ResourceLocation getFrontIcon() {
-        return new ResourceLocation(Constants.MODID, "name" + "_front");
+        return new ResourceLocation(Constants.MODID, "blocks/" + name + "_front");
     }
 
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getSide() {
+        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":block/" + "machine_side");
+    }
+
+    public ModelResourceLocation getNormal() {
+        return new ModelResourceLocation(Constants.MODID + ":" + name, "normal");
+    }
+
+    public ModelResourceLocation getInventory() {
+        return new ModelResourceLocation(name, "inventory");
+    }
 
     @Override
     public int getRenderType() {

@@ -1,21 +1,19 @@
 package com.dyonovan.jatm.client.modelfactory;
 
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
-import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.IFlexibleBakedModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -39,12 +37,12 @@ public class ModelGenerator {
         TextureMap textureMap = event.map;
 
         //Register Side Icons
-        textureMap.registerSprite(new ResourceLocation(Constants.MODID, "machine_side"));
+        textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/machine_side"));
 
         //Register Front Icons
-        for(BlockBakeable machines : BlockHandler.blockRegistry) {
-            textureMap.registerSprite(machines.getFrontIcon());
-            iconMap.put(machines.getName(), textureMap.getAtlasSprite(machines.getFrontIcon().toString()));
+        for(BlockBakeable block : BlockHandler.blockRegistry) {
+            textureMap.registerSprite(block.getFrontIcon());
+            iconMap.put(block.getName(), textureMap.getAtlasSprite(block.getFrontIcon().toString()));
         }
     }
 
@@ -55,15 +53,15 @@ public class ModelGenerator {
         ModelRegistry.invModels = new ArrayList<>();
         ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
-        for(BlockBakeable block : BlockHandler.blockRegistry) {
-            //Block Model
-            ModelResourceLocation modelResourceLocation = ModelBuilder.getModelResourceLocation(block.getDefaultState());
-
-            //Baked Model For State
-            IFlexibleBakedModel baseModel = (IFlexibleBakedModel)event.modelManager.getBlockModelShapes().getModelForState(block.getDefaultState());
-
-
-
+        for(final BlockBakeable block : BlockHandler.blockRegistry) {
+            ModelLoader.setCustomStateMapper(block, new StateMapperBase() {
+                @Override
+                protected ModelResourceLocation getModelResourceLocation(IBlockState p_178132_1_) {
+                    return block.getNormal();
+                }
+            });
+            event.modelRegistry.putObject(block.getNormal(), new CustomModel(iconMap.get(block.getName()), block.getSide()));
+            event.modelRegistry.putObject(block.getInventory(), new CustomModel(iconMap.get(block.getName()), block.getSide()));
         }
     }
 }
