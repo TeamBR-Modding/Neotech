@@ -1,5 +1,6 @@
 package com.dyonovan.jatm.handlers;
 
+import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.tileentity.generator.TileLavaGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
@@ -16,7 +17,7 @@ public class BlockHandler {
 
     public static Block coalGenerator, electricFurnace, electricCrusher, lavaGenerator;
 
-    public static List<Block> blockRegistry;
+    public static List<BlockBakeable> blockRegistry;
 
     public static void preInit() {
         blockRegistry = new ArrayList<>();
@@ -36,6 +37,6 @@ public class BlockHandler {
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {
         GameRegistry.registerBlock(block, name);
         GameRegistry.registerTileEntity(tileEntity, name);
-        blockRegistry.add(block);
+        blockRegistry.add((BlockBakeable)block);
     }
 }

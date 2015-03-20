@@ -13,43 +13,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class BlockMachine extends BlockContainer {
+public class BlockMachine extends BlockBakeable {
 
     public static final PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    private String name;
     private int guiID;
-    protected Class<? extends TileEntity> tileClass;
 
     public BlockMachine(String name, Class<? extends TileEntity> tileClass, int guiID) {
-        super(Material.iron);
+        super(Material.iron, name, tileClass);
         this.setUnlocalizedName(Constants.MODID + ":" + name);
         this.setCreativeTab(JATM.tabJATM);
         this.setHardness(1.5F);
 
-        this.name = name;
-        this.tileClass = tileClass;
         this.guiID = guiID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        try {
-            return tileClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public int getRenderType() {
-        return 3;
     }
 
     @Override

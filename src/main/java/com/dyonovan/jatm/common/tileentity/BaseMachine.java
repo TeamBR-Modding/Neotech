@@ -16,7 +16,7 @@ import net.minecraft.util.IChatComponent;
 public class BaseMachine extends TileEntity implements IEnergyHandler, ISidedInventory {
 
     protected InventoryTile inventory;
-    protected EnergyStorage energyRF;
+    public EnergyStorage energyRF;
 
     /*******************************************************************************************************************
      ************************************** Energy Functions ***********************************************************

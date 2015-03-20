@@ -18,7 +18,7 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
+//TODO : Non consume objects
 public class TileCoalGenerator extends BaseMachine implements IUpdatePlayerListBox {
 
     public int currentBurnTime;
