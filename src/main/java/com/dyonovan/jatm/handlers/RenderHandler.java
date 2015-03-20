@@ -11,21 +11,9 @@ import net.minecraft.item.Item;
 public class RenderHandler {
 
     public static void init() {
-        //Blocks
-        register(BlockHandler.furnaceGenerator);
-        register(BlockHandler.fluidGenerator);
-        register(BlockHandler.electricFurnace);
-        register(BlockHandler.electricCrusher);
-
         //Items
         register(ItemHandler.dustIron);
         register(ItemHandler.dustGold);
-    }
-
-    public static void register(Block block) {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-                .register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(Constants.MODID + ":" +
-                        ((BlockMachine) block).getName(), "inventory"));
     }
 
     public static void register(Item item) {
