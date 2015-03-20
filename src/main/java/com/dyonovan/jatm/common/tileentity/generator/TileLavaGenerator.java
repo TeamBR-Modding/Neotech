@@ -12,7 +12,6 @@ import net.minecraftforge.fluids.*;
 
 public class TileLavaGenerator extends BaseMachine implements IUpdatePlayerListBox, IFluidHandler {
 
-    public EnergyStorage energyRF;
     public FluidTank fluidTank;
     public int currentBurnTime;
 

@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 
 public class TileCoalGenerator extends BaseMachine implements IUpdatePlayerListBox {
 
-    public EnergyStorage energyRF;
     public int currentBurnTime;
     public int totalBurnTime;
 
