@@ -67,16 +67,18 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
         FluidStack fluidIn = getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN));
         if (fluidIn == null) return;
 
-        if (!(validFuels.contains(fluidIn.getFluid().getName())) ||
-                (fluidTank.getFluid() != null &&
-                fluidTank.getFluid().getFluid() != fluidIn.getFluid()) &&
-                fluidTank.getFluid().amount + fluidIn.amount > fluidTank.getCapacity()) return;
+        if (!(validFuels.contains(fluidIn.getFluid().getName()))) return;
+        if (fluidTank.getFluid() != null && fluidTank.getFluid().getFluid() != fluidIn.getFluid()) return;
+        if (fluidTank.getFluid() != null && fluidTank.getFluid().amount + fluidIn.amount > fluidTank.getCapacity()) return;
 
 
         fluidTank.fill(fluidIn, true);
+
         if (inventory.getStackInSlot(BUCKET_OUT) == null)
             inventory.setStackInSlot(drainFluidContainer(inventory.getStackInSlot(BUCKET_IN)),BUCKET_OUT);
+        else inventory.modifyStack(BUCKET_OUT, 1);
         inventory.modifyStack(BUCKET_IN, -1);
+
 
         this.getWorld().markBlockForUpdate(this.pos);
     }

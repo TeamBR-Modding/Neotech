@@ -54,6 +54,9 @@ public class GuiFluidGenerator extends GuiContainer {
         worldrenderer.addVertexWithUV(x + 28, y + 70 - heightRF, 0, 0.75F, (float) (52 - heightRF) / 256);
         worldrenderer.addVertexWithUV(x + 12, y + 70 - heightRF, 0, 0.6875F, (float) (52 - heightRF) / 256);
         tessellator.draw();
+
+        //Fluid Tank
+
     }
 
     @Override
