@@ -3,16 +3,24 @@ package com.dyonovan.jatm.common.blocks;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class BlockBakeable extends BlockContainer {
+    public static final PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+
     private String name;
     protected Class<? extends TileEntity> tileClass;
 
@@ -42,6 +50,15 @@ public abstract class BlockBakeable extends BlockContainer {
 
     public ModelResourceLocation getInventory() {
         return new ModelResourceLocation(name, "inventory");
+    }
+
+    public List<IBlockState> createDefaultStates() {
+        List<IBlockState> states = new ArrayList<>();
+        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.NORTH));
+        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.SOUTH));
+        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.EAST));
+        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.WEST));
+        return states;
     }
 
     @Override

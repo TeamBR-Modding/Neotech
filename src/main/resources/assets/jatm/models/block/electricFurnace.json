@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "front": "jatm:blocks/electricFurnace_front",
-    "top": "jatm:blocks/electricFurnace_side",
-    "side": "jatm:blocks/electricFurnace_side"
-  }
-}

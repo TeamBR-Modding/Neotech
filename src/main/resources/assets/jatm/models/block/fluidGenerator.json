@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "front": "jatm:blocks/fluidGenerator_front",
-    "top": "jatm:blocks/fluidGenerator_side",
-    "side": "jatm:blocks/fluidGenerator_side"
-  }
-}

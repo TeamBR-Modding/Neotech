@@ -6,14 +6,15 @@ import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -29,7 +30,7 @@ public class ModelGenerator {
         MinecraftForge.EVENT_BUS.register(INSTANCE);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     // Allows us to add entries for our icons
     public void textureStitch(TextureStitchEvent.Pre event) {
         iconMap = new HashMap<>();
@@ -37,12 +38,11 @@ public class ModelGenerator {
         TextureMap textureMap = event.map;
 
         //Register Side Icons
-        textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/machine_side"));
+        textureMap.registerSprite(new ResourceLocation(Constants.MODID, ":machine_side"));
 
         //Register Front Icons
         for(BlockBakeable block : BlockHandler.blockRegistry) {
-            textureMap.registerSprite(block.getFrontIcon());
-            iconMap.put(block.getName(), textureMap.getAtlasSprite(block.getFrontIcon().toString()));
+            iconMap.put(block.getName(), textureMap.registerSprite(block.getFrontIcon()));
         }
     }
 
@@ -53,15 +53,41 @@ public class ModelGenerator {
         ModelRegistry.invModels = new ArrayList<>();
         ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
-        for(final BlockBakeable block : BlockHandler.blockRegistry) {
-            ModelLoader.setCustomStateMapper(block, new StateMapperBase() {
-                @Override
-                protected ModelResourceLocation getModelResourceLocation(IBlockState p_178132_1_) {
-                    return block.getNormal();
-                }
-            });
-            event.modelRegistry.putObject(block.getNormal(), new CustomModel(iconMap.get(block.getName()), block.getSide()));
-            event.modelRegistry.putObject(block.getInventory(), new CustomModel(iconMap.get(block.getName()), block.getSide()));
+        for(BlockBakeable block : BlockHandler.blockRegistry) {
+            for(IBlockState state : block.createDefaultStates()) {
+                /**
+                 * Blocks
+                 */
+                //Get resource
+                ModelResourceLocation modelResourceLocation = ModelBuilder.getModelResourceLocation(state);
+
+                //Baked Model For State
+                IFlexibleBakedModel baseModel = (IFlexibleBakedModel) event.modelManager.getBlockModelShapes().getModelForState(state);
+
+                //Build new Model
+                ModelRegistry.models.add(ModelBuilder.changeIcon(baseModel, iconMap.get(block.getName())));
+
+                //Drop it in the registry
+                event.modelRegistry.putObject(modelResourceLocation, ModelRegistry.models.get(ModelRegistry.models.size() - 1));
+            }
+            /**
+             * Items
+             */
+            //Get Model
+            IFlexibleBakedModel itemModel = (IFlexibleBakedModel) itemModelMesher.getItemModel(new ItemStack(block));
+
+            ModelResourceLocation modelResourceLocation = ModelBuilder.getModelResourceLocation(block.getDefaultState());
+            //Get the inventory resource
+            ModelResourceLocation inventory = new ModelResourceLocation(modelResourceLocation, "inventory");
+
+            //Build New Model
+            ModelRegistry.invModels.add(ModelBuilder.changeIcon(itemModel, iconMap.get(block.getName())));
+
+            //Drop it in the registry
+            event.modelRegistry.putObject(inventory, ModelRegistry.invModels.get(ModelRegistry.invModels.size() - 1));
+
+            //Register to the ItemModelMesher
+            itemModelMesher.register(Item.getItemFromBlock(block), 0, inventory);
         }
     }
 }

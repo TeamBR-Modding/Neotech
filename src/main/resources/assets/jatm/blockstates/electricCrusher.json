@@ -1,8 +1,0 @@
-{
-  "variants": {
-      "facing=north": { "model": "jatm:electricCrusher" },
-      "facing=south": { "model": "jatm:electricCrusher", "y": 180 },
-      "facing=west":  { "model": "jatm:electricCrusher", "y": 270 },
-      "facing=east":  { "model": "jatm:electricCrusher", "y": 90 }
-  }
-}

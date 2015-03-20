@@ -15,7 +15,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(name = Constants.MODNAME, modid = Constants.MODID, version = Constants.VERSION)
-
 public class JATM {
 
     @Mod.Instance(Constants.MODID)
@@ -45,8 +44,8 @@ public class JATM {
     {
         if (event.getSide() == Side.CLIENT) {
             RenderHandler.init();
+            ModelGenerator.register();
         }
-        ModelGenerator.register();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }

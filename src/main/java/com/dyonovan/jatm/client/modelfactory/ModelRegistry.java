@@ -1,10 +1,10 @@
 package com.dyonovan.jatm.client.modelfactory;
 
-import net.minecraftforge.client.model.IFlexibleBakedModel;
+import net.minecraft.client.resources.model.SimpleBakedModel;
 
 import java.util.List;
 
 public class ModelRegistry {
-    public static List<IFlexibleBakedModel> models;
-    public static List<IFlexibleBakedModel> invModels;
+    public static List<SimpleBakedModel> models;
+    public static List<SimpleBakedModel> invModels;
 }

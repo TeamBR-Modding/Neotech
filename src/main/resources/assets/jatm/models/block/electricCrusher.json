@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "front": "jatm:blocks/electricCrusher_front",
-    "top": "jatm:blocks/electricCrusher_side",
-    "side": "jatm:blocks/electricCrusher_side"
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "front": "jatm:blocks/furnaceGenerator_front",
-    "top": "jatm:blocks/furnaceGenerator_side",
-    "side": "jatm:blocks/furnaceGenerator_side"
-  }
-}

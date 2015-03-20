@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 
 public class BlockMachine extends BlockBakeable {
 
-    public static final PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     private int guiID;
 
     public BlockMachine(String name, Class<? extends TileEntity> tileClass, int guiID) {
@@ -58,15 +57,12 @@ public class BlockMachine extends BlockBakeable {
         return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);
     }
 
-    public IBlockState getStateFromMeta(int meta)
-    {
+    public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.getFront(meta);
 
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
-        {
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
             enumfacing = EnumFacing.NORTH;
         }
-
         return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);
     }
 
