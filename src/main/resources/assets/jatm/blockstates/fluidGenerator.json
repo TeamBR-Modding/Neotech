@@ -1,0 +1,8 @@
+{
+  "variants": {
+      "facing=north": { "model": "jatm:fluidGenerator" },
+      "facing=south": { "model": "jatm:fluidGenerator", "y": 180 },
+      "facing=west":  { "model": "jatm:fluidGenerator", "y": 270 },
+      "facing=east":  { "model": "jatm:fluidGenerator", "y": 90 }
+  }
+}

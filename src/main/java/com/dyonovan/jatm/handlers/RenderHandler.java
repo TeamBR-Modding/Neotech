@@ -12,8 +12,8 @@ public class RenderHandler {
 
     public static void init() {
         //Blocks
-        register(BlockHandler.coalGenerator);
-        register(BlockHandler.lavaGenerator);
+        register(BlockHandler.furnaceGenerator);
+        register(BlockHandler.fluidGenerator);
         register(BlockHandler.electricFurnace);
         register(BlockHandler.electricCrusher);
 

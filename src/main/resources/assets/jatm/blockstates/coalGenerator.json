@@ -1,8 +1,0 @@
-{
-  "variants": {
-      "facing=north": { "model": "jatm:coalGenerator" },
-      "facing=south": { "model": "jatm:coalGenerator", "y": 180 },
-      "facing=west":  { "model": "jatm:coalGenerator", "y": 270 },
-      "facing=east":  { "model": "jatm:coalGenerator", "y": 90 }
-  }
-}

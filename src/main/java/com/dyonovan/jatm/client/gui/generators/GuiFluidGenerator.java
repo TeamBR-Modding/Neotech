@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.client.gui.generators;
 
-import com.dyonovan.jatm.common.container.generators.ContainerCoalGenerator;
-import com.dyonovan.jatm.common.tileentity.generator.TileCoalGenerator;
+import com.dyonovan.jatm.common.container.generators.ContainerFluidGenerator;
+import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -13,22 +13,22 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiCoalGenerator extends GuiContainer {
+public class GuiFluidGenerator extends GuiContainer {
 
-    private TileCoalGenerator tile;
-    private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/coal_generator.png");
+    private TileFluidGenerator tile;
+    private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/fluidGenerator.png");
 
-    public GuiCoalGenerator(InventoryPlayer inventoryPlayer, TileCoalGenerator tileCoalGenerator) {
-        super(new ContainerCoalGenerator(inventoryPlayer, tileCoalGenerator));
+    public GuiFluidGenerator(InventoryPlayer inventory, TileFluidGenerator tileEntity) {
+        super(new ContainerFluidGenerator(inventory, tileEntity));
 
-        this.tile = tileCoalGenerator;
+        this.tile = tileEntity;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        final String invTitle = "Furnace Generator";
+        final String invTitle = "Fluid Generator";
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 95 + 2, 4210752);
     }
 
     @Override
@@ -44,11 +44,6 @@ public class GuiCoalGenerator extends GuiContainer {
         //RF Energy bar
         int widthRF = tile.energyRF.getEnergyStored() * 52 / tile.energyRF.getMaxEnergyStored();
         drawTexturedModalRect(x + 62, y + 18, 176, 14, widthRF, 15);
-
-        //Buring Bar
-        int heightBurn = tile.currentBurnTime == 0 ? 13 : tile.currentBurnTime * 13 / tile.totalBurnTime;
-        drawTexturedModalRect(x + 81,   y + 37 + heightBurn,   176,    heightBurn,    14,     14 - heightBurn);
-
     }
 
     @Override

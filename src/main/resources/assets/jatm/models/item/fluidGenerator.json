@@ -1,5 +1,5 @@
 {
-  "parent": "jatm:block/lavaGenerator",
+  "parent": "jatm:block/fluidGenerator",
   "display": {
     "thirdperson": {
       "rotation": [ 10, -45, 170 ],

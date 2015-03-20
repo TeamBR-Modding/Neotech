@@ -10,7 +10,7 @@ public class CraftingHandler {
 
     public static void preInit() {
         //Coal Generator
-        GameRegistry.addRecipe(new ItemStack(BlockHandler.coalGenerator), "ABA", "BCB", "ABA",
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.furnaceGenerator), "ABA", "BCB", "ABA",
                 'A', Items.iron_ingot, 'B', Items.redstone, 'C', Blocks.furnace);
 
         //Electric Furnace

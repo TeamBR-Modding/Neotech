@@ -19,7 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 //TODO : Non consume objects
-public class TileCoalGenerator extends BaseMachine implements IUpdatePlayerListBox {
+public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerListBox {
 
     public int currentBurnTime;
     public int totalBurnTime;
@@ -31,7 +31,7 @@ public class TileCoalGenerator extends BaseMachine implements IUpdatePlayerListB
 
     public static final int FUEL_SLOT = 0;
 
-    public TileCoalGenerator() {
+    public TileFurnaceGenerator() {
         energyRF = new EnergyStorage(10000, 20);
         currentBurnTime = 0;
         totalBurnTime = 0;

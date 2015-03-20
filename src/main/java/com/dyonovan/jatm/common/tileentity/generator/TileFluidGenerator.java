@@ -10,7 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 
-public class TileLavaGenerator extends BaseMachine implements IUpdatePlayerListBox, IFluidHandler {
+public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerListBox, IFluidHandler {
 
     public FluidTank fluidTank;
     public int currentBurnTime;
@@ -24,7 +24,7 @@ public class TileLavaGenerator extends BaseMachine implements IUpdatePlayerListB
     public static final int BUCKET_IN = 0;
     public static final int BUCKET_OUT = 1;
 
-    public TileLavaGenerator() {
+    public TileFluidGenerator() {
         energyRF = new EnergyStorage(10000, 80);
         inventory = new InventoryTile(2);
         fluidTank = new FluidTank(TANK_CAPACITY);
