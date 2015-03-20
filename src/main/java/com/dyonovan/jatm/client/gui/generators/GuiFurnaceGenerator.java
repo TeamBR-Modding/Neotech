@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.client.gui.generators;
 
-import com.dyonovan.jatm.common.container.generators.ContainerLavaGenerator;
-import com.dyonovan.jatm.common.tileentity.generator.TileLavaGenerator;
+import com.dyonovan.jatm.common.container.generators.ContainerFurnaceGenerator;
+import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
 import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -13,20 +13,20 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiLavaGenerator extends GuiContainer {
+public class GuiFurnaceGenerator extends GuiContainer {
 
-    private TileLavaGenerator tile;
-    private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/lava_generator.png");
+    private TileFurnaceGenerator tile;
+    private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/furnaceGenerator.png");
 
-    public GuiLavaGenerator(InventoryPlayer inventory, TileLavaGenerator tileEntity) {
-        super(new ContainerLavaGenerator(inventory, tileEntity));
+    public GuiFurnaceGenerator(InventoryPlayer inventoryPlayer, TileFurnaceGenerator tileFurnaceGenerator) {
+        super(new ContainerFurnaceGenerator(inventoryPlayer, tileFurnaceGenerator));
 
-        this.tile = tileEntity;
+        this.tile = tileFurnaceGenerator;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        final String invTitle = "Lava Generator";
+        final String invTitle = "Furnace Generator";
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96 + 2, 4210752);
     }
@@ -44,6 +44,11 @@ public class GuiLavaGenerator extends GuiContainer {
         //RF Energy bar
         int widthRF = tile.energyRF.getEnergyStored() * 52 / tile.energyRF.getMaxEnergyStored();
         drawTexturedModalRect(x + 62, y + 18, 176, 14, widthRF, 15);
+
+        //Buring Bar
+        int heightBurn = tile.currentBurnTime == 0 ? 13 : tile.currentBurnTime * 13 / tile.totalBurnTime;
+        drawTexturedModalRect(x + 81,   y + 37 + heightBurn,   176,    heightBurn,    14,     14 - heightBurn);
+
     }
 
     @Override
