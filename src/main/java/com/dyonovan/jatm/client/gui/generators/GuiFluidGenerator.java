@@ -4,9 +4,12 @@ import com.dyonovan.jatm.common.container.generators.ContainerFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -56,7 +59,30 @@ public class GuiFluidGenerator extends GuiContainer {
         tessellator.draw();
 
         //Fluid Tank
+        if (tile.fluidTank.getFluid() != null) {
+            int heightFluid = tile.fluidTank.getFluidAmount() * 52 / tile.fluidTank.getCapacity();
 
+            TextureAtlasSprite texture =  tile.fluidTank.getFluid().getFluid().getIcon();
+            this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+            int k;
+            for (k = 0; k < heightFluid / 16; k++) {
+                worldrenderer.startDrawingQuads();
+                worldrenderer.addVertexWithUV(x + 148, y + 70, 0, texture.getMinU(), texture.getMaxV());
+                worldrenderer.addVertexWithUV(x + 164, y + 70, 0, texture.getMaxU(), texture.getMaxV());
+                worldrenderer.addVertexWithUV(x + 164, y + 70 - k * 16, 0, texture.getMaxU(), texture.getMinV());
+                worldrenderer.addVertexWithUV(x + 148, y + 70 - k * 16, 0, texture.getMinU(), texture.getMinV());
+                tessellator.draw();
+            }
+            if (k <= 16 || k % 16 != 0) {
+                worldrenderer.startDrawingQuads();
+                worldrenderer.addVertexWithUV(x + 148, y + 70, 0, texture.getMinU(), texture.getMaxV());
+                worldrenderer.addVertexWithUV(x + 164, y + 70, 0, texture.getMaxU(), texture.getMaxV());
+                worldrenderer.addVertexWithUV(x + 164, y + 70 - ((heightFluid - k * 16) + k * 16), 0, texture.getMaxU(), texture.getMinV());
+                worldrenderer.addVertexWithUV(x + 148, y + 70 - ((heightFluid - k * 16) + k * 16), 0, texture.getMinU(), texture.getMinV());
+                tessellator.draw();
+            }
+
+        }
     }
 
     @Override

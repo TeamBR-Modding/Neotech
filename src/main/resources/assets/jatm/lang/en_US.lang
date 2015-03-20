@@ -1,9 +1,9 @@
 itemGroup.tabJATM=Just Another Tech Mod
 
-tile.jatm:coalGenerator.name=Furnace Generator
+tile.jatm:furnaceGenerator.name=Furnace Generator
 tile.jatm:electricFurnace.name=Electric Furnace
 tile.jatm:electricCrusher.name=Electric Crusher
-tile.jatm:lavaGenerator.name=Lava Generator
+tile.jatm:fluidGenerator.name=Fluid Generator
 
 item.jatm:dustIron.name=Iron Dust
 item.jatm:dustGold.name=Gold Dust
