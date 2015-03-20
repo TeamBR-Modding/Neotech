@@ -143,4 +143,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+##eclipse
+eclipse/
+
 

@@ -9,11 +9,17 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BlockHandler {
 
     public static Block coalGenerator, electricFurnace, electricCrusher, lavaGenerator;
 
+    public static List<Block> blockRegistry;
+
     public static void preInit() {
+        blockRegistry = new ArrayList<>();
 
         registerBlock(coalGenerator = new BlockMachine("coalGenerator", TileCoalGenerator.class, GuiHandler.COAL_GENERATOR_GUI_ID),
                 "coalGenerator", TileCoalGenerator.class);
@@ -30,5 +36,6 @@ public class BlockHandler {
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {
         GameRegistry.registerBlock(block, name);
         GameRegistry.registerTileEntity(tileEntity, name);
+        blockRegistry.add(block);
     }
 }
