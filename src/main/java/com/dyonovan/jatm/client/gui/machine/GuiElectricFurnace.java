@@ -44,7 +44,7 @@ public class GuiElectricFurnace extends GuiContainer {
 
         //RF Energy bar
         int heightRF = tile.getEnergyStored(null) * 52 / tile.getMaxEnergyStored(null);
-        drawTexturedModalRect(x + 18, y + 16, 176, 69, 16, heightRF);
+
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.startDrawingQuads();

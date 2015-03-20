@@ -10,7 +10,21 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 
+import static net.minecraftforge.fluids.FluidContainerRegistry.*;
+
+
 public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerListBox, IFluidHandler {
+
+    private enum validFuels {
+        lava;
+
+        public static boolean contains(String fluid) {
+            for (validFuels f : validFuels.values()) {
+                if (f.name().equals(fluid)) return true;
+            }
+            return false;
+        }
+    }
 
     public FluidTank fluidTank;
     public int currentBurnTime;
@@ -20,7 +34,7 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
      */
     private static final int RF_TICK = 80;
     public static final int TOTAL_BURN_TIME = 20000;
-    public static final int TANK_CAPACITY = FluidContainerRegistry.BUCKET_VOLUME * 10;
+    public static final int TANK_CAPACITY = BUCKET_VOLUME * 10;
     public static final int BUCKET_IN = 0;
     public static final int BUCKET_OUT = 1;
 
@@ -36,7 +50,44 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
         if (!this.hasWorldObj()) return;
         World world = this.getWorld();
         if (world.isRemote) return;
+
+        transferFluid();
+
+        if (currentBurnTime > 0 || canWork()) {
+            if (currentBurnTime == 0) {
+
+            }
+            if (currentBurnTime > 0 && currentBurnTime < TOTAL_BURN_TIME) {
+
+            }
+            if (currentBurnTime >= TOTAL_BURN_TIME) {
+
+            }
+        }
     }
+
+    private boolean canWork() {
+        return false;
+    }
+
+    private void transferFluid() {
+        if (inventory.getStackInSlot(BUCKET_IN) == null ||
+                !isFilledContainer(inventory.getStackInSlot(BUCKET_IN))) return;
+
+        FluidStack fluidIn = getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN));
+        String temp = fluidIn.getFluid().getName();
+        if (!(validFuels.contains(fluidIn.getFluid().getName())) ||
+                (fluidTank.getFluid() != null &&
+                fluidTank.getFluid().getFluid() != fluidIn.getFluid())) return;
+        String string = "test";
+
+
+
+
+
+    }
+
+
 
     /*******************************************************************************************************************
      *************************************** Fluid Functions ***********************************************************
@@ -44,12 +95,9 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
 
     @Override
     public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-        if (resource.getFluid() == FluidRegistry.LAVA) {
             int actual =  fluidTank.fill(resource, doFill);
             this.getWorld().markBlockForUpdate(this.pos);
             return actual;
-        }
-        return 0;
     }
 
     @Override
@@ -127,7 +175,7 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return true;
+        return isFilledContainer(inventory.getStackInSlot(BUCKET_IN));
     }
 
     @Override

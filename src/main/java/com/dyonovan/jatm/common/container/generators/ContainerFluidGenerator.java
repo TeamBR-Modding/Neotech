@@ -8,8 +8,8 @@ import net.minecraft.inventory.SlotFurnaceOutput;
 
 public class ContainerFluidGenerator extends BaseContainer {
     public ContainerFluidGenerator(InventoryPlayer inventory, TileFluidGenerator tileEntity) {
-        addSlotToContainer(new Slot(tileEntity, TileFluidGenerator.BUCKET_IN, 80, 53));
-        addSlotToContainer(new SlotFurnaceOutput(inventory.player, tileEntity, TileFluidGenerator.BUCKET_OUT, 80, 23));
+        addSlotToContainer(new Slot(tileEntity, TileFluidGenerator.BUCKET_IN, 114, 18));
+        addSlotToContainer(new SlotFurnaceOutput(inventory.player, tileEntity, TileFluidGenerator.BUCKET_OUT, 114, 54));
         bindPlayerInventory(inventory, 8, 84);
     }
 }

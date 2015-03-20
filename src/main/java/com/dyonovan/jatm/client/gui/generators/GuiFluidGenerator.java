@@ -5,6 +5,8 @@ import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -42,8 +44,16 @@ public class GuiFluidGenerator extends GuiContainer {
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
         //RF Energy bar
-        int widthRF = tile.energyRF.getEnergyStored() * 52 / tile.energyRF.getMaxEnergyStored();
-        drawTexturedModalRect(x + 62, y + 18, 176, 14, widthRF, 15);
+        int heightRF = tile.getEnergyStored(null) * 52 / tile.getMaxEnergyStored(null);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.startDrawingQuads();
+        worldrenderer.addVertexWithUV(x + 12, y + 70, 0, 0.6875F, 0.26953125F);
+        worldrenderer.addVertexWithUV(x + 28, y + 70, 0, 0.75F, 0.26953125F);
+        worldrenderer.addVertexWithUV(x + 28, y + 70 - heightRF, 0, 0.75F, (float) (69 - heightRF) / 256);
+        worldrenderer.addVertexWithUV(x + 12, y + 70 - heightRF, 0, 0.6875F, (float) (69 - heightRF) / 256);
+        tessellator.draw();
     }
 
     @Override
@@ -53,7 +63,7 @@ public class GuiFluidGenerator extends GuiContainer {
         int x = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
 
-        if (GuiHelper.isInBounds(mouseX, mouseY, x + 62, y + 18, x + 114, y + 34)) {
+        if (GuiHelper.isInBounds(mouseX, mouseY, x + 12, y + 18, x + 28, y + 70)) {
             List<String> toolTip = new ArrayList<>();
             toolTip.add(GuiHelper.GuiColor.YELLOW + "Energy");
             toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
