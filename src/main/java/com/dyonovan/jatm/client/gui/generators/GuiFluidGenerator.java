@@ -49,10 +49,10 @@ public class GuiFluidGenerator extends GuiContainer {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.startDrawingQuads();
-        worldrenderer.addVertexWithUV(x + 12, y + 70, 0, 0.6875F, 0.26953125F);
-        worldrenderer.addVertexWithUV(x + 28, y + 70, 0, 0.75F, 0.26953125F);
-        worldrenderer.addVertexWithUV(x + 28, y + 70 - heightRF, 0, 0.75F, (float) (69 - heightRF) / 256);
-        worldrenderer.addVertexWithUV(x + 12, y + 70 - heightRF, 0, 0.6875F, (float) (69 - heightRF) / 256);
+        worldrenderer.addVertexWithUV(x + 12, y + 70, 0, 0.6875F, 0.203125F);
+        worldrenderer.addVertexWithUV(x + 28, y + 70, 0, 0.75F, 0.203125F);
+        worldrenderer.addVertexWithUV(x + 28, y + 70 - heightRF, 0, 0.75F, (float) (52 - heightRF) / 256);
+        worldrenderer.addVertexWithUV(x + 12, y + 70 - heightRF, 0, 0.6875F, (float) (52 - heightRF) / 256);
         tessellator.draw();
     }
 
@@ -67,6 +67,19 @@ public class GuiFluidGenerator extends GuiContainer {
             List<String> toolTip = new ArrayList<>();
             toolTip.add(GuiHelper.GuiColor.YELLOW + "Energy");
             toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
+            drawHoveringText(toolTip, mouseX, mouseY);
+        }
+        if (GuiHelper.isInBounds(mouseX, mouseY, x + 148, y + 18, x + 164, y + 70)) {
+            List<String> toolTip = new ArrayList<>();
+            toolTip.add(GuiHelper.GuiColor.YELLOW + "Fluid");
+            if (tile.fluidTank.getFluid() != null) {
+                toolTip.add(GuiHelper.GuiColor.ORANGE + tile.fluidTank.getFluid().getLocalizedName());
+                toolTip.add(tile.fluidTank.getFluid().amount + "/" + tile.fluidTank.getCapacity() + GuiHelper.GuiColor.RED + "MB");
+
+            } else {
+                toolTip.add(GuiHelper.GuiColor.ORANGE + "EMPTY");
+                toolTip.add("0" + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "MB");
+            }
             drawHoveringText(toolTip, mouseX, mouseY);
         }
     }

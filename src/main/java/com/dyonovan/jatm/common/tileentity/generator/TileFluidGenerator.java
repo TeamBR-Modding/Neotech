@@ -20,29 +20,27 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
 
         public static boolean contains(String fluid) {
             for (validFuels f : validFuels.values()) {
-                if (f.name().equals(fluid)) return true;
+                if (f.name().equalsIgnoreCase(fluid)) return true;
             }
             return false;
         }
     }
 
     public FluidTank fluidTank;
-    public int currentBurnTime;
 
     /**
      * Energy Creation per Tick
      */
     private static final int RF_TICK = 80;
-    public static final int TOTAL_BURN_TIME = 20000;
+    private static final int MB_TICK = 10;
     public static final int TANK_CAPACITY = BUCKET_VOLUME * 10;
     public static final int BUCKET_IN = 0;
     public static final int BUCKET_OUT = 1;
 
     public TileFluidGenerator() {
-        energyRF = new EnergyStorage(10000, 80);
+        energyRF = new EnergyStorage(10000, RF_TICK);
         inventory = new InventoryTile(2);
         fluidTank = new FluidTank(TANK_CAPACITY);
-        currentBurnTime = 0;
     }
 
     @Override
@@ -53,21 +51,13 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
 
         transferFluid();
 
-        if (currentBurnTime > 0 || canWork()) {
-            if (currentBurnTime == 0) {
-
-            }
-            if (currentBurnTime > 0 && currentBurnTime < TOTAL_BURN_TIME) {
-
-            }
-            if (currentBurnTime >= TOTAL_BURN_TIME) {
-
-            }
+        if (energyRF.getEnergyStored() + RF_TICK <= energyRF.getMaxEnergyStored() &&
+                fluidTank.getFluid() != null && fluidTank.getFluidAmount() >= MB_TICK) {
+            energyRF.modifyEnergyStored(RF_TICK);
+            fluidTank.drain(MB_TICK, true);
+            world.markBlockForUpdate(this.pos);
         }
-    }
 
-    private boolean canWork() {
-        return false;
     }
 
     private void transferFluid() {
@@ -75,16 +65,20 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
                 !isFilledContainer(inventory.getStackInSlot(BUCKET_IN))) return;
 
         FluidStack fluidIn = getFluidForFilledItem(inventory.getStackInSlot(BUCKET_IN));
-        String temp = fluidIn.getFluid().getName();
+        if (fluidIn == null) return;
+
         if (!(validFuels.contains(fluidIn.getFluid().getName())) ||
                 (fluidTank.getFluid() != null &&
-                fluidTank.getFluid().getFluid() != fluidIn.getFluid())) return;
-        String string = "test";
+                fluidTank.getFluid().getFluid() != fluidIn.getFluid()) &&
+                fluidTank.getFluid().amount + fluidIn.amount > fluidTank.getCapacity()) return;
 
 
+        fluidTank.fill(fluidIn, true);
+        if (inventory.getStackInSlot(BUCKET_OUT) == null)
+            inventory.setStackInSlot(drainFluidContainer(inventory.getStackInSlot(BUCKET_IN)),BUCKET_OUT);
+        inventory.modifyStack(BUCKET_IN, -1);
 
-
-
+        this.getWorld().markBlockForUpdate(this.pos);
     }
 
 
@@ -180,25 +174,16 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
 
     @Override
     public int getField(int id) {
-        switch (id) {
-            case 0:
-                return currentBurnTime;
-            default:
-                return 0;
-        }
+        return 0;
     }
 
     @Override
     public void setField(int id, int value) {
-        switch (id) {
-            case 0:
-                currentBurnTime = value;
-        }
     }
 
     @Override
     public int getFieldCount() {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -218,7 +203,6 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
         energyRF.readFromNBT(tag);
         inventory.readFromNBT(tag, this);
         fluidTank.readFromNBT(tag);
-        currentBurnTime = tag.getInteger("CurrentBurnTime");
     }
 
     @Override
@@ -227,6 +211,5 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
         energyRF.writeToNBT(tag);
         inventory.writeToNBT(tag);
         fluidTank.writeToNBT(tag);
-        tag.setInteger("CurrentBurnTime", currentBurnTime);
     }
 }
