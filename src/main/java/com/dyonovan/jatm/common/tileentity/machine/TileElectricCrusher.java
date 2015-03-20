@@ -116,7 +116,7 @@ public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerLis
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return true; //TODO
+        return true;
     }
 
     @Override

@@ -3,13 +3,13 @@ package com.dyonovan.jatm.common.tileentity.generator;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -22,7 +22,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 
-public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox, ISidedInventory {
+public class TileCoalGenerator extends BaseMachine implements IUpdatePlayerListBox {
 
     public EnergyStorage energyRF;
     public InventoryTile inventory;
@@ -126,21 +126,6 @@ public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUp
         return energyRF.extractEnergy(maxExtract, simulate);
     }
 
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        return energyRF.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        return energyRF.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
-    }
-
     /*******************************************************************************************************************
      **************************************** Tile Functions ***********************************************************
      *******************************************************************************************************************/
@@ -188,58 +173,6 @@ public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUp
     }
 
     @Override
-    public ItemStack getStackInSlot(int index) {
-        return inventory.getStackInSlot(index);
-    }
-
-    @Override
-    public ItemStack decrStackSize(int index, int count) {
-        ItemStack itemstack = getStackInSlot(index);
-        if(itemstack != null) {
-            if(itemstack.stackSize <= count) {
-                setInventorySlotContents(index, null);
-            }
-            itemstack = itemstack.splitStack(count);
-        }
-        this.getWorld().markBlockForUpdate(this.getPos());
-        return itemstack;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int index) {
-        ItemStack stack = getStackInSlot(index);
-        if (stack != null) {
-            setInventorySlotContents(index, null);
-        }
-        return stack;
-    }
-
-    @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
-        inventory.setStackInSlot(stack, index);
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return true;
-    }
-
-    @Override
-    public void openInventory(EntityPlayer player) {
-
-    }
-
-    @Override
-    public void closeInventory(EntityPlayer player) {
-
-    }
-
-    @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         return getFuelValue(stack) > 0;
     }
@@ -278,20 +211,9 @@ public class TileCoalGenerator extends TileEntity implements IEnergyHandler, IUp
         inventory.setStackInSlot(null, 0);
     }
 
-    @Override
-    public String getCommandSenderName() {
-        return "container.modernalchemy:generator.name";
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
-    }
-
-    @Override
-    public IChatComponent getDisplayName() {
-        return new ChatComponentTranslation(this.getCommandSenderName());
-    }
+    /*******************************************************************************************************************
+     **************************************** Tile Functions ***********************************************************
+     *******************************************************************************************************************/
 
     @Override
     public Packet getDescriptionPacket() {

@@ -1,9 +1,63 @@
 package com.dyonovan.jatm.client.gui.generators;
 
+import com.dyonovan.jatm.common.container.generators.ContainerLavaGenerator;
 import com.dyonovan.jatm.common.tileentity.generator.TileLavaGenerator;
+import com.dyonovan.jatm.helpers.GuiHelper;
+import com.dyonovan.jatm.lib.Constants;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
 
-public class GuiLavaGenerator {
+import java.util.ArrayList;
+import java.util.List;
+
+public class GuiLavaGenerator extends GuiContainer {
+
+    private TileLavaGenerator tile;
+    private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/lava_generator.png");
+
     public GuiLavaGenerator(InventoryPlayer inventory, TileLavaGenerator tileEntity) {
+        super(new ContainerLavaGenerator(inventory, tileEntity));
+
+        this.tile = tileEntity;
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int par1, int par2) {
+        final String invTitle = "Lava Generator";
+        fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96 + 2, 4210752);
+    }
+
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+
+        int x = (width - xSize) / 2;
+        int y = (height - ySize) / 2;
+
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.mc.getTextureManager().bindTexture(background);
+        drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+
+        //RF Energy bar
+        int widthRF = tile.energyRF.getEnergyStored() * 52 / tile.energyRF.getMaxEnergyStored();
+        drawTexturedModalRect(x + 62, y + 18, 176, 14, widthRF, 15);
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float par3) {
+        super.drawScreen(mouseX, mouseY, par3);
+
+        int x = (this.width - this.xSize) / 2;
+        int y = (this.height - this.ySize) / 2;
+
+        if (GuiHelper.isInBounds(mouseX, mouseY, x + 62, y + 18, x + 114, y + 34)) {
+            List<String> toolTip = new ArrayList<>();
+            toolTip.add(GuiHelper.GuiColor.YELLOW + "Energy");
+            toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
+            drawHoveringText(toolTip, mouseX, mouseY);
+        }
     }
 }
