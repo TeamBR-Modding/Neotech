@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class ModelBuilder {
+public class ModelMachine {
     // create a blank baked model with the default values
     public static SimpleBakedModel newBlankModel(TextureAtlasSprite texture) {
         return new SimpleBakedModel(new LinkedList(), newBlankFacingLists(), true, true, texture, ItemCameraTransforms.DEFAULT);

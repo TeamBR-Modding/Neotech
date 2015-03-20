@@ -1,6 +1,7 @@
 package com.dyonovan.jatm.client.modelfactory;
 
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
+import com.dyonovan.jatm.common.cable.FakeState;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
@@ -41,6 +42,11 @@ public class ModelGenerator {
         //Register Side Icons
         iconMap.put("side", textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + "machine_side")));
 
+        //Register Cable Icons
+        iconMap.put("cableNoEdges", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/cableNoEdge")));
+        iconMap.put("cablePlus", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/cablePlus")));
+        iconMap.put("cableSquare", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/cableSquare")));
+
         //Register Front Icons
         for(BlockBakeable block : BlockHandler.blockRegistry) {
             iconMap.put(block.getName(), textureMap.registerSprite(block.getFrontIcon()));
@@ -60,29 +66,37 @@ public class ModelGenerator {
                  * Blocks
                  */
                 //Get resource
-                ModelResourceLocation modelResourceLocation = ModelBuilder.getModelResourceLocation(state);
+                ModelResourceLocation modelResourceLocation = ModelMachine.getModelResourceLocation(state);
 
                 //Baked Model For State
                 IFlexibleBakedModel baseModel = (IFlexibleBakedModel) event.modelManager.getBlockModelShapes().getModelForState(state);
 
                 //Build new Model
-                ModelRegistry.models.add(ModelBuilder.changeIcon(baseModel, iconMap.get("side"), iconMap.get(block.getName()), block.convertStateToEnum(state)));
+                ModelRegistry.models.add(ModelMachine.changeIcon(baseModel, iconMap.get("side"), iconMap.get(block.getName()), block.convertStateToEnum(state)));
 
                 //Drop it in the registry
                 event.modelRegistry.putObject(modelResourceLocation, ModelRegistry.models.get(ModelRegistry.models.size() - 1));
             }
+
+            /**
+             * Cables
+             */
+            event.modelRegistry.putObject(new ModelResourceLocation(Constants.MODID + ":cable", "normal"), new ModelCable());
+            event.modelRegistry.putObject(new ModelResourceLocation(Constants.MODID + ":cable", "inventory"), new ModelCable());
+            itemModelMesher.register(Item.getItemFromBlock(BlockHandler.blockCable), 0, new ModelResourceLocation(Constants.MODID + ":cable", "inventory"));
+
             /**
              * Items
              */
             //Get Model
             IFlexibleBakedModel itemModel = (IFlexibleBakedModel) itemModelMesher.getItemModel(new ItemStack(block));
 
-            ModelResourceLocation modelResourceLocation = ModelBuilder.getModelResourceLocation(block.getDefaultState());
+            ModelResourceLocation modelResourceLocation = ModelMachine.getModelResourceLocation(block.getDefaultState());
             //Get the inventory resource
             ModelResourceLocation inventory = new ModelResourceLocation(modelResourceLocation, "inventory");
 
             //Build New Model
-            ModelRegistry.invModels.add(ModelBuilder.changeIcon(itemModel, iconMap.get("side"), iconMap.get(block.getName()), EnumFacing.NORTH));
+            ModelRegistry.invModels.add(ModelMachine.changeIcon(itemModel, iconMap.get("side"), iconMap.get(block.getName()), EnumFacing.NORTH));
 
             //Drop it in the registry
             event.modelRegistry.putObject(inventory, ModelRegistry.invModels.get(ModelRegistry.invModels.size() - 1));

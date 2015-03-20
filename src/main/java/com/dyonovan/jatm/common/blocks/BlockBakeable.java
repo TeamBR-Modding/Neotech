@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -20,7 +21,6 @@ import java.util.List;
 
 public abstract class BlockBakeable extends BlockContainer {
     public static final PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-
     private String name;
     protected Class<? extends TileEntity> tileClass;
 
@@ -49,7 +49,7 @@ public abstract class BlockBakeable extends BlockContainer {
     }
 
     public ModelResourceLocation getInventory() {
-        return new ModelResourceLocation(name, "inventory");
+        return new ModelResourceLocation(Constants.MODID + ":" + name, "inventory");
     }
 
     public List<IBlockState> createDefaultStates() {

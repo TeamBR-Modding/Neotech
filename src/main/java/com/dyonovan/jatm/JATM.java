@@ -32,27 +32,21 @@ public class JATM {
     };
 
     @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) {
         BlockHandler.preInit();
         ItemHandler.PreInit();
         CraftingHandler.preInit();
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         if (event.getSide() == Side.CLIENT) {
             RenderHandler.init();
             ModelGenerator.register();
         }
-
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 
     @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent evt)
-    {
-
-    }
+    public void postInit(FMLPostInitializationEvent evt) {}
 }
