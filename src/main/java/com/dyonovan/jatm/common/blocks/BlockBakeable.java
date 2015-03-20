@@ -61,6 +61,18 @@ public abstract class BlockBakeable extends BlockContainer {
         return states;
     }
 
+    public EnumFacing convertStateToEnum(IBlockState state) {
+        if(state == this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.NORTH))
+            return EnumFacing.NORTH;
+        if(state == this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.SOUTH))
+            return EnumFacing.SOUTH;
+        if(state == this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.EAST))
+            return EnumFacing.EAST;
+        if(state == this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.WEST))
+            return EnumFacing.WEST;
+        return EnumFacing.NORTH;
+    }
+
     @Override
     public int getRenderType() {
         return 3;

@@ -14,12 +14,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IFlexibleBakedModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-  public class ModelBuilder {
+public class ModelBuilder {
     // create a blank baked model with the default values
     public static SimpleBakedModel newBlankModel(TextureAtlasSprite texture) {
         return new SimpleBakedModel(new LinkedList(), newBlankFacingLists(), true, true, texture, ItemCameraTransforms.DEFAULT);
@@ -86,16 +87,21 @@ import java.util.List;
     }
 
     // Creates a copy of the baked model with a given texture overlayed on the sides
-    public static SimpleBakedModel changeIcon(IFlexibleBakedModel model, TextureAtlasSprite texture) {
-        SimpleBakedModel bakedModel = new SimpleBakedModel(new LinkedList(), newBlankFacingLists(), model.isGui3d(), model.isAmbientOcclusion(), texture, model.getItemCameraTransforms());
+    public static SimpleBakedModel changeIcon(IFlexibleBakedModel model, TextureAtlasSprite base, TextureAtlasSprite front, EnumFacing... sides) {
+        SimpleBakedModel bakedModel = new SimpleBakedModel(new LinkedList(), newBlankFacingLists(), model.isGui3d(), model.isAmbientOcclusion(), base, model.getItemCameraTransforms());
+
+        List<EnumFacing> overLay = new ArrayList<>(Arrays.asList(sides));
 
         for (Object o : model.getGeneralQuads()) {
-            bakedModel.getGeneralQuads().add(changeTexture((BakedQuad) o, texture));
+            bakedModel.getGeneralQuads().add(changeTexture((BakedQuad) o, base));
         }
 
         for (EnumFacing facing : EnumFacing.values()) {
             for (Object o : model.getFaceQuads(facing)) {
-                bakedModel.getFaceQuads(facing).add(changeTexture((BakedQuad) o, texture));
+                if(!overLay.contains(facing))
+                    bakedModel.getFaceQuads(facing).add(changeTexture((BakedQuad) o, base));
+                else
+                    bakedModel.getFaceQuads(facing).add(changeTexture((BakedQuad) o, front));
             }
         }
 

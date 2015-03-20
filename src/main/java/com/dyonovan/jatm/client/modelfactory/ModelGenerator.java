@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -38,7 +39,7 @@ public class ModelGenerator {
         TextureMap textureMap = event.map;
 
         //Register Side Icons
-        textureMap.registerSprite(new ResourceLocation(Constants.MODID, ":machine_side"));
+        iconMap.put("side", textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + "machine_side")));
 
         //Register Front Icons
         for(BlockBakeable block : BlockHandler.blockRegistry) {
@@ -65,7 +66,7 @@ public class ModelGenerator {
                 IFlexibleBakedModel baseModel = (IFlexibleBakedModel) event.modelManager.getBlockModelShapes().getModelForState(state);
 
                 //Build new Model
-                ModelRegistry.models.add(ModelBuilder.changeIcon(baseModel, iconMap.get(block.getName())));
+                ModelRegistry.models.add(ModelBuilder.changeIcon(baseModel, iconMap.get("side"), iconMap.get(block.getName()), block.convertStateToEnum(state)));
 
                 //Drop it in the registry
                 event.modelRegistry.putObject(modelResourceLocation, ModelRegistry.models.get(ModelRegistry.models.size() - 1));
@@ -81,7 +82,7 @@ public class ModelGenerator {
             ModelResourceLocation inventory = new ModelResourceLocation(modelResourceLocation, "inventory");
 
             //Build New Model
-            ModelRegistry.invModels.add(ModelBuilder.changeIcon(itemModel, iconMap.get(block.getName())));
+            ModelRegistry.invModels.add(ModelBuilder.changeIcon(itemModel, iconMap.get("side"), iconMap.get(block.getName()), EnumFacing.NORTH));
 
             //Drop it in the registry
             event.modelRegistry.putObject(inventory, ModelRegistry.invModels.get(ModelRegistry.invModels.size() - 1));
