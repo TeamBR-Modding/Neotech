@@ -7,6 +7,7 @@ import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockBasicCable;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.blocks.BlockTank;
+import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
@@ -66,7 +67,7 @@ public class ModelGenerator {
         ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
         for(BlockBakeable block : BlockHandler.blockRegistry) {
-            if(block instanceof BlockMachine) {
+            if(block instanceof BlockMachine || block instanceof BlockRFStorage) {
                 for (IBlockState state : block.generateFourDirectionStates()) {
                     /**
                      * Blocks

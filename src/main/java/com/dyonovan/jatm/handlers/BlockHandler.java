@@ -3,12 +3,14 @@ package com.dyonovan.jatm.handlers;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.blocks.BlockBasicCable;
+import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.jatm.common.blocks.BlockTank;
 import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
+import com.dyonovan.jatm.common.tileentity.notmachines.TileRFStorage;
 import com.dyonovan.jatm.common.tileentity.notmachines.TileTank;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -23,6 +25,7 @@ public class BlockHandler {
     public static Block furnaceGenerator, electricFurnace, electricCrusher, fluidGenerator;
     public static Block basicCable;
     public static Block basicTank;
+    public static Block basicCable, basicStorage;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -41,6 +44,8 @@ public class BlockHandler {
                 "basicCable", TileBasicCable.class);
         registerBlock(basicTank = new BlockTank("basicTank", TileTank.class),
                 "basicTank", TileTank.class);
+        registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID),
+                "basicRFStorage", TileRFStorage.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {
