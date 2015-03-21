@@ -4,6 +4,7 @@ tile.jatm:furnaceGenerator.name=Furnace Generator
 tile.jatm:electricFurnace.name=Electric Furnace
 tile.jatm:electricCrusher.name=Electric Crusher
 tile.jatm:fluidGenerator.name=Fluid Generator
+tile.jatm:basicCable.name=Basic RF Cable
 
 item.jatm:dustIron.name=Iron Dust
 item.jatm:dustGold.name=Gold Dust

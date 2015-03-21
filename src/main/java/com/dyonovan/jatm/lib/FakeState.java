@@ -1,4 +1,4 @@
-package com.dyonovan.jatm.common.cable;
+package com.dyonovan.jatm.lib;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;

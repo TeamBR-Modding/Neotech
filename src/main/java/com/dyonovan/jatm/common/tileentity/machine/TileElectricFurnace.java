@@ -100,17 +100,17 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
 
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return index == 0;
+        return index == INPUT_SLOT;
     }
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return index == 1;
+        return index == OUTPUT_SLOT;
     }
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(INPUT_SLOT)) != null;
+        return inventory.getStackInSlot(INPUT_SLOT) != null && FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(INPUT_SLOT)) != null;
     }
 
     @Override

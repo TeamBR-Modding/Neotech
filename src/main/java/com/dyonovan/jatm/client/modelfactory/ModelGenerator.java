@@ -1,7 +1,6 @@
 package com.dyonovan.jatm.client.modelfactory;
 
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
-import com.dyonovan.jatm.common.cable.FakeState;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
@@ -43,9 +42,9 @@ public class ModelGenerator {
         iconMap.put("side", textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + "machine_side")));
 
         //Register Cable Icons
-        iconMap.put("cableNoEdges", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/cableNoEdge")));
-        iconMap.put("cablePlus", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/cablePlus")));
-        iconMap.put("cableSquare", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/cableSquare")));
+        iconMap.put("basicCableNoEdges", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/basicCableNoEdge")));
+        iconMap.put("basicCablePlus", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/basicCablePlus")));
+        iconMap.put("basicCableSquare", textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/basicCableSquare")));
 
         //Register Front Icons
         for(BlockBakeable block : BlockHandler.blockRegistry) {
@@ -81,9 +80,9 @@ public class ModelGenerator {
             /**
              * Cables
              */
-            event.modelRegistry.putObject(new ModelResourceLocation(Constants.MODID + ":cable", "normal"), new ModelCable());
-            event.modelRegistry.putObject(new ModelResourceLocation(Constants.MODID + ":cable", "inventory"), new ModelCable());
-            itemModelMesher.register(Item.getItemFromBlock(BlockHandler.blockCable), 0, new ModelResourceLocation(Constants.MODID + ":cable", "inventory"));
+            event.modelRegistry.putObject(new ModelResourceLocation(Constants.MODID + ":basicCable", "normal"), new ModelCable());
+            event.modelRegistry.putObject(new ModelResourceLocation(Constants.MODID + ":basicCable", "inventory"), new ModelCable());
+            itemModelMesher.register(Item.getItemFromBlock(BlockHandler.basicCable), 0, new ModelResourceLocation(Constants.MODID + ":basicCable", "inventory"));
 
             /**
              * Items

@@ -1,8 +1,11 @@
-package com.dyonovan.jatm.common.cable;
+package com.dyonovan.jatm.common.blocks;
 
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.JATM;
+import com.dyonovan.jatm.lib.FakeState;
+import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
+import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -18,13 +21,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class BlockCable extends BlockContainer {
+public class BlockBasicCable extends BlockContainer {
     protected String name;
 
-    public BlockCable(Material materialIn, String blockName) {
+    public BlockBasicCable(Material materialIn, String blockName) {
         super(materialIn);
+        name = blockName;
         setCreativeTab(JATM.tabJATM);
-        setUnlocalizedName(name = blockName);
+        setUnlocalizedName(Constants.MODID + ":" + name);
         setBlockBounds(0.25F, 0.25F, 0.25F, 0.75F, 0.75F, 0.75F);
         setHardness(1.0F);
     }
@@ -86,7 +90,7 @@ public class BlockCable extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileCable();
+        return new TileBasicCable();
     }
 
     @Override

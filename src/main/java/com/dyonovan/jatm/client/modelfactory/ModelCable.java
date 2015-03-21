@@ -2,7 +2,7 @@ package com.dyonovan.jatm.client.modelfactory;
 
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-import com.dyonovan.jatm.common.cable.FakeState;
+import com.dyonovan.jatm.lib.FakeState;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -26,9 +26,9 @@ public class ModelCable implements ISmartBlockModel {
     boolean[] extensions = new boolean[6];
 
     public ModelCable() {
-        noEdgeTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":blocks/cableNoEdge");
-        plusTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":blocks/cablePlus");
-        squareTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":blocks/cableSquare");
+        noEdgeTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":blocks/basicCableNoEdge");
+        plusTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":blocks/basicCablePlus");
+        squareTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":blocks/basicCableSquare");
     }
 
     public ModelCable(FakeState state) {

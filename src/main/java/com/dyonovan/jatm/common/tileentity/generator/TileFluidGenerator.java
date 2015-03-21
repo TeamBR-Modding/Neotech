@@ -1,11 +1,14 @@
 package com.dyonovan.jatm.common.tileentity.generator;
 
 import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
@@ -48,6 +51,16 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
         if (!this.hasWorldObj()) return;
         World world = this.getWorld();
         if (world.isRemote) return;
+
+        if ((energyRF.getEnergyStored() > 0)) {
+            for (EnumFacing dir : EnumFacing.VALUES) {
+                TileEntity tile = world.getTileEntity(this.pos.offset(dir));
+                if (tile instanceof IEnergyReceiver) {
+                    energyRF.extractEnergy(((IEnergyHandler) tile).receiveEnergy(dir, energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
+                    world.markBlockForUpdate(this.pos);
+                }
+            }
+        }
 
         transferFluid();
 
