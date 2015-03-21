@@ -67,10 +67,11 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
 
         output = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(INPUT_SLOT));
 
-        return  output != null && !(inventory.getStackInSlot(OUTPUT_SLOT) != null &&
-                !inventory.getStackInSlot(OUTPUT_SLOT).isItemEqual(output) &&
-                inventory.getStackInSlot(OUTPUT_SLOT).stackSize < inventory.getStackInSlot(OUTPUT_SLOT).getMaxStackSize());
-
+        return output != null &&
+                !(inventory.getStackInSlot(OUTPUT_SLOT) != null &&
+                        !inventory.getStackInSlot(OUTPUT_SLOT).isItemEqual(output)) &&
+                !(inventory.getStackInSlot(OUTPUT_SLOT) != null &&
+                        inventory.getStackInSlot(OUTPUT_SLOT).stackSize >= inventory.getStackInSlot(OUTPUT_SLOT).getMaxStackSize());
     }
 
     /*******************************************************************************************************************
