@@ -1,13 +1,12 @@
 package com.dyonovan.jatm.client.modelfactory;
 
+import com.dyonovan.jatm.client.modelfactory.models.ModelBlock;
 import com.dyonovan.jatm.client.modelfactory.models.ModelCable;
-import com.dyonovan.jatm.client.modelfactory.models.ModelMachine;
 import com.dyonovan.jatm.client.modelfactory.models.ModelTank;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockBasicCable;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.blocks.BlockTank;
-import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
@@ -15,14 +14,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.IFlexibleBakedModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -67,47 +62,10 @@ public class ModelGenerator {
         ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
         for(BlockBakeable block : BlockHandler.blockRegistry) {
-            if(block instanceof BlockMachine || block instanceof BlockRFStorage) {
-                for (IBlockState state : block.generateFourDirectionStates()) {
-                    /**
-                     * Blocks
-                     */
-                    //Get resource
-                    ModelResourceLocation modelResourceLocation = ModelMachine.getModelResourceLocation(state);
-
-                    //Baked Model For State
-                    IFlexibleBakedModel baseModel = (IFlexibleBakedModel) event.modelManager.getBlockModelShapes().getModelForState(state);
-
-                    //Build new Model
-                    ModelRegistry.models.add(ModelMachine.changeIcon(baseModel, iconMap.get("side"), iconMap.get(block.getName()), block.fourStateToEnum(state)));
-
-                    //Drop it in the registry
-                    event.modelRegistry.putObject(modelResourceLocation, ModelRegistry.models.get(ModelRegistry.models.size() - 1));
-                }
-                /**
-                 * Machine Item
-                 */
-                //Get Model
-                IFlexibleBakedModel itemModel = (IFlexibleBakedModel) itemModelMesher.getItemModel(new ItemStack(block));
-
-                ModelResourceLocation modelResourceLocation = ModelMachine.getModelResourceLocation(block.getDefaultState());
-                //Get the inventory resource
-                ModelResourceLocation inventory = new ModelResourceLocation(modelResourceLocation, "inventory");
-
-                //Build New Model
-                ModelRegistry.invModels.add(ModelMachine.changeIcon(itemModel, iconMap.get("side"), iconMap.get(block.getName()), EnumFacing.NORTH));
-
-                //Drop it in the registry
-                event.modelRegistry.putObject(inventory, ModelRegistry.invModels.get(ModelRegistry.invModels.size() - 1));
-
-                //Register to the ItemModelMesher
-                itemModelMesher.register(Item.getItemFromBlock(block), 0, inventory);
-            }
-
             /**
              * Cables
              */
-            else if(block instanceof BlockBasicCable) {
+            if(block instanceof BlockBasicCable) {
                 //Build Normal Model
                 event.modelRegistry.putObject(block.getNormal(), new ModelCable());
                 //Build Inventory Model
@@ -125,6 +83,20 @@ public class ModelGenerator {
                 //Build Inventory Model
                 event.modelRegistry.putObject(block.getInventory(), new ModelTank());
                 //Register item model
+                itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
+            }
+
+            /**
+             * Machines
+             */
+            else if(block instanceof BlockMachine) {
+                for(IBlockState state : block.generateRotatableStates()) {
+                    //Build Normal Block
+                    event.modelRegistry.putObject(ModelBlock.getModelResourceLocation(state), new ModelBlock());
+                }
+                //Build Inventory block
+                event.modelRegistry.putObject(block.getInventory(), new ModelBlock());
+                //Register Item Model
                 itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
             }
         }

@@ -83,7 +83,7 @@ public class BlockBasicCable extends BlockBakeable {
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new DummyState(world, pos);
+        return new DummyState(world, pos, (BlockBakeable) world.getBlockState(pos).getBlock());
     }
 
     @Override

@@ -1,19 +1,29 @@
 package com.dyonovan.jatm.common.tileentity.storage;
 
+import com.dyonovan.jatm.common.blocks.BlockTank;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileTank extends TileEntity implements IFluidHandler, IUpdatePlayerListBox {
     public FluidTank tank;
 
     public TileTank() {
         tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 8);
+    }
+
+    public TileTank(int buckets) {
+        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * buckets);
     }
 
     public float getFluidLevelScaled() {
@@ -24,6 +34,12 @@ public class TileTank extends TileEntity implements IFluidHandler, IUpdatePlayer
         return tank.getFluid() != null ? tank.getFluid().getFluid() : null;
     }
 
+    @SideOnly(Side.CLIENT)
+    public TextureAtlasSprite getTierIcon() {
+        return tank.getCapacity() == FluidContainerRegistry.BUCKET_VOLUME * 8 ? Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/iron_block") :
+                tank.getCapacity() == FluidContainerRegistry.BUCKET_VOLUME * 16 ? Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/gold_block") :
+                tank.getCapacity() == FluidContainerRegistry.BUCKET_VOLUME * 64 ? Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/diamond_block") : null;
+    }
 
     public int getBrightness () {
         if (tank.getFluid() != null) {
@@ -35,7 +51,15 @@ public class TileTank extends TileEntity implements IFluidHandler, IUpdatePlayer
     @Override
     public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         worldObj.markBlockForUpdate(pos);
-        return canFill(from, resource.getFluid()) ? tank.fill(resource, doFill) : 0;
+        return canFill(from, resource.getFluid()) ? ( tank.fill(resource, false) > 0 ? tank.fill(resource, doFill) : fillAbove(from, resource, doFill)) : 0;
+    }
+
+    public int fillAbove(EnumFacing from, FluidStack resource, boolean doFill) {
+        BlockPos newPos = pos.offset(EnumFacing.UP);
+        while(!worldObj.isAirBlock(newPos) && worldObj.getBlockState(newPos).getBlock() instanceof BlockTank) {
+            return ((TileTank)worldObj.getTileEntity(newPos)).fill(from, resource, doFill);
+        }
+        return 0;
     }
 
     @Override

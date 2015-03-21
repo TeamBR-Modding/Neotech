@@ -1,12 +1,16 @@
 package com.dyonovan.jatm.common.blocks;
 
 import com.dyonovan.jatm.JATM;
+import com.dyonovan.jatm.collections.CubeTextures;
+import com.dyonovan.jatm.collections.DummyState;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -14,6 +18,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockMachine extends BlockBakeable {
@@ -27,6 +32,20 @@ public class BlockMachine extends BlockBakeable {
         this.setHardness(1.5F);
 
         this.guiID = guiID;
+    }
+
+    @Override
+    public CubeTextures getDefaultTextures() {
+        TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+        CubeTextures cubeTextures = new CubeTextures(
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side")
+        );
+        return cubeTextures;
     }
 
     @Override
@@ -44,9 +63,13 @@ public class BlockMachine extends BlockBakeable {
     }
 
     @Override
-    protected BlockState createBlockState()
-    {
+    protected BlockState createBlockState() {
         return new BlockState(this, PROPERTY_FACING);
+    }
+
+    @Override
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return new DummyState(world, pos, this);
     }
 
     @Override

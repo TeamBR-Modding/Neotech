@@ -18,6 +18,7 @@ import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings( "deprecation" )
 public class ModelCable implements ISmartBlockModel {
     static TextureAtlasSprite noEdgeTexture = null;
     static TextureAtlasSprite plusTexture = null;

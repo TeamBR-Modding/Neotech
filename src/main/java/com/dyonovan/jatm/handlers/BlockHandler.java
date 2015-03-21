@@ -23,7 +23,7 @@ import java.util.List;
 public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricCrusher, fluidGenerator;
-    public static Block basicTank;
+    public static Block ironTank, goldTank, diamondTank;
     public static Block basicCable, basicStorage;
 
     public static List<BlockBakeable> blockRegistry;
@@ -41,15 +41,20 @@ public class BlockHandler {
                 "electricCrusher", TileElectricCrusher.class);
         registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
                 "basicCable", TileBasicCable.class);
-        registerBlock(basicTank = new BlockTank("basicTank", TileTank.class),
-                "basicTank", TileTank.class);
+        registerBlock(ironTank = new BlockTank("ironTank", 8),
+                "ironTank", TileTank.class);
+        registerBlock(goldTank = new BlockTank("goldTank", 16),
+                "goldTank", TileTank.class);
+        registerBlock(diamondTank = new BlockTank("diamondTank", 64),
+                "diamondTank", TileTank.class);
         registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileRFStorage.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {
         GameRegistry.registerBlock(block, name);
-        GameRegistry.registerTileEntity(tileEntity, name);
+        if(tileEntity != null)
+            GameRegistry.registerTileEntity(tileEntity, name);
         blockRegistry.add((BlockBakeable)block);
     }
 }

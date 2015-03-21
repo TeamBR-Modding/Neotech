@@ -1,5 +1,6 @@
 package com.dyonovan.jatm.collections;
 
+import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -12,10 +13,12 @@ import java.util.Collection;
 public class DummyState implements IBlockState {
     public IBlockAccess blockAccess;
     public BlockPos pos;
+    public BlockBakeable block;
 
-    public DummyState(IBlockAccess w, BlockPos p) {
+    public DummyState(IBlockAccess w, BlockPos p, BlockBakeable blockBakeable) {
         this.blockAccess = w;
         this.pos = p;
+        this.block = blockBakeable;
     }
 
     public Collection getPropertyNames() {
@@ -38,7 +41,7 @@ public class DummyState implements IBlockState {
         return null;
     }
 
-    public Block getBlock() {
-        return null;
+    public BlockBakeable getBlock() {
+        return block;
     }
 }
