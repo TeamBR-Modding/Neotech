@@ -1,12 +1,16 @@
 package com.dyonovan.jatm.common.blocks.storage;
 
 import com.dyonovan.jatm.JATM;
+import com.dyonovan.jatm.collections.CubeTextures;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.tileentity.storage.TileRFStorage;
 import com.dyonovan.jatm.lib.Constants;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -35,6 +39,20 @@ public class BlockRFStorage extends BlockBakeable {
     }
 
     @Override
+    public CubeTextures getDefaultTextures() {
+        TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+        CubeTextures cubeTextures = new CubeTextures(
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side")
+        );
+        return cubeTextures;
+    }
+
+    @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
 
@@ -57,9 +75,7 @@ public class BlockRFStorage extends BlockBakeable {
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
-        int playerFacingDirection = (placer == null) ? 0 : MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3;
-        EnumFacing enumfacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
-        return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);
+        return this.getDefaultState().withProperty(PROPERTY_FACING, BlockPistonBase.getFacingFromEntity(worldIn, pos, placer));
     }
 
     public IBlockState getStateFromMeta(int meta) {

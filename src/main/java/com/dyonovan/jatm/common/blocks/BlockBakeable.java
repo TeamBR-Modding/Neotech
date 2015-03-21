@@ -82,6 +82,7 @@ public abstract class BlockBakeable extends BlockContainer {
         return 3;
     }
 
+    @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         try {
             return tileClass.newInstance();
@@ -93,6 +94,6 @@ public abstract class BlockBakeable extends BlockContainer {
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new DummyState(world, pos, (BlockBakeable) world.getBlockState(pos).getBlock());
+        return new DummyState(world, pos, this);
     }
 }

@@ -27,14 +27,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 public class BlockTank extends BlockBakeable {
-    public BlockTank(String name, Class<? extends TileEntity> tileClass) {
-        super(Material.glass, name, tileClass);
+    protected int buckets;
+    public BlockTank(String name, int bucketCount) {
+        super(Material.glass, name, null);
         setCreativeTab(JATM.tabJATM);
         setUnlocalizedName(Constants.MODID + ":" + name);
         setHardness(3.0F);
+        buckets = bucketCount;
     }
 
-    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileTank(buckets);
+    }
+        @Override
     public int getLightValue (IBlockAccess world, BlockPos pos)
     {
         TileEntity tank = world.getTileEntity(pos);
@@ -162,7 +167,7 @@ public class BlockTank extends BlockBakeable {
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new DummyState(world, pos);
+        return new DummyState(world, pos, this);
     }
 
     @Override
