@@ -1,19 +1,26 @@
 package com.dyonovan.jatm.common.blocks.storage;
 
 import com.dyonovan.jatm.JATM;
+import com.dyonovan.jatm.collections.CubeTextures;
+import com.dyonovan.jatm.collections.DummyState;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.tileentity.storage.TileRFStorage;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import static net.minecraft.block.BlockPistonBase.getFacingFromEntity;
 
 public class BlockRFStorage extends BlockBakeable {
 
@@ -27,6 +34,25 @@ public class BlockRFStorage extends BlockBakeable {
         this.setHardness(1.5F);
         this.guiID = guiID;
         this.tier = tier;
+    }
+
+    @Override
+    public CubeTextures getDefaultTextures() {
+        TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+        CubeTextures cubeTextures = new CubeTextures(
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side")
+        );
+        return cubeTextures;
+    }
+
+    @Override
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return new DummyState(world, pos, this);
     }
 
     @Override
@@ -57,9 +83,10 @@ public class BlockRFStorage extends BlockBakeable {
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
-        int playerFacingDirection = (placer == null) ? 0 : MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3;
+        /*int playerFacingDirection = (placer == null) ? 0 : MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3;
         EnumFacing enumfacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
-        return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);
+        return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);*/
+        return this.getDefaultState().withProperty(PROPERTY_FACING, getFacingFromEntity(worldIn, pos, placer));
     }
 
     public IBlockState getStateFromMeta(int meta) {
