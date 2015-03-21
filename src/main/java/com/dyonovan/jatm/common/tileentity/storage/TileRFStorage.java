@@ -5,6 +5,7 @@ import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
@@ -20,8 +21,10 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
     private static final int RF_TOTAL_1 = 250000;
     private static final int RF_TICK_1 = 200;
     public static final int CHARGE_SLOT_1 = 0;
+    public static final int CHARGE_SLOT_2 = 1;
+    public static final int CHARGE_SLOT_3 = 2;
 
-    private int tier;
+    public int tier;
     public EnergyStorage energyRF;
 
     public TileRFStorage(int tier) {
@@ -60,13 +63,26 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
      ************************************** Energy Functions ***********************************************************
      *******************************************************************************************************************/
 
+    private String getFront() {
+        PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+        String frontDir = getWorld().getBlockState(this.pos).getValue(PROPERTY_FACING).toString();
+        return frontDir;
+    }
     @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return energyRF.extractEnergy(maxExtract, simulate);
+
+        if (from.toString().equalsIgnoreCase(getFront())) {
+            return energyRF.extractEnergy(maxExtract, simulate);
+        }
+        return 0;
     }
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+
+        if (from.toString().equalsIgnoreCase(getFront())) {
+            return 0;
+        }
         int actual = energyRF.receiveEnergy(maxReceive, simulate);
         getWorld().markBlockForUpdate(this.pos);
         return actual;
