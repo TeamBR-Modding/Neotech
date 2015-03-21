@@ -1,6 +1,7 @@
 package com.dyonovan.jatm.common.tileentity.generator;
 
 import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
@@ -18,7 +19,7 @@ import java.util.List;
 import static net.minecraftforge.fluids.FluidContainerRegistry.*;
 
 
-public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerListBox, IFluidHandler {
+public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerListBox, IFluidHandler, IEnergyProvider {
 
     private enum validFuels {
         lava;
@@ -32,6 +33,7 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
     }
 
     public FluidTank fluidTank;
+    public EnergyStorage energyRF;
 
     /**
      * Energy Creation per Tick
@@ -158,15 +160,25 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
      *******************************************************************************************************************/
 
     @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return 0;
-    }
-
-    @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         int actual = energyRF.extractEnergy(maxExtract, simulate);
         if (actual > 0) this.getWorld().markBlockForUpdate(this.pos);
         return actual;
+    }
+
+    @Override
+    public int getEnergyStored(EnumFacing from) {
+        return energyRF.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(EnumFacing from) {
+        return energyRF.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(EnumFacing from) {
+        return true;
     }
 
     /*******************************************************************************************************************

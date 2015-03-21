@@ -2,6 +2,7 @@ package com.dyonovan.jatm.common.blocks.storage;
 
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
+import com.dyonovan.jatm.common.tileentity.notmachines.TileRFStorage;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
@@ -17,13 +18,20 @@ import net.minecraft.world.World;
 public class BlockRFStorage extends BlockBakeable {
 
     private int guiID;
+    public int tier;
 
-    public BlockRFStorage(String name, Class<? extends TileEntity> tileClass, int guiID) {
+    public BlockRFStorage(String name, Class<? extends TileEntity> tileClass, int guiID, int tier) {
         super(Material.iron, name, tileClass);
         this.setUnlocalizedName(Constants.MODID + ":" + name);
         this.setCreativeTab(JATM.tabJATM);
         this.setHardness(1.5F);
         this.guiID = guiID;
+        this.tier = tier;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileRFStorage(tier);
     }
 
     @Override

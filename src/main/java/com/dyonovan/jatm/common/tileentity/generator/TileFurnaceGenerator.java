@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.common.tileentity.generator;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
@@ -23,10 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO : Non consume objects
-public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerListBox {
+public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerListBox, IEnergyProvider {
 
     public int currentBurnTime;
     public int totalBurnTime;
+    public EnergyStorage energyRF;
 
     /**
      * Energy Creation per Tick
@@ -124,13 +125,23 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
      *******************************************************************************************************************/
 
     @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return 0;
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
+        return energyRF.extractEnergy(maxExtract, simulate);
     }
 
     @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return energyRF.extractEnergy(maxExtract, simulate);
+    public int getEnergyStored(EnumFacing from) {
+        return energyRF.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(EnumFacing from) {
+        return energyRF.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(EnumFacing from) {
+        return true;
     }
 
     /*******************************************************************************************************************
@@ -233,5 +244,4 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
     }
-
 }

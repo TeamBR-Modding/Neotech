@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.common.tileentity.cable;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
@@ -9,11 +9,10 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 //Design inspired from FluxDucts
-public class TileBasicCable extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox {
+public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEnergyProvider, IUpdatePlayerListBox {
 
     protected static int transferRate = 100;
     protected EnergyStorage[] faceBuffers = new EnergyStorage[6];

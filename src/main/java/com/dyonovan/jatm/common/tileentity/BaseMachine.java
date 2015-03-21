@@ -1,7 +1,5 @@
 package com.dyonovan.jatm.common.tileentity;
 
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -13,48 +11,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
-public class BaseMachine extends TileEntity implements IEnergyHandler, ISidedInventory {
+public class BaseMachine extends TileEntity implements ISidedInventory {
 
     protected InventoryTile inventory;
-    public EnergyStorage energyRF;
 
     /*******************************************************************************************************************
-     ************************************** Energy Functions ***********************************************************
+     ************************************** Inventory Functions ********************************************************
      *******************************************************************************************************************/
-
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return 0;
-    }
-
-    @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return 0;
-    }
-
-    @Override
-    public int getEnergyStored(EnumFacing from) {
-        return energyRF.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing from) {
-        return energyRF.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
-    }
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
         return new int[0];
     }
-
-    /*******************************************************************************************************************
-     ************************************** Inventory Functions ********************************************************
-     *******************************************************************************************************************/
 
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {

@@ -43,7 +43,7 @@ public class BlockHandler {
                 "basicCable", TileBasicCable.class);
         registerBlock(basicTank = new BlockTank("basicTank", TileTank.class),
                 "basicTank", TileTank.class);
-        registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID),
+        registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileRFStorage.class);
     }
 

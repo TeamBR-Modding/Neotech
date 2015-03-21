@@ -1,6 +1,7 @@
 package com.dyonovan.jatm.common.tileentity.machine;
 
 import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import com.dyonovan.jatm.crafting.OreProcessingRegistry;
@@ -13,10 +14,11 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerListBox {
+public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver {
 
     public int currentProcessTime;
     private ItemStack input, output;
+    public EnergyStorage energyRF;
 
     private static final int RF_TICK = 20;
     public static final int TOTAL_PROCESS_TIME = 150;
@@ -92,8 +94,18 @@ public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerLis
     }
 
     @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return 0;
+    public int getEnergyStored(EnumFacing from) {
+        return energyRF.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(EnumFacing from) {
+        return energyRF.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(EnumFacing from) {
+        return false;
     }
 
     /*******************************************************************************************************************
