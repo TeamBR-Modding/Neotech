@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO : Non consume objects
+//TODO : Dont consume containers (buckets)
 public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerListBox, IEnergyProvider {
 
     public int currentBurnTime;
