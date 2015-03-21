@@ -6,8 +6,12 @@ import com.dyonovan.jatm.common.tileentity.notmachines.TileTank;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -20,12 +24,23 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 public class BlockTank extends BlockBakeable {
     public BlockTank(String name, Class<? extends TileEntity> tileClass) {
         super(Material.glass, name, tileClass);
         setCreativeTab(JATM.tabJATM);
         setUnlocalizedName(Constants.MODID + ":" + name);
         setHardness(3.0F);
+    }
+
+    @Override
+    public int getLightValue (IBlockAccess world, BlockPos pos)
+    {
+        TileEntity tank = world.getTileEntity(pos);
+        if (tank != null && tank instanceof TileTank)
+            return ((TileTank) tank).getBrightness();
+        return 0;
     }
 
     @Override
@@ -88,6 +103,64 @@ public class BlockTank extends BlockBakeable {
     }
 
     @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    {
+        TileTank dummy = (TileTank) worldIn.getTileEntity(pos);
+
+        ItemStack stack = new ItemStack(this, 1);
+        TileTank logic = (TileTank) worldIn.getTileEntity(pos);
+        FluidStack liquid = logic.tank.getFluid();
+        if (liquid != null)
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+            NBTTagCompound liquidTag = new NBTTagCompound();
+            liquid.writeToNBT(liquidTag);
+            tag.setTag("Fluid", liquidTag);
+            stack.setTagCompound(tag);
+        }
+        dropTankBlock(worldIn, pos, stack);
+
+        worldIn.setBlockToAir(pos);
+        worldIn.markBlockForUpdate(pos);
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune){
+        return null;
+    }
+
+    protected void dropTankBlock (World world, BlockPos pos, ItemStack stack)
+    {
+        if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+        {
+            float f = 0.7F;
+            double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, stack);
+            entityitem.setPickupDelay(10);
+            world.spawnEntityInWorld(entityitem);
+        }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+    {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+        if (stack.hasTagCompound())
+        {
+            NBTTagCompound liquidTag = stack.getTagCompound().getCompoundTag("Fluid");
+            if (liquidTag != null)
+            {
+                FluidStack liquid = FluidStack.loadFluidStackFromNBT(liquidTag);
+                TileTank logic = (TileTank) worldIn.getTileEntity(pos);
+                logic.tank.setFluid(liquid);
+            }
+        }
+    }
+
+    @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return new DummyState(world, pos);
     }
@@ -114,13 +187,6 @@ public class BlockTank extends BlockBakeable {
 
     @SideOnly(Side.CLIENT)
     public EnumWorldBlockLayer getBlockLayer() {
-        return EnumWorldBlockLayer.TRANSLUCENT;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
-    {
-        return true;
+        return EnumWorldBlockLayer.CUTOUT;
     }
 }
