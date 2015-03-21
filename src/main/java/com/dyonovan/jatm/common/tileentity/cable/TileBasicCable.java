@@ -24,11 +24,10 @@ public class TileBasicCable extends TileEntity implements IEnergyHandler, IUpdat
         if (world.isRemote) return;
 
         if ((energyRF.getEnergyStored() > 0)) {
-            for (int i = 0; i < EnumFacing.values().length; i++) {
-            //for (EnumFacing dir : EnumFacing.values()) {
-                TileEntity tile = world.getTileEntity(this.pos.offset(EnumFacing.VALUES[i]));
+            for (EnumFacing dir : EnumFacing.values()) {
+                TileEntity tile = world.getTileEntity(this.pos.offset(dir));
                 if (tile instanceof IEnergyReceiver) {
-                    int actual = energyRF.extractEnergy(((IEnergyHandler) tile).receiveEnergy(EnumFacing.VALUES[i], energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
+                    energyRF.extractEnergy(((IEnergyHandler) tile).receiveEnergy(dir.getOpposite(), energyRF.extractEnergy(energyRF.getEnergyStored() / 6 < energyRF.getMaxExtract() ? energyRF.getEnergyStored() / 6 : energyRF.getMaxExtract(), true), false), false);
                 }
             }
         }
