@@ -110,7 +110,7 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return inventory.getStackInSlot(INPUT_SLOT) != null && FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(INPUT_SLOT)) != null;
+        return true;
     }
 
     @Override

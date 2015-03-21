@@ -35,7 +35,7 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
      * Energy Creation per Tick
      */
     private static final int RF_TICK = 80;
-    private static final int MB_TICK = 10;
+    private static final int MB_TICK = 1;
     public static final int TANK_CAPACITY = BUCKET_VOLUME * 10;
     public static final int BUCKET_IN = 0;
     public static final int BUCKET_OUT = 1;
@@ -56,7 +56,7 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
             for (EnumFacing dir : EnumFacing.VALUES) {
                 TileEntity tile = world.getTileEntity(this.pos.offset(dir));
                 if (tile instanceof IEnergyReceiver) {
-                    energyRF.extractEnergy(((IEnergyHandler) tile).receiveEnergy(dir, energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
+                    energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir, energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
                     world.markBlockForUpdate(this.pos);
                 }
             }

@@ -48,7 +48,7 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
             for (EnumFacing dir : EnumFacing.VALUES) {
                 TileEntity tile = world.getTileEntity(this.pos.offset(dir));
                 if (tile instanceof IEnergyReceiver) {
-                    energyRF.extractEnergy(((IEnergyHandler) tile).receiveEnergy(dir, energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
+                    energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir, energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
                     world.markBlockForUpdate(this.pos);
                 }
             }
