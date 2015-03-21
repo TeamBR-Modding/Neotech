@@ -80,7 +80,7 @@ public class CubeTextures {
             rotated.east = east;
             rotated.west = west;
             rotated.up = south;
-            rotated.down = up;
+            rotated.down = north;
         }
 
         return rotated;
