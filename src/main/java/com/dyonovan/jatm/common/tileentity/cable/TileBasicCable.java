@@ -27,7 +27,7 @@ public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEner
         if(this.worldObj != null) {
             int energyPerTick = transferRate;
             for (EnumFacing face : EnumFacing.values()) {
-                EnergyStorage buffer = this.faceBuffers[face.ordinal()];
+                EnergyStorage buffer = this.faceBuffers[face.getOpposite().ordinal()];
                 if (buffer.getEnergyStored() >= 1) {
                     BlockPos currentPos = this.pos.offset(face);
                     TileEntity te = this.worldObj.getTileEntity(currentPos);
@@ -50,6 +50,7 @@ public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEner
         for(startingEnergy = 0; startingEnergy < 6; ++startingEnergy) {
             sides.add(startingEnergy);
         }
+        sides.remove(facing.ordinal());
         do {
             startingEnergy = remainingEnergy;
             int share = remainingEnergy / 5;
@@ -57,13 +58,11 @@ public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEner
                 share = remainingEnergy;
             }
             for(Integer i : sides) {
-                if(i != facing.getOpposite().ordinal()) {
-                    int drained = this.faceBuffers[i].receiveEnergy(share, simulate);
-                    remainingEnergy -= drained;
-                    total += drained;
-                    if(remainingEnergy < 1) {
-                        break;
-                    }
+                int drained = this.faceBuffers[i].receiveEnergy(share, simulate);
+                remainingEnergy -= drained;
+                total += drained;
+                if(remainingEnergy < 1) {
+                    break;
                 }
             }
         } while(remainingEnergy != startingEnergy && remainingEnergy >= 1);

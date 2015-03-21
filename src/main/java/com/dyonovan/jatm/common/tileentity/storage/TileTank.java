@@ -1,5 +1,6 @@
 package com.dyonovan.jatm.common.tileentity.storage;
 
+import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockTank;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
