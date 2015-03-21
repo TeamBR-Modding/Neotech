@@ -142,7 +142,7 @@ public class ModelCable implements ISmartBlockModel {
         return squareTexture;
     }
 
-    public static final ItemTransformVec3f LittleBigger = new ItemTransformVec3f(new Vector3f(), new Vector3f(), new Vector3f(2.0F, 2.0F, 2.0F));
+    public static final ItemTransformVec3f LittleBigger = new ItemTransformVec3f(new Vector3f(), new Vector3f(), new Vector3f(1.5F, 1.5F, 1.5F));
     public static final ItemTransformVec3f MovedUp = new ItemTransformVec3f(new Vector3f(), new Vector3f(-0.05F, 0.0F, -0.15F), new Vector3f(1.0F, 1.0F, 1.0F));
 
     public ItemCameraTransforms getItemCameraTransforms() {

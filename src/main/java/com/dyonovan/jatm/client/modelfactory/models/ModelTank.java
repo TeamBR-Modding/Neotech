@@ -36,9 +36,11 @@ public class ModelTank implements ISmartBlockModel, ISmartItemModel {
     }
 
     public ModelTank(DummyState state) {
-        fluidHeight = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getFluidLevelScaled();
-        renderFluid = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getCurrentFluid();
-        topIcon = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getTierIcon();
+        if(state.blockAccess.getTileEntity(state.pos) != null) {
+            fluidHeight = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getFluidLevelScaled();
+            renderFluid = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getCurrentFluid();
+            topIcon = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getTierIcon();
+        }
         if (topIcon == null)
             topIcon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/iron_block");
     }

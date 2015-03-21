@@ -1,11 +1,13 @@
 package com.dyonovan.jatm;
 
 import com.dyonovan.jatm.client.modelfactory.ModelGenerator;
+import com.dyonovan.jatm.events.ToolTipEvent;
 import com.dyonovan.jatm.handlers.*;
 import com.dyonovan.jatm.lib.Constants;
 import com.dyonovan.jatm.common.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -36,6 +38,7 @@ public class JATM {
         BlockHandler.preInit();
         ItemHandler.PreInit();
         CraftingHandler.preInit();
+        MinecraftForge.EVENT_BUS.register(new ToolTipEvent());
     }
 
     @Mod.EventHandler

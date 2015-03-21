@@ -110,8 +110,6 @@ public class BlockTank extends BlockBakeable {
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
-        TileTank dummy = (TileTank) worldIn.getTileEntity(pos);
-
         ItemStack stack = new ItemStack(this, 1);
         TileTank logic = (TileTank) worldIn.getTileEntity(pos);
         FluidStack liquid = logic.tank.getFluid();
