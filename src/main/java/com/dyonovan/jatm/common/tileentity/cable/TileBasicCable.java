@@ -4,30 +4,39 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+//Design inspired from FluxDucts
 public class TileBasicCable extends TileEntity implements IEnergyHandler, IUpdatePlayerListBox {
 
-    protected EnergyStorage energyRF;
+    protected static int transferRate = 100;
+    protected EnergyStorage[] faceBuffers = new EnergyStorage[6];
 
     public TileBasicCable() {
-        energyRF = new EnergyStorage(1200, 200, 200);
+        for(int i = 0; i < 6; i++)
+            faceBuffers[i] = new EnergyStorage(transferRate);
     }
 
     @Override
     public void update() {
-        if (!this.hasWorldObj()) return;
-        World world = this.getWorld();
-        if (world.isRemote) return;
-
-        if ((energyRF.getEnergyStored() > 0)) {
-            for (EnumFacing dir : EnumFacing.values()) {
-                TileEntity tile = world.getTileEntity(this.pos.offset(dir));
-                if (tile instanceof IEnergyReceiver) {
-                    energyRF.extractEnergy(((IEnergyHandler) tile).receiveEnergy(dir.getOpposite(), energyRF.extractEnergy(energyRF.getEnergyStored() / 6 < energyRF.getMaxExtract() ? energyRF.getEnergyStored() / 6 : energyRF.getMaxExtract(), true), false), false);
+        if(this.worldObj != null) {
+            int energyPerTick = transferRate;
+            for (EnumFacing face : EnumFacing.values()) {
+                EnergyStorage buffer = this.faceBuffers[face.ordinal()];
+                if (buffer.getEnergyStored() >= 1) {
+                    BlockPos currentPos = this.pos.offset(face);
+                    TileEntity te = this.worldObj.getTileEntity(currentPos);
+                    if (te instanceof IEnergyReceiver) {
+                        IEnergyReceiver receiver = (IEnergyReceiver) te;
+                        if (receiver.canConnectEnergy(face) && buffer.extractEnergy(energyPerTick, true) > 0)
+                            buffer.extractEnergy(receiver.receiveEnergy(face, buffer.extractEnergy(energyPerTick, true), false), false);
+                    }
                 }
             }
         }
@@ -35,13 +44,36 @@ public class TileBasicCable extends TileEntity implements IEnergyHandler, IUpdat
 
     @Override
     public int receiveEnergy(EnumFacing facing, int maxReceive, boolean simulate) {
-        int actual = energyRF.receiveEnergy(maxReceive, simulate);
-        return actual;
+        int remainingEnergy = maxReceive;
+        int total = 0;
+        ArrayList<Integer> sides = new ArrayList<>();
+        int startingEnergy;
+        for(startingEnergy = 0; startingEnergy < 6; ++startingEnergy) {
+            sides.add(startingEnergy);
+        }
+        do {
+            startingEnergy = remainingEnergy;
+            int share = remainingEnergy / 5;
+            if(share < 1) {
+                share = remainingEnergy;
+            }
+            for(Integer i : sides) {
+                if(i != facing.getOpposite().ordinal()) {
+                    int drained = this.faceBuffers[i].receiveEnergy(share, simulate);
+                    remainingEnergy -= drained;
+                    total += drained;
+                    if(remainingEnergy < 1) {
+                        break;
+                    }
+                }
+            }
+        } while(remainingEnergy != startingEnergy && remainingEnergy >= 1);
+        return total;
     }
 
     @Override
     public int extractEnergy(EnumFacing facing, int maxExtract, boolean simulate) {
-        return energyRF.extractEnergy(maxExtract, simulate);
+        return 0;
     }
 
     @Override
@@ -51,22 +83,33 @@ public class TileBasicCable extends TileEntity implements IEnergyHandler, IUpdat
 
     @Override
     public int getEnergyStored(EnumFacing facing) {
-        return energyRF.getEnergyStored();
+        return faceBuffers[facing.ordinal()].getEnergyStored();
     }
 
     @Override
     public int getMaxEnergyStored(EnumFacing facing) {
-        return energyRF.getMaxEnergyStored();
+        return transferRate;
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tag) {
-        super.writeToNBT(tag);
-        energyRF.writeToNBT(tag);
+    public void writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        int[] energyarray = new int[6];
+        for(int energy = 0; energy < 6; ++energy) {
+            energyarray[energy] = this.faceBuffers[energy].getEnergyStored();
+        }
+        NBTTagIntArray var4 = new NBTTagIntArray(energyarray);
+        nbt.setTag("buffers", var4);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    public void readFromNBT(NBTTagCompound nbt) {
+        super.readFromNBT(nbt);
+        int[] energy = nbt.getIntArray("buffers");
+        if(energy != null && energy.length == 6) {
+            for(int n = 0; n < 6; ++n) {
+                this.faceBuffers[n].setEnergyStored(energy[n]);
+            }
+        }
     }
 }
