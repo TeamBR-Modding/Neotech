@@ -56,7 +56,7 @@ public class GuiElectricFurnace extends GuiContainer {
 
         //Progress Arrow
         int arrow = tile.currentProcessTime != 0 ? tile.currentProcessTime * 24 / TileElectricFurnace.TOTAL_PROCESS_TIME : 0;
-        this.drawTexturedModalRect(x + 79, y + 34, 176, 0, arrow + 1, 16);
+        this.drawTexturedModalRect(x + 81, y + 34, 176, 0, arrow + 1, 16);
     }
 
     @Override

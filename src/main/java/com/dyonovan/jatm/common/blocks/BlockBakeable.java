@@ -21,12 +21,11 @@ import java.util.List;
 
 public abstract class BlockBakeable extends BlockContainer {
     public static final PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    private String name;
+    protected String name;
     protected Class<? extends TileEntity> tileClass;
 
     protected BlockBakeable(Material materialIn, String name, Class<? extends TileEntity> tileClass) {
         super(materialIn);
-
         this.name = name;
         this.tileClass = tileClass;
     }
@@ -35,6 +34,7 @@ public abstract class BlockBakeable extends BlockContainer {
         return name;
     }
 
+    @SideOnly(Side.CLIENT)
     public ResourceLocation getFrontIcon() {
         return new ResourceLocation(Constants.MODID, "blocks/" + name + "_front");
     }
@@ -43,16 +43,17 @@ public abstract class BlockBakeable extends BlockContainer {
     public TextureAtlasSprite getSide() {
         return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":block/" + "machine_side");
     }
-
+    @SideOnly(Side.CLIENT)
     public ModelResourceLocation getNormal() {
         return new ModelResourceLocation(Constants.MODID + ":" + name, "normal");
     }
 
+    @SideOnly(Side.CLIENT)
     public ModelResourceLocation getInventory() {
         return new ModelResourceLocation(Constants.MODID + ":" + name, "inventory");
     }
 
-    public List<IBlockState> createDefaultStates() {
+    public List<IBlockState> generateFourDirectionStates() {
         List<IBlockState> states = new ArrayList<>();
         states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.NORTH));
         states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.SOUTH));
@@ -61,7 +62,7 @@ public abstract class BlockBakeable extends BlockContainer {
         return states;
     }
 
-    public EnumFacing convertStateToEnum(IBlockState state) {
+    public EnumFacing fourStateToEnum(IBlockState state) {
         if(state == this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.NORTH))
             return EnumFacing.NORTH;
         if(state == this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.SOUTH))

@@ -34,10 +34,8 @@ public class BlockHandler {
                 "electricFurnace", TileElectricFurnace.class);
         registerBlock(electricCrusher = new BlockMachine("electricCrusher", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
                 "electricCrusher", TileElectricCrusher.class);
-
-        basicCable = new BlockBasicCable(Material.cloth, "basicCable");
-        GameRegistry.registerBlock(basicCable, "basicCable");
-        GameRegistry.registerTileEntity(TileBasicCable.class, "basicCable");
+        registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
+                "basicCable", TileBasicCable.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {

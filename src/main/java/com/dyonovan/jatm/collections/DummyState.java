@@ -1,4 +1,4 @@
-package com.dyonovan.jatm.lib;
+package com.dyonovan.jatm.collections;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.Block;
@@ -9,11 +9,11 @@ import net.minecraft.world.IBlockAccess;
 
 import java.util.Collection;
 
-public class FakeState implements IBlockState {
+public class DummyState implements IBlockState {
     public IBlockAccess blockAccess;
     public BlockPos pos;
 
-    public FakeState(IBlockAccess w, BlockPos p) {
+    public DummyState(IBlockAccess w, BlockPos p) {
         this.blockAccess = w;
         this.pos = p;
     }

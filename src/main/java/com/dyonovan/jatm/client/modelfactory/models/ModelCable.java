@@ -1,8 +1,8 @@
-package com.dyonovan.jatm.client.modelfactory;
+package com.dyonovan.jatm.client.modelfactory.models;
 
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-import com.dyonovan.jatm.lib.FakeState;
+import com.dyonovan.jatm.collections.DummyState;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -31,7 +31,7 @@ public class ModelCable implements ISmartBlockModel {
         squareTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":blocks/basicCableSquare");
     }
 
-    public ModelCable(FakeState state) {
+    public ModelCable(DummyState state) {
         EnumFacing[] var2 = EnumFacing.values();
         int var3 = var2.length;
         for(int var4 = 0; var4 < var3; ++var4) {
@@ -149,6 +149,6 @@ public class ModelCable implements ISmartBlockModel {
     }
 
     public IBakedModel handleBlockState(IBlockState state) {
-        return state instanceof FakeState?new ModelCable((FakeState)state):null;
+        return state instanceof DummyState ?new ModelCable((DummyState)state):null;
     }
 }

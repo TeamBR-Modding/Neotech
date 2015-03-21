@@ -1,6 +1,10 @@
 package com.dyonovan.jatm.client.modelfactory;
 
+import com.dyonovan.jatm.client.modelfactory.models.ModelCable;
+import com.dyonovan.jatm.client.modelfactory.models.ModelMachine;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
+import com.dyonovan.jatm.common.blocks.BlockBasicCable;
+import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
@@ -60,48 +64,54 @@ public class ModelGenerator {
         ItemModelMesher itemModelMesher = Minecraft.getMinecraft().getRenderItem().getItemModelMesher();
 
         for(BlockBakeable block : BlockHandler.blockRegistry) {
-            for(IBlockState state : block.createDefaultStates()) {
+            if(block instanceof BlockMachine) {
+                for (IBlockState state : block.generateFourDirectionStates()) {
+                    /**
+                     * Blocks
+                     */
+                    //Get resource
+                    ModelResourceLocation modelResourceLocation = ModelMachine.getModelResourceLocation(state);
+
+                    //Baked Model For State
+                    IFlexibleBakedModel baseModel = (IFlexibleBakedModel) event.modelManager.getBlockModelShapes().getModelForState(state);
+
+                    //Build new Model
+                    ModelRegistry.models.add(ModelMachine.changeIcon(baseModel, iconMap.get("side"), iconMap.get(block.getName()), block.fourStateToEnum(state)));
+
+                    //Drop it in the registry
+                    event.modelRegistry.putObject(modelResourceLocation, ModelRegistry.models.get(ModelRegistry.models.size() - 1));
+                }
                 /**
-                 * Blocks
+                 * Machine Item
                  */
-                //Get resource
-                ModelResourceLocation modelResourceLocation = ModelMachine.getModelResourceLocation(state);
+                //Get Model
+                IFlexibleBakedModel itemModel = (IFlexibleBakedModel) itemModelMesher.getItemModel(new ItemStack(block));
 
-                //Baked Model For State
-                IFlexibleBakedModel baseModel = (IFlexibleBakedModel) event.modelManager.getBlockModelShapes().getModelForState(state);
+                ModelResourceLocation modelResourceLocation = ModelMachine.getModelResourceLocation(block.getDefaultState());
+                //Get the inventory resource
+                ModelResourceLocation inventory = new ModelResourceLocation(modelResourceLocation, "inventory");
 
-                //Build new Model
-                ModelRegistry.models.add(ModelMachine.changeIcon(baseModel, iconMap.get("side"), iconMap.get(block.getName()), block.convertStateToEnum(state)));
+                //Build New Model
+                ModelRegistry.invModels.add(ModelMachine.changeIcon(itemModel, iconMap.get("side"), iconMap.get(block.getName()), EnumFacing.NORTH));
 
                 //Drop it in the registry
-                event.modelRegistry.putObject(modelResourceLocation, ModelRegistry.models.get(ModelRegistry.models.size() - 1));
+                event.modelRegistry.putObject(inventory, ModelRegistry.invModels.get(ModelRegistry.invModels.size() - 1));
+
+                //Register to the ItemModelMesher
+                itemModelMesher.register(Item.getItemFromBlock(block), 0, inventory);
             }
 
             /**
              * Cables
              */
-            event.modelRegistry.putObject(new ModelResourceLocation(Constants.MODID + ":basicCable", "normal"), new ModelCable());
-            event.modelRegistry.putObject(new ModelResourceLocation(Constants.MODID + ":basicCable", "inventory"), new ModelCable());
-            itemModelMesher.register(Item.getItemFromBlock(BlockHandler.basicCable), 0, new ModelResourceLocation(Constants.MODID + ":basicCable", "inventory"));
-
-            /**
-             * Items
-             */
-            //Get Model
-            IFlexibleBakedModel itemModel = (IFlexibleBakedModel) itemModelMesher.getItemModel(new ItemStack(block));
-
-            ModelResourceLocation modelResourceLocation = ModelMachine.getModelResourceLocation(block.getDefaultState());
-            //Get the inventory resource
-            ModelResourceLocation inventory = new ModelResourceLocation(modelResourceLocation, "inventory");
-
-            //Build New Model
-            ModelRegistry.invModels.add(ModelMachine.changeIcon(itemModel, iconMap.get("side"), iconMap.get(block.getName()), EnumFacing.NORTH));
-
-            //Drop it in the registry
-            event.modelRegistry.putObject(inventory, ModelRegistry.invModels.get(ModelRegistry.invModels.size() - 1));
-
-            //Register to the ItemModelMesher
-            itemModelMesher.register(Item.getItemFromBlock(block), 0, inventory);
+            else if(block instanceof BlockBasicCable) {
+                //Build Normal Model
+                event.modelRegistry.putObject(block.getNormal(), new ModelCable());
+                //Build Inventory Model
+                event.modelRegistry.putObject(block.getInventory(), new ModelCable());
+                //Register the Model to the item
+                itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
+            }
         }
     }
 }

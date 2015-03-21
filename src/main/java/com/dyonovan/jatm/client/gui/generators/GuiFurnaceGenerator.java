@@ -43,7 +43,7 @@ public class GuiFurnaceGenerator extends GuiContainer {
 
         //RF Energy bar
         int widthRF = tile.energyRF.getEnergyStored() * 52 / tile.energyRF.getMaxEnergyStored();
-        drawTexturedModalRect(x + 62, y + 18, 176, 14, widthRF, 15);
+        drawTexturedModalRect(x + 62, y + 18, 176, 14, widthRF, 16);
 
         //Buring Bar
         int heightBurn = tile.currentBurnTime == 0 ? 13 : tile.currentBurnTime * 13 / tile.totalBurnTime;

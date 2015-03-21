@@ -1,4 +1,4 @@
-package com.dyonovan.jatm.client.modelfactory;
+package com.dyonovan.jatm.client.modelfactory.models;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
