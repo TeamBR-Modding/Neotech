@@ -18,6 +18,10 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+
 //TODO : Non consume objects
 public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerListBox {
 
@@ -44,15 +48,7 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
         World world = this.getWorld();
         if (world.isRemote) return;
 
-        if ((energyRF.getEnergyStored() > 0)) {
-            for (EnumFacing dir : EnumFacing.VALUES) {
-                TileEntity tile = world.getTileEntity(this.pos.offset(dir));
-                if (tile instanceof IEnergyReceiver) {
-                    energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir, energyRF.extractEnergy(energyRF.getMaxExtract(), true), false), false);
-                    world.markBlockForUpdate(this.pos);
-                }
-            }
-        }
+        transferEnergy();
 
         if (currentBurnTime > 0 || (energyRF.getEnergyStored() < energyRF.getMaxEnergyStored() && inventory != null)) {
             if (currentBurnTime == 0) {
@@ -74,6 +70,22 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
         }
     }
 
+    private void transferEnergy() {
+        List<EnumFacing> availDir = new ArrayList<>();
+        if (energyRF.getEnergyStored() > 0) {
+            for (EnumFacing dir : EnumFacing.VALUES) {
+                TileEntity tile = getWorld().getTileEntity(this.pos.offset(dir));
+                if (tile instanceof IEnergyReceiver) availDir.add(dir);
+            }
+        }
+        if (availDir.size() <= 0) return;
+        int availRF = Math.min(energyRF.getEnergyStored() / availDir.size() , RF_TICK / availDir.size());
+        for (EnumFacing dir : availDir) {
+            TileEntity tile = getWorld().getTileEntity(this.pos.offset(dir));
+            energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir, energyRF.extractEnergy(availRF, true), false), false);
+        }
+        getWorld().markBlockForUpdate(this.pos);
+    }
 
     private int getFuelValue(ItemStack itemStack) {
         if (itemStack == null) return 0;
