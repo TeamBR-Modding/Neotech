@@ -23,7 +23,6 @@ import java.util.List;
 public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricCrusher, fluidGenerator;
-    public static Block basicCable;
     public static Block basicTank;
     public static Block basicCable, basicStorage;
 
