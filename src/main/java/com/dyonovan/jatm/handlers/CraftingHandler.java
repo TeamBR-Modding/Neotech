@@ -21,6 +21,14 @@ public class CraftingHandler {
         GameRegistry.addRecipe(new ItemStack(BlockHandler.electricCrusher), "ABA", "BCB", "ABA",
                 'A', Items.iron_ingot, 'B', Items.flint, 'C', Blocks.piston);
 
+        //Basic Cable
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.basicCable, 4), "AAA", "ABA", "AAA",
+                'A', Blocks.wool, 'B', Blocks.redstone_block);
+
+        //Fluid Generator
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.fluidGenerator), "ABA", "DCD", "ABA",
+                'A', Items.iron_ingot, 'B', Items.bucket, 'C', Blocks.furnace, 'D', Items.redstone);
+
         //Vanilla Furnace Recipes
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);
         GameRegistry.addSmelting(ItemHandler.dustGold, new ItemStack(Items.gold_ingot, 1), 0.7F);
@@ -28,6 +36,5 @@ public class CraftingHandler {
         //OreProcessing Recipes
         OreProcessingRegistry.addOreProcessingRecipe(Blocks.cobblestone, Blocks.sand);
         OreProcessingRegistry.addOreProcessingRecipe(Blocks.gravel, Items.flint);
-
     }
 }

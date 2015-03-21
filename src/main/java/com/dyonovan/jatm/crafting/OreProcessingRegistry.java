@@ -62,7 +62,8 @@ public class OreProcessingRegistry {
         }
         for (OreProcessingRecipe r : recipes)
         {
-            if (r.matches(input))
+            if (r.input.isItemEqual(input))
+            //if (r.matches(input))
                 return r.getResult();
         }
         return null;
