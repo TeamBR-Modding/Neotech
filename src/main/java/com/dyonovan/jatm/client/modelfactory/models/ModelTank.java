@@ -1,9 +1,8 @@
 package com.dyonovan.jatm.client.modelfactory.models;
 
 import com.dyonovan.jatm.collections.DummyState;
-import com.dyonovan.jatm.common.tileentity.notmachines.TileTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileTank;
 import com.dyonovan.jatm.handlers.BlockHandler;
-import com.dyonovan.jatm.handlers.ItemHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
@@ -19,7 +18,6 @@ import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import org.lwjgl.opengl.GL11;
 
 import javax.vecmath.Vector3f;
 import java.util.ArrayList;

@@ -2,7 +2,7 @@ package com.dyonovan.jatm.common.blocks.storage;
 
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
-import com.dyonovan.jatm.common.tileentity.notmachines.TileRFStorage;
+import com.dyonovan.jatm.common.tileentity.storage.TileRFStorage;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;

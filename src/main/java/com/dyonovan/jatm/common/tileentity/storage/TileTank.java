@@ -1,4 +1,4 @@
-package com.dyonovan.jatm.common.tileentity.notmachines;
+package com.dyonovan.jatm.common.tileentity.storage;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;

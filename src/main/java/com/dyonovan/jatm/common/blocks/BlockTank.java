@@ -2,7 +2,7 @@ package com.dyonovan.jatm.common.blocks;
 
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.DummyState;
-import com.dyonovan.jatm.common.tileentity.notmachines.TileTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileTank;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

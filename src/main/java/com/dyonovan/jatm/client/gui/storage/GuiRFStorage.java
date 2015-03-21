@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.client.gui.storage;
 
 import com.dyonovan.jatm.common.container.storage.ContainerRFStorage;
-import com.dyonovan.jatm.common.tileentity.notmachines.TileRFStorage;
+import com.dyonovan.jatm.common.tileentity.storage.TileRFStorage;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 

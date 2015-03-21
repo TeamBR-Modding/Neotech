@@ -1,4 +1,4 @@
-package com.dyonovan.jatm.common.tileentity.notmachines;
+package com.dyonovan.jatm.common.tileentity.storage;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
@@ -8,7 +8,12 @@ import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
 
@@ -27,7 +32,28 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
 
     @Override
     public void update() {
+        if (!this.hasWorldObj()) return;
+        World world = this.getWorld();
+        if (world.isRemote) return;
 
+        transferEnergy();
+    }
+
+    private void transferEnergy() {
+        List<EnumFacing> availDir = new ArrayList<>();
+        if (energyRF.getEnergyStored() > 0) {
+            for (EnumFacing dir : EnumFacing.VALUES) {
+                TileEntity tile = getWorld().getTileEntity(this.pos.offset(dir));
+                if (tile instanceof IEnergyReceiver) availDir.add(dir);
+            }
+        }
+        if (availDir.size() <= 0) return;
+        int availRF = Math.min(energyRF.getEnergyStored() / availDir.size() , energyRF.getMaxExtract() / availDir.size());
+        for (EnumFacing dir : availDir) {
+            TileEntity tile = getWorld().getTileEntity(this.pos.offset(dir));
+            energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir, energyRF.extractEnergy(availRF, true), false), false);
+        }
+        getWorld().markBlockForUpdate(this.pos);
     }
 
     /*******************************************************************************************************************
@@ -41,7 +67,9 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return energyRF.receiveEnergy(maxReceive, simulate);
+        int actual = energyRF.receiveEnergy(maxReceive, simulate);
+        getWorld().markBlockForUpdate(this.pos);
+        return actual;
     }
 
     @Override
@@ -80,12 +108,12 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return false;
+        return true;
     }
 
     @Override
     public int getSizeInventory() {
-        return 1;
+        return tier;
     }
 
     @Override
@@ -137,6 +165,4 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
         energyRF.writeToNBT(tag);
         inventory.writeToNBT(tag);
     }
-
-
 }

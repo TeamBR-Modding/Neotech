@@ -14,7 +14,7 @@ import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
-import com.dyonovan.jatm.common.tileentity.notmachines.TileRFStorage;
+import com.dyonovan.jatm.common.tileentity.storage.TileRFStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
