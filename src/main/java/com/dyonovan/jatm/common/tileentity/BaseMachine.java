@@ -56,8 +56,6 @@ public class BaseMachine extends TileEntity implements IEnergyHandler, ISidedInv
      ************************************** Inventory Functions ********************************************************
      *******************************************************************************************************************/
 
-
-
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
         return true;

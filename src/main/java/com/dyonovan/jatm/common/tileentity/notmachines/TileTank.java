@@ -1,5 +1,9 @@
 package com.dyonovan.jatm.common.tileentity.notmachines;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -8,8 +12,12 @@ import net.minecraftforge.fluids.*;
 public class TileTank extends TileEntity implements IFluidHandler, IUpdatePlayerListBox {
     protected FluidTank tank;
 
-    public TileTank(int bucketCount) {
-        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * bucketCount);
+    public TileTank() {
+        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 8);
+    }
+
+    public float getFluidLevelScaled() {
+        return 0.0F;
     }
 
     @Override
@@ -45,5 +53,17 @@ public class TileTank extends TileEntity implements IFluidHandler, IUpdatePlayer
     @Override
     public void update() {
 
+    }
+
+    @Override
+    public Packet getDescriptionPacket() {
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeToNBT(tag);
+        return new S35PacketUpdateTileEntity(this.pos, 1, tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.getNbtCompound());
     }
 }

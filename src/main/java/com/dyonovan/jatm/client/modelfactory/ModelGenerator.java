@@ -2,9 +2,11 @@ package com.dyonovan.jatm.client.modelfactory;
 
 import com.dyonovan.jatm.client.modelfactory.models.ModelCable;
 import com.dyonovan.jatm.client.modelfactory.models.ModelMachine;
+import com.dyonovan.jatm.client.modelfactory.models.ModelTank;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockBasicCable;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
+import com.dyonovan.jatm.common.blocks.BlockTank;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
@@ -110,6 +112,18 @@ public class ModelGenerator {
                 //Build Inventory Model
                 event.modelRegistry.putObject(block.getInventory(), new ModelCable());
                 //Register the Model to the item
+                itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
+            }
+
+            /**
+             * Tank
+             */
+            else if(block instanceof BlockTank) {
+                //Build Normal Block
+                event.modelRegistry.putObject(block.getNormal(), new ModelTank());
+                //Build Inventory Model
+                event.modelRegistry.putObject(block.getInventory(), new ModelTank());
+                //Register item model
                 itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
             }
         }

@@ -3,11 +3,13 @@ package com.dyonovan.jatm.handlers;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.blocks.BlockBasicCable;
+import com.dyonovan.jatm.common.blocks.BlockTank;
 import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
+import com.dyonovan.jatm.common.tileentity.notmachines.TileTank;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
@@ -20,6 +22,7 @@ public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricCrusher, fluidGenerator;
     public static Block basicCable;
+    public static Block basicTank;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -36,6 +39,8 @@ public class BlockHandler {
                 "electricCrusher", TileElectricCrusher.class);
         registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
                 "basicCable", TileBasicCable.class);
+        registerBlock(basicTank = new BlockTank("basicTank", TileTank.class),
+                "basicTank", TileTank.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {

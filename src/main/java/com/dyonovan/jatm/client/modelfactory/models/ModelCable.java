@@ -44,7 +44,7 @@ public class ModelCable implements ISmartBlockModel {
     }
 
     public List<BakedQuad> getFaceQuads(EnumFacing facing) {
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     private void drawCableStump(ModelRotation modelRot, List<BakedQuad> list) {
