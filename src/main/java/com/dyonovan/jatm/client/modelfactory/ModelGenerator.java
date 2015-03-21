@@ -87,9 +87,9 @@ public class ModelGenerator {
             }
 
             /**
-             * Machines
+             * Blocks
              */
-            else if(block instanceof BlockMachine) {
+            else {
                 for(IBlockState state : block.generateRotatableStates()) {
                     //Build Normal Block
                     event.modelRegistry.putObject(ModelBlock.getModelResourceLocation(state), new ModelBlock());
