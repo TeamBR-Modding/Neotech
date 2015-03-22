@@ -207,4 +207,11 @@ public class BlockTank extends BlockBakeable {
     public EnumWorldBlockLayer getBlockLayer() {
         return EnumWorldBlockLayer.CUTOUT;
     }
+
+    @Override
+    public boolean canRenderInLayer(EnumWorldBlockLayer layer)
+    {
+        return layer == EnumWorldBlockLayer.CUTOUT || layer == EnumWorldBlockLayer.TRANSLUCENT;
+    }
+
 }

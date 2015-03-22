@@ -13,6 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.ISmartBlockModel;
 import net.minecraftforge.client.model.ISmartItemModel;
 import net.minecraftforge.fluids.Fluid;
@@ -29,6 +31,7 @@ public class ModelTank implements ISmartBlockModel, ISmartItemModel {
     protected static FaceBakery faceBakery = new FaceBakery();
     protected float fluidHeight;
     protected Fluid renderFluid;
+    protected boolean isItem;
 
     public ModelTank() {
         topIcon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/iron_block");
@@ -43,6 +46,7 @@ public class ModelTank implements ISmartBlockModel, ISmartItemModel {
         }
         if (topIcon == null)
             topIcon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/iron_block");
+        isItem = false;
     }
 
     public ModelTank(float renderHeight, Fluid fluid, TextureAtlasSprite icon) {
@@ -51,6 +55,7 @@ public class ModelTank implements ISmartBlockModel, ISmartItemModel {
         this.topIcon = icon;
         if (topIcon == null)
             topIcon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/iron_block");
+        isItem = true;
     }
 
     @Override
@@ -67,24 +72,25 @@ public class ModelTank implements ISmartBlockModel, ISmartItemModel {
         ModelRotation modelRot = ModelRotation.X0_Y0;
         boolean scale = true;
 
-        //Top and Bottom (Iron)
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 0.0F, 16.0F), face, topIcon, EnumFacing.DOWN, modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.001F, 0.0F), new Vector3f(16.0F, 0.001F, 16.0F), face, topIcon, EnumFacing.DOWN.getOpposite(), modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.0F, 0.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, topIcon, EnumFacing.UP, modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 15.99F, 0.0F), new Vector3f(16.0F, 15.99F, 16.0F), face, topIcon, EnumFacing.UP.getOpposite(), modelRot, null, scale, true));
+        if(MinecraftForgeClient.getRenderLayer() == EnumWorldBlockLayer.CUTOUT || isItem) {
+            //Top and Bottom (Iron)
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 0.0F, 16.0F), face, topIcon, EnumFacing.DOWN, modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.001F, 0.0F), new Vector3f(16.0F, 0.001F, 16.0F), face, topIcon, EnumFacing.DOWN.getOpposite(), modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.0F, 0.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, topIcon, EnumFacing.UP, modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 15.99F, 0.0F), new Vector3f(16.0F, 15.99F, 16.0F), face, topIcon, EnumFacing.UP.getOpposite(), modelRot, null, scale, true));
 
-        //Sides (Glass)
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 16.0F, 0.0F), face, glass, EnumFacing.NORTH, modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 16.0F, 0.0F), new Vector3f(0.0F, 0.0F, 0.0F), face, glass, EnumFacing.NORTH.getOpposite(), modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, glass, EnumFacing.SOUTH, modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 16.0F, 16.0F), new Vector3f(0.0F, 0.0F, 16.0F), face, glass, EnumFacing.SOUTH.getOpposite(), modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(0.0F, 16.0F, 16.0F), face, glass, EnumFacing.WEST, modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.0F, 16.0F), new Vector3f(0.0F, 0.0F, 0.0F), face, glass, EnumFacing.WEST.getOpposite(), modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 0.0F, 0.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, glass, EnumFacing.EAST, modelRot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 16.0F, 16.0F), new Vector3f(16.0F, 0.0F, 0.0F), face, glass, EnumFacing.EAST.getOpposite(), modelRot, null, scale, true));
-
+            //Sides (Glass)
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 16.0F, 0.0F), face, glass, EnumFacing.NORTH, modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 16.0F, 0.0F), new Vector3f(0.0F, 0.0F, 0.0F), face, glass, EnumFacing.NORTH.getOpposite(), modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, glass, EnumFacing.SOUTH, modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 16.0F, 16.0F), new Vector3f(0.0F, 0.0F, 16.0F), face, glass, EnumFacing.SOUTH.getOpposite(), modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(0.0F, 16.0F, 16.0F), face, glass, EnumFacing.WEST, modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.0F, 16.0F), new Vector3f(0.0F, 0.0F, 0.0F), face, glass, EnumFacing.WEST.getOpposite(), modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 0.0F, 0.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, glass, EnumFacing.EAST, modelRot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 16.0F, 16.0F), new Vector3f(16.0F, 0.0F, 0.0F), face, glass, EnumFacing.EAST.getOpposite(), modelRot, null, scale, true));
+        }
         //Render Fluid
-        if (renderFluid != null) {
+        if (renderFluid != null && (MinecraftForgeClient.getRenderLayer() == EnumWorldBlockLayer.TRANSLUCENT || isItem)) {
             list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, fluidHeight, 0.01F), new Vector3f(15.99F, fluidHeight, 15.99F), face, renderFluid.getIcon(), EnumFacing.UP, modelRot, null, scale, true));
             list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.001F, 0.01F), new Vector3f(15.999F, 0.001F, 15.999F), face, renderFluid.getIcon(), EnumFacing.DOWN, modelRot, null, scale, true));
 
