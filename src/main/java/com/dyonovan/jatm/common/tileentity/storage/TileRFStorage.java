@@ -29,6 +29,11 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
     public int tier;
     public EnergyStorage energyRF;
 
+    public TileRFStorage() {
+        energyRF = new EnergyStorage(10);
+        inventory = new InventoryTile(1);
+    }
+
     public TileRFStorage(int tier) {
         if (tier == 1) energyRF = new EnergyStorage(RF_TOTAL_1, RF_TICK_1);
         inventory = new InventoryTile(tier);
@@ -37,10 +42,7 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
 
     @Override
     public void update() {
-        if (!this.hasWorldObj()) return;
-        World world = this.getWorld();
-        if (world.isRemote) return;
-
+        if(worldObj != null && !worldObj.isRemote)
         transferEnergy();
     }
 
@@ -66,7 +68,6 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-
         if (from.getOpposite() != getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)) {
             int amount = energyRF.receiveEnergy(maxReceive, simulate);
             worldObj.markBlockForUpdate(this.pos);

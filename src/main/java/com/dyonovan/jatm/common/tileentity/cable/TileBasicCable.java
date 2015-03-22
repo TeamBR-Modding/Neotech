@@ -27,14 +27,13 @@ public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEner
         if(this.worldObj != null) {
             int energyPerTick = transferRate;
             for (EnumFacing face : EnumFacing.values()) {
-                EnergyStorage buffer = this.faceBuffers[face.getOpposite().ordinal()];
+                EnergyStorage buffer = this.faceBuffers[face.ordinal()];
                 if (buffer.getEnergyStored() >= 1) {
-                    BlockPos currentPos = this.pos.offset(face);
-                    TileEntity te = this.worldObj.getTileEntity(currentPos);
+                    TileEntity te = this.worldObj.getTileEntity(this.pos.offset(face));
                     if (te instanceof IEnergyReceiver) {
                         IEnergyReceiver receiver = (IEnergyReceiver) te;
                         if (receiver.canConnectEnergy(face) && buffer.extractEnergy(energyPerTick, true) > 0)
-                            buffer.extractEnergy(receiver.receiveEnergy(face, buffer.extractEnergy(energyPerTick, true), false), false);
+                            buffer.extractEnergy(receiver.receiveEnergy(face.getOpposite(), buffer.extractEnergy(energyPerTick, true), false), false);
                     }
                 }
             }
