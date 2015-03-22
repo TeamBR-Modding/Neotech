@@ -3,9 +3,11 @@ package com.dyonovan.jatm.common.tileentity.storage;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
@@ -43,49 +45,34 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
     }
 
     private void transferEnergy() {
-        List<EnumFacing> availDir = new ArrayList<>();
-        if (energyRF.getEnergyStored() > 0) {
-            for (EnumFacing dir : EnumFacing.VALUES) {
-                TileEntity tile = getWorld().getTileEntity(this.pos.offset(dir));
-                if (tile instanceof IEnergyReceiver) availDir.add(dir);
-            }
+        EnumFacing out = (EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING);
+        TileEntity tile = getWorld().getTileEntity(this.pos.offset(out));
+        if (tile instanceof IEnergyReceiver) {
+            int avail = Math.min(RF_TICK_1, energyRF.getEnergyStored());
+            int amount = ((IEnergyReceiver) tile).receiveEnergy(out.getOpposite(), avail, true);
+            int actual = ((IEnergyReceiver) tile).receiveEnergy(out.getOpposite(), amount, false);
+            energyRF.extractEnergy(actual, false);
         }
-        if (availDir.size() <= 0) return;
-        int availRF = Math.min(energyRF.getEnergyStored() / availDir.size() , energyRF.getMaxExtract() / availDir.size());
-        for (EnumFacing dir : availDir) {
-            TileEntity tile = getWorld().getTileEntity(this.pos.offset(dir));
-            energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir, energyRF.extractEnergy(availRF, true), false), false);
-        }
-        getWorld().markBlockForUpdate(this.pos);
     }
 
     /*******************************************************************************************************************
      ************************************** Energy Functions ***********************************************************
      *******************************************************************************************************************/
 
-    private String getFront() {
-        PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-        String frontDir = getWorld().getBlockState(this.pos).getValue(PROPERTY_FACING).toString();
-        return frontDir;
-    }
     @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-
-        if (from.toString().equalsIgnoreCase(getFront())) {
-            return energyRF.extractEnergy(maxExtract, simulate);
-        }
-        return 0;
+        return energyRF.extractEnergy(maxExtract, simulate);
     }
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 
-        if (from.toString().equalsIgnoreCase(getFront())) {
-            return 0;
+        if (from.getOpposite() != getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)) {
+            int amount = energyRF.receiveEnergy(maxReceive, simulate);
+            worldObj.markBlockForUpdate(this.pos);
+            return amount;
         }
-        int actual = energyRF.receiveEnergy(maxReceive, simulate);
-        getWorld().markBlockForUpdate(this.pos);
-        return actual;
+        return 0;
     }
 
     @Override

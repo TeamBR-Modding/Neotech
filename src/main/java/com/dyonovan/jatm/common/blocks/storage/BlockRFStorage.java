@@ -16,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class BlockRFStorage extends BlockBakeable {
@@ -41,7 +40,7 @@ public class BlockRFStorage extends BlockBakeable {
     @Override
     public CubeTextures getDefaultTextures() {
         TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
-        CubeTextures cubeTextures = new CubeTextures(
+        return new CubeTextures(
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
@@ -49,7 +48,6 @@ public class BlockRFStorage extends BlockBakeable {
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side")
         );
-        return cubeTextures;
     }
 
     @Override
