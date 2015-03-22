@@ -3,6 +3,7 @@ package com.dyonovan.jatm.common.blocks;
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.DummyState;
 import com.dyonovan.jatm.common.tileentity.storage.TileTank;
+import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
@@ -39,7 +41,7 @@ public class BlockTank extends BlockBakeable {
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileTank(buckets);
     }
-        @Override
+    @Override
     public int getLightValue (IBlockAccess world, BlockPos pos)
     {
         TileEntity tank = world.getTileEntity(pos);
@@ -51,11 +53,11 @@ public class BlockTank extends BlockBakeable {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
+        TileTank tank = (TileTank)world.getTileEntity(pos);
 
         ItemStack heldItem = player.getHeldItem();
         if(heldItem != null) {
             FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(heldItem);
-            TileTank tank = (TileTank)world.getTileEntity(pos);
             if(fluid != null) {
                 int amount = tank.fill(EnumFacing.UP, fluid, false);
                 if(amount == fluid.amount) {
@@ -87,6 +89,8 @@ public class BlockTank extends BlockBakeable {
                 }
             }
         }
+        if(world.isRemote)
+            player.addChatComponentMessage(new ChatComponentText(tank.tank.getFluid() == null ? "Empty" : GuiHelper.GuiColor.YELLOW + tank.tank.getFluid().getLocalizedName() + GuiHelper.GuiColor.WHITE + " : " + tank.tank.getFluidAmount() + "/" + tank.tank.getCapacity()));
         return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
     }
 
