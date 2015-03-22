@@ -41,6 +41,8 @@ public class BlockHandler {
                 "electricFurnace", TileElectricFurnace.class);
         registerBlock(electricCrusher = new BlockMachine("electricCrusher", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
                 "electricCrusher", TileElectricCrusher.class);
+        registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
+                "basicRFStorage", TileBasicRFStorage.class);
         registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
                 "basicCable", TileBasicCable.class);
         registerBlock(ironTank = new BlockTank("ironTank", 1),
@@ -49,8 +51,6 @@ public class BlockHandler {
                 "goldTank", TileGoldTank.class);
         registerBlock(diamondTank = new BlockTank("diamondTank", 3),
                 "diamondTank", TileDiamondTank.class);
-        registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
-                "basicRFStorage", TileBasicRFStorage.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {

@@ -23,11 +23,23 @@ public class CraftingHandler {
 
         //Basic Cable
         GameRegistry.addRecipe(new ItemStack(BlockHandler.basicCable, 4), "AAA", "ABA", "AAA",
-                'A', Blocks.wool, 'B', Blocks.redstone_block);
+                'A', Blocks.carpet, 'B', Blocks.redstone_block);
 
         //Fluid Generator
         GameRegistry.addRecipe(new ItemStack(BlockHandler.fluidGenerator), "ABA", "DCD", "ABA",
                 'A', Items.iron_ingot, 'B', Items.bucket, 'C', Blocks.furnace, 'D', Items.redstone);
+
+        //Basic RF Storage
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.basicStorage), "ABA", "DCD", "ABA",
+                'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', BlockHandler.basicCable);
+
+        //Tanks
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.ironTank), "BAB", "B B", "BAB",
+                'A', Blocks.heavy_weighted_pressure_plate, 'B', Blocks.glass);
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.goldTank), "BAB", "BCB", "BAB",
+                'A', Blocks.light_weighted_pressure_plate, 'B', Blocks.glass, 'C', BlockHandler.ironTank);
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.diamondTank), "BAB", "BCB", "BAB",
+                'A', Items.diamond, 'B', Blocks.glass, 'C', BlockHandler.goldTank);
 
         //Vanilla Furnace Recipes
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);
