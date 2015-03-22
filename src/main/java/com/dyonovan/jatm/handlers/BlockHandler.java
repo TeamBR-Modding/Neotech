@@ -3,6 +3,7 @@ package com.dyonovan.jatm.handlers;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.blocks.cable.BlockBasicCable;
+import com.dyonovan.jatm.common.blocks.ore.BlockOre;
 import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.jatm.common.blocks.storage.BlockTank;
 import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
@@ -18,6 +19,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ import java.util.List;
 public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricCrusher, fluidGenerator;
-    public static Block ironTank, goldTank, diamondTank;
+    public static Block ironTank, goldTank, diamondTank, oreCopper;
     public static Block basicCable, basicStorage;
 
     public static List<BlockBakeable> blockRegistry;
@@ -51,12 +53,20 @@ public class BlockHandler {
                 "goldTank", TileGoldTank.class);
         registerBlock(diamondTank = new BlockTank("diamondTank", 3),
                 "diamondTank", TileDiamondTank.class);
+        registerBlock(oreCopper = new BlockOre("oreCopper"),
+                "oreCopper", null, "oreCopper");
     }
 
-    public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {
+    public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {
         GameRegistry.registerBlock(block, name);
         if(tileEntity != null)
             GameRegistry.registerTileEntity(tileEntity, name);
+        if(oreDict != null)
+            OreDictionary.registerOre(oreDict, block);
         blockRegistry.add((BlockBakeable)block);
+    }
+
+    private static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {
+        registerBlock(block, name, tileEntity, null);
     }
 }

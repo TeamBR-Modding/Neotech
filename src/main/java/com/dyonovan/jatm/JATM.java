@@ -8,13 +8,17 @@ import com.dyonovan.jatm.common.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.io.File;
 
 @Mod(name = Constants.MODNAME, modid = Constants.MODID, version = Constants.VERSION, dependencies = Constants.DEPENDENCIES)
 public class JATM {
@@ -35,18 +39,24 @@ public class JATM {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        ConfigHandler.init(new Configuration(event.getSuggestedConfigurationFile()));
+
         BlockHandler.preInit();
         ItemHandler.PreInit();
         CraftingHandler.preInit();
+
         MinecraftForge.EVENT_BUS.register(new ToolTipEvent());
+
+        GameRegistry.registerWorldGenerator(new WorldGenHandler(), 2);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        if (event.getSide() == Side.CLIENT) {
+        /*if (event.getSide() == Side.CLIENT) {
             RenderHandler.init();
             ModelGenerator.register();
-        }
+        }*/
+        proxy.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 
