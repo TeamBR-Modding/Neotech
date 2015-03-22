@@ -81,7 +81,7 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
         int availRF = Math.min(energyRF.getEnergyStored() / availDir.size() , RF_TICK / availDir.size());
         for (EnumFacing dir : availDir) {
             TileEntity tile = getWorld().getTileEntity(this.pos.offset(dir));
-            energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir, energyRF.extractEnergy(availRF, true), false), false);
+            energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir.getOpposite(), energyRF.extractEnergy(availRF, true), false), false);
         }
         getWorld().markBlockForUpdate(this.pos);
     }

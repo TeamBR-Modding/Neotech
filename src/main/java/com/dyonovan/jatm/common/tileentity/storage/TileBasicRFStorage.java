@@ -69,7 +69,7 @@ public class TileBasicRFStorage extends BaseMachine implements IUpdatePlayerList
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        if (from.getOpposite() != getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)) {
+        if (from != getWorld().getBlockState(pos).getValue(BlockBakeable.PROPERTY_FACING)) {
             int amount = energyRF.receiveEnergy(maxReceive, simulate);
             worldObj.markBlockForUpdate(this.pos);
             return amount;
