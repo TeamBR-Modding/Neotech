@@ -6,17 +6,12 @@ import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
 
@@ -28,11 +23,19 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
 
     public int tier;
     public EnergyStorage energyRF;
+    private EnumFacing rfOutput;
 
     public TileRFStorage(int tier) {
         if (tier == 1) energyRF = new EnergyStorage(RF_TOTAL_1, RF_TICK_1);
         inventory = new InventoryTile(tier);
         this.tier = tier;
+
+    }
+
+    public TileRFStorage() {
+        inventory = new InventoryTile(1);
+        energyRF = new EnergyStorage(RF_TOTAL_1);
+        rfOutput = (EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING);
     }
 
     @Override
@@ -45,12 +48,12 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
     }
 
     private void transferEnergy() {
-        EnumFacing out = (EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING);
-        TileEntity tile = getWorld().getTileEntity(this.pos.offset(out));
+
+        TileEntity tile = getWorld().getTileEntity(this.pos.offset(rfOutput));
         if (tile instanceof IEnergyReceiver) {
             int avail = Math.min(RF_TICK_1, energyRF.getEnergyStored());
-            int amount = ((IEnergyReceiver) tile).receiveEnergy(out.getOpposite(), avail, true);
-            int actual = ((IEnergyReceiver) tile).receiveEnergy(out.getOpposite(), amount, false);
+            int amount = ((IEnergyReceiver) tile).receiveEnergy(rfOutput.getOpposite(), avail, true);
+            int actual = ((IEnergyReceiver) tile).receiveEnergy(rfOutput.getOpposite(), amount, false);
             energyRF.extractEnergy(actual, false);
         }
     }
@@ -67,9 +70,9 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 
-        if (from.getOpposite() != getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)) {
+        if (from.getOpposite() != rfOutput) {
             int amount = energyRF.receiveEnergy(maxReceive, simulate);
-            worldObj.markBlockForUpdate(this.pos);
+            worldObj.markBlockForUpdate(pos);
             return amount;
         }
         return 0;
