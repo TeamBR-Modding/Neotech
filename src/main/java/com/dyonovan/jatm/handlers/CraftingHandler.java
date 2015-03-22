@@ -44,6 +44,7 @@ public class CraftingHandler {
         //Vanilla Furnace Recipes
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);
         GameRegistry.addSmelting(ItemHandler.dustGold, new ItemStack(Items.gold_ingot, 1), 0.7F);
+        GameRegistry.addSmelting(BlockHandler.oreCopper, new ItemStack(ItemHandler.ingotCopper, 1), 0.3F);
 
         //OreProcessing Recipes
         OreProcessingRegistry.addOreProcessingRecipe(Blocks.cobblestone, Blocks.sand);
