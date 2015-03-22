@@ -2,9 +2,9 @@ package com.dyonovan.jatm.handlers;
 
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
-import com.dyonovan.jatm.common.blocks.BlockBasicCable;
+import com.dyonovan.jatm.common.blocks.cable.BlockBasicCable;
 import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
-import com.dyonovan.jatm.common.blocks.BlockTank;
+import com.dyonovan.jatm.common.blocks.storage.BlockTank;
 import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;

@@ -4,15 +4,13 @@ import com.dyonovan.jatm.client.modelfactory.models.ModelBlock;
 import com.dyonovan.jatm.client.modelfactory.models.ModelCable;
 import com.dyonovan.jatm.client.modelfactory.models.ModelTank;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
-import com.dyonovan.jatm.common.blocks.BlockBasicCable;
-import com.dyonovan.jatm.common.blocks.BlockMachine;
-import com.dyonovan.jatm.common.blocks.BlockTank;
+import com.dyonovan.jatm.common.blocks.cable.BlockBasicCable;
+import com.dyonovan.jatm.common.blocks.storage.BlockTank;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -21,9 +19,6 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ModelGenerator {
     public static ModelGenerator INSTANCE = new ModelGenerator();

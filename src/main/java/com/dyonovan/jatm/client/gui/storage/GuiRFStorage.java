@@ -2,6 +2,7 @@ package com.dyonovan.jatm.client.gui.storage;
 
 import com.dyonovan.jatm.common.container.storage.ContainerRFStorage;
 import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
+import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
@@ -10,6 +11,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiRFStorage extends GuiContainer {
 
@@ -70,6 +74,21 @@ public class GuiRFStorage extends GuiContainer {
             case 2:
                 drawTexturedModalRect(x + 148, y + 36, 176, 52, 16, 16);
                 break;
+        }
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float par3) {
+        super.drawScreen(mouseX, mouseY, par3);
+
+        int x = (this.width - this.xSize) / 2;
+        int y = (this.height - this.ySize) / 2;
+
+        if (GuiHelper.isInBounds(mouseX, mouseY, x + 12, y + 18, x + 28, y + 70)) {
+            List<String> toolTip = new ArrayList<>();
+            toolTip.add(GuiHelper.GuiColor.YELLOW + "Energy");
+            toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
+            drawHoveringText(toolTip, mouseX, mouseY);
         }
     }
 }

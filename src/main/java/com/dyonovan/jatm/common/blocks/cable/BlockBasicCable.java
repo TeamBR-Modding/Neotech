@@ -1,9 +1,10 @@
-package com.dyonovan.jatm.common.blocks;
+package com.dyonovan.jatm.common.blocks.cable;
 
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.DummyState;
+import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.BlockContainer;

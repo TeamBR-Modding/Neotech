@@ -1,7 +1,8 @@
-package com.dyonovan.jatm.common.blocks;
+package com.dyonovan.jatm.common.blocks.storage;
 
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.DummyState;
+import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.tileentity.storage.TileDiamondTank;
 import com.dyonovan.jatm.common.tileentity.storage.TileGoldTank;
 import com.dyonovan.jatm.common.tileentity.storage.TileIronTank;

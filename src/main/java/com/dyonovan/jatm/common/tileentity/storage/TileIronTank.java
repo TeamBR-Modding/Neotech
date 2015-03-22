@@ -1,6 +1,6 @@
 package com.dyonovan.jatm.common.tileentity.storage;
 
-import com.dyonovan.jatm.common.blocks.BlockTank;
+import com.dyonovan.jatm.common.blocks.storage.BlockTank;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.NBTTagCompound;
