@@ -2,7 +2,9 @@ package com.dyonovan.jatm.common.blocks;
 
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.DummyState;
-import com.dyonovan.jatm.common.tileentity.storage.TileTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileDiamondTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileGoldTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileIronTank;
 import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
@@ -39,21 +41,29 @@ public class BlockTank extends BlockBakeable {
     }
 
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileTank(buckets);
+        switch (buckets) {
+            case 3 :
+                return new TileDiamondTank();
+            case 2 :
+                return new TileGoldTank();
+            case 1 :
+            default:
+            return new TileIronTank();
+        }
     }
     @Override
     public int getLightValue (IBlockAccess world, BlockPos pos)
     {
         TileEntity tank = world.getTileEntity(pos);
-        if (tank != null && tank instanceof TileTank)
-            return ((TileTank) tank).getBrightness();
+        if (tank != null && tank instanceof TileIronTank)
+            return ((TileIronTank) tank).getBrightness();
         return 0;
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
-        TileTank tank = (TileTank)world.getTileEntity(pos);
+        TileIronTank tank = (TileIronTank)world.getTileEntity(pos);
 
         ItemStack heldItem = player.getHeldItem();
         if(heldItem != null) {
@@ -115,7 +125,7 @@ public class BlockTank extends BlockBakeable {
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
         ItemStack stack = new ItemStack(this, 1);
-        TileTank logic = (TileTank) worldIn.getTileEntity(pos);
+        TileIronTank logic = (TileIronTank) worldIn.getTileEntity(pos);
         FluidStack liquid = logic.tank.getFluid();
         if (liquid != null)
         {
@@ -161,7 +171,7 @@ public class BlockTank extends BlockBakeable {
             if (liquidTag != null)
             {
                 FluidStack liquid = FluidStack.loadFluidStackFromNBT(liquidTag);
-                TileTank logic = (TileTank) worldIn.getTileEntity(pos);
+                TileIronTank logic = (TileIronTank) worldIn.getTileEntity(pos);
                 logic.tank.setFluid(liquid);
             }
         }

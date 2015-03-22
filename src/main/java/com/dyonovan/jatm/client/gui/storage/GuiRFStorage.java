@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.client.gui.storage;
 
 import com.dyonovan.jatm.common.container.storage.ContainerRFStorage;
-import com.dyonovan.jatm.common.tileentity.storage.TileRFStorage;
+import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
@@ -13,10 +13,10 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiRFStorage extends GuiContainer {
 
-    private TileRFStorage tile;
+    private TileBasicRFStorage tile;
     private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/rfStorage.png");
 
-    public GuiRFStorage(InventoryPlayer inventory, TileRFStorage tileEntity) {
+    public GuiRFStorage(InventoryPlayer inventory, TileBasicRFStorage tileEntity) {
         super(new ContainerRFStorage(inventory, tileEntity));
         this.tile = tileEntity;
     }
@@ -24,7 +24,7 @@ public class GuiRFStorage extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         String invTitle = "";
-        switch (tile.tier) {
+        switch (tile.getTier()) {
             case 1:
                 invTitle =  StatCollector.translateToLocal("tile.jatm:basicRFStorage.name");
                 break;
@@ -62,7 +62,7 @@ public class GuiRFStorage extends GuiContainer {
         tessellator.draw();
 
         //Disable slots based on tiers
-        switch (tile.tier) {
+        switch (tile.getTier()) {
             case 1:
                 drawTexturedModalRect(x + 148, y + 36, 176, 52, 16, 16);
                 drawTexturedModalRect(x + 148, y + 54, 176, 52, 16, 16);

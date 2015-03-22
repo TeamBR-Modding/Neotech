@@ -1,6 +1,5 @@
 package com.dyonovan.jatm.common.tileentity.storage;
 
-import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockTank;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -16,15 +15,15 @@ import net.minecraftforge.fluids.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileTank extends TileEntity implements IFluidHandler, IUpdatePlayerListBox {
+public class TileIronTank extends TileEntity implements IFluidHandler, IUpdatePlayerListBox {
     public FluidTank tank;
 
-    public TileTank() {
-        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 8);
+    public TileIronTank() {
+        setTank();
     }
 
-    public TileTank(int buckets) {
-        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * buckets);
+    public void setTank() {
+        this.tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 8);
     }
 
     public float getFluidLevelScaled() {
@@ -58,7 +57,7 @@ public class TileTank extends TileEntity implements IFluidHandler, IUpdatePlayer
     public int fillAbove(EnumFacing from, FluidStack resource, boolean doFill) {
         BlockPos newPos = pos.offset(EnumFacing.UP);
         while(!worldObj.isAirBlock(newPos) && worldObj.getBlockState(newPos).getBlock() instanceof BlockTank) {
-            return ((TileTank)worldObj.getTileEntity(newPos)).fill(from, resource, doFill);
+            return ((TileIronTank)worldObj.getTileEntity(newPos)).fill(from, resource, doFill);
         }
         return 0;
     }

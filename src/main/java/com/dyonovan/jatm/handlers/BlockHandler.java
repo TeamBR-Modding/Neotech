@@ -10,8 +10,10 @@ import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
-import com.dyonovan.jatm.common.tileentity.storage.TileRFStorage;
-import com.dyonovan.jatm.common.tileentity.storage.TileTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
+import com.dyonovan.jatm.common.tileentity.storage.TileDiamondTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileGoldTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileIronTank;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
@@ -41,14 +43,14 @@ public class BlockHandler {
                 "electricCrusher", TileElectricCrusher.class);
         registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
                 "basicCable", TileBasicCable.class);
-        registerBlock(ironTank = new BlockTank("ironTank", 8),
-                "ironTank", TileTank.class);
-        registerBlock(goldTank = new BlockTank("goldTank", 16),
-                "goldTank", TileTank.class);
-        registerBlock(diamondTank = new BlockTank("diamondTank", 64),
-                "diamondTank", TileTank.class);
-        registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
-                "basicRFStorage", TileRFStorage.class);
+        registerBlock(ironTank = new BlockTank("ironTank", 1),
+                "ironTank", TileIronTank.class);
+        registerBlock(goldTank = new BlockTank("goldTank", 2),
+                "goldTank", TileGoldTank.class);
+        registerBlock(diamondTank = new BlockTank("diamondTank", 3),
+                "diamondTank", TileDiamondTank.class);
+        registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
+                "basicRFStorage", TileBasicRFStorage.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {

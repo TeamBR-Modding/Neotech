@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
+public class TileBasicRFStorage extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
 
     private static final int RF_TOTAL_1 = 250000;
     private static final int RF_TICK_1 = 200;
@@ -26,24 +26,25 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
     public static final int CHARGE_SLOT_2 = 1;
     public static final int CHARGE_SLOT_3 = 2;
 
-    public int tier;
     public EnergyStorage energyRF;
 
-    public TileRFStorage() {
-        energyRF = new EnergyStorage(10);
-        inventory = new InventoryTile(1);
+    public TileBasicRFStorage() {
+        setTier();
+        setEnergyRF();
     }
 
-    public TileRFStorage(int tier) {
-        if (tier == 1) energyRF = new EnergyStorage(RF_TOTAL_1, RF_TICK_1);
-        inventory = new InventoryTile(tier);
-        this.tier = tier;
+    public void setEnergyRF() {
+        energyRF = new EnergyStorage(RF_TOTAL_1, RF_TICK_1);
+    }
+
+    public void setTier() {
+        inventory = new InventoryTile(1);
     }
 
     @Override
     public void update() {
         if(worldObj != null && !worldObj.isRemote)
-        transferEnergy();
+            transferEnergy();
     }
 
     private void transferEnergy() {
@@ -97,12 +98,7 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        switch (tier) {
-            case 1:
-                return new int [] {0};
-            default:
-                return new int[] {0};
-        }
+        return new int[] {0};
     }
 
     @Override
@@ -117,7 +113,7 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
 
     @Override
     public int getSizeInventory() {
-        return tier;
+        return this.inventory.getSizeInventory();
     }
 
     @Override
@@ -168,5 +164,9 @@ public class TileRFStorage extends BaseMachine implements IUpdatePlayerListBox, 
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
         inventory.writeToNBT(tag);
+    }
+
+    public int getTier() {
+        return 1;
     }
 }

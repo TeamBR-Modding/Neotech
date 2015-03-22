@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.client.modelfactory.models;
 
 import com.dyonovan.jatm.collections.DummyState;
-import com.dyonovan.jatm.common.tileentity.storage.TileTank;
+import com.dyonovan.jatm.common.tileentity.storage.TileIronTank;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -37,9 +37,9 @@ public class ModelTank implements ISmartBlockModel, ISmartItemModel {
 
     public ModelTank(DummyState state) {
         if(state.blockAccess.getTileEntity(state.pos) != null) {
-            fluidHeight = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getFluidLevelScaled();
-            renderFluid = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getCurrentFluid();
-            topIcon = ((TileTank) state.blockAccess.getTileEntity(state.pos)).getTierIcon();
+            fluidHeight = ((TileIronTank) state.blockAccess.getTileEntity(state.pos)).getFluidLevelScaled();
+            renderFluid = ((TileIronTank) state.blockAccess.getTileEntity(state.pos)).getCurrentFluid();
+            topIcon = ((TileIronTank) state.blockAccess.getTileEntity(state.pos)).getTierIcon();
         }
         if (topIcon == null)
             topIcon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/iron_block");
