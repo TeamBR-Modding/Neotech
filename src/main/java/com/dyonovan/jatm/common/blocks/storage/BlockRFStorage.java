@@ -3,7 +3,9 @@ package com.dyonovan.jatm.common.blocks.storage;
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.CubeTextures;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
+import com.dyonovan.jatm.common.tileentity.storage.TileAdvancedRFStorage;
 import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
+import com.dyonovan.jatm.common.tileentity.storage.TileEliteRFStorage;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
@@ -35,8 +37,13 @@ public class BlockRFStorage extends BlockBakeable {
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         switch (tier) {
-            case 1 :
-            default :
+            case 1:
+                return new TileBasicRFStorage();
+            case 2:
+                return new TileAdvancedRFStorage();
+            case 3:
+                return new TileEliteRFStorage();
+            default:
             return new TileBasicRFStorage();
         }
     }

@@ -11,12 +11,12 @@ public class ItemHandler {
 
     public static void PreInit() {
 
+        registerItem(dustCopper = new BaseItem("dustCopper", 64), "dustCopper", "dustCopper");
+        registerItem(dustTin = new BaseItem("dustTin", 64), "dustTin", "dustTin");
         registerItem(dustIron = new BaseItem("dustIron", 64), "dustIron", "dustIron");
         registerItem(dustGold = new BaseItem("dustGold", 64), "dustGold", "dustGold");
         registerItem(ingotCopper = new BaseItem("ingotCopper", 64), "ingotCopper", "ingotCopper");
-        registerItem(dustCopper = new BaseItem("dustCopper", 64), "dustCopper", "dustCopper");
         registerItem(ingotTin = new BaseItem("ingotTin", 64), "ingotTin", "ingotTin");
-        registerItem(dustTin = new BaseItem("dustTin", 64), "dustTin", "dustTin");
 
     }
 

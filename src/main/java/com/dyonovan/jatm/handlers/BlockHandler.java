@@ -11,10 +11,7 @@ import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
-import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
-import com.dyonovan.jatm.common.tileentity.storage.TileDiamondTank;
-import com.dyonovan.jatm.common.tileentity.storage.TileGoldTank;
-import com.dyonovan.jatm.common.tileentity.storage.TileIronTank;
+import com.dyonovan.jatm.common.tileentity.storage.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +25,7 @@ public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, fluidGenerator;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
-    public static Block basicCable, basicStorage;
+    public static Block basicCable, basicStorage, advancedStorage, eliteStorage;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -47,6 +44,10 @@ public class BlockHandler {
                 "electricCrusher", TileElectricCrusher.class);
         registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileBasicRFStorage.class);
+        registerBlock(advancedStorage = new BlockRFStorage("advancedStorage", TileAdvancedRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 2),
+                "advancedStorage", TileAdvancedRFStorage.class);
+        registerBlock(eliteStorage = new BlockRFStorage("eliteStorage", TileEliteRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 3),
+                "eliteStorage", TileEliteRFStorage.class);
         registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
                 "basicCable", TileBasicCable.class);
         registerBlock(ironTank = new BlockTank("ironTank", 1),

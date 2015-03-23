@@ -4,21 +4,17 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
+import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TileBasicRFStorage extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
+public class TileBasicRFStorage extends BaseMachine implements IRFStorage, IExpellable, IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
 
     private static final int RF_TOTAL_1 = 250000;
     private static final int RF_TICK_1 = 200;
@@ -26,18 +22,10 @@ public class TileBasicRFStorage extends BaseMachine implements IUpdatePlayerList
     public static final int CHARGE_SLOT_2 = 1;
     public static final int CHARGE_SLOT_3 = 2;
 
-    public EnergyStorage energyRF;
+    protected EnergyStorage energyRF;
 
     public TileBasicRFStorage() {
-        setTier();
-        setEnergyRF();
-    }
-
-    public void setEnergyRF() {
         energyRF = new EnergyStorage(RF_TOTAL_1, RF_TICK_1);
-    }
-
-    public void setTier() {
         inventory = new InventoryTile(1);
     }
 
@@ -51,7 +39,7 @@ public class TileBasicRFStorage extends BaseMachine implements IUpdatePlayerList
         EnumFacing out = (EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING);
         TileEntity tile = getWorld().getTileEntity(this.pos.offset(out));
         if (tile instanceof IEnergyReceiver) {
-            int avail = Math.min(RF_TICK_1, energyRF.getEnergyStored());
+            int avail = Math.min(energyRF.getMaxExtract(), energyRF.getEnergyStored());
             int amount = ((IEnergyReceiver) tile).receiveEnergy(out.getOpposite(), avail, true);
             int actual = ((IEnergyReceiver) tile).receiveEnergy(out.getOpposite(), amount, false);
             energyRF.extractEnergy(actual, false);
@@ -131,9 +119,7 @@ public class TileBasicRFStorage extends BaseMachine implements IUpdatePlayerList
 
     @Override
     public void setField(int id, int value) {
-        switch (id) {
 
-        }
     }
 
     @Override
@@ -166,7 +152,18 @@ public class TileBasicRFStorage extends BaseMachine implements IUpdatePlayerList
         inventory.writeToNBT(tag);
     }
 
+    @Override
     public int getTier() {
         return 1;
+    }
+
+    @Override
+    public EnergyStorage getRF() {
+        return energyRF;
+    }
+
+    @Override
+    public BlockPos getTilePos() {
+        return this.pos;
     }
 }
