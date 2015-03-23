@@ -1,7 +1,7 @@
 package com.dyonovan.jatm.client.gui.storage;
 
 import com.dyonovan.jatm.common.container.storage.ContainerRFStorage;
-import com.dyonovan.jatm.common.tileentity.storage.IRFStorage;
+import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
 import com.dyonovan.jatm.helpers.GuiHelper;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -17,10 +17,10 @@ import java.util.List;
 
 public class GuiRFStorage extends GuiContainer {
 
-    private IRFStorage tile;
+    private TileBasicRFStorage tile;
     private ResourceLocation background = new ResourceLocation(Constants.MODID + ":textures/gui/rfStorage.png");
 
-    public GuiRFStorage(InventoryPlayer inventory, IRFStorage tileEntity) {
+    public GuiRFStorage(InventoryPlayer inventory, TileBasicRFStorage tileEntity) {
         super(new ContainerRFStorage(inventory, tileEntity));
         this.tile = tileEntity;
     }
@@ -28,7 +28,7 @@ public class GuiRFStorage extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         String invTitle = "";
-        switch (tile.getTier()) {
+        switch (tile.getSizeInventory()) {
             case 1:
                 invTitle =  StatCollector.translateToLocal("tile.jatm:basicRFStorage.name");
                 break;
@@ -54,7 +54,7 @@ public class GuiRFStorage extends GuiContainer {
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
         //RF Energy bar
-        int heightRF = tile.getRF().getEnergyStored() * 52 / tile.getRF().getMaxEnergyStored();
+        int heightRF = tile.getEnergyStored(null) * 52 / tile.getMaxEnergyStored(null);
 
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
@@ -66,7 +66,7 @@ public class GuiRFStorage extends GuiContainer {
         tessellator.draw();
 
         //Disable slots based on tiers
-        switch (tile.getTier()) {
+        switch (tile.getSizeInventory()) {
             case 1:
                 drawTexturedModalRect(x + 148, y + 36, 176, 52, 16, 16);
                 drawTexturedModalRect(x + 148, y + 54, 176, 52, 16, 16);
@@ -87,7 +87,7 @@ public class GuiRFStorage extends GuiContainer {
         if (GuiHelper.isInBounds(mouseX, mouseY, x + 12, y + 18, x + 28, y + 70)) {
             List<String> toolTip = new ArrayList<>();
             toolTip.add(GuiHelper.GuiColor.YELLOW + "Energy");
-            toolTip.add(tile.getRF().getEnergyStored() + "/" + tile.getRF().getMaxEnergyStored() + GuiHelper.GuiColor.RED + "RF");
+            toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
             drawHoveringText(toolTip, mouseX, mouseY);
         }
     }

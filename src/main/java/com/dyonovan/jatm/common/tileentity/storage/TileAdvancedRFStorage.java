@@ -2,7 +2,7 @@ package com.dyonovan.jatm.common.tileentity.storage;
 
 import net.minecraft.util.EnumFacing;
 
-public class TileAdvancedRFStorage extends TileBasicRFStorage implements IRFStorage {
+public class TileAdvancedRFStorage extends TileBasicRFStorage {
 
     private static final int RF_TOTAL_2 = 1000000;
     private static final int RF_TICK_2 = 1000;
@@ -11,9 +11,6 @@ public class TileAdvancedRFStorage extends TileBasicRFStorage implements IRFStor
         setInventory(2);
         setEnergyRF(RF_TOTAL_2, RF_TICK_2);
     }
-
-    @Override
-    public int getTier() { return 2; }
 
     /*******************************************************************************************************************
      **************************************** Inventory Functions ******************************************************

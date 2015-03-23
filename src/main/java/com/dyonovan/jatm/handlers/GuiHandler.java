@@ -1,20 +1,19 @@
 package com.dyonovan.jatm.handlers;
 
-import com.dyonovan.jatm.client.gui.storage.GuiRFStorage;
-import com.dyonovan.jatm.common.container.generators.ContainerFluidGenerator;
 import com.dyonovan.jatm.client.gui.generators.GuiFluidGenerator;
+import com.dyonovan.jatm.client.gui.generators.GuiFurnaceGenerator;
 import com.dyonovan.jatm.client.gui.machine.GuiElectricCrusher;
 import com.dyonovan.jatm.client.gui.machine.GuiElectricFurnace;
-import com.dyonovan.jatm.client.gui.generators.GuiFurnaceGenerator;
+import com.dyonovan.jatm.client.gui.storage.GuiRFStorage;
+import com.dyonovan.jatm.common.container.generators.ContainerFluidGenerator;
+import com.dyonovan.jatm.common.container.generators.ContainerFurnaceGenerator;
 import com.dyonovan.jatm.common.container.machine.ContainerElectricCrusher;
 import com.dyonovan.jatm.common.container.machine.ContainerElectricFurnace;
-import com.dyonovan.jatm.common.container.generators.ContainerFurnaceGenerator;
 import com.dyonovan.jatm.common.container.storage.ContainerRFStorage;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
+import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
-import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
-import com.dyonovan.jatm.common.tileentity.storage.IRFStorage;
 import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -41,7 +40,7 @@ public class GuiHandler implements IGuiHandler {
             case FLUID_GENERATOR_GUI_ID:
                 return new ContainerFluidGenerator(player.inventory, (TileFluidGenerator) world.getTileEntity(new BlockPos(x, y, z)));
             case RF_STORAGE_GUI_ID:
-                return new ContainerRFStorage(player.inventory, (IRFStorage) world.getTileEntity(new BlockPos(x, y, z)));
+                return new ContainerRFStorage(player.inventory, (TileBasicRFStorage) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }
@@ -58,7 +57,7 @@ public class GuiHandler implements IGuiHandler {
             case FLUID_GENERATOR_GUI_ID:
                 return new GuiFluidGenerator(player.inventory, (TileFluidGenerator) world.getTileEntity(new BlockPos(x, y, z)));
             case RF_STORAGE_GUI_ID:
-                return new GuiRFStorage(player.inventory, (IRFStorage) world.getTileEntity(new BlockPos(x, y, z)));
+                return new GuiRFStorage(player.inventory, (TileBasicRFStorage) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }

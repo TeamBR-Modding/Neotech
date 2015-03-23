@@ -11,10 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-public class TileBasicRFStorage extends BaseMachine implements IRFStorage, IExpellable, IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
+public class TileBasicRFStorage extends BaseMachine implements IExpellable, IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
 
     private static final int RF_TOTAL_1 = 250000;
     private static final int RF_TICK_1 = 200;
@@ -158,20 +157,5 @@ public class TileBasicRFStorage extends BaseMachine implements IRFStorage, IExpe
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
         inventory.writeToNBT(tag);
-    }
-
-    @Override
-    public int getTier() {
-        return 1;
-    }
-
-    @Override
-    public EnergyStorage getRF() {
-        return energyRF;
-    }
-
-    @Override
-    public BlockPos getTilePos() {
-        return this.pos;
     }
 }
