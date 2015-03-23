@@ -27,7 +27,7 @@ import java.util.List;
 public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, fluidGenerator;
-    public static Block ironTank, goldTank, diamondTank, oreCopper;
+    public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, basicStorage;
 
     public static List<BlockBakeable> blockRegistry;
