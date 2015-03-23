@@ -3,6 +3,7 @@ package com.dyonovan.jatm.common.tileentity.generator;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.block.Block;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO : Dont consume containers (buckets)
-public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerListBox, IEnergyProvider {
+public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerListBox, IEnergyProvider, IExpellable {
 
     public int currentBurnTime;
     public int totalBurnTime;

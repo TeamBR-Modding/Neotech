@@ -3,6 +3,7 @@ package com.dyonovan.jatm.common.tileentity.generator;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.item.ItemStack;
@@ -19,7 +20,7 @@ import java.util.List;
 import static net.minecraftforge.fluids.FluidContainerRegistry.*;
 
 
-public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerListBox, IFluidHandler, IEnergyProvider {
+public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerListBox, IFluidHandler, IEnergyProvider, IExpellable {
 
     private enum validFuels {
         lava;

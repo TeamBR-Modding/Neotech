@@ -2,6 +2,7 @@ package com.dyonovan.jatm.common.tileentity.machine;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import com.dyonovan.jatm.crafting.OreProcessingRegistry;
@@ -14,7 +15,7 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver {
+public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver, IExpellable {
 
     public int currentProcessTime;
     private ItemStack input, output;

@@ -1,5 +1,6 @@
 package com.dyonovan.jatm.common.tileentity;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -8,8 +9,12 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BaseMachine extends TileEntity implements ISidedInventory {
 
@@ -143,5 +148,29 @@ public class BaseMachine extends TileEntity implements ISidedInventory {
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
+    }
+
+    public void expelItems() {
+
+        for (ItemStack stack : inventory.getValues()) {
+            if (stack != null) {
+                Random random = new Random();
+                EntityItem entityitem =
+                        new EntityItem(worldObj,
+                                pos.getX() + random.nextFloat() * 0.8F + 0.1F,
+                                pos.getY() + random.nextFloat() * 0.8F + 0.1F,
+                                pos.getZ() + random.nextFloat() * 0.8F + 0.1F,
+                                stack
+                        );
+                if (stack.hasTagCompound()) {
+                    entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+                }
+                float f3 = 0.05F;
+                entityitem.motionX = (double) ((float) random.nextGaussian() * f3);
+                entityitem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
+                entityitem.motionZ = (double) ((float) random.nextGaussian() * f3);
+                worldObj.spawnEntityInWorld(entityitem);
+            }
+        }
     }
 }

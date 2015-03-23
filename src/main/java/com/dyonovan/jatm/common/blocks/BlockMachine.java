@@ -3,6 +3,7 @@ package com.dyonovan.jatm.common.blocks;
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.CubeTextures;
 import com.dyonovan.jatm.collections.DummyState;
+import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -24,6 +25,7 @@ import net.minecraft.world.World;
 public class BlockMachine extends BlockBakeable {
 
     private int guiID;
+    private Class<? extends TileEntity> tileClass;
 
     public BlockMachine(String name, Class<? extends TileEntity> tileClass, int guiID) {
         super(Material.iron, name, tileClass);
@@ -32,6 +34,7 @@ public class BlockMachine extends BlockBakeable {
         this.setHardness(1.5F);
 
         this.guiID = guiID;
+        this.tileClass = tileClass;
     }
 
     @Override
@@ -92,5 +95,15 @@ public class BlockMachine extends BlockBakeable {
     public int getMetaFromState(IBlockState state)
     {
         return ((EnumFacing)state.getValue(PROPERTY_FACING)).getIndex();
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof IExpellable) {
+            ((IExpellable) tile).expelItems();
+        }
+
+        super.breakBlock(worldIn, pos, state);
     }
 }
