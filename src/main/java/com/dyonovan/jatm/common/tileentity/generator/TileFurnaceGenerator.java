@@ -23,6 +23,8 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.minecraftforge.fluids.FluidContainerRegistry.isFilledContainer;
+
 //TODO : Dont consume containers (buckets)
 public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerListBox, IEnergyProvider, IExpellable {
 
@@ -57,6 +59,8 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
                 totalBurnTime = getFuelValue(inventory.getStackInSlot(FUEL_SLOT));
                 if (totalBurnTime == 0) return;
                 currentBurnTime = 1;
+                if (isFilledContainer(inventory.getStackInSlot(FUEL_SLOT))) {}
+                        //expelContainer();
                 if (inventory.getStackInSlot(FUEL_SLOT).stackSize == 1) inventory.setStackInSlot(null, FUEL_SLOT);
                 else inventory.getStackInSlot(FUEL_SLOT).stackSize -= 1;
             }

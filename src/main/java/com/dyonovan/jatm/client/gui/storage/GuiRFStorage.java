@@ -33,7 +33,7 @@ public class GuiRFStorage extends GuiContainer {
                 invTitle =  StatCollector.translateToLocal("tile.jatm:basicRFStorage.name");
                 break;
             case 2:
-                invTitle =  StatCollector.translateToLocal("tile.jatm:advRFStorage.name");
+                invTitle =  StatCollector.translateToLocal("tile.jatm:advancedRFStorage.name");
                 break;
             case 3:
                 invTitle =  StatCollector.translateToLocal("tile.jatm:eliteRFStorage.name");

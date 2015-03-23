@@ -44,10 +44,10 @@ public class BlockHandler {
                 "electricCrusher", TileElectricCrusher.class);
         registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileBasicRFStorage.class);
-        registerBlock(advancedStorage = new BlockRFStorage("advancedStorage", TileAdvancedRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 2),
-                "advancedStorage", TileAdvancedRFStorage.class);
-        registerBlock(eliteStorage = new BlockRFStorage("eliteStorage", TileEliteRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 3),
-                "eliteStorage", TileEliteRFStorage.class);
+        registerBlock(advancedStorage = new BlockRFStorage("advancedRFStorage", TileAdvancedRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 2),
+                "advancedRFStorage", TileAdvancedRFStorage.class);
+        registerBlock(eliteStorage = new BlockRFStorage("eliteRFStorage", TileEliteRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 3),
+                "eliteRFStorage", TileEliteRFStorage.class);
         registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
                 "basicCable", TileBasicCable.class);
         registerBlock(ironTank = new BlockTank("ironTank", 1),
