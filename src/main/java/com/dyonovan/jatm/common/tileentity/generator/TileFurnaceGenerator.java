@@ -8,6 +8,7 @@ import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
@@ -22,7 +23,9 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import static net.minecraftforge.fluids.FluidContainerRegistry.drainFluidContainer;
 import static net.minecraftforge.fluids.FluidContainerRegistry.isFilledContainer;
 
 //TODO : Dont consume containers (buckets)
@@ -59,9 +62,9 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
                 totalBurnTime = getFuelValue(inventory.getStackInSlot(FUEL_SLOT));
                 if (totalBurnTime == 0) return;
                 currentBurnTime = 1;
-                if (isFilledContainer(inventory.getStackInSlot(FUEL_SLOT))) {}
-                        //expelContainer();
-                if (inventory.getStackInSlot(FUEL_SLOT).stackSize == 1) inventory.setStackInSlot(null, FUEL_SLOT);
+                if (isFilledContainer(inventory.getStackInSlot(FUEL_SLOT)))
+                        inventory.setStackInSlot(drainFluidContainer(inventory.getStackInSlot(FUEL_SLOT)),FUEL_SLOT);
+                else if (inventory.getStackInSlot(FUEL_SLOT).stackSize == 1) inventory.setStackInSlot(null, FUEL_SLOT);
                 else inventory.getStackInSlot(FUEL_SLOT).stackSize -= 1;
             }
             if (currentBurnTime > 0 && currentBurnTime < totalBurnTime) {
