@@ -15,7 +15,7 @@ import java.util.ArrayList;
 //Design inspired from FluxDucts
 public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEnergyProvider, IUpdatePlayerListBox {
 
-    protected static int transferRate = 100;
+    protected static int transferRate = 200;
     protected EnergyStorage[] faceBuffers = new EnergyStorage[6];
 
     public TileBasicCable() {
