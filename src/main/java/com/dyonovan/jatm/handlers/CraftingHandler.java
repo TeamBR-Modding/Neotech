@@ -45,6 +45,7 @@ public class CraftingHandler {
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);
         GameRegistry.addSmelting(ItemHandler.dustGold, new ItemStack(Items.gold_ingot, 1), 0.7F);
         GameRegistry.addSmelting(BlockHandler.oreCopper, new ItemStack(ItemHandler.ingotCopper, 1), 0.3F);
+        GameRegistry.addSmelting(BlockHandler.oreTin, new ItemStack(ItemHandler.ingotTin, 1), 0.5F);
 
         //OreProcessing Recipes
         OreProcessingRegistry.addOreProcessingRecipe(Blocks.cobblestone, Blocks.sand);
