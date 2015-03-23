@@ -2,9 +2,11 @@ package com.dyonovan.jatm.common.tileentity.machine;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
+import com.dyonovan.jatm.handlers.BlockHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTBase;
@@ -42,11 +44,13 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
             if (currentProcessTime == 0) {
                 currentProcessTime = 1;
                 input = inventory.getStackInSlot(INPUT_SLOT);
+                BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnaceActive);
             }
             if (currentProcessTime > 0 && currentProcessTime < TOTAL_PROCESS_TIME) {
                 if (inventory.getStackInSlot(INPUT_SLOT) == null || !inventory.getStackInSlot(INPUT_SLOT).isItemEqual(input)) {
                     currentProcessTime = 0;
                     world.markBlockForUpdate(this.pos);
+                    BlockMachine.setState(world, pos, BlockHandler.electricFurnace);
                     return;
                 }
                 if (energyRF.getEnergyStored() >= RF_TICK ) {
@@ -57,9 +61,10 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
             if (currentProcessTime >= TOTAL_PROCESS_TIME) {
                 inventory.modifyStack(INPUT_SLOT, -1);
                 if (inventory.getStackInSlot(OUTPUT_SLOT) == null)
-                    inventory.setStackInSlot(output, OUTPUT_SLOT);
-                else inventory.getStackInSlot(OUTPUT_SLOT).stackSize += 1;
+                    inventory.setStackInSlot(new ItemStack(output.getItem(), output.stackSize > 0 ? output.stackSize : 1), OUTPUT_SLOT);
+                else inventory.getStackInSlot(OUTPUT_SLOT).stackSize += (output.stackSize > 0 ? output.stackSize : 1);
                 currentProcessTime = 0;
+                BlockMachine.setState(world, pos, BlockHandler.electricFurnace);
             }
             world.markBlockForUpdate(this.pos);
         }

@@ -5,6 +5,7 @@ import com.dyonovan.jatm.collections.CubeTextures;
 import com.dyonovan.jatm.collections.DummyState;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.lib.Constants;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -25,16 +26,15 @@ import net.minecraft.world.World;
 public class BlockMachine extends BlockBakeable {
 
     private int guiID;
-    private Class<? extends TileEntity> tileClass;
+    private static boolean keepInventory;
 
-    public BlockMachine(String name, Class<? extends TileEntity> tileClass, int guiID) {
+    public BlockMachine(boolean active, String name, Class<? extends TileEntity> tileClass, int guiID) {
         super(Material.iron, name, tileClass);
         this.setUnlocalizedName(Constants.MODID + ":" + name);
-        this.setCreativeTab(JATM.tabJATM);
+        this.setCreativeTab(active ? null : JATM.tabJATM);
         this.setHardness(1.5F);
 
         this.guiID = guiID;
-        this.tileClass = tileClass;
     }
 
     @Override
@@ -49,6 +49,25 @@ public class BlockMachine extends BlockBakeable {
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side")
         );
         return cubeTextures;
+    }
+
+    public static void setState(World worldIn, BlockPos pos, Block setter)
+    {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        keepInventory = true;
+
+        worldIn.setBlockState(pos, setter.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, iblockstate.getValue(BlockBakeable.PROPERTY_FACING)), 3);
+        worldIn.setBlockState(pos, setter.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, iblockstate.getValue(BlockBakeable.PROPERTY_FACING)), 3);
+
+        keepInventory = false;
+
+        if (tileentity != null)
+        {
+            tileentity.validate();
+            worldIn.setTileEntity(pos, tileentity);
+        }
+        worldIn.markBlockForUpdate(pos);
     }
 
     @Override
@@ -99,11 +118,12 @@ public class BlockMachine extends BlockBakeable {
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof IExpellable) {
-            ((IExpellable) tile).expelItems();
+        if(!keepInventory) {
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof IExpellable) {
+                ((IExpellable) tile).expelItems();
+            }
         }
-
         super.breakBlock(worldIn, pos, state);
     }
 }

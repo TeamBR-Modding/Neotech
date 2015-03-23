@@ -38,6 +38,8 @@ public class GuiElectricFurnace extends GuiContainer {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
+        tile = (TileElectricFurnace) mc.theWorld.getTileEntity(tile.getPos());
+
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(background);
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
