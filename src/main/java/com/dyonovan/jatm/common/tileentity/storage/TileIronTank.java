@@ -94,11 +94,11 @@ public class TileIronTank extends TileEntity implements IFluidHandler, IUpdatePl
 
     @Override
     public void update() {
-        if(tank.getFluid() != null && worldObj.getWorldTime() % 40 == 0) {
+        if(tank.getFluid() != null && worldObj.getWorldTime() % 20 == 0) {
             if(worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) instanceof IFluidHandler) {
                 IFluidHandler otherTank = (IFluidHandler)worldObj.getTileEntity(pos.offset(EnumFacing.DOWN));
                 if(otherTank.canFill(EnumFacing.UP, tank.getFluid().getFluid())) {
-                    tank.drain(otherTank.fill(EnumFacing.UP, new FluidStack(tank.getFluid().getFluid(), 100), true), true);
+                    tank.drain(otherTank.fill(EnumFacing.UP, new FluidStack(tank.getFluid().getFluid(), tank.getFluidAmount() > 1000 ? 1000 : tank.getFluidAmount()), true), true);
                 }
             }
         }
