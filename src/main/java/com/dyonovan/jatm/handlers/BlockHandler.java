@@ -26,8 +26,8 @@ import java.util.List;
 
 public class BlockHandler {
 
-    public static Block furnaceGenerator, electricFurnace, electricCrusher, fluidGenerator;
-    public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
+    public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, fluidGenerator;
+    public static Block ironTank, goldTank, diamondTank, oreCopper;
     public static Block basicCable, basicStorage;
 
     public static List<BlockBakeable> blockRegistry;
@@ -35,13 +35,15 @@ public class BlockHandler {
     public static void preInit() {
         blockRegistry = new ArrayList<>();
 
-        registerBlock(furnaceGenerator = new BlockMachine("furnaceGenerator", TileFurnaceGenerator.class, GuiHandler.FURNACE_GENERATOR_GUI_ID),
+        registerBlock(furnaceGenerator = new BlockMachine(false, "furnaceGenerator", TileFurnaceGenerator.class, GuiHandler.FURNACE_GENERATOR_GUI_ID),
                 "furnaceGenerator", TileFurnaceGenerator.class);
-        registerBlock(fluidGenerator = new BlockMachine("fluidGenerator", TileFluidGenerator.class, GuiHandler.FLUID_GENERATOR_GUI_ID),
+        registerBlock(fluidGenerator = new BlockMachine(false, "fluidGenerator", TileFluidGenerator.class, GuiHandler.FLUID_GENERATOR_GUI_ID),
                 "fluidGenerator", TileFluidGenerator.class);
-        registerBlock(electricFurnace = new BlockMachine("electricFurnace", TileElectricFurnace.class, GuiHandler.ELECTRIC_FURNACE_GUI_ID),
+        registerBlock(electricFurnace = new BlockMachine(false, "electricFurnace", TileElectricFurnace.class, GuiHandler.ELECTRIC_FURNACE_GUI_ID),
                 "electricFurnace", TileElectricFurnace.class);
-        registerBlock(electricCrusher = new BlockMachine("electricCrusher", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
+        registerBlock(electricFurnaceActive = new BlockMachine(true, "electricFurnaceActive", TileElectricFurnace.class, GuiHandler.ELECTRIC_FURNACE_GUI_ID),
+                "electricFurnaceActive", TileElectricFurnace.class);
+        registerBlock(electricCrusher = new BlockMachine(false, "electricCrusher", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
                 "electricCrusher", TileElectricCrusher.class);
         registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileBasicRFStorage.class);
