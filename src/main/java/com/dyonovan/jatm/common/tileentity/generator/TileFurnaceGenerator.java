@@ -37,7 +37,7 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
     public static final int FUEL_SLOT = 0;
 
     public TileFurnaceGenerator() {
-        energyRF = new EnergyStorage(10000, 20);
+        energyRF = new EnergyStorage(10000);
         currentBurnTime = 0;
         totalBurnTime = 0;
         inventory = new InventoryTile(1);
@@ -80,7 +80,7 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
             }
         }
         if (availDir.size() <= 0) return;
-        int availRF = Math.min(energyRF.getEnergyStored() / availDir.size() , RF_TICK / availDir.size());
+        int availRF = Math.min(energyRF.getEnergyStored() / availDir.size() , energyRF.getMaxExtract() / availDir.size());
         for (EnumFacing dir : availDir) {
             TileEntity tile = getWorld().getTileEntity(this.pos.offset(dir));
             energyRF.extractEnergy(((IEnergyReceiver) tile).receiveEnergy(dir.getOpposite(), energyRF.extractEnergy(availRF, true), false), false);
