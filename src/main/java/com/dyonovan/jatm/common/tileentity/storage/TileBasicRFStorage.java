@@ -101,7 +101,7 @@ public class TileBasicRFStorage extends BaseMachine implements IRFStorage, IExpe
 
     @Override
     public int getSizeInventory() {
-        return this.inventory.getSizeInventory();
+        return inventory.getSizeInventory();
     }
 
     @Override

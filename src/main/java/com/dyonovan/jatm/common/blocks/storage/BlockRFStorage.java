@@ -3,6 +3,7 @@ package com.dyonovan.jatm.common.blocks.storage;
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.CubeTextures;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
+import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.storage.TileAdvancedRFStorage;
 import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
 import com.dyonovan.jatm.common.tileentity.storage.TileEliteRFStorage;
@@ -99,5 +100,16 @@ public class BlockRFStorage extends BlockBakeable {
     public int getMetaFromState(IBlockState state)
     {
         return ((EnumFacing)state.getValue(PROPERTY_FACING)).getIndex();
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof IExpellable) {
+            ((IExpellable) tile).expelItems();
+        }
+
+        super.breakBlock(worldIn, pos, state);
     }
 }
