@@ -27,7 +27,7 @@ import java.util.List;
 public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricCrusher, fluidGenerator;
-    public static Block ironTank, goldTank, diamondTank, oreCopper;
+    public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, basicStorage;
 
     public static List<BlockBakeable> blockRegistry;
@@ -53,8 +53,10 @@ public class BlockHandler {
                 "goldTank", TileGoldTank.class);
         registerBlock(diamondTank = new BlockTank("diamondTank", 3),
                 "diamondTank", TileDiamondTank.class);
-        registerBlock(oreCopper = new BlockOre("oreCopper"),
+        registerBlock(oreCopper = new BlockOre("oreCopper", 1),
                 "oreCopper", null, "oreCopper");
+        registerBlock(oreTin = new BlockOre("oreTin", 2),
+                "oreTin", null, "oreTin");
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

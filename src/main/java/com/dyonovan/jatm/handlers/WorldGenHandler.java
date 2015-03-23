@@ -34,5 +34,17 @@ public class WorldGenHandler implements IWorldGenerator {
                 new WorldGenMinable(BlockHandler.oreCopper.getDefaultState(), ConfigHandler.copperSize).generate(world, random, pos);
             }
         }
+
+        //Tin
+        if (ConfigHandler.genTin) {
+            for (int i = 0; i < ConfigHandler.tinPerChunk; i++) {
+                int x = chunkX + random.nextInt(16);
+                int y = random.nextInt(ConfigHandler.tinMax - ConfigHandler.tinMin) + ConfigHandler.tinMin;
+                int z = chunkZ + random.nextInt(16);
+                BlockPos pos = new BlockPos(x, y, z);
+
+                new WorldGenMinable(BlockHandler.oreTin.getDefaultState(), ConfigHandler.tinSize).generate(world, random, pos);
+            }
+        }
     }
 }

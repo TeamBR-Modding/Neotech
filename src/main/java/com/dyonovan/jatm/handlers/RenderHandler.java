@@ -14,6 +14,8 @@ public class RenderHandler {
         register(ItemHandler.dustGold);
         register(ItemHandler.dustCopper);
         register(ItemHandler.ingotCopper);
+        register(ItemHandler.dustTin);
+        register(ItemHandler.ingotTin);
     }
 
     public static void register(Item item) {

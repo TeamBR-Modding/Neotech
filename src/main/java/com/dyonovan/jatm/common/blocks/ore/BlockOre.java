@@ -19,12 +19,12 @@ import net.minecraft.world.World;
 
 public class BlockOre extends BlockBakeable {
 
-    public BlockOre(String name) {
+    public BlockOre(String name, int miningLevel) {
         super(Material.rock, name, null);
         setCreativeTab(JATM.tabJATM);
         setUnlocalizedName(Constants.MODID + ":" + name);
         setHardness(1.0F);
-        setHarvestLevel("pickaxe", 1);
+        setHarvestLevel("pickaxe", miningLevel);
     }
 
     @Override
