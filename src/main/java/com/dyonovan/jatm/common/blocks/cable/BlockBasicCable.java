@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -44,27 +45,27 @@ public class BlockBasicCable extends BlockBakeable {
         float y2 = 1.0F - y1;
         float z1 = 0.25F;
         float z2 = 1.0F - z1;
-        if(isCableConnected(worldIn, pos.west())) {
+        if(isCableConnected(worldIn, pos.west(), EnumFacing.WEST)) {
             x1 = 0.0F;
         }
 
-        if(isCableConnected(worldIn, pos.east())) {
+        if(isCableConnected(worldIn, pos.east(), EnumFacing.EAST)) {
             x2 = 1.0F;
         }
 
-        if(isCableConnected(worldIn, pos.north())) {
+        if(isCableConnected(worldIn, pos.north(), EnumFacing.NORTH)) {
             z1 = 0.0F;
         }
 
-        if(isCableConnected(worldIn, pos.south())) {
+        if(isCableConnected(worldIn, pos.south(), EnumFacing.SOUTH)) {
             z2 = 1.0F;
         }
 
-        if(isCableConnected(worldIn, pos.down())) {
+        if(isCableConnected(worldIn, pos.down(), EnumFacing.DOWN)) {
             y1 = 0.0F;
         }
 
-        if(isCableConnected(worldIn, pos.up())) {
+        if(isCableConnected(worldIn, pos.up(), EnumFacing.UP)) {
             y2 = 1.0F;
         }
 
@@ -77,9 +78,9 @@ public class BlockBasicCable extends BlockBakeable {
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
     }
 
-    public static boolean isCableConnected(IBlockAccess blockaccess, BlockPos pos) {
+    public static boolean isCableConnected(IBlockAccess blockaccess, BlockPos pos, EnumFacing face) {
         TileEntity te = blockaccess.getTileEntity(pos);
-        return te instanceof IEnergyProvider || te instanceof IEnergyReceiver;
+        return ((te instanceof IEnergyProvider && ((IEnergyProvider)te).canConnectEnergy(face)) || (te instanceof IEnergyReceiver && ((IEnergyReceiver)te).canConnectEnergy(face)));
     }
 
     @Override

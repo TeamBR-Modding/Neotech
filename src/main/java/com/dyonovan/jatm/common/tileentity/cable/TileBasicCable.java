@@ -48,7 +48,7 @@ public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEner
         ArrayList<Integer> sides = new ArrayList<>();
         int startingEnergy;
         for(EnumFacing en : EnumFacing.values()) {
-            if(isCableConnected(pos.offset(en)) && en != facing)
+            if(isCableConnected(pos.offset(en), en) && en != facing)
                 sides.add(en.ordinal());
         }
        if(!sides.isEmpty()) {
@@ -71,9 +71,9 @@ public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEner
         return total;
     }
 
-    public boolean isCableConnected(BlockPos pos) {
+    public boolean isCableConnected(BlockPos pos, EnumFacing facing) {
         TileEntity te = worldObj.getTileEntity(pos);
-        return te instanceof IEnergyProvider || te instanceof IEnergyReceiver;
+        return ((te instanceof IEnergyProvider && ((IEnergyProvider)te).canConnectEnergy(facing)) || (te instanceof IEnergyReceiver && ((IEnergyReceiver)te).canConnectEnergy(facing)));
     }
 
     @Override

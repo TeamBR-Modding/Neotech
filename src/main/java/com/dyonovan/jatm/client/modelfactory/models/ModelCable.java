@@ -38,7 +38,7 @@ public class ModelCable implements ISmartBlockModel {
         for(int var4 = 0; var4 < var3; ++var4) {
             EnumFacing facing = var2[var4];
             TileEntity te = state.blockAccess.getTileEntity(state.pos.offset(facing));
-            if(te instanceof IEnergyReceiver || te instanceof IEnergyProvider) {
+            if((te instanceof IEnergyProvider && ((IEnergyProvider)te).canConnectEnergy(facing)) || (te instanceof IEnergyReceiver && ((IEnergyReceiver)te).canConnectEnergy(facing))) {
                 this.extensions[facing.ordinal()] = true;
             }
         }
