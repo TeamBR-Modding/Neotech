@@ -25,8 +25,16 @@ public class TileBasicRFStorage extends BaseMachine implements IRFStorage, IExpe
     protected EnergyStorage energyRF;
 
     public TileBasicRFStorage() {
-        energyRF = new EnergyStorage(RF_TOTAL_1, RF_TICK_1);
-        inventory = new InventoryTile(1);
+        setEnergyRF(RF_TOTAL_1, RF_TICK_1);
+        setInventory(1);
+    }
+
+    public void setEnergyRF(int total, int tick) {
+        energyRF = new EnergyStorage(total, tick);
+    }
+
+    public void setInventory(int size) {
+        inventory = new InventoryTile(size);
     }
 
     @Override
