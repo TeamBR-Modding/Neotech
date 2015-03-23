@@ -51,6 +51,7 @@ public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEner
             if(isCableConnected(pos.offset(en), en) && en != facing)
                 sides.add(en.ordinal());
         }
+
        if(!sides.isEmpty()) {
            do {
                startingEnergy = remainingEnergy;
