@@ -9,6 +9,7 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 
 import java.util.ArrayList;
 //Design inspired from FluxDucts
@@ -46,26 +47,33 @@ public class TileBasicCable extends TileEntity implements IEnergyReceiver, IEner
         int total = 0;
         ArrayList<Integer> sides = new ArrayList<>();
         int startingEnergy;
-        for(startingEnergy = 0; startingEnergy < 6; ++startingEnergy) {
-            sides.add(startingEnergy);
+        for(EnumFacing en : EnumFacing.values()) {
+            if(isCableConnected(pos.offset(en)) && en != facing)
+                sides.add(en.ordinal());
         }
-        sides.remove(facing.ordinal());
-        do {
-            startingEnergy = remainingEnergy;
-            int share = remainingEnergy / 5;
-            if(share < 1) {
-                share = remainingEnergy;
-            }
-            for(Integer i : sides) {
-                int drained = this.faceBuffers[i].receiveEnergy(share, simulate);
-                remainingEnergy -= drained;
-                total += drained;
-                if(remainingEnergy < 1) {
-                    break;
-                }
-            }
-        } while(remainingEnergy != startingEnergy && remainingEnergy >= 1);
+       if(!sides.isEmpty()) {
+           do {
+               startingEnergy = remainingEnergy;
+               int share = remainingEnergy / sides.size();
+               if (share < 1) {
+                   share = remainingEnergy;
+               }
+               for (Integer i : sides) {
+                   int drained = this.faceBuffers[i].receiveEnergy(share, simulate);
+                   remainingEnergy -= drained;
+                   total += drained;
+                   if (remainingEnergy < 1) {
+                       break;
+                   }
+               }
+           } while (remainingEnergy != startingEnergy && remainingEnergy >= 1);
+       }
         return total;
+    }
+
+    public boolean isCableConnected(BlockPos pos) {
+        TileEntity te = worldObj.getTileEntity(pos);
+        return te instanceof IEnergyProvider || te instanceof IEnergyReceiver;
     }
 
     @Override

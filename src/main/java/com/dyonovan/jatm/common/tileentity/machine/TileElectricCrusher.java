@@ -105,7 +105,7 @@ public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerLis
 
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
-        return false;
+        return true;
     }
 
     /*******************************************************************************************************************
