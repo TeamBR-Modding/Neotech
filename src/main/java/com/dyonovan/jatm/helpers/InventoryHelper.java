@@ -33,20 +33,22 @@ public class InventoryHelper {
         for (Integer slot : attemptSlots) {
             if (stack.stackSize <= 0) break;
             if (isSidedInventory && !((ISidedInventory) inventory).canInsertItem(slot, stack, side)) continue;
-            if (tryInsertStack(inventory, slot, stack, canStack)) {
-                return true;
-            };
+            do {
+                int actual = tryInsertStack(inventory, slot, stack, canStack);
+                stack.stackSize -= actual;
+            } while (stack.stackSize > 0);
+
         }
         return false;
     }
 
-    public static boolean tryInsertStack(IInventory targetInventory, int slot, ItemStack stack, boolean canMerge) {
+    public static int tryInsertStack(IInventory targetInventory, int slot, ItemStack stack, boolean canMerge) {
         if (targetInventory.isItemValidForSlot(slot, stack)) {
             ItemStack targetStack = targetInventory.getStackInSlot(slot);
             if (targetStack == null) {
                 targetInventory.setInventorySlotContents(slot, stack.copy());
                 stack.stackSize = 0;
-                return true;
+                return 0;
             } else if (canMerge) {
                 if (targetInventory.isItemValidForSlot(slot, stack) &&
                         areMergeCandidates(stack, targetStack)) {
@@ -57,16 +59,11 @@ public class InventoryHelper {
                     copy.stackSize += mergeAmount;
                     targetInventory.setInventorySlotContents(slot, copy);
                     stack.stackSize -= mergeAmount;
-                    if (stack.stackSize > 0) {
-                        if (slot < targetInventory.getSizeInventory() - 1) {
-                            tryInsertStack(targetInventory, slot + 1, stack, true);
-                        }
-                    }
-                    return true;
-                } else return false;
+                    return stack.stackSize;
+                }
             }
         }
-        return false;
+        return stack.stackSize;
     }
 
     public static boolean areItemAndTagEqual(final ItemStack stackA, ItemStack stackB) {
