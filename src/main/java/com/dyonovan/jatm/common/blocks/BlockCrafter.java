@@ -4,16 +4,19 @@ import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.CubeTextures;
 import com.dyonovan.jatm.collections.DummyState;
 import com.dyonovan.jatm.common.tileentity.machine.TileEntityCrafter;
+import com.dyonovan.jatm.handlers.GuiHandler;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class BlockCrafter extends BlockBakeable {
 
@@ -34,6 +37,20 @@ public class BlockCrafter extends BlockBakeable {
                 map.getAtlasSprite("minecraft:blocks/" + "crafting_table_top"),
                 map.getAtlasSprite("minecraft:blocks/" + "log_oak_top")
         );
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+        super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
+
+        if (world.isRemote) return true;
+        else {
+            TileEntity tile =  world.getTileEntity(pos);
+            if (tile != null) {
+                player.openGui(JATM.instance, GuiHandler.CRAFTER_GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
+            }
+        }
+        return true;
     }
 
     public IBlockState getStateFromMeta(int meta) {

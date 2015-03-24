@@ -5,7 +5,6 @@ import com.dyonovan.jatm.common.tileentity.machine.TileEntityCrafter;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
@@ -15,13 +14,13 @@ public class GuiCrafter extends GuiContainer {
 
     public GuiCrafter(InventoryPlayer playerInv, TileEntityCrafter crafter) {
         super(new ContainerCrafter(playerInv, crafter));
-        xSize = 255;
-        ySize = 165;
+        xSize = 196;
+        ySize = 166;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y) {
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("jatm.container.crafter"), 167 - (fontRendererObj.getStringWidth(StatCollector.translateToLocal("jatm.container.crafter")) / 2), 5, 0x404040);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("jatm.container.crafter"), 88 - (fontRendererObj.getStringWidth(StatCollector.translateToLocal("jatm.container.crafter")) / 2), 5, 0x404040);
     }
 
     @Override

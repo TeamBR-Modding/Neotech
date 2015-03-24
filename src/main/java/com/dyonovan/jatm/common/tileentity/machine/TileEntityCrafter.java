@@ -5,6 +5,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IChatComponent;
 
@@ -20,20 +23,20 @@ public class TileEntityCrafter extends TileEntity implements IInventory {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        inventoryCraftingGrid1.readFromNBT(tag);
-        inventoryCraftingGrid2.readFromNBT(tag);
+        inventoryCraftingGrid1.readFromNBT(tag, this, ":crafter1");
+        inventoryCraftingGrid2.readFromNBT(tag, this, ":crafter2");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
-        inventoryCraftingGrid1.writeToNBT(tag);
-        inventoryCraftingGrid2.writeToNBT(tag);
+        inventoryCraftingGrid1.writeToNBT(tag, ":crafter1");
+        inventoryCraftingGrid2.writeToNBT(tag, ":crafter2");
     }
 
     @Override
     public int getSizeInventory() {
-        return 0;
+        return 10;
     }
 
     @Override
@@ -43,7 +46,15 @@ public class TileEntityCrafter extends TileEntity implements IInventory {
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        return index < 10 ? inventoryCraftingGrid1.modifyStack(index, -count) : inventoryCraftingGrid2.modifyStack(index - 10, -count);
+        ItemStack itemstack = getStackInSlot(index);
+        if(itemstack != null) {
+            if(itemstack.stackSize <= count) {
+                setInventorySlotContents(index, null);
+            }
+            itemstack = itemstack.splitStack(count);
+        }
+        worldObj.markBlockForUpdate(this.getPos());
+        return itemstack;
     }
 
     @Override
@@ -57,6 +68,7 @@ public class TileEntityCrafter extends TileEntity implements IInventory {
             inventoryCraftingGrid1.setStackInSlot(stack, index);
         else
             inventoryCraftingGrid2.setStackInSlot(stack, index - 10);
+        worldObj.markBlockForUpdate(pos);
     }
 
     @Override
@@ -113,5 +125,18 @@ public class TileEntityCrafter extends TileEntity implements IInventory {
     @Override
     public IChatComponent getDisplayName() {
         return null;
+    }
+
+    @Override
+    public Packet getDescriptionPacket() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        writeToNBT(nbt);
+        return new S35PacketUpdateTileEntity(pos, 0, nbt);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+        if (pkt.getTileEntityType() == 0)
+            readFromNBT(pkt.getNbtCompound());
     }
 }

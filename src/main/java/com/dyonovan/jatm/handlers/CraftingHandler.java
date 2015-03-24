@@ -41,6 +41,10 @@ public class CraftingHandler {
         GameRegistry.addRecipe(new ItemStack(BlockHandler.diamondTank), "BAB", "BCB", "BAB",
                 'A', Items.diamond, 'B', Blocks.glass, 'C', BlockHandler.goldTank);
 
+        //Crafter
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.crafter),
+                new ItemStack(Blocks.crafting_table, 1), new ItemStack(Blocks.crafting_table, 1));
+
         //Vanilla Furnace Recipes
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);
         GameRegistry.addSmelting(ItemHandler.dustGold, new ItemStack(Items.gold_ingot, 1), 0.7F);

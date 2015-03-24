@@ -11,6 +11,7 @@ tile.jatm:eliteRFStorage.name=Elite RF Storage
 tile.jatm:ironTank.name=Iron Fluid Tank
 tile.jatm:goldTank.name=Gold Fluid Tank
 tile.jatm:diamondTank.name=Diamond Fluid Tank
+tile.jatm:crafter.name=Duel Crafter
 tile.jatm:oreCopper.name=Copper Ore
 tile.jatm:oreTin.name=Tin Ore
 
@@ -20,3 +21,5 @@ item.jatm:dustCopper.name=Copper Dust
 item.jatm:ingotCopper.name=Copper Ingot
 item.jatm:dustTin.name=Tin Dust
 item.jatm:ingotTin.name=Tin Ingot
+
+jatm.container.crafter=Duel Crafter
