@@ -9,6 +9,7 @@ import com.dyonovan.jatm.common.blocks.storage.BlockTank;
 import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
+import com.dyonovan.jatm.common.tileentity.machine.TileElectricMiner;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
 import com.dyonovan.jatm.common.tileentity.storage.*;
@@ -25,7 +26,7 @@ public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
-    public static Block basicCable, basicStorage, advancedStorage, eliteStorage;
+    public static Block basicCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -44,6 +45,8 @@ public class BlockHandler {
                 "electricCrusher", TileElectricCrusher.class);
         registerBlock(electricCrusherActive = new BlockMachine(true, "electricCrusherActive", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
                 "electricCrusherActive", TileElectricCrusher.class);
+        registerBlock(electricMiner = new BlockMachine(false, "electricMiner", TileElectricMiner.class, GuiHandler.ELECTRIC_MINER_GUI_ID),
+                "electricMiner", TileElectricMiner.class);
         registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileBasicRFStorage.class);
         registerBlock(advancedStorage = new BlockRFStorage("advancedRFStorage", TileAdvancedRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 2),
