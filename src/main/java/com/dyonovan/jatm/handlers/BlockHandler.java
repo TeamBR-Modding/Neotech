@@ -1,6 +1,7 @@
 package com.dyonovan.jatm.handlers;
 
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
+import com.dyonovan.jatm.common.blocks.BlockCrafter;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.blocks.cable.BlockBasicCable;
 import com.dyonovan.jatm.common.blocks.ore.BlockOre;
@@ -11,6 +12,7 @@ import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
+import com.dyonovan.jatm.common.tileentity.machine.TileEntityCrafter;
 import com.dyonovan.jatm.common.tileentity.storage.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -26,6 +28,7 @@ public class BlockHandler {
     public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, basicStorage, advancedStorage, eliteStorage;
+    public static Block crafter;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -58,6 +61,8 @@ public class BlockHandler {
                 "goldTank", TileGoldTank.class);
         registerBlock(diamondTank = new BlockTank("diamondTank", 3),
                 "diamondTank", TileDiamondTank.class);
+        registerBlock(crafter = new BlockCrafter(),
+                "crafter", TileEntityCrafter.class);
         registerBlock(oreCopper = new BlockOre("oreCopper", 1),
                 "oreCopper", null, "oreCopper");
         registerBlock(oreTin = new BlockOre("oreTin", 2),
@@ -70,7 +75,7 @@ public class BlockHandler {
             GameRegistry.registerTileEntity(tileEntity, name);
         if(oreDict != null)
             OreDictionary.registerOre(oreDict, block);
-        blockRegistry.add((BlockBakeable)block);
+        blockRegistry.add((BlockBakeable) block);
     }
 
     private static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity) {
