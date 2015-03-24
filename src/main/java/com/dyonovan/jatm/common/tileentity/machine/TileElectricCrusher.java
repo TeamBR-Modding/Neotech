@@ -2,10 +2,12 @@ package com.dyonovan.jatm.common.tileentity.machine;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.blocks.BlockMachine;
 import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import com.dyonovan.jatm.crafting.OreProcessingRegistry;
+import com.dyonovan.jatm.handlers.BlockHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
@@ -42,6 +44,7 @@ public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerLis
             if (currentProcessTime == 0) {
                 input = inventory.getStackInSlot(INPUT_SLOT);
                 currentProcessTime = 1;
+                BlockMachine.setState(world, pos, BlockHandler.electricCrusherActive);
             }
             if (currentProcessTime > 0 && currentProcessTime < TOTAL_PROCESS_TIME) {
                 if (inventory.getStackInSlot(INPUT_SLOT) == null || !inventory.getStackInSlot(INPUT_SLOT).isItemEqual(input)) {
@@ -81,6 +84,7 @@ public class TileElectricCrusher extends BaseMachine implements IUpdatePlayerLis
         currentProcessTime = 0;
         input = null;
         output = null;
+        BlockMachine.setState(worldObj, pos, BlockHandler.electricCrusher);
     }
 
     /*******************************************************************************************************************

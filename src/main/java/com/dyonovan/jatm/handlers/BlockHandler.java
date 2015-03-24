@@ -23,7 +23,7 @@ import java.util.List;
 
 public class BlockHandler {
 
-    public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, fluidGenerator;
+    public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, basicStorage, advancedStorage, eliteStorage;
 
@@ -42,6 +42,8 @@ public class BlockHandler {
                 "electricFurnaceActive", TileElectricFurnace.class);
         registerBlock(electricCrusher = new BlockMachine(false, "electricCrusher", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
                 "electricCrusher", TileElectricCrusher.class);
+        registerBlock(electricCrusherActive = new BlockMachine(true, "electricCrusherActive", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
+                "electricCrusherActive", TileElectricCrusher.class);
         registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileBasicRFStorage.class);
         registerBlock(advancedStorage = new BlockRFStorage("advancedRFStorage", TileAdvancedRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 2),
