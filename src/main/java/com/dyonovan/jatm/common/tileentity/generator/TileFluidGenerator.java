@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
 
@@ -180,6 +181,10 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
         return true;
+    }
+
+    @Override
+    public void spawnActiveParticles(double x, double y, double z) {
     }
 
     /*******************************************************************************************************************

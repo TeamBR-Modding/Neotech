@@ -11,14 +11,21 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
 import java.util.Random;
 
-public class BaseMachine extends TileEntity implements ISidedInventory {
+public abstract class BaseMachine extends TileEntity implements ISidedInventory {
 
     protected InventoryTile inventory;
+
+    @SideOnly(Side.CLIENT)
+    public abstract void spawnActiveParticles(double x, double y, double z);
 
     /*******************************************************************************************************************
      ************************************** Inventory Functions ********************************************************

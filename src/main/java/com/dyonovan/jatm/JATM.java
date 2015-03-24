@@ -1,6 +1,7 @@
 package com.dyonovan.jatm;
 
 import com.dyonovan.jatm.client.modelfactory.ModelGenerator;
+import com.dyonovan.jatm.events.OnCraftingEvent;
 import com.dyonovan.jatm.events.ToolTipEvent;
 import com.dyonovan.jatm.handlers.*;
 import com.dyonovan.jatm.lib.Constants;
@@ -9,13 +10,14 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.File;
@@ -46,6 +48,7 @@ public class JATM {
         CraftingHandler.preInit();
 
         MinecraftForge.EVENT_BUS.register(new ToolTipEvent());
+        FMLCommonHandler.instance().bus().register(new OnCraftingEvent());
 
         GameRegistry.registerWorldGenerator(new WorldGenHandler(), 2);
     }

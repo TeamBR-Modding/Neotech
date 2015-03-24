@@ -19,6 +19,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -172,6 +173,11 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
         inventory.writeToNBT(tag);
         tag.setInteger("CurrentBurnTime", currentBurnTime);
         tag.setInteger("TotalBurnTime", totalBurnTime);
+    }
+
+    @Override
+    public void spawnActiveParticles(double x, double y, double z) {
+        List<EnumParticleTypes> particles = new ArrayList<>();
     }
 
     /*******************************************************************************************************************

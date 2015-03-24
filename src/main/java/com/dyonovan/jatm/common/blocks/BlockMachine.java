@@ -16,25 +16,28 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockMachine extends BlockBakeable {
 
     private int guiID;
     private static boolean keepInventory;
+    private boolean isActive;
 
     public BlockMachine(boolean active, String name, Class<? extends TileEntity> tileClass, int guiID) {
         super(Material.iron, name, tileClass);
         this.setUnlocalizedName(Constants.MODID + ":" + name);
         this.setCreativeTab(active ? null : JATM.tabJATM);
         this.setHardness(1.5F);
-
+        this.setLightLevel(active ? 1 : 0);
         this.guiID = guiID;
+        this.isActive = active;
     }
 
     @Override
@@ -68,6 +71,36 @@ public class BlockMachine extends BlockBakeable {
             worldIn.setTileEntity(pos, tileentity);
         }
         worldIn.markBlockForUpdate(pos);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    {
+        if(isActive) {
+            EnumFacing enumfacing = (EnumFacing)state.getValue(BlockBakeable.PROPERTY_FACING);
+            double d0 = (double)pos.getX() + 0.5D;
+            double d1 = (double)pos.getY() + rand.nextDouble() * 6.0D / 16.0D;
+            double d2 = (double)pos.getZ() + 0.5D;
+            double d3 = 0.52D;
+            double d4 = rand.nextDouble() * 0.6D - 0.3D;
+
+            TileEntity machine = worldIn.getTileEntity(pos);
+            if(machine != null && machine instanceof BaseMachine) {
+                switch (enumfacing) {
+                    case WEST:
+                        ((BaseMachine) machine).spawnActiveParticles(d0 - d3, d1, d2 + d4);
+                        break;
+                    case EAST:
+                        ((BaseMachine) machine).spawnActiveParticles(d0 + d3, d1, d2 + d4);
+                        break;
+                    case NORTH:
+                        ((BaseMachine) machine).spawnActiveParticles(d0 + d4, d1, d2 - d3);
+                        break;
+                    case SOUTH:
+                        ((BaseMachine) machine).spawnActiveParticles(d0 + d4, d1, d2 + d3);
+                }
+            }
+        }
     }
 
     @Override

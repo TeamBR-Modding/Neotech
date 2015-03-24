@@ -12,6 +12,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+
+import java.util.List;
 
 public class TileBasicRFStorage extends BaseMachine implements IExpellable, IUpdatePlayerListBox, IEnergyReceiver, IEnergyProvider {
 
@@ -85,6 +88,10 @@ public class TileBasicRFStorage extends BaseMachine implements IExpellable, IUpd
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
         return true;
+    }
+
+    @Override
+    public void spawnActiveParticles(double x, double y, double z) {
     }
 
     /*******************************************************************************************************************

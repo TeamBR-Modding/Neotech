@@ -15,7 +15,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver, IExpellable {
 
@@ -106,6 +109,12 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
         return true;
+    }
+
+    @Override
+    public void spawnActiveParticles(double x, double y, double z) {
+        worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 0.01, 0.49, 0.72);
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
     }
 
     /*******************************************************************************************************************
