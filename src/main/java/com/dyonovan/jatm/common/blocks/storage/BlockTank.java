@@ -101,6 +101,7 @@ public class BlockTank extends BlockBakeable {
                 }
             }
         }
+        world.markBlockForUpdate(pos);
         if(world.isRemote)
             player.addChatComponentMessage(new ChatComponentText(tank.tank.getFluid() == null ? "Empty" : GuiHelper.GuiColor.YELLOW + tank.tank.getFluid().getLocalizedName() + GuiHelper.GuiColor.WHITE + " : " + tank.tank.getFluidAmount() + "/" + tank.tank.getCapacity()));
         return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
