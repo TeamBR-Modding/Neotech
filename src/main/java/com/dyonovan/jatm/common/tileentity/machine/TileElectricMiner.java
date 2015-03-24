@@ -61,7 +61,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
         IInventory storage = (IInventory) worldObj.getTileEntity(pos.up());
         Block currentBlock = worldObj.getBlockState(newBlock).getBlock();
-        //System.out.println("Currently Trying " + newBlock.toString() + "of type " + currentBlock.getLocalizedName());
+        System.out.println("Currently Trying " + newBlock.toString() + "of type " + currentBlock.getLocalizedName());
         if (currentBlock == null || currentBlock == Blocks.air || currentBlock == Blocks.bedrock) {
             moveNextPos();
             return;

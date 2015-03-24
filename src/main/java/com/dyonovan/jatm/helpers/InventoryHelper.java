@@ -37,7 +37,7 @@ public class InventoryHelper {
                 int actual = tryInsertStack(inventory, slot, stack, canStack);
                 stack.stackSize -= actual;
             } while (stack.stackSize > 0);
-
+            return true;
         }
         return false;
     }
