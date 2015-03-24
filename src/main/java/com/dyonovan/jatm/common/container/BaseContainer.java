@@ -13,21 +13,25 @@ public class BaseContainer extends Container {
     protected int InventoryMax;
     protected int HotBarMax;
     protected boolean canSendToTile = true;
+
     public String getNEILabel() { return ""; }
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         return true;
     }
+
     public void setCanSendToTile(boolean bool) {
         canSendToTile = bool;
     }
+
     @Override
     public Slot addSlotToContainer(Slot slot) {
         if(!(slot.inventory instanceof InventoryPlayer))
             tileSlots++;
         return super.addSlotToContainer(slot);
     }
+
     protected void bindPlayerInventory(InventoryPlayer playerInventory, int pixelX, int pixelY)
     {
         // Inventory
@@ -42,6 +46,7 @@ public class BaseContainer extends Container {
             addSlotToContainer(new Slot(playerInventory, x, 8 + x * 18, pixelY + 58));
         HotBarMax = InventoryMax + 9;
     }
+
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
         ItemStack stack = null;
@@ -82,5 +87,4 @@ public class BaseContainer extends Container {
         }
         return stack;
     }
-
 }

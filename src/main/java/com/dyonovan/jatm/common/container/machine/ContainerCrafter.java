@@ -1,5 +1,6 @@
 package com.dyonovan.jatm.common.container.machine;
 
+import com.dyonovan.jatm.common.container.BaseContainer;
 import com.dyonovan.jatm.common.tileentity.machine.TileEntityCrafter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -7,7 +8,7 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
-public class ContainerCrafter extends Container {
+public class ContainerCrafter extends BaseContainer {
     protected TileEntityCrafter crafter;
 
     public InventoryCrafting craftingGrid1;
@@ -27,7 +28,7 @@ public class ContainerCrafter extends Container {
         addCraftingGrid(craftingGrid1, 0,  8, 27, 3, 3);
         addCraftingGrid(craftingGrid2, 0, 116, 27, 3, 3);
 
-        addPlayerInventory(playerInv, 8, 84);
+        bindPlayerInventory(playerInv, 8, 84);
 
         onCraftMatrixChanged(craftingGrid1);
         onCraftMatrixChanged(craftingGrid2);
@@ -39,12 +40,7 @@ public class ContainerCrafter extends Container {
         if(inv == craftingGrid2)
             craftResult2.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftingGrid2, crafter.getWorld()));
     }
-
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-        return null;
-    }
-
+    
     @Override
     public boolean canMergeSlot(ItemStack stack, Slot slot) {
         return !(slot instanceof SlotCrafting);

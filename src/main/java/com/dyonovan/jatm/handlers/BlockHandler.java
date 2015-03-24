@@ -49,7 +49,7 @@ public class BlockHandler {
         registerBlock(electricCrusherActive = new BlockMachine(true, "electricCrusherActive", TileElectricCrusher.class, GuiHandler.ELECTRIC_CRUSHER_GUI_ID),
                 "electricCrusherActive", TileElectricCrusher.class);
         registerBlock(electricMiner = new BlockMachine(false, "electricMiner", TileElectricMiner.class, GuiHandler.ELECTRIC_MINER_GUI_ID),
-                "electricMiner", TileElectricCrusher.class);
+                "electricMiner", TileElectricMiner.class);
         registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileBasicRFStorage.class);
         registerBlock(advancedStorage = new BlockRFStorage("advancedRFStorage", TileAdvancedRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 2),
