@@ -5,9 +5,8 @@ import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
-import com.dyonovan.jatm.helpers.InventoryHelper;
+import com.dyonovan.jatm.helpers.inventory.InventoryHelper;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -17,7 +16,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import java.util.List;
-import java.util.Random;
 
 public class TileElectricMiner extends BaseMachine implements IExpellable, IUpdatePlayerListBox, IEnergyReceiver {
 
@@ -28,7 +26,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public static final int DEFAULT_SPEED = 5;
 
     private int currentX, currentY, currentZ, tickWait;
-    private boolean isRunning;
+    private boolean isRunning, isWorking;
 
     public EnergyStorage energyRF;
 
@@ -40,10 +38,12 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         currentZ = 0;
         tickWait = 0;
         isRunning = false;
+        isWorking = false;
     }
 
     @Override
     public void update() {
+        if (isWorking) return;
         if (!isRunning) {
             currentX = this.pos.getX() - DEFAULT_SIZE / 2;
             currentY = this.pos.getY() - 1;
@@ -58,10 +58,10 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         if (energyRF.getEnergyStored() < RF_TICK) return;//todo reduce energy
         if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) return;
         BlockPos newBlock = new BlockPos(currentX, currentY, currentZ);
-
+        isWorking = true;
         IInventory storage = (IInventory) worldObj.getTileEntity(pos.up());
         Block currentBlock = worldObj.getBlockState(newBlock).getBlock();
-        System.out.println("Currently Trying " + newBlock.toString() + "of type " + currentBlock.getLocalizedName());
+        //System.out.println("Currently Trying " + newBlock.toString() + "of type " + currentBlock.getLocalizedName());
         if (currentBlock == null || currentBlock == Blocks.air || currentBlock == Blocks.bedrock) {
             moveNextPos();
             return;
@@ -70,10 +70,13 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         List<ItemStack> dropList =  currentBlock.getDrops(worldObj, newBlock, worldObj.getBlockState(newBlock), 0);
         //TODO deal with chests, etc. Placing Item from inv in place of block
         for (ItemStack minedItem : dropList) {
-            if (InventoryHelper.insertItemIntoInventory(storage, minedItem, EnumFacing.UP.getOpposite(), -1, true)) {
-                worldObj.destroyBlock(newBlock, false);
-                moveNextPos();
-            }
+            do {
+                int actual = InventoryHelper.moveItemInto(minedItem, storage, -1, minedItem.stackSize, EnumFacing.UP, true, true);
+                minedItem.stackSize -= actual;
+            } while (minedItem.stackSize > 0);
+
+            worldObj.destroyBlock(newBlock, false);
+            moveNextPos();
         }
     }
 
@@ -81,10 +84,10 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     private void moveNextPos() {
         ++currentX;
-        if (currentX > this.pos.getX() - (DEFAULT_SIZE / 2) + DEFAULT_SIZE) {
+        if (currentX >= this.pos.getX() - (DEFAULT_SIZE / 2) + DEFAULT_SIZE) {
             ++currentZ;
             currentX = this.pos.getX() - DEFAULT_SIZE / 2;
-            if (currentZ > this.pos.getZ() - (DEFAULT_SIZE / 2) + DEFAULT_SIZE) {
+            if (currentZ >= this.pos.getZ() - (DEFAULT_SIZE / 2) + DEFAULT_SIZE) {
                 --currentY;
                 currentZ = this.pos.getZ() - DEFAULT_SIZE / 2;
                 if (currentY == 0) {
@@ -93,6 +96,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
             }
         }
         tickWait = 0;
+        isWorking = false;
     }
 
 
