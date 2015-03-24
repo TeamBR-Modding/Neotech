@@ -1,6 +1,8 @@
 package com.dyonovan.jatm.common.tileentity.machine;
 
+import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,7 +13,9 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IChatComponent;
 
-public class TileEntityCrafter extends TileEntity implements IInventory {
+import java.util.Random;
+
+public class TileEntityCrafter extends TileEntity implements IInventory, IExpellable {
     private InventoryTile inventoryCraftingGrid1;
     private InventoryTile inventoryCraftingGrid2;
 
@@ -138,5 +142,50 @@ public class TileEntityCrafter extends TileEntity implements IInventory {
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
         if (pkt.getTileEntityType() == 0)
             readFromNBT(pkt.getNbtCompound());
+    }
+
+    @Override
+    public void expelItems() {
+        for (ItemStack stack : inventoryCraftingGrid1.getValues()) {
+            if (stack != null) {
+                Random random = new Random();
+                EntityItem entityitem =
+                        new EntityItem(worldObj,
+                                pos.getX() + random.nextFloat() * 0.8F + 0.1F,
+                                pos.getY() + random.nextFloat() * 0.8F + 0.1F,
+                                pos.getZ() + random.nextFloat() * 0.8F + 0.1F,
+                                stack
+                        );
+                if (stack.hasTagCompound()) {
+                    entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+                }
+                float f3 = 0.05F;
+                entityitem.motionX = (double) ((float) random.nextGaussian() * f3);
+                entityitem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
+                entityitem.motionZ = (double) ((float) random.nextGaussian() * f3);
+                worldObj.spawnEntityInWorld(entityitem);
+            }
+        }
+
+        for (ItemStack stack : inventoryCraftingGrid2.getValues()) {
+            if (stack != null) {
+                Random random = new Random();
+                EntityItem entityitem =
+                        new EntityItem(worldObj,
+                                pos.getX() + random.nextFloat() * 0.8F + 0.1F,
+                                pos.getY() + random.nextFloat() * 0.8F + 0.1F,
+                                pos.getZ() + random.nextFloat() * 0.8F + 0.1F,
+                                stack
+                        );
+                if (stack.hasTagCompound()) {
+                    entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+                }
+                float f3 = 0.05F;
+                entityitem.motionX = (double) ((float) random.nextGaussian() * f3);
+                entityitem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
+                entityitem.motionZ = (double) ((float) random.nextGaussian() * f3);
+                worldObj.spawnEntityInWorld(entityitem);
+            }
+        }
     }
 }

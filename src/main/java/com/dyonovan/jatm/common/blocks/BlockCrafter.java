@@ -53,6 +53,15 @@ public class BlockCrafter extends BlockBakeable {
         return true;
     }
 
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (tile instanceof IExpellable) {
+                ((IExpellable) tile).expelItems();
+            }
+        super.breakBlock(worldIn, pos, state);
+    }
+
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.getFront(meta);
 
