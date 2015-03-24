@@ -8,7 +8,6 @@ import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
@@ -24,7 +23,6 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static net.minecraftforge.fluids.FluidContainerRegistry.drainFluidContainer;
 import static net.minecraftforge.fluids.FluidContainerRegistry.isFilledContainer;
