@@ -3,11 +3,15 @@ package com.dyonovan.jatm.handlers;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.BlockCrafter;
 import com.dyonovan.jatm.common.blocks.BlockMachine;
-import com.dyonovan.jatm.common.blocks.cable.BlockBasicCable;
+import com.dyonovan.jatm.common.blocks.pipe.energy.BlockAdvancedCable;
+import com.dyonovan.jatm.common.blocks.pipe.energy.BlockBasicCable;
 import com.dyonovan.jatm.common.blocks.ore.BlockOre;
+import com.dyonovan.jatm.common.blocks.pipe.energy.BlockEliteCable;
 import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.jatm.common.blocks.storage.BlockTank;
-import com.dyonovan.jatm.common.pipe.PipeBasicEnergy;
+import com.dyonovan.jatm.common.pipe.energy.PipeAdvancedEnergy;
+import com.dyonovan.jatm.common.pipe.energy.PipeBasicEnergy;
+import com.dyonovan.jatm.common.pipe.energy.PipeEliteEnergy;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
@@ -28,7 +32,7 @@ public class BlockHandler {
 
     public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
-    public static Block basicCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
+    public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
     public static Block crafter;
 
     public static List<BlockBakeable> blockRegistry;
@@ -56,8 +60,12 @@ public class BlockHandler {
                 "advancedRFStorage", TileAdvancedRFStorage.class);
         registerBlock(eliteStorage = new BlockRFStorage("eliteRFStorage", TileEliteRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 3),
                 "eliteRFStorage", TileEliteRFStorage.class);
-        registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
+        registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable", PipeBasicEnergy.class),
                 "basicCable", PipeBasicEnergy.class);
+        registerBlock(advancedCable = new BlockAdvancedCable(Material.iron, "advancedCable", PipeAdvancedEnergy.class),
+                "advancedCable", PipeAdvancedEnergy.class);
+        registerBlock(eliteCable = new BlockEliteCable(Material.iron, "eliteCable", PipeEliteEnergy.class),
+                "eliteCable", PipeEliteEnergy.class);
         registerBlock(ironTank = new BlockTank("ironTank", 1),
                 "ironTank", TileIronTank.class);
         registerBlock(goldTank = new BlockTank("goldTank", 2),

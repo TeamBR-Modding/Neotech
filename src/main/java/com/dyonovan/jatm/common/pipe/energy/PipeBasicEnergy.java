@@ -1,8 +1,9 @@
-package com.dyonovan.jatm.common.pipe;
+package com.dyonovan.jatm.common.pipe.energy;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.pipe.Pipe;
 import com.dyonovan.jatm.common.pipe.storage.EnergyBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;

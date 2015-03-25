@@ -1,10 +1,10 @@
 package com.dyonovan.jatm.client.modelfactory;
 
 import com.dyonovan.jatm.client.modelfactory.models.ModelBlock;
-import com.dyonovan.jatm.client.modelfactory.models.ModelCable;
+import com.dyonovan.jatm.client.modelfactory.models.ModelPipe;
 import com.dyonovan.jatm.client.modelfactory.models.ModelTank;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
-import com.dyonovan.jatm.common.blocks.cable.BlockBasicCable;
+import com.dyonovan.jatm.common.blocks.pipe.BlockPipe;
 import com.dyonovan.jatm.common.blocks.storage.BlockTank;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.lib.Constants;
@@ -36,14 +36,14 @@ public class ModelGenerator {
         //Register Side Icons
         textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + "machine_side"));
 
-        //Register Cable Icons
-        textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/basicCableNoEdge"));
-        textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/basicCablePlus"));
-        textureMap.registerSprite(new ResourceLocation(Constants.MODID + ":blocks/basicCableSquare"));
-
         //Register Front Icons
         for(BlockBakeable block : BlockHandler.blockRegistry) {
             textureMap.registerSprite(block.getFrontIcon());
+            if(block instanceof BlockPipe) {
+                if(textureMap.getAtlasSprite(((BlockPipe)block).getBackgroundTexture()) == null)
+                    textureMap.registerSprite(new ResourceLocation(((BlockPipe)block).getBackgroundTexture()));
+                textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + block.getName()));
+            }
         }
     }
 
@@ -56,11 +56,11 @@ public class ModelGenerator {
             /**
              * Cables
              */
-            if(block instanceof BlockBasicCable) {
+            if(block instanceof BlockPipe) {
                 //Build Normal Model
-                event.modelRegistry.putObject(block.getNormal(), new ModelCable());
+                event.modelRegistry.putObject(block.getNormal(), new ModelPipe((BlockPipe)block));
                 //Build Inventory Model
-                event.modelRegistry.putObject(block.getInventory(), new ModelCable());
+                event.modelRegistry.putObject(block.getInventory(), new ModelPipe((BlockPipe)block));
                 //Register the Model to the item
                 itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
             }

@@ -1,20 +1,14 @@
-package com.dyonovan.jatm.common.blocks.cable;
+package com.dyonovan.jatm.common.blocks.pipe;
 
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.DummyState;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
-import com.dyonovan.jatm.common.pipe.PipeBasicEnergy;
 import com.dyonovan.jatm.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,19 +16,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class BlockBasicCable extends BlockBakeable {
-
-    public BlockBasicCable(Material materialIn, String blockName) {
-        super(materialIn, blockName, PipeBasicEnergy.class);
+public abstract class BlockPipe extends BlockBakeable {
+    public BlockPipe(Material materialIn, String name, Class<? extends TileEntity> tileClass) {
+        super(materialIn, name, tileClass);
         setCreativeTab(JATM.tabJATM);
         setUnlocalizedName(Constants.MODID + ":" + name);
-        setBlockBounds(0.25F, 0.25F, 0.25F, 0.75F, 0.75F, 0.75F);
-        setHardness(1.0F);
     }
 
-    public String getName() {
-        return name;
-    }
+    public abstract boolean isCableConnected(IBlockAccess blockaccess, BlockPos pos, EnumFacing face);
+
+    /**
+     * Get width (from center 0.0F - 6.0F)
+     * @return Radius of pipe
+     */
+    public abstract float getWidth();
+
+    public abstract String getBackgroundTexture();
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
@@ -75,11 +72,6 @@ public class BlockBasicCable extends BlockBakeable {
     public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List list, Entity collidingEntity) {
         this.setBlockBoundsBasedOnState(worldIn, pos);
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
-    }
-
-    public static boolean isCableConnected(IBlockAccess blockaccess, BlockPos pos, EnumFacing face) {
-        TileEntity te = blockaccess.getTileEntity(pos);
-        return ((te instanceof IEnergyProvider && ((IEnergyProvider)te).canConnectEnergy(face)) || (te instanceof IEnergyReceiver && ((IEnergyReceiver)te).canConnectEnergy(face)));
     }
 
     @Override
