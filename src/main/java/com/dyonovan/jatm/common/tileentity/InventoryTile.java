@@ -122,6 +122,7 @@ public class InventoryTile {
         }
     }
 
+    @Deprecated
     public void writeToNBT(NBTTagCompound tagCompound) {
         NBTTagList nbtTagList = new NBTTagList();
         for (int i = 0; i < this.inventory.length; i++) {
