@@ -16,9 +16,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.World;
-
-import java.util.List;
 
 public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerListBox, IEnergyReceiver, IExpellable {
 
@@ -39,9 +36,7 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
 
     @Override
     public void update() {
-        if (!this.hasWorldObj()) return;
-        World world = this.getWorld();
-        if (world.isRemote) return;
+        if (!this.hasWorldObj() || getWorld().isRemote) return;
 
         if (currentProcessTime > 0 || canSmelt()) {
             if (currentProcessTime == 0) {
@@ -52,8 +47,8 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
             if (currentProcessTime > 0 && currentProcessTime < TOTAL_PROCESS_TIME) {
                 if (inventory.getStackInSlot(INPUT_SLOT) == null || !inventory.getStackInSlot(INPUT_SLOT).isItemEqual(input)) {
                     currentProcessTime = 0;
-                    world.markBlockForUpdate(this.pos);
-                    BlockMachine.setState(world, pos, BlockHandler.electricFurnace);
+                    worldObj.markBlockForUpdate(this.pos);
+                    BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
                     return;
                 }
                 if (energyRF.getEnergyStored() >= RF_TICK ) {
@@ -67,9 +62,9 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                     inventory.setStackInSlot(new ItemStack(output.getItem(), output.stackSize > 0 ? output.stackSize : 1), OUTPUT_SLOT);
                 else inventory.getStackInSlot(OUTPUT_SLOT).stackSize += (output.stackSize > 0 ? output.stackSize : 1);
                 currentProcessTime = 0;
-                BlockMachine.setState(world, pos, BlockHandler.electricFurnace);
+                BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
             }
-            world.markBlockForUpdate(this.pos);
+            worldObj.markBlockForUpdate(this.pos);
         }
     }
 
@@ -180,7 +175,7 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
-        inventory.readFromNBT(tag, this);
+        inventory.readFromNBT(tag, this, ":main");
         NBTTagList itemsTag = tag.getTagList("Stacks", 10);
         for (int i = 0; i < itemsTag.tagCount(); i++)
         {
@@ -208,7 +203,7 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
-        inventory.writeToNBT(tag);
+        inventory.writeToNBT(tag, ":main");
         NBTTagList nbtTagList = new NBTTagList();
         for (int i = 0; i < 2; i++) {
             NBTTagCompound nbtTagCompound1 = new NBTTagCompound();

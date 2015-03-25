@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidTank;
 
@@ -36,6 +37,8 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
 
     @Override
     public void update() {
+        if (!this.hasWorldObj() || getWorld().isRemote) return;
+
 
     }
 
