@@ -40,22 +40,12 @@ public class ContainerCrafter extends BaseContainer {
         if(inv == craftingGrid2)
             craftResult2.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftingGrid2, crafter.getWorld()));
     }
-    
+
     @Override
     public boolean canMergeSlot(ItemStack stack, Slot slot) {
         return !(slot instanceof SlotCrafting);
     }
 
-    public void addPlayerInventory(InventoryPlayer inv, int x, int y) {
-        for(int i = 0; i < 3; i++) {
-            for (int j = 0; j < 9; j++) {
-                this.addSlotToContainer(new Slot(inv, j + (i + 1) * 9, x + j * 18, y + i * 18));
-            }
-        }
-        for (int i = 0; i < 9; i++) {
-            this.addSlotToContainer(new Slot(inv, i, x + i * 18, y + 58));
-        }
-    }
 
     public void addCraftingGrid(IInventory inventory, int startSlot, int x, int y, int width, int height) {
         int i = 0;
