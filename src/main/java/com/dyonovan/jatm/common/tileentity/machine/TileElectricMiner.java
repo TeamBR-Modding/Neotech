@@ -2,6 +2,7 @@ package com.dyonovan.jatm.common.tileentity.machine;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.jatm.common.blocks.BlockBakeable;
 import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
@@ -45,15 +46,34 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public void update() {
         if (isWorking) return;
         if (!isRunning) {
-            currentX = this.pos.getX() - DEFAULT_SIZE / 2;
+            EnumFacing rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
+            if (rear.getAxis() == EnumFacing.Axis.X && rear.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) {
+                currentX = this.pos.getX() + 1;
+                currentZ = this.pos.getZ();
+            } else if (rear.getAxis() == EnumFacing.Axis.X && rear.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE) {
+                currentX = this.pos.getX() + DEFAULT_SIZE + 1;
+                currentZ = this.pos.getZ();
+            } else if (rear.getAxis() == EnumFacing.Axis.Z && rear.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) {
+                currentX = this.pos.getZ() + 1;
+                currentZ = this.pos.getX();
+            } else if (rear.getAxis() == EnumFacing.Axis.Z && rear.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE) {
+                currentX = this.pos.getZ() + DEFAULT_SIZE + 1;
+                currentZ = this.pos.getX();
+            }
+            currentY -= 1;
+
+            System.out.println("Currently Trying " + new BlockPos(currentX, currentY, currentZ).toString());
+
+            /*currentX = this.pos.getX() - DEFAULT_SIZE / 2;
             currentY = this.pos.getY() - 1;
-            currentZ = this.pos.getZ() - DEFAULT_SIZE / 2;
+            currentZ = this.pos.getZ() - DEFAULT_SIZE / 2;*/
             isRunning = true;
         }
         if (tickWait < DEFAULT_SPEED) {
             ++tickWait;
             return;
         }
+
 
         if (energyRF.getEnergyStored() < RF_TICK) return;//todo reduce energy
         if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) return;

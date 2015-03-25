@@ -14,8 +14,8 @@ public class CraftingHandler {
                 'A', Items.iron_ingot, 'B', Items.redstone, 'C', Blocks.furnace);
 
         //Electric Furnace
-        GameRegistry.addRecipe(new ItemStack(BlockHandler.electricFurnace), "ACA", "BDB", "ACA",
-                'A', Items.iron_ingot, 'B', Items.redstone, 'C', Blocks.furnace, 'D', Items.glowstone_dust);
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.electricFurnace), "ACA", "BBB", "ACA",
+                'A', Items.iron_ingot, 'B', Items.redstone, 'C', Blocks.furnace);
 
         //Electric Crusher
         GameRegistry.addRecipe(new ItemStack(BlockHandler.electricCrusher), "ABA", "BCB", "ABA",
