@@ -7,7 +7,7 @@ import com.dyonovan.jatm.common.blocks.cable.BlockBasicCable;
 import com.dyonovan.jatm.common.blocks.ore.BlockOre;
 import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.jatm.common.blocks.storage.BlockTank;
-import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
+import com.dyonovan.jatm.common.pipe.PipeBasicEnergy;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
@@ -57,7 +57,7 @@ public class BlockHandler {
         registerBlock(eliteStorage = new BlockRFStorage("eliteRFStorage", TileEliteRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 3),
                 "eliteRFStorage", TileEliteRFStorage.class);
         registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
-                "basicCable", TileBasicCable.class);
+                "basicCable", PipeBasicEnergy.class);
         registerBlock(ironTank = new BlockTank("ironTank", 1),
                 "ironTank", TileIronTank.class);
         registerBlock(goldTank = new BlockTank("goldTank", 2),

@@ -5,9 +5,8 @@ import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.DummyState;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
-import com.dyonovan.jatm.common.tileentity.cable.TileBasicCable;
+import com.dyonovan.jatm.common.pipe.PipeBasicEnergy;
 import com.dyonovan.jatm.lib.Constants;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -26,7 +25,7 @@ import java.util.List;
 public class BlockBasicCable extends BlockBakeable {
 
     public BlockBasicCable(Material materialIn, String blockName) {
-        super(materialIn, blockName, TileBasicCable.class);
+        super(materialIn, blockName, PipeBasicEnergy.class);
         setCreativeTab(JATM.tabJATM);
         setUnlocalizedName(Constants.MODID + ":" + name);
         setBlockBounds(0.25F, 0.25F, 0.25F, 0.75F, 0.75F, 0.75F);
