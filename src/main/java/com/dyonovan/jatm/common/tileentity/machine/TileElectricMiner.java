@@ -44,59 +44,62 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     @Override
     public void update() {
-        if (isWorking) return;
-        if (!isRunning) {
-            EnumFacing rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
-            if (rear.getAxis() == EnumFacing.Axis.X && rear.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) {
-                currentX = this.pos.getX() + 1;
-                currentZ = this.pos.getZ();
-            } else if (rear.getAxis() == EnumFacing.Axis.X && rear.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE) {
-                currentX = this.pos.getX() + DEFAULT_SIZE + 1;
-                currentZ = this.pos.getZ();
-            } else if (rear.getAxis() == EnumFacing.Axis.Z && rear.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) {
-                currentX = this.pos.getZ() + 1;
-                currentZ = this.pos.getX();
-            } else if (rear.getAxis() == EnumFacing.Axis.Z && rear.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE) {
-                currentX = this.pos.getZ() + DEFAULT_SIZE + 1;
-                currentZ = this.pos.getX();
-            }
-            currentY -= 1;
+        if(worldObj != null && !worldObj.isRemote) {
 
-            System.out.println("Currently Trying " + new BlockPos(currentX, currentY, currentZ).toString());
+            if (isWorking) return;
+            if (!isRunning) {
+                EnumFacing rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
+                if (rear.getAxis() == EnumFacing.Axis.X && rear.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) {
+                    currentX = this.pos.getX() + 1;
+                    currentZ = this.pos.getZ();
+                } else if (rear.getAxis() == EnumFacing.Axis.X && rear.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE) {
+                    currentX = this.pos.getX() + DEFAULT_SIZE + 1;
+                    currentZ = this.pos.getZ() - DEFAULT_SIZE;
+                } else if (rear.getAxis() == EnumFacing.Axis.Z && rear.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) {
+                    currentX = this.pos.getZ() + 1;
+                    currentZ = this.pos.getX();
+                } else if (rear.getAxis() == EnumFacing.Axis.Z && rear.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE) {
+                    currentX = this.pos.getZ() + DEFAULT_SIZE + 1;
+                    currentZ = this.pos.getX() - DEFAULT_SIZE;
+                }
+                currentY -= 1;
+
+                System.out.println("Currently Trying " + new BlockPos(currentX, currentY, currentZ).toString());
 
             /*currentX = this.pos.getX() - DEFAULT_SIZE / 2;
             currentY = this.pos.getY() - 1;
             currentZ = this.pos.getZ() - DEFAULT_SIZE / 2;*/
-            isRunning = true;
-        }
-        if (tickWait < DEFAULT_SPEED) {
-            ++tickWait;
-            return;
-        }
+                isRunning = true;
+            }
+            if (tickWait < DEFAULT_SPEED) {
+                ++tickWait;
+                return;
+            }
 
 
-        if (energyRF.getEnergyStored() < RF_TICK) return;//todo reduce energy
-        if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) return;
-        BlockPos newBlock = new BlockPos(currentX, currentY, currentZ);
-        isWorking = true;
-        IInventory storage = (IInventory) worldObj.getTileEntity(pos.up());
-        Block currentBlock = worldObj.getBlockState(newBlock).getBlock();
-        //System.out.println("Currently Trying " + newBlock.toString() + "of type " + currentBlock.getLocalizedName());
-        if (currentBlock == null || currentBlock == Blocks.air || currentBlock == Blocks.bedrock) {
-            moveNextPos();
-            return;
-        }
+            if (energyRF.getEnergyStored() < RF_TICK) return;//todo reduce energy
+            if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) return;
+            BlockPos newBlock = new BlockPos(currentX, currentY, currentZ);
+            isWorking = true;
+            IInventory storage = (IInventory) worldObj.getTileEntity(pos.up());
+            Block currentBlock = worldObj.getBlockState(newBlock).getBlock();
+            //System.out.println("Currently Trying " + newBlock.toString() + "of type " + currentBlock.getLocalizedName());
+            if (currentBlock == null || currentBlock == Blocks.air || currentBlock == Blocks.bedrock) {
+                moveNextPos();
+                return;
+            }
 
-        List<ItemStack> dropList =  currentBlock.getDrops(worldObj, newBlock, worldObj.getBlockState(newBlock), 0);
-        //TODO deal with chests, etc. Placing Item from inv in place of block
-        for (ItemStack minedItem : dropList) {
-            do {
-                int actual = InventoryHelper.moveItemInto(minedItem, storage, -1, minedItem.stackSize, EnumFacing.UP, true, true);
-                minedItem.stackSize -= actual;
-            } while (minedItem.stackSize > 0);
+            List<ItemStack> dropList = currentBlock.getDrops(worldObj, newBlock, worldObj.getBlockState(newBlock), 0);
+            //TODO deal with chests, etc. Placing Item from inv in place of block
+            for (ItemStack minedItem : dropList) {
+                do {
+                    int actual = InventoryHelper.moveItemInto(minedItem, storage, -1, minedItem.stackSize, EnumFacing.UP, true, true);
+                    minedItem.stackSize -= actual;
+                } while (minedItem.stackSize > 0);
 
-            worldObj.destroyBlock(newBlock, false);
-            moveNextPos();
+                worldObj.destroyBlock(newBlock, false);
+                moveNextPos();
+            }
         }
     }
 

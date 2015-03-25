@@ -3,7 +3,6 @@ package com.dyonovan.jatm.common.blocks.storage;
 import com.dyonovan.jatm.JATM;
 import com.dyonovan.jatm.collections.CubeTextures;
 import com.dyonovan.jatm.common.blocks.BlockBakeable;
-import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.storage.TileAdvancedRFStorage;
 import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
 import com.dyonovan.jatm.common.tileentity.storage.TileEliteRFStorage;
@@ -15,11 +14,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockRFStorage extends BlockBakeable {
 
@@ -103,13 +108,57 @@ public class BlockRFStorage extends BlockBakeable {
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    {
+        ItemStack stack = new ItemStack(this, 1);
+        TileBasicRFStorage tile = (TileBasicRFStorage) worldIn.getTileEntity(pos);
+        if (tile == null) return;
 
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof IExpellable) {
-            ((IExpellable) tile).expelItems();
+        tile.expelItems();
+
+        if (tile.getEnergyStored(null) > 0)
+        {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setInteger("Power", tile.getEnergyStored(null));
+            stack.setTagCompound(tag);
         }
+        dropStorageBlock(worldIn, pos, stack);
 
+        worldIn.destroyBlock(pos, false);
         super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune){
+        return null;
+    }
+
+    protected void dropStorageBlock (World world, BlockPos pos, ItemStack stack)
+    {
+        if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+        {
+            float f = 0.7F;
+            double d0 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            double d1 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            double d2 = (double) (world.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+            EntityItem entityitem = new EntityItem(world, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, stack);
+            entityitem.setPickupDelay(10);
+            world.spawnEntityInWorld(entityitem);
+        }
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+    {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+        if (stack.hasTagCompound())
+        {
+            NBTTagCompound tag = stack.getTagCompound();
+            if (tag != null)
+            {
+                TileBasicRFStorage tile = (TileBasicRFStorage) worldIn.getTileEntity(pos);
+                tile.setRFStorage(tag.getInteger("Power"));
+            }
+        }
     }
 }

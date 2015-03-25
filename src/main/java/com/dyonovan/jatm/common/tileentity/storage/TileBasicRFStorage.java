@@ -90,6 +90,10 @@ public class TileBasicRFStorage extends BaseMachine implements IExpellable, IUpd
         return true;
     }
 
+    public void setRFStorage(int amount) {
+        energyRF.setEnergyStored(amount);
+    }
+
     @Override
     public void spawnActiveParticles(double x, double y, double z) {
     }

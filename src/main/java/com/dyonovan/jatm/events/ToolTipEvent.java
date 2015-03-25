@@ -1,5 +1,6 @@
 package com.dyonovan.jatm.events;
 
+import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.jatm.handlers.BlockHandler;
 import com.dyonovan.jatm.helpers.GuiHelper;
 import net.minecraft.block.Block;
@@ -43,6 +44,17 @@ public class ToolTipEvent {
                         FluidStack liquid = FluidStack.loadFluidStackFromNBT(liquidTag);
                         event.toolTip.add(GuiHelper.GuiColor.YELLOW + liquid.getLocalizedName());
                         event.toolTip.add(liquid.amount + "/" + FluidContainerRegistry.BUCKET_VOLUME * 64 + "mb");
+                    }
+                }
+            }
+            if(event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.basicStorage) ||
+                    event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.advancedStorage) ||
+                    event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.eliteStorage)) {
+                if(event.itemStack.hasTagCompound()) {
+                    NBTTagCompound tag = event.itemStack.getTagCompound();
+                    if (tag != null) {
+                        event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Stored Energy");
+                        event.toolTip.add(String.valueOf(tag.getInteger("Power")) + GuiHelper.GuiColor.RED + " RF");
                     }
                 }
             }
