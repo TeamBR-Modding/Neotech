@@ -2,24 +2,15 @@ package com.dyonovan.jatm.handlers;
 
 import com.dyonovan.jatm.client.gui.generators.GuiFluidGenerator;
 import com.dyonovan.jatm.client.gui.generators.GuiFurnaceGenerator;
-import com.dyonovan.jatm.client.gui.machine.GuiCrafter;
-import com.dyonovan.jatm.client.gui.machine.GuiElectricCrusher;
-import com.dyonovan.jatm.client.gui.machine.GuiElectricMiner;
-import com.dyonovan.jatm.client.gui.machine.GuiElectricFurnace;
+import com.dyonovan.jatm.client.gui.machine.*;
 import com.dyonovan.jatm.client.gui.storage.GuiRFStorage;
 import com.dyonovan.jatm.common.container.generators.ContainerFluidGenerator;
 import com.dyonovan.jatm.common.container.generators.ContainerFurnaceGenerator;
-import com.dyonovan.jatm.common.container.machine.ContainerCrafter;
-import com.dyonovan.jatm.common.container.machine.ContainerElectricCrusher;
-import com.dyonovan.jatm.common.container.machine.ContainerElectricMiner;
-import com.dyonovan.jatm.common.container.machine.ContainerElectricFurnace;
+import com.dyonovan.jatm.common.container.machine.*;
 import com.dyonovan.jatm.common.container.storage.ContainerRFStorage;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
-import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
-import com.dyonovan.jatm.common.tileentity.machine.TileElectricMiner;
-import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
-import com.dyonovan.jatm.common.tileentity.machine.TileEntityCrafter;
+import com.dyonovan.jatm.common.tileentity.machine.*;
 import com.dyonovan.jatm.common.tileentity.storage.TileBasicRFStorage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
@@ -35,6 +26,7 @@ public class GuiHandler implements IGuiHandler {
     public static final int RF_STORAGE_GUI_ID = 4;
     public static final int ELECTRIC_MINER_GUI_ID = 5;
     public static final int CRAFTER_GUI_ID = 6;
+    public static final int THERMAL_BINDER_GUI_ID = 7;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -53,6 +45,8 @@ public class GuiHandler implements IGuiHandler {
                 return new ContainerElectricMiner(player.inventory, (TileElectricMiner) world.getTileEntity(new BlockPos(x, y, z)));
             case CRAFTER_GUI_ID :
                 return new ContainerCrafter(player.inventory, (TileEntityCrafter) world.getTileEntity(new BlockPos(x, y, z)));
+            case THERMAL_BINDER_GUI_ID :
+                return new ContainerThermalBinder(player.inventory, (TileThermalBinder) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }
@@ -74,6 +68,8 @@ public class GuiHandler implements IGuiHandler {
                 return new GuiElectricMiner(player.inventory, (TileElectricMiner) world.getTileEntity(new BlockPos(x, y, z)));
             case CRAFTER_GUI_ID :
                 return new GuiCrafter(player.inventory, (TileEntityCrafter) world.getTileEntity(new BlockPos(x, y, z)));
+            case THERMAL_BINDER_GUI_ID :
+                return new GuiThermalBinder(player.inventory, (TileThermalBinder) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }
