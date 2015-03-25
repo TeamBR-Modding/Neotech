@@ -6,14 +6,9 @@ import com.dyonovan.jatm.common.blocks.IExpellable;
 import com.dyonovan.jatm.common.tileentity.BaseMachine;
 import com.dyonovan.jatm.common.tileentity.InventoryTile;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 
 public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, IUpdatePlayerListBox, IExpellable {
 
@@ -26,13 +21,12 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     public static final int INPUT_SLOT_2 = 1;
     public static final int INPUT_SLOT_3 = 2;
     public static final int INPUT_SLOT_4 = 3;
-    public static final int BLANK_MB_SLOT = 4;
-    public static final int OUTPUT_SLOT = 5;
+    public static final int MB_SLOT = 4;
 
     public TileThermalBinder() {
         energyRF = new EnergyStorage(10000);
         currentProcessTime = 0;
-        inventory = new InventoryTile(6);
+        inventory = new InventoryTile(5);
     }
 
     @Override
@@ -77,7 +71,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        return new int[] {0,1,2,3,4,5,};
+        return new int[] {};
     }
 
     @Override
@@ -87,7 +81,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return index == OUTPUT_SLOT;
+        return false;
     }
 
     @Override
