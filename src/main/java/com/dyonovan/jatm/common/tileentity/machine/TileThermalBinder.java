@@ -9,11 +9,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidTank;
 
 public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, IUpdatePlayerListBox, IExpellable {
 
     public int currentProcessTime;
     public EnergyStorage energyRF;
+    public FluidTank tank;
 
     private static final int RF_TICK= 100;
     public static final int TOTAL_PROCESS_TIME = 200;
@@ -22,11 +25,13 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     public static final int INPUT_SLOT_3 = 2;
     public static final int INPUT_SLOT_4 = 3;
     public static final int MB_SLOT = 4;
+    public static final int INGOT_SLOT = 5;
 
     public TileThermalBinder() {
         energyRF = new EnergyStorage(10000);
         currentProcessTime = 0;
-        inventory = new InventoryTile(5);
+        inventory = new InventoryTile(6);
+        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 2);
     }
 
     @Override
@@ -139,5 +144,4 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         inventory.writeToNBT(tag, ":MainInv");
         tag.setInteger("CurrentProcessTime", currentProcessTime);
     }
-
 }

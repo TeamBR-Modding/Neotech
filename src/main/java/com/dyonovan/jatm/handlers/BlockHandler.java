@@ -9,11 +9,8 @@ import com.dyonovan.jatm.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.jatm.common.blocks.storage.BlockTank;
 import com.dyonovan.jatm.common.pipe.PipeBasicEnergy;
 import com.dyonovan.jatm.common.tileentity.generator.TileFluidGenerator;
-import com.dyonovan.jatm.common.tileentity.machine.TileElectricCrusher;
-import com.dyonovan.jatm.common.tileentity.machine.TileElectricFurnace;
+import com.dyonovan.jatm.common.tileentity.machine.*;
 import com.dyonovan.jatm.common.tileentity.generator.TileFurnaceGenerator;
-import com.dyonovan.jatm.common.tileentity.machine.TileElectricMiner;
-import com.dyonovan.jatm.common.tileentity.machine.TileEntityCrafter;
 import com.dyonovan.jatm.common.tileentity.storage.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -29,13 +26,14 @@ public class BlockHandler {
     public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
-    public static Block crafter;
+    public static Block crafter, thermalBinder;
 
     public static List<BlockBakeable> blockRegistry;
 
     public static void preInit() {
         blockRegistry = new ArrayList<>();
 
+        //Machines
         registerBlock(furnaceGenerator = new BlockMachine(false, "furnaceGenerator", TileFurnaceGenerator.class, GuiHandler.FURNACE_GENERATOR_GUI_ID),
                 "furnaceGenerator", TileFurnaceGenerator.class);
         registerBlock(fluidGenerator = new BlockMachine(false, "fluidGenerator", TileFluidGenerator.class, GuiHandler.FLUID_GENERATOR_GUI_ID),
@@ -50,26 +48,37 @@ public class BlockHandler {
                 "electricCrusherActive", TileElectricCrusher.class);
         registerBlock(electricMiner = new BlockMachine(false, "electricMiner", TileElectricMiner.class, GuiHandler.ELECTRIC_MINER_GUI_ID),
                 "electricMiner", TileElectricMiner.class);
+        registerBlock(thermalBinder = new BlockMachine(false, "thermalBinder", TileThermalBinder.class, GuiHandler.THERMAL_BINDER_GUI_ID),
+                "thermalBinder", TileThermalBinder.class);
+
+
+        //Storage Blocks
         registerBlock(basicStorage = new BlockRFStorage("basicRFStorage", TileBasicRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 1),
                 "basicRFStorage", TileBasicRFStorage.class);
         registerBlock(advancedStorage = new BlockRFStorage("advancedRFStorage", TileAdvancedRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 2),
                 "advancedRFStorage", TileAdvancedRFStorage.class);
         registerBlock(eliteStorage = new BlockRFStorage("eliteRFStorage", TileEliteRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 3),
                 "eliteRFStorage", TileEliteRFStorage.class);
-        registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
-                "basicCable", PipeBasicEnergy.class);
         registerBlock(ironTank = new BlockTank("ironTank", 1),
                 "ironTank", TileIronTank.class);
         registerBlock(goldTank = new BlockTank("goldTank", 2),
                 "goldTank", TileGoldTank.class);
         registerBlock(diamondTank = new BlockTank("diamondTank", 3),
                 "diamondTank", TileDiamondTank.class);
+
+        //Crafter
         registerBlock(crafter = new BlockCrafter(),
                 "crafter", TileEntityCrafter.class);
+
+        //Ores
         registerBlock(oreCopper = new BlockOre("oreCopper", 1),
                 "oreCopper", null, "oreCopper");
         registerBlock(oreTin = new BlockOre("oreTin", 2),
                 "oreTin", null, "oreTin");
+
+        //Cables & Pipes
+        registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable"),
+                "basicCable", PipeBasicEnergy.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {
