@@ -40,15 +40,6 @@ public abstract class BlockBakeable extends BlockContainer {
     }
 
     @SideOnly(Side.CLIENT)
-    public ResourceLocation getFrontIcon() {
-        return new ResourceLocation(Constants.MODID, "blocks/" + name + "_front");
-    }
-
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getSide() {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(Constants.MODID + ":block/" + "machine_side");
-    }
-    @SideOnly(Side.CLIENT)
     public ModelResourceLocation getNormal() {
         return new ModelResourceLocation(Constants.MODID + ":" + name, "normal");
     }
@@ -64,6 +55,9 @@ public abstract class BlockBakeable extends BlockContainer {
         return cubeTextures;
     }
 
+    public ResourceLocation[] registerIcons() {
+        return new ResourceLocation[] {new ResourceLocation(Constants.MODID, "blocks/" + name + "_front"), new ResourceLocation(Constants.MODID, "blocks/machine_side")};
+    }
 
     public List<IBlockState> generateRotatableStates() {
         List<IBlockState> states = new ArrayList<>();
