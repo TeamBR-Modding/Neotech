@@ -7,11 +7,13 @@ import com.dyonovan.neotech.common.blocks.pipe.energy.BlockAdvancedCable;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockBasicCable;
 import com.dyonovan.neotech.common.blocks.ore.BlockOre;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockEliteCable;
+import com.dyonovan.neotech.common.blocks.pipe.item.BlockPipeBasicItem;
 import com.dyonovan.neotech.common.blocks.storage.BlockRFStorage;
 import com.dyonovan.neotech.common.blocks.storage.BlockTank;
 import com.dyonovan.neotech.common.pipe.energy.PipeAdvancedEnergy;
 import com.dyonovan.neotech.common.pipe.energy.PipeBasicEnergy;
 import com.dyonovan.neotech.common.pipe.energy.PipeEliteEnergy;
+import com.dyonovan.neotech.common.pipe.item.PipeBasicItem;
 import com.dyonovan.neotech.common.tileentity.generator.TileFluidGenerator;
 import com.dyonovan.neotech.common.tileentity.machine.*;
 import com.dyonovan.neotech.common.tileentity.generator.TileFurnaceGenerator;
@@ -31,6 +33,7 @@ public class BlockHandler {
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
     public static Block crafter, thermalBinder;
+    public static Block basicItemPipe;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -91,6 +94,9 @@ public class BlockHandler {
                 "advancedCable", PipeAdvancedEnergy.class);
         registerBlock(eliteCable = new BlockEliteCable(Material.iron, "eliteCable", PipeEliteEnergy.class),
                 "eliteCable", PipeEliteEnergy.class);
+
+        registerBlock(basicItemPipe = new BlockPipeBasicItem(Material.cloth, "basicItemPipe", PipeBasicItem.class),
+                "basicItemPipe", PipeBasicItem.class);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

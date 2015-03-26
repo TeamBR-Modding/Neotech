@@ -2,12 +2,16 @@ package com.dyonovan.neotech.common.pipe.storage;
 
 import com.dyonovan.neotech.common.pipe.Pipe;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, P> {
+public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, ItemStack, P> {
 
-    protected InventoryTile[] buffers;
+    protected InventoryTile central;
+    public EnumFacing receivedDirection;
+    protected int moveInTimer;
+    protected int moveOutTimer;
     protected P pipe;
 
     @Override
@@ -17,49 +21,62 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, P>
 
     @Override
     public void setBuffers(InventoryTile[] array) {
-        buffers = array;
+        central = array[0];
     }
 
     @Override
     public InventoryTile[] getBuffers() {
-        return buffers;
+        return null;
     }
 
     @Override
     public InventoryTile getStorageForFace(EnumFacing face) {
-        return buffers[face.ordinal()];
+        return central;
     }
 
     @Override
     public boolean canBufferSend(InventoryTile buffer) {
-        return buffer.getStackInSlot(0) != null;
+        moveOutTimer--;
+        return central.getStackInSlot(0) != null && moveOutTimer < 20;
     }
 
     @Override
     public boolean canBufferExtract(InventoryTile buffer) {
-        return buffer.getStackInSlot(0) == null;
+        moveInTimer--;
+        return central.getStackInSlot(0) == null && moveInTimer < 20;
     }
 
     @Override
-    public int acceptResource(int maxAmount, EnumFacing inputFace, InventoryTile resource, boolean simulate) {
-        return 0;
+    public ItemStack acceptResource(int maxAmount, EnumFacing inputFace, ItemStack resource, boolean simulate) {
+        receivedDirection = inputFace;
+        moveInTimer = 20;
+        moveOutTimer = 20;
+        central.setStackInSlot(resource, 0);
+        return null;
     }
 
     @Override
-    public int removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
-        return 0;
+    public ItemStack removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
+        if(central.getStackInSlot(0) != null) {
+            receivedDirection = null;
+            ItemStack output = central.getStackInSlot(0).copy();
+            if(!simulate) {
+                central.getStackInSlot(0).stackSize -= maxAmount;
+                if (central.getStackInSlot(0).stackSize < 1)
+                    central.setStackInSlot(null, 0);
+            }
+            return output;
+        }
+        return null;
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        for(int i = 0; i < buffers.length; i++)
-            buffers[i].writeToNBT(tag, String.valueOf(i));
+        central.writeToNBT(tag, "");
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        buffers = new InventoryTile[6];
-        for(int i = 0; i < 6; i++)
-            buffers[i].readFromNBT(tag, 6, String.valueOf(i));
+        central.readFromNBT(tag, 1, "");
     }
 }

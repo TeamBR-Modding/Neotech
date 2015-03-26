@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 
-public class EnergyBuffer<P extends Pipe> implements IPipeBuffer<EnergyStorage, P> {
+public class EnergyBuffer<P extends Pipe> implements IPipeBuffer<EnergyStorage, Integer,  P> {
 
     protected EnergyStorage[] buffers;
     protected P pipe;
@@ -44,7 +44,7 @@ public class EnergyBuffer<P extends Pipe> implements IPipeBuffer<EnergyStorage, 
     }
 
     @Override
-    public int acceptResource(int maxAmount, EnumFacing inputFace, EnergyStorage resource, boolean simulate) {
+    public Integer acceptResource(int maxAmount, EnumFacing inputFace, Integer resource, boolean simulate) {
         int remainingEnergy = maxAmount;
         int total = 0;
         ArrayList<Integer> sides = new ArrayList<>();
@@ -75,7 +75,7 @@ public class EnergyBuffer<P extends Pipe> implements IPipeBuffer<EnergyStorage, 
     }
 
     @Override
-    public int removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
+    public Integer removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
         return 0;
     }
 

@@ -4,7 +4,7 @@ import com.dyonovan.neotech.common.pipe.Pipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-public interface IPipeBuffer<T, P extends Pipe> {
+public interface IPipeBuffer<T, R, P extends Pipe> {
 
     /**
      * Set the parent of this buffer
@@ -53,7 +53,7 @@ public interface IPipeBuffer<T, P extends Pipe> {
      * @param simulate Should you fake it?
      * @return How much was filled
      */
-    public int acceptResource(int maxAmount, EnumFacing inputFace, T resource, boolean simulate);
+    public R acceptResource(int maxAmount, EnumFacing inputFace, R resource, boolean simulate);
 
     /**
      * Remove Resource
@@ -62,7 +62,7 @@ public interface IPipeBuffer<T, P extends Pipe> {
      * @param simulate Fake it?
      * @return The resource to remove
      */
-    public int removeResource(int maxAmount, EnumFacing outputFace, boolean simulate);
+    public R removeResource(int maxAmount, EnumFacing outputFace, boolean simulate);
 
     /**
      * Save data to tag

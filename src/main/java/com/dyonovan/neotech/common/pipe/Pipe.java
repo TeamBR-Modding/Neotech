@@ -33,6 +33,7 @@ public abstract class Pipe<T extends IPipeBuffer> extends TileEntity implements 
 
     @Override
     public void update() {
+        if(worldObj.isRemote) return;
         for(EnumFacing face : EnumFacing.values()) {
             //Extract
             if(buffer.canBufferExtract(buffer.getStorageForFace(face)) &&
