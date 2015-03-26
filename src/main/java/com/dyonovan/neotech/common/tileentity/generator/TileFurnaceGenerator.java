@@ -3,9 +3,11 @@ package com.dyonovan.neotech.common.tileentity.generator;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.neotech.common.blocks.BlockMachine;
 import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
+import com.dyonovan.neotech.handlers.BlockHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -65,6 +67,7 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
                         inventory.setStackInSlot(drainFluidContainer(inventory.getStackInSlot(FUEL_SLOT)),FUEL_SLOT);
                 else if (inventory.getStackInSlot(FUEL_SLOT).stackSize == 1) inventory.setStackInSlot(null, FUEL_SLOT);
                 else inventory.getStackInSlot(FUEL_SLOT).stackSize -= 1;
+                BlockMachine.setState(worldObj, pos, BlockHandler.furnaceGeneratorActive);
             }
             if (currentBurnTime > 0 && currentBurnTime < totalBurnTime) {
                 energyRF.modifyEnergyStored(RF_TICK);
@@ -73,6 +76,7 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
             if (currentBurnTime > 0 && currentBurnTime >= totalBurnTime) {
                 currentBurnTime = 0;
                 totalBurnTime = 0;
+                BlockMachine.setState(worldObj, pos, BlockHandler.furnaceGenerator);
             }
             world.markBlockForUpdate(this.pos);
         }
@@ -175,7 +179,8 @@ public class TileFurnaceGenerator extends BaseMachine implements IUpdatePlayerLi
 
     @Override
     public void spawnActiveParticles(double x, double y, double z) {
-        List<EnumParticleTypes> particles = new ArrayList<>();
+        worldObj.spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0, 0, 0);
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
     }
 
     /*******************************************************************************************************************

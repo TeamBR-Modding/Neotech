@@ -27,7 +27,7 @@ import java.util.List;
 
 public class BlockHandler {
 
-    public static Block furnaceGenerator, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator;
+    public static Block furnaceGenerator, furnaceGeneratorActive, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator, fluidGeneratorActive;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
     public static Block crafter, thermalBinder;
@@ -40,8 +40,12 @@ public class BlockHandler {
         //Machines
         registerBlock(furnaceGenerator = new BlockMachine(false, "furnaceGenerator", TileFurnaceGenerator.class, GuiHandler.FURNACE_GENERATOR_GUI_ID),
                 "furnaceGenerator", TileFurnaceGenerator.class);
+        registerBlock(furnaceGeneratorActive = new BlockMachine(true, "furnaceGeneratorActive", TileFurnaceGenerator.class, GuiHandler.FURNACE_GENERATOR_GUI_ID),
+                "furnaceGeneratorActive", TileFurnaceGenerator.class);
         registerBlock(fluidGenerator = new BlockMachine(false, "fluidGenerator", TileFluidGenerator.class, GuiHandler.FLUID_GENERATOR_GUI_ID),
                 "fluidGenerator", TileFluidGenerator.class);
+        registerBlock(fluidGeneratorActive = new BlockMachine(true, "fluidGeneratorActive", TileFluidGenerator.class, GuiHandler.FLUID_GENERATOR_GUI_ID),
+                "fluidGeneratorActive", TileFluidGenerator.class);
         registerBlock(electricFurnace = new BlockMachine(false, "electricFurnace", TileElectricFurnace.class, GuiHandler.ELECTRIC_FURNACE_GUI_ID),
                 "electricFurnace", TileElectricFurnace.class);
         registerBlock(electricFurnaceActive = new BlockMachine(true, "electricFurnaceActive", TileElectricFurnace.class, GuiHandler.ELECTRIC_FURNACE_GUI_ID),
