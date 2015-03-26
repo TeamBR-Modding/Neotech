@@ -49,10 +49,6 @@ public class NeoTech {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        /*if (event.getSide() == Side.CLIENT) {
-            RenderHandler.init();
-            ModelGenerator.register();
-        }*/
         proxy.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
