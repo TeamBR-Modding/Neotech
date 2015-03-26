@@ -39,6 +39,13 @@ public interface IPipeBuffer<T, P extends Pipe> {
     public boolean canBufferSend(T buffer);
 
     /**
+     * Is the buffer allowing extraction
+     * @param buffer Face buffer to extract into
+     * @return True is available
+     */
+    public boolean canBufferExtract(T buffer);
+
+    /**
      * Accept Resource
      * @param maxAmount How Much
      * @param inputFace Which face
@@ -55,7 +62,7 @@ public interface IPipeBuffer<T, P extends Pipe> {
      * @param simulate Fake it?
      * @return The resource to remove
      */
-    public T removeResource(int maxAmount, EnumFacing outputFace, boolean simulate);
+    public int removeResource(int maxAmount, EnumFacing outputFace, boolean simulate);
 
     /**
      * Save data to tag

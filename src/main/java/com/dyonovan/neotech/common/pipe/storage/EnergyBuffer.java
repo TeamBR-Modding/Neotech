@@ -39,6 +39,11 @@ public class EnergyBuffer<P extends Pipe> implements IPipeBuffer<EnergyStorage, 
     }
 
     @Override
+    public boolean canBufferExtract(EnergyStorage buffer) {
+        return false;
+    }
+
+    @Override
     public int acceptResource(int maxAmount, EnumFacing inputFace, EnergyStorage resource, boolean simulate) {
         int remainingEnergy = maxAmount;
         int total = 0;
@@ -70,8 +75,8 @@ public class EnergyBuffer<P extends Pipe> implements IPipeBuffer<EnergyStorage, 
     }
 
     @Override
-    public EnergyStorage removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
-        return null;
+    public int removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
+        return 0;
     }
 
     @Override
