@@ -26,7 +26,7 @@ public class GuiFurnaceGenerator extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        final String invTitle = StatCollector.translateToLocal("tile.netotech:furnaceGenerator.name");
+        final String invTitle = StatCollector.translateToLocal("tile.neotech:furnaceGenerator.name");
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96 + 2, 4210752);
     }
