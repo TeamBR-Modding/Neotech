@@ -50,7 +50,7 @@ public class CraftingHandler {
 
         //Elite RF Storage
         GameRegistry.addRecipe(new ItemStack(BlockHandler.eliteStorage), "ABA", "DCD", "ABA",
-                'A', Items.diamond, 'B', Blocks.iron_bars, 'C', BlockHandler.advancedStorage, 'D', BlockHandler.eliteStorage);
+                'A', Items.diamond, 'B', Blocks.iron_bars, 'C', BlockHandler.advancedStorage, 'D', BlockHandler.eliteCable);
 
         //Tanks
         GameRegistry.addRecipe(new ItemStack(BlockHandler.ironTank), "BAB", "B B", "BAB",
