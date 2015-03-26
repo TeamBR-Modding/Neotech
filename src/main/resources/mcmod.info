@@ -1,7 +1,7 @@
 [
 {
-"modid": "jatm",
-"name": "Just Another Tech Mod",
+"modid": "neotech",
+"name": "NeoTech",
 "description": "Ore Processing",
 "version": "${version}",
 "mcversion": "${mcversion}",

@@ -1,0 +1,25 @@
+itemGroup.tabneotech=Just Another Tech Mod
+
+tile.neotech:furnaceGenerator.name=Furnace Generator
+tile.neotech:electricFurnace.name=Electric Furnace
+tile.neotech:electricCrusher.name=Electric Crusher
+tile.neotech:fluidGenerator.name=Fluid Generator
+tile.neotech:basicCable.name=Basic RF Cable
+tile.neotech:basicRFStorage.name=Basic RF Storage
+tile.neotech:advancedRFStorage.name=Advanced RF Storage
+tile.neotech:eliteRFStorage.name=Elite RF Storage
+tile.neotech:ironTank.name=Iron Fluid Tank
+tile.neotech:goldTank.name=Gold Fluid Tank
+tile.neotech:diamondTank.name=Diamond Fluid Tank
+tile.neotech:crafter.name=Duel Crafter
+tile.neotech:oreCopper.name=Copper Ore
+tile.neotech:oreTin.name=Tin Ore
+
+item.neotech:dustIron.name=Iron Dust
+item.neotech:dustGold.name=Gold Dust
+item.neotech:dustCopper.name=Copper Dust
+item.neotech:ingotCopper.name=Copper Ingot
+item.neotech:dustTin.name=Tin Dust
+item.neotech:ingotTin.name=Tin Ingot
+
+neotech.container.crafter=Duel Crafter
