@@ -1,6 +1,6 @@
-JATM - Just Another Tech Mod
+NeoTech
 ===============
-Used for finding out the changes to Forge/Minecraft 1.8
+Tech mod for Forge/Minecraft 1.8
 
 License
 ===============
