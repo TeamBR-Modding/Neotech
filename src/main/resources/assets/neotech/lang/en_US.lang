@@ -1,4 +1,4 @@
-itemGroup.tabneotech=NeoTech
+itemGroup.tabNeoTech=NeoTech
 
 tile.neotech:furnaceGenerator.name=Furnace Generator
 tile.neotech:electricFurnace.name=Electric Furnace
