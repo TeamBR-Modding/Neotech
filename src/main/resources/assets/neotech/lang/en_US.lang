@@ -1,10 +1,14 @@
-itemGroup.tabneotech=Just Another Tech Mod
+itemGroup.tabneotech=NeoTech
 
 tile.neotech:furnaceGenerator.name=Furnace Generator
 tile.neotech:electricFurnace.name=Electric Furnace
 tile.neotech:electricCrusher.name=Electric Crusher
 tile.neotech:fluidGenerator.name=Fluid Generator
+tile.neotech:electricMiner.name=Electric Miner (WIP)
+tile.neotech:electricBinder.name=Electric Binder (WIP)
 tile.neotech:basicCable.name=Basic RF Cable
+tile.neotech:advancedCable.name=Advanced RF Cable
+tile.neotech:eliteCable.name=Elite RF Cable
 tile.neotech:basicRFStorage.name=Basic RF Storage
 tile.neotech:advancedRFStorage.name=Advanced RF Storage
 tile.neotech:eliteRFStorage.name=Elite RF Storage
