@@ -3,6 +3,7 @@ package com.dyonovan.neotech.common.blocks.pipe;
 import com.dyonovan.neotech.NeoTech;
 import com.dyonovan.neotech.collections.DummyState;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
+import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -77,6 +78,15 @@ public abstract class BlockPipe extends BlockBakeable {
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return new DummyState(world, pos, (BlockBakeable) world.getBlockState(pos).getBlock());
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof IExpellable) {
+            ((IExpellable) tile).expelItems();
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

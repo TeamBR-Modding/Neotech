@@ -2,6 +2,7 @@ package com.dyonovan.neotech.common.pipe.storage;
 
 import com.dyonovan.neotech.common.pipe.Pipe;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -58,7 +59,18 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
 
         for(EnumFacing face : dirs) {
             if(buffers[face.ordinal()].getStackInSlot(0) == null) {
-                buffers[face.ordinal()].setStackInSlot(resource.copy(), 0);
+                if(pipe.getWorld().getTileEntity(pipe.getPos().offset(face)) instanceof ISidedInventory) {
+                    ISidedInventory otherInv = (ISidedInventory)pipe.getWorld().getTileEntity(pipe.getPos().offset(face));
+                    boolean flag = false;
+                    for(int i : otherInv.getSlotsForFace(face.getOpposite())) {
+                        if(!otherInv.canInsertItem(i, resource, face.getOpposite()))
+                            flag = true;
+                    }
+                    if(flag)
+                        continue;
+                }
+                if(!simulate)
+                    buffers[face.ordinal()].setStackInSlot(resource.copy(), 0);
                 return resource;
             }
         }
@@ -69,14 +81,15 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
     @Override
     public ItemStack removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
         ItemStack outputStack = buffers[outputFace.ordinal()].getStackInSlot(0).copy();
-        buffers[outputFace.ordinal()].setStackInSlot(null, 0);
+        if(!simulate)
+            buffers[outputFace.ordinal()].setStackInSlot(null, 0);
         return outputStack;
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-       for(int i = 0; i < 6; i++)
-           buffers[i].writeToNBT(tag, String.valueOf(i));
+        for(int i = 0; i < 6; i++)
+            buffers[i].writeToNBT(tag, String.valueOf(i));
     }
 
     @Override

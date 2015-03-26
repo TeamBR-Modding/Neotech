@@ -1,16 +1,21 @@
 package com.dyonovan.neotech.common.pipe.item;
 
+import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.pipe.Pipe;
 import com.dyonovan.neotech.common.pipe.storage.ItemBuffer;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
-public class PipeBasicItem extends Pipe<ItemBuffer> {
+import java.util.Random;
+
+public class PipeBasicItem extends Pipe<ItemBuffer> implements IExpellable{
 
     protected boolean extractMode;
 
@@ -55,6 +60,25 @@ public class PipeBasicItem extends Pipe<ItemBuffer> {
         if(tile instanceof PipeBasicItem) {
             PipeBasicItem other = (PipeBasicItem)tile;
             other.buffer.acceptResource(getMaximumTransferRate(), face.getOpposite(), buffer.removeResource(getMaximumTransferRate(), face, false), false);
+        } else if(tile instanceof ISidedInventory && buffer.getStorageForFace(face).getStackInSlot(0) != null && !extractMode) {
+            ISidedInventory otherInv = (ISidedInventory)tile;
+            for(int i : otherInv.getSlotsForFace(face.getOpposite())) {
+                if(otherInv.getStackInSlot(i) == null) {
+                    if(otherInv.canInsertItem(i, buffer.removeResource(getMaximumTransferRate(), face, true), face.getOpposite()))
+                        otherInv.setInventorySlotContents(i, buffer.removeResource(getMaximumTransferRate(), face, false));
+                    return;
+                } else {
+                    if(otherInv.getStackInSlot(i).getItem() == buffer.getStorageForFace(face).getStackInSlot(0).getItem() &&
+                            otherInv.getStackInSlot(i).getItemDamage() == buffer.getStorageForFace(face).getStackInSlot(0).getItemDamage() &&
+                            otherInv.canInsertItem(i, buffer.removeResource(getMaximumTransferRate(), face, true), face.getOpposite()) &&
+                            !otherInv.getStackInSlot(i).hasTagCompound()) {
+                        if(otherInv.getStackInSlot(i).stackSize + buffer.getStorageForFace(face).getStackInSlot(0).stackSize <= otherInv.getStackInSlot(i).getMaxStackSize()) {
+                            otherInv.getStackInSlot(i).stackSize += buffer.removeResource(getMaximumTransferRate(), face, false).stackSize;
+                            return;
+                        }
+                    }
+                }
+            }
         } else if(tile instanceof IInventory && buffer.getStorageForFace(face).getStackInSlot(0) != null && !extractMode) {
             IInventory otherInv = (IInventory)tile;
             for(int i = 0; i < otherInv.getSizeInventory(); i++) {
@@ -77,8 +101,27 @@ public class PipeBasicItem extends Pipe<ItemBuffer> {
 
     @Override
     public void extractFromTile(TileEntity tile, EnumFacing face) {
-       if(extractMode) {
-            if(tile instanceof IInventory) {
+        if(extractMode) {
+            if(tile instanceof ISidedInventory) {
+                ISidedInventory otherInv = (ISidedInventory)tile;
+                for(int i : otherInv.getSlotsForFace(face.getOpposite())) {
+                    if(otherInv.getStackInSlot(i) != null) {
+                        if(otherInv.getStackInSlot(i).stackSize <= getMaximumTransferRate()) {
+                            ItemStack mover = otherInv.getStackInSlot(i).copy();
+                            otherInv.setInventorySlotContents(i, null);
+                            buffer.acceptResource(getMaximumTransferRate(), face, mover, false);
+                            return;
+                        } else {
+                            ItemStack mover = otherInv.getStackInSlot(i).copy();
+                            mover.stackSize = getMaximumTransferRate();
+                            ItemStack removed = buffer.acceptResource(getMaximumTransferRate(), face, mover, false);
+                            otherInv.getStackInSlot(i).stackSize -= removed != null ? removed.stackSize : 0;
+                            return;
+                        }
+                    }
+                }
+            }
+            else if(tile instanceof IInventory) {
                 IInventory otherInv = (IInventory)tile;
                 for(int i = 0; i < otherInv.getSizeInventory(); i++) {
                     if(otherInv.getStackInSlot(i) != null) {
@@ -126,11 +169,29 @@ public class PipeBasicItem extends Pipe<ItemBuffer> {
         worldObj.markBlockForUpdate(pos);
     }
 
-    public boolean hasItemInPipe() {
-        for(EnumFacing enumFacing : EnumFacing.values()) {
-            if(buffer.getStorageForFace(enumFacing).getStackInSlot(0) != null)
-                return true;
+    @Override
+    public void expelItems() {
+        for (EnumFacing face : EnumFacing.values()) {
+            for (ItemStack stack : buffer.getStorageForFace(face).getValues()) {
+                if (stack != null) {
+                    Random random = new Random();
+                    EntityItem entityitem =
+                            new EntityItem(worldObj,
+                                    pos.getX() + random.nextFloat() * 0.8F + 0.1F,
+                                    pos.getY() + random.nextFloat() * 0.8F + 0.1F,
+                                    pos.getZ() + random.nextFloat() * 0.8F + 0.1F,
+                                    stack
+                            );
+                    if (stack.hasTagCompound()) {
+                        entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+                    }
+                    float f3 = 0.05F;
+                    entityitem.motionX = (double) ((float) random.nextGaussian() * f3);
+                    entityitem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
+                    entityitem.motionZ = (double) ((float) random.nextGaussian() * f3);
+                    worldObj.spawnEntityInWorld(entityitem);
+                }
+            }
         }
-        return false;
     }
 }
