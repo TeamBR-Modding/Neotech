@@ -9,14 +9,28 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockPipeBasicItem extends BlockPipe {
     public BlockPipeBasicItem(Material materialIn, String name, Class<? extends TileEntity> tileClass) {
         super(materialIn, name, tileClass);
         setBlockBounds(0.25F, 0.25F, 0.25F, 0.75F, 0.75F, 0.75F);
         setHardness(1.0F);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    {
+        PipeBasicItem pipe = (PipeBasicItem)worldIn.getTileEntity(pos);
+        if(pipe.hasItemInPipe() || pipe.getExtractModeActive()) {
+            worldIn.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0, 0, 0);
+        }
     }
 
     @Override
@@ -39,7 +53,7 @@ public class BlockPipeBasicItem extends BlockPipe {
 
     @Override
     public float getWidth() {
-        return 4.0F;
+        return 3.0F;
     }
 
     @Override
