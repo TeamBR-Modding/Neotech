@@ -3,9 +3,11 @@ package com.dyonovan.neotech.common.tileentity.generator;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import com.dyonovan.neotech.common.blocks.BlockMachine;
 import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
+import com.dyonovan.neotech.handlers.BlockHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
@@ -65,8 +67,10 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
                 fluidTank.getFluid() != null && fluidTank.getFluidAmount() >= MB_TICK) {
             energyRF.modifyEnergyStored(RF_TICK);
             fluidTank.drain(MB_TICK, true);
+            BlockMachine.setState(worldObj, pos, BlockHandler.fluidGeneratorActive);
             world.markBlockForUpdate(this.pos);
-        }
+        } else if(worldObj.getBlockState(pos).getBlock() == BlockHandler.fluidGeneratorActive)
+            BlockMachine.setState(worldObj, pos, BlockHandler.fluidGenerator);
 
     }
 
