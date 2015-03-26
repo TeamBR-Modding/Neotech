@@ -11,7 +11,9 @@ public class OnCraftingEvent {
     public void onCrafted(PlayerEvent.ItemCraftedEvent event) {
         if(event.craftMatrix.getStackInSlot(4) != null && event.craftMatrix.getStackInSlot(4).hasTagCompound() ) {
             if(event.crafting.getItem() == Item.getItemFromBlock(BlockHandler.goldTank) ||
-                    event.crafting.getItem() == Item.getItemFromBlock(BlockHandler.diamondTank)) {
+                    event.crafting.getItem() == Item.getItemFromBlock(BlockHandler.diamondTank) ||
+                    event.crafting.getItem() == Item.getItemFromBlock(BlockHandler.advancedStorage) ||
+                    event.crafting.getItem() == Item.getItemFromBlock(BlockHandler.eliteStorage)) {
                 NBTTagCompound tag = event.craftMatrix.getStackInSlot(4).getTagCompound();
                 event.crafting.setTagCompound(tag);
             }

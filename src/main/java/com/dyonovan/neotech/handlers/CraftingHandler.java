@@ -24,6 +24,17 @@ public class CraftingHandler {
         //Basic Cable
         GameRegistry.addRecipe(new ItemStack(BlockHandler.basicCable, 4), "AAA", "ABA", "AAA",
                 'A', Blocks.carpet, 'B', Blocks.redstone_block);
+        //Advanced Cable
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.advancedCable, 4), "ACA", "CBC", "ACA",
+                'A', Items.iron_ingot, 'B', Blocks.redstone_block, 'C', Items.glowstone_dust);
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.advancedCable),
+                new ItemStack(BlockHandler.basicCable), new ItemStack(Items.iron_ingot), new ItemStack(Items.glowstone_dust));
+
+        //Elite Cable
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.eliteCable, 4), "ACA", "CBC", "ACA",
+                'A', Items.gold_ingot, 'B', Blocks.redstone_block, 'C', Items.diamond);
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.advancedCable),
+                new ItemStack(BlockHandler.advancedCable), new ItemStack(Items.gold_ingot), new ItemStack(Items.diamond));
 
         //Fluid Generator
         GameRegistry.addRecipe(new ItemStack(BlockHandler.fluidGenerator), "ABA", "DCD", "ABA",
@@ -32,6 +43,14 @@ public class CraftingHandler {
         //Basic RF Storage
         GameRegistry.addRecipe(new ItemStack(BlockHandler.basicStorage), "ABA", "DCD", "ABA",
                 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', BlockHandler.basicCable);
+
+        //Advanced RF Storage
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.advancedStorage), "ABA", "DCD", "ABA",
+                'A', Items.gold_ingot, 'B', Blocks.iron_bars, 'C', BlockHandler.basicStorage, 'D', BlockHandler.advancedCable);
+
+        //Elite RF Storage
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.eliteStorage), "ABA", "DCD", "ABA",
+                'A', Items.diamond, 'B', Blocks.iron_bars, 'C', BlockHandler.advancedStorage, 'D', BlockHandler.eliteStorage);
 
         //Tanks
         GameRegistry.addRecipe(new ItemStack(BlockHandler.ironTank), "BAB", "B B", "BAB",
