@@ -21,6 +21,8 @@ import com.dyonovan.neotech.common.tileentity.storage.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -33,12 +35,17 @@ public class BlockHandler {
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
     public static Block crafter, thermalBinder;
+    public static Fluid moltenTin;
     public static Block basicItemPipe;
 
     public static List<BlockBakeable> blockRegistry;
 
     public static void preInit() {
         blockRegistry = new ArrayList<>();
+
+        //Fluids
+        moltenTin = new Fluid("moltenTin").setDensity(5769).setViscosity(3000);
+        FluidRegistry.registerFluid(moltenTin);
 
         //Machines
         registerBlock(furnaceGenerator = new BlockMachine(false, "furnaceGenerator", TileFurnaceGenerator.class, GuiHandler.FURNACE_GENERATOR_GUI_ID),

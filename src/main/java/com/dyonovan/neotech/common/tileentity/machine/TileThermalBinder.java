@@ -5,11 +5,13 @@ import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
+import com.dyonovan.neotech.handlers.BlockHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -21,6 +23,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
 
     private static final int RF_TICK= 100;
     public static final int TOTAL_PROCESS_TIME = 200;
+    public static final int MB_PER_INGOT = 1000;
     public static final int INPUT_SLOT_1 = 0;
     public static final int INPUT_SLOT_2 = 1;
     public static final int INPUT_SLOT_3 = 2;
@@ -32,7 +35,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         energyRF = new EnergyStorage(10000);
         currentProcessTime = 0;
         inventory = new InventoryTile(6);
-        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 2);
+        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 4);
     }
 
     @Override
@@ -40,12 +43,16 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         if (!this.hasWorldObj() || getWorld().isRemote) return;
 
         meltTin();
-
-
     }
 
     public void meltTin() {
+        if (inventory.getStackInSlot(INGOT_SLOT) == null) return;
 
+        if (tank.getFluid() == null || tank.getFluid().amount <= 3000 ) {
+            inventory.modifyStack(INGOT_SLOT, -1);
+            if (tank.getFluid() == null) tank.setFluid(new FluidStack(BlockHandler.moltenTin, 1000));
+            else tank.getFluid().amount += 1000;
+        }
     }
 
     /*******************************************************************************************************************
@@ -102,7 +109,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         switch (index) {
             case INGOT_SLOT:
-                return OreDictionary.getOres("ingotTin").contains(inventory.getStackInSlot(INGOT_SLOT).getItem());
+                return OreDictionary.getOres("ingotTin").contains(stack.getItem());
         }
         return true;
     }
