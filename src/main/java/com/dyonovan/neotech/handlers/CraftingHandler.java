@@ -33,7 +33,7 @@ public class CraftingHandler {
         //Elite Cable
         GameRegistry.addRecipe(new ItemStack(BlockHandler.eliteCable, 4), "ACA", "CBC", "ACA",
                 'A', Items.gold_ingot, 'B', Blocks.redstone_block, 'C', Items.diamond);
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.advancedCable),
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.eliteCable),
                 new ItemStack(BlockHandler.advancedCable), new ItemStack(Items.gold_ingot), new ItemStack(Items.diamond));
 
         //Fluid Generator
