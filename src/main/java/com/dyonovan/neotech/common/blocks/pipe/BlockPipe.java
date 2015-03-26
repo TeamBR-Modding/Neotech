@@ -26,7 +26,7 @@ public abstract class BlockPipe extends BlockBakeable {
     public abstract boolean isCableConnected(IBlockAccess blockaccess, BlockPos pos, EnumFacing face);
 
     /**
-     * Get width (from center 0.0F - 6.0F)
+     * Get width (from center 0.0F - 8.0F)
      * @return Radius of pipe
      */
     public abstract float getWidth();

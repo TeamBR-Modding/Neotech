@@ -38,11 +38,14 @@ public class ModelGenerator {
 
         //Register Front Icons
         for(BlockBakeable block : BlockHandler.blockRegistry) {
-            textureMap.registerSprite(block.getFrontIcon());
             if(block instanceof BlockPipe) {
                 if(textureMap.getAtlasSprite(((BlockPipe)block).getBackgroundTexture()) == null)
                     textureMap.registerSprite(new ResourceLocation(((BlockPipe)block).getBackgroundTexture()));
                 textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + block.getName()));
+            } else {
+                for(ResourceLocation location : block.registerIcons()) {
+                    textureMap.registerSprite(location);
+                }
             }
         }
     }
