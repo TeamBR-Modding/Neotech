@@ -54,6 +54,18 @@ public class ToolTipEvent {
                     }
                 }
             }
+            if (event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.basicCable)) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Energy Transfer");
+                event.toolTip.add(String.valueOf("200" + GuiHelper.GuiColor.RED + " RF/t"));
+            }
+            if (event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.advancedCable)) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Energy Transfer");
+                event.toolTip.add(String.valueOf("1000" + GuiHelper.GuiColor.RED + " RF/t"));
+            }
+            if (event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.eliteCable)) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Energy Transfer");
+                event.toolTip.add(String.valueOf("5000" + GuiHelper.GuiColor.RED + " RF/t"));
+            }
         }
     }
 }
