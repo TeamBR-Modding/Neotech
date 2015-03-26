@@ -20,7 +20,11 @@ public abstract class Pipe<T extends IPipeBuffer> extends TileEntity implements 
 
     public abstract boolean canTileReceive(TileEntity tile);
 
+    public abstract boolean canTileProvide(TileEntity tile);
+
     public abstract void giveToTile(TileEntity tile, EnumFacing face);
+
+    public abstract void extractFromTile(TileEntity tile, EnumFacing face);
 
     public Pipe() {
         setBuffer();
@@ -30,6 +34,14 @@ public abstract class Pipe<T extends IPipeBuffer> extends TileEntity implements 
     @Override
     public void update() {
         for(EnumFacing face : EnumFacing.values()) {
+            //Extract
+            if(buffer.canBufferExtract(buffer.getStorageForFace(face)) &&
+                    isPipeConnected(pos.offset(face), face) &&
+                    canTileProvide(worldObj.getTileEntity(pos.offset(face)))) {
+                extractFromTile(worldObj.getTileEntity(pos.offset(face)), face);
+            }
+
+            //Transfer
             if(buffer.canBufferSend(buffer.getStorageForFace(face)) &&
                     isPipeConnected(pos.offset(face), face) &&
                     canTileReceive(worldObj.getTileEntity(pos.offset(face)))) {

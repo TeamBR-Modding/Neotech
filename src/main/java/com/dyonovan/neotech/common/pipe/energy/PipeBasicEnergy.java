@@ -44,8 +44,18 @@ public class PipeBasicEnergy extends Pipe<EnergyBuffer> implements IEnergyReceiv
     }
 
     @Override
+    public boolean canTileProvide(TileEntity tile) {
+        return false;
+    }
+
+    @Override
     public void giveToTile(TileEntity tile, EnumFacing face) {
         buffer.getBuffers()[face.ordinal()].extractEnergy(((IEnergyReceiver)tile).receiveEnergy(face.getOpposite(), buffer.getBuffers()[face.ordinal()].extractEnergy(getMaximumTransferRate(), true), false), false);
+    }
+
+    @Override
+    public void extractFromTile(TileEntity tile, EnumFacing face) {
+
     }
 
     @Override

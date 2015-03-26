@@ -103,6 +103,29 @@ public class InventoryTile {
      * Helper method to communicate data
      * @param tagCompound Tag to read from
      */
+    public void readFromNBT(NBTTagCompound tagCompound, int size, String separation) {
+        NBTTagList itemsTag = tagCompound.getTagList("Items" + separation, 10);
+        this.inventory = new ItemStack[size];
+        for (int i = 0; i < itemsTag.tagCount(); i++)
+        {
+            NBTTagCompound nbtTagCompound1 = itemsTag.getCompoundTagAt(i);
+            NBTBase nbt = nbtTagCompound1.getTag("Slot" + separation);
+            int j;
+            if ((nbt instanceof NBTTagByte)) {
+                j = nbtTagCompound1.getByte("Slot" + separation) & 0xFF;
+            } else {
+                j = nbtTagCompound1.getShort("Slot" + separation);
+            }
+            if ((j >= 0) && (j < this.inventory.length)) {
+                this.inventory[j] = ItemStack.loadItemStackFromNBT(nbtTagCompound1);
+            }
+        }
+    }
+
+    /**
+     * Helper method to communicate data
+     * @param tagCompound Tag to read from
+     */
     public void readFromNBT(NBTTagCompound tagCompound, IInventory parent, String separation) {
         NBTTagList itemsTag = tagCompound.getTagList("Items" + separation, 10);
         this.inventory = new ItemStack[parent.getSizeInventory()];
