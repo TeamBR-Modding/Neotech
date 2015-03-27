@@ -54,7 +54,25 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
     @Override
     public void giveToTile(TileEntity tile, EnumFacing face) {
         if(buffer.removeResource(getMaximumTransferRate(), face, true) != null) {
-            if (tile instanceof ISidedInventory) {
+            if (tile instanceof PipeBasicItem) {
+                PipeBasicItem pipe = (PipeBasicItem) tile;
+                for (int i = 0; i < pipe.getSizeInventory(); i++) {
+                    pipe.buffer.justReceived[face.getOpposite().ordinal()] = true;
+                    if (pipe.getStackInSlot(i) == null) {
+                        pipe.setInventorySlotContents(i, buffer.removeResource(getMaximumTransferRate(), face, false));
+                        return;
+                    } else if (pipe.getStackInSlot(i).getItem() == buffer.removeResource(getMaximumTransferRate(), face, true).getItem() &&
+                            pipe.getStackInSlot(i).getItemDamage() == buffer.removeResource(getMaximumTransferRate(), face, true).getItemDamage() &&
+                            !pipe.getStackInSlot(i).hasTagCompound()) {
+                        if (pipe.getStackInSlot(i).stackSize + buffer.removeResource(getMaximumTransferRate(), face, true).stackSize <= pipe.getStackInSlot(i).getMaxStackSize()) {
+                            pipe.getStackInSlot(i).stackSize += buffer.removeResource(getMaximumTransferRate(), face, false).stackSize;
+                            return;
+                        } else {
+                            pipe.getStackInSlot(i).stackSize += buffer.removeResource(pipe.getStackInSlot(i).getMaxStackSize() - pipe.getStackInSlot(i).stackSize, face, false).stackSize;
+                        }
+                    }
+                }
+            } else if (tile instanceof ISidedInventory) {
                 ISidedInventory otherInv = (ISidedInventory) tile;
                 for (int i : otherInv.getSlotsForFace(face.getOpposite())) {
                     if (otherInv.getStackInSlot(i) == null) {

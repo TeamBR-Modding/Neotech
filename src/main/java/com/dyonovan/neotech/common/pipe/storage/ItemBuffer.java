@@ -6,14 +6,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, ItemStack, P> {
 
     public InventoryTile inventory;
     protected boolean[] extractSides;
     protected boolean[] insertSides;
+    public boolean[] justReceived;
+    protected int tick = 0;
     protected P pipe;
 
     @Override
@@ -30,6 +32,8 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
         inventory = new InventoryTile(6);
         extractSides = new boolean[6];
         insertSides = new boolean[6];
+        justReceived = new boolean[6];
+        Arrays.fill(justReceived, Boolean.FALSE);
         Arrays.fill(extractSides, Boolean.FALSE);
         Arrays.fill(insertSides, Boolean.TRUE);
     }
@@ -49,7 +53,7 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
 
     @Override
     public boolean canBufferSend(InventoryTile buffer, EnumFacing face) {
-        return insertSides[face.ordinal()];
+        return insertSides[face.ordinal()] && !justReceived[face.ordinal()];
     }
 
     public void setCanInsert(EnumFacing face, boolean value) {
@@ -91,6 +95,7 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
     public ItemStack removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
         for(int i = 0; i < inventory.getSizeInventory(); i++) {
             if(inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).stackSize > 0) {
+                justReceived[outputFace.ordinal()] = false;
                 ItemStack resource = inventory.getStackInSlot(i).copy();
                 if(resource.stackSize > maxAmount) {
                     resource.stackSize = maxAmount;
@@ -116,7 +121,14 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
 
     @Override
     public void update() {
-
+        for (boolean aJustReceived : justReceived) {
+            if (aJustReceived)
+                tick++;
+        }
+        if(tick > 40) {
+            Arrays.fill(justReceived, false);
+            tick = 0; 
+        }
     }
 
     @Override
