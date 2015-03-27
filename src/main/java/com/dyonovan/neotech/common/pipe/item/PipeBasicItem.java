@@ -32,7 +32,7 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
 
     @Override
     public int getMaximumTransferRate() {
-        return 32;
+        return 1;
     }
 
     @Override

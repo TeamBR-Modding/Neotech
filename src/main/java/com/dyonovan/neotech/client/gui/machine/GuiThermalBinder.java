@@ -94,5 +94,7 @@ public class GuiThermalBinder extends GuiContainer {
             toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
             drawHoveringText(toolTip, mouseX, mouseY);
         }
+
+
     }
 }
