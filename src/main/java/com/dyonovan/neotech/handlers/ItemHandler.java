@@ -7,7 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemHandler {
 
-    public static Item dustIron, dustGold, ingotCopper, dustCopper, ingotTin, dustTin;
+    public static Item dustIron, dustGold, ingotCopper, dustCopper, ingotTin, dustTin, speedProcessor, effRam;
 
     public static void PreInit() {
 
@@ -17,6 +17,8 @@ public class ItemHandler {
         registerItem(dustGold = new BaseItem("dustGold", 64), "dustGold", "dustGold");
         registerItem(ingotCopper = new BaseItem("ingotCopper", 64), "ingotCopper", "ingotCopper");
         registerItem(ingotTin = new BaseItem("ingotTin", 64), "ingotTin", "ingotTin");
+        registerItem(speedProcessor = new BaseItem("speedProcessor", 4), "speedProcessor", null);
+        registerItem(effRam = new BaseItem("effRam", 4), "effRam", null);
 
     }
 

@@ -2,8 +2,10 @@ package com.dyonovan.neotech.client.gui.machine;
 
 import com.dyonovan.neotech.common.container.machine.ContainerThermalBinder;
 import com.dyonovan.neotech.common.tileentity.machine.TileThermalBinder;
+import com.dyonovan.neotech.handlers.PacketHandler;
 import com.dyonovan.neotech.helpers.GuiHelper;
 import com.dyonovan.neotech.lib.Constants;
+import com.dyonovan.neotech.network.ThermalBinderPacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
@@ -44,6 +46,7 @@ public class GuiThermalBinder extends GuiContainer {
             if (tile.getStackInSlot(tile.MB_SLOT_INPUT) == null)
                 return;
 
+            PacketHandler.net.sendToServer(new ThermalBinderPacket.StartMessage(tile.getPos()));
         }
     }
 

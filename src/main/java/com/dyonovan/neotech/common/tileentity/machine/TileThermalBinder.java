@@ -5,15 +5,11 @@ import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
-import com.dyonovan.neotech.handlers.BlockHandler;
+import com.dyonovan.neotech.handlers.ItemHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, IUpdatePlayerListBox, IExpellable {
 
@@ -21,7 +17,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     public EnergyStorage energyRF;
 
     private static final int RF_TICK= 100;
-    public static final int TOTAL_PROCESS_TIME = 200;
+    public static final int BASE_PROCESS_TIME = 200;
     public static final int INPUT_SLOT_1 = 0;
     public static final int INPUT_SLOT_2 = 1;
     public static final int INPUT_SLOT_3 = 2;
@@ -37,11 +33,42 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
 
     @Override
     public void update() {
-        if (!this.hasWorldObj() || getWorld().isRemote) return;
+        if (!this.hasWorldObj() || getWorld().isRemote || currentProcessTime <= 0) return;
+
+        if (currentProcessTime > 0 && currentProcessTime <= BASE_PROCESS_TIME) {
+            if (inventory.getStackInSlot(MB_SLOT_INPUT) == null) {
+                currentProcessTime = 0;
+                worldObj.markBlockForUpdate(pos);
+                return;
+            }
+            if (energyRF.getEnergyStored() >= RF_TICK) {
+                energyRF.extractEnergy(RF_TICK, false);
+                ++currentProcessTime;
+            }
+        }
+        if (currentProcessTime >= BASE_PROCESS_TIME) {
+            int speed = 0;
+            int efficiency = 0;
+            int power = 0;
+            boolean io = false;
+            for (int i = 0; i < 4; i++) {
+                if (getStackInSlot(i) != null) {
+                    if (getStackInSlot(i).getItem() == ItemHandler.speedProcessor)
+                        speed += getStackInSlot(i).stackSize;
+                    else if (getStackInSlot(i).getItem() == ItemHandler.effRam)
+                        efficiency += getStackInSlot(i).stackSize;
+                }
+            }
+            //writeToMB()
+        }
+    }
+
+    public ItemStack writeToMB(int speed, int efficiency, int power, boolean io) {
+        return null;
     }
 
     public void mergeMB() {
-
+        currentProcessTime = 1;
     }
 
     /*******************************************************************************************************************
