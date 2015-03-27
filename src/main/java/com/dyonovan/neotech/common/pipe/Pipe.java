@@ -9,6 +9,10 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import scala.actors.threadpool.Arrays;
+
+import java.util.Collections;
+import java.util.List;
 
 public abstract class Pipe<T extends IPipeBuffer> extends TileEntity implements IUpdatePlayerListBox {
     protected T buffer;
@@ -41,16 +45,19 @@ public abstract class Pipe<T extends IPipeBuffer> extends TileEntity implements 
         if(worldObj.isRemote) return;
         coolDown--;
         if(coolDown <= 0) {
-            for (EnumFacing face : EnumFacing.values()) {
+            buffer.update();
+            List<EnumFacing> dirs = Arrays.asList(EnumFacing.values());
+            Collections.shuffle(dirs);
+            for (EnumFacing face : dirs) {
                 //Extract
-                if (buffer.canBufferExtract(buffer.getStorageForFace(face)) &&
+                if (buffer.canBufferExtract(buffer.getStorageForFace(face), face) &&
                         isPipeConnected(pos.offset(face), face) &&
                         canTileProvide(worldObj.getTileEntity(pos.offset(face)))) {
                     extractFromTile(worldObj.getTileEntity(pos.offset(face)), face);
                 }
 
                 //Transfer
-                if (buffer.canBufferSend(buffer.getStorageForFace(face)) &&
+                if (buffer.canBufferSend(buffer.getStorageForFace(face), face) &&
                         isPipeConnected(pos.offset(face), face) &&
                         canTileReceive(worldObj.getTileEntity(pos.offset(face)))) {
                     giveToTile(worldObj.getTileEntity(pos.offset(face)), face);

@@ -1,36 +1,27 @@
 package com.dyonovan.neotech.common.pipe.item;
 
-import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.pipe.Pipe;
 import com.dyonovan.neotech.common.pipe.storage.ItemBuffer;
-import com.dyonovan.neotech.common.tileentity.InventoryTile;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 
-import java.util.Random;
+public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory{
 
-public class PipeBasicItem extends Pipe<ItemBuffer> implements IExpellable{
-
-    protected boolean extractMode;
 
     @Override
     public void setBuffer() {
         buffer = new ItemBuffer();
-        extractMode = false;
     }
 
     @Override
     public void initBuffers() {
-        InventoryTile[] built = new InventoryTile[6];
-        for(int i = 0; i < 6; i++)
-            built[i] = new InventoryTile(1);
-        buffer.setBuffers(built);
+        buffer.setBuffers(null);
         buffer.setParentPipe(this);
     }
 
@@ -41,8 +32,8 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IExpellable{
 
     @Override
     public boolean isPipeConnected(BlockPos pos, EnumFacing facing) {
-        TileEntity te = worldObj.getTileEntity(pos);
-        return canTileReceive(te);
+        TileEntity tile = worldObj.getTileEntity(pos);
+        return (buffer.canBufferSend(null, facing) || buffer.canBufferExtract(null, facing)) && (tile instanceof IInventory);
     }
 
     @Override
@@ -57,39 +48,33 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IExpellable{
 
     @Override
     public void giveToTile(TileEntity tile, EnumFacing face) {
-        if(tile instanceof PipeBasicItem) {
-            PipeBasicItem other = (PipeBasicItem)tile;
-            other.buffer.acceptResource(getMaximumTransferRate(), face.getOpposite(), buffer.removeResource(getMaximumTransferRate(), face, false), false);
-        } else if(tile instanceof ISidedInventory && buffer.getStorageForFace(face).getStackInSlot(0) != null && !extractMode) {
-            ISidedInventory otherInv = (ISidedInventory)tile;
-            for(int i : otherInv.getSlotsForFace(face.getOpposite())) {
-                if(otherInv.getStackInSlot(i) == null) {
-                    if(otherInv.canInsertItem(i, buffer.removeResource(getMaximumTransferRate(), face, true), face.getOpposite()))
+        if(buffer.removeResource(getMaximumTransferRate(), face, true) != null) {
+            if (tile instanceof ISidedInventory) {
+                ISidedInventory otherInv = (ISidedInventory) tile;
+                for (int i : otherInv.getSlotsForFace(face.getOpposite())) {
+                    if (otherInv.getStackInSlot(i) == null) {
                         otherInv.setInventorySlotContents(i, buffer.removeResource(getMaximumTransferRate(), face, false));
-                    return;
-                } else {
-                    if(otherInv.getStackInSlot(i).getItem() == buffer.getStorageForFace(face).getStackInSlot(0).getItem() &&
-                            otherInv.getStackInSlot(i).getItemDamage() == buffer.getStorageForFace(face).getStackInSlot(0).getItemDamage() &&
+                        return;
+                    } else if(otherInv.getStackInSlot(i).getItem() == buffer.removeResource(getMaximumTransferRate(), face, true).getItem() &&
+                            otherInv.getStackInSlot(i).getItemDamage() == buffer.removeResource(getMaximumTransferRate(), face, true).getItemDamage() &&
                             otherInv.canInsertItem(i, buffer.removeResource(getMaximumTransferRate(), face, true), face.getOpposite()) &&
                             !otherInv.getStackInSlot(i).hasTagCompound()) {
-                        if(otherInv.getStackInSlot(i).stackSize + buffer.getStorageForFace(face).getStackInSlot(0).stackSize <= otherInv.getStackInSlot(i).getMaxStackSize()) {
+                        if(otherInv.getStackInSlot(i).stackSize + buffer.removeResource(getMaximumTransferRate(), face, true).stackSize < otherInv.getStackInSlot(i).getMaxStackSize()) {
                             otherInv.getStackInSlot(i).stackSize += buffer.removeResource(getMaximumTransferRate(), face, false).stackSize;
                             return;
                         }
                     }
                 }
-            }
-        } else if(tile instanceof IInventory && buffer.getStorageForFace(face).getStackInSlot(0) != null && !extractMode) {
-            IInventory otherInv = (IInventory)tile;
-            for(int i = 0; i < otherInv.getSizeInventory(); i++) {
-                if(otherInv.getStackInSlot(i) == null) {
-                    otherInv.setInventorySlotContents(i, buffer.removeResource(getMaximumTransferRate(), face, false));
-                    return;
-                } else {
-                    if(otherInv.getStackInSlot(i).getItem() == buffer.getStorageForFace(face).getStackInSlot(0).getItem() &&
-                            otherInv.getStackInSlot(i).getItemDamage() == buffer.getStorageForFace(face).getStackInSlot(0).getItemDamage() &&
+            } else if (tile instanceof IInventory) {
+                IInventory otherInv = (IInventory) tile;
+                for(int i = 0; i < otherInv.getSizeInventory(); i++) {
+                    if (otherInv.getStackInSlot(i) == null) {
+                        otherInv.setInventorySlotContents(i, buffer.removeResource(getMaximumTransferRate(), face, false));
+                        return;
+                    } else if(otherInv.getStackInSlot(i).getItem() == buffer.removeResource(getMaximumTransferRate(), face, true).getItem() &&
+                            otherInv.getStackInSlot(i).getItemDamage() == buffer.removeResource(getMaximumTransferRate(), face, true).getItemDamage() &&
                             !otherInv.getStackInSlot(i).hasTagCompound()) {
-                        if(otherInv.getStackInSlot(i).stackSize + buffer.getStorageForFace(face).getStackInSlot(0).stackSize <= otherInv.getStackInSlot(i).getMaxStackSize()) {
+                        if(otherInv.getStackInSlot(i).stackSize + buffer.removeResource(getMaximumTransferRate(), face, true).stackSize <= otherInv.getStackInSlot(i).getMaxStackSize()) {
                             otherInv.getStackInSlot(i).stackSize += buffer.removeResource(getMaximumTransferRate(), face, false).stackSize;
                             return;
                         }
@@ -101,43 +86,24 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IExpellable{
 
     @Override
     public void extractFromTile(TileEntity tile, EnumFacing face) {
-        if(extractMode) {
-            if(tile instanceof ISidedInventory) {
-                ISidedInventory otherInv = (ISidedInventory)tile;
-                for(int i : otherInv.getSlotsForFace(face.getOpposite())) {
-                    if(otherInv.getStackInSlot(i) != null) {
-                        if(otherInv.getStackInSlot(i).stackSize <= getMaximumTransferRate()) {
-                            ItemStack mover = otherInv.getStackInSlot(i).copy();
-                            otherInv.setInventorySlotContents(i, null);
-                            buffer.acceptResource(getMaximumTransferRate(), face, mover, false);
-                            return;
-                        } else {
-                            ItemStack mover = otherInv.getStackInSlot(i).copy();
-                            mover.stackSize = getMaximumTransferRate();
-                            ItemStack removed = buffer.acceptResource(getMaximumTransferRate(), face, mover, false);
-                            otherInv.getStackInSlot(i).stackSize -= removed != null ? removed.stackSize : 0;
-                            return;
-                        }
-                    }
+        if(tile instanceof ISidedInventory) {
+            ISidedInventory otherInv = (ISidedInventory)tile;
+            for(int i : otherInv.getSlotsForFace(face.getOpposite())) {
+                if(otherInv.getStackInSlot(i) != null) {
+                    buffer.acceptResource(getMaximumTransferRate(), face, otherInv.getStackInSlot(i), false);
+                    if(otherInv.getStackInSlot(i).stackSize <= 0)
+                        otherInv.setInventorySlotContents(i, null);
+                    return;
                 }
             }
-            else if(tile instanceof IInventory) {
-                IInventory otherInv = (IInventory)tile;
-                for(int i = 0; i < otherInv.getSizeInventory(); i++) {
-                    if(otherInv.getStackInSlot(i) != null) {
-                        if(otherInv.getStackInSlot(i).stackSize <= getMaximumTransferRate()) {
-                            ItemStack mover = otherInv.getStackInSlot(i).copy();
-                            otherInv.setInventorySlotContents(i, null);
-                            buffer.acceptResource(getMaximumTransferRate(), face, mover, false);
-                            return;
-                        } else {
-                            ItemStack mover = otherInv.getStackInSlot(i).copy();
-                            mover.stackSize = getMaximumTransferRate();
-                            ItemStack removed = buffer.acceptResource(getMaximumTransferRate(), face, mover, false);
-                            otherInv.getStackInSlot(i).stackSize -= removed != null ? removed.stackSize : 0;
-                            return;
-                        }
-                    }
+        } else if (tile instanceof IInventory) {
+            IInventory otherInv = (IInventory)tile;
+            for(int i = 0; i < otherInv.getSizeInventory(); i++) {
+                if(otherInv.getStackInSlot(i) != null) {
+                    buffer.acceptResource(getMaximumTransferRate(), face, otherInv.getStackInSlot(i), false);
+                    if(otherInv.getStackInSlot(i).stackSize <= 0)
+                        otherInv.setInventorySlotContents(i, null);
+                    return;
                 }
             }
         }
@@ -145,53 +111,111 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IExpellable{
 
     @Override
     public int getOperationDelay() {
-        return 20;
+        return 0;
+    }
+
+    public void toggleExtractMode(EnumFacing face) {
+        if(buffer.canBufferExtract(null, face))
+            buffer.setCanExtract(face, false);
+        else
+            buffer.setCanExtract(face, true);
+
+        if(buffer.canBufferSend(null, face))
+            buffer.setCanInsert(face, false);
+        else
+            buffer.setCanInsert(face, true);
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        nbt.setBoolean("ExtractMode", extractMode);
+    public int getSizeInventory() {
+        return buffer.inventory.getSizeInventory();
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        extractMode = nbt.getBoolean("ExtractMode");
-    }
-
-    public boolean getExtractModeActive() {
-        return extractMode;
-    }
-
-    public void setExtractMode(boolean newValue) {
-        extractMode = newValue;
-        worldObj.markBlockForUpdate(pos);
+    public ItemStack getStackInSlot(int index) {
+        return buffer.inventory.getStackInSlot(index);
     }
 
     @Override
-    public void expelItems() {
-        for (EnumFacing face : EnumFacing.values()) {
-            for (ItemStack stack : buffer.getStorageForFace(face).getValues()) {
-                if (stack != null) {
-                    Random random = new Random();
-                    EntityItem entityitem =
-                            new EntityItem(worldObj,
-                                    pos.getX() + random.nextFloat() * 0.8F + 0.1F,
-                                    pos.getY() + random.nextFloat() * 0.8F + 0.1F,
-                                    pos.getZ() + random.nextFloat() * 0.8F + 0.1F,
-                                    stack
-                            );
-                    if (stack.hasTagCompound()) {
-                        entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
-                    }
-                    float f3 = 0.05F;
-                    entityitem.motionX = (double) ((float) random.nextGaussian() * f3);
-                    entityitem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
-                    entityitem.motionZ = (double) ((float) random.nextGaussian() * f3);
-                    worldObj.spawnEntityInWorld(entityitem);
-                }
+    public ItemStack decrStackSize(int index, int count) {
+        ItemStack itemstack = getStackInSlot(index);
+        if(itemstack != null) {
+            if(itemstack.stackSize <= count) {
+                setInventorySlotContents(index, null);
             }
+            itemstack = itemstack.splitStack(count);
         }
+        worldObj.markBlockForUpdate(this.getPos());
+        return itemstack;
+    }
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int index) {
+        ItemStack stack = getStackInSlot(index);
+        if (stack != null) {
+            setInventorySlotContents(index, null);
+        }
+        return stack;
+    }
+
+    @Override
+    public void setInventorySlotContents(int index, ItemStack stack) {
+        buffer.inventory.setStackInSlot(stack, index);
+    }
+
+    @Override
+    public int getInventoryStackLimit() {
+        return getMaximumTransferRate();
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return true;
+    }
+
+    @Override
+    public void openInventory(EntityPlayer player) {}
+
+    @Override
+    public void closeInventory(EntityPlayer player) {}
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
+    @Override
+    public String getCommandSenderName() {
+        return null;
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return null;
     }
 }

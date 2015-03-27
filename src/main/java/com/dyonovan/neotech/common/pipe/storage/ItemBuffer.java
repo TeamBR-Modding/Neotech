@@ -2,18 +2,19 @@ package com.dyonovan.neotech.common.pipe.storage;
 
 import com.dyonovan.neotech.common.pipe.Pipe;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, ItemStack, P> {
 
-    protected InventoryTile[] buffers;
+    public InventoryTile inventory;
+    protected boolean[] extractSides;
+    protected boolean[] insertSides;
+    protected HashMap<Integer, EnumFacing> receivedSide;
     protected P pipe;
 
     @Override
@@ -21,9 +22,18 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
         this.pipe = parent;
     }
 
+    /**
+     * For this situation don't pass anything
+     * @param array Make it NULL
+     */
     @Override
     public void setBuffers(InventoryTile[] array) {
-        buffers = array;
+        inventory = new InventoryTile(6);
+        extractSides = new boolean[6];
+        insertSides = new boolean[6];
+        receivedSide = new HashMap<>();
+        Arrays.fill(extractSides, Boolean.FALSE);
+        Arrays.fill(insertSides, Boolean.TRUE);
     }
 
     @Override
@@ -31,73 +41,93 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
         return null;
     }
 
+    /**
+     * For this instance, will just return the inventory
+     */
     @Override
     public InventoryTile getStorageForFace(EnumFacing face) {
-        return buffers[face.ordinal()];
+        return inventory;
     }
 
     @Override
-    public boolean canBufferSend(InventoryTile buffer) {
-        return buffer.getStackInSlot(0) != null;
+    public boolean canBufferSend(InventoryTile buffer, EnumFacing face) {
+        return insertSides[face.ordinal()];
+    }
+
+    public void setCanInsert(EnumFacing face, boolean value) {
+        insertSides[face.ordinal()] = value;
     }
 
     @Override
-    public boolean canBufferExtract(InventoryTile buffer) {
-        return buffer.getStackInSlot(0) == null;
+    public boolean canBufferExtract(InventoryTile buffer, EnumFacing face) {
+        return extractSides[face.ordinal()];
+    }
+
+    public void setCanExtract(EnumFacing face, boolean value) {
+        extractSides[face.ordinal()] = value;
     }
 
     @Override
     public ItemStack acceptResource(int maxAmount, EnumFacing inputFace, ItemStack resource, boolean simulate) {
-
-        List<EnumFacing> dirs = new ArrayList<>();
-        for(EnumFacing facing : EnumFacing.values()) {
-            if(pipe.isPipeConnected(pipe.getPos().offset(facing), facing) && facing != inputFace)
-                dirs.add(facing);
-        }
-
-        Collections.shuffle(dirs);
-
-        for(EnumFacing face : dirs) {
-            if(buffers[face.ordinal()].getStackInSlot(0) == null) {
-                if(pipe.getWorld().getTileEntity(pipe.getPos().offset(face)) instanceof ISidedInventory) {
-                    ISidedInventory otherInv = (ISidedInventory)pipe.getWorld().getTileEntity(pipe.getPos().offset(face));
-                    boolean flag = false;
-                    for(int i : otherInv.getSlotsForFace(face.getOpposite())) {
-                        if(!otherInv.canInsertItem(i, resource, face.getOpposite()))
-                            flag = true;
+        if(resource != null && resource.stackSize > 0) {
+            for (int i = 0; i < inventory.getSizeInventory(); i++) {
+                if (inventory.getStackInSlot(i) == null) {
+                    ItemStack mover = resource.copy();
+                    if (mover.stackSize >= maxAmount && !simulate) {
+                        mover.stackSize = maxAmount;
+                        resource.stackSize -= mover.stackSize;
                     }
-                    if(flag)
-                        continue;
+                    if (!simulate)
+                        inventory.setStackInSlot(mover, i);
+                    return resource;
                 }
-                if(!simulate)
-                    buffers[face.ordinal()].setStackInSlot(resource.copy(), 0);
-                return resource;
             }
         }
-
         return null;
     }
 
     @Override
     public ItemStack removeResource(int maxAmount, EnumFacing outputFace, boolean simulate) {
-        ItemStack outputStack = buffers[outputFace.ordinal()].getStackInSlot(0).copy();
-        if(!simulate)
-            buffers[outputFace.ordinal()].setStackInSlot(null, 0);
-        return outputStack;
+        for(int i = 0; i < inventory.getSizeInventory(); i++) {
+            if(inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).stackSize > 0) {
+                ItemStack resource = inventory.getStackInSlot(i).copy();
+                if(!simulate)
+                    inventory.setStackInSlot(null, i);
+                return resource;
+            }
+        }
+        return null;
+    }
+
+    public void removeDeadStacks() {
+        for(int i = 0; i < inventory.getSizeInventory(); i++) {
+            if(inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).stackSize <= 0)
+                inventory.setStackInSlot(null, i);
+        }
+    }
+
+    @Override
+    public void update() {
+
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        for(int i = 0; i < 6; i++)
-            buffers[i].writeToNBT(tag, String.valueOf(i));
+        inventory.writeToNBT(tag, "");
+        for(int i = 0; i < 6; i++) {
+            tag.setBoolean("InsertSide" + String.valueOf(i), insertSides[i]);
+            tag.setBoolean("ExtractSide" + String.valueOf(i), extractSides[i]);
+        }
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        buffers = new InventoryTile[6];
+        inventory.readFromNBT(tag, 6, "");
+        insertSides = new boolean[6];
+        extractSides = new boolean[6];
         for(int i = 0; i < 6; i++) {
-            buffers[i] = new InventoryTile(1);
-            buffers[i].readFromNBT(tag, 6, String.valueOf(i));
+            insertSides[i] = tag.getBoolean("InsertSide" + String.valueOf(i));
+            extractSides[i] = tag.getBoolean("ExtractSide" + String.valueOf(i));
         }
     }
 }

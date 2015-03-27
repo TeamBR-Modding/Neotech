@@ -28,9 +28,7 @@ public class BlockPipeBasicItem extends BlockPipe {
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
         PipeBasicItem pipe = (PipeBasicItem)worldIn.getTileEntity(pos);
-        if(pipe.getExtractModeActive()) {
-            worldIn.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX() + 0.5, pos.getY() + 0.7, pos.getZ() + 0.5, 0, 0, 0);
-        }
+
     }
 
     @Override
@@ -38,15 +36,12 @@ public class BlockPipeBasicItem extends BlockPipe {
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
 
         PipeBasicItem pipe = (PipeBasicItem) world.getTileEntity(pos);
-        if(pipe.getExtractModeActive())
-            pipe.setExtractMode(false);
-        else
-            pipe.setExtractMode(true);
+            pipe.toggleExtractMode(side);
 
         return true;
     }
 
-        @Override
+    @Override
     public boolean isCableConnected(IBlockAccess blockaccess, BlockPos pos, EnumFacing face) {
         return blockaccess.getTileEntity(pos) instanceof IInventory || blockaccess.getTileEntity(pos) instanceof PipeBasicItem;
     }
