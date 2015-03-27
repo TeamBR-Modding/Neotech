@@ -127,7 +127,7 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
         }
         if(tick > 40) {
             Arrays.fill(justReceived, false);
-            tick = 0; 
+            tick = 0;
         }
     }
 

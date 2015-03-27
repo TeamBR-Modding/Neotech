@@ -11,7 +11,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelRotation;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ISmartBlockModel;
 import net.minecraftforge.client.model.ISmartItemModel;
 
@@ -23,6 +26,9 @@ import java.util.List;
 public class ModelPipe implements ISmartBlockModel, ISmartItemModel {
     protected TextureAtlasSprite backGround = null;
     protected TextureAtlasSprite foreGround = null;
+    protected BlockPipe pipe;
+    protected BlockPos pos;
+    protected IBlockAccess worldObj;
     static FaceBakery faceBakery = new FaceBakery();
     boolean[] extensions = new boolean[6];
     protected float min;
@@ -38,6 +44,10 @@ public class ModelPipe implements ISmartBlockModel, ISmartItemModel {
 
         min = 8.0F - ((BlockPipe)state.block).getWidth();
         max = 8.0F +  ((BlockPipe)state.block).getWidth();
+
+        pipe = (BlockPipe) state.block;
+        worldObj = state.blockAccess;
+        pos = state.pos;
     }
 
     public ModelPipe(BlockPipe pipe) {
@@ -66,27 +76,27 @@ public class ModelPipe implements ISmartBlockModel, ISmartItemModel {
         BlockFaceUV uv = new BlockFaceUV(new float[]{0.0F, 0.0F, 16.0F, 16.0F}, 0);
         BlockPartFace face = new BlockPartFace(null, 0, "", uv);
 
-        if(this.extensions[0]) {
+        if(this.extensions[EnumFacing.DOWN.ordinal()]) {
             this.drawPipeConnection(ModelRotation.X270_Y0, list);
         }
 
-        if(this.extensions[1]) {
+        if(this.extensions[EnumFacing.UP.ordinal()]) {
             this.drawPipeConnection(ModelRotation.X90_Y0, list);
         }
 
-        if(this.extensions[2]) {
+        if(this.extensions[EnumFacing.NORTH.ordinal()]) {
             this.drawPipeConnection(ModelRotation.X180_Y0, list);
         }
 
-        if(this.extensions[3]) {
+        if(this.extensions[EnumFacing.SOUTH.ordinal()]) {
             this.drawPipeConnection(ModelRotation.X0_Y0, list);
         }
 
-        if(this.extensions[4]) {
+        if(this.extensions[EnumFacing.WEST.ordinal()]) {
             this.drawPipeConnection(ModelRotation.X0_Y90, list);
         }
 
-        if(this.extensions[5]) {
+        if(this.extensions[EnumFacing.EAST.ordinal()]) {
             this.drawPipeConnection(ModelRotation.X0_Y270, list);
         }
 
@@ -105,6 +115,10 @@ public class ModelPipe implements ISmartBlockModel, ISmartItemModel {
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, foreGround, EnumFacing.SOUTH, modelRot, null, scale, true));
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, foreGround, EnumFacing.EAST, modelRot, null, scale, true));
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, foreGround, EnumFacing.WEST, modelRot, null, scale, true));
+
+        if(worldObj != null && pipe != null) {
+            pipe.drawExtras(list, faceBakery, worldObj, pos);
+        }
 
         return list;
     }

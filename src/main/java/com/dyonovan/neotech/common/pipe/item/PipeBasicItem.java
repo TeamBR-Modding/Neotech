@@ -14,6 +14,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpellable {
@@ -143,6 +144,10 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
 
     public void toggleExtractMode() {
         for(EnumFacing face : EnumFacing.values()) {
+            if(worldObj.getTileEntity(pos.offset(face)) == null) {
+                buffer.setCanExtract(face, false);
+                continue;
+            }
             if (canTileProvide(worldObj.getTileEntity(pos.offset(face))) && !(worldObj.getTileEntity(pos.offset(face)) instanceof PipeBasicItem)) {
                 if (buffer.canBufferExtract(null, face))
                     buffer.setCanExtract(face, false);
@@ -157,13 +162,9 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
         }
     }
 
-    public boolean hasItemsInPipe() {
-        for(ItemStack stack : buffer.inventory.getValues()) {
-            if(stack != null)
-                return true;
-        }
-        return false;
-    }
+   public boolean isExtracting(EnumFacing face) {
+       return buffer.canBufferExtract(null, face);
+   }
 
     @Override
     public int getSizeInventory() {
