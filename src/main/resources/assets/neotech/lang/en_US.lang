@@ -27,3 +27,5 @@ item.neotech:dustTin.name=Tin Dust
 item.neotech:ingotTin.name=Tin Ingot
 
 neotech.container.crafter=Duel Crafter
+
+button.neotech:buttonStart.name=Start

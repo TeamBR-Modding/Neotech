@@ -50,6 +50,7 @@ public class NeoTech {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.init();
+        PacketHandler.initPackets();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 

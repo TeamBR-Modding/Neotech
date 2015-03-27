@@ -4,17 +4,18 @@ import com.dyonovan.neotech.common.container.BaseContainer;
 import com.dyonovan.neotech.common.tileentity.machine.TileThermalBinder;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnaceOutput;
 
 public class ContainerThermalBinder extends BaseContainer {
 
     public ContainerThermalBinder(InventoryPlayer inventory, TileThermalBinder tileEntity) {
 
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_1, 78, 18));
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_2, 113, 18));
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_3, 78, 52));
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_4, 113, 52));
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.MB_SLOT, 43, 34));
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INGOT_SLOT, 142, 10));
-        bindPlayerInventory(inventory, 8, 84);
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_1, 70, 18));
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_2, 105, 18));
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_3, 70, 52));
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_4, 105, 52));
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.MB_SLOT_INPUT, 41, 34));
+        addSlotToContainer(new SlotFurnaceOutput(inventory.player, tileEntity, TileThermalBinder.MB_SLOT_OUTPUT, 138, 35));
+        bindPlayerInventory(inventory, 8, 111);
     }
 }

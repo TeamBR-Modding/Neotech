@@ -19,40 +19,29 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
 
     public int currentProcessTime;
     public EnergyStorage energyRF;
-    public FluidTank tank;
 
     private static final int RF_TICK= 100;
     public static final int TOTAL_PROCESS_TIME = 200;
-    public static final int MB_PER_INGOT = 1000;
     public static final int INPUT_SLOT_1 = 0;
     public static final int INPUT_SLOT_2 = 1;
     public static final int INPUT_SLOT_3 = 2;
     public static final int INPUT_SLOT_4 = 3;
-    public static final int MB_SLOT = 4;
-    public static final int INGOT_SLOT = 5;
+    public static final int MB_SLOT_INPUT = 4;
+    public static final int MB_SLOT_OUTPUT = 5;
 
     public TileThermalBinder() {
         energyRF = new EnergyStorage(10000);
         currentProcessTime = 0;
         inventory = new InventoryTile(6);
-        tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 4);
     }
 
     @Override
     public void update() {
         if (!this.hasWorldObj() || getWorld().isRemote) return;
-
-        meltTin();
     }
 
-    public void meltTin() {
-        if (inventory.getStackInSlot(INGOT_SLOT) == null) return;
+    public void mergeMB() {
 
-        if (tank.getFluid() == null || tank.getFluid().amount <= tank.getCapacity() - MB_PER_INGOT ) {
-            inventory.modifyStack(INGOT_SLOT, -1);
-            if (tank.getFluid() == null) tank.setFluid(new FluidStack(BlockHandler.moltenTin, MB_PER_INGOT));
-            else tank.getFluid().amount += MB_PER_INGOT;
-        }
     }
 
     /*******************************************************************************************************************
@@ -108,8 +97,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         switch (index) {
-            case INGOT_SLOT:
-                return OreDictionary.getOres("ingotTin").contains(stack.getItem());
+
         }
         return true;
     }

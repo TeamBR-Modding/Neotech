@@ -4,6 +4,7 @@ import com.dyonovan.neotech.common.container.machine.ContainerThermalBinder;
 import com.dyonovan.neotech.common.tileentity.machine.TileThermalBinder;
 import com.dyonovan.neotech.helpers.GuiHelper;
 import com.dyonovan.neotech.lib.Constants;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -22,15 +23,35 @@ public class GuiThermalBinder extends GuiContainer {
 
     public GuiThermalBinder(InventoryPlayer inventory, TileThermalBinder tileEntity) {
         super(new ContainerThermalBinder(inventory, tileEntity));
-
+        ySize = 193;
         tile = tileEntity;
+    }
+
+    @Override
+    public void initGui() {
+        int x = (width - xSize) / 2;
+        int y = (height - ySize) / 2;
+
+        this.buttonList.clear();
+        this.buttonList.add(new GuiButton(0, x + 64, y + 76, 63, 20, StatCollector.translateToLocal("button.neotech:buttonStart.name")));
+
+        super.initGui();
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) {
+        if (button.id == 0) {
+            if (tile.getStackInSlot(tile.MB_SLOT_INPUT) == null)
+                return;
+
+        }
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         final String invTitle = StatCollector.translateToLocal("tile.neotech:thermalBinder.name");
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 4, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96, 4210752);
     }
 
     @Override
