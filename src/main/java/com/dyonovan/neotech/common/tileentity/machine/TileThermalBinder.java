@@ -49,17 +49,17 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         if (currentProcessTime >= BASE_PROCESS_TIME) {
             int speed = 0;
             int efficiency = 0;
-            int power = 0;
+            int capacity = 0;
             boolean io = false;
             for (int i = 0; i < 4; i++) {
                 if (getStackInSlot(i) != null) {
                     if (getStackInSlot(i).getItem() == ItemHandler.speedProcessor)
                         speed += getStackInSlot(i).stackSize;
-                    else if (getStackInSlot(i).getItem() == ItemHandler.effRam)
-                        efficiency += getStackInSlot(i).stackSize;
+                    else if (getStackInSlot(i).getItem() == ItemHandler.capRam)
+                        capacity += getStackInSlot(i).stackSize;
                 }
             }
-            //writeToMB()
+            writeToMB(speed, efficiency, capacity, io);
         }
     }
 

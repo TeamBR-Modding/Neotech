@@ -17,7 +17,7 @@ public class RenderHandler {
         register(ItemHandler.dustTin);
         register(ItemHandler.ingotTin);
         register(ItemHandler.speedProcessor);
-        register(ItemHandler.effRam);
+        register(ItemHandler.capRam);
     }
 
     public static void register(Item item) {
