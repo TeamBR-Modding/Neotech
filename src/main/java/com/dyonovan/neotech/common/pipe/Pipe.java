@@ -97,5 +97,6 @@ public abstract class Pipe<T extends IPipeBuffer> extends TileEntity implements 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
+        worldObj.markBlockForUpdate(pos);
     }
 }

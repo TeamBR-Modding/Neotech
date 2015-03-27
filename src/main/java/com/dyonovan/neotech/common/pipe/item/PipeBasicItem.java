@@ -43,7 +43,7 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
 
     @Override
     public boolean canTileReceive(TileEntity tile) {
-        return tile instanceof IInventory || tile instanceof PipeBasicItem;
+        return tile instanceof IInventory;
     }
 
     @Override
@@ -64,9 +64,11 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
                             otherInv.getStackInSlot(i).getItemDamage() == buffer.removeResource(getMaximumTransferRate(), face, true).getItemDamage() &&
                             otherInv.canInsertItem(i, buffer.removeResource(getMaximumTransferRate(), face, true), face.getOpposite()) &&
                             !otherInv.getStackInSlot(i).hasTagCompound()) {
-                        if(otherInv.getStackInSlot(i).stackSize + buffer.removeResource(getMaximumTransferRate(), face, true).stackSize < otherInv.getStackInSlot(i).getMaxStackSize()) {
+                        if(otherInv.getStackInSlot(i).stackSize + buffer.removeResource(getMaximumTransferRate(), face, true).stackSize <= otherInv.getStackInSlot(i).getMaxStackSize()) {
                             otherInv.getStackInSlot(i).stackSize += buffer.removeResource(getMaximumTransferRate(), face, false).stackSize;
                             return;
+                        }else {
+                            otherInv.getStackInSlot(i).stackSize += buffer.removeResource(otherInv.getStackInSlot(i).getMaxStackSize() - otherInv.getStackInSlot(i).stackSize, face, false).stackSize;
                         }
                     }
                 }
@@ -82,6 +84,8 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
                         if(otherInv.getStackInSlot(i).stackSize + buffer.removeResource(getMaximumTransferRate(), face, true).stackSize <= otherInv.getStackInSlot(i).getMaxStackSize()) {
                             otherInv.getStackInSlot(i).stackSize += buffer.removeResource(getMaximumTransferRate(), face, false).stackSize;
                             return;
+                        } else {
+                            otherInv.getStackInSlot(i).stackSize += buffer.removeResource(otherInv.getStackInSlot(i).getMaxStackSize() - otherInv.getStackInSlot(i).stackSize, face, false).stackSize;
                         }
                     }
                 }
@@ -116,19 +120,23 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
 
     @Override
     public int getOperationDelay() {
-        return 20;
+        return 5;
     }
 
-    public void toggleExtractMode(EnumFacing face) {
-        if(buffer.canBufferExtract(null, face))
-            buffer.setCanExtract(face, false);
-        else
-            buffer.setCanExtract(face, true);
+    public void toggleExtractMode() {
+        for(EnumFacing face : EnumFacing.values()) {
+            if (canTileProvide(worldObj.getTileEntity(pos.offset(face))) && !(worldObj.getTileEntity(pos.offset(face)) instanceof PipeBasicItem)) {
+                if (buffer.canBufferExtract(null, face))
+                    buffer.setCanExtract(face, false);
+                else
+                    buffer.setCanExtract(face, true);
 
-        if(buffer.canBufferSend(null, face))
-            buffer.setCanInsert(face, false);
-        else
-            buffer.setCanInsert(face, true);
+                if (buffer.canBufferSend(null, face))
+                    buffer.setCanInsert(face, false);
+                else
+                    buffer.setCanInsert(face, true);
+            }
+        }
     }
 
     public boolean hasItemsInPipe() {

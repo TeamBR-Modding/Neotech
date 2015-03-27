@@ -14,7 +14,6 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
     public InventoryTile inventory;
     protected boolean[] extractSides;
     protected boolean[] insertSides;
-    protected int[] dontGoThisWay;
     protected P pipe;
 
     @Override
@@ -31,8 +30,6 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
         inventory = new InventoryTile(6);
         extractSides = new boolean[6];
         insertSides = new boolean[6];
-        dontGoThisWay = new int[6];
-        Arrays.fill(dontGoThisWay, 10);
         Arrays.fill(extractSides, Boolean.FALSE);
         Arrays.fill(insertSides, Boolean.TRUE);
     }

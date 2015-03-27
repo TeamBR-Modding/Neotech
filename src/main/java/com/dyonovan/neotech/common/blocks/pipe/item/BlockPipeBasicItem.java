@@ -28,9 +28,7 @@ public class BlockPipeBasicItem extends BlockPipe {
     public void randomDisplayTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
         PipeBasicItem pipe = (PipeBasicItem)worldIn.getTileEntity(pos);
-        if(pipe.hasItemsInPipe()) {
-            worldIn.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX() + 0.5, pos.getY() + 0.7, pos.getZ() + 0.5, 0, 0, 0);
-        }
+
     }
 
     @Override
@@ -38,7 +36,7 @@ public class BlockPipeBasicItem extends BlockPipe {
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
 
         PipeBasicItem pipe = (PipeBasicItem) world.getTileEntity(pos);
-            pipe.toggleExtractMode(side);
+            pipe.toggleExtractMode();
 
         return true;
     }
