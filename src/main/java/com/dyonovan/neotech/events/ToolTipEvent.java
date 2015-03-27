@@ -68,7 +68,28 @@ public class ToolTipEvent {
                 event.toolTip.add(String.valueOf("5000" + GuiHelper.GuiColor.RED + " RF/t"));
             }
             if (event.itemStack.getItem() == ItemHandler.upgradeMB) {
-
+                if (event.itemStack.hasTagCompound()) {
+                    NBTTagCompound tag = event.itemStack.getTagCompound();
+                    if (tag.hasKey("Speed"))
+                        event.toolTip.add(GuiHelper.GuiColor.GREEN + "Speed: +" + tag.getInteger("Speed") * 10 + "%");
+                    if (tag.hasKey("Efficiency") || tag.hasKey("Speed")) {
+                        int eff = tag.hasKey("Efficiency") ? tag.getInteger("Efficiency") : 0;
+                        int speed = tag.hasKey("Speed") ? tag.getInteger("Speed") : 0;
+                        int actual = eff * 10 - speed * 10;
+                        if (actual >= 0)
+                            event.toolTip.add(GuiHelper.GuiColor.GREEN + "Efficiency: +" + actual + "%");
+                        else
+                            event.toolTip.add(GuiHelper.GuiColor.RED + "Efficiency: -" + actual + "%");
+                    }
+                    if (tag.hasKey("Capacity"))
+                        event.toolTip.add(GuiHelper.GuiColor.GREEN + "Capacity: +" + tag.getInteger("Capacity") + GuiHelper.GuiColor.RED + "RF");
+                    if (tag.hasKey("AutoOutput")) {
+                        if (tag.getBoolean("AutoOutput"))
+                            event.toolTip.add(GuiHelper.GuiColor.GREEN + "Auto Output: " + "True");
+                        else
+                            event.toolTip.add(GuiHelper.GuiColor.RED + "Auto Output: " + "False");
+                    }
+                }
             }
         }
     }
