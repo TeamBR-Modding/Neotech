@@ -7,6 +7,8 @@ import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.lib.Constants;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.FaceBakery;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -36,11 +38,11 @@ public abstract class BlockPipe extends BlockBakeable {
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-        float x1 = 0.25F;
+        float x1 = getWidth() / 16;
         float x2 = 1.0F - x1;
-        float y1 = 0.25F;
+        float y1 = getWidth() / 16;
         float y2 = 1.0F - y1;
-        float z1 = 0.25F;
+        float z1 = getWidth() / 16;
         float z2 = 1.0F - z1;
         if(isCableConnected(worldIn, pos.west(), EnumFacing.WEST)) {
             x1 = 0.0F;
@@ -74,6 +76,8 @@ public abstract class BlockPipe extends BlockBakeable {
         this.setBlockBoundsBasedOnState(worldIn, pos);
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
     }
+
+    public void drawExtras(List<BakedQuad> list, FaceBakery faceBakery, IBlockAccess world, BlockPos pos) {}
 
     @Override
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {

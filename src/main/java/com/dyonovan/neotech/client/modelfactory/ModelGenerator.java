@@ -34,7 +34,10 @@ public class ModelGenerator {
         TextureMap textureMap = event.map;
 
         //Register Side Icons
-        textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + "machine_side"));
+        textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/machine_side"));
+
+        //Register Pipe Stuff
+        textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/pipeExtract"));
 
         //Register Front Icons
         for(BlockBakeable block : BlockHandler.blockRegistry) {
