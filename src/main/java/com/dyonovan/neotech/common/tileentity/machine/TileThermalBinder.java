@@ -48,10 +48,10 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     public void meltTin() {
         if (inventory.getStackInSlot(INGOT_SLOT) == null) return;
 
-        if (tank.getFluid() == null || tank.getFluid().amount <= 3000 ) {
+        if (tank.getFluid() == null || tank.getFluid().amount <= tank.getCapacity() - MB_PER_INGOT ) {
             inventory.modifyStack(INGOT_SLOT, -1);
-            if (tank.getFluid() == null) tank.setFluid(new FluidStack(BlockHandler.moltenTin, 1000));
-            else tank.getFluid().amount += 1000;
+            if (tank.getFluid() == null) tank.setFluid(new FluidStack(BlockHandler.moltenTin, MB_PER_INGOT));
+            else tank.getFluid().amount += MB_PER_INGOT;
         }
     }
 
