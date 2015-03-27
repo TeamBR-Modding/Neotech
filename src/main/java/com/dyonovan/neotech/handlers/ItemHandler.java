@@ -8,6 +8,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ItemHandler {
 
     public static Item dustIron, dustGold, ingotCopper, dustCopper, ingotTin, dustTin, speedProcessor, capRam;
+    public static Item effFan, ioPort, upgradeMB;
 
     public static void PreInit() {
 
@@ -19,6 +20,9 @@ public class ItemHandler {
         registerItem(ingotTin = new BaseItem("ingotTin", 64), "ingotTin", "ingotTin");
         registerItem(speedProcessor = new BaseItem("speedProcessor", 4), "speedProcessor", null);
         registerItem(capRam = new BaseItem("capRam", 4), "capRam", null);
+        registerItem(effFan = new BaseItem("effFan", 4), "effFan", null);
+        registerItem(ioPort = new BaseItem("ioPort", 1), "ioPort", null);
+        registerItem(ioPort = new BaseItem("upgradeMB", 1), "upgradeMB", null);
 
     }
 

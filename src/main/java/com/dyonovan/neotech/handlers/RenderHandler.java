@@ -18,6 +18,9 @@ public class RenderHandler {
         register(ItemHandler.ingotTin);
         register(ItemHandler.speedProcessor);
         register(ItemHandler.capRam);
+        register(ItemHandler.effFan);
+        register(ItemHandler.ioPort);
+        register(ItemHandler.ioPort);
     }
 
     public static void register(Item item) {

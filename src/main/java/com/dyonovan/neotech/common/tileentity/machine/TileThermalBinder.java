@@ -34,7 +34,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     @Override
     public void update() {
         if (!this.hasWorldObj() || getWorld().isRemote || currentProcessTime <= 0) return;
-
+        //todo add into slots when mb inserted
         if (currentProcessTime > 0 && currentProcessTime <= BASE_PROCESS_TIME) {
             if (inventory.getStackInSlot(MB_SLOT_INPUT) == null) {
                 currentProcessTime = 0;
@@ -57,14 +57,29 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
                         speed += getStackInSlot(i).stackSize;
                     else if (getStackInSlot(i).getItem() == ItemHandler.capRam)
                         capacity += getStackInSlot(i).stackSize;
+                    else if (getStackInSlot(i).getItem() == ItemHandler.effFan)
+                        efficiency += getStackInSlot(i).stackSize;
+                    else if (getStackInSlot(i).getItem() == ItemHandler.ioPort)
+                        io = true;
+
+                    inventory.setStackInSlot(null, i);
                 }
             }
+            inventory.setStackInSlot(null, MB_SLOT_INPUT);
             writeToMB(speed, efficiency, capacity, io);
         }
     }
 
-    public ItemStack writeToMB(int speed, int efficiency, int power, boolean io) {
-        return null;
+    public void writeToMB(int speed, int efficiency, int capacity, boolean io) {
+
+        ItemStack newMB = new ItemStack(ItemHandler.upgradeMB, 1);
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setInteger("Speed", speed);
+        tag.setInteger("Efficiency", efficiency);
+        tag.setInteger("Capacity", capacity);
+        tag.setBoolean("AutoOutput", io);
+        newMB.setTagCompound(tag);
+        inventory.setStackInSlot(newMB, MB_SLOT_OUTPUT);
     }
 
     public void mergeMB() {

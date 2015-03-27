@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.events;
 
 import com.dyonovan.neotech.handlers.BlockHandler;
+import com.dyonovan.neotech.handlers.ItemHandler;
 import com.dyonovan.neotech.helpers.GuiHelper;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -65,6 +66,9 @@ public class ToolTipEvent {
             if (event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.eliteCable)) {
                 event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Energy Transfer");
                 event.toolTip.add(String.valueOf("5000" + GuiHelper.GuiColor.RED + " RF/t"));
+            }
+            if (event.itemStack.getItem() == ItemHandler.upgradeMB) {
+
             }
         }
     }
