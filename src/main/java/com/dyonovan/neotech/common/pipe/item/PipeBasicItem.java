@@ -1,17 +1,22 @@
 package com.dyonovan.neotech.common.pipe.item;
 
+import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.pipe.Pipe;
 import com.dyonovan.neotech.common.pipe.storage.ItemBuffer;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
-public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory{
+import java.util.Random;
+
+public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpellable {
 
 
     @Override
@@ -27,7 +32,7 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory{
 
     @Override
     public int getMaximumTransferRate() {
-        return 1;
+        return 32;
     }
 
     @Override
@@ -111,7 +116,7 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory{
 
     @Override
     public int getOperationDelay() {
-        return 0;
+        return 20;
     }
 
     public void toggleExtractMode(EnumFacing face) {
@@ -124,6 +129,14 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory{
             buffer.setCanInsert(face, false);
         else
             buffer.setCanInsert(face, true);
+    }
+
+    public boolean hasItemsInPipe() {
+        for(ItemStack stack : buffer.inventory.getValues()) {
+            if(stack != null)
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -217,5 +230,29 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory{
     @Override
     public IChatComponent getDisplayName() {
         return null;
+    }
+
+    @Override
+    public void expelItems() {
+        for (ItemStack stack : buffer.inventory.getValues()) {
+            if (stack != null) {
+                Random random = new Random();
+                EntityItem entityitem =
+                        new EntityItem(worldObj,
+                                pos.getX() + random.nextFloat() * 0.8F + 0.1F,
+                                pos.getY() + random.nextFloat() * 0.8F + 0.1F,
+                                pos.getZ() + random.nextFloat() * 0.8F + 0.1F,
+                                stack
+                        );
+                if (stack.hasTagCompound()) {
+                    entityitem.getEntityItem().setTagCompound((NBTTagCompound) stack.getTagCompound().copy());
+                }
+                float f3 = 0.05F;
+                entityitem.motionX = (double) ((float) random.nextGaussian() * f3);
+                entityitem.motionY = (double) ((float) random.nextGaussian() * f3 + 0.2F);
+                entityitem.motionZ = (double) ((float) random.nextGaussian() * f3);
+                worldObj.spawnEntityInWorld(entityitem);
+            }
+        }
     }
 }

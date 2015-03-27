@@ -14,7 +14,7 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
     public InventoryTile inventory;
     protected boolean[] extractSides;
     protected boolean[] insertSides;
-    protected HashMap<Integer, EnumFacing> receivedSide;
+    protected int[] dontGoThisWay;
     protected P pipe;
 
     @Override
@@ -31,7 +31,8 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
         inventory = new InventoryTile(6);
         extractSides = new boolean[6];
         insertSides = new boolean[6];
-        receivedSide = new HashMap<>();
+        dontGoThisWay = new int[6];
+        Arrays.fill(dontGoThisWay, 10);
         Arrays.fill(extractSides, Boolean.FALSE);
         Arrays.fill(insertSides, Boolean.TRUE);
     }
@@ -73,9 +74,12 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
             for (int i = 0; i < inventory.getSizeInventory(); i++) {
                 if (inventory.getStackInSlot(i) == null) {
                     ItemStack mover = resource.copy();
-                    if (mover.stackSize >= maxAmount && !simulate) {
+                    if (mover.stackSize >= maxAmount) {
                         mover.stackSize = maxAmount;
-                        resource.stackSize -= mover.stackSize;
+                        if(!simulate)
+                            resource.stackSize -= mover.stackSize;
+                    } else if(mover.stackSize < maxAmount && !simulate) {
+                        resource.stackSize -= resource.stackSize;
                     }
                     if (!simulate)
                         inventory.setStackInSlot(mover, i);
@@ -91,6 +95,13 @@ public class ItemBuffer<P extends Pipe> implements IPipeBuffer<InventoryTile, It
         for(int i = 0; i < inventory.getSizeInventory(); i++) {
             if(inventory.getStackInSlot(i) != null && inventory.getStackInSlot(i).stackSize > 0) {
                 ItemStack resource = inventory.getStackInSlot(i).copy();
+                if(resource.stackSize > maxAmount) {
+                    resource.stackSize = maxAmount;
+                    if(!simulate) {
+                        inventory.getStackInSlot(i).stackSize -= maxAmount;
+                    }
+                    return resource;
+                }
                 if(!simulate)
                     inventory.setStackInSlot(null, i);
                 return resource;
