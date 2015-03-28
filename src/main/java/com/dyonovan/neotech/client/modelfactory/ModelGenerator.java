@@ -92,10 +92,10 @@ public class ModelGenerator {
             else {
                 for(IBlockState state : block.generateRotatableStates()) {
                     //Build Normal Block
-                    event.modelRegistry.putObject(ModelBlock.getModelResourceLocation(state), new ModelBlock());
+                    event.modelRegistry.putObject(ModelBlock.getModelResourceLocation(state), new ModelBlock(block));
                 }
                 //Build Inventory block
-                event.modelRegistry.putObject(block.getInventory(), new ModelBlock());
+                event.modelRegistry.putObject(block.getInventory(), new ModelBlock(block));
                 //Register Item Model
                 itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
             }

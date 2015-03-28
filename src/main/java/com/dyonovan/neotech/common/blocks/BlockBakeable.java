@@ -77,10 +77,12 @@ public abstract class BlockBakeable extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        try {
-            return tileClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+        if(tileClass != null) {
+            try {
+                return tileClass.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
