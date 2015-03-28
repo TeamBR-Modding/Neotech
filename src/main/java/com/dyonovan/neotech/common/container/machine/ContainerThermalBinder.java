@@ -11,12 +11,12 @@ public class ContainerThermalBinder extends BaseContainer {
 
     public ContainerThermalBinder(InventoryPlayer inventory, TileThermalBinder tileEntity) {
 
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_1, 70, 18));
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_2, 105, 18));
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_3, 70, 52));
-        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_4, 105, 52));
-        addSlotToContainer(new SlotMB(tileEntity, TileThermalBinder.MB_SLOT_INPUT, 41, 34));
-        addSlotToContainer(new SlotFurnaceOutput(inventory.player, tileEntity, TileThermalBinder.MB_SLOT_OUTPUT, 138, 35));
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_1, 70, 27));
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_2, 105, 27));
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_3, 70, 61));
+        addSlotToContainer(new Slot(tileEntity, TileThermalBinder.INPUT_SLOT_4, 105, 61));
+        addSlotToContainer(new SlotMB(tileEntity, TileThermalBinder.MB_SLOT_INPUT, 41, 43));
+        addSlotToContainer(new SlotFurnaceOutput(inventory.player, tileEntity, TileThermalBinder.MB_SLOT_OUTPUT, 138, 44));
         bindPlayerInventory(inventory, 8, 111);
     }
 }

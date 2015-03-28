@@ -35,7 +35,7 @@ public class GuiThermalBinder extends GuiContainer {
         int y = (height - ySize) / 2;
 
         this.buttonList.clear();
-        this.buttonList.add(new GuiButton(0, x + 64, y + 76, 63, 20, StatCollector.translateToLocal("button.neotech:buttonStart.name")));
+        this.buttonList.add(new GuiButton(0, x + 64, y + 85, 63, 20, StatCollector.translateToLocal("button.neotech:buttonStart.name")));
 
         super.initGui();
     }
@@ -54,8 +54,8 @@ public class GuiThermalBinder extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         final String invTitle = StatCollector.translateToLocal("tile.neotech:thermalBinder.name");
-        fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 4, 4210752);
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96, 4210752);
+        fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 7, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 93, 4210752);
     }
 
     @Override
@@ -73,10 +73,10 @@ public class GuiThermalBinder extends GuiContainer {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.startDrawingQuads();
-        worldrenderer.addVertexWithUV(x + 18, y + 68, 0, 0.6875F, 0.26953125F);
-        worldrenderer.addVertexWithUV(x + 34, y + 68, 0, 0.75F, 0.26953125F);
-        worldrenderer.addVertexWithUV(x + 34, y + 68 - heightRF, 0, 0.75F, (float) (69 - heightRF) / 256);
-        worldrenderer.addVertexWithUV(x + 18, y + 68 - heightRF, 0, 0.6875F, (float) (69 - heightRF) / 256);
+        worldrenderer.addVertexWithUV(x + 18, y + 77, 0, 0.6875F, 0.26953125F);
+        worldrenderer.addVertexWithUV(x + 34, y + 77, 0, 0.75F, 0.26953125F);
+        worldrenderer.addVertexWithUV(x + 34, y + 77 - heightRF, 0, 0.75F, (float) (69 - heightRF) / 256);
+        worldrenderer.addVertexWithUV(x + 18, y + 77 - heightRF, 0, 0.6875F, (float) (69 - heightRF) / 256);
         tessellator.draw();
 
 
@@ -89,7 +89,7 @@ public class GuiThermalBinder extends GuiContainer {
         int x = (this.width - this.xSize) / 2;
         int y = (this.height - this.ySize) / 2;
 
-        if (GuiHelper.isInBounds(mouseX, mouseY, x + 18, y + 16, x + 34, y + 68)) {
+        if (GuiHelper.isInBounds(mouseX, mouseY, x + 18, y + 25, x + 34, y + 77)) {
             List<String> toolTip = new ArrayList<>();
             toolTip.add(GuiHelper.GuiColor.YELLOW + "Energy");
             toolTip.add(tile.getEnergyStored(null) + "/" + tile.getMaxEnergyStored(null) + GuiHelper.GuiColor.RED + "RF");
