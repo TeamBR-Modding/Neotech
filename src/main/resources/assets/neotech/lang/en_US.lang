@@ -19,9 +19,10 @@ tile.neotech:crafter.name=Duel Crafter
 tile.neotech:oreCopper.name=Copper Ore
 tile.neotech:oreTin.name=Tin Ore
 tile.neotech:basicItemPipe.name=Basic Item Pipe
-tile.neotech:basicItemPipe.name=Basic Item Pipe
 tile.neotech:advancedItemPipe.name=Advanced Item Pipe
 tile.neotech:eliteItemPipe.name=Elite Item Pipe
+
+tile.neotech:smoothGlass.name=Smooth Glass
 
 item.neotech:dustIron.name=Iron Dust
 item.neotech:dustGold.name=Gold Dust

@@ -61,10 +61,6 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
     @Override
     public List getGeneralQuads() {
         ArrayList<BakedQuad> list = new ArrayList<>();
-        BlockFaceUV uv = new BlockFaceUV(new float[]{0.0F, 0.0F, 16.0F, 16.0F}, 0);
-        BlockPartFace face = new BlockPartFace(null, 0, "", uv);
-
-        boolean scale = true;
         boolean[] connections = new boolean[8];
 
         //Item (DON'T LOOK AROUND!)
@@ -174,7 +170,7 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
 
     @Override
     public boolean isAmbientOcclusion() {
-        return true;
+        return false;
     }
 
     @Override
