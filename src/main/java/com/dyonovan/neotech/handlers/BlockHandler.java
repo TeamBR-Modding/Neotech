@@ -42,7 +42,7 @@ public class BlockHandler {
     public static Block crafter, thermalBinder;
     public static Fluid moltenTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
-    public static Block connectedTest;
+    public static Block smoothGlass;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -116,8 +116,8 @@ public class BlockHandler {
                 "eliteItemPipe", PipeEliteItem.class);
 
         //Connected Textures
-        registerBlock(connectedTest = new BlockConnectedTextures(Material.cloth, "connectedTest", null),
-                "connectedTest", null);
+        registerBlock(smoothGlass = new BlockConnectedTextures(Material.cloth, "smoothGlass", null),
+                "smoothGlass", null);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

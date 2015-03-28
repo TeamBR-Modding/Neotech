@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -18,6 +19,7 @@ public class BlockConnectedTextures extends BlockBakeable {
     public BlockConnectedTextures(Material materialIn, String name, Class<? extends TileEntity> tileClass) {
         super(materialIn, name, tileClass);
         setCreativeTab(NeoTech.tabNeoTech);
+        setUnlocalizedName(Constants.MODID + ":" + name);
     }
 
     /**
