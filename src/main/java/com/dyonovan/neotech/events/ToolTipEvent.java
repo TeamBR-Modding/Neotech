@@ -79,10 +79,10 @@ public class ToolTipEvent {
                         if (actual >= 0)
                             event.toolTip.add(GuiHelper.GuiColor.GREEN + "Efficiency: +" + actual + "%");
                         else
-                            event.toolTip.add(GuiHelper.GuiColor.RED + "Efficiency: -" + actual + "%");
+                            event.toolTip.add(GuiHelper.GuiColor.RED + "Efficiency: " + actual + "%");
                     }
                     if (tag.hasKey("Capacity"))
-                        event.toolTip.add(GuiHelper.GuiColor.GREEN + "Capacity: +" + tag.getInteger("Capacity") + GuiHelper.GuiColor.RED + "RF");
+                        event.toolTip.add(GuiHelper.GuiColor.GREEN + "Capacity: +" + tag.getInteger("Capacity") * 1000 + GuiHelper.GuiColor.ORANGE + " RF");
                     if (tag.hasKey("AutoOutput")) {
                         if (tag.getBoolean("AutoOutput"))
                             event.toolTip.add(GuiHelper.GuiColor.GREEN + "Auto Output: " + "True");
@@ -90,6 +90,22 @@ public class ToolTipEvent {
                             event.toolTip.add(GuiHelper.GuiColor.RED + "Auto Output: " + "False");
                     }
                 }
+            }
+            if (event.itemStack.getItem() == ItemHandler.ioPort) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Auto Output Upgrade");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Allows Machines to Auto Output to Valid Inventory");
+            }
+            if (event.itemStack.getItem() == ItemHandler.effFan) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Auto Output Upgrade");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Allows Machines to Auto Output to Valid Inventory");
+            }
+            if (event.itemStack.getItem() == ItemHandler.capRam) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Capacity Upgrade");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases the RF the machine can hold by 1000");
+            }
+            if (event.itemStack.getItem() == ItemHandler.speedProcessor) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Speed Upgrade");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases Speed at the cost of ");
             }
         }
     }

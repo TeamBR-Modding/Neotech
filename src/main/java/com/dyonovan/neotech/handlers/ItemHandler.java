@@ -22,7 +22,7 @@ public class ItemHandler {
         registerItem(capRam = new BaseItem("capRam", 4), "capRam", null);
         registerItem(effFan = new BaseItem("effFan", 4), "effFan", null);
         registerItem(ioPort = new BaseItem("ioPort", 1), "ioPort", null);
-        registerItem(ioPort = new BaseItem("upgradeMB", 1), "upgradeMB", null);
+        registerItem(upgradeMB = new BaseItem("upgradeMB", 1), "upgradeMB", null);
 
     }
 

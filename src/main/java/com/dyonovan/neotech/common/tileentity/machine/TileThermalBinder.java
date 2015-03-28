@@ -66,11 +66,11 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
                 }
             }
             inventory.setStackInSlot(null, MB_SLOT_INPUT);
-            writeToMB(speed, efficiency, capacity, io);
+            inventory.setStackInSlot(writeToMB(speed, efficiency, capacity, io), MB_SLOT_OUTPUT);
         }
     }
 
-    public void writeToMB(int speed, int efficiency, int capacity, boolean io) {
+    public ItemStack writeToMB(int speed, int efficiency, int capacity, boolean io) {
 
         ItemStack newMB = new ItemStack(ItemHandler.upgradeMB, 1);
         NBTTagCompound tag = new NBTTagCompound();
@@ -79,7 +79,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         tag.setInteger("Capacity", capacity);
         tag.setBoolean("AutoOutput", io);
         newMB.setTagCompound(tag);
-        inventory.setStackInSlot(newMB, MB_SLOT_OUTPUT);
+        return newMB;
     }
 
     public void mergeMB() {
