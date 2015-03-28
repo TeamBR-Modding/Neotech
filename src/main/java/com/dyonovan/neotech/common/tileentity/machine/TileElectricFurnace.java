@@ -23,15 +23,23 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     private ItemStack input, output;
     public EnergyStorage energyRF;
 
+    private int speed, capacity, efficiency;
+    private boolean io;
+
     private static final int RF_TICK = 20;
     public static final int TOTAL_PROCESS_TIME = 150;
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
+    public static final int UPGRADE_SLOT = 2;
 
     public TileElectricFurnace() {
         energyRF = new EnergyStorage(10000);
         currentProcessTime = 0;
-        inventory = new InventoryTile(2);
+        inventory = new InventoryTile(3);
+        speed = 0;
+        capacity = 0;
+        efficiency = 0;
+        io = false;
     }
 
     @Override
@@ -139,7 +147,15 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     @Override
     public int getField(int id) {
         switch (id) {
-            case 0:
+            case SPEED:
+                return speed;
+            case EFFICIENCY:
+                return efficiency;
+            case CAPACITY:
+                return capacity;
+            case IO:
+                return !io ? 0 : 1;
+            case 5:
                 return currentProcessTime;
             default:
                 return 0;
@@ -150,14 +166,22 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     @Override
     public void setField(int id, int value) {
         switch (id) {
-            case 0:
+            case SPEED:
+                speed = value;
+            case EFFICIENCY:
+                efficiency = value;
+            case CAPACITY:
+                capacity = value;
+            case IO:
+                io = value != 0;
+            case 5:
                 currentProcessTime = value;
         }
     }
 
     @Override
     public int getFieldCount() {
-        return 1;
+        return 5;
     }
 
     @Override

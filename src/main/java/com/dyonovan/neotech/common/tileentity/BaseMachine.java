@@ -18,6 +18,11 @@ import java.util.Random;
 
 public abstract class BaseMachine extends TileEntity implements ISidedInventory {
 
+    public static final int SPEED = 0;
+    public static final int CAPACITY = 1;
+    public static final int EFFICIENCY = 2;
+    public static final int IO = 3;
+
     protected InventoryTile inventory;
 
     @SideOnly(Side.CLIENT)
