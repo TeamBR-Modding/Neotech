@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ToolTipEvent {
+    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onToolTip(ItemTooltipEvent event) {
         if(event.itemStack != null) {
