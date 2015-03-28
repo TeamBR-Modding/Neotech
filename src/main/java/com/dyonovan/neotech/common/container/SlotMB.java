@@ -36,7 +36,7 @@ public class SlotMB extends Slot {
                 ++count;
             }
         }
-        super.putStack(stack);
+        super.putStack(new ItemStack(ItemHandler.upgradeMB));
     }
 
     @Override
@@ -48,6 +48,7 @@ public class SlotMB extends Slot {
             for (int i = 0; i < 4; i++) {
                 if (inventory.getStackInSlot(i) != null) return false;
             }
+            return true;
         }
         return false;
     }

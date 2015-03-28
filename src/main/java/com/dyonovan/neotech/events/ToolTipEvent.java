@@ -67,7 +67,7 @@ public class ToolTipEvent {
                 event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Energy Transfer");
                 event.toolTip.add(String.valueOf("5000" + GuiHelper.GuiColor.RED + " RF/t"));
             }
-            if (event.itemStack.getItem() == ItemHandler.upgradeMB) {
+            if (event.itemStack.getItem() == ItemHandler.upgradeMBFull) {
                 if (event.itemStack.hasTagCompound()) {
                     NBTTagCompound tag = event.itemStack.getTagCompound();
                     if (tag.hasKey("Speed"))
