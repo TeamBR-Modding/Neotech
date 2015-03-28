@@ -76,17 +76,20 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
             } else if (tile instanceof ISidedInventory) {
                 ISidedInventory otherInv = (ISidedInventory) tile;
                 for (int i : otherInv.getSlotsForFace(face.getOpposite())) {
-                    if (otherInv.getStackInSlot(i) == null) {
+                    if (otherInv.getStackInSlot(i) == null &&
+                            otherInv.canInsertItem(i, buffer.removeResource(getMaximumTransferRate(), face, true), face.getOpposite())) {
                         otherInv.setInventorySlotContents(i, buffer.removeResource(getMaximumTransferRate(), face, false));
                         return;
-                    } else if(otherInv.getStackInSlot(i).getItem() == buffer.removeResource(getMaximumTransferRate(), face, true).getItem() &&
+                    } else if(otherInv.getStackInSlot(i) != null &&
+                            otherInv.getStackInSlot(i).getItem() == buffer.removeResource(getMaximumTransferRate(), face, true).getItem() &&
                             otherInv.getStackInSlot(i).getItemDamage() == buffer.removeResource(getMaximumTransferRate(), face, true).getItemDamage() &&
                             otherInv.canInsertItem(i, buffer.removeResource(getMaximumTransferRate(), face, true), face.getOpposite()) &&
                             !otherInv.getStackInSlot(i).hasTagCompound()) {
                         if(otherInv.getStackInSlot(i).stackSize + buffer.removeResource(getMaximumTransferRate(), face, true).stackSize <= otherInv.getStackInSlot(i).getMaxStackSize()) {
                             otherInv.getStackInSlot(i).stackSize += buffer.removeResource(getMaximumTransferRate(), face, false).stackSize;
                             return;
-                        }else {
+                        } else if (otherInv.getStackInSlot(i) != null &&
+                                otherInv.canInsertItem(i, buffer.removeResource(getMaximumTransferRate(), face, true), face.getOpposite())){
                             otherInv.getStackInSlot(i).stackSize += buffer.removeResource(otherInv.getStackInSlot(i).getMaxStackSize() - otherInv.getStackInSlot(i).stackSize, face, false).stackSize;
                         }
                     }
