@@ -31,7 +31,7 @@ public class BlockMachine extends BlockBakeable {
     public BlockMachine(boolean active, String name, Class<? extends TileEntity> tileClass, int guiID) {
         super(Material.iron, name, tileClass);
         this.setUnlocalizedName(Constants.MODID + ":" + name);
-        this.setCreativeTab(active ? null : NeoTech.tabNeoTech);
+        if (!active) this.setCreativeTab(active ? null : NeoTech.tabNeoTech);
         this.setHardness(1.5F);
         this.setLightLevel(active ? 1 : 0);
         this.guiID = guiID;

@@ -4,9 +4,9 @@ import com.dyonovan.neotech.common.blocks.BlockBakeable;
 import com.dyonovan.neotech.common.blocks.BlockConnectedTextures;
 import com.dyonovan.neotech.common.blocks.BlockCrafter;
 import com.dyonovan.neotech.common.blocks.BlockMachine;
+import com.dyonovan.neotech.common.blocks.ore.BlockOre;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockAdvancedCable;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockBasicCable;
-import com.dyonovan.neotech.common.blocks.ore.BlockOre;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockEliteCable;
 import com.dyonovan.neotech.common.blocks.pipe.item.BlockPipeAdvancedItem;
 import com.dyonovan.neotech.common.blocks.pipe.item.BlockPipeBasicItem;
@@ -20,14 +20,13 @@ import com.dyonovan.neotech.common.pipe.item.PipeAdvancedItem;
 import com.dyonovan.neotech.common.pipe.item.PipeBasicItem;
 import com.dyonovan.neotech.common.pipe.item.PipeEliteItem;
 import com.dyonovan.neotech.common.tileentity.generator.TileFluidGenerator;
-import com.dyonovan.neotech.common.tileentity.machine.*;
 import com.dyonovan.neotech.common.tileentity.generator.TileFurnaceGenerator;
+import com.dyonovan.neotech.common.tileentity.machine.*;
 import com.dyonovan.neotech.common.tileentity.storage.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -48,10 +47,6 @@ public class BlockHandler {
 
     public static void preInit() {
         blockRegistry = new ArrayList<>();
-
-        //Fluids
-        moltenTin = new Fluid("moltenTin").setDensity(5769).setViscosity(3000);
-        FluidRegistry.registerFluid(moltenTin);
 
         //Machines
         registerBlock(furnaceGenerator = new BlockMachine(false, "furnaceGenerator", TileFurnaceGenerator.class, GuiHandler.FURNACE_GENERATOR_GUI_ID),
