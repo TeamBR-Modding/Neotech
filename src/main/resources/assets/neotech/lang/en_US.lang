@@ -18,6 +18,10 @@ tile.neotech:diamondTank.name=Diamond Fluid Tank
 tile.neotech:crafter.name=Duel Crafter
 tile.neotech:oreCopper.name=Copper Ore
 tile.neotech:oreTin.name=Tin Ore
+tile.neotech:basicItemPipe.name=Basic Item Pipe
+tile.neotech:basicItemPipe.name=Basic Item Pipe
+tile.neotech:advancedItemPipe.name=Advanced Item Pipe
+tile.neotech:eliteItemPipe.name=Elite Item Pipe
 
 item.neotech:dustIron.name=Iron Dust
 item.neotech:dustGold.name=Gold Dust
@@ -25,6 +29,12 @@ item.neotech:dustCopper.name=Copper Dust
 item.neotech:ingotCopper.name=Copper Ingot
 item.neotech:dustTin.name=Tin Dust
 item.neotech:ingotTin.name=Tin Ingot
+item.neotech:capRam.name=Capacity Upgrade
+item.neotech:effFan.name=Efficiency Upgrade
+item.neotech:ioPort.name=Auto Output Upgrade
+item.neotech:speedProcessor.name=Speed Upgrade
+item.neotech:upgradeMB.name=Machine Upgrade Motherboard (Empty)
+item.neotech:upgradeMBFull.name=Machine Upgrade Motherboard (Filled)
 
 neotech.container.crafter=Duel Crafter
 

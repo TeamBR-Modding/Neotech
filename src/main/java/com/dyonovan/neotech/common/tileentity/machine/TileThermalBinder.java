@@ -139,7 +139,30 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         switch (index) {
-
+            case MB_SLOT_INPUT:
+                if (stack.getItem() != ItemHandler.upgradeMB) return false;
+                if (!stack.hasTagCompound()) return true;
+                for (int i = 0; i < 4; i++) {
+                    if (inventory.getStackInSlot(i) != null) return false;
+                }
+                NBTTagCompound tag = stack.getTagCompound();
+                int count = 0;
+                if (tag.hasKey("Speed")) {
+                    inventory.setStackInSlot(new ItemStack(ItemHandler.speedProcessor, tag.getInteger("Speed")), count);
+                    ++count;
+                }
+                if (tag.hasKey("Efficiency")) {
+                    inventory.setStackInSlot(new ItemStack(ItemHandler.effFan, tag.getInteger("Efficiency")), count);
+                    ++count;
+                }
+                if (tag.hasKey("Capacity")) {
+                    inventory.setStackInSlot(new ItemStack(ItemHandler.capRam, tag.getInteger("Capacity")), count);
+                    ++count;
+                }
+                if (tag.hasKey("AutoOutput")) {
+                    inventory.setStackInSlot(new ItemStack(ItemHandler.ioPort, 1), count);
+                    ++count;
+                }
         }
         return true;
     }

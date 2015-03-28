@@ -92,20 +92,31 @@ public class ToolTipEvent {
                 }
             }
             if (event.itemStack.getItem() == ItemHandler.ioPort) {
-                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Auto Output Upgrade");
-                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Allows Machines to Auto Output to Valid Inventory");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Allows Machines to Auto Output");
             }
             if (event.itemStack.getItem() == ItemHandler.effFan) {
-                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Auto Output Upgrade");
-                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Allows Machines to Auto Output to Valid Inventory");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases Machines Efficiency");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "-10% RF Use");
             }
             if (event.itemStack.getItem() == ItemHandler.capRam) {
-                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Capacity Upgrade");
-                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases the RF the machine can hold by 1000");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases the RF the machine can hold");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "+1000 RF");
             }
             if (event.itemStack.getItem() == ItemHandler.speedProcessor) {
-                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Speed Upgrade");
-                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases Speed at the cost of ");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases Speed at the cost of Efficiency");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "+10% Speed " + GuiHelper.GuiColor.RED + "+10 RF Use");
+            }
+            if (event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.basicItemPipe)) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Item Transfer");
+                event.toolTip.add(String.valueOf("1 Item"));
+            }
+            if (event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.advancedItemPipe)) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Item Transfer");
+                event.toolTip.add(String.valueOf("32 Items"));
+            }
+            if (event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.eliteItemPipe)) {
+                event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Item Transfer");
+                event.toolTip.add(String.valueOf("64 Items"));
             }
         }
     }

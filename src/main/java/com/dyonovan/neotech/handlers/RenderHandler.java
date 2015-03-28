@@ -20,7 +20,8 @@ public class RenderHandler {
         register(ItemHandler.capRam);
         register(ItemHandler.effFan);
         register(ItemHandler.ioPort);
-        register(ItemHandler.ioPort);
+        register(ItemHandler.upgradeMB);
+        register(ItemHandler.upgradeMBFull);
     }
 
     public static void register(Item item) {

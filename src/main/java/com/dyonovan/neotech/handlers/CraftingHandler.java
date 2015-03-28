@@ -64,6 +64,24 @@ public class CraftingHandler {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.crafter),
                 new ItemStack(Blocks.crafting_table, 1), new ItemStack(Blocks.crafting_table, 1));
 
+        //Item Pipes
+        //Basic
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.basicItemPipe, 4), "AAA", "ABA", "ACA",
+                'A', Blocks.carpet, 'B', Blocks.chest, 'C', Blocks.piston);
+        //Advanced
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.advancedItemPipe, 4), "ACA", "CBC", "ADA",
+                'A', Items.iron_ingot, 'B', Blocks.chest, 'C', Items.glowstone_dust, 'D', Blocks.piston);
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.advancedItemPipe),
+                new ItemStack(BlockHandler.basicItemPipe),
+                new ItemStack(Items.iron_ingot), new ItemStack(Items.glowstone_dust), new ItemStack(Blocks.piston));
+
+        //Elite
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.eliteItemPipe, 4), "ACA", "CBC", "ADA",
+                'A', Items.gold_ingot, 'B', Blocks.chest, 'C', Items.diamond, 'D', Blocks.piston);
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.eliteItemPipe),
+                new ItemStack(BlockHandler.advancedItemPipe),
+                new ItemStack(Items.gold_ingot), new ItemStack(Items.diamond), new ItemStack(Blocks.piston));
+
         //Vanilla Furnace Recipes
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);
         GameRegistry.addSmelting(ItemHandler.dustGold, new ItemStack(Items.gold_ingot, 1), 0.7F);
