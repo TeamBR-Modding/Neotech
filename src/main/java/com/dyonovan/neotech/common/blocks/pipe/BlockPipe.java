@@ -38,11 +38,11 @@ public abstract class BlockPipe extends BlockBakeable {
 
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
-        float x1 = getWidth() / 16;
+        float x1 = 0.25F;
         float x2 = 1.0F - x1;
-        float y1 = getWidth() / 16;
+        float y1 = 0.25F;
         float y2 = 1.0F - y1;
-        float z1 = getWidth() / 16;
+        float z1 = 0.25F;
         float z2 = 1.0F - z1;
         if(isCableConnected(worldIn, pos.west(), EnumFacing.WEST)) {
             x1 = 0.0F;

@@ -5,6 +5,7 @@ import com.dyonovan.neotech.client.modelfactory.models.ModelPipe;
 import com.dyonovan.neotech.client.modelfactory.models.ModelTank;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
 import com.dyonovan.neotech.common.blocks.pipe.BlockPipe;
+import com.dyonovan.neotech.common.blocks.pipe.item.BlockPipeBasicItem;
 import com.dyonovan.neotech.common.blocks.storage.BlockTank;
 import com.dyonovan.neotech.handlers.BlockHandler;
 import com.dyonovan.neotech.lib.Constants;
@@ -45,6 +46,8 @@ public class ModelGenerator {
                 if(textureMap.getAtlasSprite(((BlockPipe)block).getBackgroundTexture()) == null)
                     textureMap.registerSprite(new ResourceLocation(((BlockPipe)block).getBackgroundTexture()));
                 textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + block.getName()));
+                if(block instanceof BlockPipeBasicItem)
+                    textureMap.registerSprite(new ResourceLocation(((BlockPipeBasicItem)block).getJunction()));
             } else {
                 for(ResourceLocation location : block.registerIcons()) {
                     textureMap.registerSprite(location);
