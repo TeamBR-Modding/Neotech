@@ -23,23 +23,21 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     private ItemStack input, output;
     public EnergyStorage energyRF;
 
-    private int speed, capacity, efficiency;
-    private boolean io;
-
-    private static final int RF_TICK = 20;
+    public static final int RF_TICK = 20;
     public static final int TOTAL_PROCESS_TIME = 150;
+    public static final int DEFAULT_RF_CAPACITY = 10000;
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
     public static final int UPGRADE_SLOT = 2;
 
     public TileElectricFurnace() {
-        energyRF = new EnergyStorage(10000);
         currentProcessTime = 0;
         inventory = new InventoryTile(3);
         speed = 0;
-        capacity = 0;
+        capacity = DEFAULT_RF_CAPACITY;
         efficiency = 0;
         io = false;
+        energyRF = new EnergyStorage(capacity);
     }
 
     @Override
@@ -52,19 +50,19 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                 input = inventory.getStackInSlot(INPUT_SLOT);
                 BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnaceActive);
             }
-            if (currentProcessTime > 0 && currentProcessTime < TOTAL_PROCESS_TIME) {
+            if (currentProcessTime > 0 && currentProcessTime < findSpeed(TOTAL_PROCESS_TIME, speed)) {
                 if (inventory.getStackInSlot(INPUT_SLOT) == null || !inventory.getStackInSlot(INPUT_SLOT).isItemEqual(input)) {
                     currentProcessTime = 0;
                     worldObj.markBlockForUpdate(this.pos);
                     BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
                     return;
                 }
-                if (energyRF.getEnergyStored() >= RF_TICK ) {
+                if (energyRF.getEnergyStored() >= findEff(RF_TICK, speed, efficiency) ) {
                     energyRF.modifyEnergyStored(-RF_TICK);
                     ++currentProcessTime;
                 }
             }
-            if (currentProcessTime >= TOTAL_PROCESS_TIME) {
+            if (currentProcessTime >= findSpeed(TOTAL_PROCESS_TIME, speed)) {
                 inventory.modifyStack(INPUT_SLOT, -1);
                 if (inventory.getStackInSlot(OUTPUT_SLOT) == null)
                     inventory.setStackInSlot(new ItemStack(output.getItem(), output.stackSize > 0 ? output.stackSize : 1), OUTPUT_SLOT);
@@ -155,7 +153,7 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                 return capacity;
             case IO:
                 return !io ? 0 : 1;
-            case 5:
+            case 4:
                 return currentProcessTime;
             default:
                 return 0;
@@ -172,11 +170,13 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                 efficiency = value;
             case CAPACITY:
                 capacity = value;
+                energyRF.setCapacity(DEFAULT_RF_CAPACITY + capacity * 1000);
             case IO:
                 io = value != 0;
-            case 5:
+            case 4:
                 currentProcessTime = value;
         }
+        worldObj.markBlockForUpdate(pos);
     }
 
     @Override
@@ -221,6 +221,10 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
             }
         }
         currentProcessTime = tag.getInteger("CurrentProcessTime");
+        speed = tag.getInteger("Speed");
+        efficiency = tag.getInteger("Efficiency");
+        capacity = tag.getInteger("Capacity");
+        io = tag.getBoolean("AutoOutput");
     }
 
     @Override
@@ -247,5 +251,9 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         }
         tag.setTag("Stacks", nbtTagList);
         tag.setInteger("CurrentProcessTime", currentProcessTime);
+        tag.setInteger("Speed", speed);
+        tag.setInteger("Efficiency", efficiency);
+        tag.setInteger("Capacity", capacity);
+        tag.setBoolean("AutoOutput", io);
     }
 }

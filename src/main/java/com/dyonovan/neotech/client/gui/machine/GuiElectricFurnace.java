@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.client.gui.machine;
 
 import com.dyonovan.neotech.common.container.machine.ContainerElectricFurnace;
+import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.neotech.helpers.GuiHelper;
 import com.dyonovan.neotech.lib.Constants;
@@ -24,6 +25,7 @@ public class GuiElectricFurnace extends GuiContainer {
         super(new ContainerElectricFurnace(inventory, tileEntity));
 
         this.tile = tileEntity;
+        ySize = 181;
     }
 
     @Override
@@ -31,6 +33,27 @@ public class GuiElectricFurnace extends GuiContainer {
         final String invTitle = StatCollector.translateToLocal("tile.neotech:electricFurnace.name");
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96 + 2, 4210752);
+
+        GL11.glPushMatrix();
+        GL11.glScalef(.8F, .8F, 1F);
+
+        final String rfUsage = StatCollector.translateToLocal("title.neotech:rfUsage.name") + " ";
+        final int rfActual = tile.findEff(TileElectricFurnace.RF_TICK,
+                tile.getField(BaseMachine.SPEED), tile.getField(BaseMachine.EFFICIENCY));
+        final GuiHelper.GuiColor rfColor = rfActual > TileElectricFurnace.RF_TICK ? GuiHelper.GuiColor.RED : GuiHelper.GuiColor.GREEN;
+        fontRendererObj.drawString(rfUsage + rfColor + Integer.toString(rfActual), 75, 70, 16777215);
+
+        final String processTime = StatCollector.translateToLocal("title.neotech:processTime.name") + " ";
+        final int speedActual = tile.findSpeed(TileElectricFurnace.TOTAL_PROCESS_TIME, tile.getField(BaseMachine.SPEED));
+        final GuiHelper.GuiColor speedColor = speedActual > TileElectricFurnace.TOTAL_PROCESS_TIME ? GuiHelper.GuiColor.RED : GuiHelper.GuiColor.GREEN;
+                fontRendererObj.drawString(processTime + speedColor + Integer.toString(speedActual), 75, 80, 16777215);
+
+        final String autoOutput = StatCollector.translateToLocal("title.neotech:autoOutput.name") + " ";
+        final String outputActual = tile.getField(BaseMachine.IO) == 1 ? GuiHelper.GuiColor.GREEN + "True" :
+                GuiHelper.GuiColor.RED + "False";
+        fontRendererObj.drawString(autoOutput + outputActual, 75, 90, 16777215);
+        GL11.glScalef(1F, 1F, 1F);
+        GL11.glPopMatrix();
     }
 
     @Override
@@ -58,7 +81,7 @@ public class GuiElectricFurnace extends GuiContainer {
 
         //Progress Arrow
         int arrow = tile.currentProcessTime != 0 ? tile.currentProcessTime * 24 / TileElectricFurnace.TOTAL_PROCESS_TIME : 0;
-        this.drawTexturedModalRect(x + 81, y + 34, 176, 0, arrow + 1, 16);
+        this.drawTexturedModalRect(x + 81, y + 27, 176, 0, arrow + 1, 16);
     }
 
     @Override

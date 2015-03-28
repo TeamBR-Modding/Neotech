@@ -44,8 +44,6 @@ public class SlotUpgrade extends Slot {
                 tile.setField(BaseMachine.IO, tag.getBoolean("Efficiency") ? 1 : 0);
             }
         }
-
-
         super.putStack(stack);
     }
 
@@ -54,7 +52,6 @@ public class SlotUpgrade extends Slot {
        for (int i = 0; i < 4; i++) {
            tile.setField(i, 0);
        }
-
         super.onPickupFromSlot(playerIn, stack);
     }
 }

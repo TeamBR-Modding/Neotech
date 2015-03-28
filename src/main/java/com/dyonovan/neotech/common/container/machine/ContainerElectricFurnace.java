@@ -11,9 +11,9 @@ public class ContainerElectricFurnace extends BaseContainer {
 
     public ContainerElectricFurnace(InventoryPlayer inventory, TileElectricFurnace tileEntity) {
 
-        addSlotToContainer(new Slot(tileEntity, TileElectricFurnace.INPUT_SLOT, 57, 34));
-        addSlotToContainer(new SlotFurnaceOutput(inventory.player, tileEntity, TileElectricFurnace.OUTPUT_SLOT, 117, 34));
+        addSlotToContainer(new Slot(tileEntity, TileElectricFurnace.INPUT_SLOT, 57, 27));
+        addSlotToContainer(new SlotFurnaceOutput(inventory.player, tileEntity, TileElectricFurnace.OUTPUT_SLOT, 117, 27));
         addSlotToContainer(new SlotUpgrade(tileEntity, TileElectricFurnace.UPGRADE_SLOT, 153, 7));
-        bindPlayerInventory(inventory, 8, 84);
+        bindPlayerInventory(inventory, 8, 100);
     }
 }

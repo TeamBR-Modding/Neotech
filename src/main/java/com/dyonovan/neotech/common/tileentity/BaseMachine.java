@@ -24,6 +24,8 @@ public abstract class BaseMachine extends TileEntity implements ISidedInventory 
     public static final int IO = 3;
 
     protected InventoryTile inventory;
+    protected int speed, capacity, efficiency;
+    protected boolean io;
 
     @SideOnly(Side.CLIENT)
     public abstract void spawnActiveParticles(double x, double y, double z);
@@ -180,5 +182,13 @@ public abstract class BaseMachine extends TileEntity implements ISidedInventory 
                 worldObj.spawnEntityInWorld(entityitem);
             }
         }
+    }
+
+    public int findSpeed(int totalTime, int actSpeed) {
+        return Math.round(totalTime - (totalTime * Math.min(actSpeed / 10F, 1)));
+    }
+
+    public int findEff(int rfTick, int actSpeed, int eff) {
+        return rfTick + Math.round(rfTick * Math.min(actSpeed / 10F, 1)) - Math.round(rfTick * Math.min(eff / 10F, 1));
     }
 }

@@ -39,3 +39,6 @@ item.neotech:upgradeMBFull.name=Machine Upgrade Motherboard (Filled)
 neotech.container.crafter=Duel Crafter
 
 button.neotech:buttonStart.name=Start
+title.neotech:rfUsage.name=RF Usage:
+title.neotech:processTime.name=Process Time:
+title.neotech:autoOutput.name=Auto Output:
