@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.client.modelfactory;
 
 import com.dyonovan.neotech.client.modelfactory.models.ModelBlock;
+import com.dyonovan.neotech.client.modelfactory.models.ModelConnectedTextures;
 import com.dyonovan.neotech.client.modelfactory.models.ModelPipe;
 import com.dyonovan.neotech.client.modelfactory.models.ModelTank;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
+import com.dyonovan.neotech.common.blocks.BlockConnectedTextures;
 import com.dyonovan.neotech.common.blocks.pipe.BlockPipe;
 import com.dyonovan.neotech.common.blocks.pipe.item.BlockPipeBasicItem;
 import com.dyonovan.neotech.common.blocks.storage.BlockTank;
@@ -83,6 +85,18 @@ public class ModelGenerator {
                 //Build Inventory Model
                 event.modelRegistry.putObject(block.getInventory(), new ModelTank());
                 //Register item model
+                itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
+            }
+
+            /**
+             * Connected Texture Blocks
+             */
+            else if(block instanceof BlockConnectedTextures) {
+                //Build Normal Block
+                event.modelRegistry.putObject(block.getNormal(), new ModelConnectedTextures((BlockConnectedTextures) block));
+                //Build Inventory Model
+                event.modelRegistry.putObject(block.getInventory(), new ModelConnectedTextures((BlockConnectedTextures)block));
+                //Register Item Model
                 itemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory());
             }
 

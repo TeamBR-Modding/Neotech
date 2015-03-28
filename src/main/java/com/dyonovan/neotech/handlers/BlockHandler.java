@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.handlers;
 
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
+import com.dyonovan.neotech.common.blocks.BlockConnectedTextures;
 import com.dyonovan.neotech.common.blocks.BlockCrafter;
 import com.dyonovan.neotech.common.blocks.BlockMachine;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockAdvancedCable;
@@ -41,6 +42,7 @@ public class BlockHandler {
     public static Block crafter, thermalBinder;
     public static Fluid moltenTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
+    public static Block connectedTest;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -112,6 +114,10 @@ public class BlockHandler {
                 "advancedItemPipe", PipeAdvancedItem.class);
         registerBlock(eliteItemPipe = new BlockPipeEliteItem(Material.iron, "eliteItemPipe", PipeEliteItem.class),
                 "eliteItemPipe", PipeEliteItem.class);
+
+        //Connected Textures
+        registerBlock(connectedTest = new BlockConnectedTextures(Material.cloth, "connectedTest", null),
+                "connectedTest", null);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

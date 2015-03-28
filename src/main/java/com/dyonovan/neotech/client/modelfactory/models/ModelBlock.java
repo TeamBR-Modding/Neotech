@@ -41,13 +41,13 @@ public class ModelBlock implements ISmartBlockModel, ISmartItemModel {
     }
 
     @Override
-    public List getFaceQuads(EnumFacing p_177551_1_) {
+    public List getFaceQuads(EnumFacing face) {
         return new ArrayList<>();
     }
 
     @Override
     public List getGeneralQuads() {
-        ArrayList list = new ArrayList();
+        ArrayList<BakedQuad> list = new ArrayList<>();
         BlockFaceUV uv = new BlockFaceUV(new float[]{0.0F, 0.0F, 16.0F, 16.0F}, 0);
         BlockPartFace face = new BlockPartFace(null, 0, "", uv);
 
