@@ -162,9 +162,9 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
         }
     }
 
-   public boolean isExtracting(EnumFacing face) {
-       return buffer.canBufferExtract(null, face);
-   }
+    public boolean isExtracting(EnumFacing face) {
+        return buffer.canBufferExtract(null, face);
+    }
 
     @Override
     public int getSizeInventory() {

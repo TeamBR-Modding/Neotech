@@ -56,6 +56,8 @@ public class ModelPipe implements ISmartBlockModel, ISmartItemModel {
 
         min = 8.0F - pipe.getWidth();
         max = 8.0F + pipe.getWidth();
+
+        this.pipe = pipe;
     }
 
     public List<BakedQuad> getFaceQuads(EnumFacing facing) {
@@ -116,7 +118,7 @@ public class ModelPipe implements ISmartBlockModel, ISmartItemModel {
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, foreGround, EnumFacing.EAST, modelRot, null, scale, true));
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, foreGround, EnumFacing.WEST, modelRot, null, scale, true));
 
-        if(worldObj != null && pipe != null) {
+        if(pipe != null) {
             pipe.drawExtras(list, faceBakery, worldObj, pos);
         }
 

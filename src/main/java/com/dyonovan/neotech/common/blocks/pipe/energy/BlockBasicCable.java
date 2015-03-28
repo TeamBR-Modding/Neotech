@@ -24,7 +24,7 @@ public class BlockBasicCable extends BlockPipe {
 
     @Override
     public float getWidth() {
-        return 4.0F;
+        return 3.0F;
     }
 
     @Override
