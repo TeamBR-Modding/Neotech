@@ -72,7 +72,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
 
     public ItemStack writeToMB(int speed, int efficiency, int capacity, boolean io) {
 
-        ItemStack newMB = new ItemStack(ItemHandler.upgradeMB, 1);
+        ItemStack newMB = new ItemStack(ItemHandler.upgradeMBFull, 1);
         NBTTagCompound tag = new NBTTagCompound();
         tag.setInteger("Speed", speed);
         tag.setInteger("Efficiency", efficiency);
