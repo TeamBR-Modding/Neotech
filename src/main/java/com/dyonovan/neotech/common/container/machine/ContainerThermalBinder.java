@@ -6,7 +6,6 @@ import com.dyonovan.neotech.common.tileentity.machine.TileThermalBinder;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnaceOutput;
-import net.minecraft.item.ItemStack;
 
 public class ContainerThermalBinder extends BaseContainer {
 

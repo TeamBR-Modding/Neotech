@@ -43,8 +43,9 @@ public class GuiThermalBinder extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
-            if (tile.getStackInSlot(tile.MB_SLOT_INPUT) == null)
-                return;
+            if (tile.getStackInSlot(tile.MB_SLOT_INPUT) == null) return;
+            if (tile.getStackInSlot(tile.INPUT_SLOT_1) == null && tile.getStackInSlot(tile.INPUT_SLOT_2) == null &&
+                    tile.getStackInSlot(tile.INPUT_SLOT_3) == null && tile.getStackInSlot(tile.INPUT_SLOT_4) == null) return;
 
             PacketHandler.net.sendToServer(new ThermalBinderPacket.StartMessage(tile.getPos()));
         }

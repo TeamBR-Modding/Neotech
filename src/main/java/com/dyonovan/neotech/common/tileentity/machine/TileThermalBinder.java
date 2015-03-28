@@ -16,6 +16,9 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     public int currentProcessTime;
     public EnergyStorage energyRF;
 
+    private int speed, capacity, efficiency;
+    private boolean io;
+
     private static final int RF_TICK= 100;
     public static final int BASE_PROCESS_TIME = 200;
     public static final int INPUT_SLOT_1 = 0;
@@ -29,45 +32,34 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         energyRF = new EnergyStorage(10000);
         currentProcessTime = 0;
         inventory = new InventoryTile(6);
+        speed = 0;
+        capacity = 0;
+        efficiency = 0;
+        io = false;
     }
 
     @Override
     public void update() {
         if (!this.hasWorldObj() || getWorld().isRemote || currentProcessTime <= 0) return;
-        //todo add into slots when mb inserted
+
         if (currentProcessTime > 0 && currentProcessTime <= BASE_PROCESS_TIME) {
-            if (inventory.getStackInSlot(MB_SLOT_INPUT) == null) {
-                currentProcessTime = 0;
-                worldObj.markBlockForUpdate(pos);
-                return;
-            }
             if (energyRF.getEnergyStored() >= RF_TICK) {
                 energyRF.extractEnergy(RF_TICK, false);
                 ++currentProcessTime;
             }
         }
         if (currentProcessTime >= BASE_PROCESS_TIME) {
-            int speed = 0;
-            int efficiency = 0;
-            int capacity = 0;
-            boolean io = false;
-            for (int i = 0; i < 4; i++) {
-                if (getStackInSlot(i) != null) {
-                    if (getStackInSlot(i).getItem() == ItemHandler.speedProcessor)
-                        speed += getStackInSlot(i).stackSize;
-                    else if (getStackInSlot(i).getItem() == ItemHandler.capRam)
-                        capacity += getStackInSlot(i).stackSize;
-                    else if (getStackInSlot(i).getItem() == ItemHandler.effFan)
-                        efficiency += getStackInSlot(i).stackSize;
-                    else if (getStackInSlot(i).getItem() == ItemHandler.ioPort)
-                        io = true;
-
-                    inventory.setStackInSlot(null, i);
-                }
-            }
-            inventory.setStackInSlot(null, MB_SLOT_INPUT);
             inventory.setStackInSlot(writeToMB(speed, efficiency, capacity, io), MB_SLOT_OUTPUT);
+            doReset();
         }
+    }
+
+    private void doReset() {
+        currentProcessTime = 0;
+        speed = 0;
+        efficiency = 0;
+        capacity = 0;
+        io = false;
     }
 
     public ItemStack writeToMB(int speed, int efficiency, int capacity, boolean io) {
@@ -77,12 +69,27 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         if (speed > 0) tag.setInteger("Speed", speed);
         if (efficiency > 0) tag.setInteger("Efficiency", efficiency);
         if (capacity > 0) tag.setInteger("Capacity", capacity);
-        if (io) tag.setBoolean("AutoOutput", io);
+        if (io) tag.setBoolean("AutoOutput", true);
         newMB.setTagCompound(tag);
         return newMB;
     }
 
     public void mergeMB() {
+        for (int i = 0; i < 4; i++) {
+            if (inventory.getStackInSlot(i) != null) {
+                if (getStackInSlot(i).getItem() == ItemHandler.speedProcessor)
+                    speed += getStackInSlot(i).stackSize;
+                if (getStackInSlot(i).getItem() == ItemHandler.effFan)
+                    efficiency += getStackInSlot(i).stackSize;
+                if (getStackInSlot(i).getItem() == ItemHandler.capRam)
+                    capacity += getStackInSlot(i).stackSize;
+                if (getStackInSlot(i).getItem() == ItemHandler.ioPort)
+                    io = true;
+
+                inventory.setStackInSlot(null, i);
+            }
+        }
+        inventory.setStackInSlot(null, MB_SLOT_INPUT);
         currentProcessTime = 1;
     }
 
