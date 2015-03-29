@@ -5,6 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class CraftingHandler {
 
@@ -39,6 +40,10 @@ public class CraftingHandler {
         //Fluid Generator
         GameRegistry.addRecipe(new ItemStack(BlockHandler.fluidGenerator), "ABA", "DCD", "ABA",
                 'A', Items.iron_ingot, 'B', Items.bucket, 'C', Blocks.furnace, 'D', Items.redstone);
+
+        //Thermal Binder
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.thermalBinder), "ABA", "CDC", "ABA",
+                'A', Items.gold_ingot, 'B', ItemHandler.upgradeMB, 'C', Items.glowstone_dust, 'D', Items.magma_cream);
 
         //Basic RF Storage
         GameRegistry.addRecipe(new ItemStack(BlockHandler.basicStorage), "ABA", "DCD", "ABA",
@@ -81,6 +86,25 @@ public class CraftingHandler {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.eliteItemPipe),
                 new ItemStack(BlockHandler.advancedItemPipe),
                 new ItemStack(Items.gold_ingot), new ItemStack(Items.diamond), new ItemStack(Blocks.piston));
+
+        //Smooth Glass
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.smoothGlass, 8), "AAA", "A A", "AAA",
+                'A', Blocks.glass);
+
+        //Upgrades
+        //Speed
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemHandler.speedProcessor), "ABA", "CDC", "ABA",
+                'A', "ingotTin", 'B', "dyeBlue", 'C', Items.redstone, 'D', Blocks.quartz_block));
+        //Capacity
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemHandler.capRam), "ABA", "CDC", "ABA",
+                'A', "ingotCopper", 'B', Items.quartz, 'C', Items.redstone, 'D', Blocks.gold_block));
+        //Efficency
+        GameRegistry.addRecipe(new ItemStack(ItemHandler.effFan), "A A", " B ", "A A",
+                'A', Items.iron_ingot, 'B', Blocks.iron_block);
+
+
+
+
 
         //Vanilla Furnace Recipes
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);

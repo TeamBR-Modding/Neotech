@@ -1,11 +1,15 @@
 itemGroup.tabNeoTech=NeoTech
 
 tile.neotech:furnaceGenerator.name=Furnace Generator
+tile.neotech:furnaceGeneratorActive.name=Furnace Generator
 tile.neotech:electricFurnace.name=Electric Furnace
+tile.neotech:electricFurnaceActive.name=Electric Furnace
 tile.neotech:electricCrusher.name=Electric Crusher
+tile.neotech:electricCrusherActive.name=Electric Crusher
 tile.neotech:fluidGenerator.name=Fluid Generator
+tile.neotech:fluidGeneratorActive.name=Fluid Generator
 tile.neotech:electricMiner.name=Electric Miner (WIP)
-tile.neotech:thermalBinder.name=Thermal Binder (WIP)
+tile.neotech:thermalBinder.name=Thermal Binder
 tile.neotech:basicCable.name=Basic RF Cable
 tile.neotech:advancedCable.name=Advanced RF Cable
 tile.neotech:eliteCable.name=Elite RF Cable
@@ -32,7 +36,7 @@ item.neotech:dustTin.name=Tin Dust
 item.neotech:ingotTin.name=Tin Ingot
 item.neotech:capRam.name=Capacity Upgrade
 item.neotech:effFan.name=Efficiency Upgrade
-item.neotech:ioPort.name=Auto Output Upgrade
+item.neotech:ioPort.name=Auto Output Upgrade (WIP)
 item.neotech:speedProcessor.name=Speed Upgrade
 item.neotech:upgradeMB.name=Machine Upgrade Motherboard (Empty)
 item.neotech:upgradeMBFull.name=Machine Upgrade Motherboard (Filled)
