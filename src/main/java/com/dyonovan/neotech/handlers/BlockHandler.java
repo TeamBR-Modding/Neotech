@@ -79,8 +79,8 @@ public class BlockHandler {
                 "advancedRFStorage", TileAdvancedRFStorage.class);
         registerBlock(eliteStorage = new BlockRFStorage("eliteRFStorage", TileEliteRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 3),
                 "eliteRFStorage", TileEliteRFStorage.class);
-        registerBlock(creativeStorage = new BlockRFStorage("creativeStorage", TileCreativeRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 4),
-                "creativeStorage", TileCreativeRFStorage.class);
+        registerBlock(creativeStorage = new BlockRFStorage("creativeRFStorage", TileCreativeRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 4),
+                "creativeRFStorage", TileCreativeRFStorage.class);
         registerBlock(ironTank = new BlockTank("ironTank", 1),
                 "ironTank", TileIronTank.class);
         registerBlock(goldTank = new BlockTank("goldTank", 2),

@@ -13,7 +13,7 @@ public class TileCreativeRFStorage extends TileEliteRFStorage {
     public TileCreativeRFStorage() {
         setInventory(3);
         setEnergyRF(RF_TOTAL_CREATIVE, RF_TICK_CREATIVE);
-        energyRF.setEnergyStored(RF_TICK_CREATIVE);
+        energyRF.setEnergyStored(RF_TOTAL_CREATIVE);
     }
 
     @Override
