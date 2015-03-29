@@ -88,8 +88,8 @@ public class CraftingHandler {
                 new ItemStack(Items.gold_ingot), new ItemStack(Items.diamond), new ItemStack(Blocks.piston));
 
         //Phantom Glass
-        GameRegistry.addRecipe(new ItemStack(BlockHandler.phantomGlass, 8), "AAA", "ABA", "AAA",
-                'A', Blocks.glass, 'B', Blocks.oak_door);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.phantomGlass, 8), "AAA", "ABA", "AAA",
+                'A', "blockGlass", 'B', Blocks.oak_door));
 
         //Upgrades
         //Speed
