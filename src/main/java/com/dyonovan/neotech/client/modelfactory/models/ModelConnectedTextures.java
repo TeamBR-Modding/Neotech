@@ -78,7 +78,8 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
         }
         if(MinecraftForgeClient.getRenderLayer() == EnumWorldBlockLayer.TRANSLUCENT) {
             for(EnumFacing dir : EnumFacing.values()) {
-                if (world.isAirBlock(pos.offset(dir))) {
+                if (world.isAirBlock(pos.offset(dir)) || (!world.getBlockState(pos.offset(dir)).getBlock().isOpaqueCube() &&
+                        !block.canBlockConnect(world.getBlockState(pos.offset(dir)).getBlock()))) {
                     switch (dir) {
                         case UP:
                             connections[0] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock());

@@ -10,8 +10,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -69,6 +72,11 @@ public class BlockConnectedTextures extends BlockBakeable {
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getDefaultStateIcon() {
         return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(String.format("%s:blocks/%s_corners", Constants.MODID, name));
+    }
+
+    @Override
+    public boolean isSideSolid(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return true;
     }
 
     @Override
