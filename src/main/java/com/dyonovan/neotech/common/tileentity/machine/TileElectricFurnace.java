@@ -76,6 +76,7 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     private void doReset() {
         currentProcessTime = 0;
         BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
+        worldObj.markBlockForUpdate(this.pos);
     }
 
     private boolean canSmelt() {
@@ -170,15 +171,20 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         switch (id) {
             case SPEED:
                 speed = value;
+                break;
             case EFFICIENCY:
                 efficiency = value;
+                break;
             case CAPACITY:
                 capacity = value;
                 energyRF.setCapacity(DEFAULT_RF_CAPACITY + capacity * 1000);
+                break;
             case IO:
                 io = value != 0;
+                break;
             case 4:
                 currentProcessTime = value;
+                break;
         }
         worldObj.markBlockForUpdate(pos);
     }
