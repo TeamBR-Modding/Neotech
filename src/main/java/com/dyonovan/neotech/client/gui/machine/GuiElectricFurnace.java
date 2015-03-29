@@ -2,6 +2,7 @@ package com.dyonovan.neotech.client.gui.machine;
 
 import com.dyonovan.neotech.common.container.machine.ContainerElectricFurnace;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
+import com.dyonovan.neotech.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.neotech.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.neotech.helpers.GuiHelper;
 import com.dyonovan.neotech.lib.Constants;
@@ -33,6 +34,8 @@ public class GuiElectricFurnace extends GuiContainer {
         final String invTitle = StatCollector.translateToLocal("tile.neotech:electricFurnace.name");
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96 + 2, 4210752);
+
+        tile = (TileElectricFurnace) mc.theWorld.getTileEntity(tile.getPos());
 
         GL11.glPushMatrix();
         GL11.glScalef(.8F, .8F, 1F);
