@@ -76,7 +76,6 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     private void doReset() {
         currentProcessTime = 0;
         BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
-        worldObj.markBlockForUpdate(this.pos);
     }
 
     private boolean canSmelt() {
