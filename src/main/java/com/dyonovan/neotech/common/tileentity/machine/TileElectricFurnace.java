@@ -67,11 +67,15 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                 if (inventory.getStackInSlot(OUTPUT_SLOT) == null)
                     inventory.setStackInSlot(new ItemStack(output.getItem(), output.stackSize > 0 ? output.stackSize : 1), OUTPUT_SLOT);
                 else inventory.getStackInSlot(OUTPUT_SLOT).stackSize += (output.stackSize > 0 ? output.stackSize : 1);
-                currentProcessTime = 0;
-                BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
+                doReset();
             }
             worldObj.markBlockForUpdate(this.pos);
         }
+    }
+
+    private void doReset() {
+        currentProcessTime = 0;
+        BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
     }
 
     private boolean canSmelt() {
