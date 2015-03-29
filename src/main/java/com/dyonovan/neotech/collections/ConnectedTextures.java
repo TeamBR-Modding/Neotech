@@ -26,18 +26,18 @@ public class ConnectedTextures {
      * 2 - Bottom Left
      * 3 - Bottom Right
      *
-     * The boolean array is the connections around the block. This should be size 12. 0 is top left and it goes left to right,
+     * The boolean array is the connections around the block. This should be size 16. 0 is top left and it goes left to right,
      * top to bottom. Exclude the block itself as we don't need to check that
      *
      * Boolean Array
-     * 012
-     * 3 4
-     * 567
+     * 0 1 2
+     * 3   4
+     * 5 6 7
      *
      * One Level Up
-     *  8
-     * 9 10
-     *  11
+     *  8  9 10
+     * 11    12
+     * 13 14 15
      *
      */
     public TextureAtlasSprite getTextureForCorner(int corner, boolean[] connections) {

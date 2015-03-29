@@ -84,7 +84,7 @@ public class ModelBlock implements ISmartBlockModel, ISmartItemModel {
         return textures.north;
     }
 
-    public static ItemTransformVec3f MovedUp = new ItemTransformVec3f(new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F));
+    public static ItemTransformVec3f MovedUp = new ItemTransformVec3f(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F));
     @Override
     public ItemCameraTransforms getItemCameraTransforms() {
         return new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT);
