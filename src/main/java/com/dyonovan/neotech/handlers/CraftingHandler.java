@@ -101,6 +101,9 @@ public class CraftingHandler {
         //Efficency
         GameRegistry.addRecipe(new ItemStack(ItemHandler.effFan), "A A", " B ", "A A",
                 'A', Items.iron_ingot, 'B', Blocks.iron_block);
+        //UpgradeMB
+        GameRegistry.addRecipe(new ItemStack(ItemHandler.upgradeMB), "ABA", "CDC", "ABA",
+                'A', Items.gold_ingot, 'B', Items.comparator, 'C', Items.redstone, 'D', Items.blaze_rod);
 
 
 

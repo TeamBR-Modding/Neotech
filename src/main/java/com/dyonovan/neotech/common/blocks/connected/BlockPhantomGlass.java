@@ -14,7 +14,7 @@ import java.util.List;
 public class BlockPhantomGlass extends BlockConnectedTextures {
     public BlockPhantomGlass(Material materialIn, String name, Class<? extends TileEntity> tileClass) {
         super(materialIn, name, tileClass);
-        setHardness(2.0F);
+        setHardness(1.5F);
     }
 
     @Override
