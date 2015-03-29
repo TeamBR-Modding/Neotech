@@ -9,8 +9,8 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import scala.actors.threadpool.Arrays;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
