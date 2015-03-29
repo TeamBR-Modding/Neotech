@@ -42,7 +42,7 @@ public class TileBasicRFStorage extends BaseMachine implements IExpellable, IUpd
             transferEnergy();
     }
 
-    private void transferEnergy() {
+    protected void transferEnergy() {
         EnumFacing out = (EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING);
         TileEntity tile = getWorld().getTileEntity(this.pos.offset(out));
         if (tile instanceof IEnergyReceiver) {
@@ -157,13 +157,13 @@ public class TileBasicRFStorage extends BaseMachine implements IExpellable, IUpd
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
-        inventory.readFromNBT(tag, this);
+        inventory.readFromNBT(tag, this, ":main");
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
-        inventory.writeToNBT(tag);
+        inventory.writeToNBT(tag, ":main");
     }
 }

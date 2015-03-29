@@ -38,6 +38,8 @@ public class GuiRFStorage extends GuiContainer {
             case 3:
                 invTitle =  StatCollector.translateToLocal("tile.neotech:eliteRFStorage.name");
                 break;
+            case 4:
+                invTitle = StatCollector.translateToLocal("tile.neotech:creativeRFStorage.name");
         }
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 95 + 2, 4210752);

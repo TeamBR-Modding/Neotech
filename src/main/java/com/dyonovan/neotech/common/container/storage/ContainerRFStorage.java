@@ -18,6 +18,7 @@ public class ContainerRFStorage extends BaseContainer {
                 addSlotToContainer(new Slot(tile, TileBasicRFStorage.CHARGE_SLOT_2, 148, 36));
                 break;
             case 3:
+            case 4:
                 addSlotToContainer(new Slot(tile, TileBasicRFStorage.CHARGE_SLOT_1, 148, 18));
                 addSlotToContainer(new Slot(tile, TileBasicRFStorage.CHARGE_SLOT_2, 148, 36));
                 addSlotToContainer(new Slot(tile, TileBasicRFStorage.CHARGE_SLOT_3, 148, 54));

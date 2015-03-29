@@ -5,6 +5,7 @@ import com.dyonovan.neotech.collections.CubeTextures;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
 import com.dyonovan.neotech.common.tileentity.storage.TileAdvancedRFStorage;
 import com.dyonovan.neotech.common.tileentity.storage.TileBasicRFStorage;
+import com.dyonovan.neotech.common.tileentity.storage.TileCreativeRFStorage;
 import com.dyonovan.neotech.common.tileentity.storage.TileEliteRFStorage;
 import com.dyonovan.neotech.lib.Constants;
 import net.minecraft.block.BlockPistonBase;
@@ -49,6 +50,8 @@ public class BlockRFStorage extends BlockBakeable {
                 return new TileAdvancedRFStorage();
             case 3:
                 return new TileEliteRFStorage();
+            case 4:
+                return new TileCreativeRFStorage();
             default:
             return new TileBasicRFStorage();
         }

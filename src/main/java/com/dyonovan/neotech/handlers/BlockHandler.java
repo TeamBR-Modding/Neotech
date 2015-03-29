@@ -39,7 +39,7 @@ public class BlockHandler {
     public static Block furnaceGenerator, furnaceGeneratorActive, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator, fluidGeneratorActive;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
-    public static Block crafter, thermalBinder;
+    public static Block crafter, thermalBinder, creativeStorage;
     public static Fluid moltenTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
     public static Block phantomGlass;
@@ -79,6 +79,8 @@ public class BlockHandler {
                 "advancedRFStorage", TileAdvancedRFStorage.class);
         registerBlock(eliteStorage = new BlockRFStorage("eliteRFStorage", TileEliteRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 3),
                 "eliteRFStorage", TileEliteRFStorage.class);
+        registerBlock(creativeStorage = new BlockRFStorage("creativeStorage", TileCreativeRFStorage.class, GuiHandler.RF_STORAGE_GUI_ID, 4),
+                "creativeStorage", TileCreativeRFStorage.class);
         registerBlock(ironTank = new BlockTank("ironTank", 1),
                 "ironTank", TileIronTank.class);
         registerBlock(goldTank = new BlockTank("goldTank", 2),
