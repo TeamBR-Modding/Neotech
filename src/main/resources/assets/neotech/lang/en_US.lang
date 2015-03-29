@@ -26,7 +26,7 @@ tile.neotech:basicItemPipe.name=Basic Item Pipe
 tile.neotech:advancedItemPipe.name=Advanced Item Pipe
 tile.neotech:eliteItemPipe.name=Elite Item Pipe
 
-tile.neotech:smoothGlass.name=Smooth Glass
+tile.neotech:phantomGlass.name=Phantom Glass
 
 item.neotech:dustIron.name=Iron Dust
 item.neotech:dustGold.name=Gold Dust

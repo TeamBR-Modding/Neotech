@@ -2,7 +2,7 @@ package com.dyonovan.neotech.client.modelfactory.models;
 
 import com.dyonovan.neotech.collections.ConnectedTextures;
 import com.dyonovan.neotech.collections.DummyState;
-import com.dyonovan.neotech.common.blocks.BlockConnectedTextures;
+import com.dyonovan.neotech.common.blocks.connected.BlockConnectedTextures;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.*;
@@ -50,18 +50,24 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
     public void drawFace(boolean[] connections, List<BakedQuad> list, ModelRotation rot) {
         BlockPartFace face = new BlockPartFace(null, 0, "", new BlockFaceUV(new float[]{0.0F, 0.0F, 16.0F, 16.0F}, 0));
         boolean scale = true;
-        for (EnumFacing f : EnumFacing.values()) {
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(2, connections), f, rot, null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(3, connections), f, rot, null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(0, connections), f, rot, null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(1, connections), f, rot, null, scale, true));
+
+        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(2, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(3, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(0, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(1, connections), EnumFacing.SOUTH, rot, null, scale, true));
+
+        if (block != null && block.isTranslucent()) {
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(2, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(3, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(0, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(1, connections), EnumFacing.NORTH, rot, null, scale, true));
         }
     }
 
     @Override
     public List getGeneralQuads() {
         ArrayList<BakedQuad> list = new ArrayList<>();
-        boolean[] connections = new boolean[8];
+        boolean[] connections = new boolean[12];
 
         //Item (DON'T LOOK AROUND!)
         if (world == null) {

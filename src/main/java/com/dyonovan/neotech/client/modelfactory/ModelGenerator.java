@@ -5,7 +5,7 @@ import com.dyonovan.neotech.client.modelfactory.models.ModelConnectedTextures;
 import com.dyonovan.neotech.client.modelfactory.models.ModelPipe;
 import com.dyonovan.neotech.client.modelfactory.models.ModelTank;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
-import com.dyonovan.neotech.common.blocks.BlockConnectedTextures;
+import com.dyonovan.neotech.common.blocks.connected.BlockConnectedTextures;
 import com.dyonovan.neotech.common.blocks.pipe.BlockPipe;
 import com.dyonovan.neotech.common.blocks.pipe.item.BlockPipeBasicItem;
 import com.dyonovan.neotech.common.blocks.storage.BlockTank;

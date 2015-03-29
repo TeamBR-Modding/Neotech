@@ -1,7 +1,8 @@
-package com.dyonovan.neotech.common.blocks;
+package com.dyonovan.neotech.common.blocks.connected;
 
 import com.dyonovan.neotech.NeoTech;
 import com.dyonovan.neotech.collections.ConnectedTextures;
+import com.dyonovan.neotech.common.blocks.BlockBakeable;
 import com.dyonovan.neotech.lib.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
