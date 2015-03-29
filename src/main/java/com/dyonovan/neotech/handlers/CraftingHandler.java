@@ -89,7 +89,7 @@ public class CraftingHandler {
 
         //Phantom Glass
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.phantomGlass, 8), "AAA", "ABA", "AAA",
-                'A', "blockGlass", 'B', Blocks.oak_door));
+                'A', "blockGlass", 'B', Items.oak_door));
 
         //Upgrades
         //Speed
