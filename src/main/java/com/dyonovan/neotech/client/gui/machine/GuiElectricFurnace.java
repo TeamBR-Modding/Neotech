@@ -35,7 +35,7 @@ public class GuiElectricFurnace extends GuiContainer {
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
         fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 5, ySize - 96 + 2, 4210752);
 
-        tile = (TileElectricFurnace) mc.theWorld.getTileEntity(tile.getPos());
+        //tile = (TileElectricFurnace) mc.theWorld.getTileEntity(tile.getPos());
 
         GL11.glPushMatrix();
         GL11.glScalef(.8F, .8F, 1F);
@@ -64,7 +64,7 @@ public class GuiElectricFurnace extends GuiContainer {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        //tile = (TileElectricFurnace) mc.theWorld.getTileEntity(tile.getPos());
+        tile = (TileElectricFurnace) mc.theWorld.getTileEntity(tile.getPos());
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(background);
@@ -83,7 +83,8 @@ public class GuiElectricFurnace extends GuiContainer {
         tessellator.draw();
 
         //Progress Arrow
-        int arrow = tile.currentProcessTime != 0 ? tile.currentProcessTime * 24 / TileElectricFurnace.TOTAL_PROCESS_TIME : 0;
+        int arrow = tile.currentProcessTime != 0 ? tile.currentProcessTime * 24 /
+                tile.findSpeed(TileElectricFurnace.TOTAL_PROCESS_TIME, tile.getField(BaseMachine.SPEED))  : 0;
         this.drawTexturedModalRect(x + 81, y + 27, 176, 0, arrow + 1, 16);
     }
 
