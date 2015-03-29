@@ -23,7 +23,7 @@ public class BlockOre extends BlockBakeable {
         super(Material.rock, name, null);
         setCreativeTab(NeoTech.tabNeoTech);
         setUnlocalizedName(Constants.MODID + ":" + name);
-        setHardness(1.0F);
+        setHardness(3.0F);
         setHarvestLevel("pickaxe", miningLevel);
     }
 
