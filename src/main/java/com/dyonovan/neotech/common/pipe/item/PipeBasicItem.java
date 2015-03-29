@@ -120,7 +120,7 @@ public class PipeBasicItem extends Pipe<ItemBuffer> implements IInventory, IExpe
         if(tile instanceof ISidedInventory) {
             ISidedInventory otherInv = (ISidedInventory)tile;
             for(int i : otherInv.getSlotsForFace(face.getOpposite())) {
-                if(otherInv.getStackInSlot(i) != null) {
+                if(otherInv.getStackInSlot(i) != null && otherInv.canExtractItem(i, otherInv.getStackInSlot(i), face.getOpposite())) {
                     buffer.acceptResource(getMaximumTransferRate(), face, otherInv.getStackInSlot(i), false);
                     if(otherInv.getStackInSlot(i).stackSize <= 0)
                         otherInv.setInventorySlotContents(i, null);
