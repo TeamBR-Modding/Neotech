@@ -88,8 +88,7 @@ public class CraftingHandler {
                 new ItemStack(Items.gold_ingot), new ItemStack(Items.diamond), new ItemStack(Blocks.piston));
 
         //Smooth Glass
-        GameRegistry.addRecipe(new ItemStack(BlockHandler.smoothGlass, 8), "AAA", "A A", "AAA",
-                'A', Blocks.glass);
+        //GameRegistry.addRecipe(new ItemStack(BlockHandler.smoothGlass, 8), "AAA", "A A", "AAA", 'A', Blocks.glass);
 
         //Upgrades
         //Speed
