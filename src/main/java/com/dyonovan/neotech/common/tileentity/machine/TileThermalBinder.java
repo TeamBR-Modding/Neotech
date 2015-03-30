@@ -52,6 +52,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
             inventory.setStackInSlot(writeToMB(speed, efficiency, capacity, io), MB_SLOT_OUTPUT);
             doReset();
         }
+        worldObj.markBlockForUpdate(pos);
     }
 
     private void doReset() {
@@ -91,6 +92,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         }
         inventory.setStackInSlot(null, MB_SLOT_INPUT);
         currentProcessTime = 1;
+        worldObj.markBlockForUpdate(pos);
     }
 
     /*******************************************************************************************************************

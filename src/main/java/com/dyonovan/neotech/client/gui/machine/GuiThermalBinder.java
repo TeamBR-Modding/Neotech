@@ -82,7 +82,14 @@ public class GuiThermalBinder extends GuiContainer {
         worldrenderer.addVertexWithUV(x + 18, y + 77 - heightRF, 0, 0.6875F, (float) (69 - heightRF) / 256);
         tessellator.draw();
 
-
+        //Draw Progress Arrow
+        int arrow = tile.currentProcessTime != 0 ? tile.currentProcessTime * 23 / TileThermalBinder.BASE_PROCESS_TIME : 0;
+        this.drawTexturedModalRect(x + 133, y + 24, 176, 69, arrow > 15 ? 15 : arrow, 4);
+        this.drawTexturedModalRect(x + 133, y + 76, 176, 89, arrow > 15 ? 15 : arrow, 4);
+        if (arrow > 15) {
+            this.drawTexturedModalRect(x + 143, y + 28, 186, 73, 7, arrow - 15);
+            this.drawTexturedModalRect(x + 143, y + 76, 186, 81 + (8 - (arrow - 15)), 7, (arrow - 15));
+        }
     }
 
     @Override
