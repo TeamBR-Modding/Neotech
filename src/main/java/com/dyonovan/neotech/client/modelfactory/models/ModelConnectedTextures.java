@@ -76,80 +76,78 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
                 drawFace(connections, list, lookUpRotationForFace(facing));
             return list;
         }
-        if(MinecraftForgeClient.getRenderLayer() == EnumWorldBlockLayer.TRANSLUCENT) {
-            for(EnumFacing dir : EnumFacing.values()) {
-                if (world.isAirBlock(pos.offset(dir)) || (!world.getBlockState(pos.offset(dir)).getBlock().isOpaqueCube() &&
-                        !block.canBlockConnect(world.getBlockState(pos.offset(dir)).getBlock()))) {
-                    switch (dir) {
-                        case UP:
-                            connections[0] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock());
-                            connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
-                            connections[2] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock());
-                            connections[3] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock());
-                            connections[4] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock());
-                            connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock());
-                            connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
-                            connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock());
-                            drawFace(connections, list, lookUpRotationForFace(dir));
-                            break;
-                        case DOWN:
-                            connections[0] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock());
-                            connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
-                            connections[2] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock());
-                            connections[3] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock());
-                            connections[4] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock());
-                            connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock());
-                            connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
-                            connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock());
-                            drawFace(connections, list, lookUpRotationForFace(dir));
-                            break;
-                        case NORTH:
-                            connections[0] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock());
-                            connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock());
-                            connections[2] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock());
-                            connections[3] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock());
-                            connections[4] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock());
-                            connections[5] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock());
-                            connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
-                            connections[7] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock());
-                            drawFace(connections, list, lookUpRotationForFace(dir));
-                            break;
-                        case SOUTH:
-                            connections[0] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock());
-                            connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock());
-                            connections[2] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock());
-                            connections[3] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock());
-                            connections[4] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock());
-                            connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock());
-                            connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
-                            connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock());
-                            drawFace(connections, list, lookUpRotationForFace(dir));
-                            break;
-                        case WEST:
-                            connections[0] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock());
-                            connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock());
-                            connections[2] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock());
-                            connections[3] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
-                            connections[4] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
-                            connections[5] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock());
-                            connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
-                            connections[7] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock());
-                            drawFace(connections, list, lookUpRotationForFace(dir));
-                            break;
-                        case EAST:
-                            connections[0] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock());
-                            connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock());
-                            connections[2] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock());
-                            connections[3] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
-                            connections[4] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
-                            connections[5] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock());
-                            connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
-                            connections[7] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock());
-                            drawFace(connections, list, lookUpRotationForFace(dir));
-                            break;
-                        default:
-                            break;
-                    }
+        for(EnumFacing dir : EnumFacing.values()) {
+            if (world.isAirBlock(pos.offset(dir)) || (!world.getBlockState(pos.offset(dir)).getBlock().isOpaqueCube() &&
+                    !block.canBlockConnect(world.getBlockState(pos.offset(dir)).getBlock()))) {
+                switch (dir) {
+                    case UP:
+                        connections[0] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock());
+                        connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
+                        connections[2] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock());
+                        connections[3] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock());
+                        connections[4] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock());
+                        connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock());
+                        connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
+                        connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock());
+                        drawFace(connections, list, lookUpRotationForFace(dir));
+                        break;
+                    case DOWN:
+                        connections[0] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock());
+                        connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
+                        connections[2] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock());
+                        connections[3] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock());
+                        connections[4] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock());
+                        connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock());
+                        connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
+                        connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock());
+                        drawFace(connections, list, lookUpRotationForFace(dir));
+                        break;
+                    case NORTH:
+                        connections[0] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock());
+                        connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock());
+                        connections[2] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock());
+                        connections[3] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock());
+                        connections[4] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock());
+                        connections[5] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock());
+                        connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
+                        connections[7] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock());
+                        drawFace(connections, list, lookUpRotationForFace(dir));
+                        break;
+                    case SOUTH:
+                        connections[0] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock());
+                        connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock());
+                        connections[2] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock());
+                        connections[3] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 0)).getBlock());
+                        connections[4] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 0)).getBlock());
+                        connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock());
+                        connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
+                        connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock());
+                        drawFace(connections, list, lookUpRotationForFace(dir));
+                        break;
+                    case WEST:
+                        connections[0] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock());
+                        connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock());
+                        connections[2] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock());
+                        connections[3] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
+                        connections[4] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
+                        connections[5] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock());
+                        connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
+                        connections[7] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock());
+                        drawFace(connections, list, lookUpRotationForFace(dir));
+                        break;
+                    case EAST:
+                        connections[0] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock());
+                        connections[1] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 0)).getBlock());
+                        connections[2] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock());
+                        connections[3] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
+                        connections[4] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
+                        connections[5] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock());
+                        connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
+                        connections[7] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock());
+                        drawFace(connections, list, lookUpRotationForFace(dir));
+                        break;
+                    default:
+                        break;
                 }
             }
         }
