@@ -36,12 +36,12 @@ public class BlockOre extends BlockBakeable {
     public CubeTextures getDefaultTextures() {
         TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
         return new CubeTextures(
-                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
-                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
-                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
-                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
-                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
-                map.getAtlasSprite(Constants.MODID + ":blocks/" + name)
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front")
         );
     }
 
