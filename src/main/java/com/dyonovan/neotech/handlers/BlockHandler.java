@@ -3,6 +3,7 @@ package com.dyonovan.neotech.handlers;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
 import com.dyonovan.neotech.common.blocks.BlockCrafter;
 import com.dyonovan.neotech.common.blocks.BlockMachine;
+import com.dyonovan.neotech.common.blocks.connected.BlockConnectedTextures;
 import com.dyonovan.neotech.common.blocks.connected.BlockPhantomGlass;
 import com.dyonovan.neotech.common.blocks.connected.BlockVoidGlass;
 import com.dyonovan.neotech.common.blocks.ore.BlockOre;
@@ -40,7 +41,7 @@ public class BlockHandler {
     public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
     public static Block crafter, thermalBinder, creativeStorage, blockCopper, blockTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
-    public static Block phantomGlass, voidGlass;
+    public static Block phantomGlass, voidGlass, test;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -120,6 +121,8 @@ public class BlockHandler {
                 "phantomGlass", null);
         registerBlock(voidGlass = new BlockVoidGlass(Material.glass, "voidGlass", null),
                 "voidGlass", null);
+        registerBlock(test = new BlockConnectedTextures(Material.rock, "test", null),
+                "test", null);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {
