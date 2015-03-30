@@ -234,7 +234,7 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
 
     @Override
     public boolean isAmbientOcclusion() {
-        return false;
+        return true;
     }
 
     @Override
