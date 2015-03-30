@@ -5,6 +5,7 @@ import com.dyonovan.neotech.common.blocks.connected.BlockConnectedTextures;
 import com.dyonovan.neotech.common.blocks.BlockCrafter;
 import com.dyonovan.neotech.common.blocks.BlockMachine;
 import com.dyonovan.neotech.common.blocks.connected.BlockPhantomGlass;
+import com.dyonovan.neotech.common.blocks.connected.BlockVoidGlass;
 import com.dyonovan.neotech.common.blocks.ore.BlockOre;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockAdvancedCable;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockBasicCable;
@@ -42,7 +43,7 @@ public class BlockHandler {
     public static Block crafter, thermalBinder, creativeStorage;
     public static Fluid moltenTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
-    public static Block phantomGlass;
+    public static Block phantomGlass, voidGlass;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -116,6 +117,8 @@ public class BlockHandler {
         //Connected Textures
         registerBlock(phantomGlass = new BlockPhantomGlass(Material.glass, "phantomGlass", null),
                 "phantomGlass", null);
+        registerBlock(voidGlass = new BlockVoidGlass(Material.glass, "voidGlass", null),
+                "voidGlass", null);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

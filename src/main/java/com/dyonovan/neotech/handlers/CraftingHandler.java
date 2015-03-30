@@ -91,6 +91,11 @@ public class CraftingHandler {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.phantomGlass, 8), "AAA", "ABA", "AAA",
                 'A', "blockGlass", 'B', Items.oak_door));
 
+        //Void Glass
+        ItemStack inkSack = new ItemStack(Items.dye, 1, 0);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.voidGlass, 4), " A ", "AIA", " A ",
+                'A', "blockGlass", 'I', inkSack));
+
         //Upgrades
         //Speed
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemHandler.speedProcessor), "ABA", "CDC", "ABA",
