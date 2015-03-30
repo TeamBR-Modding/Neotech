@@ -39,7 +39,7 @@ public class CraftingHandler {
 
         //Fluid Generator
         GameRegistry.addRecipe(new ItemStack(BlockHandler.fluidGenerator), "ABA", "DCD", "ABA",
-                'A', Items.iron_ingot, 'B', Items.bucket, 'C', Blocks.furnace, 'D', Items.redstone);
+                'A', Items.iron_ingot, 'B', Items.bucket, 'C', Blocks.furnace, 'D', Items.blaze_rod);
 
         //Thermal Binder
         GameRegistry.addRecipe(new ItemStack(BlockHandler.thermalBinder), "ABA", "CDC", "ABA",
