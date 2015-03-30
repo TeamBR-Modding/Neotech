@@ -61,6 +61,19 @@ dependencies {
     //compile "mcp.mobius.waila:Waila:1.6.0_B1_1.8.1"
 }
 
+task devJar(type: Jar, dependsOn: 'classes') {
+    from(sourceSets.main.output) {
+        include '**'
+    }
+    extension = 'jar'
+    classifier = 'dev'
+}
+artifacts {
+    archives devJar
+}
+
+
+
 processResources
 {
     // this will ensure that this task is redone when the versions change.
