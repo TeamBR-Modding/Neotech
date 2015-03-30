@@ -122,9 +122,10 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
 
     @Override
     public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-            int actual =  fluidTank.fill(resource, doFill);
-            this.getWorld().markBlockForUpdate(this.pos);
-            return actual;
+        if (!(validFuels.contains(resource.getFluid().getName()))) return 0;
+        int actual = fluidTank.fill(resource, doFill);
+        this.getWorld().markBlockForUpdate(this.pos);
+        return actual;
     }
 
     @Override
@@ -248,7 +249,7 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
-        inventory.readFromNBT(tag, this);
+        inventory.readFromNBT(tag, this, ":main");
         fluidTank.readFromNBT(tag);
     }
 
@@ -256,7 +257,7 @@ public class TileFluidGenerator extends BaseMachine implements IUpdatePlayerList
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
-        inventory.writeToNBT(tag);
+        inventory.writeToNBT(tag, ":main");
         fluidTank.writeToNBT(tag);
     }
 }
