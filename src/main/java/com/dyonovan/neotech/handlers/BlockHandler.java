@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.handlers;
 
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
-import com.dyonovan.neotech.common.blocks.connected.BlockConnectedTextures;
 import com.dyonovan.neotech.common.blocks.BlockCrafter;
 import com.dyonovan.neotech.common.blocks.BlockMachine;
 import com.dyonovan.neotech.common.blocks.connected.BlockPhantomGlass;
@@ -28,7 +27,6 @@ import com.dyonovan.neotech.common.tileentity.storage.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -40,8 +38,7 @@ public class BlockHandler {
     public static Block furnaceGenerator, furnaceGeneratorActive, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator, fluidGeneratorActive;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
     public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
-    public static Block crafter, thermalBinder, creativeStorage;
-    public static Fluid moltenTin;
+    public static Block crafter, thermalBinder, creativeStorage, blockCopper, blockTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
     public static Block phantomGlass, voidGlass;
 
@@ -98,6 +95,10 @@ public class BlockHandler {
                 "oreCopper", null, "oreCopper");
         registerBlock(oreTin = new BlockOre("oreTin", 2),
                 "oreTin", null, "oreTin");
+        registerBlock(blockCopper = new BlockOre("blockCopper", 1),
+                "blockCopper", null, "blockCopper");
+        registerBlock(blockTin = new BlockOre("blockTin", 2),
+                "blockTin", null, "blockTin");
 
         //Cables & Pipes
         registerBlock(basicCable = new BlockBasicCable(Material.cloth, "basicCable", PipeBasicEnergy.class),
