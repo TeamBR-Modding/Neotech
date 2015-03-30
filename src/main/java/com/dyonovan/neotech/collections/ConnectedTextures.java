@@ -103,43 +103,59 @@ public class ConnectedTextures {
             case 4 :
                 if(connections[9] && connections[11])
                     return corners;
-                else if(connections[9])
+                else if(connections[9] && connections[3])
                     return horizontal;
-                else if(connections[11])
+                else if(connections[9])
+                    return corners;
+                else if(connections[11] && connections[1])
                     return vertical;
-                else if(connections[8])
+                else if(connections[11])
+                    return corners;
+                else if(connections[8] && connections[1] && connections[3])
                     return anti_corners;
-                return noConnections;
+                return getTextureForCorner(0, connections);
             case 5 :
                 if(connections[9] && connections[12])
                     return corners;
-                else if(connections[9])
+                else if(connections[9] && connections[4])
                     return horizontal;
-                else if(connections[12])
+                else if(connections[9])
+                    return corners;
+                else if(connections[12] && connections[1])
                     return vertical;
-                else if(connections[10])
+                else if(connections[12])
+                    return corners;
+                else if(connections[10] && connections[1] && connections[4])
                     return anti_corners;
-                return noConnections;
+                return getTextureForCorner(1, connections);
             case 6 :
                 if(connections[11] && connections[14])
                     return corners;
-                else if(connections[14])
+                else if(connections[14] && connections[3])
                     return horizontal;
-                else if(connections[11])
+                else if(connections[14])
+                    return corners;
+                else if(connections[11] && connections[6])
                     return vertical;
-                else if(connections[13])
+                else if(connections[11])
+                    return corners;
+                else if(connections[13] && connections[6] && connections[3])
                     return anti_corners;
-                return noConnections;
+                return getTextureForCorner(2, connections);
             case 7 :
                 if(connections[12] && connections[14])
                     return corners;
-                else if(connections[14])
+                else if(connections[14] && connections[4])
                     return horizontal;
-                else if(connections[12])
+                else if(connections[14])
+                    return corners;
+                else if(connections[12] && connections[6])
                     return vertical;
-                else if(connections[15])
+                else if(connections[12])
+                    return corners;
+                else if(connections[15] && connections[6] && connections[4])
                     return anti_corners;
-                return noConnections;
+                return getTextureForCorner(3, connections);
             default :
                 return noConnections;
         }
