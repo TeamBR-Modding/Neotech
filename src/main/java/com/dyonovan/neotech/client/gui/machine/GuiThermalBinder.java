@@ -88,7 +88,7 @@ public class GuiThermalBinder extends GuiContainer {
         this.drawTexturedModalRect(x + 133, y + 76, 176, 89, arrow > 15 ? 15 : arrow, 4);
         if (arrow > 15) {
             this.drawTexturedModalRect(x + 143, y + 28, 186, 73, 7, arrow - 15);
-            this.drawTexturedModalRect(x + 143, y + 76, 186, 81 + (8 - (arrow - 15)), 7, (arrow - 15));
+            this.drawTexturedModalRect(x + 143, y + 68 + (8 - (arrow - 15)), 186, 81 + (8 - (arrow - 15)), 7, (arrow - 15));
         }
     }
 
