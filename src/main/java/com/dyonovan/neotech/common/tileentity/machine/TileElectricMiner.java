@@ -28,6 +28,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     private int currentX, currentY, currentZ, tickWait;
     private boolean isRunning, isWorking;
+    private EnumFacing rear;
 
     public EnergyStorage energyRF;
 
@@ -48,27 +49,20 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
             if (isWorking) return;
             if (!isRunning) {
-                EnumFacing rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
-                if (rear.getAxis() == EnumFacing.Axis.X && rear.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) {
-                    currentX = this.pos.getX() + 1;
-                    currentZ = this.pos.getZ();
-                } else if (rear.getAxis() == EnumFacing.Axis.X && rear.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE) {
-                    currentX = this.pos.getX() + DEFAULT_SIZE + 1;
-                    currentZ = this.pos.getZ() - DEFAULT_SIZE;
-                } else if (rear.getAxis() == EnumFacing.Axis.Z && rear.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE) {
-                    currentX = this.pos.getZ() + 1;
-                    currentZ = this.pos.getX();
-                } else if (rear.getAxis() == EnumFacing.Axis.Z && rear.getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE) {
-                    currentX = this.pos.getZ() + DEFAULT_SIZE + 1;
-                    currentZ = this.pos.getX() - DEFAULT_SIZE;
-                }
-                currentY -= 1;
+                rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
+                BlockPos start = this.pos.offset(rear, DEFAULT_SIZE - 1);
+                start = start.offset(rear.rotateY(), (DEFAULT_SIZE / 2) - 1);
+                start = start.offset(EnumFacing.DOWN);
 
-                System.out.println("Currently Trying " + new BlockPos(currentX, currentY, currentZ).toString());
+                BlockPos finish = this.pos.offset(rear, 0);
+                finish = finish.offset(rear.rotateY(), ((DEFAULT_SIZE / 2) + 1) * -1);
+                finish = finish.offset(EnumFacing.DOWN, start.getY());
 
-            /*currentX = this.pos.getX() - DEFAULT_SIZE / 2;
-            currentY = this.pos.getY() - 1;
-            currentZ = this.pos.getZ() - DEFAULT_SIZE / 2;*/
+                //System.out.println(rear.toString());
+                //System.out.println("Currently Trying " + new BlockPos(currentX, currentY, currentZ).toString());
+                System.out.println("Currently area " + start.toString());
+                System.out.println("to " + finish.toString());
+
                 isRunning = true;
             }
             if (tickWait < DEFAULT_SPEED) {
@@ -107,6 +101,10 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     private void moveNextPos() {
         ++currentX;
+        switch (rear.toString()) {
+            case "west":
+
+        }
         if (currentX >= this.pos.getX() - (DEFAULT_SIZE / 2) + DEFAULT_SIZE) {
             ++currentZ;
             currentX = this.pos.getX() - DEFAULT_SIZE / 2;
