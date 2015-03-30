@@ -40,6 +40,10 @@ public class BlockConnectedTextures extends BlockBakeable {
         };
     }
 
+    /**
+     * Build the connected texture object
+     * @return {@link com.dyonovan.neotech.collections.ConnectedTextures} with appropriate textures
+     */
     @SideOnly(Side.CLIENT)
     public ConnectedTextures getConnectedTextures() {
         TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
