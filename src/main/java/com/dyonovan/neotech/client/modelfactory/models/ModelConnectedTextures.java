@@ -51,23 +51,34 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
         BlockPartFace face = new BlockPartFace(null, 0, "", new BlockFaceUV(new float[]{0.0F, 0.0F, 16.0F, 16.0F}, 0));
         boolean scale = true;
 
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(2, connections), EnumFacing.SOUTH, rot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(3, connections), EnumFacing.SOUTH, rot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(0, connections), EnumFacing.SOUTH, rot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(1, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(2, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(3, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(0, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(1, connections), EnumFacing.SOUTH, rot, null, scale, true));
+
+        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(6, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(7, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(4, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(5, connections), EnumFacing.SOUTH, rot, null, scale, true));
 
         if (block != null && block.isTranslucent()) {
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(2, connections), EnumFacing.NORTH, rot, null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(3, connections), EnumFacing.NORTH, rot, null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(0, connections), EnumFacing.NORTH, rot, null, scale, true));
-            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(1, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(2, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(3, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(0, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(1, connections), EnumFacing.NORTH, rot, null, scale, true));
+
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(6, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(7, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(4, connections), EnumFacing.NORTH, rot, null, scale, true));
+            list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(5, connections), EnumFacing.NORTH, rot, null, scale, true));
+
         }
     }
 
     @Override
     public List getGeneralQuads() {
         ArrayList<BakedQuad> list = new ArrayList<>();
-        boolean[] connections = new boolean[8];
+        boolean[] connections = new boolean[16];
 
         //Item (DON'T LOOK AROUND!)
         if (world == null) {
@@ -89,6 +100,14 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
                         connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock());
                         connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, 1)).getBlock());
                         connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock());
+                        connections[8] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, -1)).getBlock());
+                        connections[9] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock());
+                        connections[10] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, -1)).getBlock());
+                        connections[11] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock());
+                        connections[12] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock());
+                        connections[13] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 1)).getBlock());
+                        connections[14] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock());
+                        connections[15] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 1)).getBlock());
                         drawFace(connections, list, lookUpRotationForFace(dir));
                         break;
                     case DOWN:
@@ -100,6 +119,14 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
                         connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock());
                         connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, 0, -1)).getBlock());
                         connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock());
+                        connections[8] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 1)).getBlock());
+                        connections[9] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock());
+                        connections[10] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 1)).getBlock());
+                        connections[11] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock());
+                        connections[12] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock());
+                        connections[13] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, -1)).getBlock());
+                        connections[14] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock());
+                        connections[15] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, -1)).getBlock());
                         drawFace(connections, list, lookUpRotationForFace(dir));
                         break;
                     case NORTH:
@@ -111,6 +138,14 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
                         connections[5] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock());
                         connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
                         connections[7] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock());
+                        connections[8] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, -1)).getBlock());
+                        connections[9] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, -1)).getBlock());
+                        connections[10] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, -1)).getBlock());
+                        connections[11] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock());
+                        connections[12] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock());
+                        connections[13] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, -1)).getBlock());
+                        connections[14] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock());
+                        connections[15] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, -1)).getBlock());
                         drawFace(connections, list, lookUpRotationForFace(dir));
                         break;
                     case SOUTH:
@@ -122,6 +157,14 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
                         connections[5] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock());
                         connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
                         connections[7] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock());
+                        connections[8] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 1)).getBlock());
+                        connections[9] = block.canBlockConnect(world.getBlockState(pos.add(0, 1, 1)).getBlock());
+                        connections[10] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 1)).getBlock());
+                        connections[11] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock());
+                        connections[12] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock());
+                        connections[13] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 1)).getBlock());
+                        connections[14] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock());
+                        connections[15] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 1)).getBlock());
                         drawFace(connections, list, lookUpRotationForFace(dir));
                         break;
                     case WEST:
@@ -133,6 +176,14 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
                         connections[5] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock());
                         connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
                         connections[7] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock());
+                        connections[8] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, -1)).getBlock());
+                        connections[9] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 0)).getBlock());
+                        connections[10] = block.canBlockConnect(world.getBlockState(pos.add(-1, 1, 1)).getBlock());
+                        connections[11] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, -1)).getBlock());
+                        connections[12] = block.canBlockConnect(world.getBlockState(pos.add(-1, 0, 1)).getBlock());
+                        connections[13] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, -1)).getBlock());
+                        connections[14] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 0)).getBlock());
+                        connections[15] = block.canBlockConnect(world.getBlockState(pos.add(-1, -1, 1)).getBlock());
                         drawFace(connections, list, lookUpRotationForFace(dir));
                         break;
                     case EAST:
@@ -144,6 +195,14 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
                         connections[5] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 1)).getBlock());
                         connections[6] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, 0)).getBlock());
                         connections[7] = block.canBlockConnect(world.getBlockState(pos.add(0, -1, -1)).getBlock());
+                        connections[8] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 1)).getBlock());
+                        connections[9] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, 0)).getBlock());
+                        connections[10] = block.canBlockConnect(world.getBlockState(pos.add(1, 1, -1)).getBlock());
+                        connections[11] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, 1)).getBlock());
+                        connections[12] = block.canBlockConnect(world.getBlockState(pos.add(1, 0, -1)).getBlock());
+                        connections[13] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 1)).getBlock());
+                        connections[14] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, 0)).getBlock());
+                        connections[15] = block.canBlockConnect(world.getBlockState(pos.add(1, -1, -1)).getBlock());
                         drawFace(connections, list, lookUpRotationForFace(dir));
                         break;
                     default:

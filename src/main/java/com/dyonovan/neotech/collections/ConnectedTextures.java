@@ -21,10 +21,10 @@ public class ConnectedTextures {
      * This is used to get what part should be rendered for each corner
      *
      * The corners are represented by integers:
-     * 0 - Top Left
-     * 1 - Top Right
-     * 2 - Bottom Left
-     * 3 - Bottom Right
+     * 0 & 4 - Top Left
+     * 1 & 5 - Top Right
+     * 2 & 6 - Bottom Left
+     * 3 & 7 - Bottom Right
      *
      * The boolean array is the connections around the block. This should be size 16. 0 is top left and it goes left to right,
      * top to bottom. Exclude the block itself as we don't need to check that
@@ -100,6 +100,46 @@ public class ConnectedTextures {
                 else if(connections[4])
                     return horizontal;
                 return corners;
+            case 4 :
+                if(connections[9] && connections[11])
+                    return corners;
+                else if(connections[9])
+                    return horizontal;
+                else if(connections[11])
+                    return vertical;
+                else if(connections[8])
+                    return anti_corners;
+                return noConnections;
+            case 5 :
+                if(connections[9] && connections[12])
+                    return corners;
+                else if(connections[9])
+                    return horizontal;
+                else if(connections[12])
+                    return vertical;
+                else if(connections[10])
+                    return anti_corners;
+                return noConnections;
+            case 6 :
+                if(connections[11] && connections[14])
+                    return corners;
+                else if(connections[14])
+                    return horizontal;
+                else if(connections[11])
+                    return vertical;
+                else if(connections[13])
+                    return anti_corners;
+                return noConnections;
+            case 7 :
+                if(connections[12] && connections[14])
+                    return corners;
+                else if(connections[14])
+                    return horizontal;
+                else if(connections[12])
+                    return vertical;
+                else if(connections[15])
+                    return anti_corners;
+                return noConnections;
             default :
                 return noConnections;
         }
