@@ -33,6 +33,13 @@ public class NeoTech {
         }
     };
 
+    public static CreativeTabs tabNeoTechDeco = new CreativeTabs("tabNeoTechDeco") {
+        @Override
+        public Item getTabIconItem() {
+            return Item.getItemFromBlock(BlockHandler.voidGlass);
+        }
+    };
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         ConfigHandler.init(new Configuration(event.getSuggestedConfigurationFile()));

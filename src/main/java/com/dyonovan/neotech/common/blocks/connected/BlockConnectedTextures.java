@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockConnectedTextures extends BlockBakeable {
     public BlockConnectedTextures(Material materialIn, String name, Class<? extends TileEntity> tileClass) {
         super(materialIn, name, tileClass);
-        setCreativeTab(NeoTech.tabNeoTech);
+        setCreativeTab(NeoTech.tabNeoTechDeco);
         setUnlocalizedName(Constants.MODID + ":" + name);
     }
 
