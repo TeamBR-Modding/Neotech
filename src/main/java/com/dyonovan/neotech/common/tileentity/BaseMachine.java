@@ -162,6 +162,7 @@ public abstract class BaseMachine extends TileEntity implements ISidedInventory 
 
     public void expelItems() {
 
+        if (inventory == null || inventory.getSizeInventory() == 0) return;
         for (ItemStack stack : inventory.getValues()) {
             if (stack != null) {
                 Random random = new Random();

@@ -5,7 +5,6 @@ import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
 import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
-import com.dyonovan.neotech.common.tileentity.InventoryTile;
 import com.dyonovan.neotech.helpers.inventory.InventoryHelper;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -22,16 +21,15 @@ import java.util.List;
 
 public class TileElectricMiner extends BaseMachine implements IExpellable, IUpdatePlayerListBox, IEnergyReceiver {
 
-    public static final int INPUT_SLOT = 0;
-
     public static final int RF_TICK = 250;
     public static final int DEFAULT_SIZE = 9;
     public static final int DEFAULT_SPEED = 5;
 
     private int tickWait;
     private int areaSize;
-    private int numBlock;
-    private boolean isRunning, isWorking;
+    public int numBlock;
+    public boolean isRunning;
+    private boolean isWorking;
     private ArrayList<BlockPos> miningArea;
     private BlockPos currentPos, start, finish;
 
@@ -39,7 +37,6 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     public TileElectricMiner() {
         energyRF = new EnergyStorage(10000);
-        inventory = new InventoryTile(1);
         tickWait = 0;
         numBlock = 0;
         areaSize = 0;
@@ -60,11 +57,12 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
             }
             if (tickWait < DEFAULT_SPEED) {
                 ++tickWait;
+                worldObj.markBlockForUpdate(pos);
                 return;
             }
 
-
-            if (energyRF.getEnergyStored() < RF_TICK) return;//todo reduce energy
+            if (energyRF.getEnergyStored() < RF_TICK) return;
+            energyRF.modifyEnergyStored(RF_TICK);
             if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) return;
             isWorking = true;
             IInventory storage = (IInventory) worldObj.getTileEntity(pos.up());
@@ -105,6 +103,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         areaSize = miningArea.size();
         currentPos = start;
         isRunning = true;
+        worldObj.markBlockForUpdate(pos);
     }
 
     private void moveNextPos() {
@@ -114,6 +113,12 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
             tickWait = 0;
             isWorking = false;
         } else isRunning = false;
+        worldObj.markBlockForUpdate(pos);
+    }
+
+    public int getTotalBlocks() {
+        if (miningArea == null) return 0;
+        return miningArea.size();
     }
 
 
@@ -141,55 +146,6 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         return true;
     }
 
-    /*******************************************************************************************************************
-     ************************************** Inventory Functions ********************************************************
-     *******************************************************************************************************************/
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        return new int[] {0};
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return index == 0;
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return false;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public int getField(int id) {
-        switch (id) {
-            default:
-                return 0;
-        }
-
-    }
-
-    @Override
-    public void setField(int id, int value) {
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    @Override
-    public void clear() {
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-            inventory.setStackInSlot(null, i);
-        }
-    }
-
     @Override
     public void spawnActiveParticles(double x, double y, double z) {
 
@@ -199,7 +155,6 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
-        inventory.readFromNBT(tag, this, ":main");
         tickWait = tag.getInteger("TickWait");
         areaSize = tag.getInteger("AreaSize");
         numBlock = tag.getInteger("NumBlock");
@@ -217,7 +172,6 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
-        inventory.writeToNBT(tag, ":main");
         tag.setInteger("TickWait", tickWait);
         tag.setInteger("AreaSize", areaSize);
         tag.setInteger("NumBlock", numBlock);
