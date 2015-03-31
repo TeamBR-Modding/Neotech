@@ -1,0 +1,55 @@
+itemGroup.tabNeoTech=NeoTech
+itemGroup.tabNeoTechDeco=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ef
+
+tile.neotech:furnaceGenerator.name=Four générateur
+tile.neotech:furnaceGeneratorActive.name=Four générateur
+tile.neotech:electricFurnace.name=Four électrique
+tile.neotech:electricFurnaceActive.name=Four électrique
+tile.neotech:electricCrusher.name=Broyeur électrique
+tile.neotech:electricCrusherActive.name=Broyeur électrique
+tile.neotech:fluidGenerator.name=Générateur de fluide
+tile.neotech:fluidGeneratorActive.name=Générateur de fluide
+tile.neotech:electricMiner.name=Mineur électrique (WIP)
+tile.neotech:thermalBinder.name=Agglutinant thermique
+tile.neotech:basicCable.name=Câble RF de base
+tile.neotech:advancedCable.name=Câble RF avancé
+tile.neotech:eliteCable.name=Câble RF d'élite
+tile.neotech:basicRFStorage.name=Stockage RF de base
+tile.neotech:advancedRFStorage.name=Stockage RF avancé
+tile.neotech:eliteRFStorage.name=Stockage RF d'élite
+tile.neotech:creativeRFStorage.name=Stockage RF créatif
+tile.neotech:ironTank.name=Réservoir de fluide en fer
+tile.neotech:goldTank.name=Réservoir de fluide en or
+tile.neotech:diamondTank.name=Réservoir de fluide en diamant
+tile.neotech:crafter.name=Atelier de duel
+tile.neotech:oreCopper.name=Minerai de cuivre
+tile.neotech:oreTin.name=Minerai d'étain
+tile.neotech:blockCopper.name=Bloc de cuivre
+tile.neotech:blockTin.name=Bloc d'étain
+tile.neotech:basicItemPipe.name=Conduite d'élément de base
+tile.neotech:advancedItemPipe.name=Conduite d'élément avancé
+tile.neotech:eliteItemPipe.name=Conduite d'élémentd'élite
+
+tile.neotech:phantomGlass.name=Verre fantôme
+tile.neotech:voidGlass.name=§8Verre du néant§R
+
+item.neotech:dustIron.name=Poussière de fer
+item.neotech:dustGold.name=Poussière d'or
+item.neotech:dustCopper.name=Poussière de cuivre
+item.neotech:ingotCopper.name=Lingot de cuivre
+item.neotech:dustTin.name=Poussière d'étain
+item.neotech:ingotTin.name=Lingot d'étain
+item.neotech:capRam.name=Amélioration de capacité
+item.neotech:effFan.name=Amélioration d'efficacité
+item.neotech:ioPort.name=Amélioration d'auto-éjection (WIP)
+item.neotech:speedProcessor.name=Amélioration de vitesse
+item.neotech:upgradeMB.name=Carte mère d'amélioration de machine (vide)
+item.neotech:upgradeMBFull.name=Carte mère d'amélioration de machine (pleine)
+
+neotech.container.crafter=Atelier de duel
+
+button.neotech:buttonStart.name=Démarrer
+
+title.neotech:rfUsage.name=Utilisation RF :
+title.neotech:processTime.name=Temps de processus :
+title.neotech:autoOutput.name=Auto-éjection :
