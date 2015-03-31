@@ -96,6 +96,10 @@ public class CraftingHandler {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockHandler.voidGlass, 4), " A ", "AIA", " A ",
                 'A', "blockGlass", 'I', inkSack));
 
+        //Bordered Brick
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.borderedBrick, 4),
+                Blocks.brick_block, Blocks.brick_block, Blocks.brick_block, Blocks.brick_block);
+
         //Upgrades
         //Speed
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemHandler.speedProcessor), "ABA", "CDC", "ABA",
@@ -109,10 +113,6 @@ public class CraftingHandler {
         //UpgradeMB
         GameRegistry.addRecipe(new ItemStack(ItemHandler.upgradeMB), "ABA", "CDC", "ABA",
                 'A', Items.gold_ingot, 'B', Items.comparator, 'C', Items.redstone, 'D', Items.blaze_rod);
-
-
-
-
 
         //Vanilla Furnace Recipes
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);
