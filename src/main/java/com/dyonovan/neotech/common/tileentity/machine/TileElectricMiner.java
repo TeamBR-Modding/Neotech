@@ -223,9 +223,9 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         tag.setInteger("NumBlock", numBlock);
         tag.setBoolean("IsRunning", isRunning);
         tag.setBoolean("IsWorking", isWorking);
-        tag.setInteger("CurrentX", start.getX());
-        tag.setInteger("CurrentY", start.getY());
-        tag.setInteger("CurrentZ", start.getZ());
+        tag.setInteger("CurrentX", currentPos.getX());
+        tag.setInteger("CurrentY", currentPos.getY());
+        tag.setInteger("CurrentZ", currentPos.getZ());
         tag.setInteger("StartX", start.getX());
         tag.setInteger("StartY", start.getY());
         tag.setInteger("StartZ", start.getZ());
