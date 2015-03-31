@@ -49,10 +49,10 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
         BlockPartFace face = new BlockPartFace(null, 0, "", new BlockFaceUV(new float[]{0.0F, 0.0F, 16.0F, 16.0F}, 0));
         boolean scale = true;
 
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(6, connections), EnumFacing.SOUTH, rot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(7, connections), EnumFacing.SOUTH, rot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(4, connections), EnumFacing.SOUTH, rot, null, scale, true));
-        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 15.999F), face, textures.getTextureForCorner(5, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(6, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 0.0F, 16.0F), new Vector3f(16.0F, 8.0F, 16.0F), face, textures.getTextureForCorner(7, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 8.0F, 16.0F), new Vector3f(8.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(4, connections), EnumFacing.SOUTH, rot, null, scale, true));
+        list.add(faceBakery.makeBakedQuad(new Vector3f(8.0F, 8.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, textures.getTextureForCorner(5, connections), EnumFacing.SOUTH, rot, null, scale, true));
 
         if (block != null && block.isTranslucent()) {
             list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(8.0F, 8.0F, 15.999F), face, textures.getTextureForCorner(6, connections), EnumFacing.NORTH, rot, null, scale, true));

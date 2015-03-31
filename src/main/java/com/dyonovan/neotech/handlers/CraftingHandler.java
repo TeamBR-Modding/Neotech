@@ -100,6 +100,10 @@ public class CraftingHandler {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.borderedBrick, 4),
                 Blocks.brick_block, Blocks.brick_block, Blocks.brick_block, Blocks.brick_block);
 
+        //Bordered Stone Brick
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.borderedStoneBrick, 4),
+                Blocks.stonebrick, Blocks.stonebrick, Blocks.stonebrick, Blocks.stonebrick);
+
         //Upgrades
         //Speed
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemHandler.speedProcessor), "ABA", "CDC", "ABA",

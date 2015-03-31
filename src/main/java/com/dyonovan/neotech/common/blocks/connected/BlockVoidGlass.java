@@ -17,4 +17,14 @@ public class BlockVoidGlass extends BlockConnectedTextures {
     public EnumWorldBlockLayer getBlockLayer() {
         return EnumWorldBlockLayer.TRANSLUCENT;
     }
+
+    @SideOnly(Side.CLIENT)
+    public boolean isTranslucent() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
 }

@@ -33,6 +33,7 @@ tile.neotech:eliteItemPipe.name=Elite Item Pipe
 tile.neotech:phantomGlass.name=Phantom Glass
 tile.neotech:voidGlass.name=§8Void Glass§R
 tile.neotech:borderedBrick.name=Bordered Brick
+tile.neotech:borderedStoneBrick.name=Bordered Stone Brick
 
 item.neotech:dustIron.name=Iron Dust
 item.neotech:dustGold.name=Gold Dust

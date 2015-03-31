@@ -95,12 +95,12 @@ public class BlockConnectedTextures extends BlockBakeable {
 
     @Override
     public boolean isOpaqueCube() {
-        return false;
+        return true;
     }
 
     @SideOnly(Side.CLIENT)
     public boolean isTranslucent() {
-        return true;
+        return false;
     }
 
     public boolean isFullCube() {

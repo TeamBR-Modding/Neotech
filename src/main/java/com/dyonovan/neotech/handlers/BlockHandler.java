@@ -41,7 +41,7 @@ public class BlockHandler {
     public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
     public static Block crafter, thermalBinder, creativeStorage, blockCopper, blockTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
-    public static Block phantomGlass, voidGlass, borderedBrick;
+    public static Block phantomGlass, voidGlass, borderedBrick, borderedStoneBrick;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -123,6 +123,8 @@ public class BlockHandler {
                 "voidGlass", null);
         registerBlock(borderedBrick = new BlockConnectedTextures(Material.rock, "borderedBrick", null),
                 "borderedBrick", null);
+        registerBlock(borderedStoneBrick = new BlockConnectedTextures(Material.rock, "borderedStoneBrick", null),
+                "borderedStoneBrick", null);
     }
 
     public static void registerBlock(Block block, String name, Class<? extends TileEntity> tileEntity, String oreDict) {

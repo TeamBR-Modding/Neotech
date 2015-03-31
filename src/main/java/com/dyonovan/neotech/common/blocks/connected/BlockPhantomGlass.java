@@ -8,6 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -23,5 +25,15 @@ public class BlockPhantomGlass extends BlockConnectedTextures {
             return;
         }
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public boolean isTranslucent() {
+        return true;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
     }
 }
