@@ -65,10 +65,9 @@ public class ModelTank implements ISmartBlockModel, ISmartItemModel {
 
     @Override
     public List getGeneralQuads() {
-        ArrayList list = new ArrayList();
+        ArrayList<BakedQuad> list = new ArrayList<>();
         BlockFaceUV uv = new BlockFaceUV(new float[]{0.0F, 0.0F, 16.0F, 16.0F}, 0);
         BlockPartFace face = new BlockPartFace(null, 0, "", uv);
-
         ModelRotation modelRot = ModelRotation.X0_Y0;
         boolean scale = true;
 

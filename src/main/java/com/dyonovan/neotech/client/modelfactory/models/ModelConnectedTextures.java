@@ -77,7 +77,6 @@ public class ModelConnectedTextures implements ISmartBlockModel, ISmartItemModel
     public List getGeneralQuads() {
         ArrayList<BakedQuad> list = new ArrayList<>();
         boolean[] connections = new boolean[16];
-
         //Item (DON'T LOOK AROUND!)
         if (world == null) {
             Arrays.fill(connections, false);
