@@ -50,7 +50,7 @@ public class ModelGenerator {
                 textureMap.registerSprite(new ResourceLocation(Constants.MODID, "blocks/" + block.getName()));
                 if(block instanceof BlockPipeBasicItem)
                     textureMap.registerSprite(new ResourceLocation(((BlockPipeBasicItem)block).getJunction()));
-            } else {
+            } else if(block.registerIcons() != null) {
                 for(ResourceLocation location : block.registerIcons()) {
                     textureMap.registerSprite(location);
                 }

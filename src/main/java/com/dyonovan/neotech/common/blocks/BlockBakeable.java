@@ -67,7 +67,7 @@ public abstract class BlockBakeable extends BlockContainer {
     }
 
     public ResourceLocation[] registerIcons() {
-        return new ResourceLocation[] {new ResourceLocation(Constants.MODID, "blocks/" + name + "_front"), new ResourceLocation(Constants.MODID, "blocks/machine_side")};
+        return null;
     }
 
     public abstract RotationMode getRotationMode();

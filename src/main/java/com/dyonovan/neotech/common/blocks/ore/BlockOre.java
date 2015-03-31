@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class BlockOre extends BlockBakeable {
@@ -43,6 +44,10 @@ public class BlockOre extends BlockBakeable {
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front"),
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + name + "_front")
         );
+    }
+
+    public ResourceLocation[] registerIcons() {
+        return new ResourceLocation[] { new ResourceLocation(Constants.MODID + ":blocks/" + name + "_front")};
     }
 
     @Override

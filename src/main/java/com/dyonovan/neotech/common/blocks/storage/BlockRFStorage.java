@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -68,6 +69,10 @@ public class BlockRFStorage extends BlockBakeable {
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side"),
                 map.getAtlasSprite(Constants.MODID + ":blocks/" + "machine_side")
         );
+    }
+
+    public ResourceLocation[] registerIcons() {
+        return new ResourceLocation[] { new ResourceLocation(Constants.MODID + ":blocks/" + name + "_front")};
     }
 
     @Override

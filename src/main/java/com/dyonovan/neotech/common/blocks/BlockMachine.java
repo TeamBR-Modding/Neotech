@@ -57,6 +57,11 @@ public class BlockMachine extends BlockBakeable {
         return RotationMode.FOUR_STATE;
     }
 
+    @Override
+    public ResourceLocation[] registerIcons() {
+        return new ResourceLocation[] {new ResourceLocation(Constants.MODID, "blocks/" + name + "_front")};
+    }
+
     public static void setState(World worldIn, BlockPos pos, Block setter)
     {
         IBlockState iblockstate = worldIn.getBlockState(pos);
