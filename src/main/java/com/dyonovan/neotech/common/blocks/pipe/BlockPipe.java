@@ -28,6 +28,11 @@ public abstract class BlockPipe extends BlockBakeable {
 
     public abstract boolean isCableConnected(IBlockAccess blockaccess, BlockPos pos, EnumFacing face);
 
+    @Override
+    public RotationMode getRotationMode() {
+        return RotationMode.NONE;
+    }
+
     /**
      * Get width (from center 0.0F - 8.0F)
      * @return Radius of pipe

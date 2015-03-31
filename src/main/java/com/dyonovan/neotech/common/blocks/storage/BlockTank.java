@@ -41,6 +41,11 @@ public class BlockTank extends BlockBakeable {
         buckets = bucketCount;
     }
 
+    @Override
+    public RotationMode getRotationMode() {
+        return RotationMode.NONE;
+    }
+
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         switch (buckets) {
             case 3 :

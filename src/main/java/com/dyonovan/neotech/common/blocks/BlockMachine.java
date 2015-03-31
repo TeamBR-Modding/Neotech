@@ -52,6 +52,11 @@ public class BlockMachine extends BlockBakeable {
         return cubeTextures;
     }
 
+    @Override
+    public RotationMode getRotationMode() {
+        return RotationMode.FOUR_STATE;
+    }
+
     public static void setState(World worldIn, BlockPos pos, Block setter)
     {
         IBlockState iblockstate = worldIn.getBlockState(pos);
@@ -113,24 +118,6 @@ public class BlockMachine extends BlockBakeable {
             }
         }
         return true;
-    }
-
-    @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, PROPERTY_FACING);
-    }
-
-    @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return new DummyState(world, pos, this);
-    }
-
-    @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        int playerFacingDirection = (placer == null) ? 0 : MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3;
-        EnumFacing enumfacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
-        return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);
     }
 
     public IBlockState getStateFromMeta(int meta) {

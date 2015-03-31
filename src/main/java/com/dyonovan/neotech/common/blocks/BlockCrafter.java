@@ -42,6 +42,11 @@ public class BlockCrafter extends BlockBakeable {
     }
 
     @Override
+    public RotationMode getRotationMode() {
+        return RotationMode.FOUR_STATE;
+    }
+
+    @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
 

@@ -4,16 +4,20 @@ import com.dyonovan.neotech.collections.CubeTextures;
 import com.dyonovan.neotech.collections.DummyState;
 import com.dyonovan.neotech.lib.Constants;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,6 +30,13 @@ import java.util.List;
 
 public abstract class BlockBakeable extends BlockContainer {
     public static final PropertyDirection PROPERTY_FACING = PropertyDirection.create("facing", Arrays.asList(EnumFacing.values()));
+
+    public enum RotationMode {
+        FOUR_STATE,
+        SIX_STATE,
+        NONE
+    }
+
     protected String name;
     protected Class<? extends TileEntity> tileClass;
 
@@ -59,20 +70,57 @@ public abstract class BlockBakeable extends BlockContainer {
         return new ResourceLocation[] {new ResourceLocation(Constants.MODID, "blocks/" + name + "_front"), new ResourceLocation(Constants.MODID, "blocks/machine_side")};
     }
 
+    public abstract RotationMode getRotationMode();
+
     public List<IBlockState> generateRotatableStates() {
         List<IBlockState> states = new ArrayList<>();
-        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.NORTH));
-        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.SOUTH));
-        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.EAST));
-        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.WEST));
-        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.UP));
-        states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.DOWN));
+        switch (getRotationMode()) {
+            case SIX_STATE:
+                states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.UP));
+                states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.DOWN));
+            case FOUR_STATE:
+                states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.NORTH));
+                states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.SOUTH));
+                states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.EAST));
+                states.add(this.getDefaultState().withProperty(PROPERTY_FACING, EnumFacing.WEST));
+            case NONE:
+            default:
+                states.add(this.getDefaultState());
+        }
         return states;
+    }
+
+    @Override
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+    {
+        switch (getRotationMode()) {
+            case SIX_STATE:
+                return this.getDefaultState().withProperty(PROPERTY_FACING, BlockPistonBase.getFacingFromEntity(worldIn, pos, placer));
+            case FOUR_STATE:
+                int playerFacingDirection = (placer == null) ? 0 : MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3;
+                EnumFacing enumfacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
+                return this.getDefaultState().withProperty(PROPERTY_FACING, enumfacing);
+            case NONE:
+            default:
+                return super.onBlockPlaced(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
+        }
     }
 
     @Override
     public int getRenderType() {
         return 3;
+    }
+
+    @Override
+    protected BlockState createBlockState() {
+        switch (getRotationMode()) {
+            case FOUR_STATE:
+            case SIX_STATE:
+                return new BlockState(this, PROPERTY_FACING);
+            case NONE:
+            default:
+                return new BlockState(this);
+        }
     }
 
     @Override

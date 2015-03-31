@@ -71,6 +71,11 @@ public class BlockRFStorage extends BlockBakeable {
     }
 
     @Override
+    public RotationMode getRotationMode() {
+        return RotationMode.SIX_STATE;
+    }
+
+    @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ);
 
@@ -90,11 +95,6 @@ public class BlockRFStorage extends BlockBakeable {
         return new BlockState(this, PROPERTY_FACING);
     }
 
-    @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        return this.getDefaultState().withProperty(PROPERTY_FACING, BlockPistonBase.getFacingFromEntity(worldIn, pos, placer));
-    }
 
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing enumfacing = EnumFacing.getFront(meta);

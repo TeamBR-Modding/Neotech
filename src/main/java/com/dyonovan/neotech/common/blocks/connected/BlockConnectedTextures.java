@@ -40,6 +40,11 @@ public class BlockConnectedTextures extends BlockBakeable {
         };
     }
 
+    @Override
+    public RotationMode getRotationMode() {
+        return RotationMode.NONE;
+    }
+
     /**
      * Build the connected texture object
      * @return {@link com.dyonovan.neotech.collections.ConnectedTextures} with appropriate textures
