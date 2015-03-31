@@ -7,6 +7,7 @@ import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
 import com.dyonovan.neotech.helpers.inventory.InventoryHelper;
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -16,6 +17,7 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TileElectricMiner extends BaseMachine implements IExpellable, IUpdatePlayerListBox, IEnergyReceiver {
@@ -26,21 +28,26 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public static final int DEFAULT_SIZE = 9;
     public static final int DEFAULT_SPEED = 5;
 
-    private int currentX, currentY, currentZ, tickWait;
+    private int tickWait;
+    private int areaSize;
+    private int numBlock;
     private boolean isRunning, isWorking;
-    private EnumFacing rear;
+    private ArrayList<BlockPos> miningArea;
+    private BlockPos currentPos, start, finish;
 
     public EnergyStorage energyRF;
 
     public TileElectricMiner() {
         energyRF = new EnergyStorage(10000);
         inventory = new InventoryTile(1);
-        currentX = 0;
-        currentY = 0;
-        currentZ = 0;
         tickWait = 0;
+        numBlock = 0;
+        areaSize = 0;
         isRunning = false;
         isWorking = false;
+        currentPos = new BlockPos(0, 0, 0);
+        start = new BlockPos(0, 0, 0);
+        finish = new BlockPos(0, 0, 0);
     }
 
     @Override
@@ -49,21 +56,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
             if (isWorking) return;
             if (!isRunning) {
-                rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
-                BlockPos start = this.pos.offset(rear, DEFAULT_SIZE - 1);
-                start = start.offset(rear.rotateY(), (DEFAULT_SIZE / 2) - 1);
-                start = start.offset(EnumFacing.DOWN);
-
-                BlockPos finish = this.pos.offset(rear, 0);
-                finish = finish.offset(rear.rotateY(), ((DEFAULT_SIZE / 2) + 1) * -1);
-                finish = finish.offset(EnumFacing.DOWN, start.getY());
-
-                //System.out.println(rear.toString());
-                //System.out.println("Currently Trying " + new BlockPos(currentX, currentY, currentZ).toString());
-                System.out.println("Currently area " + start.toString());
-                System.out.println("to " + finish.toString());
-
-                isRunning = true;
+                setArea();
             }
             if (tickWait < DEFAULT_SPEED) {
                 ++tickWait;
@@ -73,17 +66,16 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
             if (energyRF.getEnergyStored() < RF_TICK) return;//todo reduce energy
             if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) return;
-            BlockPos newBlock = new BlockPos(currentX, currentY, currentZ);
             isWorking = true;
             IInventory storage = (IInventory) worldObj.getTileEntity(pos.up());
-            Block currentBlock = worldObj.getBlockState(newBlock).getBlock();
-            //System.out.println("Currently Trying " + newBlock.toString() + "of type " + currentBlock.getLocalizedName());
+            Block currentBlock = worldObj.getBlockState(currentPos).getBlock();
+
             if (currentBlock == null || currentBlock == Blocks.air || currentBlock == Blocks.bedrock) {
                 moveNextPos();
                 return;
             }
 
-            List<ItemStack> dropList = currentBlock.getDrops(worldObj, newBlock, worldObj.getBlockState(newBlock), 0);
+            List<ItemStack> dropList = currentBlock.getDrops(worldObj, currentPos, worldObj.getBlockState(currentPos), 0);
             //TODO deal with chests, etc. Placing Item from inv in place of block
             for (ItemStack minedItem : dropList) {
                 do {
@@ -91,33 +83,37 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                     minedItem.stackSize -= actual;
                 } while (minedItem.stackSize > 0);
 
-                worldObj.destroyBlock(newBlock, false);
+                worldObj.destroyBlock(currentPos, false);
                 moveNextPos();
             }
         }
     }
 
+    private void setArea() {
+        EnumFacing rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
+        start = getPos().offset(rear, 1);
+        start = start.offset(rear.rotateYCCW(), DEFAULT_SIZE / 2);
+        start = start.offset(EnumFacing.DOWN, pos.getY() - 1);
 
+        finish = getPos().offset(rear, DEFAULT_SIZE);
+        finish = finish.offset(rear.rotateY(), (DEFAULT_SIZE / 2));
+        finish = finish.offset(EnumFacing.DOWN);
+
+        //noinspection unchecked
+        Iterable<BlockPos> miningAreaTemp = BlockPos.getAllInBox(start, finish);
+        miningArea = Lists.newArrayList(miningAreaTemp);
+        areaSize = miningArea.size();
+        currentPos = start;
+        isRunning = true;
+    }
 
     private void moveNextPos() {
-        ++currentX;
-        switch (rear.toString()) {
-            case "west":
-
-        }
-        if (currentX >= this.pos.getX() - (DEFAULT_SIZE / 2) + DEFAULT_SIZE) {
-            ++currentZ;
-            currentX = this.pos.getX() - DEFAULT_SIZE / 2;
-            if (currentZ >= this.pos.getZ() - (DEFAULT_SIZE / 2) + DEFAULT_SIZE) {
-                --currentY;
-                currentZ = this.pos.getZ() - DEFAULT_SIZE / 2;
-                if (currentY == 0) {
-                    isRunning = false;
-                }
-            }
-        }
-        tickWait = 0;
-        isWorking = false;
+        ++numBlock;
+        if (numBlock < areaSize) {
+            currentPos = miningArea.get(numBlock);
+            tickWait = 0;
+            isWorking = false;
+        } else isRunning = false;
     }
 
 
@@ -180,9 +176,6 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     @Override
     public void setField(int id, int value) {
-        switch (id) {
-
-        }
     }
 
     @Override
@@ -206,23 +199,38 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
-        inventory.readFromNBT(tag, this);
-        currentX = tag.getInteger("CurrentX");
-        currentY = tag.getInteger("CurrentY");
-        currentZ = tag.getInteger("CurrentZ");
+        inventory.readFromNBT(tag, this, ":main");
         tickWait = tag.getInteger("TickWait");
+        areaSize = tag.getInteger("AreaSize");
+        numBlock = tag.getInteger("NumBlock");
         isRunning = tag.getBoolean("IsRunning");
+        isWorking = tag.getBoolean("IsWorking");
+        currentPos = new BlockPos(tag.getInteger("CurrentX"), tag.getInteger("CurrentY"), tag.getInteger("CurrentZ"));
+        //noinspection unchecked
+        Iterable<BlockPos> miningAreaTemp = BlockPos.getAllInBox(
+                new BlockPos(tag.getInteger("StartX"), tag.getInteger("StartY"), tag.getInteger("StartZ")),
+                new BlockPos(tag.getInteger("FinishX"), tag.getInteger("FinishY"), tag.getInteger("FinishZ")));
+        miningArea = Lists.newArrayList(miningAreaTemp);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
-        inventory.writeToNBT(tag);
-        tag.setInteger("CurrentX", currentX);
-        tag.setInteger("CurrentY", currentY);
-        tag.setInteger("CurrentZ", currentZ);
+        inventory.writeToNBT(tag, ":main");
         tag.setInteger("TickWait", tickWait);
+        tag.setInteger("AreaSize", areaSize);
+        tag.setInteger("NumBlock", numBlock);
         tag.setBoolean("IsRunning", isRunning);
+        tag.setBoolean("IsWorking", isWorking);
+        tag.setInteger("CurrentX", start.getX());
+        tag.setInteger("CurrentY", start.getY());
+        tag.setInteger("CurrentZ", start.getZ());
+        tag.setInteger("StartX", start.getX());
+        tag.setInteger("StartY", start.getY());
+        tag.setInteger("StartZ", start.getZ());
+        tag.setInteger("FinishX", finish.getX());
+        tag.setInteger("FinishY", finish.getY());
+        tag.setInteger("FinishZ", finish.getZ());
     }
 }
