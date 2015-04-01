@@ -7,7 +7,6 @@ import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.helpers.inventory.InventoryHelper;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Queues;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -19,7 +18,6 @@ import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class TileElectricMiner extends BaseMachine implements IExpellable, IUpdatePlayerListBox, IEnergyReceiver {
 
@@ -32,11 +30,11 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public static final int btnStop = 2;
 
     private int tickWait;
-    private int areaSize;
+    public int areaSize;
     public int numBlock;
     public boolean isRunning;
     private boolean isWorking;
-    private Queue<BlockPos> miningArea;
+    private ArrayList<BlockPos> miningArea;
     private BlockPos currentPos, start, finish;
 
     public EnergyStorage energyRF;
@@ -57,7 +55,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public void update() {
         if(worldObj != null && !worldObj.isRemote) {
 
-            if (isWorking) return;
+            if (!isRunning || isWorking) return;
 
             if (tickWait < DEFAULT_SPEED) {
                 ++tickWait;
@@ -102,28 +100,21 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         finish = finish.offset(EnumFacing.DOWN);
 
         //noinspection unchecked
-        miningArea = Queues.newArrayDeque(BlockPos.getAllInBox(start, finish));
+        miningArea = Lists.newArrayList(BlockPos.getAllInBox(start, finish));
         areaSize = miningArea.size();
         currentPos = start;
-        isRunning = true;
         worldObj.markBlockForUpdate(pos);
     }
 
     private void moveNextPos() {
         ++numBlock;
         if (numBlock < areaSize) {
-            currentPos = miningArea.remove();
+            currentPos = miningArea.get(numBlock);
             tickWait = 0;
             isWorking = false;
         } else isRunning = false;
         worldObj.markBlockForUpdate(pos);
     }
-
-    public int getTotalBlocks() {
-        if (miningArea == null) return 0;
-        return miningArea.size();
-    }
-
 
     /*******************************************************************************************************************
      ************************************** Energy Functions ***********************************************************
@@ -163,13 +154,13 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         tickWait = tag.getInteger("TickWait");
         areaSize = tag.getInteger("AreaSize");
         numBlock = tag.getInteger("NumBlock");
-        isRunning = tag.getBoolean("IsRunning");
-        isWorking = tag.getBoolean("IsWorking");
         currentPos = new BlockPos(tag.getInteger("CurrentX"), tag.getInteger("CurrentY"), tag.getInteger("CurrentZ"));
         //noinspection unchecked
-        miningArea = Queues.newArrayDeque(BlockPos.getAllInBox(
+        miningArea = Lists.newArrayList(BlockPos.getAllInBox(
                 new BlockPos(tag.getInteger("StartX"), tag.getInteger("StartY"), tag.getInteger("StartZ")),
                 new BlockPos(tag.getInteger("FinishX"), tag.getInteger("FinishY"), tag.getInteger("FinishZ"))));
+        isRunning = tag.getBoolean("IsRunning");
+        //worldObj.markBlockForUpdate(pos);
     }
 
     @Override
@@ -180,7 +171,6 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         tag.setInteger("AreaSize", areaSize);
         tag.setInteger("NumBlock", numBlock);
         tag.setBoolean("IsRunning", isRunning);
-        tag.setBoolean("IsWorking", isWorking);
         tag.setInteger("CurrentX", currentPos.getX());
         tag.setInteger("CurrentY", currentPos.getY());
         tag.setInteger("CurrentZ", currentPos.getZ());

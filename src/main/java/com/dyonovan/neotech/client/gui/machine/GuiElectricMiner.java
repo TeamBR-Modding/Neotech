@@ -2,12 +2,12 @@ package com.dyonovan.neotech.client.gui.machine;
 
 import com.dyonovan.neotech.common.container.machine.ContainerElectricMiner;
 import com.dyonovan.neotech.common.tileentity.machine.TileElectricMiner;
+import com.dyonovan.neotech.handlers.PacketHandler;
 import com.dyonovan.neotech.helpers.GuiHelper;
 import com.dyonovan.neotech.lib.Constants;
+import com.dyonovan.neotech.network.ElectricMinerPacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -32,7 +32,7 @@ public class GuiElectricMiner extends GuiContainer {
     public void initGui() {
         super.initGui();
 
-        drawButtons(true, false, false);
+        drawButtons(tile.areaSize == 0, !tile.isRunning && tile.areaSize > 0, tile.isRunning);
     }
 
     @SuppressWarnings("unchecked")
@@ -53,6 +53,23 @@ public class GuiElectricMiner extends GuiContainer {
         buttonList.add(btnStart);
         buttonList.add(btnStop);
         //updateScreen();
+    }
+
+    @Override
+    public void actionPerformed(GuiButton guibutton) {
+        switch (guibutton.id) {
+            case TileElectricMiner.btnScan:
+                drawButtons(false, true, false);
+                break;
+            case TileElectricMiner.btnStart:
+                drawButtons(false, false, true);
+                break;
+            case TileElectricMiner.btnStop:
+                drawButtons(false, true, false);
+                break;
+        }
+
+        PacketHandler.net.sendToServer(new ElectricMinerPacket.StartMessage(tile.getPos(), guibutton.id));
     }
 
     @Override
@@ -87,12 +104,12 @@ public class GuiElectricMiner extends GuiContainer {
         fontRendererObj.drawString(currentSize + Integer.toString(sizeActual) + "x" + Integer.toString(sizeActual), 50, 55, 16777215);
 
         final String totalBlocks = StatCollector.translateToLocal("title.neotech:totalBlocks.name") + " ";
-        final int totalBlocksActual = tile.getTotalBlocks();
+        final int totalBlocksActual = tile.areaSize; // > 0 ? tile.str : 0;
         final GuiHelper.GuiColor totalBlocksColor = totalBlocksActual > 0 ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.RED;
         fontRendererObj.drawString(totalBlocks + totalBlocksColor + Integer.toString(totalBlocksActual), 50, 65, 16777215);
 
         final String blocksLeft =  StatCollector.translateToLocal("title.neotech:blocksLeft.name") + " ";
-        final int blocksLeftActual = totalBlocksActual - tile.numBlock;
+        final int blocksLeftActual = totalBlocksActual == 0 ? 0 : totalBlocksActual - tile.numBlock;
         final GuiHelper.GuiColor blocksLeftColor = blocksLeftActual > 0 ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.RED;
         fontRendererObj.drawString(blocksLeft + blocksLeftColor + Integer.toString(blocksLeftActual), 50, 75, 16777215);
 

@@ -21,8 +21,10 @@ public class ElectricMinerPacket implements IMessageHandler<ElectricMinerPacket.
                     tile.setArea();
                     break;
                 case TileElectricMiner.btnStart:
+                    tile.isRunning = true;
                     break;
                 case TileElectricMiner.btnStop:
+                    tile.isRunning = false;
                     break;
             }
         }
