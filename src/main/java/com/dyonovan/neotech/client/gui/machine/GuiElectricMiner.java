@@ -1,10 +1,10 @@
 package com.dyonovan.neotech.client.gui.machine;
 
 import com.dyonovan.neotech.common.container.machine.ContainerElectricMiner;
-import com.dyonovan.neotech.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.neotech.common.tileentity.machine.TileElectricMiner;
 import com.dyonovan.neotech.helpers.GuiHelper;
 import com.dyonovan.neotech.lib.Constants;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +20,33 @@ public class GuiElectricMiner extends GuiContainer {
         super(new ContainerElectricMiner(inventory, tileEntity));
 
         this.tile = tileEntity;
+        ySize = 177;
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+
+        drawButtons(true, false, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void drawButtons(boolean scan, boolean start, boolean stop) {
+
+        int x = (width - xSize) / 2;
+        int y = (height - ySize) / 2;
+
+        GuiButton btnScan = new GuiButton(0, x + 37, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:scan.name"));
+        btnScan.enabled = scan;
+        GuiButton btnStart = new GuiButton(1, x + 74, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:start.name"));
+        btnStart.enabled = start;
+        GuiButton btnStop = new GuiButton(2, x + 109, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:stop.name"));
+        btnStop.enabled = stop;
+
+        buttonList.clear();
+        buttonList.add(btnScan);
+        buttonList.add(btnStart);
+        buttonList.add(btnStop);
     }
 
     @Override
@@ -32,8 +59,9 @@ public class GuiElectricMiner extends GuiContainer {
 
         final String isRunningTitle = StatCollector.translateToLocal("title.neotech:isRunning.name") + " ";
         final boolean isRunning = tile.isRunning;
+        final String strIsRunning = isRunning ? "True" : "False";
         final GuiHelper.GuiColor runningColor = !isRunning ? GuiHelper.GuiColor.RED : GuiHelper.GuiColor.GREEN;
-        fontRendererObj.drawString(isRunningTitle + runningColor + isRunning, 50, 25, 16777215);
+        fontRendererObj.drawString(isRunningTitle + runningColor + strIsRunning, 50, 25, 16777215);
 
 
         final String rfUsage = StatCollector.translateToLocal("title.neotech:rfUsage.name") + " ";

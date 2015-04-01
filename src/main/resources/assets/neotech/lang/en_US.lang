@@ -61,3 +61,6 @@ title.neotech:waitTime.name=Wait Time:
 title.neotech:currentSize.name=Current Size:
 title.neotech:totalBlocks.name=Total Blocks:
 title.neotech:blocksLeft.name=Blocks Left:
+title.neotech:scan.name=Scan
+title.neotech:start.name=Start
+title.neotech:stop.name=Stop
