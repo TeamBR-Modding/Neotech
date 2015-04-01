@@ -62,12 +62,19 @@ public abstract class BlockBakeable extends BlockContainer {
 
     public CubeTextures getDefaultTextures() {
         TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
-        CubeTextures cubeTextures = new CubeTextures();
+        CubeTextures cubeTextures = new CubeTextures(
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name),
+                map.getAtlasSprite(Constants.MODID + ":blocks/" + name)
+        );
         return cubeTextures;
     }
 
     public ResourceLocation[] registerIcons() {
-        return null;
+        return new ResourceLocation[] {new ResourceLocation(Constants.MODID + ":blocks/" + name)};
     }
 
     public abstract RotationMode getRotationMode();

@@ -42,51 +42,52 @@ public class CubeTextures {
 
     public CubeTextures getRotatedTextures(IBlockState state, BlockBakeable block) {
         CubeTextures rotated = new CubeTextures();
-        if(state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.NORTH)) {
-            rotated.copy(this);
-        }
-        else if(state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.SOUTH)) {
-            rotated.south = north;
-            rotated.north = south;
-            rotated.east = west;
-            rotated.west = east;
-            rotated.up = up;
-            rotated.down = down;
-        }
-        else if(state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.EAST)) {
-            rotated.north = west;
-            rotated.south = east;
-            rotated.east = north;
-            rotated.west = south;
-            rotated.up = up;
-            rotated.down = down;
-        }
-        else if(state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.WEST)) {
-            rotated.north = east;
-            rotated.south = west;
-            rotated.east = south;
-            rotated.west = north;
-            rotated.up = up;
-            rotated.down = down;
-        }
-        else if(state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.UP)) {
-            rotated.north = down;
-            rotated.south = up;
-            rotated.east = east;
-            rotated.west = west;
-            rotated.up = north;
-            rotated.down = south;
-        }
-        else if(state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.DOWN)) {
-            rotated.north = down;
-            rotated.south = up;
-            rotated.east = east;
-            rotated.west = west;
-            rotated.up = south;
-            rotated.down = north;
-        }
 
-        return rotated;
+
+        try {
+            if (state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.NORTH)) {
+                rotated.copy(this);
+            } else if (state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.SOUTH)) {
+                rotated.south = north;
+                rotated.north = south;
+                rotated.east = west;
+                rotated.west = east;
+                rotated.up = up;
+                rotated.down = down;
+            } else if (state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.EAST)) {
+                rotated.north = west;
+                rotated.south = east;
+                rotated.east = north;
+                rotated.west = south;
+                rotated.up = up;
+                rotated.down = down;
+            } else if (state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.WEST)) {
+                rotated.north = east;
+                rotated.south = west;
+                rotated.east = south;
+                rotated.west = north;
+                rotated.up = up;
+                rotated.down = down;
+            } else if (state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.UP)) {
+                rotated.north = down;
+                rotated.south = up;
+                rotated.east = east;
+                rotated.west = west;
+                rotated.up = north;
+                rotated.down = south;
+            } else if (state == block.getDefaultState().withProperty(BlockBakeable.PROPERTY_FACING, EnumFacing.DOWN)) {
+                rotated.north = down;
+                rotated.south = up;
+                rotated.east = east;
+                rotated.west = west;
+                rotated.up = south;
+                rotated.down = north;
+            }
+
+            return rotated;
+        } catch (IllegalArgumentException e) {
+            return this;
+        }
     }
 
     public void copy(CubeTextures cube) {

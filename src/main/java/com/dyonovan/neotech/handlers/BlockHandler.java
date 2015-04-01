@@ -7,6 +7,7 @@ import com.dyonovan.neotech.common.blocks.connected.BlockClimbingRock;
 import com.dyonovan.neotech.common.blocks.connected.BlockConnectedTextures;
 import com.dyonovan.neotech.common.blocks.connected.BlockPhantomGlass;
 import com.dyonovan.neotech.common.blocks.connected.BlockVoidGlass;
+import com.dyonovan.neotech.common.blocks.misc.BlockTrampoline;
 import com.dyonovan.neotech.common.blocks.ore.BlockOre;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockAdvancedCable;
 import com.dyonovan.neotech.common.blocks.pipe.energy.BlockBasicCable;
@@ -43,6 +44,7 @@ public class BlockHandler {
     public static Block crafter, thermalBinder, creativeStorage, blockCopper, blockTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
     public static Block phantomGlass, voidGlass, borderedBrick, borderedStoneBrick, climbingRock;
+    public static Block trampoline;
 
     public static List<BlockBakeable> blockRegistry;
 
@@ -116,6 +118,10 @@ public class BlockHandler {
                 "advancedItemPipe", PipeAdvancedItem.class);
         registerBlock(eliteItemPipe = new BlockPipeEliteItem(Material.iron, "eliteItemPipe", PipeEliteItem.class),
                 "eliteItemPipe", PipeEliteItem.class);
+
+        //Misc
+        registerBlock(trampoline = new BlockTrampoline(Material.cloth, "trampoline", null),
+                "trampoline", null);
 
         //Connected Textures
         registerBlock(phantomGlass = new BlockPhantomGlass(Material.glass, "phantomGlass", null),
