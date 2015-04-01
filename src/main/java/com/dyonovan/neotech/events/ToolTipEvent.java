@@ -1,8 +1,11 @@
 package com.dyonovan.neotech.events;
 
+import com.dyonovan.neotech.common.blocks.BlockBakeable;
+import com.dyonovan.neotech.common.blocks.pipe.item.BlockPipeBasicItem;
 import com.dyonovan.neotech.handlers.BlockHandler;
 import com.dyonovan.neotech.handlers.ItemHandler;
 import com.dyonovan.neotech.helpers.GuiHelper;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -15,6 +18,9 @@ public class ToolTipEvent {
     @SubscribeEvent
     public void onToolTip(ItemTooltipEvent event) {
         if(event.itemStack != null) {
+            if(Block.getBlockFromItem(event.itemStack.getItem()) instanceof BlockBakeable) {
+                ((BlockBakeable) Block.getBlockFromItem(event.itemStack.getItem())).addToolTip(event.toolTip);
+            }
             if(event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.ironTank)) {
                 if(event.itemStack.hasTagCompound()) {
                     NBTTagCompound liquidTag = event.itemStack.getTagCompound().getCompoundTag("Fluid");

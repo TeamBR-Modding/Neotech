@@ -104,6 +104,10 @@ public class CraftingHandler {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.borderedStoneBrick, 4),
                 Blocks.stonebrick, Blocks.stonebrick, Blocks.stonebrick, Blocks.stonebrick);
 
+        //Climbing Rock
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.climbingRock, 8), "RRR", "RLR", "RRR",
+                'R', Blocks.cobblestone, 'L', Blocks.ladder);
+
         //Upgrades
         //Speed
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemHandler.speedProcessor), "ABA", "CDC", "ABA",

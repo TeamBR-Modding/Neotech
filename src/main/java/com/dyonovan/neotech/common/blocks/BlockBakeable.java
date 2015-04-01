@@ -139,4 +139,6 @@ public abstract class BlockBakeable extends BlockContainer {
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return new DummyState(world, pos, this);
     }
+
+    public void addToolTip(List<String> toolTip) {}
 }
