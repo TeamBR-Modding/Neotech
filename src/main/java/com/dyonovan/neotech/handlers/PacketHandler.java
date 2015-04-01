@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.handlers;
 
 import com.dyonovan.neotech.lib.Constants;
+import com.dyonovan.neotech.network.ElectricMinerPacket;
 import com.dyonovan.neotech.network.ThermalBinderPacket;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -15,6 +16,7 @@ public class PacketHandler {
         net = NetworkRegistry.INSTANCE.newSimpleChannel(Constants.MODID.toUpperCase());
 
         registerMessage(ThermalBinderPacket.class, ThermalBinderPacket.StartMessage.class);
+        registerMessage(ElectricMinerPacket.class, ElectricMinerPacket.StartMessage.class);
     }
 
     @SuppressWarnings("unchecked")

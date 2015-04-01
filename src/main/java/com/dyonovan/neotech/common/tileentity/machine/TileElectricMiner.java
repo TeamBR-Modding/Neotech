@@ -25,7 +25,11 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     public static final int RF_TICK = 250;
     public static final int DEFAULT_SIZE = 9;
-    public static final int DEFAULT_SPEED = 5;
+    public static final int DEFAULT_SPEED = 20;
+
+    public static final int btnScan = 0;
+    public static final int btnStart = 1;
+    public static final int btnStop = 2;
 
     private int tickWait;
     private int areaSize;
@@ -54,9 +58,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         if(worldObj != null && !worldObj.isRemote) {
 
             if (isWorking) return;
-            if (!isRunning) {
-                setArea();
-            }
+
             if (tickWait < DEFAULT_SPEED) {
                 ++tickWait;
                 worldObj.markBlockForUpdate(pos);
@@ -89,7 +91,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         }
     }
 
-    private void setArea() {
+    public void setArea() {
         EnumFacing rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
         start = getPos().offset(rear, 1);
         start = start.offset(rear.rotateYCCW(), DEFAULT_SIZE / 2);
@@ -129,7 +131,9 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return energyRF.receiveEnergy(maxReceive, simulate);
+        int actual = energyRF.receiveEnergy(maxReceive, simulate);
+        worldObj.markBlockForUpdate(pos);
+        return actual;
     }
 
     @Override
