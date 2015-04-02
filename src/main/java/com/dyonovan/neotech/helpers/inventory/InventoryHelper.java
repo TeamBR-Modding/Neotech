@@ -17,15 +17,14 @@ public class InventoryHelper {
             for (int i = 0; i < pipe.getSizeInventory(); i++) {
                 if (stack.stackSize <= 0) return sizeMoved;
                 if (pipe.getStackInSlot(i) == null) {
-                    int actual = Math.min(stack.stackSize, pipe.getMaximumTransferRate());
-                    pipe.setInventorySlotContents(i, new ItemStack(stack.getItem(), actual, stack.getItemDamage()));
-                    stack.stackSize -= actual;
+                    int actual = stack.stackSize;
+                    pipe.getBuffer().acceptResource(stack.stackSize, EnumFacing.UP, stack, false);
                     sizeMoved += actual;
                 } else if (compareStack(pipe.getStackInSlot(i), stack)) {
-                    int currentActual = Math.min(stack.stackSize, pipe.getStackInSlot(i).getMaxStackSize() - pipe.getStackInSlot(i).stackSize);
-                    pipe.getStackInSlot(i).stackSize += currentActual;
-                    stack.stackSize -= currentActual;
-                    sizeMoved += currentActual;
+                    int actual = Math.min(stack.stackSize, pipe.getStackInSlot(i).getMaxStackSize() - pipe.getStackInSlot(i).stackSize);
+                    pipe.getBuffer().acceptResource(actual, EnumFacing.UP, stack, false);
+                    stack.stackSize -= actual;
+                    sizeMoved += actual;
                 }
             }
             return sizeMoved;
