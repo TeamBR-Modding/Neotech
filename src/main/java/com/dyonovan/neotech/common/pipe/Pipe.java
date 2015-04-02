@@ -39,6 +39,10 @@ public abstract class Pipe<T extends IPipeBuffer> extends TileEntity implements 
         initBuffers();
         coolDown = 0;
     }
+    
+    public T getBuffer() {
+        return buffer;
+    }
 
     @Override
     public void update() {
