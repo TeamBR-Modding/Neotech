@@ -28,12 +28,12 @@ public class GuiElectricMiner extends GuiContainer {
         ySize = 177;
     }
 
-    @Override
+    /*@Override
     public void initGui() {
         super.initGui();
 
         drawButtons(tile.areaSize == 0, !tile.isRunning && tile.areaSize > 0, tile.isRunning);
-    }
+    }*/
 
     @SuppressWarnings("unchecked")
     private void drawButtons(boolean scan, boolean start, boolean stop) {
@@ -76,6 +76,8 @@ public class GuiElectricMiner extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         final String invTitle = StatCollector.translateToLocal("tile.neotech:electricMiner.name");
         fontRendererObj.drawString(invTitle, (((ySize + 10) - fontRendererObj.getStringWidth(invTitle)) / 2), 6, 4210752);
+
+        drawButtons(tile.areaSize == 0, !tile.isRunning && tile.areaSize > 0, tile.isRunning);
 
         GL11.glPushMatrix();
         GL11.glScalef(.8F, .8F, 1F);

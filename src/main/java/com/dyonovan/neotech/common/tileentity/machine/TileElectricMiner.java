@@ -65,7 +65,10 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
             if (energyRF.getEnergyStored() < RF_TICK) return;
             energyRF.modifyEnergyStored(RF_TICK);
-            if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) return;
+            if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) {
+                isRunning = isWorking = false;
+                return;
+            }
             isWorking = true;
 
             IInventory storage = (IInventory) worldObj.getTileEntity(pos.up());
@@ -74,6 +77,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
             if (currentBlock == null || currentBlock == Blocks.air || currentBlock == Blocks.bedrock) {
                 moveNextPos();
+                worldObj.markBlockForUpdate(pos);
                 return;
             }
 
@@ -86,6 +90,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                     worldObj.destroyBlock(currentPos, false);
                     moveNextPos();
                     isRunning = false;
+                    return;
                 }
             }
             worldObj.destroyBlock(currentPos, false);

@@ -17,7 +17,7 @@ public class InventoryHelper {
             for (int i = 0; i < pipe.getSizeInventory(); i++) {
                 if (stack.stackSize <= 0) return sizeMoved;
                 if (pipe.getStackInSlot(i) == null) {
-                    int actual = Math.min(stack.stackSize, pipe.getStackInSlot(i).getMaxStackSize());
+                    int actual = Math.min(stack.stackSize, pipe.getMaximumTransferRate());
                     pipe.setInventorySlotContents(i, new ItemStack(stack.getItem(), actual, stack.getItemDamage()));
                     stack.stackSize -= actual;
                     sizeMoved += actual;
@@ -36,9 +36,8 @@ public class InventoryHelper {
                 if (stack.stackSize <= 0) return sizeMoved;
                 if (inventory.canInsertItem(i, stack, facing.getOpposite())) {
                     if (inventory.getStackInSlot(i) == null) {
-                        int actual = Math.min(stack.stackSize, inventory.getStackInSlot(i).getMaxStackSize());
-                        inventory.setInventorySlotContents(i, new ItemStack(stack.getItem(), actual, stack.getItemDamage()));
-                        sizeMoved += actual;
+                        inventory.setInventorySlotContents(i, stack);
+                        sizeMoved += stack.stackSize;
                     } else if (compareStack(inventory.getStackInSlot(i), stack)) {
                         int actual = Math.min(stack.stackSize, inventory.getStackInSlot(i).getMaxStackSize() - inventory.getStackInSlot(i).stackSize);
                         inventory.getStackInSlot(i).stackSize += actual;
@@ -51,9 +50,8 @@ public class InventoryHelper {
             int sizeMoved = 0;
             for (int i = 0; i < tile.getSizeInventory(); i++) {
                 if (tile.getStackInSlot(i) == null) {
-                    int actual = Math.min(stack.stackSize, tile.getStackInSlot(i).getMaxStackSize());
-                    tile.setInventorySlotContents(i, new ItemStack(stack.getItem(), actual, stack.getItemDamage()));
-                    sizeMoved += actual;
+                    tile.setInventorySlotContents(i, stack);
+                    sizeMoved += stack.stackSize;
                 } else if (compareStack(tile.getStackInSlot(i), stack)) {
                     int actual = Math.min(stack.stackSize, tile.getStackInSlot(i).getMaxStackSize() - tile.getStackInSlot(i).stackSize);
                     tile.getStackInSlot(i).stackSize += actual;
