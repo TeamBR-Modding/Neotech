@@ -18,8 +18,8 @@ public class InventoryHelper {
                 if (stack.stackSize <= 0) return sizeMoved;
                 if (pipe.getStackInSlot(i) == null) {
                     int actual = stack.stackSize;
-                    pipe.getBuffer().acceptResource(stack.stackSize, EnumFacing.UP, stack, false);
-                    sizeMoved += actual;
+                    pipe.getBuffer().acceptResource(stack.stackSize, facing.getOpposite(), stack, false);
+                    sizeMoved += actual - stack.stackSize;
                 } else if (compareStack(pipe.getStackInSlot(i), stack)) {
                     int actual = Math.min(stack.stackSize, pipe.getStackInSlot(i).getMaxStackSize() - pipe.getStackInSlot(i).stackSize);
                     pipe.getBuffer().acceptResource(actual, EnumFacing.UP, stack, false);
