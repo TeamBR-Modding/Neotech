@@ -6,13 +6,10 @@ import com.dyonovan.neotech.common.blocks.BlockBakeable;
 import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.helpers.inventory.InventoryHelper;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
@@ -21,7 +18,6 @@ import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class TileElectricMiner extends BaseMachine implements IExpellable, IUpdatePlayerListBox, IEnergyReceiver {
 
@@ -85,26 +81,15 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
             //TODO deal with chests, etc. Placing Item from inv in place of block
             for (ItemStack minedItem : dropList) {
                 int stacksize = minedItem.stackSize;
-                do {
-                    int actual = InventoryHelper.insertItemIntoInventory(storage, minedItem, EnumFacing.UP, -1, false, true);
-                    if (actual <= 0) {
-                        isWorking = false;
-                        tickWait = 0;
-                        return;
-                    }
-                    stacksize -= actual;
-                } while (stacksize > 0);
+                stacksize -= InventoryHelper.moveStack(storage, minedItem, EnumFacing.UP);
+                if (stacksize > 0) {
+                    worldObj.destroyBlock(currentPos, false);
+                    moveNextPos();
+                    isRunning = false;
+                }
             }
-            for (ItemStack minedItem : dropList) {
-                int stacksize = minedItem.stackSize;
-                do {
-                    int actual = InventoryHelper.insertItemIntoInventory(storage, minedItem, EnumFacing.UP, -1, true, true);
-                    stacksize -= actual;
-                } while (stacksize > 0);
-
-                worldObj.destroyBlock(currentPos, false);
-                moveNextPos();
-            }
+            worldObj.destroyBlock(currentPos, false);
+            moveNextPos();
         }
     }
 
