@@ -31,12 +31,12 @@ public class InventoryHelper {
      * @param slot
      * @param stack
      */
-    public static void tryInsertStack(IInventory targetInventory, int slot, ItemStack stack, boolean canMerge) {
+    public static int tryInsertStack(IInventory targetInventory, int slot, ItemStack stack, boolean canMerge) {
         if (targetInventory.isItemValidForSlot(slot, stack)) {
             ItemStack targetStack = targetInventory.getStackInSlot(slot);
             if (targetStack == null) {
                 targetInventory.setInventorySlotContents(slot, stack.copy());
-                stack.stackSize = 0;
+                return stack.stackSize;
             } else if (canMerge) {
                 if (targetInventory.isItemValidForSlot(slot, stack) &&
                         areMergeCandidates(stack, targetStack)) {
@@ -47,9 +47,11 @@ public class InventoryHelper {
                     copy.stackSize += mergeAmount;
                     targetInventory.setInventorySlotContents(slot, copy);
                     stack.stackSize -= mergeAmount;
+                    return mergeAmount;
                 }
             }
         }
+        return 0;
     }
 
     public static boolean areItemAndTagEqual(final ItemStack stackA, ItemStack stackB) {
@@ -72,9 +74,10 @@ public class InventoryHelper {
         insertItemIntoInventory(inventory, stack, side, intoSlot, doMove, true);
     }
 
-    public static void insertItemIntoInventory(IInventory inventory, ItemStack stack, EnumFacing side, int intoSlot, boolean doMove, boolean canStack) {
-        if (stack == null) return;
+    public static int insertItemIntoInventory(IInventory inventory, ItemStack stack, EnumFacing side, int intoSlot, boolean doMove, boolean canStack) {
+        if (stack == null) return 0;
 
+        int actual = 0;
         IInventory targetInventory = inventory;
         // if we're not meant to move, make a clone of the inventory
         if (!doMove) {
@@ -97,12 +100,15 @@ public class InventoryHelper {
         }
         // if we've defining a specific slot, we'll just use that
         if (intoSlot > -1) attemptSlots.retainAll(ImmutableSet.of(intoSlot));
-        if (attemptSlots.isEmpty()) return;
+        if (attemptSlots.isEmpty()) return 0;
         for (Integer slot : attemptSlots) {
             if (stack.stackSize <= 0) break;
             if (isSidedInventory && !((ISidedInventory) inventory).canInsertItem(slot, stack, side)) continue;
-            tryInsertStack(targetInventory, slot, stack, canStack);
+            int attempt = tryInsertStack(targetInventory, slot, stack, canStack);
+            stack.stackSize -= attempt;
+            actual += attempt;
         }
+        return actual;
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.network;
 
 import com.dyonovan.neotech.common.tileentity.machine.TileElectricMiner;
-import com.dyonovan.neotech.common.tileentity.machine.TileThermalBinder;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -17,13 +16,13 @@ public class ElectricMinerPacket implements IMessageHandler<ElectricMinerPacket.
                     getTileEntity(message.pos);
 
             switch (message.btnPress) {
-                case TileElectricMiner.btnScan:
+                case TileElectricMiner.BTN_SCAN:
                     tile.setArea();
                     break;
-                case TileElectricMiner.btnStart:
+                case TileElectricMiner.BTN_START:
                     tile.isRunning = true;
                     break;
-                case TileElectricMiner.btnStop:
+                case TileElectricMiner.BTN_STOP:
                     tile.isRunning = false;
                     break;
             }

@@ -41,11 +41,11 @@ public class GuiElectricMiner extends GuiContainer {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        GuiButton btnScan = new GuiButton(TileElectricMiner.btnScan, x + 37, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:scan.name"));
+        GuiButton btnScan = new GuiButton(TileElectricMiner.BTN_SCAN, x + 37, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:scan.name"));
         btnScan.enabled = scan;
-        GuiButton btnStart = new GuiButton(TileElectricMiner.btnStart, x + 74, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:start.name"));
+        GuiButton btnStart = new GuiButton(TileElectricMiner.BTN_START, x + 74, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:start.name"));
         btnStart.enabled = start;
-        GuiButton btnStop = new GuiButton(TileElectricMiner.btnStop, x + 109, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:stop.name"));
+        GuiButton btnStop = new GuiButton(TileElectricMiner.BTN_STOP, x + 109, y + 72, 30, 20, StatCollector.translateToLocal("title.neotech:stop.name"));
         btnStop.enabled = stop;
 
         buttonList.clear();
@@ -58,13 +58,13 @@ public class GuiElectricMiner extends GuiContainer {
     @Override
     public void actionPerformed(GuiButton guibutton) {
         switch (guibutton.id) {
-            case TileElectricMiner.btnScan:
+            case TileElectricMiner.BTN_SCAN:
                 drawButtons(false, true, false);
                 break;
-            case TileElectricMiner.btnStart:
+            case TileElectricMiner.BTN_START:
                 drawButtons(false, false, true);
                 break;
-            case TileElectricMiner.btnStop:
+            case TileElectricMiner.BTN_STOP:
                 drawButtons(false, true, false);
                 break;
         }
