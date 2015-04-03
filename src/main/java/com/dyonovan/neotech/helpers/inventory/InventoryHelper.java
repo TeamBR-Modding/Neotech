@@ -12,22 +12,7 @@ public class InventoryHelper {
         if (tile == null) return 0;
 
         if (tile instanceof PipeBasicItem) {
-            PipeBasicItem pipe = (PipeBasicItem) tile;
-            int sizeMoved = 0;
-            for (int i = 0; i < pipe.getSizeInventory(); i++) {
-                if (stack.stackSize <= 0) return sizeMoved;
-                if (pipe.getStackInSlot(i) == null) {
-                    int actual = stack.stackSize;
-                    pipe.getBuffer().acceptResource(stack.stackSize, facing.getOpposite(), stack, false);
-                    sizeMoved += actual - stack.stackSize;
-                } else if (compareStack(pipe.getStackInSlot(i), stack)) {
-                    int actual = Math.min(stack.stackSize, pipe.getStackInSlot(i).getMaxStackSize() - pipe.getStackInSlot(i).stackSize);
-                    pipe.getBuffer().acceptResource(actual, EnumFacing.UP, stack, false);
-                    stack.stackSize -= actual;
-                    sizeMoved += actual;
-                }
-            }
-            return sizeMoved;
+            return ((PipeBasicItem)tile).getBuffer().acceptResource(stack.stackSize, facing.getOpposite(), stack, false).stackSize;
         } else if (tile instanceof ISidedInventory) {
             ISidedInventory inventory = (ISidedInventory) tile;
             int sizeMoved = 0;
