@@ -8,7 +8,6 @@ import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.helpers.inventory.InventoryHelper;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -16,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.ILockableContainer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,13 +82,13 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                 worldObj.markBlockForUpdate(pos);
                 return;
             }
-            if (currentBlock instanceof BlockChest) {
+            if (worldObj.getTileEntity(currentPos) instanceof ILockableContainer) {
                 IInventory chest = (IInventory) worldObj.getTileEntity(currentPos);
                 for (int i = 0; i < chest.getSizeInventory(); i++) {
                     if (chest.getStackInSlot(i) == null) continue;
                     int stacksize = chest.getStackInSlot(i).stackSize;
                     stacksize -= InventoryHelper.moveStack(storage, chest.getStackInSlot(i), EnumFacing.UP);
-                    if (chest.getStackInSlot(i).stackSize > 0) {
+                    if (stacksize > 0) {
                         isRunning = false;
                         return;
                     } else {
