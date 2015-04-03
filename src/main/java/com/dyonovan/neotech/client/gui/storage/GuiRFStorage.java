@@ -68,7 +68,7 @@ public class GuiRFStorage extends GuiContainer {
         tessellator.draw();
 
         //Disable slots based on tiers
-        switch (tile.getSizeInventory()) {
+        switch (tile.getTier()) {
             case 1:
                 drawTexturedModalRect(x + 148, y + 36, 176, 52, 16, 16);
                 drawTexturedModalRect(x + 148, y + 54, 176, 52, 16, 16);

@@ -8,6 +8,7 @@ import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.helpers.inventory.InventoryHelper;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -17,13 +18,14 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TileElectricMiner extends BaseMachine implements IExpellable, IUpdatePlayerListBox, IEnergyReceiver {
 
     public static final int RF_TICK = 250;
     public static final int DEFAULT_SIZE = 9;
-    public static final int DEFAULT_SPEED = 20;
+    public static final int DEFAULT_SPEED = 5;
 
     public static final int BTN_SCAN = 0;
     public static final int BTN_START = 1;
@@ -80,17 +82,30 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                 worldObj.markBlockForUpdate(pos);
                 return;
             }
-
-            List<ItemStack> dropList = currentBlock.getDrops(worldObj, currentPos, worldObj.getBlockState(currentPos), 0);
-            //TODO deal with chests, etc. Placing Item from inv in place of block
-            for (ItemStack minedItem : dropList) {
-                int stacksize = minedItem.stackSize;
-                stacksize -= InventoryHelper.moveStack(storage, minedItem, EnumFacing.UP);
-                if (stacksize > 0) {
-                    worldObj.destroyBlock(currentPos, false);
-                    moveNextPos();
-                    isRunning = false;
-                    return;
+            if (currentBlock instanceof BlockChest) {
+                IInventory chest = (IInventory) worldObj.getTileEntity(currentPos);
+                for (int i = 0; i < chest.getSizeInventory(); i++) {
+                    if (chest.getStackInSlot(i) == null) continue;
+                    int stacksize = chest.getStackInSlot(i).stackSize;
+                    stacksize -= InventoryHelper.moveStack(storage, chest.getStackInSlot(i), EnumFacing.UP);
+                    if (chest.getStackInSlot(i).stackSize > 0) {
+                        isRunning = false;
+                        return;
+                    } else {
+                        chest.setInventorySlotContents(i, null);
+                    }
+                }
+            } else {
+                List<ItemStack> dropList = currentBlock.getDrops(worldObj, currentPos, worldObj.getBlockState(currentPos), 0);
+                for (ItemStack minedItem : dropList) {
+                    int stacksize = minedItem.stackSize;
+                    stacksize -= InventoryHelper.moveStack(storage, minedItem, EnumFacing.UP);
+                    if (stacksize > 0) {
+                        worldObj.destroyBlock(currentPos, false);
+                        moveNextPos();
+                        isRunning = false;
+                        return;
+                    }
                 }
             }
             worldObj.destroyBlock(currentPos, false);
@@ -110,8 +125,9 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
         //noinspection unchecked
         miningArea = Lists.newArrayList(BlockPos.getAllInBox(start, finish));
+        Collections.sort(miningArea, Collections.reverseOrder());
         areaSize = miningArea.size();
-        currentPos = start;
+        currentPos = miningArea.get(0);
         worldObj.markBlockForUpdate(pos);
     }
 
@@ -169,6 +185,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         finish =  new BlockPos(tag.getInteger("FinishX"), tag.getInteger("FinishY"), tag.getInteger("FinishZ"));
         //noinspection unchecked
         miningArea = Lists.newArrayList(BlockPos.getAllInBox(start, finish));
+        Collections.sort(miningArea, Collections.reverseOrder());
         isRunning = tag.getBoolean("IsRunning");
         //worldObj.markBlockForUpdate(pos);
     }
