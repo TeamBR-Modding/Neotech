@@ -10,6 +10,7 @@ public class TileEliteRFStorage extends TileAdvancedRFStorage {
     public TileEliteRFStorage() {
         setInventory(3);
         setEnergyRF(RF_TOTAL_3, RF_TICK_3);
+        tier = 3;
     }
 
     @Override

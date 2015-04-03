@@ -14,6 +14,7 @@ public class TileCreativeRFStorage extends TileEliteRFStorage {
         setInventory(3);
         setEnergyRF(RF_TOTAL_CREATIVE, RF_TICK_CREATIVE);
         energyRF.setEnergyStored(RF_TOTAL_CREATIVE);
+        tier = 4;
     }
 
     @Override

@@ -22,11 +22,15 @@ public class TileBasicRFStorage extends BaseMachine implements IExpellable, IUpd
     public static final int CHARGE_SLOT_3 = 2;
 
     protected EnergyStorage energyRF;
+    protected int tier;
 
     public TileBasicRFStorage() {
         setEnergyRF(RF_TOTAL_1, RF_TICK_1);
         setInventory(1);
+        tier = 1;
     }
+
+    public int getTier() { return tier; }
 
     public void setEnergyRF(int total, int tick) {
         energyRF = new EnergyStorage(total, tick);

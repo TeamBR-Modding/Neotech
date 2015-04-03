@@ -28,7 +28,7 @@ public class GuiRFStorage extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         String invTitle = "";
-        switch (tile.getSizeInventory()) {
+        switch (tile.getTier()) {
             case 1:
                 invTitle =  StatCollector.translateToLocal("tile.neotech:basicRFStorage.name");
                 break;
