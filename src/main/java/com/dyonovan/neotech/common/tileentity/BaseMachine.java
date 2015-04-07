@@ -192,6 +192,8 @@ public abstract class BaseMachine extends TileEntity implements ISidedInventory 
     }
 
     public int findEff(int rfTick, int actSpeed, int eff) {
-        return rfTick + Math.round(rfTick * Math.min(actSpeed / 10F, 1)) - Math.round(rfTick * Math.min(eff / 10F, 1));
+        if (eff == 0) return rfTick;
+        return rfTick - Math.round(rfTick * Math.min(eff / 10F, 1));
+        //return rfTick + Math.round(rfTick * Math.min(actSpeed / 10F, 1)) - Math.round(rfTick * Math.min(eff / 10F, 1));
     }
 }

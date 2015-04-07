@@ -51,6 +51,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
             }
         }
         if (currentProcessTime >= BASE_PROCESS_TIME) {
+
             inventory.setStackInSlot(writeToMB(speed, efficiency, capacity, minerSize, io, silkTouch), MB_SLOT_OUTPUT);
             doReset();
         }

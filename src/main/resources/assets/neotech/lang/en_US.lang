@@ -46,6 +46,8 @@ item.neotech:capRam.name=Capacity Upgrade
 item.neotech:effFan.name=Efficiency Upgrade
 item.neotech:ioPort.name=Auto Output Upgrade (WIP)
 item.neotech:speedProcessor.name=Speed Upgrade
+item.neotech:minerSize.name=Size Upgrade
+item.neotech:silkTouch.name=Silk Touch Upgrade
 item.neotech:upgradeMB.name=Machine Upgrade Motherboard (Empty)
 item.neotech:upgradeMBFull.name=Machine Upgrade Motherboard (Filled)
 

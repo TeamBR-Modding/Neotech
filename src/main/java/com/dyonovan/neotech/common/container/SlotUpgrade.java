@@ -32,10 +32,7 @@ public class SlotUpgrade extends Slot {
             NBTTagCompound tag = stack.getTagCompound();
             if (tag.hasKey("Speed")) {
                 tile.setField(BaseMachine.SPEED, tag.getInteger("Speed"));
-                tile.setField(BaseMachine.EFFICIENCY, tag.getInteger("Speed") * -1);
-            }
-            if (tag.hasKey("Efficiency")) {
-                tile.setField(BaseMachine.EFFICIENCY, tile.getField(BaseMachine.EFFICIENCY) + tag.getInteger("Efficiency"));
+                //tile.setField(BaseMachine.EFFICIENCY, tag.getInteger("Speed") * -1);
             }
             if (tag.hasKey("Capacity")) {
                 tile.setField(BaseMachine.CAPACITY, tag.getInteger("Capacity"));
@@ -44,11 +41,17 @@ public class SlotUpgrade extends Slot {
                 tile.setField(BaseMachine.SIZE, tag.getInteger("MinerSize"));
             }
             if (tag.hasKey("AutoOutput")) {
-                tile.setField(BaseMachine.IO, tag.getBoolean("Efficiency") ? 1 : 0);
+                tile.setField(BaseMachine.IO, tag.getBoolean("AutoOutput") ? 1 : 0);
             }
             if (tag.hasKey("SilkTouch")) {
                 tile.setField(BaseMachine.SILKTOUCH, tag.getBoolean("SilkTouch") ? 1 : 0);
             }
+            int eff = 0;
+            if (tag.hasKey("Efficiency")) eff += tile.getField(BaseMachine.EFFICIENCY) + tag.getInteger("Efficiency");
+            if (tag.hasKey("Speed")) eff += tag.getInteger("Speed") * -1;
+            if (tag.hasKey("MinerSize")) eff += tag.getInteger("MinerSize") * -3;
+            if (tag.hasKey("SilkTouch")) if (tag.getBoolean("SilkTouch")) eff += -5;
+            tile.setField(BaseMachine.EFFICIENCY, eff);
         }
         super.putStack(stack);
     }

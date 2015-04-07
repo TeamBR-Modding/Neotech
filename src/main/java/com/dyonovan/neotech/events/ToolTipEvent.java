@@ -82,11 +82,11 @@ public class ToolTipEvent {
                     if (tag.hasKey("Efficiency") || tag.hasKey("Speed")) {
                         int eff = tag.hasKey("Efficiency") ? tag.getInteger("Efficiency") : 0;
                         int speed = tag.hasKey("Speed") ? tag.getInteger("Speed") : 0;
-                        int actual = eff * 10 - speed * 10;
-                        if (actual >= 0)
-                            event.toolTip.add(GuiHelper.GuiColor.GREEN + "Efficiency: +" + actual + "%");
+                        //int actual = eff * 10 - speed * 10;
+                        if (eff >= 0)
+                            event.toolTip.add(GuiHelper.GuiColor.GREEN + "Efficiency: +" + eff + "%");
                         else
-                            event.toolTip.add(GuiHelper.GuiColor.RED + "Efficiency: " + actual + "%");
+                            event.toolTip.add(GuiHelper.GuiColor.RED + "Efficiency: " + eff + "%");
                     }
                     if (tag.hasKey("Capacity"))
                         event.toolTip.add(GuiHelper.GuiColor.GREEN + "Capacity: +" + tag.getInteger("Capacity") * 1000 + GuiHelper.GuiColor.ORANGE + " RF");
@@ -142,7 +142,7 @@ public class ToolTipEvent {
             }
             if (event.itemStack.getItem() == ItemHandler.silkTouch) {
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "Adds Silk Touch at the cost of Efficiency");
-                event.toolTip.add(GuiHelper.GuiColor.GREEN + "+Silk Touch " + GuiHelper.GuiColor.RED + "+200 RF Use");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "+Silk Touch " + GuiHelper.GuiColor.RED + "+50% RF Use");
                 if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
                     event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
                     event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Miner");
@@ -152,7 +152,7 @@ public class ToolTipEvent {
             }
             if (event.itemStack.getItem() == ItemHandler.minerSize) {
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases Size at the cost of Efficiency");
-                event.toolTip.add(GuiHelper.GuiColor.GREEN + "3x Size " + GuiHelper.GuiColor.RED + "+300 RF Use");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "3x Size " + GuiHelper.GuiColor.RED + "+30% RF Use");
                 if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
                     event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
                     event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Miner");
