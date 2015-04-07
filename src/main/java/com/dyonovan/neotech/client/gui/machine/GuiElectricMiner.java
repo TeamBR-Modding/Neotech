@@ -84,8 +84,8 @@ public class GuiElectricMiner extends GuiContainer {
 
 
         final String rfUsage = StatCollector.translateToLocal("title.neotech:rfUsage.name") + " ";
-        final int rfActual = tile.findEff(TileElectricMiner.RF_TICK,
-                tile.getField(BaseMachine.SPEED), tile.getField(BaseMachine.EFFICIENCY));
+        final int rfActual = tile.findEff(TileElectricMiner.RF_TICK, tile.getField(BaseMachine.SPEED),
+                tile.getField(BaseMachine.EFFICIENCY), tile.getField(BaseMachine.SILKTOUCH) == 1, tile.getField(BaseMachine.SIZE));
         final GuiHelper.GuiColor rfColor = rfActual > TileElectricMiner.RF_TICK ? GuiHelper.GuiColor.RED :
                 rfActual < TileElectricMiner.RF_TICK ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.WHITE;
         fontRendererObj.drawString(rfUsage + rfColor + Integer.toString(rfActual), 50, 35, 16777215);

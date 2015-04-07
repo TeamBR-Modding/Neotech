@@ -34,10 +34,10 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         currentProcessTime = 0;
         inventory = new InventoryTile(3);
         speed = 0;
-        capacity = DEFAULT_RF_CAPACITY;
+        capacity = 0;
         efficiency = 0;
         io = false;
-        energyRF = new EnergyStorage(capacity);
+        energyRF = new EnergyStorage(DEFAULT_RF_CAPACITY);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                     BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
                     return;
                 }
-                if (energyRF.getEnergyStored() >= findEff(RF_TICK, speed, efficiency)) {
-                    energyRF.modifyEnergyStored(-findEff(RF_TICK, speed, efficiency));
+                if (energyRF.getEnergyStored() >= findEff(RF_TICK, speed, efficiency, false, 0)) {
+                    energyRF.modifyEnergyStored(-findEff(RF_TICK, speed, efficiency, false, 0));
                     ++currentProcessTime;
                 }
             }

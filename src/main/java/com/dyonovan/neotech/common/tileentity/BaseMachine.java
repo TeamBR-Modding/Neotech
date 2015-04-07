@@ -24,6 +24,7 @@ public abstract class BaseMachine extends TileEntity implements ISidedInventory 
     public static final int IO = 3;
     public static final int SIZE = 4;
     public static final int SILKTOUCH = 5;
+    public static final int TOTAL_UPGRADES = 6;
 
     protected InventoryTile inventory;
     protected int speed, capacity, efficiency, minerSize;
@@ -191,9 +192,16 @@ public abstract class BaseMachine extends TileEntity implements ISidedInventory 
         return Math.round(totalTime - (totalTime * Math.min(actSpeed / 10F, 1)));
     }
 
-    public int findEff(int rfTick, int actSpeed, int eff) {
-        if (eff == 0) return rfTick;
-        return rfTick - Math.round(rfTick * Math.min(eff / 10F, 1));
-        //return rfTick + Math.round(rfTick * Math.min(actSpeed / 10F, 1)) - Math.round(rfTick * Math.min(eff / 10F, 1));
+    public int findEff(int rfTick, int actSpeed, int eff, boolean silk, int size) {
+        int actRFTick = rfTick;
+        if (actSpeed != 0)
+            actRFTick += Math.round(rfTick * Math.min(actSpeed / 10F, 1));
+        if (size != 0)
+            actRFTick += Math.round(rfTick * ((size / 10F) * 3));
+        if (eff != 0)
+            actRFTick -= Math.round(rfTick * Math.min(eff / 10F, 1));
+        if (silk)
+            actRFTick += Math.round(rfTick * .5);
+        return actRFTick;
     }
 }

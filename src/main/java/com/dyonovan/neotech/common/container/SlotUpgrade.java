@@ -46,19 +46,16 @@ public class SlotUpgrade extends Slot {
             if (tag.hasKey("SilkTouch")) {
                 tile.setField(BaseMachine.SILKTOUCH, tag.getBoolean("SilkTouch") ? 1 : 0);
             }
-            int eff = 0;
-            if (tag.hasKey("Efficiency")) eff += tile.getField(BaseMachine.EFFICIENCY) + tag.getInteger("Efficiency");
-            if (tag.hasKey("Speed")) eff += tag.getInteger("Speed") * -1;
-            if (tag.hasKey("MinerSize")) eff += tag.getInteger("MinerSize") * -3;
-            if (tag.hasKey("SilkTouch")) if (tag.getBoolean("SilkTouch")) eff += -5;
-            tile.setField(BaseMachine.EFFICIENCY, eff);
+            if (tag.hasKey("Efficiency")) {
+                tile.setField(BaseMachine.EFFICIENCY, tag.getInteger("Efficiency"));
+            }
         }
         super.putStack(stack);
     }
 
     @Override
     public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack) {
-       for (int i = 0; i < 4; i++) {
+       for (int i = 0; i < BaseMachine.TOTAL_UPGRADES; i++) {
            tile.setField(i, 0);
        }
         super.onPickupFromSlot(playerIn, stack);

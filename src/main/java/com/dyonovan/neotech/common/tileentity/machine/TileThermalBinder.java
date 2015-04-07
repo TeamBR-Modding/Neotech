@@ -205,6 +205,12 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         energyRF.readFromNBT(tag);
         inventory.readFromNBT(tag, this, ":MainInv");
         currentProcessTime = tag.getInteger("CurrentProcessTime");
+        speed = tag.getInteger("Speed");
+        efficiency = tag.getInteger("Efficiency");
+        capacity = tag.getInteger("Capacity");
+        minerSize = tag.getInteger("MinerSize");
+        io = tag.getBoolean("IO");
+        silkTouch = tag.getBoolean("SilkTouch");
     }
 
     @Override
@@ -213,5 +219,11 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         energyRF.writeToNBT(tag);
         inventory.writeToNBT(tag, ":MainInv");
         tag.setInteger("CurrentProcessTime", currentProcessTime);
+        tag.setInteger("Speed", speed);
+        tag.setInteger("Efficiency", efficiency);
+        tag.setInteger("Capacity", capacity);
+        tag.setInteger("MinerSize", minerSize);
+        tag.setBoolean("IO", io);
+        tag.setBoolean("SilkTouch", silkTouch);
     }
 }

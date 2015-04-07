@@ -50,9 +50,9 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public TileElectricMiner() {
         inventory = new InventoryTile(1);
         speed = 0;
-        capacity = DEFAULT_RF_CAPACITY;
+        capacity = 0;
         efficiency = 0;
-        energyRF = new EnergyStorage(capacity);
+        energyRF = new EnergyStorage(DEFAULT_RF_CAPACITY);
         tickWait = 0;
         numBlock = 0;
         areaSize = 0;
@@ -76,8 +76,8 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                 return;
             }
 
-            if (energyRF.getEnergyStored() < findEff(RF_TICK, speed, efficiency)) return;
-            energyRF.modifyEnergyStored(-findEff(RF_TICK, speed, efficiency));
+            if (energyRF.getEnergyStored() < findEff(RF_TICK, speed, efficiency, silkTouch, minerSize)) return;
+            energyRF.modifyEnergyStored(-findEff(RF_TICK, speed, efficiency, silkTouch, minerSize));
             if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) {
                 isRunning = isWorking = false;
                 return;
@@ -126,7 +126,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     private void doStop() {
         isRunning = false;
-        BlockMachine.setState(worldObj, pos, BlockHandler.electricMiner);
+        setRunning(false);
     }
 
     public void setRunning(boolean state) {
@@ -134,6 +134,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
             BlockMachine.setState(worldObj, pos, BlockHandler.electricMinerActive);
         else
             BlockMachine.setState(worldObj, pos, BlockHandler.electricMiner);
+        worldObj.markBlockForUpdate(pos);
     }
 
     public void setArea() {

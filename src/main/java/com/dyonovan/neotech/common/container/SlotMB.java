@@ -31,8 +31,16 @@ public class SlotMB extends Slot {
                 inventory.setInventorySlotContents(count, new ItemStack(ItemHandler.capRam, tag.getInteger("Capacity")));
                 ++count;
             }
+            if (tag.hasKey("MinerSize")) {
+                inventory.setInventorySlotContents(count, new ItemStack(ItemHandler.minerSize, tag.getInteger("MinerSize")));
+                ++count;
+            }
             if (tag.hasKey("AutoOutput")) {
                 inventory.setInventorySlotContents(count, new ItemStack(ItemHandler.ioPort, 1));
+                ++count;
+            }
+            if (tag.hasKey("SilkTouch")) {
+                inventory.setInventorySlotContents(count, new ItemStack(ItemHandler.silkTouch, 1));
                 ++count;
             }
         }

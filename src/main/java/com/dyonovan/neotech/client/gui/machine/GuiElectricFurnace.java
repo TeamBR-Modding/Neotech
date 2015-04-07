@@ -2,7 +2,6 @@ package com.dyonovan.neotech.client.gui.machine;
 
 import com.dyonovan.neotech.common.container.machine.ContainerElectricFurnace;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
-import com.dyonovan.neotech.common.tileentity.machine.TileElectricCrusher;
 import com.dyonovan.neotech.common.tileentity.machine.TileElectricFurnace;
 import com.dyonovan.neotech.helpers.GuiHelper;
 import com.dyonovan.neotech.lib.Constants;
@@ -42,7 +41,7 @@ public class GuiElectricFurnace extends GuiContainer {
 
         final String rfUsage = StatCollector.translateToLocal("title.neotech:rfUsage.name") + " ";
         final int rfActual = tile.findEff(TileElectricFurnace.RF_TICK,
-                tile.getField(BaseMachine.SPEED), tile.getField(BaseMachine.EFFICIENCY));
+                tile.getField(BaseMachine.SPEED), tile.getField(BaseMachine.EFFICIENCY), false, 0);
         final GuiHelper.GuiColor rfColor = rfActual > TileElectricFurnace.RF_TICK ? GuiHelper.GuiColor.RED : GuiHelper.GuiColor.GREEN;
         fontRendererObj.drawString(rfUsage + rfColor + Integer.toString(rfActual), 75, 70, 16777215);
 

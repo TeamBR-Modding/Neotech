@@ -79,23 +79,32 @@ public class ToolTipEvent {
                     NBTTagCompound tag = event.itemStack.getTagCompound();
                     if (tag.hasKey("Speed"))
                         event.toolTip.add(GuiHelper.GuiColor.GREEN + "Speed: +" + tag.getInteger("Speed") * 10 + "%");
-                    if (tag.hasKey("Efficiency") || tag.hasKey("Speed")) {
-                        int eff = tag.hasKey("Efficiency") ? tag.getInteger("Efficiency") : 0;
-                        int speed = tag.hasKey("Speed") ? tag.getInteger("Speed") : 0;
-                        //int actual = eff * 10 - speed * 10;
-                        if (eff >= 0)
-                            event.toolTip.add(GuiHelper.GuiColor.GREEN + "Efficiency: +" + eff + "%");
-                        else
-                            event.toolTip.add(GuiHelper.GuiColor.RED + "Efficiency: " + eff + "%");
-                    }
                     if (tag.hasKey("Capacity"))
                         event.toolTip.add(GuiHelper.GuiColor.GREEN + "Capacity: +" + tag.getInteger("Capacity") * 1000 + GuiHelper.GuiColor.ORANGE + " RF");
+                    if (tag.hasKey("MinerSize"))
+                        event.toolTip.add(GuiHelper.GuiColor.GREEN + "Size: x" + tag.getInteger("MinerSize") * 3);
                     if (tag.hasKey("AutoOutput")) {
                         if (tag.getBoolean("AutoOutput"))
                             event.toolTip.add(GuiHelper.GuiColor.GREEN + "Auto Output: " + "True");
                         else
                             event.toolTip.add(GuiHelper.GuiColor.RED + "Auto Output: " + "False");
                     }
+                    if (tag.hasKey("SilkTouch")) {
+                        if (tag.getBoolean("SilkTouch"))
+                            event.toolTip.add(GuiHelper.GuiColor.GREEN + "Silk Touch: " + "True");
+                        else
+                            event.toolTip.add(GuiHelper.GuiColor.RED + "Silk Touch: " + "False");
+                    }
+                    int eff = 0;
+                    if (tag.hasKey("Efficiency")) eff += tag.getInteger("Efficiency");
+                    if (tag.hasKey("Speed")) eff += tag.getInteger("Speed") * -1;
+                    if (tag.hasKey("MinerSize")) eff += tag.getInteger("MinerSize") * -3;
+                    if (tag.hasKey("SilkTouch")) if (tag.getBoolean("SilkTouch")) eff += -5;
+                        if (eff >= 0)
+                            event.toolTip.add(GuiHelper.GuiColor.GREEN + "Efficiency: +" + eff * 10 + "%");
+                        else
+                            event.toolTip.add(GuiHelper.GuiColor.RED + "Efficiency: " + eff * 10 + "%");
+
                 }
             }
             if (event.itemStack.getItem() == ItemHandler.ioPort) {
