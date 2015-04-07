@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.client.gui.machine;
 
 import com.dyonovan.neotech.common.container.machine.ContainerElectricMiner;
+import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.common.tileentity.machine.TileElectricMiner;
 import com.dyonovan.neotech.handlers.PacketHandler;
 import com.dyonovan.neotech.helpers.GuiHelper;
@@ -27,13 +28,6 @@ public class GuiElectricMiner extends GuiContainer {
         this.tile = tileEntity;
         ySize = 177;
     }
-
-    /*@Override
-    public void initGui() {
-        super.initGui();
-
-        drawButtons(tile.areaSize == 0, !tile.isRunning && tile.areaSize > 0, tile.isRunning);
-    }*/
 
     @SuppressWarnings("unchecked")
     private void drawButtons(boolean scan, boolean start, boolean stop) {
@@ -90,13 +84,14 @@ public class GuiElectricMiner extends GuiContainer {
 
 
         final String rfUsage = StatCollector.translateToLocal("title.neotech:rfUsage.name") + " ";
-        final int rfActual = TileElectricMiner.RF_TICK;
+        final int rfActual = tile.findEff(TileElectricMiner.RF_TICK,
+                tile.getField(BaseMachine.SPEED), tile.getField(BaseMachine.EFFICIENCY));
         final GuiHelper.GuiColor rfColor = rfActual > TileElectricMiner.RF_TICK ? GuiHelper.GuiColor.RED :
                 rfActual < TileElectricMiner.RF_TICK ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.WHITE;
         fontRendererObj.drawString(rfUsage + rfColor + Integer.toString(rfActual), 50, 35, 16777215);
 
         final String waitTime = StatCollector.translateToLocal("title.neotech:waitTime.name") + " ";
-        final int waitActual = TileElectricMiner.DEFAULT_SPEED;
+        final int waitActual = tile.findSpeed(TileElectricMiner.DEFAULT_SPEED, tile.getField(BaseMachine.SPEED));
         final GuiHelper.GuiColor waitColor = waitActual > TileElectricMiner.DEFAULT_SPEED ? GuiHelper.GuiColor.RED :
                 waitActual < TileElectricMiner.DEFAULT_SPEED ? GuiHelper.GuiColor.GREEN : GuiHelper.GuiColor.WHITE;
         fontRendererObj.drawString(waitTime + waitColor + Integer.toString(waitActual), 50, 45, 16777215);

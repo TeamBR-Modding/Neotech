@@ -12,6 +12,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.input.Keyboard;
 
 public class ToolTipEvent {
     @SuppressWarnings("unused")
@@ -100,18 +101,45 @@ public class ToolTipEvent {
             }
             if (event.itemStack.getItem() == ItemHandler.ioPort) {
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "Allows Machines to Auto Output");
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                    event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Furnace");
+                } else {
+                    event.toolTip.add(GuiHelper.GuiColor.GRAY + "Shift for Valid Machines");
+                }
             }
             if (event.itemStack.getItem() == ItemHandler.effFan) {
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases Machines Efficiency");
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "-10% RF Use");
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                    event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Furnace");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Miner");
+                } else {
+                    event.toolTip.add(GuiHelper.GuiColor.GRAY + "Shift for Valid Machines");
+                }
             }
             if (event.itemStack.getItem() == ItemHandler.capRam) {
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases the RF the machine can hold");
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "+1000 RF");
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                    event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Furnace");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Miner");
+                } else {
+                    event.toolTip.add(GuiHelper.GuiColor.GRAY + "Shift for Valid Machines");
+                }
             }
             if (event.itemStack.getItem() == ItemHandler.speedProcessor) {
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases Speed at the cost of Efficiency");
                 event.toolTip.add(GuiHelper.GuiColor.GREEN + "+10% Speed " + GuiHelper.GuiColor.RED + "+10 RF Use");
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                    event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Furnace");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Miner");
+                } else {
+                    event.toolTip.add(GuiHelper.GuiColor.GRAY + "Shift for Valid Machines");
+                }
             }
             if (event.itemStack.getItem() == Item.getItemFromBlock(BlockHandler.basicItemPipe)) {
                 event.toolTip.add(GuiHelper.GuiColor.YELLOW + "Max Item Transfer");

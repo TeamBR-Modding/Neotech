@@ -57,8 +57,8 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                     BlockMachine.setState(worldObj, pos, BlockHandler.electricFurnace);
                     return;
                 }
-                if (energyRF.getEnergyStored() >= findEff(RF_TICK, speed, efficiency) ) {
-                    energyRF.modifyEnergyStored(-RF_TICK);
+                if (energyRF.getEnergyStored() >= findEff(RF_TICK, speed, efficiency)) {
+                    energyRF.modifyEnergyStored(-findEff(RF_TICK, speed, efficiency));
                     ++currentProcessTime;
                 }
             }

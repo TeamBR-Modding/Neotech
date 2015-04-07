@@ -3,8 +3,11 @@ package com.dyonovan.neotech.common.tileentity.machine;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
+import com.dyonovan.neotech.common.blocks.BlockMachine;
 import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
+import com.dyonovan.neotech.common.tileentity.InventoryTile;
+import com.dyonovan.neotech.handlers.BlockHandler;
 import com.dyonovan.neotech.helpers.inventory.InventoryHelper;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -25,11 +28,14 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     public static final int RF_TICK = 250;
     public static final int DEFAULT_SIZE = 9;
-    public static final int DEFAULT_SPEED = 5;
+    public static final int DEFAULT_SPEED = 40;
+    public static final int DEFAULT_RF_CAPACITY = 10000;
 
     public static final int BTN_SCAN = 0;
     public static final int BTN_START = 1;
     public static final int BTN_STOP = 2;
+
+    public static final int UPGRADE_SLOT = 0;
 
     private int tickWait;
     public int areaSize;
@@ -42,7 +48,11 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public EnergyStorage energyRF;
 
     public TileElectricMiner() {
-        energyRF = new EnergyStorage(10000);
+        inventory = new InventoryTile(1);
+        speed = 0;
+        capacity = DEFAULT_RF_CAPACITY;
+        efficiency = 0;
+        energyRF = new EnergyStorage(capacity);
         tickWait = 0;
         numBlock = 0;
         areaSize = 0;
@@ -59,14 +69,14 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
             if (miningArea == null || !isRunning || isWorking) return;
 
-            if (tickWait < DEFAULT_SPEED) {
+            if (tickWait < findSpeed(DEFAULT_SPEED, speed)) {
                 ++tickWait;
-                worldObj.markBlockForUpdate(pos);
+                //worldObj.markBlockForUpdate(pos);
                 return;
             }
 
-            if (energyRF.getEnergyStored() < RF_TICK) return;
-            energyRF.modifyEnergyStored(RF_TICK);
+            if (energyRF.getEnergyStored() < findEff(RF_TICK, speed, efficiency)) return;
+            energyRF.modifyEnergyStored(-findEff(RF_TICK, speed, efficiency));
             if (!(worldObj.getTileEntity(pos.up()) instanceof IInventory)) {
                 isRunning = isWorking = false;
                 return;
@@ -89,7 +99,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                     int stacksize = chest.getStackInSlot(i).stackSize;
                     stacksize -= InventoryHelper.moveStack(storage, chest.getStackInSlot(i), EnumFacing.UP);
                     if (stacksize > 0) {
-                        isRunning = false;
+                        doStop();
                         return;
                     } else {
                         chest.setInventorySlotContents(i, null);
@@ -103,7 +113,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                     if (stacksize > 0) {
                         worldObj.destroyBlock(currentPos, false);
                         moveNextPos();
-                        isRunning = false;
+                        doStop();
                         return;
                     }
                 }
@@ -111,6 +121,18 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
             worldObj.destroyBlock(currentPos, false);
             moveNextPos();
         }
+    }
+
+    private void doStop() {
+        isRunning = false;
+        BlockMachine.setState(worldObj, pos, BlockHandler.electricMiner);
+    }
+
+    public void setRunning(boolean state) {
+        if (state)
+            BlockMachine.setState(worldObj, pos, BlockHandler.electricMinerActive);
+        else
+            BlockMachine.setState(worldObj, pos, BlockHandler.electricMiner);
     }
 
     public void setArea() {
@@ -172,10 +194,52 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
 
     }
 
+    /*******************************************************************************************************************
+     ******************************************* Tile Functions ********************************************************
+     *******************************************************************************************************************/
+
+    @Override
+    public int getField(int id) {
+        switch (id) {
+            case SPEED:
+                return speed;
+            case EFFICIENCY:
+                return efficiency;
+            case CAPACITY:
+                return capacity;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        switch (id) {
+            case SPEED:
+                speed = value;
+                break;
+            case EFFICIENCY:
+                efficiency = value;
+                break;
+            case CAPACITY:
+                capacity = value;
+                energyRF.setCapacity(DEFAULT_RF_CAPACITY + capacity * 1000);
+                break;
+        }
+        worldObj.markBlockForUpdate(pos);
+    }
+
+    @Override
+    public int getFieldCount() { return 3; }
+
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         energyRF.readFromNBT(tag);
+        inventory.readFromNBT(tag, this, ":main");
+        speed = tag.getInteger("Speed");
+        efficiency = tag.getInteger("Efficiency");
+        capacity = tag.getInteger("Capacity");
         tickWait = tag.getInteger("TickWait");
         areaSize = tag.getInteger("AreaSize");
         numBlock = tag.getInteger("NumBlock");
@@ -187,13 +251,16 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         miningArea = Lists.newArrayList(BlockPos.getAllInBox(start, finish));
         Collections.sort(miningArea, Collections.reverseOrder());
         isRunning = tag.getBoolean("IsRunning");
-        //worldObj.markBlockForUpdate(pos);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         energyRF.writeToNBT(tag);
+        inventory.writeToNBT(tag, ":main");
+        tag.setInteger("Speed", speed);
+        tag.setInteger("Efficiency", efficiency);
+        tag.setInteger("Capacity", capacity);
         tag.setInteger("TickWait", tickWait);
         tag.setInteger("AreaSize", areaSize);
         tag.setInteger("NumBlock", numBlock);

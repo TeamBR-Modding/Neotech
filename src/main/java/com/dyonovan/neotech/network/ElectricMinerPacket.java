@@ -1,6 +1,8 @@
 package com.dyonovan.neotech.network;
 
+import com.dyonovan.neotech.common.blocks.BlockMachine;
 import com.dyonovan.neotech.common.tileentity.machine.TileElectricMiner;
+import com.dyonovan.neotech.handlers.BlockHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -20,9 +22,11 @@ public class ElectricMinerPacket implements IMessageHandler<ElectricMinerPacket.
                     tile.setArea();
                     break;
                 case TileElectricMiner.BTN_START:
+                    tile.setRunning(true);
                     tile.isRunning = true;
                     break;
                 case TileElectricMiner.BTN_STOP:
+                    tile.setRunning(false);
                     tile.isRunning = false;
                     break;
             }

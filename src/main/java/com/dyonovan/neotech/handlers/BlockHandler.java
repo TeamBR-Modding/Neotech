@@ -40,7 +40,7 @@ public class BlockHandler {
 
     public static Block furnaceGenerator, furnaceGeneratorActive, electricFurnace, electricFurnaceActive, electricCrusher, electricCrusherActive, fluidGenerator, fluidGeneratorActive;
     public static Block ironTank, goldTank, diamondTank, oreCopper, oreTin;
-    public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner;
+    public static Block basicCable, advancedCable, eliteCable, basicStorage, advancedStorage, eliteStorage, electricMiner, electricMinerActive;
     public static Block crafter, thermalBinder, creativeStorage, blockCopper, blockTin;
     public static Block basicItemPipe, advancedItemPipe, eliteItemPipe;
     public static Block phantomGlass, voidGlass, borderedBrick, borderedStoneBrick, climbingRock;
@@ -70,6 +70,8 @@ public class BlockHandler {
                 "electricCrusherActive", TileElectricCrusher.class);
         registerBlock(electricMiner = new BlockMachine(false, "electricMiner", TileElectricMiner.class, GuiHandler.ELECTRIC_MINER_GUI_ID),
                 "electricMiner", TileElectricMiner.class);
+        registerBlock(electricMinerActive = new BlockMachine(true, "electricMinerActive", TileElectricMiner.class, GuiHandler.ELECTRIC_MINER_GUI_ID),
+                "electricMinerActive", TileElectricMiner.class);
         registerBlock(thermalBinder = new BlockMachine(false, "thermalBinder", TileThermalBinder.class, GuiHandler.THERMAL_BINDER_GUI_ID),
                 "thermalBinder", TileThermalBinder.class);
 
