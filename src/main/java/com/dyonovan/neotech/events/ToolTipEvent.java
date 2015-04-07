@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.events;
 
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
-import com.dyonovan.neotech.common.blocks.pipe.item.BlockPipeBasicItem;
 import com.dyonovan.neotech.handlers.BlockHandler;
 import com.dyonovan.neotech.handlers.ItemHandler;
 import com.dyonovan.neotech.helpers.GuiHelper;
@@ -136,6 +135,26 @@ public class ToolTipEvent {
                 if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
                     event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
                     event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Furnace");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Miner");
+                } else {
+                    event.toolTip.add(GuiHelper.GuiColor.GRAY + "Shift for Valid Machines");
+                }
+            }
+            if (event.itemStack.getItem() == ItemHandler.silkTouch) {
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Adds Silk Touch at the cost of Efficiency");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "+Silk Touch " + GuiHelper.GuiColor.RED + "+200 RF Use");
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                    event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
+                    event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Miner");
+                } else {
+                    event.toolTip.add(GuiHelper.GuiColor.GRAY + "Shift for Valid Machines");
+                }
+            }
+            if (event.itemStack.getItem() == ItemHandler.minerSize) {
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "Increases Size at the cost of Efficiency");
+                event.toolTip.add(GuiHelper.GuiColor.GREEN + "3x Size " + GuiHelper.GuiColor.RED + "+300 RF Use");
+                if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                    event.toolTip.add(GuiHelper.GuiColor.GREEN + "Valid for use in:");
                     event.toolTip.add(GuiHelper.GuiColor.LIME + "Electric Miner");
                 } else {
                     event.toolTip.add(GuiHelper.GuiColor.GRAY + "Shift for Valid Machines");

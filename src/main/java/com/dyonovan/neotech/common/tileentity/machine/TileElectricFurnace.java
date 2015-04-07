@@ -157,7 +157,7 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
                 return capacity;
             case IO:
                 return !io ? 0 : 1;
-            case 4:
+            case 6:
                 return currentProcessTime;
             default:
                 return 0;
@@ -181,7 +181,7 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
             case IO:
                 io = value != 0;
                 break;
-            case 4:
+            case 6:
                 currentProcessTime = value;
                 break;
         }
@@ -207,6 +207,8 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        capacity = tag.getInteger("Capacity");
+        energyRF.setCapacity(DEFAULT_RF_CAPACITY + capacity * 1000);
         energyRF.readFromNBT(tag);
         inventory.readFromNBT(tag, this, ":main");
         NBTTagList itemsTag = tag.getTagList("Stacks", 10);
@@ -232,7 +234,6 @@ public class TileElectricFurnace extends BaseMachine implements IUpdatePlayerLis
         currentProcessTime = tag.getInteger("CurrentProcessTime");
         speed = tag.getInteger("Speed");
         efficiency = tag.getInteger("Efficiency");
-        capacity = tag.getInteger("Capacity");
         io = tag.getBoolean("AutoOutput");
     }
 

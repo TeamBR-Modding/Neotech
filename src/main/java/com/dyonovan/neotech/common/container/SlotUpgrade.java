@@ -40,8 +40,14 @@ public class SlotUpgrade extends Slot {
             if (tag.hasKey("Capacity")) {
                 tile.setField(BaseMachine.CAPACITY, tag.getInteger("Capacity"));
             }
+            if (tag.hasKey("MinerSize")) {
+                tile.setField(BaseMachine.SIZE, tag.getInteger("MinerSize"));
+            }
             if (tag.hasKey("AutoOutput")) {
                 tile.setField(BaseMachine.IO, tag.getBoolean("Efficiency") ? 1 : 0);
+            }
+            if (tag.hasKey("SilkTouch")) {
+                tile.setField(BaseMachine.SILKTOUCH, tag.getBoolean("SilkTouch") ? 1 : 0);
             }
         }
         super.putStack(stack);

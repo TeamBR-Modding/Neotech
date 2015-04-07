@@ -56,6 +56,7 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         tickWait = 0;
         numBlock = 0;
         areaSize = 0;
+        minerSize = 0;
         isRunning = false;
         isWorking = false;
         currentPos = new BlockPos(0, 0, 0);
@@ -138,11 +139,11 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     public void setArea() {
         EnumFacing rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
         start = getPos().offset(rear, 1);
-        start = start.offset(rear.rotateYCCW(), DEFAULT_SIZE / 2);
+        start = start.offset(rear.rotateYCCW(), (DEFAULT_SIZE * (minerSize * 3)) / 2);
         start = start.offset(EnumFacing.DOWN, pos.getY() - 1);
 
-        finish = getPos().offset(rear, DEFAULT_SIZE);
-        finish = finish.offset(rear.rotateY(), (DEFAULT_SIZE / 2));
+        finish = getPos().offset(rear, DEFAULT_SIZE * (minerSize * 3));
+        finish = finish.offset(rear.rotateY(), (DEFAULT_SIZE * (minerSize * 3)) / 2);
         finish = finish.offset(EnumFacing.DOWN);
 
         //noinspection unchecked
@@ -207,6 +208,10 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                 return efficiency;
             case CAPACITY:
                 return capacity;
+            case SILKTOUCH:
+                return !silkTouch ? 0 : 1;
+            case SIZE:
+                return minerSize;
             default:
                 return 0;
         }
@@ -225,24 +230,33 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
                 capacity = value;
                 energyRF.setCapacity(DEFAULT_RF_CAPACITY + capacity * 1000);
                 break;
+            case SIZE:
+                minerSize = value;
+                break;
+            case SILKTOUCH:
+                silkTouch = value != 0;
+                break;
         }
         worldObj.markBlockForUpdate(pos);
     }
 
     @Override
-    public int getFieldCount() { return 3; }
+    public int getFieldCount() { return 5; }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
+        capacity = tag.getInteger("Capacity");
+        energyRF.setCapacity(DEFAULT_RF_CAPACITY + capacity * 1000);
         energyRF.readFromNBT(tag);
         inventory.readFromNBT(tag, this, ":main");
         speed = tag.getInteger("Speed");
         efficiency = tag.getInteger("Efficiency");
-        capacity = tag.getInteger("Capacity");
         tickWait = tag.getInteger("TickWait");
         areaSize = tag.getInteger("AreaSize");
         numBlock = tag.getInteger("NumBlock");
+        minerSize = tag.getInteger("MinerSize");
+        silkTouch = tag.getBoolean("SilkTouch");
         currentPos = new BlockPos(tag.getInteger("CurrentX"), tag.getInteger("CurrentY"), tag.getInteger("CurrentZ"));
         //noinspection unchecked
         start = new BlockPos(tag.getInteger("StartX"), tag.getInteger("StartY"), tag.getInteger("StartZ"));
@@ -264,6 +278,8 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
         tag.setInteger("TickWait", tickWait);
         tag.setInteger("AreaSize", areaSize);
         tag.setInteger("NumBlock", numBlock);
+        tag.setInteger("MinerSize", minerSize);
+        tag.setBoolean("SilkTouch", silkTouch);
         tag.setInteger("CurrentX", currentPos.getX());
         tag.setInteger("CurrentY", currentPos.getY());
         tag.setInteger("CurrentZ", currentPos.getZ());

@@ -22,10 +22,12 @@ public abstract class BaseMachine extends TileEntity implements ISidedInventory 
     public static final int CAPACITY = 1;
     public static final int EFFICIENCY = 2;
     public static final int IO = 3;
+    public static final int SIZE = 4;
+    public static final int SILKTOUCH = 5;
 
     protected InventoryTile inventory;
-    protected int speed, capacity, efficiency;
-    protected boolean io;
+    protected int speed, capacity, efficiency, minerSize;
+    protected boolean io, silkTouch;
 
     @SideOnly(Side.CLIENT)
     public abstract void spawnActiveParticles(double x, double y, double z);

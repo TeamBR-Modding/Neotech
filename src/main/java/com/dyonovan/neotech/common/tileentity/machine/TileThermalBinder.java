@@ -16,8 +16,8 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
     public int currentProcessTime;
     public EnergyStorage energyRF;
 
-    private int speed, capacity, efficiency;
-    private boolean io;
+    private int speed, capacity, efficiency, minerSize;
+    private boolean io, silkTouch;
 
     private static final int RF_TICK= 100;
     public static final int BASE_PROCESS_TIME = 200;
@@ -35,7 +35,9 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         speed = 0;
         capacity = 0;
         efficiency = 0;
+        minerSize = 0;
         io = false;
+        silkTouch = false;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
             }
         }
         if (currentProcessTime >= BASE_PROCESS_TIME) {
-            inventory.setStackInSlot(writeToMB(speed, efficiency, capacity, io), MB_SLOT_OUTPUT);
+            inventory.setStackInSlot(writeToMB(speed, efficiency, capacity, minerSize, io, silkTouch), MB_SLOT_OUTPUT);
             doReset();
         }
         worldObj.markBlockForUpdate(pos);
@@ -60,17 +62,21 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
         speed = 0;
         efficiency = 0;
         capacity = 0;
+        minerSize = 0;
         io = false;
+        silkTouch = false;
     }
 
-    public ItemStack writeToMB(int speed, int efficiency, int capacity, boolean io) {
+    public ItemStack writeToMB(int speed, int efficiency, int capacity, int minerSize, boolean io, boolean silkTouch) {
 
         ItemStack newMB = new ItemStack(ItemHandler.upgradeMBFull, 1);
         NBTTagCompound tag = new NBTTagCompound();
         if (speed > 0) tag.setInteger("Speed", speed);
         if (efficiency > 0) tag.setInteger("Efficiency", efficiency);
         if (capacity > 0) tag.setInteger("Capacity", capacity);
+        if (minerSize > 0) tag.setInteger("MinerSize", minerSize);
         if (io) tag.setBoolean("AutoOutput", true);
+        if (silkTouch) tag.setBoolean("SilkTouch", true);
         newMB.setTagCompound(tag);
         return newMB;
     }
@@ -84,9 +90,12 @@ public class TileThermalBinder extends BaseMachine implements IEnergyReceiver, I
                     efficiency += getStackInSlot(i).stackSize;
                 if (getStackInSlot(i).getItem() == ItemHandler.capRam)
                     capacity += getStackInSlot(i).stackSize;
+                if (getStackInSlot(i).getItem() == ItemHandler.minerSize)
+                    minerSize += getStackInSlot(i).stackSize;
                 if (getStackInSlot(i).getItem() == ItemHandler.ioPort)
                     io = true;
-
+                if (getStackInSlot(i).getItem() == ItemHandler.silkTouch)
+                    silkTouch = true;
                 inventory.setStackInSlot(null, i);
             }
         }

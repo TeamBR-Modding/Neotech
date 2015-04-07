@@ -97,7 +97,7 @@ public class GuiElectricMiner extends GuiContainer {
         fontRendererObj.drawString(waitTime + waitColor + Integer.toString(waitActual), 50, 45, 16777215);
 
         final String currentSize = StatCollector.translateToLocal("title.neotech:currentSize.name") + " ";
-        final int sizeActual = TileElectricMiner.DEFAULT_SIZE;
+        final int sizeActual = TileElectricMiner.DEFAULT_SIZE * (tile.getField(BaseMachine.SIZE) * 3);
         fontRendererObj.drawString(currentSize + Integer.toString(sizeActual) + "x" + Integer.toString(sizeActual), 50, 55, 16777215);
 
         final String totalBlocks = StatCollector.translateToLocal("title.neotech:totalBlocks.name") + " ";
