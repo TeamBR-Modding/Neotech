@@ -23,11 +23,9 @@ public class ElectricMinerPacket implements IMessageHandler<ElectricMinerPacket.
                     break;
                 case TileElectricMiner.BTN_START:
                     tile.setRunning(true);
-                    tile.isRunning = true;
                     break;
                 case TileElectricMiner.BTN_STOP:
                     tile.setRunning(false);
-                    tile.isRunning = false;
                     break;
             }
         }

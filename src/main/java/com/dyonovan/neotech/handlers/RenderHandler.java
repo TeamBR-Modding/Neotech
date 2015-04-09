@@ -20,6 +20,8 @@ public class RenderHandler {
         register(ItemHandler.capRam);
         register(ItemHandler.effFan);
         register(ItemHandler.ioPort);
+        register(ItemHandler.silkTouch);
+        register(ItemHandler.minerSize);
         register(ItemHandler.upgradeMB);
         register(ItemHandler.upgradeMBFull);
     }

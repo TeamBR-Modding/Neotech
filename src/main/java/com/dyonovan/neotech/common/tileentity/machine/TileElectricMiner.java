@@ -130,21 +130,28 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     }
 
     public void setRunning(boolean state) {
+        //NBTTagCompound tag = new NBTTagCompound();
+        //writeToNBT(tag);
         if (state)
             BlockMachine.setState(worldObj, pos, BlockHandler.electricMinerActive);
         else
             BlockMachine.setState(worldObj, pos, BlockHandler.electricMiner);
+        //readFromNBT(tag);
         worldObj.markBlockForUpdate(pos);
+        isRunning = state;
     }
 
     public void setArea() {
         EnumFacing rear = ((EnumFacing) getWorld().getBlockState(this.pos).getValue(BlockBakeable.PROPERTY_FACING)).getOpposite();
         start = getPos().offset(rear, 1);
-        start = start.offset(rear.rotateYCCW(), (DEFAULT_SIZE * (minerSize * 3)) / 2);
+        start = minerSize == 0 ? start.offset(rear.rotateYCCW(), DEFAULT_SIZE / 2) :
+                start.offset(rear.rotateYCCW(), (DEFAULT_SIZE * (minerSize * 3)) / 2);
         start = start.offset(EnumFacing.DOWN, pos.getY() - 1);
 
-        finish = getPos().offset(rear, DEFAULT_SIZE * (minerSize * 3));
-        finish = finish.offset(rear.rotateY(), (DEFAULT_SIZE * (minerSize * 3)) / 2);
+        finish = minerSize == 0 ? getPos().offset(rear, DEFAULT_SIZE) :
+                getPos().offset(rear, DEFAULT_SIZE * (minerSize * 3));
+        finish = minerSize == 0 ? finish.offset(rear.rotateY(), DEFAULT_SIZE / 2) :
+                finish.offset(rear.rotateY(), (DEFAULT_SIZE * (minerSize * 3)) / 2);
         finish = finish.offset(EnumFacing.DOWN);
 
         //noinspection unchecked
