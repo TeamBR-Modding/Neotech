@@ -3,11 +3,9 @@ package com.dyonovan.neotech.common.tileentity.machine;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import com.dyonovan.neotech.common.blocks.BlockBakeable;
-import com.dyonovan.neotech.common.blocks.BlockMachine;
 import com.dyonovan.neotech.common.blocks.IExpellable;
 import com.dyonovan.neotech.common.tileentity.BaseMachine;
 import com.dyonovan.neotech.common.tileentity.InventoryTile;
-import com.dyonovan.neotech.handlers.BlockHandler;
 import com.dyonovan.neotech.helpers.inventory.InventoryHelper;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -130,14 +128,14 @@ public class TileElectricMiner extends BaseMachine implements IExpellable, IUpda
     }
 
     public void setRunning(boolean state) {
-        //NBTTagCompound tag = new NBTTagCompound();
-        //writeToNBT(tag);
+        /*NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
         if (state)
             BlockMachine.setState(worldObj, pos, BlockHandler.electricMinerActive);
         else
             BlockMachine.setState(worldObj, pos, BlockHandler.electricMiner);
-        //readFromNBT(tag);
         worldObj.markBlockForUpdate(pos);
+        readFromNBT(tag);*/
         isRunning = state;
     }
 
