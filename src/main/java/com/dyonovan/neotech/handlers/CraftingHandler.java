@@ -69,6 +69,10 @@ public class CraftingHandler {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockHandler.crafter),
                 new ItemStack(Blocks.crafting_table, 1), new ItemStack(Blocks.crafting_table, 1));
 
+        //Miner Recipe
+        GameRegistry.addRecipe(new ItemStack(BlockHandler.electricMiner), "ABA", "CDC", "ABA",
+                'A', Items.iron_ingot, 'B', Items.redstone, 'C', Items.diamond_pickaxe, 'D', Blocks.chest);
+
         //Item Pipes
         //Basic
         GameRegistry.addRecipe(new ItemStack(BlockHandler.basicItemPipe, 4), "AAA", "ABA", "ACA",
@@ -121,6 +125,10 @@ public class CraftingHandler {
         //UpgradeMB
         GameRegistry.addRecipe(new ItemStack(ItemHandler.upgradeMB), "ABA", "CDC", "ABA",
                 'A', Items.gold_ingot, 'B', Items.comparator, 'C', Items.redstone, 'D', Items.blaze_rod);
+        //Miner Size
+        GameRegistry.addRecipe(new ItemStack(ItemHandler.minerSize), "A A", " B ", "A A",
+                'A', Items.iron_pickaxe, 'B', Blocks.piston);
+
 
         //Vanilla Furnace Recipes
         GameRegistry.addSmelting(ItemHandler.dustIron, new ItemStack(Items.iron_ingot, 1), 0.5F);

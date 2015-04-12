@@ -9,7 +9,7 @@ tile.neotech:electricCrusher.name=Electric Crusher
 tile.neotech:electricCrusherActive.name=Electric Crusher
 tile.neotech:fluidGenerator.name=Fluid Generator
 tile.neotech:fluidGeneratorActive.name=Fluid Generator
-tile.neotech:electricMiner.name=Electric Miner (WIP)
+tile.neotech:electricMiner.name=Electric Miner
 tile.neotech:thermalBinder.name=Thermal Binder
 tile.neotech:basicCable.name=Basic RF Cable
 tile.neotech:advancedCable.name=Advanced RF Cable
@@ -29,6 +29,7 @@ tile.neotech:blockTin.name=Block of Tin
 tile.neotech:basicItemPipe.name=Basic Item Pipe
 tile.neotech:advancedItemPipe.name=Advanced Item Pipe
 tile.neotech:eliteItemPipe.name=Elite Item Pipe
+tile.neotech:trampoline.name=Trampoline (WIP)
 
 tile.neotech:phantomGlass.name=Phantom Glass
 tile.neotech:voidGlass.name=§8Void Glass§R
@@ -47,7 +48,7 @@ item.neotech:effFan.name=Efficiency Upgrade
 item.neotech:ioPort.name=Auto Output Upgrade (WIP)
 item.neotech:speedProcessor.name=Speed Upgrade
 item.neotech:minerSize.name=Size Upgrade
-item.neotech:silkTouch.name=Silk Touch Upgrade
+item.neotech:silkTouch.name=Silk Touch Upgrade (WIP)
 item.neotech:upgradeMB.name=Machine Upgrade Motherboard (Empty)
 item.neotech:upgradeMBFull.name=Machine Upgrade Motherboard (Filled)
 
