@@ -58,30 +58,8 @@ public class GuiFluidGenerator extends GuiContainer {
         tessellator.draw();
 
         //Fluid Tank
-        if (tile.fluidTank.getFluid() != null) {
-            int heightFluid = tile.fluidTank.getFluidAmount() * 52 / tile.fluidTank.getCapacity();
-
-            TextureAtlasSprite texture =  tile.fluidTank.getFluid().getFluid().getIcon();
-            this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-            int k;
-            for (k = 0; k < heightFluid / 16; k++) {
-                worldrenderer.startDrawingQuads();
-                worldrenderer.addVertexWithUV(x + 148, y + 70, 0, texture.getMinU(), texture.getMaxV());
-                worldrenderer.addVertexWithUV(x + 164, y + 70, 0, texture.getMaxU(), texture.getMaxV());
-                worldrenderer.addVertexWithUV(x + 164, y + 70 - k * 16, 0, texture.getMaxU(), texture.getMinV());
-                worldrenderer.addVertexWithUV(x + 148, y + 70 - k * 16, 0, texture.getMinU(), texture.getMinV());
-                tessellator.draw();
-            }
-            if (k <= 16 || k % 16 != 0) {
-                worldrenderer.startDrawingQuads();
-                worldrenderer.addVertexWithUV(x + 148, y + 70, 0, texture.getMinU(), texture.getMaxV());
-                worldrenderer.addVertexWithUV(x + 164, y + 70, 0, texture.getMaxU(), texture.getMaxV());
-                worldrenderer.addVertexWithUV(x + 164, y + 70 - ((heightFluid - k * 16) + k * 16), 0, texture.getMaxU(), texture.getMinV());
-                worldrenderer.addVertexWithUV(x + 148, y + 70 - ((heightFluid - k * 16) + k * 16), 0, texture.getMinU(), texture.getMinV());
-                tessellator.draw();
-            }
-
-        }
+        if (tile.fluidTank.getFluid() != null)
+            GuiHelper.drawFluid(tile.fluidTank.getFluid(), x + 148, y + 18, zLevel, 16, 52, tile.fluidTank.getCapacity());
     }
 
     @Override
