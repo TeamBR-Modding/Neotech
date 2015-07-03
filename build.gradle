@@ -57,8 +57,17 @@ minecraft {
     mappings = "stable_16"
 }
 
+repositories {
+    maven {
+        name 'CB Maven FS'
+        url "http://chickenbones.net/maven/"
+    }
+}
+
 dependencies {
-    //compile "mcp.mobius.waila:Waila:1.6.0_B1_1.8.1"
+    compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
+    compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
+    compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
