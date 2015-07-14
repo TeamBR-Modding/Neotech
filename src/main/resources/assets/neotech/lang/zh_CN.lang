@@ -1,0 +1,69 @@
+itemGroup.tabNeoTech=新式科技
+itemGroup.tabNeoTechDeco=新式科技: §4-§6-§e-§2装§9饰§5物§4品§6-§e-§2-
+
+tile.neotech:furnaceGenerator.name=燃炉发电机
+tile.neotech:furnaceGeneratorActive.name=燃炉发电机
+tile.neotech:electricFurnace.name=电力燃炉
+tile.neotech:electricFurnaceActive.name=电力燃炉
+tile.neotech:electricCrusher.name=电力粉碎机
+tile.neotech:electricCrusherActive.name=电力粉碎机
+tile.neotech:fluidGenerator.name=流体发电机
+tile.neotech:fluidGeneratorActive.name=流体发电机
+tile.neotech:electricMiner.name=电力采矿机
+tile.neotech:thermalBinder.name=热力粘合机
+tile.neotech:basicCable.name=基础RF线缆
+tile.neotech:advancedCable.name=高级RF线缆
+tile.neotech:eliteCable.name=精英RF线缆
+tile.neotech:basicRFStorage.name=基础RF容器
+tile.neotech:advancedRFStorage.name=高级RF容器
+tile.neotech:eliteRFStorage.name=精英RF容器
+tile.neotech:creativeRFStorage.name=创造RF容器
+tile.neotech:ironTank.name=铁质流体储罐
+tile.neotech:goldTank.name=金质流体储罐
+tile.neotech:diamondTank.name=钻石流体储罐
+tile.neotech:crafter.name=合成器
+tile.neotech:oreCopper.name=铜矿石
+tile.neotech:oreTin.name=锡矿石
+tile.neotech:blockCopper.name=铜方块
+tile.neotech:blockTin.name=锡方块
+tile.neotech:basicItemPipe.name=基础物品管道
+tile.neotech:advancedItemPipe.name=高级物品管道
+tile.neotech:eliteItemPipe.name=经营物品管道
+tile.neotech:trampoline.name=蹦床 (WIP)
+
+tile.neotech:phantomGlass.name=幻影玻璃
+tile.neotech:voidGlass.name=§8虚空玻璃§R
+tile.neotech:borderedBrick.name=镶边砖块
+tile.neotech:borderedStoneBrick.name=镶边石砖
+tile.neotech:climbingRock.name=攀爬岩石
+
+item.neotech:dustIron.name=铁粉
+item.neotech:dustGold.name=金粉
+item.neotech:dustCopper.name=铜粉
+item.neotech:ingotCopper.name=铜锭
+item.neotech:dustTin.name=锡粉
+item.neotech:ingotTin.name=锡锭
+item.neotech:capRam.name=容量升级
+item.neotech:effFan.name=效率升级
+item.neotech:ioPort.name=自动输出升级 (WIP)
+item.neotech:speedProcessor.name=速度升级
+item.neotech:minerSize.name=大小升级
+item.neotech:silkTouch.name=精准升级 (WIP)
+item.neotech:upgradeMB.name=机器升级板 (空置)
+item.neotech:upgradeMBFull.name=机器升级板  (填满)
+
+neotech.container.crafter=合成器
+
+button.neotech:buttonStart.name=开始
+
+title.neotech:rfUsage.name=RF使用:
+title.neotech:processTime.name=处理时间:
+title.neotech:autoOutput.name=自动输出:
+title.neotech:isRunning.name=运行:
+title.neotech:waitTime.name=等待时间:
+title.neotech:currentSize.name=电流大小:
+title.neotech:totalBlocks.name=总计方块:
+title.neotech:blocksLeft.name=完成方块:
+title.neotech:scan.name=扫描
+title.neotech:start.name=开始
+title.neotech:stop.name=停止
