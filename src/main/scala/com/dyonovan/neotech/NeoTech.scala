@@ -2,6 +2,7 @@ package com.dyonovan.neotech
 
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.BlockManager
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
 import net.minecraft.item.Item
@@ -33,6 +34,7 @@ object NeoTech {
     }
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
+        BlockManager.preInit()
         proxy.preInit()
     }
 

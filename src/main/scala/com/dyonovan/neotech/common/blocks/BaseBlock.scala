@@ -33,7 +33,7 @@ class BaseBlock(material: Material, name: String, tileEntity: Class[_ <: TileEnt
 
   /**
    * Used to tell if this should be in a creative tab, and if so which one
-   * @return Null if none, defaults to the main Modular Systems Tab
+   * @return Null if none, defaults to the main NeoTech Tab
    */
   def getCreativeTab: CreativeTabs = NeoTech.tabNeoTech
 

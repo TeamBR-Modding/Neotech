@@ -1,6 +1,8 @@
 package com.dyonovan.neotech.common.tiles
 
+import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
+import net.minecraft.item.crafting.FurnaceRecipes
 
 /**
  * This file was created for NeoTech
@@ -12,13 +14,18 @@ import net.minecraft.item.ItemStack
  * @author Dyonovan
  * @since August 11, 2015
  */
-class TileFurnace extends AbstractCore {
+class TileFurnace extends AbstractTile {
     /**
      * Get the output of the recipe
      * @param stack The input
      * @return The output
      */
-    override def recipe(stack: ItemStack): ItemStack = ???
+    override def recipe(stack: ItemStack): ItemStack = {
+        if (stack != null)
+            FurnaceRecipes.instance().getSmeltingResult(stack)
+        else
+            null
+    }
 
     /**
      * Used to output the redstone single from this structure
@@ -30,5 +37,5 @@ class TileFurnace extends AbstractCore {
      *
      * @return int range 0 - 16
      */
-    override def getRedstoneOutput: Int = ???
+    override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
 }

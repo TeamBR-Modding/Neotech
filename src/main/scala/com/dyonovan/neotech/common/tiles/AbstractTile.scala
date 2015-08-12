@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 11, 2015
  */
-abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInventory with IEnergyReceiver {
+abstract class AbstractTile extends UpdatingTile with Inventory with ISidedInventory with IEnergyReceiver {
 
     final val cookSpeed = 200
     final val ENERGY_SMELT = 200
@@ -129,12 +129,12 @@ abstract class AbstractCore extends UpdatingTile with Inventory with ISidedInven
     def smeltCount: Int = {
         var input : ItemStack = getStackInSlot(0)
         if (input == null) {
-            return null
+            return 0
         }
         var output : ItemStack = getStackInSlot(1)
         val recipeResult : ItemStack = recipe(input)
         if (recipeResult == null && output != null && !output.isItemEqual(recipeResult)) {
-            return null
+            return 0
         }
         else if (output == null) {
             output = recipeResult.copy

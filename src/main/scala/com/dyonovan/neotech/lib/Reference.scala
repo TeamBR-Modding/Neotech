@@ -11,8 +11,8 @@ package com.dyonovan.neotech.lib
  * @since August 07, 2015
  */
 object Reference {
-    final val MOD_NAME     = "Modular Systems"
-    final val MOD_ID       = "modularsystems"
+    final val MOD_NAME     = "NeoTech"
+    final val MOD_ID       = "neotech"
     final val VERSION      = "@VERSION@"
     final val DEPENDENCIES = "required-after:bookshelf;required-after:NotEnoughItems"
 }

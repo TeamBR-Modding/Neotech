@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.common.blocks
 
 import com.dyonovan.neotech.common.blocks.traits.CoreStates
-import com.dyonovan.neotech.common.tiles.AbstractCore
+import com.dyonovan.neotech.common.tiles.AbstractTile
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
@@ -27,7 +27,7 @@ with OpensGui with CoreStates with DropsItems {
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
         world.getTileEntity(pos) match {
-            case tile: AbstractCore =>
+            case tile: AbstractTile =>
                 player.openGui(Bookshelf, 0, world, pos.getX, pos.getY, pos.getZ)
             case _ =>
         }
