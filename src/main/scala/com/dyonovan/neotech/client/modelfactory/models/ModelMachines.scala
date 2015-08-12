@@ -27,7 +27,7 @@ import net.minecraftforge.client.model.{ISmartBlockModel, ISmartItemModel}
  * @author Dyonovan
  * @since August 12, 2015
  */
-class ModelBaker extends ISmartBlockModel with ISmartItemModel {
+class ModelMachines extends ISmartBlockModel with ISmartItemModel {
     val faceBakery = new FaceBakery
     var facingDirection = EnumFacing.NORTH
     val modelRot = ModelRotation.X0_Y0
@@ -83,12 +83,12 @@ class ModelBaker extends ISmartBlockModel with ISmartItemModel {
     }
 
     override def handleBlockState(state: IBlockState): IBakedModel = {
-        new ModelBaker(state.getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing],
+        new ModelMachines(state.getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing],
             state.getValue(state.getBlock.asInstanceOf[CoreStates].PROPERTY_ACTIVE).asInstanceOf[Boolean], state.getBlock)
     }
 
     override def handleItemState(stack: ItemStack): IBakedModel = {
-        new ModelBaker(EnumFacing.NORTH, false, Block.getBlockFromItem(stack.getItem))
+        new ModelMachines(EnumFacing.NORTH, false, Block.getBlockFromItem(stack.getItem))
     }
 
     override def isBuiltInRenderer: Boolean = false

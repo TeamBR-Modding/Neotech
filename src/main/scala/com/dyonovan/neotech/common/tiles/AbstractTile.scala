@@ -59,6 +59,7 @@ abstract class AbstractTile extends UpdatingTile with Inventory with ISidedInven
         if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1)) && !values.isPowered) {
 
             if (this.values.burnTime <= 0) {
+                this.values.burnTime = cookSpeed
                 this.values.currentItemBurnTime = this.values.burnTime
                 cook()
                 didWork = true
@@ -124,6 +125,7 @@ abstract class AbstractTile extends UpdatingTile with Inventory with ISidedInven
                 getStackInSlot(1).stackSize += smeltcount
             }
         }
+        energy.extractEnergy(ENERGY_SMELT, false)
     }
 
     def smeltCount: Int = {
@@ -155,7 +157,7 @@ abstract class AbstractTile extends UpdatingTile with Inventory with ISidedInven
     }
 
     @SideOnly(Side.CLIENT) def getCookProgressScaled(scaleVal: Int): Int =
-        ((this.values.cookTime * scaleVal) / Math.max(this.values.burnTime, 0.001)).toInt
+        ((this.values.cookTime * scaleVal) / Math.max(cookSpeed, 0.001)).toInt
 
     @SideOnly(Side.CLIENT) def getBurnTimeRemainingScaled(scaleVal: Int): Int =
         ((this.values.burnTime * scaleVal) / Math.max(this.values.currentItemBurnTime, 0.001)).toInt

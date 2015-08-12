@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.client.modelfactory
 
-import com.dyonovan.neotech.client.modelfactory.models.ModelBaker
+import com.dyonovan.neotech.client.modelfactory.models.ModelMachines
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.BlockManager
 import net.minecraft.block.Block
@@ -57,9 +57,9 @@ class ModelFactory {
         val itemModelMesher = Minecraft.getMinecraft.getRenderItem.getItemModelMesher
 
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricFurnace", "normal"),
-            new ModelBaker())
+            new ModelMachines())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricFurnace", "inventory"),
-            new ModelBaker())
+            new ModelMachines())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.electricFurnace), 0, new ModelResourceLocation(Reference.MOD_ID +
                 ":" + "electricFurnace", "inventory"))
     }

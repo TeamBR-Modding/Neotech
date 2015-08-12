@@ -1,7 +1,10 @@
 package com.dyonovan.neotech.common.blocks
 
+import com.dyonovan.neotech.client.gui.GuiFurnace
 import com.dyonovan.neotech.common.blocks.traits.CoreStates
-import com.dyonovan.neotech.common.tiles.AbstractTile
+import com.dyonovan.neotech.common.container.ContainerFurnace
+import com.dyonovan.neotech.common.tiles.{AbstractTile, TileFurnace}
+import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
@@ -34,7 +37,18 @@ with OpensGui with CoreStates with DropsItems {
         true
     }
 
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
+            case block: BlockManager.electricFurnace.type =>
+                new ContainerFurnace(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnace])
+            case _ => null
+        }
+    }
 
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
+            case block: BlockManager.electricFurnace.type =>
+                new GuiFurnace(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnace])
+        }
+    }
 }
