@@ -19,6 +19,14 @@ object ItemRenderManager {
     def registerItemRenderer(): Unit = {
         registerItem(ItemManager.dustGold)
         registerItem(ItemManager.dustIron)
+        registerItem(ItemManager.dustCopper)
+        registerItem(ItemManager.dustTin)
+        registerItem(ItemManager.ingotCopper)
+        registerItem(ItemManager.ingotTin)
+        registerItem(Item.getItemFromBlock(BlockManager.blockCopper))
+        registerItem(Item.getItemFromBlock(BlockManager.blockTin))
+        registerItem(Item.getItemFromBlock(BlockManager.oreCopper))
+        registerItem(Item.getItemFromBlock(BlockManager.oreTin))
     }
 
     def registerItem(item: Item): Unit = {

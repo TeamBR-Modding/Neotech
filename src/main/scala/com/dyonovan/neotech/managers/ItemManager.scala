@@ -18,14 +18,30 @@ import net.minecraftforge.oredict.OreDictionary
  */
 object ItemManager {
 
-    var dustGold = new BaseItem("dustGold", 64)
-    var dustIron = new BaseItem("dustIron", 64)
+    //Dusts
+    val dustGold = new BaseItem("dustGold", 64)
+    val dustIron = new BaseItem("dustIron", 64)
+    val dustCopper = new BaseItem("dustCopper", 64)
+    val dustTin = new BaseItem("dustTin", 64)
+
+    //Ingots
+    val ingotCopper = new BaseItem("ingotCopper", 64)
+    val ingotTin = new BaseItem("ingotTin", 64)
 
     def preInit(): Unit = {
         registerItem(dustGold, "dustGold", "dustGold")
-        GameRegistry.addSmelting(dustIron, new ItemStack(Items.iron_ingot), 1.0F)
         registerItem(dustIron, "dustIron", "dustIron")
+        registerItem(dustCopper, "dustCopper", "dustCopper")
+        registerItem(dustTin, "dustTin", "dustTin")
+
+        registerItem(ingotCopper, "ingotCopper", "ingotCopper")
+        registerItem(ingotTin, "ingotTin", "ingotTin")
+
+        //Dust Smelting Recipes
         GameRegistry.addSmelting(dustGold, new ItemStack(Items.gold_ingot), 2.0F)
+        GameRegistry.addSmelting(dustIron, new ItemStack(Items.iron_ingot), 1.0F)
+        GameRegistry.addSmelting(dustCopper, new ItemStack(this.ingotCopper), 1.0F)
+        GameRegistry.addSmelting(dustTin, new ItemStack(this.ingotTin), 2.0F)
     }
     /**
      * Helper method to register items

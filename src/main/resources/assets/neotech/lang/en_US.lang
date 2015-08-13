@@ -5,8 +5,17 @@ tile.neotech:furnaceGenerator.name=Furnace Generator
 tile.neotech:electricFurnace.name=Electric Furnace
 tile.neotech:electricCrusher.name=Electric Crusher
 
+tile.neotech:oreCopper.name=Copper Ore
+tile.neotech:oreTin.name=Tin Ore
+tile.neotech:blockCopper.name=Block of Copper
+tile.neotech:blockTin.name=Block of Tin
+
 inventory.furnace.title=Electric Furnace
 inventory.crusher.title=Electric Crusher
 
 item.neotech:dustIron.name=Iron Dust
 item.neotech:dustGold.name=Gold Dust
+item.neotech:dustCopper.name=Copper Dust
+item.neotech:ingotCopper.name=Copper Ingot
+item.neotech:dustTin.name=Tin Dust
+item.neotech:ingotTin.name=Tin Ingot

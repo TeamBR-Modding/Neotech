@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.BlockMachine
+import com.dyonovan.neotech.common.blocks.machines.BlockMachine
+import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace}
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
@@ -22,10 +23,23 @@ object BlockManager {
     val electricFurnace = new BlockMachine("electricFurnace", classOf[TileElectricFurnace])
     val electricCrusher = new BlockMachine("electricCrusher", classOf[TileElectricCrusher])
 
+    //ores
+    val oreCopper = new BlockOre("oreCopper", 1)
+    val blockCopper = new BlockOre("blockCopper", 1)
+    val oreTin = new BlockOre("oreTin", 1)
+    val blockTin = new BlockOre("blockTin", 1)
+
 
     def preInit(): Unit = {
+        //Machines
         registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace])
         registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher])
+
+        //Ores
+        registerBlock(oreCopper, "oreCopper", null, "oreCopper")
+        registerBlock(oreTin, "oreTin", null, "oreTin")
+        registerBlock(blockCopper, "blockCopper", null, "blockCopper")
+        registerBlock(blockTin, "blockTin", null, "blockTin")
     }
 
     /**

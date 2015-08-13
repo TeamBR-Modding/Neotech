@@ -1,10 +1,11 @@
-package com.dyonovan.neotech.common.blocks
+package com.dyonovan.neotech.common.blocks.machines
 
 import com.dyonovan.neotech.client.gui.machines.{GuiElectricCrusher, GuiElectricFurnace}
+import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.traits.CoreStates
 import com.dyonovan.neotech.common.container.machines.{ContainerElectricCrusher, ContainerElectricFurnace}
-import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
+import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace}
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
