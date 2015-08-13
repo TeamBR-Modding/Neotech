@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.tiles
 
-import cofh.api.energy.{IEnergyHandler, EnergyStorage, IEnergyReceiver}
+import cofh.api.energy.{EnergyStorage, IEnergyHandler}
 import com.dyonovan.neotech.collections.StandardValues
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import net.minecraft.inventory.ISidedInventory
@@ -160,6 +160,7 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
         super[Inventory].readFromNBT(tag)
         values.readFromNBT(tag)
         energy.readFromNBT(tag)
+        worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
     /** *****************************************************************************************************************
