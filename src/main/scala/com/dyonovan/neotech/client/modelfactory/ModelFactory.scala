@@ -50,6 +50,10 @@ class ModelFactory {
         //Furnace
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricFurnace_front"))
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricFurnaceActive_front"))
+
+        //Crusher
+        event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricCrusher_front"))
+        event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricCrusherActive_front"))
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -62,5 +66,13 @@ class ModelFactory {
             new ModelMachines())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.electricFurnace), 0, new ModelResourceLocation(Reference.MOD_ID +
                 ":" + "electricFurnace", "inventory"))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricCrusher", "normal"),
+            new ModelMachines())
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricCrusher", "inventory"),
+            new ModelMachines())
+        itemModelMesher.register(Item.getItemFromBlock(BlockManager.electricCrusher), 0, new ModelResourceLocation
+        (Reference.MOD_ID +
+                ":" + "electricCrusher", "inventory"))
     }
 }

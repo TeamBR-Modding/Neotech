@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.blocks.traits
 
-import com.dyonovan.neotech.common.tiles.AbstractTile
+import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import net.minecraft.block.Block
 import net.minecraft.block.properties.{IProperty, PropertyBool}
@@ -45,7 +45,7 @@ trait CoreStates extends Block {
 
   override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
     world.getTileEntity(pos) match {
-      case core : AbstractTile =>
+      case core : AbstractMachine =>
         state.withProperty (PropertyRotation.FOUR_WAY.getProperty, world.getBlockState (pos).getValue (PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing] )
           .withProperty(PROPERTY_ACTIVE, core.isBurning.asInstanceOf[java.lang.Boolean])
       case _ =>

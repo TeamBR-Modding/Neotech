@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.BlockMachine
-import com.dyonovan.neotech.common.tiles.TileFurnace
+import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace}
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -19,10 +19,13 @@ import net.minecraftforge.oredict.OreDictionary
  */
 object BlockManager {
 
-    val electricFurnace = new BlockMachine("electricFurnace", classOf[TileFurnace])
+    val electricFurnace = new BlockMachine("electricFurnace", classOf[TileElectricFurnace])
+    val electricCrusher = new BlockMachine("electricCrusher", classOf[TileElectricCrusher])
+
 
     def preInit(): Unit = {
-        registerBlock(electricFurnace, "electricFurnace", classOf[TileFurnace])
+        registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace])
+        registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher])
     }
 
     /**

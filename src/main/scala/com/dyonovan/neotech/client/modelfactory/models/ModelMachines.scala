@@ -31,23 +31,23 @@ class ModelMachines extends ISmartBlockModel with ISmartItemModel {
     val faceBakery = new FaceBakery
     var facingDirection = EnumFacing.NORTH
     val modelRot = ModelRotation.X0_Y0
-    var block : Block = null
+    var block: Block = null
     var isActive = false
 
-    def this(rotation : EnumFacing, active : Boolean, theBlock : Block) = {
+    def this(rotation: EnumFacing, active: Boolean, theBlock: Block) = {
         this()
         facingDirection = rotation
         isActive = active
         block = theBlock
     }
 
-    override def getFaceQuads(facing : EnumFacing): util.List[_] = {
+    override def getFaceQuads(facing: EnumFacing): util.List[_] = {
         val bakedQuads = new util.ArrayList[BakedQuad]()
         addFacesAndStuff(facing, bakedQuads)
         bakedQuads
     }
 
-    private def addFacesAndStuff(facing : EnumFacing, bakedQuad: util.ArrayList[BakedQuad]) : Unit = {
+    private def addFacesAndStuff(facing: EnumFacing, bakedQuad: util.ArrayList[BakedQuad]): Unit = {
         val uv = new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0)
         val face = new BlockPartFace(null, 0, "", uv)
 
@@ -70,13 +70,23 @@ class ModelMachines extends ISmartBlockModel with ISmartItemModel {
         }
     }
 
-    def getTextureForBlock(facing : EnumFacing) : TextureAtlasSprite = {
-        if(block == BlockManager.electricFurnace) {
-            if(facing == facingDirection) {
-                if(isActive)
+    def getTextureForBlock(facing: EnumFacing): TextureAtlasSprite = {
+        if (block == BlockManager.electricFurnace) {
+            if (facing == facingDirection) {
+                if (isActive)
                     return Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/electricFurnaceActive_front")
                 else
                     return Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/electricFurnace_front")
+            }
+        }
+        if (block == BlockManager.electricCrusher) {
+            if (facing == facingDirection) {
+                if (isActive)
+                    return Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID +
+                            ":blocks/electricCrusherActive_front")
+                else
+                    return Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID +
+                            ":blocks/electricCrusher_front")
             }
         }
         Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/machine_side")
@@ -94,6 +104,7 @@ class ModelMachines extends ISmartBlockModel with ISmartItemModel {
     override def isBuiltInRenderer: Boolean = false
 
     val MovedUp = new ItemTransformVec3f(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F))
+
     override def getItemCameraTransforms: ItemCameraTransforms = {
         new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
