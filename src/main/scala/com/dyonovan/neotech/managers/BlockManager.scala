@@ -2,7 +2,7 @@ package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
-import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace}
+import com.dyonovan.neotech.common.tiles.machines.{TileFurnaceGenerator, TileElectricCrusher, TileElectricFurnace}
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -22,6 +22,7 @@ object BlockManager {
 
     val electricFurnace = new BlockMachine("electricFurnace", classOf[TileElectricFurnace])
     val electricCrusher = new BlockMachine("electricCrusher", classOf[TileElectricCrusher])
+    val furnaceGenerator = new BlockMachine("furnaceGenerator", classOf[TileFurnaceGenerator])
 
     //ores
     val oreCopper = new BlockOre("oreCopper", 1)
@@ -34,6 +35,7 @@ object BlockManager {
         //Machines
         registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace])
         registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher])
+        registerBlock(furnaceGenerator, "furnaceGenerator", classOf[TileFurnaceGenerator])
 
         //Ores
         registerBlock(oreCopper, "oreCopper", null, "oreCopper")

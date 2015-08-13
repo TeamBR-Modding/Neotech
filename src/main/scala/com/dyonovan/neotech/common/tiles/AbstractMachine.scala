@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.tiles
 
-import cofh.api.energy.{EnergyStorage, IEnergyReceiver}
+import cofh.api.energy.{IEnergyHandler, EnergyStorage, IEnergyReceiver}
 import com.dyonovan.neotech.collections.StandardValues
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import net.minecraft.inventory.ISidedInventory
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 11, 2015
  */
-abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedInventory with IEnergyReceiver {
+abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedInventory with IEnergyHandler {
 
     final val cookSpeed = 200
     final val ENERGY_SMELT = 200
@@ -125,30 +125,6 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
         energy.extractEnergy(ENERGY_SMELT, false)
     }
 
-    /*def smeltCount: Int = {
-        var input : ItemStack = getStackInSlot(0)
-        if (input == null) {
-            return 0
-        }
-        var output : ItemStack = getStackInSlot(1)
-        val recipeResult : ItemStack = recipe(input)
-        if (recipeResult == null && output != null && !output.isItemEqual(recipeResult)) {
-            return 0
-        }
-        else if (output == null) {
-            output = recipeResult.copy
-            output.stackSize = 0
-        }
-        input = input.copy
-        val recipeStackSize : Int = if (recipeResult.stackSize > 0) recipeResult.stackSize else 1
-        val outMax : Int = if (getInventoryStackLimit < output.getMaxStackSize) output.getMaxStackSize else getInventoryStackLimit()
-        val outAvailable : Int = outMax - output.stackSize
-        if (recipeStackSize > outAvailable) {
-            return outAvailable / recipeStackSize
-        }
-        recipeStackSize
-    }*/
-
     def isBurning: Boolean = {
         values.burnTime > 0
     }
@@ -244,6 +220,8 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
         worldObj.markBlockForUpdate(pos)
         actual
     }
+
+    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
 
     /**
      * Returns the amount of energy currently stored.

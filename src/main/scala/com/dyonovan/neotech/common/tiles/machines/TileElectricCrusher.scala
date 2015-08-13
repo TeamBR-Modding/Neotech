@@ -96,4 +96,6 @@ class TileElectricCrusher extends AbstractMachine {
     override def getSlotsForFace(side: EnumFacing): Array[Int] = {
         Array[Int](0, 1, 2)
     }
+
+    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = ???
 }

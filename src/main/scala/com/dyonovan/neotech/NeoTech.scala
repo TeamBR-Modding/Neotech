@@ -4,13 +4,14 @@ import java.io.File
 
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
+import com.dyonovan.neotech.managers.{WorldGenManager, ItemManager, BlockManager}
 import com.dyonovan.neotech.registries._
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
 import net.minecraft.item.Item
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.common.{Mod, SidedProxy}
 import org.apache.logging.log4j.LogManager
 
@@ -48,6 +49,7 @@ object NeoTech {
         BlockManager.preInit()
         ItemManager.preInit()
         proxy.preInit()
+        GameRegistry.registerWorldGenerator(WorldGenManager, 2)
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
