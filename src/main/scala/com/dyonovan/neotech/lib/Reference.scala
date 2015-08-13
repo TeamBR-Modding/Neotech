@@ -15,4 +15,8 @@ object Reference {
     final val MOD_ID       = "neotech"
     final val VERSION      = "@VERSION@"
     final val DEPENDENCIES = "required-after:bookshelf;required-after:NotEnoughItems"
+
+    final val CONFIG_COPPER_GENERATION = "Copper Ore Generation"
+    final val CONFIG_TIN_GENERATION = "Tin Ore Generation"
+    final val CONFIG_ORE_GENERATION = "Ore Generation"
 }
