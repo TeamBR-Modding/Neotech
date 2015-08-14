@@ -2,10 +2,8 @@ package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
-import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.common.tiles.machines.{TileFurnaceGenerator, TileElectricCrusher, TileElectricFurnace}
-import cyano.poweradvantage.api.ConduitType
-import cyano.poweradvantage.api.modsupport.{ILightWeightPowerAcceptor, LightWeightPowerRegistry}
+import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
+import com.dyonovan.neotech.registries.PowerAdvantageRegistry
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.Loader
@@ -65,21 +63,7 @@ object BlockManager {
             OreDictionary.registerOre(oreDict, block)
 
         if (Loader.isModLoaded("poweradvantage") && powerAcceptor) {
-            LightWeightPowerRegistry.registerLightWeightPowerAcceptor(block, new ILightWeightPowerAcceptor {
-
-                override def canAcceptEnergyType(powerType: ConduitType): Boolean = {
-                    ConduitType.areSameType(powerType, "electricity")
-                }
-                override def addEnergy(tileEntity: TileEntity, v: Float, conduitType: ConduitType): Float = {
-                    val tile = tileEntity.asInstanceOf[AbstractMachine]
-                    tile.receiveEnergy(null, v.toInt, simulate = false).toFloat
-                }
-
-                override def getEnergyDemand(tileEntity: TileEntity, conduitType: ConduitType): Float = {
-                    val tile = tileEntity.asInstanceOf[AbstractMachine]
-                    (tile.getMaxEnergyStored(null) - tile.getEnergyStored(null)).toFloat
-                }
-            })
+            PowerAdvantageRegistry.registerPA(block)
         }
     }
 
@@ -97,5 +81,6 @@ object BlockManager {
     def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], powerAcceptor: Boolean) : Unit = {
         registerBlock(block, name, tileEntity, null, powerAcceptor)
     }
+
 
 }
