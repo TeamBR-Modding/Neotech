@@ -97,5 +97,5 @@ class TileElectricCrusher extends AbstractMachine {
         Array[Int](0, 1, 2)
     }
 
-    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = ???
+    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
 }

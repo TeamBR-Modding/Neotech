@@ -30,7 +30,10 @@ class ClientProxy extends CommonProxy {
                     (BlockManager.electricFurnace.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
         ModelLoader.setCustomStateMapper(BlockManager.electricCrusher,
             (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore
-                    (BlockManager.electricCrusher.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+                    (BlockManager.furnaceGenerator.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+        ModelLoader.setCustomStateMapper(BlockManager.furnaceGenerator,
+            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore
+                    (BlockManager.furnaceGenerator.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
     }
 
     /**

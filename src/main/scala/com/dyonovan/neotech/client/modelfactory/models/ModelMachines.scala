@@ -93,10 +93,10 @@ class ModelMachines extends ISmartBlockModel with ISmartItemModel {
             if (facing == facingDirection) {
                 if (isActive)
                     return Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID +
-                            ":blocks/electricCrusherActive_front")
+                            ":blocks/furnaceGeneratorActive_front")
                 else
                     return Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID +
-                            ":blocks/electricCrusher_front")
+                            ":blocks/furnaceGenerator_front")
             }
         }
         Minecraft.getMinecraft.getTextureMapBlocks.getTextureExtry(Reference.MOD_ID + ":blocks/machine_side")

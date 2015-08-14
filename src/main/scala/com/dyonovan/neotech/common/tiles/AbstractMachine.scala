@@ -160,7 +160,8 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
         super[Inventory].readFromNBT(tag)
         values.readFromNBT(tag)
         energy.readFromNBT(tag)
-        worldObj.markBlockRangeForRenderUpdate(pos, pos)
+        if (worldObj != null)
+            worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
     /** *****************************************************************************************************************

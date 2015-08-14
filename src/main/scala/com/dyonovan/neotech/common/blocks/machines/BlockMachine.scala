@@ -1,11 +1,11 @@
 package com.dyonovan.neotech.common.blocks.machines
 
-import com.dyonovan.neotech.client.gui.machines.{GuiElectricCrusher, GuiElectricFurnace}
+import com.dyonovan.neotech.client.gui.machines.{GuiFurnaceGenerator, GuiElectricCrusher, GuiElectricFurnace}
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.traits.CoreStates
-import com.dyonovan.neotech.common.container.machines.{ContainerElectricCrusher, ContainerElectricFurnace}
+import com.dyonovan.neotech.common.container.machines.{ContainerFurnaceGenerator, ContainerElectricCrusher, ContainerElectricFurnace}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace}
+import com.dyonovan.neotech.common.tiles.machines.{TileFurnaceGenerator, TileElectricCrusher, TileElectricFurnace}
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
@@ -45,6 +45,8 @@ with OpensGui with CoreStates with DropsItems {
                 new ContainerElectricFurnace(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricFurnace])
             case block: BlockManager.electricCrusher.type =>
                 new ContainerElectricCrusher(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricCrusher])
+            case block: BlockManager.furnaceGenerator.type =>
+                new ContainerFurnaceGenerator(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
             case _ => null
         }
     }
@@ -55,6 +57,8 @@ with OpensGui with CoreStates with DropsItems {
                 new GuiElectricFurnace(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricFurnace])
             case block: BlockManager.electricCrusher.type =>
                 new GuiElectricCrusher(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricCrusher])
+            case block: BlockManager.furnaceGenerator.type =>
+                new GuiFurnaceGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
             case _ => null
         }
     }

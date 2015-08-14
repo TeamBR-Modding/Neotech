@@ -12,6 +12,7 @@ tile.neotech:blockTin.name=Block of Tin
 
 inventory.furnace.title=Electric Furnace
 inventory.crusher.title=Electric Crusher
+inventory.furnacegenerator.title=Furnace Generator
 
 item.neotech:dustIron.name=Iron Dust
 item.neotech:dustGold.name=Gold Dust

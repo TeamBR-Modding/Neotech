@@ -1,9 +1,10 @@
 package com.dyonovan.neotech.common.tiles.machines
 
-import cofh.api.energy.EnergyStorage
+import cofh.api.energy.{IEnergyReceiver, EnergyStorage}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
+import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.EnumFacing
 
 /**
@@ -18,14 +19,37 @@ import net.minecraft.util.EnumFacing
  */
 class TileFurnaceGenerator extends AbstractMachine {
 
-    final val RF_TICK = 40
+    final val RF_TICK = 20
 
-    override val energy = new EnergyStorage(32000)
+    override val energy = new EnergyStorage(100000)
 
     override def doWork(): Unit = {
-        //Generate
 
+        //Generate
+        if (this.values.burnTime > 0) {
+            this.values.burnTime -= 1
+            energy.receiveEnergy(RF_TICK, false)
+            worldObj.markBlockForUpdate(pos)
+        } else if (energy.getEnergyStored < energy.getMaxEnergyStored && getStackInSlot(0) != null) {
+            this.values.burnTime = (TileEntityFurnace.getItemBurnTime(getStackInSlot(0)) / 2.0).toInt
+            this.values.currentItemBurnTime = this.values.burnTime
+            decrStackSize(0, 1)
+        }
         //Transfer
+        if (energy.getEnergyStored > 0) {
+            for (i <- EnumFacing.values()) {
+                worldObj.getTileEntity(pos.offset(i)) match {
+                    case tile: IEnergyReceiver =>
+                        val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
+                        if (want > 0) {
+                            val actual = energy.extractEnergy(want, false)
+                            tile.receiveEnergy(i.getOpposite, actual, false)
+                            worldObj.markBlockForUpdate(pos)
+                        }
+                    case _ =>
+                }
+            }
+        }
     }
     /**
      * Get the output of the recipe
@@ -46,9 +70,21 @@ class TileFurnaceGenerator extends AbstractMachine {
      */
     override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
 
-    override def initialSize: Int = 3
+    override def initialSize: Int = 1
 
     override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = false
 
     override def getSlotsForFace(side: EnumFacing): Array[Int] = Array[Int](0)
+
+    override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = 0
+
+    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = {
+        val actual = energy.extractEnergy(maxExtract, simulate)
+        worldObj.markBlockForUpdate(pos)
+        actual
+    }
+
+    override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = {
+        TileEntityFurnace.getItemBurnTime(stack) > 0
+    }
 }

@@ -21,7 +21,7 @@ class GuiElectricFurnace(player: EntityPlayer, tileEntity: TileElectricFurnace) 
     }
 
     override def addComponents(): Unit = {
-        components += new GuiComponentArrow(79, 34) {
+        components += new GuiComponentArrow(81, 55) {
             override def getCurrentProgress: Int = tile.getCookProgressScaled(24)
         }
         components += new GuiComponentPowerBar(20, 18, 18, 60, new Color(255, 0, 0)) {
