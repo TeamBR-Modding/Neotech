@@ -2,9 +2,13 @@ package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
+import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.machines.{TileFurnaceGenerator, TileElectricCrusher, TileElectricFurnace}
+import cyano.poweradvantage.api.ConduitType
+import cyano.poweradvantage.api.modsupport.{ILightWeightPowerAcceptor, LightWeightPowerRegistry}
 import net.minecraft.block.Block
 import net.minecraft.tileentity.TileEntity
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -33,15 +37,15 @@ object BlockManager {
 
     def preInit(): Unit = {
         //Machines
-        registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace])
-        registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher])
+        registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace], powerAcceptor = true)
+        registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher], powerAcceptor = true)
         registerBlock(furnaceGenerator, "furnaceGenerator", classOf[TileFurnaceGenerator])
 
         //Ores
-        registerBlock(oreCopper, "oreCopper", null, "oreCopper")
-        registerBlock(oreTin, "oreTin", null, "oreTin")
-        registerBlock(blockCopper, "blockCopper", null, "blockCopper")
-        registerBlock(blockTin, "blockTin", null, "blockTin")
+        registerBlock(oreCopper, "oreCopper", null, "oreCopper", powerAcceptor = false)
+        registerBlock(oreTin, "oreTin", null, "oreTin", powerAcceptor = false)
+        registerBlock(blockCopper, "blockCopper", null, "blockCopper", powerAcceptor = false)
+        registerBlock(blockTin, "blockTin", null, "blockTin", powerAcceptor = false)
     }
 
     /**
@@ -52,12 +56,31 @@ object BlockManager {
      * @param tileEntity The tile entity, null if none
      * @param oreDict    The ore dict tag, should it be needed
      */
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String) : Unit = {
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String,
+                      powerAcceptor: Boolean) : Unit = {
         GameRegistry.registerBlock(block, name)
         if (tileEntity != null)
             GameRegistry.registerTileEntity(tileEntity, name)
         if (oreDict != null)
             OreDictionary.registerOre(oreDict, block)
+
+        if (Loader.isModLoaded("poweradvantage") && powerAcceptor) {
+            LightWeightPowerRegistry.registerLightWeightPowerAcceptor(block, new ILightWeightPowerAcceptor {
+
+                override def canAcceptEnergyType(powerType: ConduitType): Boolean = {
+                    ConduitType.areSameType(powerType, "electricity")
+                }
+                override def addEnergy(tileEntity: TileEntity, v: Float, conduitType: ConduitType): Float = {
+                    val tile = tileEntity.asInstanceOf[AbstractMachine]
+                    tile.receiveEnergy(null, v.toInt, simulate = false).toFloat
+                }
+
+                override def getEnergyDemand(tileEntity: TileEntity, conduitType: ConduitType): Float = {
+                    val tile = tileEntity.asInstanceOf[AbstractMachine]
+                    (tile.getMaxEnergyStored(null) - tile.getEnergyStored(null)).toFloat
+                }
+            })
+        }
     }
 
     /**
@@ -68,7 +91,11 @@ object BlockManager {
      * @param tileEntity The tile
      */
     def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity]) : Unit = {
-        registerBlock(block, name, tileEntity, null)
+        registerBlock(block, name, tileEntity, null, powerAcceptor = false)
+    }
+
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], powerAcceptor: Boolean) : Unit = {
+        registerBlock(block, name, tileEntity, null, powerAcceptor)
     }
 
 }

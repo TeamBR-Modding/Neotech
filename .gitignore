@@ -145,5 +145,5 @@ $RECYCLE.BIN/
 
 ##eclipse
 eclipse/
-
+!PowerAdvantage-API-1.2.6.jar
 

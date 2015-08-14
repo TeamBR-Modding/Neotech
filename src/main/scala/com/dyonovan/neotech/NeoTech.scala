@@ -4,7 +4,7 @@ import java.io.File
 
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{WorldGenManager, ItemManager, BlockManager}
+import com.dyonovan.neotech.managers.{CraftingRecipeManager, WorldGenManager, ItemManager, BlockManager}
 import com.dyonovan.neotech.registries._
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
@@ -50,6 +50,7 @@ object NeoTech {
         ItemManager.preInit()
         proxy.preInit()
         GameRegistry.registerWorldGenerator(WorldGenManager, 2)
+        CraftingRecipeManager.preInit()
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
