@@ -34,7 +34,6 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
     var pipeTile : TilePipe = null
     var min = 5.0F
     var max = 11.0F
-    val connections = Array(false, true, false, false, false, false)
 
     def this(block : BlockPipe, tile: TilePipe) {
         this()
@@ -48,33 +47,44 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
     override def getGeneralQuads : util.List[_] = {
         val list = new util.ArrayList[BakedQuad]()
 
-       for(dir <- EnumFacing.values()) {
-           list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, getTexture, dir, ModelRotation.X0_Y0, null, true, true))
+        for(dir <- EnumFacing.values()) { //Draw the center bit, front and back
+                list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, getTexture, dir, ModelRotation.X0_Y0, null, true, true))
+                list.add(faceBakery.makeBakedQuad(new Vector3f(max, max, max), new Vector3f(min, min, min), face, getTexture, dir.getOpposite, ModelRotation.X0_Y0, null, true, true))
+        }
 
-           if (connections(EnumFacing.DOWN.ordinal()))
-               drawPipeConnection(ModelRotation.X270_Y0, list)
-           if (connections(EnumFacing.UP.ordinal()))
-               drawPipeConnection(ModelRotation.X90_Y0, list)
-           if (connections(EnumFacing.NORTH.ordinal()))
-               drawPipeConnection(ModelRotation.X180_Y0, list)
-           if (connections(EnumFacing.SOUTH.ordinal()))
-               drawPipeConnection(ModelRotation.X0_Y0, list)
-           if (connections(EnumFacing.WEST.ordinal()))
-               drawPipeConnection(ModelRotation.X0_Y90, list)
-           if (connections(EnumFacing.EAST.ordinal()))
-               drawPipeConnection(ModelRotation.X0_Y270, list)
-       }
+        if(pipeTile != null) { //Exists in world
+            if (pipeTile.canConnect(EnumFacing.DOWN))
+                drawPipeConnection(ModelRotation.X270_Y0, list)
+            if (pipeTile.canConnect(EnumFacing.UP))
+                drawPipeConnection(ModelRotation.X90_Y0, list)
+            if (pipeTile.canConnect(EnumFacing.NORTH))
+                drawPipeConnection(ModelRotation.X180_Y0, list)
+            if (pipeTile.canConnect(EnumFacing.SOUTH))
+                drawPipeConnection(ModelRotation.X0_Y0, list)
+            if (pipeTile.canConnect(EnumFacing.EAST.getOpposite))
+                drawPipeConnection(ModelRotation.X0_Y90, list)
+            if (pipeTile.canConnect(EnumFacing.WEST.getOpposite))
+                drawPipeConnection(ModelRotation.X0_Y270, list)
+        } else { //Is an item
+            drawPipeConnection(ModelRotation.X270_Y0, list)
+            drawPipeConnection(ModelRotation.X90_Y0, list)
+        }
 
         list
     }
 
     def drawPipeConnection(modelRot : ModelRotation, list : util.ArrayList[BakedQuad]) {
-        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, min, 16.0F), face, getTexture, EnumFacing.NORTH, modelRot, null, true, true))
-        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, min, 16.0F), face, getTexture, EnumFacing.SOUTH, modelRot, null, true, true))
-        list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, min, 16.0F), face, getTexture, EnumFacing.UP, modelRot, null, true, true))
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, max), new Vector3f(max, max, 16.0F), face, getTexture, EnumFacing.UP, modelRot, null, true, true))
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(max, min, 16.0F), face, getTexture, EnumFacing.DOWN, modelRot, null, true, true))
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, max), new Vector3f(min, max, 16.0F), face, getTexture, EnumFacing.WEST, modelRot, null, true, true))
         list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, max), new Vector3f(max, max, 16.0F), face, getTexture, EnumFacing.EAST, modelRot, null, true, true))
+
+        //Enable the back to be seen
+        list.add(faceBakery.makeBakedQuad(new Vector3f(max, max, 16.0F), new Vector3f(min, max, max), face, getTexture, EnumFacing.DOWN, modelRot, null, true, true))
+        list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, 16.0F), new Vector3f(min, min, max), face, getTexture, EnumFacing.UP, modelRot, null, true, true))
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, 16.0F), new Vector3f(min, min, max), face, getTexture, EnumFacing.EAST, modelRot, null, true, true))
+        list.add(faceBakery.makeBakedQuad(new Vector3f(max, max, 16.0F), new Vector3f(max, min, max), face, getTexture, EnumFacing.WEST, modelRot, null, true, true))
+
     }
 
     override def isAmbientOcclusion: Boolean = true

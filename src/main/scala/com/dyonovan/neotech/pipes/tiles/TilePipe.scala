@@ -19,6 +19,6 @@ class TilePipe extends UpdatingTile {
      * @param face The facing direction
      */
     def canConnect(face : EnumFacing) : Boolean = {
-        true
+        worldObj.getTileEntity(pos.offset(face)).isInstanceOf[TilePipe]
     }
 }
