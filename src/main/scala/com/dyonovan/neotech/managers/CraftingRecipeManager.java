@@ -39,5 +39,18 @@ public class CraftingRecipeManager {
                 'A', "ingotTin"));
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotTin(), 9), new ItemStack(BlockManager
                 .blockTin()));
+
+        //Basic RF Storage
+        GameRegistry.addRecipe(new ItemStack(BlockManager.basicRFStorage()), "ABA", "DCD", "ABA",
+                'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', Items.comparator);
+
+        //Advanced RF Storage
+        GameRegistry.addRecipe(new ItemStack(BlockManager.advancedRFStorage()), "ABA", "DCD", "ABA",
+                'A', Items.gold_ingot, 'B', Blocks.iron_bars, 'C', BlockManager.basicRFStorage(), 'D', Items.comparator);
+
+        //Elite RF Storage
+        GameRegistry.addRecipe(new ItemStack(BlockManager.eliteRFStorage()), "ABA", "DCD", "ABA",
+                'A', Items.diamond, 'B', Blocks.iron_bars, 'C', BlockManager.advancedRFStorage(), 'D', Items.comparator);
+
     }
 }
