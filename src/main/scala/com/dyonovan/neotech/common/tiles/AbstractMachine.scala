@@ -219,7 +219,8 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
      */
     override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
         val actual = energy.receiveEnergy(maxReceive, simulate)
-        worldObj.markBlockForUpdate(pos)
+        if (worldObj != null)
+            worldObj.markBlockForUpdate(pos)
         actual
     }
 
