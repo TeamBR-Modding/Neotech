@@ -87,4 +87,11 @@ class TileFurnaceGenerator extends AbstractMachine {
     override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = {
         TileEntityFurnace.getItemBurnTime(stack) > 0
     }
+
+    override def canInsertItem(index: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+        index match {
+            case 0 => TileEntityFurnace.getItemBurnTime (itemStackIn) > 0
+            case _ => false
+        }
+    }
 }
