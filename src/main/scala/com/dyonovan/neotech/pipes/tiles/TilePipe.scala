@@ -21,4 +21,13 @@ class TilePipe extends UpdatingTile {
     def canConnect(face : EnumFacing) : Boolean = {
         worldObj.getTileEntity(pos.offset(face)).isInstanceOf[TilePipe]
     }
+
+    /**
+     * Used to tell the resource moving through it how much to speed up when passing through.
+     *
+     * Keep in mind, the speed is equal to how many blocks to offset. Unless you want it moving tons of blocks at once
+     * don't go over 1
+     * @return
+     */
+    def getSpeedupValue : Double = 0
 }
