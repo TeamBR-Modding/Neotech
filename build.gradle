@@ -15,6 +15,21 @@ buildscript {
     }
 }
 
+repositories {
+    maven {
+        name 'BR Repo'
+        url "http://www.dyonovan.com/maven2/"
+    }
+    maven {
+        name 'CB Maven FS'
+        url "http://chickenbones.net/maven/"
+    }
+    maven { // The repo from which to get waila
+        name "Mobius Repo"
+        url "http://mobiusstrip.eu/maven"
+    }
+}
+
 apply plugin: 'scala'
 apply plugin: 'forge'
 apply plugin: 'curseforge'
@@ -39,7 +54,7 @@ if (build == null || build == '') {
 } else {
     version = "${config.minecraft_version}-${config.mod_version}-B" + System.getenv("BUILD_NUMBER")
 }
-//version = "${config.minecraft_version}-${config.mod_version}-B" + System.getenv("BUILD_NUMBER")
+
 group= "com.dyonovan.neotech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "NeoTech"
 
@@ -66,20 +81,6 @@ minecraft {
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-
-repositories {
-    maven {
-        name 'CB Maven FS'
-        url "http://chickenbones.net/maven/"
-    }
-    maven {
-        url "http://www.beyondrealitypack.com/maven2/"
-    }
-    maven { // The repo from which to get waila
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
 }
 
 dependencies {
@@ -122,6 +123,7 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
 curse {
     projectId = 228643
     apiKey = APIToken
