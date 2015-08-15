@@ -36,7 +36,7 @@ object NeoTech {
     var configFolderLocation : String = ""
 
     @SidedProxy(clientSide = "com.dyonovan.neotech.client.ClientProxy",
-                serverSide = "com.dyonovan.neotech.common.CommonProsy")
+                serverSide = "com.dyonovan.neotech.common.CommonProxy")
     var proxy : CommonProxy = null
 
     val tabNeoTech: CreativeTabs = new CreativeTabs("tabNeoTech") {

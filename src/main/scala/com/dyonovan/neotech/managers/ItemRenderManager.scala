@@ -27,6 +27,10 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.blockTin))
         registerItem(Item.getItemFromBlock(BlockManager.oreCopper))
         registerItem(Item.getItemFromBlock(BlockManager.oreTin))
+        registerItem(Item.getItemFromBlock(BlockManager.basicRFStorage))
+        registerItem(Item.getItemFromBlock(BlockManager.advancedRFStorage))
+        registerItem(Item.getItemFromBlock(BlockManager.eliteRFStorage))
+        registerItem(Item.getItemFromBlock(BlockManager.creativeRFStorage))
     }
 
     def registerItem(item: Item): Unit = {

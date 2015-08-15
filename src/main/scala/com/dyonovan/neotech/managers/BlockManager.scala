@@ -2,7 +2,9 @@ package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
+import com.dyonovan.neotech.common.blocks.storage.BlockRFStorage
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
+import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
 import com.dyonovan.neotech.pipes.tiles.TilePipe
 import com.dyonovan.neotech.registries.PowerAdvantageRegistry
@@ -38,6 +40,12 @@ object BlockManager {
     //Pipes
     val pipeItemBasic = new BlockPipe("pipeItemBasic", Material.rock, classOf[TilePipe])
 
+    //RF Storage
+    val basicRFStorage = new BlockRFStorage("basicRFStorage", 1)
+    val advancedRFStorage = new BlockRFStorage("advancedRFStorage", 2)
+    val eliteRFStorage = new BlockRFStorage("eliteRFStorage", 3)
+    val creativeRFStorage = new BlockRFStorage("creativeRFStorage", 4)
+
 
     def preInit(): Unit = {
         //Machines
@@ -53,6 +61,12 @@ object BlockManager {
 
         //Pipes
         registerBlock(pipeItemBasic, "pipeItemBasic", classOf[TilePipe])
+
+        //RF Storage
+        registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)
+        registerBlock(advancedRFStorage, "advancedRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)
+        registerBlock(eliteRFStorage, "eliteRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)
+        registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)
     }
 
     /**
