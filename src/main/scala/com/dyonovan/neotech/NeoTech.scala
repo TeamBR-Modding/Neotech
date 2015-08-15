@@ -39,8 +39,12 @@ object NeoTech {
                 serverSide = "com.dyonovan.neotech.common.CommonProsy")
     var proxy : CommonProxy = null
 
-    var tabNeoTech: CreativeTabs = new CreativeTabs("tabNeoTech") {
+    val tabNeoTech: CreativeTabs = new CreativeTabs("tabNeoTech") {
         override def getTabIconItem: Item = Item.getItemFromBlock(Blocks.furnace)
+    }
+
+    val tabPipes = new CreativeTabs("tabNeoTechPipes") {
+        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemBasic)
     }
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {

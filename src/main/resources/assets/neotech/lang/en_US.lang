@@ -1,4 +1,5 @@
 itemGroup.tabNeoTech=NeoTech
+itemGroup.tabNeoTechPipes=Transport Pipes
 itemGroup.tabNeoTechDeco=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2e
 
 tile.neotech:furnaceGenerator.name=Furnace Generator

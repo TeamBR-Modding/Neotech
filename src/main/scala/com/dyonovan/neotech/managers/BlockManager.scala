@@ -3,8 +3,11 @@ package com.dyonovan.neotech.managers
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
+import com.dyonovan.neotech.pipes.blocks.BlockPipe
+import com.dyonovan.neotech.pipes.tiles.TilePipe
 import com.dyonovan.neotech.registries.PowerAdvantageRegistry
 import net.minecraft.block.Block
+import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -32,6 +35,9 @@ object BlockManager {
     val oreTin = new BlockOre("oreTin", 1)
     val blockTin = new BlockOre("blockTin", 1)
 
+    //Pipes
+    val pipeItemBasic = new BlockPipe("pipeItemBasic", Material.rock, classOf[TilePipe])
+
 
     def preInit(): Unit = {
         //Machines
@@ -44,6 +50,9 @@ object BlockManager {
         registerBlock(oreTin, "oreTin", null, "oreTin", powerAcceptor = false)
         registerBlock(blockCopper, "blockCopper", null, "blockCopper", powerAcceptor = false)
         registerBlock(blockTin, "blockTin", null, "blockTin", powerAcceptor = false)
+
+        //Pipes
+        registerBlock(pipeItemBasic, "pipeItemBasic", classOf[TilePipe])
     }
 
     /**

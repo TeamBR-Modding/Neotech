@@ -28,7 +28,7 @@ import net.minecraft.world.World
  * @since August 11, 2015
  */
 class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.iron, name, tileEntity)
-with OpensGui with CoreStates with DropsItems {
+    with OpensGui with CoreStates with DropsItems {
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
         world.getTileEntity(pos) match {
