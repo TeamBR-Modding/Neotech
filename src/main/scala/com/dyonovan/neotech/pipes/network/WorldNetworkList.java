@@ -12,13 +12,13 @@ import java.util.LinkedHashSet;
  *
  * @author Paul Davis pauljoda
  * @since August 15, 2015
+ *
+ * Used to hold a list of networks
  */
 public class WorldNetworkList {
     public World world;
-
     public WorldNetworkList(World worldObj) {
         world = worldObj;
     }
-
-    public LinkedHashSet<AbstractNetwork> activeNetworks = new LinkedHashSet<>();
+    public LinkedHashSet<PipeNetwork> activeNetworks = new LinkedHashSet<>();
 }

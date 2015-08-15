@@ -1,11 +1,13 @@
 package com.dyonovan.neotech.pipes.world;
 
-import com.dyonovan.neotech.pipes.network.AbstractNetwork;
+import com.dyonovan.neotech.pipes.network.PipeNetwork;
+import com.dyonovan.neotech.pipes.network.WorldNetworkList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import java.util.Iterator;
 import java.util.WeakHashMap;
 
 /**
@@ -20,10 +22,10 @@ import java.util.WeakHashMap;
 public class WorldTicker {
     public static WorldTicker INSTANCE = new WorldTicker();
 
-    public static final WeakHashMap<World, AbstractNetwork> networks = new WeakHashMap<>();
+    public static final WeakHashMap<World, WorldNetworkList> networks = new WeakHashMap<>();
 
     public static void register() {
-        MinecraftForge.EVENT_BUS.register(INSTANCE);
+        FMLCommonHandler.instance().bus().register(INSTANCE);
     }
 
     /**
@@ -31,7 +33,7 @@ public class WorldTicker {
      * @param world The world the network is in
      * @param network The network to add
      */
-    public void addNetwork(World world, AbstractNetwork network) {
+    public void addNetwork(World world, WorldNetworkList network) {
         networks.put(world, network);
     }
 
@@ -40,7 +42,19 @@ public class WorldTicker {
         if(networks.isEmpty())
             return;
         synchronized (networks) {
-            AbstractNetwork localNetwork = networks.get(event.world);
+            WorldNetworkList localNetwork = networks.get(event.world);
+            Iterator<PipeNetwork> networkIterator = localNetwork.activeNetworks.iterator();
+            while(networkIterator.hasNext()) {
+                PipeNetwork network = networkIterator.next();
+                if(network == null || network.shouldBeDestroyed())
+                    networkIterator.remove();
+                else {
+                    if(event.phase == TickEvent.Phase.END)
+                        network.onTickEnd();
+                    else
+                        network.onTickStart();
+                }
+            }
         }
     }
 }

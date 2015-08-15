@@ -6,7 +6,7 @@ import com.dyonovan.neotech.common.blocks.storage.BlockRFStorage
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
-import com.dyonovan.neotech.pipes.tiles.TilePipe
+import com.dyonovan.neotech.pipes.tiles.BasePipe
 import com.dyonovan.neotech.registries.PowerAdvantageRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -38,7 +38,7 @@ object BlockManager {
     val blockTin = new BlockOre("blockTin", 1)
 
     //Pipes
-    val pipeItemBasic = new BlockPipe("pipeItemBasic", Material.rock, classOf[TilePipe])
+    val pipeItemBasic = new BlockPipe("pipeItemBasic", Material.rock, classOf[BasePipe])
 
     //RF Storage
     val basicRFStorage = new BlockRFStorage("basicRFStorage", 1)
@@ -60,7 +60,7 @@ object BlockManager {
         registerBlock(blockTin, "blockTin", null, "blockTin", powerAcceptor = false)
 
         //Pipes
-        registerBlock(pipeItemBasic, "pipeItemBasic", classOf[TilePipe])
+        registerBlock(pipeItemBasic, "pipeItemBasic", classOf[BasePipe])
 
         //RF Storage
         registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)

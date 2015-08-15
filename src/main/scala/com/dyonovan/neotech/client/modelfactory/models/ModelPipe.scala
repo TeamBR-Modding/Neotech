@@ -5,7 +5,7 @@ import javax.vecmath.Vector3f
 
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
-import com.dyonovan.neotech.pipes.tiles.TilePipe
+import com.dyonovan.neotech.pipes.tiles.IPipe
 import com.teambr.bookshelf.common.blocks.properties.TileAwareState
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
@@ -31,11 +31,11 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
     val uv = new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0)
     val face = new BlockPartFace(null, 0, "", uv)
     var blockPipe : BlockPipe = null
-    var pipeTile : TilePipe = null
-    var min = 5.0F
-    var max = 11.0F
+    var pipeTile : IPipe = null
+    var min = 4.0F
+    var max = 12.0F
 
-    def this(block : BlockPipe, tile: TilePipe) {
+    def this(block : BlockPipe, tile: IPipe) {
         this()
         blockPipe = block
         pipeTile = tile
@@ -47,9 +47,10 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
     override def getGeneralQuads : util.List[_] = {
         val list = new util.ArrayList[BakedQuad]()
 
-        for(dir <- EnumFacing.values()) { //Draw the center bit, front and back
-                list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, getTexture, dir, ModelRotation.X0_Y0, null, true, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(max, max, max), new Vector3f(min, min, min), face, getTexture, dir.getOpposite, ModelRotation.X0_Y0, null, true, true))
+        for(dir <- EnumFacing.values()) {
+            //Draw the center bit, front and back
+            list.add(faceBakery.makeBakedQuad(new Vector3f(min, min, min), new Vector3f(max, max, max), face, getTexture, dir, ModelRotation.X0_Y0, null, true, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(max, max, max), new Vector3f(min, min, min), face, getTexture, dir.getOpposite, ModelRotation.X0_Y0, null, true, true))
         }
 
         if(pipeTile != null) { //Exists in world
@@ -102,7 +103,7 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
 
     override def handleBlockState(state : IBlockState) : IBakedModel =  {
         state match {
-            case tileAware : TileAwareState => new ModelPipe(state.getBlock.asInstanceOf[BlockPipe], tileAware.tile.asInstanceOf[TilePipe])
+            case tileAware : TileAwareState => new ModelPipe(state.getBlock.asInstanceOf[BlockPipe], tileAware.tile.asInstanceOf[IPipe])
             case _ =>  new ModelPipe
 
         }

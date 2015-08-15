@@ -3,7 +3,7 @@ package com.dyonovan.neotech.pipes.blocks
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.pipes.tiles.TilePipe
+import com.dyonovan.neotech.pipes.tiles.{BasePipe, IPipe}
 import com.teambr.bookshelf.common.blocks.properties.TileAwareState
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
@@ -24,12 +24,13 @@ import net.minecraftforge.fml.relauncher.{ Side, SideOnly }
  * @author Paul Davis pauljoda
  * @since August 14, 2015
  */
-class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: TilePipe]) extends BlockContainer(mat) {
+class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: BasePipe]) extends BlockContainer(mat) {
 
     //Constructor
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabPipes)
     setHardness(1.5F)
+    setLightOpacity(0)
     ModelFactory.INSTANCE.pipeRegistry += this
 
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
@@ -46,27 +47,27 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: TilePi
         var y2 = 1.0F - y1
         var z1 = 0.25F
         var z2 = 1.0F - z1
-        if(isCableConnected(worldIn, pos.west(), EnumFacing.WEST)) {
+        if(isCableConnected(worldIn, pos, EnumFacing.WEST)) {
             x1 = 0.0F
         }
 
-        if(isCableConnected(worldIn, pos.east(), EnumFacing.EAST)) {
+        if(isCableConnected(worldIn, pos, EnumFacing.EAST)) {
             x2 = 1.0F
         }
 
-        if(isCableConnected(worldIn, pos.north(), EnumFacing.NORTH)) {
+        if(isCableConnected(worldIn, pos, EnumFacing.NORTH)) {
             z1 = 0.0F
         }
 
-        if(isCableConnected(worldIn, pos.south(), EnumFacing.SOUTH)) {
+        if(isCableConnected(worldIn, pos, EnumFacing.SOUTH)) {
             z2 = 1.0F
         }
 
-        if(isCableConnected(worldIn, pos.down(), EnumFacing.DOWN)) {
+        if(isCableConnected(worldIn, pos, EnumFacing.DOWN)) {
             y1 = 0.0F
         }
 
-        if(isCableConnected(worldIn, pos.up(), EnumFacing.UP)) {
+        if(isCableConnected(worldIn, pos, EnumFacing.UP)) {
             y2 = 1.0F
         }
 
@@ -74,7 +75,7 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: TilePi
     }
 
     def isCableConnected(world: IBlockAccess, pos: BlockPos, facing: EnumFacing) : Boolean = {
-        world.getTileEntity(pos).isInstanceOf[TilePipe]
+        world.getTileEntity(pos).asInstanceOf[IPipe].canConnect(facing)
     }
 
    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[_], collidingEntity : Entity) {
@@ -88,6 +89,8 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: TilePi
 
     @SideOnly(Side.CLIENT)
     override def isTranslucent : Boolean = true
+
+    override def isFullCube : Boolean = false
 
     @SideOnly(Side.CLIENT)
     override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
