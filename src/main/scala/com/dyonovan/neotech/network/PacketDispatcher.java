@@ -20,7 +20,6 @@ public class PacketDispatcher {
 
     public static void initPackets() {
         net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID().toUpperCase());
-        registerMessage(RenderPipeResourcePacket.class, RenderPipeResourcePacket.class);
     }
 
     @SuppressWarnings("unchecked")

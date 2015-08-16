@@ -4,9 +4,8 @@ import java.io.File
 
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{CraftingRecipeManager, WorldGenManager, ItemManager, BlockManager}
+import com.dyonovan.neotech.managers.{BlockManager, CraftingRecipeManager, ItemManager, WorldGenManager}
 import com.dyonovan.neotech.network.PacketDispatcher
-import com.dyonovan.neotech.pipes.world.WorldTicker
 import com.dyonovan.neotech.registries._
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Blocks
@@ -46,7 +45,7 @@ object NeoTech {
     }
 
     val tabPipes = new CreativeTabs("tabNeoTechPipes") {
-        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemBasic)
+        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemBasicSource)
     }
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
@@ -61,7 +60,6 @@ object NeoTech {
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
         CrusherRecipeRegistry.init()
-        WorldTicker.register()
         PacketDispatcher.initPackets()
         proxy.init()
     }

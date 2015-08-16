@@ -1,13 +1,18 @@
 package com.dyonovan.neotech.pipes.network;
 
-import io.netty.buffer.ByteBuf;
+import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Stack;
 
 /**
  * This file was created for NeoTech
@@ -43,7 +48,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
 
     @Override
     public void onDropInWorld() {
-        if (!world.isRemote) {
+        if (!world.isRemote && resource != null) {
             EntityItem item = new EntityItem(world, xPos, yPos, zPos);
             item.setEntityItemStack(resource);
             world.spawnEntityInWorld(item);
@@ -51,21 +56,45 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeItemStack(buf, resource);
-        buf.writeDouble(xPos);
-        buf.writeDouble(yPos);
-        buf.writeDouble(zPos);
-    }
-
-    @Override
-    public ResourceEntity fromBytes(ByteBuf buf) {
-        return new ItemResourceEntity(ByteBufUtils.readItemStack(buf),
-                buf.readDouble(), buf.readDouble(), buf.readDouble(), 0, new BlockPos(0, 0, 0), new BlockPos(0, 0, 0), null);
-    }
-
-    @Override
     public void renderResource(float tickPartial) {
-        Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, xPos, yPos, zPos, 100, 0, 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.pushAttrib();
+
+        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+        GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
+        RenderUtils.bindMinecraftBlockSheet();
+        GL11.glScaled(0.5, 0.5, 0.5);
+        try {
+            Minecraft.getMinecraft().getRenderItem().renderItemModel(resource);
+        } catch(NullPointerException ignored) {}
+
+        GlStateManager.popAttrib();
+        GlStateManager.popMatrix();
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        if(resource != null)
+            resource.writeToNBT(tag);
+        tag.setDouble("X", xPos);
+        tag.setDouble("Y", yPos);
+        tag.setDouble("Z", zPos);
+        tag.setDouble("Speed", speed);
+        tag.setLong("Destination", destination.toLong());
+        tag.setLong("From", from.toLong());
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        if(resource == null)
+            resource = new ItemStack(Blocks.air);
+        resource.readFromNBT(tag);
+        xPos = tag.getDouble("X");
+        yPos = tag.getDouble("Y");
+        zPos = tag.getDouble("Z");
+        nextSpeed = tag.getDouble("Speed");
+        destination = BlockPos.fromLong(tag.getLong("Destination"));
+        from = BlockPos.fromLong(tag.getLong("From"));
+        pathQueue = new Stack<>();
     }
 }

@@ -1,12 +1,15 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
+import com.dyonovan.neotech.client.renderers.ItemExtractionRenderer
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.blocks.traits.CoreStates
 import com.dyonovan.neotech.managers.{ItemRenderManager, BlockManager}
+import com.dyonovan.neotech.pipes.tiles.ItemExtractionPipe
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder
 import net.minecraftforge.client.model.ModelLoader
+import net.minecraftforge.fml.client.registry.ClientRegistry
 
 /**
  * This file was created for NeoTech
@@ -34,6 +37,8 @@ class ClientProxy extends CommonProxy {
         ModelLoader.setCustomStateMapper(BlockManager.furnaceGenerator,
             (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore
                     (BlockManager.furnaceGenerator.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
+
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[ItemExtractionPipe], new ItemExtractionRenderer)
     }
 
     /**

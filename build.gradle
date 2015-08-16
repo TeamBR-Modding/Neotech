@@ -124,6 +124,12 @@ processResources
     }
 }
 
+jar {
+    manifest {
+        attributes 'FMLAT': 'neotech_at.cfg'
+    }
+}
+
 curse {
     projectId = 228643
     apiKey = APIToken

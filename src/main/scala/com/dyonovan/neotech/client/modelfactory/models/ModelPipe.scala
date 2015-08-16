@@ -4,6 +4,7 @@ import java.util
 import javax.vecmath.Vector3f
 
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
+import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
 import com.dyonovan.neotech.pipes.tiles.IPipe
 import com.teambr.bookshelf.common.blocks.properties.TileAwareState
@@ -99,7 +100,16 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
         new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
 
-    override def getTexture : TextureAtlasSprite = ModelFactory.BASIC_ITEM_TEXTURE
+    override def getTexture : TextureAtlasSprite =  {
+        blockPipe match {
+            case BlockManager.pipeItemBasicSource =>
+                ModelFactory.BASIC_ITEM_SOURCE
+            case BlockManager.pipeItemBasicSink =>
+                ModelFactory.BASIC_ITEM_SINK
+            case _ =>
+                ModelFactory.STRUCTURE_PIPE
+        }
+    }
 
     override def handleBlockState(state : IBlockState) : IBakedModel =  {
         state match {

@@ -1,9 +1,7 @@
 package com.dyonovan.neotech.pipes.tiles
 
-import java.lang.Long
-
 import com.dyonovan.neotech.pipes.network.{PipeInformation, ResourceEntity}
-import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 
 /**
@@ -14,19 +12,17 @@ import net.minecraft.util.EnumFacing
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author Paul Davis pauljoda
- * @since August 15, 2015
+ * @since August 16, 2015
  */
-class BasePipe extends UpdatingTile with IPipe {
-    override def canConnect(facing: EnumFacing): Boolean = worldObj.getTileEntity(pos.offset(facing)).isInstanceOf[IPipe]
+trait IPipe extends TileEntity {
+    def canConnect(facing: EnumFacing): Boolean = getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[IPipe]
 
-    override def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {
-        resource.nextSpeed += 0.0
-    }
+    def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {}
 
-    override def getInformation: PipeInformation = {
+    def getInformation: PipeInformation = {
         val connections = Array[Boolean](false, false, false, false, false, false)
         for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
+            getWorld.getTileEntity(getPos.offset(dir)) match {
                 case otherPipe: IPipe =>
                     connections(dir.ordinal()) = true
                 case _ =>
@@ -35,7 +31,7 @@ class BasePipe extends UpdatingTile with IPipe {
         new PipeInformation(connections, canAcceptResource(null))
     }
 
-    override def canAcceptResource(resource: ResourceEntity[_]): Boolean = true
+    def canAcceptResource(resource: ResourceEntity[_]): Boolean = false
 
-    override def getPosAsLong: Long = pos.toLong
+    def getPosAsLong: Long = getPos.toLong
 }
