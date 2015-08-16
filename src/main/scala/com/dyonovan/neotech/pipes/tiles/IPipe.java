@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.pipes.tiles;
 
+import com.dyonovan.neotech.pipes.network.PipeInformation;
 import com.dyonovan.neotech.pipes.network.ResourceEntity;
 import net.minecraft.util.EnumFacing;
 
@@ -27,4 +28,22 @@ public interface IPipe {
      * @param resource The resource entering
      */
     void onResourceEnteredPipe(ResourceEntity resource);
+
+    /**
+     * Used to get the information for this pipe
+     */
+    PipeInformation getInformation();
+
+    /**
+     * Used to get the current position as a long
+     * @return BlockPos as long
+     */
+    Long getPosAsLong();
+
+    /**
+     * Used to tell if this can receive a resource
+     * @param resource The resource to check, pass null to check if is sink
+     * @return True if it can accept, if null is passed and this is a sink, still return true
+     */
+    boolean canAcceptResource(ResourceEntity resource);
 }

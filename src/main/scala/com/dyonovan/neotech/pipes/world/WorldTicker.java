@@ -1,13 +1,18 @@
 package com.dyonovan.neotech.pipes.world;
 
-import com.dyonovan.neotech.pipes.network.PipeNetwork;
-import com.dyonovan.neotech.pipes.network.WorldNetworkList;
+import com.dyonovan.neotech.network.PacketDispatcher;
+import com.dyonovan.neotech.network.RenderPipeResourcePacket;
+import com.dyonovan.neotech.pipes.network.ResourceEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.WeakHashMap;
 
 /**
@@ -22,19 +27,26 @@ import java.util.WeakHashMap;
 public class WorldTicker {
     public static WorldTicker INSTANCE = new WorldTicker();
 
-    public static final WeakHashMap<World, WorldNetworkList> networks = new WeakHashMap<>();
+    public static final WeakHashMap<World, LinkedList<ResourceEntity>> networks = new WeakHashMap<>();
+    public float renderTickTime;
 
     public static void register() {
         FMLCommonHandler.instance().bus().register(INSTANCE);
     }
 
     /**
-     * Used to add a network to the tick list
-     * @param world The world the network is in
-     * @param network The network to add
+     * Used to add a resource to the tick list
+     * @param world The world the resource is in
+     * @param resource The resource to add
      */
-    public void addNetwork(World world, WorldNetworkList network) {
-        networks.put(world, network);
+    public void addResourceToWorld(World world, ResourceEntity resource) {
+        if(networks.containsKey(world)) {
+            networks.get(world).add(resource);
+        } else {
+            LinkedList<ResourceEntity> list = new LinkedList<>();
+            list.add(resource);
+            networks.put(world, list);
+        }
     }
 
     @SubscribeEvent
@@ -42,19 +54,36 @@ public class WorldTicker {
         if(networks.isEmpty())
             return;
         synchronized (networks) {
-            WorldNetworkList localNetwork = networks.get(event.world);
-            Iterator<PipeNetwork> networkIterator = localNetwork.activeNetworks.iterator();
-            while(networkIterator.hasNext()) {
-                PipeNetwork network = networkIterator.next();
-                if(network == null || network.shouldBeDestroyed())
-                    networkIterator.remove();
-                else {
-                    if(event.phase == TickEvent.Phase.END)
-                        network.onTickEnd();
-                    else
-                        network.onTickStart();
+            LinkedList<ResourceEntity> resources = networks.get(event.world);
+            if (resources != null) {
+                Iterator<ResourceEntity> networkIterator = resources.iterator();
+                while (networkIterator.hasNext()) {
+                    ResourceEntity resource = networkIterator.next();
+                    if (resource == null)
+                        networkIterator.remove();
+                    else {
+                        if (event.phase == TickEvent.Phase.END) {
+                            resource.updateEntity();
+                            PacketDispatcher.net.sendToAllAround(new RenderPipeResourcePacket(resource),
+                                    new NetworkRegistry.TargetPoint(event.world.provider.getDimensionId(),
+                                            resource.xPos, resource.yPos, resource.zPos, 100));
+                        } else {
+                            if (resource.isDead) {
+                                resource.onDropInWorld();
+                                networkIterator.remove();
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+
+
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void tick(TickEvent.RenderTickEvent event) {
+       renderTickTime = event.renderTickTime;
     }
 }

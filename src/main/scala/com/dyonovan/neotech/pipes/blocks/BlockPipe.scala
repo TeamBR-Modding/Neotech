@@ -3,12 +3,17 @@ package com.dyonovan.neotech.pipes.blocks
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.pipes.network.ItemResourceEntity
 import com.dyonovan.neotech.pipes.tiles.{BasePipe, IPipe}
+import com.dyonovan.neotech.pipes.world.WorldTicker
 import com.teambr.bookshelf.common.blocks.properties.TileAwareState
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.Entity
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Items
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{ EnumFacing, AxisAlignedBB, BlockPos, EnumWorldBlockLayer }
 import net.minecraft.world.{ IBlockAccess, World }
@@ -32,6 +37,12 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: BasePi
     setHardness(1.5F)
     setLightOpacity(0)
     ModelFactory.INSTANCE.pipeRegistry += this
+
+    override def onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+        val item = new ItemResourceEntity(new ItemStack(Items.coal), pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, 0.05, pos, pos.north(5).east(2), worldIn)
+        WorldTicker.INSTANCE.addResourceToWorld(worldIn, item)
+        true
+    }
 
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
         world.getTileEntity(pos) match {
@@ -78,7 +89,7 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: BasePi
         world.getTileEntity(pos).asInstanceOf[IPipe].canConnect(facing)
     }
 
-   override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[_], collidingEntity : Entity) {
+    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[_], collidingEntity : Entity) {
         this.setBlockBoundsBasedOnState(worldIn, pos)
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
