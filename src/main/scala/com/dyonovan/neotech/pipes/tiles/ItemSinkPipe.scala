@@ -34,7 +34,7 @@ class ItemSinkPipe extends IPipe {
                 for(dir <- EnumFacing.values()) {
                     worldObj.getTileEntity(pos.offset(dir)) match {
                         case otherInv : IInventory =>
-                            if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir.getOpposite, doMove = true, canStack = true) > 0) {
+                            if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir.getOpposite, doMove = false, canStack = true) > 0) {
                                 return true
                             }
                         case _ =>

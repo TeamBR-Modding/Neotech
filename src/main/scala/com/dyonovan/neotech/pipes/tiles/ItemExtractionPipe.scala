@@ -108,7 +108,8 @@ class ItemExtractionPipe extends UpdatingTile with IPipe {
             resource.pathQueue.push(new Vector3d(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
             u = parent.get(u.toLong)
         }
-        resources.add(resource)
+        if(!resource.pathQueue.isEmpty)
+            resources.add(resource)
     }
 
     override def onServerTick() : Unit = {
