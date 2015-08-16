@@ -36,12 +36,6 @@ object ItemManager {
 
         registerItem(ingotCopper, "ingotCopper", "ingotCopper")
         registerItem(ingotTin, "ingotTin", "ingotTin")
-
-        //Dust Smelting Recipes
-        GameRegistry.addSmelting(dustGold, new ItemStack(Items.gold_ingot), 2.0F)
-        GameRegistry.addSmelting(dustIron, new ItemStack(Items.iron_ingot), 1.0F)
-        GameRegistry.addSmelting(dustCopper, new ItemStack(this.ingotCopper), 1.0F)
-        GameRegistry.addSmelting(dustTin, new ItemStack(this.ingotTin), 2.0F)
     }
     /**
      * Helper method to register items

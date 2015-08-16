@@ -52,5 +52,13 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.eliteRFStorage()), "ABA", "DCD", "ABA",
                 'A', Items.diamond, 'B', Blocks.iron_bars, 'C', BlockManager.advancedRFStorage(), 'D', Items.comparator);
 
+        //Smelting Recipes
+        GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
+        GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);
+        GameRegistry.addSmelting(ItemManager.dustCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
+        GameRegistry.addSmelting(ItemManager.dustTin(), new ItemStack(ItemManager.ingotTin()), 2.0F);
+        GameRegistry.addSmelting(BlockManager.oreCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
+        GameRegistry.addSmelting(BlockManager.oreTin(), new ItemStack(ItemManager.ingotTin()), 1.0F);
+
     }
 }
