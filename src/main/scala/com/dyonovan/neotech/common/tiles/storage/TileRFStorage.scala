@@ -64,7 +64,8 @@ class TileRFStorage(t: Int) extends TileEntity with IEnergyHandler with Updating
         super[TileEntity].readFromNBT(tag)
         super[UpdatingTile].readFromNBT(tag)
         energy.readFromNBT(tag)
-        tier = tag.getInteger("Tier")
+        if (tag.hasKey("Tier"))
+            tier = tag.getInteger("Tier")
     }
 
     /** *****************************************************************************************************************
