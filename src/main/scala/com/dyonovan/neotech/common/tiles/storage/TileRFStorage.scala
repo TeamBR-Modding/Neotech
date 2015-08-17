@@ -42,7 +42,7 @@ class TileRFStorage(tier: Int) extends TileEntity with IEnergyHandler with Updat
                     case tile: IEnergyReceiver =>
                         val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
                         if (want > 0) {
-                            val actual = energy.extractEnergy(want, false)
+                            val actual = extractEnergy(null, want, false)
                             tile.receiveEnergy(i.getOpposite, actual, false)
                             worldObj.markBlockForUpdate(pos)
                         }
@@ -83,7 +83,7 @@ class TileRFStorage(tier: Int) extends TileEntity with IEnergyHandler with Updat
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = {
         var doSimulate = simulate
         if (tier == 4) doSimulate = true
-        val actual = energy.extractEnergy(maxExtract, simulate)
+        val actual = energy.extractEnergy(maxExtract, doSimulate)
         if (worldObj != null)
             worldObj.markBlockForUpdate(pos)
         actual
