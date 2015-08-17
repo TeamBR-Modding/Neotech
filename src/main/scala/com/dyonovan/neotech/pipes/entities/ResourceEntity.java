@@ -38,6 +38,10 @@ abstract public class ResourceEntity<R> {
     public double yPos;
     public double zPos;
 
+    public double prevX;
+    public double prevY;
+    public double prevZ;
+
     //How fast to move
     protected double speed;
     public double nextSpeed;
@@ -63,9 +67,9 @@ abstract public class ResourceEntity<R> {
      */
     public ResourceEntity(R toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
         resource = toMove;
-        xPos = x;
-        yPos = y;
-        zPos = z;
+        xPos = prevX = x;
+        yPos = prevY = y;
+        zPos = prevZ = z;
         speed = nextSpeed = momentum;
 
         from = new BlockPos(sender);
@@ -127,6 +131,10 @@ abstract public class ResourceEntity<R> {
                 int xMod = Integer.signum(Double.compare(xPos, currentTarget.getX()));
                 int yMod = Integer.signum(Double.compare(yPos, currentTarget.getY()));
                 int zMod = Integer.signum(Double.compare(zPos, currentTarget.getZ()));
+
+                prevX = xPos;
+                prevY = yPos;
+                prevZ = zPos;
 
                 if (xMod != 0) {
                     double distance = (Math.abs(xPos - currentTarget.getX()));

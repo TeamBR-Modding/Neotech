@@ -1,12 +1,12 @@
-package com.dyonovan.neotech.pipes.tiles.energy
+package com.dyonovan.neotech.pipes.tiles.fluid
 
 import java.util
 
-import cofh.api.energy.{EnergyStorage, IEnergyProvider, IEnergyReceiver}
-import com.dyonovan.neotech.pipes.entities.EnergyResourceEntity
+import com.dyonovan.neotech.pipes.entities.FluidResourceEntity
 import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraftforge.fluids.{FluidTank, IFluidHandler}
 
 /**
  * This file was created for NeoTech
@@ -18,11 +18,11 @@ import net.minecraft.util.{BlockPos, EnumFacing}
  * @author Paul Davis pauljoda
  * @since August 17, 2015
  */
-class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceEntity] {
+class FluidExtractionPipe extends ExtractionPipe[FluidTank, FluidResourceEntity] {
 
     override def canConnect(facing: EnumFacing): Boolean =
         getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
-                (getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IEnergyProvider] && getWorld.getTileEntity(pos.offset(facing)).asInstanceOf[IEnergyProvider].canConnectEnergy(facing.getOpposite))
+                getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IFluidHandler]
 
     /**
      * This is the speed to extract from. You should be calling this when building your resources to send.
@@ -30,19 +30,19 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
      * This is included as a reminder to the child to have variable speeds
      * @return
      */
-    override def getSpeed: Double = 0.5
+    override def getSpeed: Double = 0.05
 
     /**
-     * Used to specify how much RF, check for upgrades here
+     * Used to specify how many mb to drain, check for upgrades here
      * @return
      */
-    def getMaxRFDrain : Int = 200 * 20
+    def getMaxFluidDrain : Int = 1000
 
     /**
      * Get how many ticks to 'cooldown' between operations.
      * @return 20 = 1 second
      */
-    override def getDelay: Int = 10
+    override def getDelay: Int = 20
 
     /**
      * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
@@ -59,48 +59,46 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
      * have additional functions to the pipe besides just extracting. For example, a pipe that pulls items in the world
      */
     override def tryExtractResources(): Unit = {
+
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case provider : IEnergyProvider =>
-                    if(provider.getEnergyStored(dir.getOpposite) > 0) {
-                        val tempStorage = new EnergyStorage(getMaxRFDrain)
-                        tempStorage.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true))
-                        if(extractOnRoundRobin(new EnergyResourceEntity(tempStorage,
+                case tank : IFluidHandler =>
+                    val tempTank = new FluidTank(getMaxFluidDrain)
+                    tempTank.fill(tank.drain(dir.getOpposite, getMaxFluidDrain, false), true)
+                    if(extractResourceOnShortestPath(new FluidResourceEntity(tempTank,
+                        pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                        pos, pos.north(), worldObj), simulate = true)) {
+                        val resource = new FluidResourceEntity(tempTank,
                             pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                            pos, pos.north(), worldObj), simulate = true)) {
-                            val resource = new EnergyResourceEntity(new EnergyStorage(getMaxRFDrain),
-                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                pos, pos.north(), worldObj)
-                            resource.resource.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false))
-                            extractOnRoundRobin(resource, simulate = false)
-                            return
-                        }
+                            pos, pos.north(), worldObj)
+                        extractResourceOnShortestPath(resource, simulate = false)
+                        return
                     }
+
                 case _ =>
             }
         }
     }
-
 
     /**
      * This is called when we fail to send a resource. You should put the resource back where you found it or
      * add it to the world
      * @param resource
      */
-    override def resourceReturned(resource: EnergyResourceEntity): Unit = {
-        val tempStorage = new EnergyStorage(resource.resource.getMaxEnergyStored, resource.resource.getMaxReceive, resource.resource.getMaxExtract)
-        tempStorage.setEnergyStored(resource.resource.getEnergyStored)
+    override def resourceReturned(resource: FluidResourceEntity): Unit = {
+        val tempTank = new FluidTank(resource.resource.getFluidAmount)
+        tempTank.setFluid(resource.resource.getFluid)
 
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case receiver : IEnergyReceiver if tempStorage.getEnergyStored > 0 =>
-                    receiver.receiveEnergy(dir.getOpposite, tempStorage.extractEnergy(tempStorage.getEnergyStored, false), false)
+                case tank : IFluidHandler if tempTank.getFluidAmount > 0 =>
+                    tank.fill(dir.getOpposite, tempTank.drain(tempTank.getFluidAmount, true), true)
                 case _ =>
             }
         }
 
-        resource.resource = tempStorage
-        if(resource.resource.getEnergyStored <= 0) {
+        resource.resource = tempTank
+        if(resource.resource.getFluidAmount <= 0) {
             resource.isDead = true
         } else {
             val tempLocation = new BlockPos(resource.from)
@@ -125,10 +123,10 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super.readFromNBT(tag)
         val resourceList = tag.getTagList("Resources", 10)
-        resources = new util.ArrayList[EnergyResourceEntity]()
+        resources = new util.ArrayList[FluidResourceEntity]()
         for(i <- 0 until resourceList.tagCount()) {
             val resourceTag = resourceList.getCompoundTagAt(i)
-            val item = new EnergyResourceEntity()
+            val item = new FluidResourceEntity()
             item.readFromNBT(resourceTag)
             if(worldObj != null && !worldObj.isRemote) {
                 item.setWorld(worldObj)

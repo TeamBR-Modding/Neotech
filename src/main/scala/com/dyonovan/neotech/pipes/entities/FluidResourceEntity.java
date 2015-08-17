@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.pipes.entities;
 
-import cofh.api.energy.EnergyStorage;
 import com.dyonovan.neotech.helpers.RenderHelper;
 import com.dyonovan.neotech.lib.Reference;
 import com.teambr.bookshelf.util.RenderUtils;
@@ -13,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidTank;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Stack;
@@ -26,12 +26,12 @@ import java.util.Stack;
  * @author Paul Davis pauljoda
  * @since August 17, 2015
  */
-public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
+public class FluidResourceEntity extends ResourceEntity<FluidTank> {
 
     /**
      * Stub for reading from server
      */
-    public EnergyResourceEntity() {}
+    public FluidResourceEntity() {}
 
     /**
      * Move an entity with momentum. Use this for most cases
@@ -45,47 +45,48 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
      * @param receiver
      * @param theWorld
      */
-    public EnergyResourceEntity(EnergyStorage toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
+    public FluidResourceEntity(FluidTank toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
         super(toMove, x, y, z, momentum, sender, receiver, theWorld);
     }
 
     @Override
     public void onDropInWorld() {
-        //Since we are just energy, lets not do anything for now.
-        //If we are evil, maybe we should spawn an explosion...
+        //Since we are just fluid, lets not do anything for now.
     }
 
     @Override
     public void renderResource(float tickPartial) {
-        GlStateManager.pushMatrix();
-        GlStateManager.pushAttrib();
+        if(resource != null && resource.getFluid() != null) {
+            GlStateManager.pushMatrix();
+            GlStateManager.pushAttrib();
 
-        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-        GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
+            RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+            GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
 
-        RenderUtils.bindTexture(new ResourceLocation(Reference.MOD_ID(), "textures/entity/energyEntity.png"));
+            RenderUtils.bindTexture(new ResourceLocation(Reference.MOD_ID(), "textures/entity/energyEntity.png"));
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.disableLighting();
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GlStateManager.disableLighting();
 
-        RenderHelper.setupBillboard(Minecraft.getMinecraft().thePlayer);
+            RenderHelper.setupBillboard(Minecraft.getMinecraft().thePlayer);
 
-        WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
-        renderer.startDrawingQuads();
-        renderer.addVertexWithUV(-0.2, -0.2, -0.2, 0, 0);
-        renderer.addVertexWithUV(-0.2, 0.2, -0.2, 0, 1);
-        renderer.addVertexWithUV(0.2, 0.2, -0.2, 1, 1);
-        renderer.addVertexWithUV(0.2, -0.2, -0.2, 1, 0);
-        Tessellator.getInstance().draw();
+            WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
+            renderer.startDrawingQuads();
+            renderer.addVertexWithUV(-0.2, -0.2, -0.2, 0, 0);
+            renderer.addVertexWithUV(-0.2, 0.2, -0.2, 0, 1);
+            renderer.addVertexWithUV(0.2, 0.2, -0.2, 1, 1);
+            renderer.addVertexWithUV(0.2, -0.2, -0.2, 1, 0);
+            Tessellator.getInstance().draw();
 
-        GlStateManager.enableLighting();
+            GlStateManager.enableLighting();
 
-        RenderUtils.bindMinecraftBlockSheet();
+            RenderUtils.bindMinecraftBlockSheet();
 
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GlStateManager.popAttrib();
-        GlStateManager.popMatrix();
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GlStateManager.popAttrib();
+            GlStateManager.popMatrix();
+        }
     }
 
     @Override
@@ -95,9 +96,6 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         tag.setDouble("X", xPos);
         tag.setDouble("Y", yPos);
         tag.setDouble("Z", zPos);
-        tag.setDouble("PX", prevX);
-        tag.setDouble("PY", prevY);
-        tag.setDouble("PZ", prevZ);
         tag.setDouble("Speed", speed);
         tag.setLong("Destination", destination.toLong());
         tag.setLong("From", from.toLong());
@@ -106,14 +104,11 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         if(resource == null)
-            resource = new EnergyStorage(0);
+            resource = new FluidTank(0);
         resource.readFromNBT(tag);
         xPos = tag.getDouble("X");
         yPos = tag.getDouble("Y");
         zPos = tag.getDouble("Z");
-        prevX = tag.getDouble("PX");
-        prevY = tag.getDouble("PY");
-        prevZ = tag.getDouble("PZ");
         nextSpeed = tag.getDouble("Speed");
         destination = BlockPos.fromLong(tag.getLong("Destination"));
         from = BlockPos.fromLong(tag.getLong("From"));
