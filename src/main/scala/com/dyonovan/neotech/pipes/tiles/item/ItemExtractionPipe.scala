@@ -22,7 +22,6 @@ import net.minecraft.util.{BlockPos, EnumFacing}
  * @since August 16, 2015
  */
 class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
-
     override def canConnect(facing: EnumFacing): Boolean =
         getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory]
 

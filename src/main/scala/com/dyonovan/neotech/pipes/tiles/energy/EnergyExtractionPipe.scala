@@ -19,6 +19,7 @@ import net.minecraft.util.{BlockPos, EnumFacing}
  * @since August 17, 2015
  */
 class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceEntity] {
+
     override def canConnect(facing: EnumFacing): Boolean =
         getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IEnergyProvider]
 
@@ -40,7 +41,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
      * Get how many ticks to 'cooldown' between operations.
      * @return 20 = 1 second
      */
-    override def getDelay: Int = 20
+    override def getDelay: Int = 1
 
     /**
      * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
@@ -65,14 +66,14 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
                     if(provider.getEnergyStored(dir.getOpposite) > 0) {
                         tempStorage = new EnergyStorage(getMaxRFDrain)
                         tempStorage.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true))
-                        if(extractResourceOnShortestPath(new EnergyResourceEntity(tempStorage,
+                        if(extractOnRoundRobin(new EnergyResourceEntity(tempStorage,
                             pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                             pos, pos.north(), worldObj), simulate = true)) {
                             val resource = new EnergyResourceEntity(new EnergyStorage(getMaxRFDrain),
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                                 pos, pos.north(), worldObj)
                             resource.resource.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false))
-                            extractResourceOnShortestPath(resource, simulate = false)
+                            extractOnRoundRobin(resource, simulate = false)
                             return
                         }
                     }

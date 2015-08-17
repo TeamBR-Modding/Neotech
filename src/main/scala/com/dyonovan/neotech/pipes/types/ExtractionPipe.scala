@@ -24,7 +24,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
     /**
      * Useful in round robin
      */
-    val lastSink : Long = 0
+    var lastSink : Long = 0
 
     /**
      * Get how many ticks to 'cooldown' between operations.
@@ -112,6 +112,96 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
                 destination = d
                 shortest = distance.get(d.toLong)
             }
+        }
+
+        //Build the path to the shortest
+        resource.pathQueue.clear()
+        resource.destination = destination
+        var u: BlockPos = destination
+        while (parent.get(u.toLong) != null) {
+            resource.pathQueue.push(new Vector3d(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
+            u = parent.get(u.toLong)
+        }
+
+        if (!resource.pathQueue.isEmpty) {
+            //If we have a path add it
+            if(!simulate)
+                resources.add(resource)
+            true
+        }
+        else
+            false
+    }
+
+    def extractOnRoundRobin(resource : R, simulate : Boolean): Boolean = {
+        //Sometimes we won't get anything, get lost
+        if(resource == null)
+            return false
+
+        //What we wish to send
+        val sinks = new util.ArrayList[Long]()
+        val distance: util.HashMap[Long, Integer] = new util.HashMap[Long, Integer]
+        val parent: util.HashMap[Long, BlockPos] = new util.HashMap[Long, BlockPos]
+
+        distance.put(getPosAsLong, 0) //We are right here
+        parent.put(getPosAsLong, null) //No parent
+
+        val queue: util.Queue[BlockPos] = new util.LinkedList[BlockPos] //Create a queue
+        queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
+
+        //Search the graph
+        while (!queue.isEmpty) {
+            val thisPos: BlockPos = queue.poll
+            getWorld.getTileEntity(thisPos) match { //Make sure this is a pipe
+                case thisPipe: SimplePipe =>
+                    for (facing <- EnumFacing.values) { //Add children
+                        if (thisPipe.canConnect(facing)) {
+                            val otherPos: BlockPos = thisPos.offset(facing)
+                            if (distance.get(otherPos.toLong) == null) { //If it hasn't already been added
+                                queue.add(otherPos)
+                                distance.put(otherPos.toLong, Integer.MAX_VALUE) //We will set the distance later
+                                parent.put(otherPos.toLong, null) //Also parent
+
+                                val newDistance: Int = (distance.get(thisPos.toLong) + thisPos.distanceSq(otherPos)).toInt
+                                //If our distance is less than what existed, replace
+                                if (newDistance < distance.get(otherPos.toLong)) {
+                                    distance.put(otherPos.toLong, newDistance)
+                                    parent.put(otherPos.toLong, thisPos)
+                                }
+
+                                getWorld.getTileEntity(otherPos) match { //Add to sinks
+                                    case pipe: SinkPipe[T, R] =>
+                                        if (pipe.willAcceptResource(resource))
+                                            sinks.add(pipe.getPosAsLong)
+                                    case _ =>
+                                }
+                            }
+                        }
+                    }
+                case _ =>
+            }
+        }
+
+        //Find the next source
+        var destination : BlockPos = null
+        var pickNext : Boolean = lastSink == 0
+        for (i <- 0 until sinks.size()) {
+            if(pickNext) {
+                destination = BlockPos.fromLong(sinks.get(i))
+                lastSink = sinks.get(i)
+                pickNext = false
+            }
+           if(sinks.get(i) == lastSink && destination == null)
+               pickNext = true
+        }
+
+        if(destination == null && !sinks.isEmpty) {
+            destination = BlockPos.fromLong(sinks.get(0))
+            lastSink = sinks.get(0)
+        }
+        else if(destination == null) {
+            lastSink = 0
+            return false
         }
 
         //Build the path to the shortest
