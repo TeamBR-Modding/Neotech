@@ -20,6 +20,11 @@ tile.neotech:oreTin.name=Tin Ore
 tile.neotech:blockCopper.name=Block of Copper
 tile.neotech:blockTin.name=Block of Tin
 
+tile.neotech:ironTank.name=Iron Fluid Tank
+tile.neotech:goldTank.name=Gold Fluid Tank
+tile.neotech:diamondTank.name=Diamond Fluid Tank
+tile.neotech:creativeTank.name=Creative Fluid Tank
+
 inventory.furnace.title=Electric Furnace
 inventory.crusher.title=Electric Crusher
 inventory.furnacegenerator.title=Furnace Generator
@@ -34,3 +39,4 @@ item.neotech:dustCopper.name=Copper Dust
 item.neotech:ingotCopper.name=Copper Ingot
 item.neotech:dustTin.name=Tin Dust
 item.neotech:ingotTin.name=Tin Ingot
+

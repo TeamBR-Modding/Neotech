@@ -2,9 +2,9 @@ package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
-import com.dyonovan.neotech.common.blocks.storage.{ItemBlockRFStorage, BlockRFStorage}
+import com.dyonovan.neotech.common.blocks.storage.{ItemBlockTank, BlockTank, ItemBlockRFStorage, BlockRFStorage}
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
-import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
+import com.dyonovan.neotech.common.tiles.storage.{TileTank, TileRFStorage}
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
 import com.dyonovan.neotech.pipes.tiles.{ItemSinkPipe, ItemExtractionPipe, StructurePipe}
 import com.dyonovan.neotech.registries.PowerAdvantageRegistry
@@ -50,6 +50,11 @@ object BlockManager {
     val eliteRFStorage = new BlockRFStorage("eliteRFStorage", 3)
     val creativeRFStorage = new BlockRFStorage("creativeRFStorage", 4)
 
+    //Tanks
+    val ironTank = new BlockTank("ironTank", 1)
+    val goldTank = new BlockTank("goldTank", 2)
+    val diamondTank = new BlockTank("diamondTank", 3)
+    val creativeTank = new BlockTank("creativeTank", 4)
 
     def preInit(): Unit = {
         //Machines
@@ -73,6 +78,12 @@ object BlockManager {
         registerBlock(advancedRFStorage, "advancedRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
         registerBlock(eliteRFStorage, "eliteRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
         registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
+
+        //Tanks
+        registerBlock(ironTank, "ironTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
+        registerBlock(goldTank, "goldTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
+        registerBlock(diamondTank, "diamondTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
+        registerBlock(creativeTank, "creativeTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
     }
 
     /**
