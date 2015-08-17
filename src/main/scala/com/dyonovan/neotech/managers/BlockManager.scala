@@ -6,7 +6,8 @@ import com.dyonovan.neotech.common.blocks.storage.{ItemBlockTank, BlockTank, Ite
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.storage.{TileTank, TileRFStorage}
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
-import com.dyonovan.neotech.pipes.tiles.{ItemSinkPipe, ItemExtractionPipe, StructurePipe}
+import com.dyonovan.neotech.pipes.tiles.item.{ItemSinkPipe, ItemExtractionPipe}
+import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.dyonovan.neotech.registries.PowerAdvantageRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material

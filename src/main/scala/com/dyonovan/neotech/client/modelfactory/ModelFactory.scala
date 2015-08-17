@@ -37,7 +37,9 @@ object ModelFactory {
 
     var STRUCTURE_PIPE : TextureAtlasSprite = null
     var BASIC_ITEM_SOURCE : TextureAtlasSprite = null
+    var BASIC_ITEM_SOURCE_EXTRAS : TextureAtlasSprite = null
     var BASIC_ITEM_SINK : TextureAtlasSprite = null
+    var BASIC_ITEM_SINK_EXTRAS : TextureAtlasSprite = null
 
     // Get the default model resource location for a block state
     // Used to put an entry into the model registry
@@ -73,7 +75,9 @@ class ModelFactory {
         //Pipes
         ModelFactory.STRUCTURE_PIPE = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/structurePipe"))
         ModelFactory.BASIC_ITEM_SOURCE = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/basicItemSource"))
+        ModelFactory.BASIC_ITEM_SOURCE_EXTRAS = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/basicItemSourceExtras"))
         ModelFactory.BASIC_ITEM_SINK = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/basicItemSink"))
+        ModelFactory.BASIC_ITEM_SINK_EXTRAS = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/basicItemSinkExtras"))
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

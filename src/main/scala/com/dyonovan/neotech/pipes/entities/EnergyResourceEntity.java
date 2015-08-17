@@ -1,16 +1,11 @@
-package com.dyonovan.neotech.pipes.network;
+package com.dyonovan.neotech.pipes.entities;
 
-import com.teambr.bookshelf.util.RenderUtils;
+import cofh.api.energy.EnergyStorage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Stack;
 
@@ -21,14 +16,14 @@ import java.util.Stack;
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author Paul Davis pauljoda
- * @since August 15, 2015
+ * @since August 17, 2015
  */
-public class ItemResourceEntity extends ResourceEntity<ItemStack> {
+public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
 
     /**
      * Stub for reading from server
      */
-    public ItemResourceEntity() {}
+    public EnergyResourceEntity() {}
 
     /**
      * Move an entity with momentum. Use this for most cases
@@ -42,34 +37,19 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
      * @param receiver
      * @param theWorld
      */
-    public ItemResourceEntity(ItemStack toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
+    public EnergyResourceEntity(EnergyStorage toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
         super(toMove, x, y, z, momentum, sender, receiver, theWorld);
     }
 
     @Override
     public void onDropInWorld() {
-        if (!world.isRemote && resource != null) {
-            EntityItem item = new EntityItem(world, xPos, yPos, zPos);
-            item.setEntityItemStack(resource);
-            world.spawnEntityInWorld(item);
-        }
+        //Since we are just energy, lets not do anything for now.
+        //If we are evil, maybe we should spawn an explosion...
     }
 
     @Override
     public void renderResource(float tickPartial) {
-        GlStateManager.pushMatrix();
-        GlStateManager.pushAttrib();
-
-        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-        GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
-        RenderUtils.bindMinecraftBlockSheet();
-        GL11.glScaled(0.5, 0.5, 0.5);
-        try {
-            Minecraft.getMinecraft().getRenderItem().renderItemModel(resource);
-        } catch(NullPointerException ignored) {}
-
-        GlStateManager.popAttrib();
-        GlStateManager.popMatrix();
+        Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, xPos, yPos, zPos, 0, 100, 0);
     }
 
     @Override
@@ -87,7 +67,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         if(resource == null)
-            resource = new ItemStack(Blocks.air);
+            resource = new EnergyStorage(0);
         resource.readFromNBT(tag);
         xPos = tag.getDouble("X");
         yPos = tag.getDouble("Y");

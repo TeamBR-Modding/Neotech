@@ -4,7 +4,6 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.collections.DummyState
 import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.lib.Reference
-import com.teambr.bookshelf.common.blocks.traits.BlockBakeable
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
@@ -15,9 +14,9 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{EnumWorldBlockLayer, BlockPos}
+import net.minecraft.util.{BlockPos, EnumWorldBlockLayer}
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.fml.relauncher.{SideOnly, Side}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.util.Random
 
@@ -31,7 +30,7 @@ import scala.util.Random
  * @author Dyonovan
  * @since August 16, 2015
  */
-class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) with OpensGui with BlockBakeable {
+class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) with OpensGui {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
@@ -111,11 +110,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
         new DummyState(world, pos, this)
     }
 
-    override def isBlockNormalCube: Boolean = {
-        false
-    }
-
-    override def getRenderType(): Int = 3
+    override def getRenderType: Int = 3
 
     override def isOpaqueCube : Boolean = false
 
@@ -132,8 +127,4 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
 
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
-
-    override def MODID: String = Reference.MOD_ID
-
-    override def blockName: String = name
 }

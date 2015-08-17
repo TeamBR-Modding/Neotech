@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.pipes.network;
+package com.dyonovan.neotech.pipes.entities;
 
 import com.dyonovan.neotech.pipes.types.SimplePipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -247,5 +247,27 @@ abstract public class ResourceEntity<R> {
             isDead = true;
         }
         return false;
+    }
+
+    /**
+     * Sets the speed of this resource
+     *
+     * DO NOT SET TO ANYTHING 0 OR BELOW.
+     * @param i New speed
+     */
+    public void setSpeed(double i) {
+        nextSpeed = i;
+    }
+
+    /**
+     * Used to add or remove speed from an entity
+     *
+     * If the speed goes below 0, it will set to a minimum of very slow
+     * @param i Velocity change
+     */
+    public void applySpeed(double i) {
+        nextSpeed += i;
+        if(nextSpeed <= 0)
+            nextSpeed = 0.001;
     }
 }

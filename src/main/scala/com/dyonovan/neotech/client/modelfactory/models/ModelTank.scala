@@ -30,7 +30,7 @@ import net.minecraftforge.fluids.{Fluid, FluidContainerRegistry, FluidStack}
 class ModelTank extends ISmartBlockModel with ISmartItemModel{
 
     var topIcon: TextureAtlasSprite = null
-    val glass: TextureAtlasSprite = null
+    val glass: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/glass")
     val faceBakery = new FaceBakery
     var fluidHeight: Float = 0.0F
     var renderFluid: Fluid = null

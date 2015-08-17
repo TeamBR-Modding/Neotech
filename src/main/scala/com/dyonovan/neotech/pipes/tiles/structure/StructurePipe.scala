@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.pipes.tiles
+package com.dyonovan.neotech.pipes.tiles.structure
 
 import com.dyonovan.neotech.pipes.types.SimplePipe
 

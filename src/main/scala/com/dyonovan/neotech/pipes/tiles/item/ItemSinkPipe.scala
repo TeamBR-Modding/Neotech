@@ -1,6 +1,6 @@
-package com.dyonovan.neotech.pipes.tiles
+package com.dyonovan.neotech.pipes.tiles.item
 
-import com.dyonovan.neotech.pipes.network.ItemResourceEntity
+import com.dyonovan.neotech.pipes.entities.ItemResourceEntity
 import com.dyonovan.neotech.pipes.types.{SimplePipe, SinkPipe}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.bookshelf.util.InventoryUtils

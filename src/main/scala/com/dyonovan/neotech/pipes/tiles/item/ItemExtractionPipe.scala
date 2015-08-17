@@ -1,8 +1,8 @@
-package com.dyonovan.neotech.pipes.tiles
+package com.dyonovan.neotech.pipes.tiles.item
 
 import java.util
 
-import com.dyonovan.neotech.pipes.network.ItemResourceEntity
+import com.dyonovan.neotech.pipes.entities.ItemResourceEntity
 import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.bookshelf.util.InventoryUtils
@@ -26,10 +26,31 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
     override def canConnect(facing: EnumFacing): Boolean =
         getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory]
 
+    /**
+     * This is the speed to extract from. You should be calling this when building your resources to send.
+     *
+     * This is included as a reminder to the child to have variable speeds
+     * @return
+     */
     override def getSpeed: Double = 0.05
 
-    override def resourceReturned(resourceEntity: ItemResourceEntity): Unit = {
-        val resource = resourceEntity.asInstanceOf[ItemResourceEntity]
+    /**
+     * Used to specify how big a stack to pull. Judge with upgrades here
+     * @return
+     */
+    def getMaxStackExtract : Int = 1
+
+    /**
+     * Get how many ticks to 'cooldown' between operations.
+     * @return 20 = 1 second
+     */
+    override def getDelay: Int = 20
+
+    /**
+     * This is called when we fail to send a resource. You should put the resource back where you found it or
+     * add it to the world
+     */
+    override def resourceReturned(resource: ItemResourceEntity): Unit = {
         val tempInv = new Inventory() {
             override var inventoryName: String = "TEMPINV"
             override def hasCustomName(): Boolean = false
@@ -110,8 +131,12 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
             worldObj.getTileEntity(pos.offset(dir)) match {
                 case sidedInv : ISidedInventory =>
                     for(i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
+                        if(shouldStopTrying) {
+                            shouldStopTrying = false
+                            return
+                        }
                         if(tempInv.getStackInSlot(0) == null) {
-                            InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, 64, dir.getOpposite, doMove = true, canStack = true)
+                            InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
                             if (tempInv.getStackInSlot(0) != null) {
                                 extractResourceOnShortestPath(new ItemResourceEntity(tempInv.getStackInSlot(0),
                                     pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
@@ -122,8 +147,12 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
                     }
                 case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
                     for(i <- 0 until otherInv.getSizeInventory) {
+                        if(shouldStopTrying) {
+                            shouldStopTrying = false
+                            return
+                        }
                         if (tempInv.getStackInSlot(0) == null) {
-                            InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, 64, dir.getOpposite, doMove = true, canStack = true)
+                            InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
                             if (tempInv.getStackInSlot(0) != null) {
                                 extractResourceOnShortestPath(new ItemResourceEntity(tempInv.getStackInSlot(0),
                                     pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,

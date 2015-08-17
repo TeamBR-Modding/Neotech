@@ -55,21 +55,41 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
         }
 
         if(pipeTile != null) { //Exists in world
-            if (pipeTile.canConnect(EnumFacing.DOWN))
+            if (pipeTile.canConnect(EnumFacing.DOWN)) {
                 drawPipeConnection(ModelRotation.X270_Y0, list)
-            if (pipeTile.canConnect(EnumFacing.UP))
+                if(getExtraTexture != null && pipeTile.isSpecialConnection(EnumFacing.DOWN))
+                    drawPipeExtras(ModelRotation.X270_Y0, list)
+            }
+            if (pipeTile.canConnect(EnumFacing.UP)) {
                 drawPipeConnection(ModelRotation.X90_Y0, list)
-            if (pipeTile.canConnect(EnumFacing.NORTH))
+                if(getExtraTexture != null && pipeTile.isSpecialConnection(EnumFacing.UP))
+                    drawPipeExtras(ModelRotation.X90_Y0, list)
+            }
+            if (pipeTile.canConnect(EnumFacing.NORTH)) {
                 drawPipeConnection(ModelRotation.X180_Y0, list)
-            if (pipeTile.canConnect(EnumFacing.SOUTH))
+                if(getExtraTexture != null && pipeTile.isSpecialConnection(EnumFacing.NORTH))
+                    drawPipeExtras(ModelRotation.X180_Y0, list)
+            }
+            if (pipeTile.canConnect(EnumFacing.SOUTH)) {
                 drawPipeConnection(ModelRotation.X0_Y0, list)
-            if (pipeTile.canConnect(EnumFacing.EAST.getOpposite))
+                if(getExtraTexture != null && pipeTile.isSpecialConnection(EnumFacing.SOUTH))
+                    drawPipeExtras(ModelRotation.X0_Y0, list)
+            }
+            if (pipeTile.canConnect(EnumFacing.WEST)) {
                 drawPipeConnection(ModelRotation.X0_Y90, list)
-            if (pipeTile.canConnect(EnumFacing.WEST.getOpposite))
+                if(getExtraTexture != null && pipeTile.isSpecialConnection(EnumFacing.WEST))
+                    drawPipeExtras(ModelRotation.X0_Y90, list)
+            }
+            if (pipeTile.canConnect(EnumFacing.EAST)) {
                 drawPipeConnection(ModelRotation.X0_Y270, list)
+                if(getExtraTexture != null && pipeTile.isSpecialConnection(EnumFacing.EAST))
+                    drawPipeExtras(ModelRotation.X0_Y270, list)
+            }
         } else { //Is an item
             drawPipeConnection(ModelRotation.X270_Y0, list)
             drawPipeConnection(ModelRotation.X90_Y0, list)
+            if(getExtraTexture != null)
+                drawPipeExtras(ModelRotation.X270_Y0, list)
         }
 
         list
@@ -86,7 +106,14 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
         list.add(faceBakery.makeBakedQuad(new Vector3f(max, min, 16.0F), new Vector3f(min, min, max), face, getTexture, EnumFacing.UP, modelRot, null, true, true))
         list.add(faceBakery.makeBakedQuad(new Vector3f(min, max, 16.0F), new Vector3f(min, min, max), face, getTexture, EnumFacing.EAST, modelRot, null, true, true))
         list.add(faceBakery.makeBakedQuad(new Vector3f(max, max, 16.0F), new Vector3f(max, min, max), face, getTexture, EnumFacing.WEST, modelRot, null, true, true))
+    }
 
+    def drawPipeExtras(modelRot : ModelRotation, list : util.ArrayList[BakedQuad]) {
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min - 1, max + 1, max), new Vector3f(max + 1, max + 1, 16.0F), face, getExtraTexture, EnumFacing.UP, modelRot, null, true, true))
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min - 1, min - 1, max), new Vector3f(max + 1, min - 1, 16.0F), face, getExtraTexture, EnumFacing.DOWN, modelRot, null, true, true))
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min - 1, min - 1, max), new Vector3f(min - 1, max + 1, 16.0F), face, getExtraTexture, EnumFacing.WEST, modelRot, null, true, true))
+        list.add(faceBakery.makeBakedQuad(new Vector3f(max + 1, min - 1, max), new Vector3f(max + 1, max + 1, 16.0F), face, getExtraTexture, EnumFacing.EAST, modelRot, null, true, true))
+        list.add(faceBakery.makeBakedQuad(new Vector3f(min - 1, min - 1, max - 0.001F), new Vector3f(max + 1, max + 1, max - 0.001F), face, getExtraTexture, EnumFacing.NORTH, modelRot, null, true, true))
     }
 
     override def isAmbientOcclusion: Boolean = true
@@ -108,6 +135,17 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
                 ModelFactory.BASIC_ITEM_SINK
             case _ =>
                 ModelFactory.STRUCTURE_PIPE
+        }
+    }
+
+    def getExtraTexture : TextureAtlasSprite = {
+        blockPipe match {
+            case BlockManager.pipeItemBasicSource =>
+                ModelFactory.BASIC_ITEM_SOURCE_EXTRAS
+            case BlockManager.pipeItemBasicSink =>
+                ModelFactory.BASIC_ITEM_SINK_EXTRAS
+            case _ =>
+                null
         }
     }
 
