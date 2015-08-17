@@ -29,7 +29,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
      * This is included as a reminder to the child to have variable speeds
      * @return
      */
-    override def getSpeed: Double = 1
+    override def getSpeed: Double = 0.5
 
     /**
      * Used to specify how much RF, check for upgrades here

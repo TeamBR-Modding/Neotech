@@ -1,6 +1,8 @@
 package com.dyonovan.neotech.helpers
 
 import net.minecraft.client.renderer.Tessellator
+import net.minecraft.entity.Entity
+import org.lwjgl.opengl.GL11
 
 /**
  * This file was created for NeoTech
@@ -47,5 +49,11 @@ object RenderHelper {
         tes.addVertexWithUV(x2, y2, z1, u1, v)
 
         Tessellator.getInstance().draw()
+    }
+
+
+    def setupBillboard(entity : Entity) {
+        GL11.glRotatef(-entity.rotationYaw, 0, 1, 0)
+        GL11.glRotatef(entity.rotationPitch, 1, 0, 0)
     }
 }

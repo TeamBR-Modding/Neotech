@@ -6,6 +6,8 @@ import com.dyonovan.neotech.lib.Reference;
 import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
@@ -63,12 +65,25 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
 
         RenderUtils.bindTexture(new ResourceLocation(Reference.MOD_ID(), "textures/entity/energyEntity.png"));
 
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableLighting();
-        RenderHelper.renderCubeWithTexture(-0.1, -0.1, -0.1, 0.1, 0.1, 0.1, 0, 0, 1, 1);
+
+        RenderHelper.setupBillboard(Minecraft.getMinecraft().thePlayer);
+
+        WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
+        renderer.startDrawingQuads();
+        renderer.addVertexWithUV(-0.2, -0.2, -0.2, 0, 0);
+        renderer.addVertexWithUV(-0.2, 0.2, -0.2, 0, 1);
+        renderer.addVertexWithUV(0.2, 0.2, -0.2, 1, 1);
+        renderer.addVertexWithUV(0.2, -0.2, -0.2, 1, 0);
+        Tessellator.getInstance().draw();
+
         GlStateManager.enableLighting();
 
         RenderUtils.bindMinecraftBlockSheet();
 
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
         GlStateManager.popAttrib();
         GlStateManager.popMatrix();
     }
