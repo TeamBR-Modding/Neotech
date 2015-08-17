@@ -34,4 +34,6 @@ trait IPipe extends TileEntity {
     def canAcceptResource(resource: ResourceEntity[_]): Boolean = false
 
     def getPosAsLong: Long = getPos.toLong
+
+    def onPipeBroken() : Unit = {}
 }

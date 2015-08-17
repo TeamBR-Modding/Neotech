@@ -3,10 +3,10 @@ package com.dyonovan.neotech.pipes.tiles
 import java.util
 import javax.vecmath.Vector3d
 
-import com.dyonovan.neotech.pipes.network.ItemResourceEntity
+import com.dyonovan.neotech.pipes.network.{ResourceEntity, ItemResourceEntity}
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.IInventory
+import net.minecraft.inventory.{ISidedInventory, IInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.tileentity.TileEntity
@@ -44,7 +44,7 @@ class ItemExtractionPipe extends UpdatingTile with IPipe {
 
     def extractStackOnShortestPath(stack : ItemStack) : Unit = {
         //What we wish to send
-        val resource = new ItemResourceEntity(stack, pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, 0.05, pos, pos, worldObj)
+        val resource = new ItemResourceEntity(stack.copy(), pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, 0.05, pos, pos, worldObj)
         val sinks = new util.ArrayList[Long]()
         val distance: util.HashMap[Long, Integer] = new util.HashMap[Long, Integer]
         val parent: util.HashMap[Long, BlockPos] = new util.HashMap[Long, BlockPos]
@@ -60,34 +60,32 @@ class ItemExtractionPipe extends UpdatingTile with IPipe {
             val thisPos: BlockPos = queue.poll
             worldObj.getTileEntity(thisPos) match {
                 case thisPipe: IPipe =>
+                    for (facing <- EnumFacing.values) {
+                        if (thisPipe.canConnect(facing)) {
+                            val otherPos: BlockPos = thisPos.offset(facing)
+                            if (distance.get(otherPos.toLong) == null) {
+                                queue.add(otherPos)
+                                distance.put(otherPos.toLong, Integer.MAX_VALUE)
+                                parent.put(otherPos.toLong, null)
 
-                    if (thisPipe != null) {
-                        for (facing <- EnumFacing.values) {
-                            if (thisPipe.canConnect(facing)) {
-                                val otherPos: BlockPos = thisPos.offset(facing)
-                                if (distance.get(otherPos.toLong) == null) {
+                                val newDistance: Int = (distance.get(thisPos.toLong) + thisPos.distanceSq(otherPos)).toInt
+                                if (newDistance < distance.get(otherPos.toLong)) {
+                                    distance.put(otherPos.toLong, newDistance)
+                                    parent.put(otherPos.toLong, thisPos)
+                                }
 
-                                    queue.add(otherPos)
-                                    distance.put(otherPos.toLong, Integer.MAX_VALUE)
-                                    parent.put(otherPos.toLong, null)
-
-                                    val newDistance: Int = (distance.get(thisPos.toLong) + thisPos.distanceSq(otherPos)).toInt
-                                    if (newDistance < distance.get(otherPos.toLong)) {
-                                        distance.put(otherPos.toLong, newDistance)
-                                        parent.put(otherPos.toLong, thisPos)
-                                    }
-
-                                    if (thisPipe.canAcceptResource(resource))
-                                        sinks.add(thisPipe.getPosAsLong)
+                                worldObj.getTileEntity(otherPos) match {
+                                    case pipe : IPipe =>
+                                        if(pipe.canAcceptResource(resource))
+                                            sinks.add(pipe.getPosAsLong)
+                                    case _ =>
                                 }
                             }
                         }
-
                     }
                 case _ =>
             }
         }
-
 
         //Find the shortest
         var destination = new BlockPos(pos)
@@ -110,6 +108,27 @@ class ItemExtractionPipe extends UpdatingTile with IPipe {
         }
         if(!resource.pathQueue.isEmpty)
             resources.add(resource)
+        else {
+            val tempInv = new Inventory() {
+                override var inventoryName: String = "TEMPINV"
+                override def hasCustomName(): Boolean = false
+                override def initialSize: Int = 1
+            }
+
+            tempInv.setInventorySlotContents(0, resource.resource)
+            for(dir <- EnumFacing.values()) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case otherInv : IInventory =>
+                        InventoryUtils.moveItemInto(tempInv, 0, otherInv, -1, 64, dir, doMove = true, canStack = true)
+                    case _ =>
+                }
+            }
+
+            if(tempInv.getStackInSlot(0) != null) {
+                resource.resource = tempInv.getStackInSlot(0)
+                resource.onDropInWorld()
+            }
+        }
     }
 
     override def onServerTick() : Unit = {
@@ -120,6 +139,7 @@ class ItemExtractionPipe extends UpdatingTile with IPipe {
                 val resource = iterator.next()
                 resource.setWorld(worldObj)
                 if (resource.isDead) {
+                    resource.onDropInWorld()
                     iterator.remove()
                 }
                 else
@@ -133,6 +153,11 @@ class ItemExtractionPipe extends UpdatingTile with IPipe {
             tryExtractItems()
     }
 
+    override def onPipeBroken(): Unit = {
+        for(i <- 0 until resources.size())
+            resources.get(i).onDropInWorld()
+    }
+
     def tryExtractItems(): Unit = {
         val tempInv = new Inventory() {
             override var inventoryName: String = "TEMPINV"
@@ -142,18 +167,71 @@ class ItemExtractionPipe extends UpdatingTile with IPipe {
 
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case otherInv : IInventory =>
+                case sidedInv : ISidedInventory =>
+                    for(i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
+                        if(tempInv.getStackInSlot(0) == null) {
+                            InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, 64, dir.getOpposite, doMove = true, canStack = true)
+                        } else {
+                            extractStackOnShortestPath(tempInv.getStackInSlot(0))
+                            return
+                        }
+                    }
+                case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
                     for(i <- 0 until otherInv.getSizeInventory) {
                         if (tempInv.getStackInSlot(0) == null) {
                             InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, 64, dir.getOpposite, doMove = true, canStack = true)
+                        } else {
+                            extractStackOnShortestPath(tempInv.getStackInSlot(0))
+                            return
+                        }
+                    }
+                case _ =>
+            }
+        }
+    }
+
+    override def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {
+        resource match {
+            case item : ItemResourceEntity =>
+                if(item.destination == pos)
+                    tryInsertResource(item)
+            case _ =>
+        }
+    }
+
+    def tryInsertResource(resource : ItemResourceEntity) : Unit = {
+        val tempInventory = new Inventory() {
+            override var inventoryName: String = "TEMPINV"
+            override def hasCustomName(): Boolean = false
+            override def initialSize: Int = 1
+        }
+
+        tempInventory.setInventorySlotContents(0, resource.resource.copy())
+
+        //Try and insert the stack
+        for(dir <- EnumFacing.values()) {
+            worldObj.getTileEntity(pos.offset(dir)) match {
+                case otherInv : IInventory =>
+                    if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir, doMove = true, canStack = true) > 0) {
+                        if(tempInventory.getStackInSlot(0) != null && tempInventory.getStackInSlot(0).stackSize <= 0) {
+                            resource.resource = null
+                            resource.isDead = true
+                            tempInventory.setInventorySlotContents(0, null)
+                        } else {
+                            resource.resource = tempInventory.getStackInSlot(0)
                         }
                     }
                 case _ =>
             }
         }
 
-        if(tempInv.getStackInSlot(0) != null)
-            extractStackOnShortestPath(tempInv.getStackInSlot(0))
+        //If we couldn't fill, move back to source
+        if(!resource.isDead) {
+            val tempLocation = new BlockPos(resource.from)
+            resource.from = new BlockPos(pos)
+            resource.destination = new BlockPos(tempLocation)
+            resource.findPathToDestination()
+        }
     }
 
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
@@ -181,8 +259,6 @@ class ItemExtractionPipe extends UpdatingTile with IPipe {
             }
             resources.add(item)
         }
-
-
     }
 
     @SideOnly(Side.CLIENT)

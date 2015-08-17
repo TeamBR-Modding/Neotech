@@ -11,6 +11,10 @@ tile.neotech:advancedRFStorage.name=Advanced RF Storage
 tile.neotech:eliteRFStorage.name=Elite RF Storage
 tile.neotech:creativeRFStorage.name=Creative RF Storage
 
+tile.neotech:pipeStructure.name=Basic Structure Pipe
+tile.neotech:pipeItemBasicSource.name=Basic Item Extract Pipe
+tile.neotech:pipeItemBasicSink.name=Basic Item Insert Pipe
+
 tile.neotech:oreCopper.name=Copper Ore
 tile.neotech:oreTin.name=Tin Ore
 tile.neotech:blockCopper.name=Block of Copper

@@ -3,7 +3,7 @@ package com.dyonovan.neotech.pipes.tiles
 import com.dyonovan.neotech.pipes.network.{ItemResourceEntity, ResourceEntity}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.IInventory
+import net.minecraft.inventory.{ISidedInventory, IInventory}
 import net.minecraft.util.{BlockPos, EnumFacing}
 
 /**
@@ -29,12 +29,12 @@ class ItemSinkPipe extends IPipe {
                     override def initialSize: Int = 1
                 }
 
-                tempInventory.setInventorySlotContents(0, item.resource)
+                tempInventory.setInventorySlotContents(0, item.resource.copy())
                 //Try and insert the stack
                 for(dir <- EnumFacing.values()) {
                     worldObj.getTileEntity(pos.offset(dir)) match {
                         case otherInv : IInventory =>
-                            if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir.getOpposite, doMove = false, canStack = true) > 0) {
+                            if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir, doMove = false, canStack = true) > 0) {
                                 return true
                             }
                         case _ =>
@@ -66,14 +66,21 @@ class ItemSinkPipe extends IPipe {
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case otherInv : IInventory =>
-                    if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir.getOpposite, doMove = true, canStack = true) > 0) {
-                        if(tempInventory.getStackInSlot(0) != null && tempInventory.getStackInSlot(0).stackSize <= 0) {
-                            resource.resource = null
+                case isided : ISidedInventory =>
+                    for(i <- isided.getSlotsForFace(dir.getOpposite)) {
+                        if(InventoryUtils.moveItemInto(tempInventory, 0, isided, i, 64, dir, doMove = true, canStack = true) > 0) {
                             resource.isDead = true
-                        } else {
+                            resource.resource = null
                             resource.resource = tempInventory.getStackInSlot(0)
                         }
+                    }
+                case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
+                    for(i <- 0 until otherInv.getSizeInventory) {
+                         if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, i, 64, dir, doMove = true, canStack = true) > 0) {
+                             resource.isDead = true
+                             resource.resource = null
+                             resource.resource = tempInventory.getStackInSlot(0)
+                         }
                     }
                 case _ =>
             }

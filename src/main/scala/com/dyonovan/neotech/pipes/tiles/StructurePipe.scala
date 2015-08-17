@@ -1,7 +1,5 @@
 package com.dyonovan.neotech.pipes.tiles
 
-import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
-
 /**
  * This file was created for NeoTech
  *
@@ -12,4 +10,4 @@ import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
  * @author Paul Davis pauljoda
  * @since August 15, 2015
  */
-class StructurePipe extends UpdatingTile with IPipe {}
+class StructurePipe extends IPipe {}

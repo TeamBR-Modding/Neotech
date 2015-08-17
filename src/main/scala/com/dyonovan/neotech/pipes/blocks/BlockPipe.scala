@@ -33,6 +33,14 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: IPipe]
     setLightOpacity(0)
     ModelFactory.INSTANCE.pipeRegistry += this
 
+    override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) : Unit = {
+        worldIn.getTileEntity(pos) match {
+            case pipe : IPipe =>
+                pipe.onPipeBroken()
+            case _ =>
+        }
+    }
+
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
         world.getTileEntity(pos) match {
             case tile : TileEntity => new TileAwareState(tile, world.getBlockState(pos).getBlock)

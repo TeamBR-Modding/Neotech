@@ -142,6 +142,11 @@ abstract public class ResourceEntity<R> {
                     zPos += Math.min(speed, distance) * -zMod;
                 }
 
+                if(world.getTileEntity(new BlockPos(xPos, yPos, zPos)) == null) {
+                    isDead = true;
+                    return;
+                }
+
                 //If we have entered the new pipe, then we should update
                 if (xPos == currentTarget.getX() && yPos == currentTarget.getY() && zPos == currentTarget.getZ()) {
                     if (onPipeEntered())
@@ -239,7 +244,6 @@ abstract public class ResourceEntity<R> {
                     }
                 }
             }
-            onDropInWorld(); //Couldn't figure it out
             isDead = true;
         }
         return false;
