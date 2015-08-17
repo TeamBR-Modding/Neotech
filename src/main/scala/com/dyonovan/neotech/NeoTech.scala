@@ -2,6 +2,7 @@ package com.dyonovan.neotech
 
 import java.io.File
 
+import com.dyonovan.neotech.api.nei.NEICallback
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers._
@@ -33,6 +34,8 @@ object NeoTech {
 
     //The logger. For logging
     final val logger = LogManager.getLogger(Reference.MOD_NAME)
+
+    var nei : NEICallback = null
 
     var configFolderLocation : String = ""
 

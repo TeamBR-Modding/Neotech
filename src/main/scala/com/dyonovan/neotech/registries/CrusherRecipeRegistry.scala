@@ -211,4 +211,24 @@ object CrusherRecipeRegistry {
             case _ => null
         }
     }
+
+    def getRecipes: util.ArrayList[CrusherRecipesStack] = {
+        val list = new util.ArrayList[CrusherRecipesStack]
+        for (i <- crusherRecipes) {
+            val outStack = getItemStackFromString(i.output)
+            outStack.stackSize = i.qty
+            if (getItemStackFromString(i.input) == null) {
+                for (j <- OreDictionary.getOres(i.input)) {
+
+                    list.add(new CrusherRecipesStack(j, outStack))
+                }
+            } else list.add(new CrusherRecipesStack(getItemStackFromString(i.input), outStack))
+        }
+        list
+    }
+
+    class CrusherRecipesStack(i: ItemStack, o: ItemStack) {
+        var input = i
+        var output = o
+    }
 }
