@@ -185,6 +185,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
         //Find the next source
         var destination : BlockPos = null
         var pickNext : Boolean = lastSink == 0
+        val lastLastSink = lastSink
         for (i <- 0 until sinks.size()) {
             if(pickNext) {
                 destination = BlockPos.fromLong(sinks.get(i))
@@ -217,6 +218,8 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
             //If we have a path add it
             if(!simulate)
                 resources.add(resource)
+            else
+                lastSink = lastLastSink
             true
         }
         else

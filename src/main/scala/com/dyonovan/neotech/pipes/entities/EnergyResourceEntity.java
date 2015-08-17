@@ -1,11 +1,17 @@
 package com.dyonovan.neotech.pipes.entities;
 
 import cofh.api.energy.EnergyStorage;
+import com.dyonovan.neotech.helpers.RenderHelper;
+import com.dyonovan.neotech.lib.Reference;
+import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Stack;
 
@@ -49,7 +55,22 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
 
     @Override
     public void renderResource(float tickPartial) {
-        Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, xPos, yPos, zPos, 0, 100, 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.pushAttrib();
+
+        RenderManager manager = Minecraft.getMinecraft().getRenderManager();
+        GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
+
+        RenderUtils.bindTexture(new ResourceLocation(Reference.MOD_ID(), "textures/entity/energyEntity.png"));
+
+        GlStateManager.disableLighting();
+        RenderHelper.renderCubeWithTexture(-0.1, -0.1, -0.1, 0.1, 0.1, 0.1, 0, 0, 1, 1);
+        GlStateManager.enableLighting();
+
+        RenderUtils.bindMinecraftBlockSheet();
+
+        GlStateManager.popAttrib();
+        GlStateManager.popMatrix();
     }
 
     @Override
