@@ -77,6 +77,10 @@ class TileTank(tier: Int) extends TileEntity with IFluidHandler with UpdatingTil
         }
     }
 
+    def getTier: Int = {
+        tier
+    }
+
     override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)
 
     override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = {
@@ -92,7 +96,9 @@ class TileTank(tier: Int) extends TileEntity with IFluidHandler with UpdatingTil
         tank.getFluid == null || tank.getFluid.getFluid == fluid
     }
 
-    override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = false
+    override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = {
+        tank.getFluid != null || tank.getFluid.getFluid == fluid
+    }
 
     override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
         if (canFill(from, resource.getFluid)) {
@@ -122,5 +128,7 @@ class TileTank(tier: Int) extends TileEntity with IFluidHandler with UpdatingTil
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super.readFromNBT(tag)
         tank.readFromNBT(tag)
+        if (worldObj != null)
+            worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 }

@@ -81,10 +81,10 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
     override def getCapacity(container: ItemStack): Int = getTankInfo._2
 
     override def getFluid(container: ItemStack): FluidStack = {
-        if (!container.hasTagCompound || !container.getTagCompound.hasKey("Fluid")) {
+        if (!container.hasTagCompound || !container.getTagCompound.hasKey("FluidName")) {
             return null
         }
-        FluidStack.loadFluidStackFromNBT(container.getTagCompound.getCompoundTag("Fluid"))
+        FluidStack.loadFluidStackFromNBT(container.getTagCompound)
     }
 
     override def fill(container: ItemStack, resource: FluidStack, doFill: Boolean): Int = {

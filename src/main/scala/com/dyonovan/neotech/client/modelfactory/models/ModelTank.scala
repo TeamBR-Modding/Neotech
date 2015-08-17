@@ -36,7 +36,7 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
     var renderFluid: Fluid = null
     var isItem: Boolean = _
 
-    def this(state: DummyState) {
+    /*def this(state: DummyState) {
         this()
         if(state.blockAccess.getTileEntity(state.pos) != null) {
             fluidHeight = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getFluidLevelScaled
@@ -46,7 +46,7 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
         if (topIcon == null)
             topIcon = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
         isItem = false
-    }
+    }*/
 
     def this(renderHeight: Float, fluid: Fluid, icon: TextureAtlasSprite) {
         this()
@@ -58,9 +58,18 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
         isItem = true
     }
 
-    override def handleBlockState(state: IBlockState): IBakedModel = {
-        state match {
-            case state1: DummyState => new ModelTank(state1)
+    override def handleBlockState(s: IBlockState): IBakedModel = {
+        s match {
+            case state: DummyState =>
+                if(state.blockAccess.getTileEntity(state.pos) != null) {
+                    fluidHeight = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getFluidLevelScaled
+                    renderFluid = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getCurrentFluid
+                    topIcon = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getTierIcon
+                }
+                if (topIcon == null)
+                    topIcon = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
+                isItem = false
+                new ModelTank(fluidHeight, renderFluid, topIcon)
             case _ => null
         }
     }
@@ -70,10 +79,10 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
         var fluid: Fluid = null
         var top: TextureAtlasSprite = null
         if (stack.hasTagCompound) {
-            val liquidTag = stack.getTagCompound.getCompoundTag("Fluid")
+            val liquidTag = stack.getTagCompound.getString("FluidName")
 
             if (liquidTag != null) {
-                val liquid = FluidStack.loadFluidStackFromNBT(liquidTag)
+                val liquid = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
                 fluid = liquid.getFluid
                 if (stack.getItem == Item.getItemFromBlock(BlockManager.ironTank))
                     height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 15.99F)
