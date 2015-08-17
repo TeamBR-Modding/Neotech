@@ -2,6 +2,7 @@ package com.dyonovan.neotech.managers;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -41,16 +42,18 @@ public class CraftingRecipeManager {
                 .blockTin()));
 
         //Basic RF Storage
-        GameRegistry.addRecipe(new ItemStack(BlockManager.basicRFStorage()), "ABA", "DCD", "ABA",
-                'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', Items.comparator);
+        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage()), 1, 16), "ABA",
+                "DCD", "ABA", 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', Items.comparator);
 
         //Advanced RF Storage
-        GameRegistry.addRecipe(new ItemStack(BlockManager.advancedRFStorage()), "ABA", "DCD", "ABA",
-                'A', Items.gold_ingot, 'B', Blocks.iron_bars, 'C', BlockManager.basicRFStorage(), 'D', Items.comparator);
+        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage()), 1, 16), "ABA",
+                "DCD", "ABA", 'A', Items.gold_ingot, 'B', Blocks.iron_bars, 'C',
+                        BlockManager.basicRFStorage(), 'D', Items.comparator);
 
         //Elite RF Storage
-        GameRegistry.addRecipe(new ItemStack(BlockManager.eliteRFStorage()), "ABA", "DCD", "ABA",
-                'A', Items.diamond, 'B', Blocks.iron_bars, 'C', BlockManager.advancedRFStorage(), 'D', Items.comparator);
+        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage()), 1, 16), "ABA",
+                "DCD", "ABA", 'A', Items.diamond, 'B', Blocks.iron_bars, 'C',
+                        BlockManager.advancedRFStorage(), 'D', Items.comparator);
 
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);

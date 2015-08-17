@@ -18,6 +18,8 @@ import net.minecraft.util.EnumFacing
  */
 class TileRFStorage(tier: Int) extends TileEntity with IEnergyHandler with UpdatingTile {
 
+    def this() = this(1)
+
     var energy: EnergyStorage = new EnergyStorage(25000, 200, 200)
 
     tier match {
@@ -52,11 +54,13 @@ class TileRFStorage(tier: Int) extends TileEntity with IEnergyHandler with Updat
 
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].writeToNBT(tag)
+        super[UpdatingTile].writeToNBT(tag)
         energy.writeToNBT(tag)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].readFromNBT(tag)
+        super[UpdatingTile].readFromNBT(tag)
         energy.readFromNBT(tag)
     }
 

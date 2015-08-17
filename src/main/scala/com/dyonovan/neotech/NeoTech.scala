@@ -4,7 +4,7 @@ import java.io.File
 
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{BlockManager, CraftingRecipeManager, ItemManager, WorldGenManager}
+import com.dyonovan.neotech.managers._
 import com.dyonovan.neotech.network.PacketDispatcher
 import com.dyonovan.neotech.registries._
 import net.minecraft.creativetab.CreativeTabs
@@ -61,6 +61,7 @@ object NeoTech {
     @EventHandler def init(event : FMLInitializationEvent) =  {
         CrusherRecipeRegistry.init()
         PacketDispatcher.initPackets()
+        EventManager.init()
         proxy.init()
     }
 

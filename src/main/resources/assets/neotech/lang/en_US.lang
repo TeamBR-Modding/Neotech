@@ -34,8 +34,3 @@ item.neotech:dustCopper.name=Copper Dust
 item.neotech:ingotCopper.name=Copper Ingot
 item.neotech:dustTin.name=Tin Dust
 item.neotech:ingotTin.name=Tin Ingot
-
-item.neotech:itemRFStorageBasic.name=Basic RF Storage
-item.neotech:itemRFStorageAdvanced.name=Advanced RF Storage
-item.neotech:itemRFStorageElite.name=Elite RF Storage
-item.neotech:itemRFStorageCreative.name=Creative RF Storage

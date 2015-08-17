@@ -2,7 +2,7 @@ package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
-import com.dyonovan.neotech.common.blocks.storage.BlockRFStorage
+import com.dyonovan.neotech.common.blocks.storage.{ItemBlockRFStorage, BlockRFStorage}
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
@@ -10,6 +10,7 @@ import com.dyonovan.neotech.pipes.tiles.{ItemSinkPipe, ItemExtractionPipe, Struc
 import com.dyonovan.neotech.registries.PowerAdvantageRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.item.ItemBlock
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -68,10 +69,10 @@ object BlockManager {
         registerBlock(pipeItemBasicSink, "pipeItemBasicSink", classOf[ItemSinkPipe])
 
         //RF Storage
-        registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)
-        registerBlock(advancedRFStorage, "advancedRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)
-        registerBlock(eliteRFStorage, "eliteRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)
-        registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], null, powerAcceptor = true)
+        registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
+        registerBlock(advancedRFStorage, "advancedRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
+        registerBlock(eliteRFStorage, "eliteRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
+        registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
     }
 
     /**
@@ -89,6 +90,17 @@ object BlockManager {
             GameRegistry.registerTileEntity(tileEntity, name)
         if (oreDict != null)
             OreDictionary.registerOre(oreDict, block)
+
+        if (Loader.isModLoaded("poweradvantage") && powerAcceptor) {
+            PowerAdvantageRegistry.registerPA(block)
+        }
+    }
+
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], powerAcceptor: Boolean,
+                      itemBlock: Class[_ <: ItemBlock]) : Unit = {
+        GameRegistry.registerBlock(block, itemBlock, name)
+        if (tileEntity != null)
+            GameRegistry.registerTileEntity(tileEntity, name)
 
         if (Loader.isModLoaded("poweradvantage") && powerAcceptor) {
             PowerAdvantageRegistry.registerPA(block)
