@@ -16,38 +16,49 @@ import net.minecraft.util.EnumFacing
  * @author Dyonovan
  * @since August 15, 2015
  */
-class TileRFStorage(t: Int) extends TileEntity with IEnergyHandler with UpdatingTile {
+class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile {
 
-    def this() = this(1)
-    var tier = t
+    var tier = 0
 
-    var energy: EnergyStorage = new EnergyStorage(25000, 200, 200)
+    def this(t: Int) {
+        this()
+        tier = t
+        initEnergy()
+    }
 
-    tier match {
-        case 1 => energy = new EnergyStorage(25000, 200, 200)
-        case 2 => energy = new EnergyStorage(1000000, 1000, 1000)
-        case 3 => energy = new EnergyStorage(10000000, 10000, 10000)
-        case 4 =>
-            energy = new EnergyStorage(100000000, 100000, 100000)
-            energy.setEnergyStored(energy.getMaxEnergyStored)
-        case _ => energy = new EnergyStorage(25000, 200, 200)
+    var energy: EnergyStorage = _
+
+    def initEnergy(): Unit = {
+        tier match {
+            case 1 => energy = new EnergyStorage(25000, 200, 200)
+            case 2 => energy = new EnergyStorage(1000000, 1000, 1000)
+            case 3 => energy = new EnergyStorage(10000000, 10000, 10000)
+            case 4 =>
+                energy = new EnergyStorage(100000000, 100000, 100000)
+                energy.setEnergyStored(energy.getMaxEnergyStored)
+            case _ =>
+        }
+        if (worldObj != null)
+            worldObj.markBlockForUpdate(pos)
     }
 
     def getTier: Int = tier
 
     override def onServerTick(): Unit = {
         //Transfer
-        if (energy.getEnergyStored > 0) {
-            for (i <- EnumFacing.values()) {
-                worldObj.getTileEntity(pos.offset(i)) match {
-                    case tile: IEnergyReceiver =>
-                        val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
-                        if (want > 0) {
-                            val actual = extractEnergy(null, want, simulate = false)
-                            tile.receiveEnergy(i.getOpposite, actual, false)
-                            worldObj.markBlockForUpdate(pos)
-                        }
-                    case _ =>
+        if (energy != null) {
+            if (energy.getEnergyStored > 0) {
+                for (i <- EnumFacing.values()) {
+                    worldObj.getTileEntity(pos.offset(i)) match {
+                        case tile: IEnergyReceiver =>
+                            val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
+                            if (want > 0) {
+                                val actual = extractEnergy(null, want, simulate = false)
+                                tile.receiveEnergy(i.getOpposite, actual, false)
+                                worldObj.markBlockForUpdate(pos)
+                            }
+                        case _ =>
+                    }
                 }
             }
         }
@@ -56,25 +67,39 @@ class TileRFStorage(t: Int) extends TileEntity with IEnergyHandler with Updating
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].writeToNBT(tag)
         super[UpdatingTile].writeToNBT(tag)
-        energy.writeToNBT(tag)
+        if (energy != null) {
+            energy.writeToNBT(tag)
+        }
         tag.setInteger("Tier", tier)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].readFromNBT(tag)
         super[UpdatingTile].readFromNBT(tag)
-        energy.readFromNBT(tag)
-        if (tag.hasKey("Tier"))
+        if (tag.hasKey("Tier")) {
             tier = tag.getInteger("Tier")
+            initEnergy()
+            if (tier != 4)
+                energy.readFromNBT(tag)
+        }
+
     }
 
     /** *****************************************************************************************************************
       * *********************************************** Energy methods **************************************************
       * *****************************************************************************************************************/
 
-    override def getEnergyStored(from: EnumFacing): Int = energy.getEnergyStored
+    override def getEnergyStored(from: EnumFacing): Int = {
+        if (energy != null)
+            energy.getEnergyStored
+        else 0
+    }
 
-    override def getMaxEnergyStored(from: EnumFacing): Int = energy.getMaxEnergyStored
+    override def getMaxEnergyStored(from: EnumFacing): Int = {
+        if (energy != null)
+            energy.getMaxEnergyStored
+        else 0
+    }
 
     override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
         if (tier == 4) return 0
