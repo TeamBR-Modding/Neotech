@@ -4,7 +4,6 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.collections.DummyState
 import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.lib.Reference
-import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -14,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{EnumFacing, BlockPos, EnumWorldBlockLayer}
+import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fluids.FluidContainerRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -31,7 +30,7 @@ import scala.util.Random
  * @author Dyonovan
  * @since August 16, 2015
  */
-class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) with OpensGui {
+class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
@@ -183,8 +182,4 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
     override def canRenderInLayer(layer: EnumWorldBlockLayer): Boolean = {
         layer == EnumWorldBlockLayer.CUTOUT || layer == EnumWorldBlockLayer.TRANSLUCENT
     }
-
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
-
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = ???
 }

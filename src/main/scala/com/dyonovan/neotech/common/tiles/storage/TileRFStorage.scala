@@ -16,9 +16,10 @@ import net.minecraft.util.EnumFacing
  * @author Dyonovan
  * @since August 15, 2015
  */
-class TileRFStorage(tier: Int) extends TileEntity with IEnergyHandler with UpdatingTile {
+class TileRFStorage(t: Int) extends TileEntity with IEnergyHandler with UpdatingTile {
 
     def this() = this(1)
+    var tier = t
 
     var energy: EnergyStorage = new EnergyStorage(25000, 200, 200)
 
@@ -42,7 +43,7 @@ class TileRFStorage(tier: Int) extends TileEntity with IEnergyHandler with Updat
                     case tile: IEnergyReceiver =>
                         val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
                         if (want > 0) {
-                            val actual = extractEnergy(null, want, false)
+                            val actual = extractEnergy(null, want, simulate = false)
                             tile.receiveEnergy(i.getOpposite, actual, false)
                             worldObj.markBlockForUpdate(pos)
                         }
@@ -56,12 +57,14 @@ class TileRFStorage(tier: Int) extends TileEntity with IEnergyHandler with Updat
         super[TileEntity].writeToNBT(tag)
         super[UpdatingTile].writeToNBT(tag)
         energy.writeToNBT(tag)
+        tag.setInteger("Tier", tier)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].readFromNBT(tag)
         super[UpdatingTile].readFromNBT(tag)
         energy.readFromNBT(tag)
+        tier = tag.getInteger("Tier")
     }
 
     /** *****************************************************************************************************************
