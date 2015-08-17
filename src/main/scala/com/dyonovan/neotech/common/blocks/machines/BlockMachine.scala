@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
  * This file was created for NeoTech
@@ -51,6 +52,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends Bas
         }
     }
 
+    @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getBlockState(new BlockPos(x, y, z)).getBlock match {
             case block: BlockManager.electricFurnace.type =>

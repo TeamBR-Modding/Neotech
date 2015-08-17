@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.BlockPos
 import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.util.Random
 
@@ -76,6 +77,7 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
         new ContainerGeneric
     }
 
+    @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         var title = ""
         tier match {
