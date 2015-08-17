@@ -46,36 +46,59 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
      */
     override def getDelay: Int = 20
 
-    /**
-     * This is called when we fail to send a resource. You should put the resource back where you found it or
-     * add it to the world
-     */
-    override def resourceReturned(resource: ItemResourceEntity): Unit = {
+    override def doExtraction(): Unit = {
+        tryExtractResources()
+    }
+
+    override def tryExtractResources(): Unit = {
         val tempInv = new Inventory() {
             override var inventoryName: String = "TEMPINV"
             override def hasCustomName(): Boolean = false
             override def initialSize: Int = 1
         }
 
-        tempInv.setInventorySlotContents(0, resource.resource)
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case otherInv : IInventory =>
-                    InventoryUtils.moveItemInto(tempInv, 0, otherInv, -1, 64, dir, doMove = true, canStack = true)
+                case sidedInv : ISidedInventory =>
+                    for(i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
+                        tempInv.setInventorySlotContents(0, null)
+                        if (sidedInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = false, canStack = true) > 0) {
+                            if(extractResourceOnShortestPath(new ItemResourceEntity(sidedInv.getStackInSlot(i),
+                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                pos, pos, worldObj), simulate = true)) {
+                                InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
+                                extractResourceOnShortestPath(new ItemResourceEntity(tempInv.getStackInSlot(0),
+                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                    pos, pos, worldObj), simulate = false)
+                                return
+                            }
+                        }
+                    }
+                case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
+                    for(i <- 0 until otherInv.getSizeInventory) {
+                        tempInv.setInventorySlotContents(0, null)
+                        if (otherInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = false, canStack = true) > 0) {
+                            if(extractResourceOnShortestPath(new ItemResourceEntity(otherInv.getStackInSlot(i),
+                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                pos, pos, worldObj), simulate = true)) {
+                                InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
+                                extractResourceOnShortestPath(new ItemResourceEntity(tempInv.getStackInSlot(0),
+                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                    pos, pos, worldObj), simulate = false)
+                                return
+                            }
+                        }
+                    }
                 case _ =>
             }
         }
-
-        if(tempInv.getStackInSlot(0) != null && tempInv.getStackInSlot(0).stackSize <= 0)
-            tempInv.setInventorySlotContents(0, null)
-
-        if(tempInv.getStackInSlot(0) != null) {
-            resource.resource = tempInv.getStackInSlot(0)
-            resource.onDropInWorld()
-        }
     }
 
-    override def tryInsertResource(resource : ItemResourceEntity) : Unit = {
+    /**
+     * This is called when we fail to send a resource. You should put the resource back where you found it or
+     * add it to the world
+     */
+    override def resourceReturned(resource: ItemResourceEntity): Unit = {
         val tempInventory = new Inventory() {
             override var inventoryName: String = "TEMPINV"
             override def hasCustomName(): Boolean = false
@@ -120,52 +143,6 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
         }
     }
 
-    override def tryExtractResources: Unit = {
-        val tempInv = new Inventory() {
-            override var inventoryName: String = "TEMPINV"
-            override def hasCustomName(): Boolean = false
-            override def initialSize: Int = 1
-        }
-
-        for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case sidedInv : ISidedInventory =>
-                    for(i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
-                        if(shouldStopTrying) {
-                            shouldStopTrying = false
-                            return
-                        }
-                        if(tempInv.getStackInSlot(0) == null) {
-                            InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
-                            if (tempInv.getStackInSlot(0) != null) {
-                                extractResourceOnShortestPath(new ItemResourceEntity(tempInv.getStackInSlot(0),
-                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                    pos, pos, worldObj))
-                            }
-                            tempInv.setInventorySlotContents(0, null)
-                        }
-                    }
-                case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
-                    for(i <- 0 until otherInv.getSizeInventory) {
-                        if(shouldStopTrying) {
-                            shouldStopTrying = false
-                            return
-                        }
-                        if (tempInv.getStackInSlot(0) == null) {
-                            InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
-                            if (tempInv.getStackInSlot(0) != null) {
-                                extractResourceOnShortestPath(new ItemResourceEntity(tempInv.getStackInSlot(0),
-                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                    pos, pos, worldObj))
-                            }
-                            tempInv.setInventorySlotContents(0, null)
-                        }
-                    }
-                case _ =>
-            }
-        }
-    }
-
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super.writeToNBT(tag)
         tag.setInteger("SizeResources", resources.size())
@@ -191,9 +168,5 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
             }
             resources.add(item)
         }
-    }
-
-    override def doExtraction: Unit = {
-        tryExtractResources
     }
 }

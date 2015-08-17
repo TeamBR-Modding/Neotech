@@ -20,7 +20,7 @@ trait SinkPipe[T, R <: ResourceEntity[T]] extends SimplePipe {
      * @param resource
      * @return
      */
-    def willAcceptResource(resource: R) : Boolean
+    def willAcceptResource(resource: ResourceEntity[_]) : Boolean
 
     /**
      * Called when the resource enters this pipe. If it is meant for us, we will try and insert

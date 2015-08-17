@@ -27,13 +27,6 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
     val lastSink : Long = 0
 
     /**
-     * This little boolean is more useful than it may look. This will be used to tell the pipe when you have put a resource
-     * into the buffer and should stop cycling the inventory you are looking in. You must use this in the extended class
-     * as it is not handled here. I set it to true when something is added, but you must set it back to false if you wish to use it
-     */
-    var shouldStopTrying = false
-
-    /**
      * Get how many ticks to 'cooldown' between operations.
      * @return 20 = 1 second
      */
@@ -57,12 +50,14 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
      *
      * This will handle finding things that will accept it and will pick the shortest path of all of them
      *
+     * You can use this to simulate as well, you are responsible for removing from the tile
+     *
      * @param resource The resource to check
      */
-    def extractResourceOnShortestPath(resource : R): Unit = {
+    def extractResourceOnShortestPath(resource : R, simulate : Boolean): Boolean = {
         //Sometimes we won't get anything, get lost
         if(resource == null)
-            return
+            return false
 
         //What we wish to send
         val sinks = new util.ArrayList[Long]()
@@ -130,11 +125,12 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
 
         if (!resource.pathQueue.isEmpty) {
             //If we have a path add it
-            resources.add(resource)
-            shouldStopTrying = true
+            if(!simulate)
+                resources.add(resource)
+            true
         }
-        else //Otherwise put it back
-            resourceReturned(resource)
+        else
+            false
     }
 
     /**
@@ -152,7 +148,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
                 val resource = iterator.next()
                 if(getWorld != null)
                     resource.setWorld(getWorld)
-                if (resource.isDead || resource.resource == null) {
+                if (resource.isDead || resource.resource == null || resource == null) {
                     resource.onDropInWorld()
                     iterator.remove()
                 }
@@ -197,16 +193,10 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
     override def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {
         resource match {
             case matchingResource: R if resource.destination == getPos && !resource.isDead =>
-                tryInsertResource(matchingResource)
+                resourceReturned(matchingResource)
             case _ =>
         }
     }
-
-    /**
-     * Called when the resource returns. You should try to put the resource somewhere or send it back from where it came
-     * @param resource
-     */
-    def tryInsertResource(resource : R)
 
     /**
      * Make sure we don't lose everything when we are broken

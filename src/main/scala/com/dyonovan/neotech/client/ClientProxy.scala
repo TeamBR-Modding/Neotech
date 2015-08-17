@@ -1,11 +1,13 @@
 package com.dyonovan.neotech.client
 
+import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.client.renderers.ExtractionPipeRenderer
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.blocks.traits.CoreStates
 import com.dyonovan.neotech.managers.{BlockManager, ItemRenderManager}
-import com.dyonovan.neotech.pipes.entities.ItemResourceEntity
+import com.dyonovan.neotech.pipes.entities.{EnergyResourceEntity, ItemResourceEntity}
+import com.dyonovan.neotech.pipes.tiles.energy.EnergyExtractionPipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemExtractionPipe
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder
@@ -41,6 +43,7 @@ class ClientProxy extends CommonProxy {
                     (BlockManager.furnaceGenerator.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[ItemExtractionPipe], new ExtractionPipeRenderer[ItemStack, ItemResourceEntity, ItemExtractionPipe])
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[EnergyExtractionPipe], new ExtractionPipeRenderer[EnergyStorage, EnergyResourceEntity, EnergyExtractionPipe])
     }
 
     /**

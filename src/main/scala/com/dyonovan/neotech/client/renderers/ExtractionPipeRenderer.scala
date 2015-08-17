@@ -19,8 +19,8 @@ class ExtractionPipeRenderer[T, R <: ResourceEntity[T], P <: ExtractionPipe[T, R
     override def renderTileEntityAt(tile : TileEntity, posX: Double, posY: Double, posZ : Double, partialTick : Float, integer : Int): Unit = {
         val resourceList = tile.asInstanceOf[P].resources
         for(i <- 0 until resourceList.size()) {
-            val item = resourceList.get(i)
-            item.renderResource(partialTick)
+            val resource = resourceList.get(i)
+            resource.renderResource(partialTick)
         }
     }
 }

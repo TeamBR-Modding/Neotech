@@ -133,6 +133,10 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
                 ModelFactory.BASIC_ITEM_SOURCE
             case BlockManager.pipeItemBasicSink =>
                 ModelFactory.BASIC_ITEM_SINK
+            case BlockManager.pipeEnergyBasicSource =>
+                ModelFactory.BASIC_ENERGY_SOURCE
+            case BlockManager.pipeEnergyBasicSink =>
+                ModelFactory.BASIC_ENERGY_SINK
             case _ =>
                 ModelFactory.STRUCTURE_PIPE
         }
@@ -144,6 +148,10 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
                 ModelFactory.BASIC_ITEM_SOURCE_EXTRAS
             case BlockManager.pipeItemBasicSink =>
                 ModelFactory.BASIC_ITEM_SINK_EXTRAS
+            case BlockManager.pipeEnergyBasicSource =>
+                ModelFactory.BASIC_ENERGY_SOURCE_EXTRAS
+            case BlockManager.pipeEnergyBasicSink =>
+                ModelFactory.BASIC_ENERGY_SINK_EXTRAS
             case _ =>
                 null
         }
