@@ -35,13 +35,13 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
      * Used to specify how much RF, check for upgrades here
      * @return
      */
-    def getMaxRFDrain : Int = 200
+    def getMaxRFDrain : Int = 200 * 20
 
     /**
      * Get how many ticks to 'cooldown' between operations.
      * @return 20 = 1 second
      */
-    override def getDelay: Int = 1
+    override def getDelay: Int = 20
 
     /**
      * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
