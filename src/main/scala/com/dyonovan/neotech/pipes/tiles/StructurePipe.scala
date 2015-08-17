@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.pipes.tiles
 
+import com.dyonovan.neotech.pipes.types.SimplePipe
+
 /**
  * This file was created for NeoTech
  *
@@ -10,4 +12,4 @@ package com.dyonovan.neotech.pipes.tiles
  * @author Paul Davis pauljoda
  * @since August 15, 2015
  */
-class StructurePipe extends IPipe {}
+class StructurePipe extends SimplePipe {}

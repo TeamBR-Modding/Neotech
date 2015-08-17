@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.pipes.network;
 
-import com.dyonovan.neotech.pipes.tiles.IPipe;
+import com.dyonovan.neotech.pipes.types.SimplePipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -166,8 +166,8 @@ abstract public class ResourceEntity<R> {
      * @return True if into a new pipe
      */
     public boolean onPipeEntered() {
-        if(world.getTileEntity(new BlockPos(currentTarget.x, currentTarget.y, currentTarget.z)) instanceof IPipe) {
-            IPipe pipe = (IPipe) world.getTileEntity(new BlockPos(currentTarget.x, currentTarget.y, currentTarget.z));
+        if(world.getTileEntity(new BlockPos(currentTarget.x, currentTarget.y, currentTarget.z)) instanceof SimplePipe) {
+            SimplePipe pipe = (SimplePipe) world.getTileEntity(new BlockPos(currentTarget.x, currentTarget.y, currentTarget.z));
             pipe.onResourceEnteredPipe(this);
             return true;
         } else {
@@ -196,8 +196,8 @@ abstract public class ResourceEntity<R> {
      * Finds the path to the registered destination
      */
     public boolean findPathToDestination() {
-        if(world != null && destination != null && world.getTileEntity(new BlockPos(xPos, yPos, zPos)) instanceof IPipe) {
-            IPipe currentPipe = (IPipe) world.getTileEntity(new BlockPos(xPos, yPos, zPos));
+        if(world != null && destination != null && world.getTileEntity(new BlockPos(xPos, yPos, zPos)) instanceof SimplePipe) {
+            SimplePipe currentPipe = (SimplePipe) world.getTileEntity(new BlockPos(xPos, yPos, zPos));
 
             HashMap<Long, Integer> distance = new HashMap<>();
             HashMap<Long, BlockPos> parent = new HashMap<>();
@@ -210,8 +210,8 @@ abstract public class ResourceEntity<R> {
 
             while(!queue.isEmpty()) {
                 BlockPos thisPos = queue.poll();
-                if (world.getTileEntity(thisPos) instanceof IPipe) {
-                    IPipe thisPipe = (IPipe) world.getTileEntity(thisPos);
+                if (world.getTileEntity(thisPos) instanceof SimplePipe) {
+                    SimplePipe thisPipe = (SimplePipe) world.getTileEntity(thisPos);
 
                     //Add all children
                     if (thisPipe != null) {

@@ -6,7 +6,7 @@ import javax.vecmath.Vector3f
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
-import com.dyonovan.neotech.pipes.tiles.IPipe
+import com.dyonovan.neotech.pipes.types.SimplePipe
 import com.teambr.bookshelf.common.blocks.properties.TileAwareState
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
@@ -32,11 +32,11 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
     val uv = new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0)
     val face = new BlockPartFace(null, 0, "", uv)
     var blockPipe : BlockPipe = null
-    var pipeTile : IPipe = null
+    var pipeTile : SimplePipe = null
     var min = 4.0F
     var max = 12.0F
 
-    def this(block : BlockPipe, tile: IPipe) {
+    def this(block : BlockPipe, tile: SimplePipe) {
         this()
         blockPipe = block
         pipeTile = tile
@@ -113,7 +113,7 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
 
     override def handleBlockState(state : IBlockState) : IBakedModel =  {
         state match {
-            case tileAware : TileAwareState => new ModelPipe(state.getBlock.asInstanceOf[BlockPipe], tileAware.tile.asInstanceOf[IPipe])
+            case tileAware : TileAwareState => new ModelPipe(state.getBlock.asInstanceOf[BlockPipe], tileAware.tile.asInstanceOf[SimplePipe])
             case _ =>  new ModelPipe
 
         }

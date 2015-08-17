@@ -3,7 +3,7 @@ package com.dyonovan.neotech.pipes.blocks
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.pipes.tiles.IPipe
+import com.dyonovan.neotech.pipes.types.SimplePipe
 import com.teambr.bookshelf.common.blocks.properties.TileAwareState
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Paul Davis pauljoda
  * @since August 14, 2015
  */
-class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: IPipe]) extends BlockContainer(mat) {
+class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: SimplePipe]) extends BlockContainer(mat) {
 
     //Constructor
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
@@ -35,7 +35,7 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: IPipe]
 
     override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) : Unit = {
         worldIn.getTileEntity(pos) match {
-            case pipe : IPipe =>
+            case pipe : SimplePipe =>
                 pipe.onPipeBroken()
             case _ =>
         }
@@ -84,7 +84,7 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: IPipe]
 
     def isCableConnected(world: IBlockAccess, pos: BlockPos, facing: EnumFacing) : Boolean = {
         world.getTileEntity(pos) match {
-            case pipe : IPipe =>
+            case pipe : SimplePipe =>
                 pipe.canConnect(facing)
             case _ => false
         }

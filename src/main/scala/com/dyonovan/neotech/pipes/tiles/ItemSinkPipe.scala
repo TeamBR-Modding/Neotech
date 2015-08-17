@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.pipes.tiles
 
-import com.dyonovan.neotech.pipes.network.{ItemResourceEntity, ResourceEntity}
+import com.dyonovan.neotech.pipes.network.ItemResourceEntity
+import com.dyonovan.neotech.pipes.types.{SimplePipe, SinkPipe}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.{ISidedInventory, IInventory}
+import net.minecraft.inventory.{IInventory, ISidedInventory}
+import net.minecraft.item.ItemStack
 import net.minecraft.util.{BlockPos, EnumFacing}
 
 /**
@@ -16,11 +18,11 @@ import net.minecraft.util.{BlockPos, EnumFacing}
  * @author Paul Davis pauljoda
  * @since August 16, 2015
  */
-class ItemSinkPipe extends IPipe {
+class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] {
     override def canConnect(facing: EnumFacing): Boolean =
-        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[IPipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory]
+        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory]
 
-    override def canAcceptResource(resource: ResourceEntity[_]): Boolean = {
+    override def willAcceptResource(resource: ItemResourceEntity): Boolean = {
         resource match {
             case item : ItemResourceEntity =>
                 val tempInventory = new Inventory() {
@@ -45,16 +47,7 @@ class ItemSinkPipe extends IPipe {
         }
     }
 
-    override def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {
-        resource match {
-            case item : ItemResourceEntity =>
-                if(item.destination == pos)
-                    tryInsertResource(item)
-            case _ =>
-        }
-    }
-
-    def tryInsertResource(resource : ItemResourceEntity) : Unit = {
+    override def tryInsertResource(resource : ItemResourceEntity) : Unit = {
         val tempInventory = new Inventory() {
             override var inventoryName: String = "TEMPINV"
             override def hasCustomName(): Boolean = false
@@ -69,17 +62,21 @@ class ItemSinkPipe extends IPipe {
                 case isided : ISidedInventory =>
                     for(i <- isided.getSlotsForFace(dir.getOpposite)) {
                         if(InventoryUtils.moveItemInto(tempInventory, 0, isided, i, 64, dir, doMove = true, canStack = true) > 0) {
-                            resource.isDead = true
-                            resource.resource = null
                             resource.resource = tempInventory.getStackInSlot(0)
+                            if(resource.resource == null || resource.resource.stackSize <= 0) {
+                                resource.isDead = true
+                                resource.resource = null
+                            }
                         }
                     }
                 case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
                     for(i <- 0 until otherInv.getSizeInventory) {
                          if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, i, 64, dir, doMove = true, canStack = true) > 0) {
-                             resource.isDead = true
-                             resource.resource = null
                              resource.resource = tempInventory.getStackInSlot(0)
+                             if(resource.resource == null || resource.resource.stackSize <= 0) {
+                                 resource.isDead = true
+                                 resource.resource = null
+                             }
                          }
                     }
                 case _ =>
