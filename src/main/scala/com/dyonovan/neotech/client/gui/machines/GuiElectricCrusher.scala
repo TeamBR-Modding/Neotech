@@ -2,11 +2,13 @@ package com.dyonovan.neotech.client.gui.machines
 
 import java.awt.Color
 
+import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.common.container.machines.ContainerElectricCrusher
 import com.dyonovan.neotech.common.tiles.machines.TileElectricCrusher
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.StatCollector
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -33,6 +35,16 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
     override def addComponents(): Unit = {
         components += new GuiComponentArrow(64, 34) {
             override def getCurrentProgress: Int = tile.getCookProgressScaled(24)
+
+            override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
+                if (NeoTech.nei != null)
+                    ArrayBuffer(StatCollector.translateToLocal("inventory.nei.recipes"))
+                null
+            }
+
+            override def mouseDown(x: Int, y: Int, button: Int) : Unit = {
+                if (NeoTech.nei != null) NeoTech.nei.onArrowClicked(inventory)
+            }
         }
         components += new GuiComponentPowerBar(14, 18, 18, 60, new Color(255, 0, 0)) {
             override def getEnergyPercent(scale: Int): Int = {

@@ -58,8 +58,8 @@ public class RecipeHandlerFurnace extends TemplateRecipeHandler {
      */
     @Override
     public void drawExtras(int recipe) {
-        //this.drawProgressBar(77, 41, 176, 0, 14, 14, 48, 7);
         this.drawProgressBar(74, 23, 176, 14, 24, 16, 48, 0);
+        this.drawProgressBar(17, 12, 176, 32, 12, 44, 48, 7);
     }
 
     /**

@@ -51,3 +51,4 @@ item.neotech:ingotTin.name=Tin Ingot
 neotech.nei.name=NeoTech
 neotech.nei.furnacerecipes=Electric Furnace
 neotech.nei.crusherrecipes=Electric Crusher
+inventory.nei.recipes=Recipes

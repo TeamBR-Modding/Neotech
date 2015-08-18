@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * This file was created for NeoTech
- * <p/>
+ *
  * NeoTech is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -57,8 +57,8 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
      */
     @Override
     public void drawExtras(int recipe) {
-        this.drawProgressBar(77, 41, 176, 0, 14, 14, 48, 7);
         this.drawProgressBar(74, 23, 176, 14, 24, 16, 48, 0);
+        this.drawProgressBar(17, 12, 176, 32, 12, 44, 48, 7);
     }
 
     /**
@@ -74,7 +74,7 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
      */
     @Override
     public void loadTransferRects() {
-        this.transferRects.add(new RecipeTransferRect(new Rectangle(74, 23, 24, 18), "crusher"));
+        this.transferRects.add(new RecipeTransferRect(new Rectangle(74, 23, 24, 18), "ecrusher"));
     }
 
     /**
@@ -105,7 +105,7 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
      */
     @Override
     public void loadCraftingRecipes(String outputID, Object... results) {
-        if (outputID.equals("crusher") && this.getClass() == RecipeHandlerCrusher.class) {
+        if (outputID.equals("ecrusher") && this.getClass() == RecipeHandlerCrusher.class) {
             ArrayList<CrusherRecipeRegistry.CrusherRecipesStack> recipes = CrusherRecipeRegistry.getRecipes();
 
             for (CrusherRecipeRegistry.CrusherRecipesStack recipe : recipes)
@@ -135,8 +135,8 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
      */
     @Override
     public void loadUsageRecipes(String input, Object... ingredients) {
-        if (input.equals("crusher") && this.getClass() == RecipeHandlerCrusher.class)
-            this.loadCraftingRecipes("crusher");
+        if (input.equals("ecrusher") && this.getClass() == RecipeHandlerCrusher.class)
+            this.loadCraftingRecipes("ecrusher");
         else
             super.loadUsageRecipes(input, ingredients);
     }
