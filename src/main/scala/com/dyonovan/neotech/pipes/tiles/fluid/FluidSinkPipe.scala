@@ -1,9 +1,9 @@
-package com.dyonovan.neotech.pipes.tiles.energy
+package com.dyonovan.neotech.pipes.tiles.fluid
 
-import cofh.api.energy.{EnergyStorage, IEnergyReceiver}
-import com.dyonovan.neotech.pipes.entities.{ResourceEntity, EnergyResourceEntity}
+import com.dyonovan.neotech.pipes.entities.{FluidResourceEntity, ResourceEntity}
 import com.dyonovan.neotech.pipes.types.{SimplePipe, SinkPipe}
 import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraftforge.fluids.{FluidTank, IFluidHandler}
 
 /**
  * This file was created for NeoTech
@@ -15,10 +15,9 @@ import net.minecraft.util.{BlockPos, EnumFacing}
  * @author Paul Davis pauljoda
  * @since August 17, 2015
  */
-class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
+class FluidSinkPipe extends SinkPipe[FluidTank, FluidResourceEntity] {
     override def canConnect(facing: EnumFacing): Boolean =
-        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
-                (getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IEnergyReceiver] && getWorld.getTileEntity(pos.offset(facing)).asInstanceOf[IEnergyReceiver].canConnectEnergy(facing.getOpposite))
+        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IFluidHandler]
 
     /**
      * Used to check if this pipe can accept a resource
@@ -28,16 +27,19 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
      * @return
      */
     override def willAcceptResource(resourceEntity: ResourceEntity[_]): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[EnergyResourceEntity] || resourceEntity.resource == null)
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[FluidResourceEntity] || resourceEntity.resource == null)
             return false
 
-        val resource = resourceEntity.asInstanceOf[EnergyResourceEntity]
+        val resource = resourceEntity.asInstanceOf[FluidResourceEntity]
 
-        //Try and insert the energy
+        if(resource.resource.getFluid == null)
+            return false
+
+        //Try and insert the fluid
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case receiver : IEnergyReceiver =>
-                    if(receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true) > 0)
+                case tank : IFluidHandler =>
+                    if(tank.fill(dir.getOpposite, resource.resource.getFluid, false) > 0)
                         return true
                 case _ =>
             }
@@ -51,17 +53,19 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
      * It is pretty good practice to send the resource back if you can't remove all of it
      * @param resource
      */
-    override def tryInsertResource(resource: EnergyResourceEntity): Unit = {
+    override def tryInsertResource(resource: FluidResourceEntity): Unit = {
         if(resource == null || resource.resource == null)
             return
 
         //Try and insert the energy
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case receiver : IEnergyReceiver if !resource.isDead =>
-                    receiver.receiveEnergy(dir.getOpposite, resource.resource.extractEnergy(resource.resource.getEnergyStored, false), false)
-                    if(resource.resource.getEnergyStored <= 0)
+                case tank : IFluidHandler if !resource.isDead =>
+                    resource.resource.drain(tank.fill(dir.getOpposite, resource.resource.getFluid, true), true)
+                    if(resource.resource.getFluidAmount <= 0) {
                         resource.isDead = true
+                        resource.resource.setFluid(null)
+                    }
                 case _ =>
             }
         }

@@ -129,14 +129,18 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
 
     override def getTexture : TextureAtlasSprite =  {
         blockPipe match {
-            case BlockManager.pipeItemBasicSource =>
+            case BlockManager.pipeItemSource =>
                 ModelFactory.BASIC_ITEM_SOURCE
-            case BlockManager.pipeItemBasicSink =>
+            case BlockManager.pipeItemSink =>
                 ModelFactory.BASIC_ITEM_SINK
-            case BlockManager.pipeEnergyBasicSource =>
+            case BlockManager.pipeEnergySource =>
                 ModelFactory.BASIC_ENERGY_SOURCE
-            case BlockManager.pipeEnergyBasicSink =>
+            case BlockManager.pipeEnergySink =>
                 ModelFactory.BASIC_ENERGY_SINK
+            case BlockManager.pipeFluidSource =>
+                ModelFactory.BASIC_FLUID_SOURCE
+            case BlockManager.pipeFluidSink =>
+                ModelFactory.BASIC_FLUID_SINK
             case _ =>
                 ModelFactory.STRUCTURE_PIPE
         }
@@ -144,14 +148,18 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
 
     def getExtraTexture : TextureAtlasSprite = {
         blockPipe match {
-            case BlockManager.pipeItemBasicSource =>
+            case BlockManager.pipeItemSource =>
                 ModelFactory.BASIC_ITEM_SOURCE_EXTRAS
-            case BlockManager.pipeItemBasicSink =>
+            case BlockManager.pipeItemSink =>
                 ModelFactory.BASIC_ITEM_SINK_EXTRAS
-            case BlockManager.pipeEnergyBasicSource =>
+            case BlockManager.pipeEnergySource =>
                 ModelFactory.BASIC_ENERGY_SOURCE_EXTRAS
-            case BlockManager.pipeEnergyBasicSink =>
+            case BlockManager.pipeEnergySink =>
                 ModelFactory.BASIC_ENERGY_SINK_EXTRAS
+            case BlockManager.pipeFluidSource =>
+                ModelFactory.BASIC_FLUID_SOURCE_EXTRAS
+            case BlockManager.pipeFluidSink =>
+                ModelFactory.BASIC_FLUID_SINK_EXTRAS
             case _ =>
                 null
         }

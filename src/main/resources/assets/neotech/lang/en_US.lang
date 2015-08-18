@@ -13,11 +13,14 @@ tile.neotech:creativeRFStorage.name=Creative RF Storage
 
 tile.neotech:pipeStructure.name=Basic Structure Pipe
 
-tile.neotech:pipeItemBasicSource.name=Basic Item Extract Pipe
-tile.neotech:pipeItemBasicSink.name=Basic Item Insert Pipe
+tile.neotech:pipeItemBasicSource.name=Item Extract Pipe
+tile.neotech:pipeItemBasicSink.name=Item Insert Pipe
 
-tile.neotech:pipeEnergyBasicSource.name=Basic Energy Extract Pipe
-tile.neotech:pipeEnergyBasicSink.name=Basic Energy Insert Pipe
+tile.neotech:pipeEnergyBasicSource.name=Energy Extract Pipe
+tile.neotech:pipeEnergyBasicSink.name=Energy Insert Pipe
+
+tile.neotech:pipeFluidBasicSource.name=Fluid Extract Pipe
+tile.neotech:pipeFluidBasicSink.name=Fluid Insert Pipe
 
 tile.neotech:oreCopper.name=Copper Ore
 tile.neotech:oreTin.name=Tin Ore

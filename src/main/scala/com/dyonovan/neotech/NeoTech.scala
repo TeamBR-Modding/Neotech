@@ -48,7 +48,7 @@ object NeoTech {
     }
 
     val tabPipes = new CreativeTabs("tabNeoTechPipes") {
-        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemBasicSource)
+        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemSource)
     }
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
