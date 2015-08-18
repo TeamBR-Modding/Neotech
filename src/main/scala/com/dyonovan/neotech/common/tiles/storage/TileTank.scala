@@ -20,14 +20,25 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 16, 2015
  */
-class TileTank(tier: Int) extends TileEntity with IFluidHandler with UpdatingTile {
+class TileTank extends TileEntity with IFluidHandler with UpdatingTile {
 
-    def this() = this(1)
+    var tier = 0
 
-    val tank = new FluidTank(getTierInfo(tier)._2)
+    def this(t: Int) = {
+        this()
+        tier = t
+        initTank()
+    }
+
+    var tank: FluidTank = _
+
+    def initTank(): Unit = {
+        tank = new FluidTank(getTierInfo(tier)._2)
+        if (worldObj != null) worldObj.markBlockForUpdate(pos)
+    }
 
     override def onServerTick() : Unit = {
-        if(tank.getFluid != null && worldObj.getWorldTime % 20 == 0) {
+        if(tank != null && tank.getFluid != null && worldObj.getWorldTime % 20 == 0) {
             worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
                 case otherTank: IFluidHandler =>
                     if (otherTank.canFill(EnumFacing.UP, tank.getFluid.getFluid)) {
@@ -85,7 +96,7 @@ class TileTank(tier: Int) extends TileEntity with IFluidHandler with UpdatingTil
 
     override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = {
         val fluidAmount = tank.drain(maxDrain, false)
-        if (fluidAmount != null && doDrain) {
+        if (fluidAmount != null && doDrain && tier != 4) {
             tank.drain(maxDrain, true)
             worldObj.markBlockForUpdate(pos)
         }
@@ -122,13 +133,19 @@ class TileTank(tier: Int) extends TileEntity with IFluidHandler with UpdatingTil
 
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super.writeToNBT(tag)
-        tank.writeToNBT(tag)
+        if (tank != null)
+            tank.writeToNBT(tag)
+        tag.setInteger("Tier", tier)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super.readFromNBT(tag)
-        tank.readFromNBT(tag)
-        if (worldObj != null)
-            worldObj.markBlockRangeForRenderUpdate(pos, pos)
+        if (tag.hasKey("Tier")) {
+            tier = tag.getInteger("Tier")
+            initTank()
+            tank.readFromNBT(tag)
+            if (worldObj != null)
+                worldObj.markBlockRangeForRenderUpdate(pos, pos)
+        }
     }
 }
