@@ -5,7 +5,7 @@ import com.dyonovan.neotech.collections.DummyState
 import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.BlockManager
-import com.dyonovan.neotech.notification.{Notification, NotificationHelper}
+import com.teambr.bookshelf.notification.{NotificationHelper, Notification}
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState

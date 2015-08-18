@@ -36,7 +36,7 @@ object CrusherRecipeRegistry {
         if (!loadFromFile)
             generateDefaults()
         else
-            LogHelper.info("Block Values loaded successfully")
+            LogHelper.info("Crusher Recipes loaded successfully")
     }
 
     /**
@@ -44,7 +44,7 @@ object CrusherRecipeRegistry {
      * @return True if successful
      */
     def loadFromFile(): Boolean = {
-        LogHelper.info("Loading Block Values...")
+        LogHelper.info("Loading Crusher Recipes...")
         crusherRecipes = JsonUtils.readFromJson[util.ArrayList[CrusherRecipes]](new TypeToken[util.ArrayList[CrusherRecipes]]() {
         }, NeoTech.configFolderLocation + File.separator + "Registries" + File.separator + "crusherRecipes.json")
         if (crusherRecipes == null)
