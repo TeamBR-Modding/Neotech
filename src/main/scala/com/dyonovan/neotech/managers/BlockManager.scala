@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
+import com.dyonovan.neotech.common.blocks.misc.BlockCrafter
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage.{ItemBlockTank, BlockTank, ItemBlockRFStorage, BlockRFStorage}
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
+import com.dyonovan.neotech.common.tiles.misc.TileCrafter
 import com.dyonovan.neotech.common.tiles.storage.{TileTank, TileRFStorage}
 import com.dyonovan.neotech.pipes.blocks.BlockPipe
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergySinkPipe, EnergyExtractionPipe}
@@ -66,6 +68,9 @@ object BlockManager {
     val diamondTank = new BlockTank("diamondTank", 3)
     val creativeTank = new BlockTank("creativeTank", 4)
 
+    //Misc
+    val blockCrafter = new BlockCrafter("blockCrafter", classOf[TileCrafter])
+
     def preInit(): Unit = {
         //Machines
         registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace], powerAcceptor = true)
@@ -102,6 +107,9 @@ object BlockManager {
         registerBlock(goldTank, "goldTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
         registerBlock(diamondTank, "diamondTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
         registerBlock(creativeTank, "creativeTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
+
+        //misc
+        registerBlock(blockCrafter, "blockCrafter", classOf[TileCrafter])
     }
 
     /**

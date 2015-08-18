@@ -33,6 +33,9 @@ tile.neotech:goldTank.name=Gold Fluid Tank
 tile.neotech:diamondTank.name=Diamond Fluid Tank
 tile.neotech:creativeTank.name=Creative Fluid Tank
 
+tile.neotech:blockCrafter.name=Duel Crafter
+neotech.container.crafter=Duel Crafter
+
 inventory.furnace.title=Electric Furnace
 inventory.crusher.title=Electric Crusher
 inventory.furnacegenerator.title=Furnace Generator

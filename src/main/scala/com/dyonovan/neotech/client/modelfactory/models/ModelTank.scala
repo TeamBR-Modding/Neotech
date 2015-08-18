@@ -36,18 +36,6 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
     var renderFluid: Fluid = null
     var isItem: Boolean = _
 
-    /*def this(state: DummyState) {
-        this()
-        if(state.blockAccess.getTileEntity(state.pos) != null) {
-            fluidHeight = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getFluidLevelScaled
-            renderFluid = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getCurrentFluid
-            topIcon = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getTierIcon
-        }
-        if (topIcon == null)
-            topIcon = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
-        isItem = false
-    }*/
-
     def this(renderHeight: Float, fluid: Fluid, icon: TextureAtlasSprite) {
         this()
         this.fluidHeight = renderHeight
