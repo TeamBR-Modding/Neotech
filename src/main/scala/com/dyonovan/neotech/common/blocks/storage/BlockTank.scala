@@ -4,6 +4,8 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.collections.DummyState
 import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.BlockManager
+import com.dyonovan.neotech.notification.{Notification, NotificationHelper}
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -39,8 +41,8 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing,
                                   hitX: Float, hitY: Float, hitZ: Float): Boolean = {
         val heldItem = player.getHeldItem
+        val tank = world.getTileEntity(pos).asInstanceOf[TileTank]
         if (heldItem != null && FluidContainerRegistry.isContainer(heldItem)) {
-            val tank = world.getTileEntity(pos).asInstanceOf[TileTank]
             val fluid = FluidContainerRegistry.getFluidForFilledItem(heldItem)
             if (fluid != null) {
                 val amount = tank.fill(EnumFacing.UP, fluid, doFill = false)
@@ -74,6 +76,19 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
                     }
                 }
             }
+        } else if (world.isRemote && tank != null) {
+            var fluidName: String = ""
+            var fluidAmount: String = ""
+            if (tank.getCurrentFluid != null) {
+                fluidName = tank.getCurrentFluid.getLocalizedName()
+                fluidAmount = tank.tank.getFluid.amount.toString + " / " + tank.tank.getCapacity + " mb"
+            } else {
+                fluidName = "Empty"
+                fluidAmount = "0 / " + tank.tank.getCapacity + " mb"
+            }
+
+            val notify = new Notification(new ItemStack(Item.getItemFromBlock(BlockManager.ironTank)), fluidName, fluidAmount)
+            NotificationHelper.addNotification(notify)
         }
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
         true
