@@ -36,6 +36,7 @@ object ModelFactory {
     }
 
     var STRUCTURE_PIPE : TextureAtlasSprite = null
+    var STRUCTURE_PIPE_BASIC_SPEED : TextureAtlasSprite = null
 
     var BASIC_ITEM_SOURCE : TextureAtlasSprite = null
     var BASIC_ITEM_SOURCE_EXTRAS : TextureAtlasSprite = null
@@ -85,6 +86,7 @@ class ModelFactory {
 
         //Pipes
         ModelFactory.STRUCTURE_PIPE = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/structurePipe"))
+        ModelFactory.STRUCTURE_PIPE_BASIC_SPEED = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/structureBasicSpeed"))
 
         ModelFactory.BASIC_ITEM_SOURCE = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/basicItemSource"))
         ModelFactory.BASIC_ITEM_SOURCE_EXTRAS = event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/basicItemSourceExtras"))

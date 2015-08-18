@@ -107,5 +107,8 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: Simple
     @SideOnly(Side.CLIENT)
     override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
 
+    override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
+        layer == EnumWorldBlockLayer.TRANSLUCENT
+
     override def createNewTileEntity(worldIn : World, meta : Int) : TileEntity = tileClass.newInstance()
 }

@@ -12,10 +12,10 @@ import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.renderer.block.model._
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.resources.model.{ ModelRotation, IBakedModel }
+import net.minecraft.client.resources.model.{IBakedModel, ModelRotation}
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.client.model.{ ISmartBlockModel, ISmartItemModel }
+import net.minecraftforge.client.model.{ISmartBlockModel, ISmartItemModel}
 
 /**
  * This file was created for NeoTech
@@ -87,7 +87,7 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
             }
         } else { //Is an item
             drawPipeConnection(ModelRotation.X270_Y0, list)
-            drawPipeConnection(ModelRotation.X90_Y0, list)
+           // drawPipeConnection(ModelRotation.X90_Y0, list)
             if(getExtraTexture != null)
                 drawPipeExtras(ModelRotation.X270_Y0, list)
         }
@@ -129,6 +129,8 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
 
     override def getTexture : TextureAtlasSprite =  {
         blockPipe match {
+            case BlockManager.pipeBasicSpeedStructure =>
+                ModelFactory.STRUCTURE_PIPE_BASIC_SPEED
             case BlockManager.pipeItemSource =>
                 ModelFactory.BASIC_ITEM_SOURCE
             case BlockManager.pipeItemSink =>

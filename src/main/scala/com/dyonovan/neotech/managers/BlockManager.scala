@@ -43,6 +43,7 @@ object BlockManager {
 
     //Pipes
     val pipeBasicStructure = new BlockPipe("pipeStructure", Material.rock, classOf[StructurePipe])
+    val pipeBasicSpeedStructure = new BlockPipe("pipeBasicSpeedStructure", Material.rock, classOf[StructurePipe])
     
     val pipeItemSource = new BlockPipe("pipeItemBasicSource", Material.rock, classOf[ItemExtractionPipe])
     val pipeItemSink = new BlockPipe("pipeItemBasicSink", Material.rock, classOf[ItemSinkPipe])
@@ -79,6 +80,7 @@ object BlockManager {
 
         //Pipes
         registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe])
+        registerBlock(pipeBasicSpeedStructure, "pipeBasicSpeedStructure", classOf[StructurePipe])
 
         registerBlock(pipeItemSource, "pipeItemBasicSource", classOf[ItemExtractionPipe])
         registerBlock(pipeItemSink, "pipeItemBasicSink", classOf[ItemSinkPipe])
