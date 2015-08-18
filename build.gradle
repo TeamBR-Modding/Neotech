@@ -98,8 +98,15 @@ task devJar(type: Jar, dependsOn: 'classes') {
     extension = 'jar'
     classifier = 'dev'
 }
+
+task sourceJar(type: Jar, dependsOn: "sourceMainScala") {
+    from 'build/sources/scala'
+    classifier = 'sources'
+}
+
 artifacts {
     archives devJar
+    archives sourceJar
 }
 
 
