@@ -42,10 +42,10 @@ trait CoreStates extends Block {
 
     /**
      * Used to tell the actual state in world
-     * @param state
-     * @param worldIn
-     * @param pos
-     * @return
+     * @param state The state that is currently in
+     * @param worldIn The world
+     * @param pos The position
+     * @return The new state, with relevant info added
      */
     override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
         worldIn.getTileEntity(pos) match {
