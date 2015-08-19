@@ -74,4 +74,18 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
             resource.findPathToDestination()
         }
     }
+
+    def pingAmountNeeded() : Int = {
+        //Try and insert the energy
+        for(dir <- EnumFacing.values()) {
+            worldObj.getTileEntity(pos.offset(dir)) match {
+                case receiver : IEnergyReceiver =>
+                    val requested = receiver.receiveEnergy(dir.getOpposite, receiver.getEnergyStored(dir.getOpposite), true)
+                    if(requested > 0)
+                        return requested
+                case _ =>
+            }
+        }
+        -1
+    }
 }
