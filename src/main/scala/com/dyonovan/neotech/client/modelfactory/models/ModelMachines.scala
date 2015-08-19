@@ -103,7 +103,7 @@ class ModelMachines extends ISmartBlockModel with ISmartItemModel {
     }
 
     override def handleBlockState(state: IBlockState): IBakedModel = {
-        new ModelMachines(state.getValue(PropertyRotation.FOUR_WAY.getProperty).asInstanceOf[EnumFacing],
+        new ModelMachines(state.getValue(PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing],
             state.getValue(state.getBlock.asInstanceOf[CoreStates].PROPERTY_ACTIVE).asInstanceOf[Boolean], state.getBlock)
     }
 

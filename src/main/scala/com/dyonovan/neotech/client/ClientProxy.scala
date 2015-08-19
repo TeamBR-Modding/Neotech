@@ -35,13 +35,13 @@ class ClientProxy extends CommonProxy {
      */
     override def preInit() = {
         ModelLoader.setCustomStateMapper(BlockManager.electricFurnace,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore
+            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY).addPropertiesToIgnore
                     (BlockManager.electricFurnace.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
         ModelLoader.setCustomStateMapper(BlockManager.electricCrusher,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore
+            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY).addPropertiesToIgnore
                     (BlockManager.furnaceGenerator.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
         ModelLoader.setCustomStateMapper(BlockManager.furnaceGenerator,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY.getProperty).addPropertiesToIgnore
+            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY).addPropertiesToIgnore
                     (BlockManager.furnaceGenerator.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[ItemExtractionPipe], new ExtractionPipeRenderer[ItemStack, ItemResourceEntity, ItemExtractionPipe])
