@@ -80,7 +80,6 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
         if (didWork) {
             worldObj.markBlockForUpdate(pos)
         }
-
     }
 
     private def cook(): Boolean = {

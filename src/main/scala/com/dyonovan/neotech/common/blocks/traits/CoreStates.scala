@@ -40,6 +40,21 @@ trait CoreStates extends Block {
         new BlockState(this, PropertyRotation.FOUR_WAY, PROPERTY_ACTIVE)
     }
 
+    /**
+     * Used to tell the actual state in world
+     * @param state
+     * @param worldIn
+     * @param pos
+     * @return
+     */
+    override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
+        worldIn.getTileEntity(pos) match {
+            case tile : AbstractMachine =>
+                state.withProperty(PROPERTY_ACTIVE, tile.values.burnTime > 0)
+            case _ => state
+        }
+    }
+
     override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
         world.getTileEntity(pos) match {
             case core : AbstractMachine =>
