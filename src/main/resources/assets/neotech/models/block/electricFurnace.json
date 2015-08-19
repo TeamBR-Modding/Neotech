@@ -3,7 +3,7 @@
     "textures": {
         "top": "neotech:blocks/machine_side",
         "front": "neotech:blocks/electricFurnace_front",
-        "side": "neotech:blocks/machine_side"
-		"active" "neotech:blocks/electricFurnaceActive_front"
+        "side": "neotech:blocks/machine_side",
+		"active" : "neotech:blocks/electricFurnaceActive_front"
     }
 }

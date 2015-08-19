@@ -108,12 +108,12 @@ class ModelFactory {
     def bakeModels(event: ModelBakeEvent): Unit = {
         val itemModelMesher = Minecraft.getMinecraft.getRenderItem.getItemModelMesher
 
-       event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricFurnace", "normal"),
+    /*   event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricFurnace", "normal"),
             new ModelMachines())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricFurnace", "inventory"),
             new ModelMachines())
         itemModelMesher.register(Item.getItemFromBlock(BlockManager.electricFurnace), 0, new ModelResourceLocation(Reference.MOD_ID +
-                ":" + "electricFurnace", "inventory"))
+                ":" + "electricFurnace", "inventory"))*/
 
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricCrusher", "normal"),
             new ModelMachines())
