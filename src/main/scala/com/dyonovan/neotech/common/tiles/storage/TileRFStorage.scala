@@ -1,7 +1,11 @@
 package com.dyonovan.neotech.common.tiles.storage
 
 import cofh.api.energy.{EnergyStorage, IEnergyHandler, IEnergyReceiver}
+import com.teambr.bookshelf.api.waila.Waila
+import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import mcp.mobius.waila.api.ITaggedList
+import mcp.mobius.waila.api.ITaggedList.ITipList
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
@@ -16,7 +20,7 @@ import net.minecraft.util.EnumFacing
  * @author Dyonovan
  * @since August 15, 2015
  */
-class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile {
+class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile with Waila {
 
     var tier = 0
 
@@ -119,4 +123,14 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile {
     }
 
     override def canConnectEnergy(from: EnumFacing): Boolean = true
+
+    override def returnWailaBody(tipList: ITaggedList.ITipList): ITipList = {
+        var color = ""
+        if (getEnergyStored(null) > 0)
+            color = GuiColor.GREEN.toString
+        else
+            color = GuiColor.RED.toString
+        tipList.add(color + getEnergyStored(null) + "/" + getMaxEnergyStored(null) + " RF")
+        tipList
+    }
 }
