@@ -1,7 +1,11 @@
 package com.dyonovan.neotech.common.tiles.storage
 
 import com.dyonovan.neotech.common.blocks.storage.BlockTank
+import com.teambr.bookshelf.api.waila.Waila
+import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import mcp.mobius.waila.api.ITaggedList
+import mcp.mobius.waila.api.ITaggedList.ITipList
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.nbt.NBTTagCompound
@@ -20,7 +24,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 16, 2015
  */
-class TileTank extends TileEntity with IFluidHandler with UpdatingTile {
+class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Waila {
 
     var tier = 0
 
@@ -147,5 +151,20 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile {
             if (worldObj != null)
                 worldObj.markBlockRangeForRenderUpdate(pos, pos)
         }
+    }
+
+    override def returnWailaBody(tipList: ITaggedList.ITipList): ITipList = {
+        var fluidName = ""
+        var fluidAmount = ""
+        if (tank.getFluid != null) {
+            fluidName = GuiColor.WHITE + tank.getFluid.getLocalizedName
+            fluidAmount = GuiColor.ORANGE + tank.getFluidAmount.toString + " / " + tank.getCapacity + " mb"
+        } else {
+            fluidName = GuiColor.GRAY + "Empty"
+            fluidAmount = GuiColor.RED + "0 / " + tank.getCapacity + " mb"
+        }
+        tipList.add(GuiColor.WHITE + "Fluid: " + fluidName)
+        tipList.add(fluidAmount)
+        tipList
     }
 }

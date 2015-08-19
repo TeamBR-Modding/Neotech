@@ -48,12 +48,20 @@ public class CraftingRecipeManager {
         //Advanced RF Storage
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage()), 1, 16), "ABA",
                 "DCD", "ABA", 'A', Items.gold_ingot, 'B', Blocks.iron_bars, 'C',
-                        BlockManager.basicRFStorage(), 'D', Items.comparator);
+                BlockManager.basicRFStorage(), 'D', Items.comparator);
 
         //Elite RF Storage
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage()), 1, 16), "ABA",
                 "DCD", "ABA", 'A', Items.diamond, 'B', Blocks.iron_bars, 'C',
                         BlockManager.advancedRFStorage(), 'D', Items.comparator);
+
+        //Tanks
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.ironTank()), 1, 16),
+                "ABA", "BCB", "ABA", 'A', Items.iron_ingot, 'B', "blockGlass", 'C', Items.bucket));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.goldTank()), 1, 16),
+                "ABA", "BCB", "ABA", 'A', Items.gold_ingot, 'B', "blockGlass", 'C', BlockManager.ironTank()));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.diamondTank()), 1, 16),
+                "ABA", "BCB", "ABA", 'A', Items.diamond, 'B', "blockGlass", 'C', BlockManager.goldTank()));
 
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);

@@ -21,7 +21,9 @@ object OnCraftedEvent {
     def onCrafted(event: PlayerEvent.ItemCraftedEvent): Unit = {
         if(event.craftMatrix.getStackInSlot(4) != null && event.craftMatrix.getStackInSlot(4).hasTagCompound) {
             if(event.crafting.getItem == Item.getItemFromBlock(BlockManager.advancedRFStorage) ||
-                    event.crafting.getItem == Item.getItemFromBlock(BlockManager.eliteRFStorage)) {
+                    event.crafting.getItem == Item.getItemFromBlock(BlockManager.eliteRFStorage) ||
+                    event.crafting.getItem == Item.getItemFromBlock(BlockManager.goldTank) ||
+                    event.crafting.getItem == Item.getItemFromBlock(BlockManager.diamondTank)) {
                 val tag = event.craftMatrix.getStackInSlot(4).getTagCompound
                 event.crafting.setTagCompound(tag)
             }
