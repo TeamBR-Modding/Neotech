@@ -73,8 +73,8 @@ class ModelFactory {
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/machine_side"))
 
         //Furnace
-        event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricFurnace_front"))
-        event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricFurnaceActive_front"))
+      //  event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricFurnace_front"))
+      //  event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricFurnaceActive_front"))
 
         //Crusher
         event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricCrusher_front"))
@@ -108,7 +108,7 @@ class ModelFactory {
     def bakeModels(event: ModelBakeEvent): Unit = {
         val itemModelMesher = Minecraft.getMinecraft.getRenderItem.getItemModelMesher
 
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricFurnace", "normal"),
+       event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricFurnace", "normal"),
             new ModelMachines())
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricFurnace", "inventory"),
             new ModelMachines())

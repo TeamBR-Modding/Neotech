@@ -23,6 +23,7 @@ object ItemRenderManager {
         registerItem(ItemManager.dustTin)
         registerItem(ItemManager.ingotCopper)
         registerItem(ItemManager.ingotTin)
+        registerItem(Item.getItemFromBlock(BlockManager.electricFurnace))
         registerItem(Item.getItemFromBlock(BlockManager.blockCopper))
         registerItem(Item.getItemFromBlock(BlockManager.blockTin))
         registerItem(Item.getItemFromBlock(BlockManager.oreCopper))

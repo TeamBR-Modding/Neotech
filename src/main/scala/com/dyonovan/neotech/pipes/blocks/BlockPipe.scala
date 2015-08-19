@@ -95,6 +95,11 @@ class BlockPipe(val name : String, mat : Material, tileClass : Class[_ <: Simple
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
 
+    //TODO: Implement Colored networks
+   /* override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
+        0xFFFFFF
+    }*/
+
     override def getRenderType : Int = 3
 
     override def isOpaqueCube : Boolean = false
