@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  */
 trait CoreStates extends Block {
 
-    lazy val PROPERTY_ACTIVE = PropertyBool.create("IsActive")
+    lazy val PROPERTY_ACTIVE = PropertyBool.create("isactive")
 
     /**
      * Called when the block is placed, we check which way the player is facing and put our value as the opposite of that
@@ -30,7 +30,7 @@ trait CoreStates extends Block {
     override def onBlockPlaced(world : World, blockPos : BlockPos, facing : EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
         val playerFacingDirection = if (placer == null) 0 else MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3
         val enumFacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite
-        this.getDefaultState.withProperty(PropertyRotation.FOUR_WAY, enumFacing)
+        this.getDefaultState.withProperty(PropertyRotation.FOUR_WAY, enumFacing).withProperty(PROPERTY_ACTIVE, false)
     }
 
     /**

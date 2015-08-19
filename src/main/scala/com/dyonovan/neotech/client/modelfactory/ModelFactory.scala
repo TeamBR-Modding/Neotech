@@ -70,7 +70,7 @@ class ModelFactory {
         //been nice enough to give us a little helper event. Thanks Forge!
 
         //Machine Sides
-        event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/machine_side"))
+      //  event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/machine_side"))
 
         //Furnace
       //  event.map.registerSprite(new ResourceLocation(Reference.MOD_ID + ":blocks/electricFurnace_front"))

@@ -2,32 +2,33 @@
   "forge_marker" : 1,
   "defaults" : {
     "textures" : {
-     "front" : "neotech:blocks/electricFurnace_front",
-     "top" : "neotech:blocks/machine_side",
-     "side" : "neotech:blocks/machine_side"
-   },
-   "model" : "neotech:block/electricFurnace",
-   "uvlock" : true
- },
- "variants" : {
-     //Used to tell if we are active
-     "IsActive" : {
-         "true" : {
-             "textures" : {
-                 "front" : "neotech:blocks/electricFurnaceActive_front"
-             }
-         },
-         "false" :  {
-             //Nothing to change
-         }
-     },
-     "facing" : {
-         "north" : {
+      "front" : "neotech:blocks/electricFurnace_front",
+      "top" : "neotech:blocks/machine_side",
+      "side" : "neotech:blocks/machine_side"
+    },
+    "model" : "neotech:electricFurnace",
+    "uvlock" : true
+  },
+  "variants" : {
+      "facing" : {
+          "north" : {
               //Nothing, defaults set us already
           },
-         "south" : { "y" : 180 },
-         "west" : { "y" : 270 },
-         "east" : { "y" : 90 }
-     }
- }
+          "south" : { "y" : 180 },
+          "west" : { "y" : 270 },
+          "east" : { "y" : 90 }
+      },
+    //Used to tell if we are active
+    "isactive" : {
+      "true" : {
+        "textures" : {
+          "front" : "neotech:blocks/electricFurnaceActive_front"
+        }
+      },
+      "false" :  {
+        //Nothing to change
+      }
+    }
+  }
 }
+

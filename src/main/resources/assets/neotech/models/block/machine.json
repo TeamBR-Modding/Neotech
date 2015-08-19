@@ -1,8 +1,8 @@
 {
-    "parent": "neotech:block/machine",
+    "parent": "block/orientable",
     "textures": {
-        "front": "neotech:blocks/electricFurnace_front",
         "top": "neotech:blocks/machine_side",
+        "front": "neotech:blocks/machine_side",
         "side": "neotech:blocks/machine_side"
     }
 }
