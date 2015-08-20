@@ -5,7 +5,7 @@ import com.dyonovan.neotech.common.tiles.AbstractMachine
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntityFurnace
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{EnumParticleTypes, EnumFacing}
 
 /**
  * This file was created for NeoTech
@@ -93,5 +93,10 @@ class TileFurnaceGenerator extends AbstractMachine {
             case 0 => TileEntityFurnace.getItemBurnTime (itemStackIn) > 0
             case _ => false
         }
+    }
+
+    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
+        worldObj.spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0, 0, 0)
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0)
     }
 }

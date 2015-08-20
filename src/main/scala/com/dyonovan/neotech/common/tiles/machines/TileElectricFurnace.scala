@@ -4,6 +4,7 @@ import com.dyonovan.neotech.common.tiles.AbstractMachine
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
+import net.minecraft.util.EnumParticleTypes
 
 /**
  * This file was created for NeoTech
@@ -39,4 +40,9 @@ class TileElectricFurnace extends AbstractMachine {
      * @return int range 0 - 16
      */
     override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
+
+    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
+        worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 0.01, 0.49, 0.72)
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0)
+    }
 }

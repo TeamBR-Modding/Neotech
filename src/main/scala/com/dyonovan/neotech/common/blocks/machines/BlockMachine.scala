@@ -1,13 +1,16 @@
 package com.dyonovan.neotech.common.blocks.machines
 
-import com.dyonovan.neotech.client.gui.machines.{GuiFurnaceGenerator, GuiElectricCrusher, GuiElectricFurnace}
+import java.util.Random
+
+import com.dyonovan.neotech.client.gui.machines.{GuiElectricCrusher, GuiElectricFurnace, GuiFurnaceGenerator}
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.traits.CoreStates
-import com.dyonovan.neotech.common.container.machines.{ContainerFurnaceGenerator, ContainerElectricCrusher, ContainerElectricFurnace}
+import com.dyonovan.neotech.common.container.machines.{ContainerElectricCrusher, ContainerElectricFurnace, ContainerFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.common.tiles.machines.{TileFurnaceGenerator, TileElectricCrusher, TileElectricFurnace}
+import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.Bookshelf
+import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
@@ -38,6 +41,29 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends Bas
             case _ =>
         }
         true
+    }
+
+    @SideOnly(Side.CLIENT)
+    override def randomDisplayTick(world: World, pos: BlockPos, state: IBlockState, rand: Random): Unit = {
+        if (state.getValue(this.PROPERTY_ACTIVE).asInstanceOf[Boolean]) {
+            val enumFacing:EnumFacing = state.getValue(PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing]
+            val d0: Double = pos.getX + 0.5
+            val d1: Double = pos.getY + rand.nextDouble() * 6.0D / 16.0D
+            val d2: Double = pos.getZ + 0.5D
+            val d3: Double = 0.52D
+            val d4: Double = rand.nextDouble() * 0.6D - 0.3D
+
+            val machine = world.getTileEntity(pos)
+            if (machine != null && machine.isInstanceOf[AbstractMachine]) {
+                enumFacing match {
+                    case EnumFacing.WEST => machine.asInstanceOf[AbstractMachine].spawnActiveParticles(d0 - d3, d1, d2 + d4)
+                    case EnumFacing.EAST => machine.asInstanceOf[AbstractMachine].spawnActiveParticles(d0 + d3, d1, d2 + d4)
+                    case EnumFacing.NORTH => machine.asInstanceOf[AbstractMachine].spawnActiveParticles(d0 + d4, d1, d2 - d3)
+                    case EnumFacing.SOUTH => machine.asInstanceOf[AbstractMachine].spawnActiveParticles(d0 + d4, d1, d2 + d3)
+                    case _ =>
+                }
+            }
+        }
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {

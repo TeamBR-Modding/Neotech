@@ -4,7 +4,7 @@ import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.registries.CrusherRecipeRegistry
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{EnumParticleTypes, EnumFacing}
 
 import scala.util.Random
 
@@ -98,4 +98,9 @@ class TileElectricCrusher extends AbstractMachine {
     }
 
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
+
+    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
+    }
 }

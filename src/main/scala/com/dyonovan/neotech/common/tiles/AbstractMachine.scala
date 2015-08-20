@@ -27,6 +27,8 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
     val values = new StandardValues
     val energy = new EnergyStorage(10000)
 
+    def spawnActiveParticles(x: Double, y: Double, z: Double)
+
     /**
      * Get the output of the recipe
      * @param stack The input
