@@ -66,6 +66,8 @@ object CrusherRecipeRegistry {
     def generateDefaults(): Unit = {
         LogHelper.info("Json not found. Creating Dynamic Crusher Recipe List...")
 
+        crusherRecipes.add(new CrusherRecipes("oreRedstone",
+            getItemStackString(new ItemStack(Items.redstone)), 6, getItemStackString(new ItemStack(Items.redstone))))
         crusherRecipes.add(new CrusherRecipes("oreLapis",
             getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))
         crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.blaze_rod)),
@@ -99,24 +101,15 @@ object CrusherRecipeRegistry {
             if (i.startsWith("dust")) {
                 val oreList = OreDictionary.getOres(i.replaceFirst("dust", "ore"))
                 if (!oreList.isEmpty) {
-                    i.replaceFirst("dust", "ore") match {
-                        case "oreRedstone" =>
-                            crusherRecipes.add(new CrusherRecipes("oreRedstone",
-                                getItemStackString(new ItemStack(Items.redstone)), 6, getItemStackString(new ItemStack(Items.redstone))))
-                        /*case "oreLapis" =>
-                            crusherRecipes.add(new CrusherRecipes("oreLapis",
-                                getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))*/
-                        case _ =>
-                            val itemList = OreDictionary.getOres(i)
-                            if (itemList.size() > 0 && !doesExist(i.replaceFirst("dust", "ore")))
-                                crusherRecipes.add(new CrusherRecipes(i.replaceFirst("dust", "ore"),
-                                    getItemStackString(new ItemStack(itemList.get(0).getItem, 1, itemList.get(0).getItemDamage)),
-                                    2, ""))
-                    }
+                    val itemList = OreDictionary.getOres(i)
+                    if (itemList.size() > 0 && !doesExist(i.replaceFirst("dust", "ore")))
+                        crusherRecipes.add(new CrusherRecipes(i.replaceFirst("dust", "ore"),
+                            getItemStackString(new ItemStack(itemList.get(0).getItem, 1,
+                                itemList.get(0).getItemDamage)), 2, ""))
                 }
             } else if (i.startsWith("ingot")) {
                 val oreList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
-                if (!oreList.isEmpty) {
+                if (!oreList.isEmpty && !doesExist(i.replaceFirst("ingot", "dust"))) {
                     val itemList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
                     if (itemList.size() > 0) {
                         crusherRecipes.add(new CrusherRecipes(i, getItemStackString(
@@ -239,4 +232,5 @@ object CrusherRecipeRegistry {
         var output = o
         var secondary = s
     }
+
 }
