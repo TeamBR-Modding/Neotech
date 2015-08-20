@@ -69,7 +69,8 @@ public class CraftingRecipeManager {
                 "AAA", "BBB", "AAA", 'A', Items.iron_ingot, 'B', "blockGlass"));
         //Acceleration
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicSpeedStructure())),
-                "CAC", "ABA", "CAC", 'A', "ingotCopper", 'B', BlockManager.pipeBasicStructure(), 'C', Items.glowstone_dust));
+                "CAC", "ABA", "CAC", 'A', "ingotBronze", 'B', BlockManager.pipeBasicStructure(), 'C', Items
+                .glowstone_dust));
         //Power
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergySource())),
                 " C ", "BAB", "   ", 'A', BlockManager.basicRFStorage(), 'B', Blocks.sticky_piston, 'C',
@@ -77,7 +78,6 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergySink())),
                 "   ", "BAB", " C ", 'A', BlockManager.basicRFStorage(), 'B', Blocks.piston, 'C',
                 BlockManager.pipeBasicStructure());
-
         //Item
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeItemSource())),
                 " C ", "BAB", "   ", 'A', Blocks.chest, 'B', Blocks.sticky_piston, 'C',
@@ -85,14 +85,20 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeItemSink())),
                 "   ", "BAB", " C ", 'A', Blocks.chest, 'B', Blocks.piston, 'C',
                 BlockManager.pipeBasicStructure());
-
         //Liquid
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeFluidSource())),
-                " C ", "BAB", "   ", 'A', BlockManager.ironTank(), 'B', Blocks.sticky_piston, 'C',
+                " C ", "BAB", 'A', BlockManager.ironTank(), 'B', Blocks.sticky_piston, 'C',
                 BlockManager.pipeBasicStructure());
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeFluidSink())),
-                "   ", "BAB", " C ", 'A', BlockManager.ironTank(), 'B', Blocks.piston, 'C',
+                "BAB", " C ", 'A', BlockManager.ironTank(), 'B', Blocks.piston, 'C',
                 BlockManager.pipeBasicStructure());
+        //Crafter
+        GameRegistry.addRecipe(new ItemStack(BlockManager.blockCrafter()), "ABA", 'A', Blocks.crafting_table,
+                'B', Blocks.chest);
+
+        //Bronze Dust
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.dustBronze()), "AA", "AB",
+                'A', "dustCopper", 'B', "dustTin"));
 
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
@@ -101,6 +107,6 @@ public class CraftingRecipeManager {
         GameRegistry.addSmelting(ItemManager.dustTin(), new ItemStack(ItemManager.ingotTin()), 2.0F);
         GameRegistry.addSmelting(BlockManager.oreCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
         GameRegistry.addSmelting(BlockManager.oreTin(), new ItemStack(ItemManager.ingotTin()), 1.0F);
-
+        GameRegistry.addSmelting(ItemManager.dustBronze(), new ItemStack(ItemManager.ingotBronze()), 2.0F);
     }
 }

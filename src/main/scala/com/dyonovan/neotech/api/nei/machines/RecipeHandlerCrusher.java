@@ -2,9 +2,9 @@ package com.dyonovan.neotech.api.nei.machines;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.dyonovan.neotech.client.gui.machines.GuiElectricCrusher;
-import com.dyonovan.neotech.collections.CrusherRecipes;
 import com.dyonovan.neotech.lib.Reference;
 import com.dyonovan.neotech.registries.CrusherRecipeRegistry;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -37,8 +37,8 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
         public PositionedStack output; //The output stack
 
         public CrushingPair(ItemStack input, ItemStack output) {
-            this.input = new PositionedStack(input, 51, 24);
-            this.output = new PositionedStack(output, 110, 24);
+            this.input = new PositionedStack(input, 37, 25);
+            this.output = new PositionedStack(output, 101, 25);
         }
 
         @Override
@@ -57,8 +57,13 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
      */
     @Override
     public void drawExtras(int recipe) {
-        this.drawProgressBar(74, 23, 176, 14, 24, 16, 48, 0);
-        this.drawProgressBar(17, 12, 176, 32, 12, 44, 48, 7);
+        this.drawProgressBar(64, 25, 176, 14, 24, 16, 48, 0);
+        this.drawProgressBar(10, 9, 176, 32, 12, 44, 48, 7);
+    }
+
+    @Override
+    public List<String> handleTooltip(GuiRecipe gui, List<String> currenttip, int recipe) {
+        return currenttip;
     }
 
     /**
@@ -66,7 +71,7 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
      */
     @Override
     public String getGuiTexture() {
-        return Reference.MOD_ID() + ":textures/gui/nei/furnace.png";
+        return Reference.MOD_ID() + ":textures/gui/nei/crusher.png";
     }
 
     /**

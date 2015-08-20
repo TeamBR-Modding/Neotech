@@ -23,19 +23,23 @@ object ItemManager {
     val dustIron = new BaseItem("dustIron", 64)
     val dustCopper = new BaseItem("dustCopper", 64)
     val dustTin = new BaseItem("dustTin", 64)
+    val dustBronze = new BaseItem("dustBronze", 64)
 
     //Ingots
     val ingotCopper = new BaseItem("ingotCopper", 64)
     val ingotTin = new BaseItem("ingotTin", 64)
+    val ingotBronze = new BaseItem("ingotBronze", 64)
 
     def preInit(): Unit = {
         registerItem(dustGold, "dustGold", "dustGold")
         registerItem(dustIron, "dustIron", "dustIron")
         registerItem(dustCopper, "dustCopper", "dustCopper")
         registerItem(dustTin, "dustTin", "dustTin")
+        registerItem(dustBronze, "dustBronze", "dustBronze")
 
         registerItem(ingotCopper, "ingotCopper", "ingotCopper")
         registerItem(ingotTin, "ingotTin", "ingotTin")
+        registerItem(ingotBronze, "ingotBronze", "ingotBronze")
     }
     /**
      * Helper method to register items

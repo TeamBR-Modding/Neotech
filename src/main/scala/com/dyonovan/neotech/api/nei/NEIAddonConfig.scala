@@ -1,9 +1,10 @@
 package com.dyonovan.neotech.api.nei
 
 import codechicken.nei.api.{API, IConfigureNEI}
-import codechicken.nei.recipe.TemplateRecipeHandler
+import codechicken.nei.recipe.{RecipeInfo, TemplateRecipeHandler}
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.api.nei.machines.{RecipeHandlerCrusher, RecipeHandlerFurnace}
+import com.dyonovan.neotech.client.gui.machines.GuiElectricCrusher
 import com.dyonovan.neotech.lib.Reference
 import net.minecraft.util.StatCollector
 
@@ -23,6 +24,8 @@ class NEIAddonConfig extends IConfigureNEI {
         registerHandler(new RecipeHandlerFurnace)
         registerHandler(new RecipeHandlerCrusher)
 
+        RecipeInfo.setGuiOffset(classOf[GuiElectricCrusher], -10, 8)
+
         NeoTech.nei = new NEICallback
     }
 
@@ -38,4 +41,6 @@ class NEIAddonConfig extends IConfigureNEI {
         API.registerRecipeHandler(handler)
         API.registerUsageHandler(handler)
     }
+
+
 }
