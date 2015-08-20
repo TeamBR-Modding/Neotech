@@ -6,6 +6,7 @@ import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.{EnumParticleTypes, EnumFacing}
+import net.minecraftforge.fluids.FluidContainerRegistry
 
 /**
  * This file was created for NeoTech
@@ -85,7 +86,7 @@ class TileFurnaceGenerator extends AbstractMachine {
     }
 
     override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = {
-        TileEntityFurnace.getItemBurnTime(stack) > 0
+        TileEntityFurnace.getItemBurnTime(stack) > 0 && !FluidContainerRegistry.isContainer(stack)
     }
 
     override def canInsertItem(index: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
