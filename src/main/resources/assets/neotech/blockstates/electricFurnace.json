@@ -2,18 +2,14 @@
   "forge_marker" : 1,
   "defaults" : {
     "textures" : {
-      "front" : "neotech:blocks/electricFurnace_front",
-      "top" : "neotech:blocks/machine_side",
-      "side" : "neotech:blocks/machine_side"
+      "front" : "neotech:blocks/electricFurnace_front"
     },
     "model" : "neotech:machine",
     "uvlock" : true
   },
   "variants" : {
       "facing" : {
-          "north" : {
-              //Nothing, defaults set us already
-          },
+          "north" : { "y" : 0 },
           "south" : { "y" : 180 },
           "west" : { "y" : 270 },
           "east" : { "y" : 90 }
@@ -25,9 +21,7 @@
           "front" : "neotech:blocks/electricFurnaceActive_front"
         }
       },
-      "false" :  {
-        //Nothing to change
-      }
+      "false" :  {}
     }
   }
 }

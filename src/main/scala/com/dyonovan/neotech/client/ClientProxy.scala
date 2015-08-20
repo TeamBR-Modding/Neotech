@@ -4,16 +4,12 @@ import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.client.renderers.ExtractionPipeRenderer
 import com.dyonovan.neotech.common.CommonProxy
-import com.dyonovan.neotech.common.blocks.traits.CoreStates
-import com.dyonovan.neotech.managers.{BlockManager, ItemRenderManager}
-import com.dyonovan.neotech.pipes.entities.{FluidResourceEntity, EnergyResourceEntity, ItemResourceEntity}
+import com.dyonovan.neotech.managers.ItemRenderManager
+import com.dyonovan.neotech.pipes.entities.{EnergyResourceEntity, FluidResourceEntity, ItemResourceEntity}
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyExtractionPipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidExtractionPipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemExtractionPipe
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import net.minecraft.client.renderer.block.statemap.StateMap.Builder
 import net.minecraft.item.ItemStack
-import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fluids.FluidTank
 import net.minecraftforge.fml.client.registry.ClientRegistry
 
@@ -34,16 +30,6 @@ class ClientProxy extends CommonProxy {
      * This is where you would register blocks and such
      */
     override def preInit() = {
-    /*    ModelLoader.setCustomStateMapper(BlockManager.electricFurnace,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY).addPropertiesToIgnore
-                    (BlockManager.electricFurnace.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())*/
-        ModelLoader.setCustomStateMapper(BlockManager.electricCrusher,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY).addPropertiesToIgnore
-                    (BlockManager.furnaceGenerator.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
-        ModelLoader.setCustomStateMapper(BlockManager.furnaceGenerator,
-            (new Builder).addPropertiesToIgnore(PropertyRotation.FOUR_WAY).addPropertiesToIgnore
-                    (BlockManager.furnaceGenerator.asInstanceOf[CoreStates].PROPERTY_ACTIVE).build())
-
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[ItemExtractionPipe], new ExtractionPipeRenderer[ItemStack, ItemResourceEntity, ItemExtractionPipe])
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[EnergyExtractionPipe], new ExtractionPipeRenderer[EnergyStorage, EnergyResourceEntity, EnergyExtractionPipe])
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[FluidExtractionPipe], new ExtractionPipeRenderer[FluidTank, FluidResourceEntity, FluidExtractionPipe])
