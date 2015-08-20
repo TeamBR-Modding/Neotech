@@ -7,7 +7,7 @@ import com.dyonovan.neotech.common.blocks.storage.{ItemBlockTank, BlockTank, Ite
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.misc.TileCrafter
 import com.dyonovan.neotech.common.tiles.storage.{TileTank, TileRFStorage}
-import com.dyonovan.neotech.pipes.blocks.BlockPipe
+import com.dyonovan.neotech.pipes.blocks.{TestBlockPipe, BlockPipe}
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergySinkPipe, EnergyExtractionPipe}
 import com.dyonovan.neotech.pipes.tiles.fluid.{FluidSinkPipe, FluidExtractionPipe}
 import com.dyonovan.neotech.pipes.tiles.item.{ItemSinkPipe, ItemExtractionPipe}
@@ -44,6 +44,7 @@ object BlockManager {
     val blockTin = new BlockOre("blockTin", 1)
 
     //Pipes
+    val testPipe = new TestBlockPipe("testPipe", Material.glass, classOf[StructurePipe])
     val pipeBasicStructure = new BlockPipe("pipeStructure", Material.rock, classOf[StructurePipe])
     val pipeBasicSpeedStructure = new BlockPipe("pipeBasicSpeedStructure", Material.rock, classOf[StructurePipe])
     
@@ -84,6 +85,7 @@ object BlockManager {
         registerBlock(blockTin, "blockTin", null, "blockTin", powerAcceptor = false)
 
         //Pipes
+        registerBlock(testPipe, "testPipe", classOf[StructurePipe])
         registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe])
         registerBlock(pipeBasicSpeedStructure, "pipeBasicSpeedStructure", classOf[StructurePipe])
 
