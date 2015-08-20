@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.items.BaseItem
+import com.dyonovan.neotech.common.items.{BaseUpgradeItem, BaseItem}
 import net.minecraft.init.Items
 import net.minecraft.item.{ItemStack, Item}
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -30,6 +30,14 @@ object ItemManager {
     val ingotTin = new BaseItem("ingotTin", 64)
     val ingotBronze = new BaseItem("ingotBronze", 64)
 
+    //Upgrade System
+    val upgradeMBEmpty = new BaseUpgradeItem("upgradeMBEmpty", 1, true)
+    val upgradeMBFull = new BaseUpgradeItem("upgradeMBFull", 1, false)
+    val upgradeCapacity = new BaseUpgradeItem("upgradeCapacity", 8, true)
+    val upgradeControl = new BaseUpgradeItem("upgradeControl", 8, true)
+    val upgradeEfficiency = new BaseUpgradeItem("upgradeEfficiency", 8, true)
+    val upgradeSecondary = new BaseUpgradeItem("upgradeSecondary", 8, true)
+
     def preInit(): Unit = {
         registerItem(dustGold, "dustGold", "dustGold")
         registerItem(dustIron, "dustIron", "dustIron")
@@ -40,6 +48,13 @@ object ItemManager {
         registerItem(ingotCopper, "ingotCopper", "ingotCopper")
         registerItem(ingotTin, "ingotTin", "ingotTin")
         registerItem(ingotBronze, "ingotBronze", "ingotBronze")
+
+        registerItem(upgradeMBEmpty, "upgradeMBEmpty")
+        registerItem(upgradeMBFull, "upgradeMBFull")
+        registerItem(upgradeCapacity, "upgradeCapacity")
+        registerItem(upgradeControl, "upgradeControl")
+        registerItem(upgradeEfficiency, "upgradeEfficiency")
+        registerItem(upgradeSecondary, "upgradeSecondary")
     }
     /**
      * Helper method to register items

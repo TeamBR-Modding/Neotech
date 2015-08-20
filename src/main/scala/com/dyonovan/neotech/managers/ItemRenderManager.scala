@@ -37,6 +37,13 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.eliteRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.creativeRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.blockCrafter))
+        registerItem(ItemManager.upgradeMBFull)
+        registerItem(ItemManager.upgradeMBEmpty)
+        registerItem(ItemManager.upgradeCapacity)
+        registerItem(ItemManager.upgradeControl)
+        registerItem(ItemManager.upgradeEfficiency)
+        registerItem(ItemManager.upgradeSecondary)
+
     }
 
     def registerItem(item: Item): Unit = {

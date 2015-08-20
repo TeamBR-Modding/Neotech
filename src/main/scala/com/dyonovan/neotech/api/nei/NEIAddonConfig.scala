@@ -1,11 +1,13 @@
 package com.dyonovan.neotech.api.nei
 
-import codechicken.nei.api.{API, IConfigureNEI}
+import codechicken.nei.api.{ItemInfo, API, IConfigureNEI}
 import codechicken.nei.recipe.{RecipeInfo, TemplateRecipeHandler}
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.api.nei.machines.{RecipeHandlerCrusher, RecipeHandlerFurnace}
 import com.dyonovan.neotech.client.gui.machines.GuiElectricCrusher
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
+import net.minecraft.item.{ItemStack, Item}
 import net.minecraft.util.StatCollector
 
 /**
@@ -25,6 +27,8 @@ class NEIAddonConfig extends IConfigureNEI {
         registerHandler(new RecipeHandlerCrusher)
 
         RecipeInfo.setGuiOffset(classOf[GuiElectricCrusher], -10, 8)
+
+        ItemInfo.hiddenItems.add(new ItemStack(ItemManager.upgradeMBFull))
 
         NeoTech.nei = new NEICallback
     }
