@@ -57,3 +57,4 @@ neotech.nei.name=NeoTech
 neotech.nei.furnacerecipes=Electric Furnace
 neotech.nei.crusherrecipes=Electric Crusher
 inventory.nei.recipes=Recipes
+neotech.nei.ecrusher.outputchance=10% Chance per Upgrade

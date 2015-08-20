@@ -2,6 +2,7 @@ package com.dyonovan.neotech.api.nei.machines;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
+import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.dyonovan.neotech.client.gui.machines.GuiElectricCrusher;
 import com.dyonovan.neotech.lib.Reference;
@@ -39,8 +40,15 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
         public CrushingTrio(ItemStack input, ItemStack output, ItemStack secondary) {
             this.input = new PositionedStack(input, 37, 25);
             this.output = new PositionedStack(output, 101, 25);
-            if (secondary != null)
+            if (secondary != null) {
                 this.secondary = new PositionedStack(secondary, 130, 25);
+            }
+        }
+
+        public boolean getSecondaryChance(ItemStack stack) {
+            if (stack == null) return false;
+            PositionedStack sec = getOtherStack();
+            return sec != null && sec.item.equals(stack);
         }
 
         @Override
@@ -76,6 +84,14 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
     @Override
     public String getGuiTexture() {
         return Reference.MOD_ID() + ":textures/gui/nei/crusher.png";
+    }
+
+    @Override
+    public List<String> handleItemTooltip(GuiRecipe gui, ItemStack stack, List<String> currenttip, int recipe) {
+        CrushingTrio rec = (CrushingTrio) arecipes.get(recipe);
+        if (rec.getSecondaryChance(stack))
+            currenttip.add(StatCollector.translateToLocal("neotech.nei.ecrusher.outputchance"));
+        return currenttip;
     }
 
     /**
