@@ -3,19 +3,19 @@ package com.dyonovan.neotech.managers
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.misc.BlockCrafter
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
-import com.dyonovan.neotech.common.blocks.storage.{ItemBlockTank, BlockTank, ItemBlockRFStorage, BlockRFStorage}
+import com.dyonovan.neotech.common.blocks.storage.{BlockRFStorage, BlockTank, ItemBlockRFStorage, ItemBlockTank}
 import com.dyonovan.neotech.common.tiles.machines.{TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.misc.TileCrafter
-import com.dyonovan.neotech.common.tiles.storage.{TileTank, TileRFStorage}
-import com.dyonovan.neotech.pipes.blocks.{TestBlockPipe, BlockPipe}
-import com.dyonovan.neotech.pipes.tiles.energy.{EnergySinkPipe, EnergyExtractionPipe}
-import com.dyonovan.neotech.pipes.tiles.fluid.{FluidSinkPipe, FluidExtractionPipe}
-import com.dyonovan.neotech.pipes.tiles.item.{ItemSinkPipe, ItemExtractionPipe}
+import com.dyonovan.neotech.common.tiles.storage.{TileRFStorage, TileTank}
+import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockPipe}
+import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
+import com.dyonovan.neotech.pipes.tiles.fluid.{FluidExtractionPipe, FluidSinkPipe}
+import com.dyonovan.neotech.pipes.tiles.item.{ItemExtractionPipe, ItemSinkPipe}
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.dyonovan.neotech.registries.PowerAdvantageRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.item.ItemBlock
+import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -44,18 +44,17 @@ object BlockManager {
     val blockTin = new BlockOre("blockTin", 1)
 
     //Pipes
-    val testPipe = new TestBlockPipe("testPipe", Material.glass, classOf[StructurePipe])
-    val pipeBasicStructure = new BlockPipe("pipeStructure", Material.rock, classOf[StructurePipe])
-    val pipeBasicSpeedStructure = new BlockPipe("pipeBasicSpeedStructure", Material.rock, classOf[StructurePipe])
-    
-    val pipeItemSource = new BlockPipe("pipeItemBasicSource", Material.rock, classOf[ItemExtractionPipe])
-    val pipeItemSink = new BlockPipe("pipeItemBasicSink", Material.rock, classOf[ItemSinkPipe])
+    val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, classOf[StructurePipe])
+    val pipeBasicSpeedStructure = new BlockPipeSpecial("pipeBasicSpeedStructure", Material.rock, classOf[StructurePipe])
 
-    val pipeEnergySource = new BlockPipe("pipeEnergyBasicSource", Material.rock, classOf[EnergyExtractionPipe])
-    val pipeEnergySink = new BlockPipe("pipeEnergyBasicSink", Material.rock, classOf[EnergySinkPipe])
+    val pipeItemSource = new BlockPipeSpecial("pipeItemBasicSource", Material.rock, classOf[ItemExtractionPipe])
+    val pipeItemSink = new BlockPipeSpecial("pipeItemBasicSink", Material.rock, classOf[ItemSinkPipe])
 
-    val pipeFluidSource = new BlockPipe("pipeFluidBasicSource", Material.rock, classOf[FluidExtractionPipe])
-    val pipeFluidSink = new BlockPipe("pipeFluidBasicSink", Material.rock, classOf[FluidSinkPipe])
+    val pipeEnergySource = new BlockPipeSpecial("pipeEnergyBasicSource", Material.rock, classOf[EnergyExtractionPipe])
+    val pipeEnergySink = new BlockPipeSpecial("pipeEnergyBasicSink", Material.rock, classOf[EnergySinkPipe])
+
+    val pipeFluidSource = new BlockPipeSpecial("pipeFluidBasicSource", Material.rock, classOf[FluidExtractionPipe])
+    val pipeFluidSink = new BlockPipeSpecial("pipeFluidBasicSink", Material.rock, classOf[FluidSinkPipe])
 
     //RF Storage
     val basicRFStorage = new BlockRFStorage("basicRFStorage", 1)
@@ -85,8 +84,10 @@ object BlockManager {
         registerBlock(blockTin, "blockTin", null, "blockTin", powerAcceptor = false)
 
         //Pipes
-        registerBlock(testPipe, "testPipe", classOf[StructurePipe])
-        registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe])
+        registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], powerAcceptor = false, classOf[ItemBlockPipe])
+        for(color <- EnumDyeColor.values())
+            OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
+
         registerBlock(pipeBasicSpeedStructure, "pipeBasicSpeedStructure", classOf[StructurePipe])
 
         registerBlock(pipeItemSource, "pipeItemBasicSource", classOf[ItemExtractionPipe])

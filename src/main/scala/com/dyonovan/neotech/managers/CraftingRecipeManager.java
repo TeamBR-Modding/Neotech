@@ -2,10 +2,12 @@ package com.dyonovan.neotech.managers;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  * This file was created for NeoTech
@@ -53,7 +55,7 @@ public class CraftingRecipeManager {
         //Elite RF Storage
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage()), 1, 16), "ABA",
                 "DCD", "ABA", 'A', Items.diamond, 'B', Blocks.iron_bars, 'C',
-                        BlockManager.advancedRFStorage(), 'D', Items.comparator);
+                BlockManager.advancedRFStorage(), 'D', Items.comparator);
 
         //Tanks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.ironTank()), 1, 16),
@@ -67,6 +69,15 @@ public class CraftingRecipeManager {
         //Basic
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 4),
                 "AAA", "BBB", "AAA", 'A', Items.iron_ingot, 'B', "blockGlass"));
+
+        //Colors!!
+        for(EnumDyeColor color : EnumDyeColor.values()) {
+            if(color.ordinal() == 0) //Not white
+                continue;
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 1, color.ordinal()),
+                    "pipeStructure", new ItemStack(Items.dye, 1, color.getDyeDamage())));
+        }
+
         //Acceleration
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicSpeedStructure())),
                 "CAC", "ABA", "CAC", 'A', "ingotBronze", 'B', BlockManager.pipeBasicStructure(), 'C', Items

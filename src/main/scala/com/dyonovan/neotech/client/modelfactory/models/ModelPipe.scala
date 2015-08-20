@@ -5,7 +5,7 @@ import javax.vecmath.Vector3f
 
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.managers.BlockManager
-import com.dyonovan.neotech.pipes.blocks.BlockPipe
+import com.dyonovan.neotech.pipes.blocks.BlockPipeSpecial
 import com.dyonovan.neotech.pipes.types.SimplePipe
 import com.teambr.bookshelf.common.blocks.properties.TileAwareState
 import net.minecraft.block.Block
@@ -31,12 +31,12 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
     val faceBakery = new FaceBakery
     val uv = new BlockFaceUV(Array[Float](0.0F, 0.0F, 16.0F, 16.0F), 0)
     val face = new BlockPartFace(null, 0, "", uv)
-    var blockPipe : BlockPipe = null
+    var blockPipe : BlockPipeSpecial = null
     var pipeTile : SimplePipe = null
     var min = 4.0F
     var max = 12.0F
 
-    def this(block : BlockPipe, tile: SimplePipe) {
+    def this(block : BlockPipeSpecial, tile: SimplePipe) {
         this()
         blockPipe = block
         pipeTile = tile
@@ -169,11 +169,11 @@ class ModelPipe extends ISmartBlockModel with ISmartItemModel {
 
     override def handleBlockState(state : IBlockState) : IBakedModel =  {
         state match {
-            case tileAware : TileAwareState => new ModelPipe(state.getBlock.asInstanceOf[BlockPipe], tileAware.tile.asInstanceOf[SimplePipe])
+            case tileAware : TileAwareState => new ModelPipe(state.getBlock.asInstanceOf[BlockPipeSpecial], tileAware.tile.asInstanceOf[SimplePipe])
             case _ =>  new ModelPipe
 
         }
     }
 
-    override def handleItemState(stack : ItemStack) : IBakedModel = new ModelPipe(Block.getBlockFromItem(stack.getItem).asInstanceOf[BlockPipe], null)
+    override def handleItemState(stack : ItemStack) : IBakedModel = new ModelPipe(Block.getBlockFromItem(stack.getItem).asInstanceOf[BlockPipeSpecial], null)
 }

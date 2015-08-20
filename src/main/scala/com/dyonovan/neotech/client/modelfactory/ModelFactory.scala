@@ -3,7 +3,7 @@ package com.dyonovan.neotech.client.modelfactory
 import com.dyonovan.neotech.client.modelfactory.models.{ModelPipe, ModelTank}
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.BlockManager
-import com.dyonovan.neotech.pipes.blocks.BlockPipe
+import com.dyonovan.neotech.pipes.blocks.BlockPipeSpecial
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -62,7 +62,7 @@ object ModelFactory {
 
 class ModelFactory {
 
-    val pipeRegistry = new ArrayBuffer[BlockPipe]
+    val pipeRegistry = new ArrayBuffer[BlockPipeSpecial]
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     def textureStitch(event: TextureStitchEvent.Pre): Unit = {
@@ -94,9 +94,9 @@ class ModelFactory {
         val itemModelMesher = Minecraft.getMinecraft.getRenderItem.getItemModelMesher
 
         //Pipes
-        pipeRegistry.foreach((blockPipe : BlockPipe) => event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + blockPipe.name, "normal"), new ModelPipe()))
-        pipeRegistry.foreach((blockPipe : BlockPipe) => event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + blockPipe.name, "inventory"), new ModelPipe()))
-        pipeRegistry.foreach((blockPipe : BlockPipe) => itemModelMesher.register(Item.getItemFromBlock(blockPipe), 0, new ModelResourceLocation
+        pipeRegistry.foreach((blockPipe : BlockPipeSpecial) => event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + blockPipe.name, "normal"), new ModelPipe()))
+        pipeRegistry.foreach((blockPipe : BlockPipeSpecial) => event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + blockPipe.name, "inventory"), new ModelPipe()))
+        pipeRegistry.foreach((blockPipe : BlockPipeSpecial) => itemModelMesher.register(Item.getItemFromBlock(blockPipe), 0, new ModelResourceLocation
         (Reference.MOD_ID +
                 ":" + blockPipe.name, "inventory")))
 

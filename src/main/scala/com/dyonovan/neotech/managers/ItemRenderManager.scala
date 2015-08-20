@@ -1,8 +1,9 @@
 package com.dyonovan.neotech.managers
 
+import com.dyonovan.neotech.lib.Reference
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.model.ModelResourceLocation
-import net.minecraft.item.Item
+import net.minecraft.item.{EnumDyeColor, Item}
 
 /**
  * This file was created for NeoTech
@@ -37,10 +38,18 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.eliteRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.creativeRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.blockCrafter))
+        registerPipes()
     }
 
     def registerItem(item: Item): Unit = {
         Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(item, 0,
             new ModelResourceLocation(item.getUnlocalizedName.substring(5), "inventory"))
+    }
+
+    def registerPipes() : Unit = {
+        for(color <- EnumDyeColor.values()) {
+            Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(Item.getItemFromBlock(BlockManager.pipeBasicStructure), color.getMetadata,
+                new ModelResourceLocation(Reference.MOD_ID + ":pipeStructure_" + color.getName, "inventory"))
+        }
     }
 }

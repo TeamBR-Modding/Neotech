@@ -11,7 +11,23 @@ tile.neotech:advancedRFStorage.name=Advanced RF Storage
 tile.neotech:eliteRFStorage.name=Elite RF Storage
 tile.neotech:creativeRFStorage.name=Creative RF Storage
 
-tile.neotech:pipeStructure.name=Structure Pipe
+tile.neotech:pipeStructure_black.name=§8Black §rStructure Pipe
+tile.neotech:pipeStructure_blue.name=§1Blue §rStructure Pipe
+tile.neotech:pipeStructure_brown.name=§6Brown §rStructure Pipe
+tile.neotech:pipeStructure_cyan.name=§bCyan §rStructure Pipe
+tile.neotech:pipeStructure_gray.name=§8Gray §rStructure Pipe
+tile.neotech:pipeStructure_green.name=§2Green §rStructure Pipe
+tile.neotech:pipeStructure_lightBlue.name=§9Light Blue §rStructure Pipe
+tile.neotech:pipeStructure_lime.name=§aLime §rStructure Pipe
+tile.neotech:pipeStructure_magenta.name=§5Magenta §rStructure Pipe
+tile.neotech:pipeStructure_orange.name=§6Orange §rStructure Pipe
+tile.neotech:pipeStructure_pink.name=§dPink §rStructure Pipe
+tile.neotech:pipeStructure_purple.name=§5Purple §rStructure Pipe
+tile.neotech:pipeStructure_red.name=§cRed §rStructure Pipe
+tile.neotech:pipeStructure_silver.name=§7Silver §rStructure Pipe
+tile.neotech:pipeStructure_white.name=White Structure Pipe
+tile.neotech:pipeStructure_yellow.name=§eYellow §rStructure Pipe
+
 tile.neotech:pipeBasicSpeedStructure.name=Basic Acceleration Pipe
 
 tile.neotech:pipeItemBasicSource.name=Item Extract Pipe
