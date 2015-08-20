@@ -2,7 +2,6 @@ package com.dyonovan.neotech.api.nei.machines;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
-import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import com.dyonovan.neotech.client.gui.machines.GuiElectricCrusher;
 import com.dyonovan.neotech.lib.Reference;
@@ -31,14 +30,17 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
     /**
      * The recipe for the crusher
      */
-    public class CrushingPair extends CachedRecipe {
+    public class CrushingTrio extends CachedRecipe {
 
         public PositionedStack input; //The input stack
         public PositionedStack output; //The output stack
+        public PositionedStack secondary; //The output stack
 
-        public CrushingPair(ItemStack input, ItemStack output) {
+        public CrushingTrio(ItemStack input, ItemStack output, ItemStack secondary) {
             this.input = new PositionedStack(input, 37, 25);
             this.output = new PositionedStack(output, 101, 25);
+            if (secondary != null)
+                this.secondary = new PositionedStack(secondary, 130, 25);
         }
 
         @Override
@@ -50,6 +52,13 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
         public PositionedStack getResult() {
             return this.output;
         }
+
+        @Override
+        public PositionedStack getOtherStack() {
+            if (this.secondary != null)
+                return this.secondary;
+            else return null;
+        }
     }
 
     /**
@@ -59,11 +68,6 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
     public void drawExtras(int recipe) {
         this.drawProgressBar(64, 25, 176, 14, 24, 16, 48, 0);
         this.drawProgressBar(10, 9, 176, 32, 12, 44, 48, 7);
-    }
-
-    @Override
-    public List<String> handleTooltip(GuiRecipe gui, List<String> currenttip, int recipe) {
-        return currenttip;
     }
 
     /**
@@ -114,7 +118,7 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
             ArrayList<CrusherRecipeRegistry.CrusherRecipesStack> recipes = CrusherRecipeRegistry.getRecipes();
 
             for (CrusherRecipeRegistry.CrusherRecipesStack recipe : recipes)
-                this.arecipes.add(new CrushingPair(recipe.input(), recipe.output()));
+                this.arecipes.add(new CrushingTrio(recipe.input(), recipe.output(), recipe.secondary()));
         } else
             super.loadCraftingRecipes(outputID, results);
     }
@@ -129,7 +133,7 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
 
         for (CrusherRecipeRegistry.CrusherRecipesStack recipe : recipes) {
             if (NEIServerUtils.areStacksSameType(recipe.output(), result))
-                this.arecipes.add(new CrushingPair(recipe.input(), recipe.output()));
+                this.arecipes.add(new CrushingTrio(recipe.input(), recipe.output(), recipe.secondary()));
         }
     }
 
@@ -156,7 +160,7 @@ public class RecipeHandlerCrusher extends TemplateRecipeHandler {
 
         for (CrusherRecipeRegistry.CrusherRecipesStack recipe : recipes) {
             if (NEIServerUtils.areStacksSameTypeCrafting(recipe.input(), ingredient)) {
-                CrushingPair arecipe = new CrushingPair(recipe.input(), recipe.output());
+                CrushingTrio arecipe = new CrushingTrio(recipe.input(), recipe.output(), recipe.secondary());
                 arecipe.setIngredientPermutation(Collections.singletonList(arecipe.input), ingredient);
                 this.arecipes.add(arecipe);
                 return; //We should stop since we found our answer

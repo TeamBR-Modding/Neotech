@@ -66,39 +66,6 @@ object CrusherRecipeRegistry {
     def generateDefaults(): Unit = {
         LogHelper.info("Json not found. Creating Dynamic Crusher Recipe List...")
 
-        val oreDict = OreDictionary.getOreNames
-
-        for (i <- oreDict) {
-            if (i.startsWith("dust")) {
-                val oreList = OreDictionary.getOres(i.replaceFirst("dust", "ore"))
-                if (!oreList.isEmpty) {
-                    i.replaceFirst("dust", "ore") match {
-                        case "oreRedstone" =>
-                            crusherRecipes.add(new CrusherRecipes("oreRedstone",
-                                getItemStackString(new ItemStack(Items.redstone)), 6, getItemStackString(new ItemStack(Items.redstone))))
-                        /*case "oreLapis" =>
-                            crusherRecipes.add(new CrusherRecipes("oreLapis",
-                                getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))*/
-                        case _ =>
-                            val itemList = OreDictionary.getOres(i)
-                            if (itemList.size() > 0)
-                                crusherRecipes.add(new CrusherRecipes(i.replaceFirst("dust", "ore"),
-                                    getItemStackString(new ItemStack(itemList.get(0).getItem, 1, itemList.get(0).getItemDamage)),
-                                    2, ""))
-                    }
-                }
-            } else if (i.startsWith("ingot")) {
-                val oreList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
-                if (!oreList.isEmpty) {
-                    val itemList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
-                    if (itemList.size() > 0) {
-                        crusherRecipes.add(new CrusherRecipes(i, getItemStackString(
-                            new ItemStack(itemList.get(0).getItem, 1, itemList.get(0).getItemDamage)), 1, ""))
-                    }
-                }
-            }
-        }
-
         crusherRecipes.add(new CrusherRecipes("oreLapis",
             getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))
         crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Items.blaze_rod)),
@@ -126,8 +93,48 @@ object CrusherRecipeRegistry {
         crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.gravel)),
             getItemStackString(new ItemStack(Items.flint)), 1, getItemStackString(new ItemStack(Items.flint))))
 
+        val oreDict = OreDictionary.getOreNames
+
+        for (i <- oreDict) {
+            if (i.startsWith("dust")) {
+                val oreList = OreDictionary.getOres(i.replaceFirst("dust", "ore"))
+                if (!oreList.isEmpty) {
+                    i.replaceFirst("dust", "ore") match {
+                        case "oreRedstone" =>
+                            crusherRecipes.add(new CrusherRecipes("oreRedstone",
+                                getItemStackString(new ItemStack(Items.redstone)), 6, getItemStackString(new ItemStack(Items.redstone))))
+                        /*case "oreLapis" =>
+                            crusherRecipes.add(new CrusherRecipes("oreLapis",
+                                getItemStackString(new ItemStack(Items.dye, 1, 4)), 6, getItemStackString(new ItemStack(Items.dye, 1, 4))))*/
+                        case _ =>
+                            val itemList = OreDictionary.getOres(i)
+                            if (itemList.size() > 0 && !doesExist(i.replaceFirst("dust", "ore")))
+                                crusherRecipes.add(new CrusherRecipes(i.replaceFirst("dust", "ore"),
+                                    getItemStackString(new ItemStack(itemList.get(0).getItem, 1, itemList.get(0).getItemDamage)),
+                                    2, ""))
+                    }
+                }
+            } else if (i.startsWith("ingot")) {
+                val oreList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
+                if (!oreList.isEmpty) {
+                    val itemList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
+                    if (itemList.size() > 0) {
+                        crusherRecipes.add(new CrusherRecipes(i, getItemStackString(
+                            new ItemStack(itemList.get(0).getItem, 1, itemList.get(0).getItemDamage)), 1, ""))
+                    }
+                }
+            }
+        }
+
         saveToFile()
         LogHelper.info("Finished adding " + crusherRecipes.size + " Crusher Recipes")
+    }
+
+    private def doesExist(stack: String): Boolean = {
+        for (i <- crusherRecipes) {
+            if (stack == i.input) return true
+        }
+        false
     }
 
     /**
@@ -220,15 +227,16 @@ object CrusherRecipeRegistry {
             if (getItemStackFromString(i.input) == null) {
                 for (j <- OreDictionary.getOres(i.input)) {
 
-                    list.add(new CrusherRecipesStack(j, outStack))
+                    list.add(new CrusherRecipesStack(j, outStack, getItemStackFromString(i.outputSecondary)))
                 }
-            } else list.add(new CrusherRecipesStack(getItemStackFromString(i.input), outStack))
+            } else list.add(new CrusherRecipesStack(getItemStackFromString(i.input), outStack, getItemStackFromString(i.outputSecondary)))
         }
         list
     }
 
-    class CrusherRecipesStack(i: ItemStack, o: ItemStack) {
+    class CrusherRecipesStack(i: ItemStack, o: ItemStack, s: ItemStack) {
         var input = i
         var output = o
+        var secondary = s
     }
 }
