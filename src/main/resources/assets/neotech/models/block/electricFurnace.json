@@ -1,9 +1,0 @@
-{
-    "parent": "neotech:block/machine",
-    "textures": {
-        "particle" : "#front",
-        "front": "neotech:blocks/electricFurnace_front",
-        "top": "neotech:blocks/machine_side",
-        "side": "neotech:blocks/machine_side"
-    }
-}

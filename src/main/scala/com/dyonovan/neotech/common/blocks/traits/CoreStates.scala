@@ -55,17 +55,6 @@ trait CoreStates extends Block {
         }
     }
 
-    override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
-        world.getTileEntity(pos) match {
-            case core : AbstractMachine =>
-                state.withProperty (PropertyRotation.FOUR_WAY, world.getBlockState (pos).getValue (PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing] )
-                        .withProperty(PROPERTY_ACTIVE, core.isBurning.asInstanceOf[java.lang.Boolean])
-            case _ =>
-                state.withProperty (PropertyRotation.FOUR_WAY, world.getBlockState (pos).getValue (PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing] )
-                        .withProperty(PROPERTY_ACTIVE, true)
-        }
-    }
-
     /**
      * Used to convert the meta to state
      * @param meta The meta
