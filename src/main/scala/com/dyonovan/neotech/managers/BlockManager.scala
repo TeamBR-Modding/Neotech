@@ -44,8 +44,8 @@ object BlockManager {
     val blockTin = new BlockOre("blockTin", 1)
 
     //Pipes
-    val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, classOf[StructurePipe])
-    val pipeBasicSpeedStructure = new BlockPipeSpecial("pipeBasicSpeedStructure", Material.rock, classOf[StructurePipe])
+    val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, true, classOf[StructurePipe])
+    val pipeBasicSpeedStructure = new BlockPipe("pipeBasicSpeedStructure", Material.rock, false, classOf[StructurePipe])
 
     val pipeItemSource = new BlockPipeSpecial("pipeItemBasicSource", Material.rock, classOf[ItemExtractionPipe])
     val pipeItemSink = new BlockPipeSpecial("pipeItemBasicSink", Material.rock, classOf[ItemSinkPipe])

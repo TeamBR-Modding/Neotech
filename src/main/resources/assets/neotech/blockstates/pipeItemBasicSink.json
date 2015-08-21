@@ -1,0 +1,162 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "textures" : {
+            "base" : "neotech:blocks/pipes/basicItemSink",
+            "extra" : "neotech:blocks/pipes/basicItemSinkExtras"
+        },
+        "model" : "neotech:pipe"
+    },
+    "variants" : {
+        "up" : {
+            "0" : {},
+            "1" : {
+                "submodel": {
+                    "connection_up": {
+                        "model": "neotech:pipeConnection",
+                        "x": 90
+                    }
+                }
+            },
+            "2" : {
+                "submodel": {
+                    "connection_up": {
+                        "model": "neotech:pipeConnection",
+                        "x": 90
+                    }
+                },
+                "submodel": {
+                    "connection_up_special": {
+                        "model": "neotech:pipeConnectionSpecial",
+                        "x": 90
+                    }
+                }
+            }
+        },
+        "down" : {
+            "0" : {},
+            "1" : {
+                "submodel": {
+                    "connection_down": {
+                        "model": "neotech:pipeConnection",
+                        "x": 270
+                    }
+                }
+            },
+            "2" : {
+                "submodel": {
+                    "connection_down": {
+                        "model": "neotech:pipeConnection",
+                        "x": 270
+                    }
+                },
+                "submodel": {
+                    "connection_down_special": {
+                        "model": "neotech:pipeConnectionSpecial",
+                        "x": 270
+                    }
+                }
+            }
+        },
+        "north" : {
+            "0" : {},
+            "1" : {
+                "submodel": {
+                    "connection_north": {
+                        "model": "neotech:pipeConnection",
+                        "x": 180
+                    }
+                }
+            },
+            "2" : {
+                "submodel": {
+                    "connection_north": {
+                        "model": "neotech:pipeConnection",
+                        "x": 180
+                    }
+                },
+                "submodel": {
+                    "connection_north_special": {
+                        "model": "neotech:pipeConnectionSpecial",
+                        "x": 180
+                    }
+                }
+            }
+        },
+        "south" : {
+            "0" : {},
+            "1" : {
+                "submodel": {
+                    "connection_south": {
+                        "model": "neotech:pipeConnection",
+                        "x": 0
+                    }
+                }
+            },
+            "2" : {
+                "submodel": {
+                    "connection_south": {
+                        "model": "neotech:pipeConnection",
+                        "x": 0
+                    }
+                },
+                "submodel": {
+                    "connection_south_special": {
+                        "model": "neotech:pipeConnectionSpecial",
+                        "x": 0
+                    }
+                }
+            }
+        },
+        "east" : {
+            "0" : {},
+            "1" : {
+                "submodel": {
+                    "connection_east": {
+                        "model": "neotech:pipeConnection",
+                        "y" : 270
+                    }
+                }
+            },
+            "2" : {
+                "submodel": {
+                    "connection_east": {
+                        "model": "neotech:pipeConnection",
+                        "y" : 270
+                    }
+                },
+                "submodel": {
+                    "connection_east_special": {
+                        "model": "neotech:pipeConnectionSpecial",
+                        "y" : 270
+                    }
+                }
+            }
+        },
+        "west" : {
+            "0" : {},
+            "1" : {
+                "submodel": {
+                    "connection_west": {
+                        "model": "neotech:pipeConnection",
+                        "y" : 90
+                    }
+                }
+            },
+            "2" : {
+                "submodel": {
+                    "connection_west": {
+                        "model": "neotech:pipeConnection",
+                        "y": 90
+                    }
+                },
+                "submodel": {
+                    "connection_west_special": {
+                        "model": "neotech:pipeConnectionSpecial",
+                        "y": 90
+                    }
+                }
+            }
+        }
+    }
+}

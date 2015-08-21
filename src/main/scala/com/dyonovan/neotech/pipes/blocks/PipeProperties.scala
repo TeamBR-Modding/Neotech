@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.pipes.blocks
 
-import net.minecraft.block.properties.{PropertyBool, PropertyEnum}
+import net.minecraft.block.properties.{PropertyInteger, PropertyBool, PropertyEnum}
 import net.minecraft.item.EnumDyeColor
 
 /**
@@ -21,4 +21,10 @@ object PipeProperties {
     lazy val SOUTH = PropertyBool.create("south")
     lazy val EAST = PropertyBool.create("east")
     lazy val WEST = PropertyBool.create("west")
+    lazy val SPECIAL_UP = PropertyInteger.create("up", 0, 2)
+    lazy val SPECIAL_DOWN = PropertyInteger.create("down", 0, 2)
+    lazy val SPECIAL_NORTH = PropertyInteger.create("north", 0, 2)
+    lazy val SPECIAL_SOUTH = PropertyInteger.create("south", 0, 2)
+    lazy val SPECIAL_EAST = PropertyInteger.create("east", 0, 2)
+    lazy val SPECIAL_WEST = PropertyInteger.create("west", 0, 2)
 }

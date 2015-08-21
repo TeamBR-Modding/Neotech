@@ -26,7 +26,7 @@ class StructurePipe extends SimplePipe {
      */
     override def canConnect(facing: EnumFacing): Boolean = {
         worldObj.getBlockState(pos.offset(facing)).getBlock match {
-            case block : BlockPipe if worldObj.getBlockState(pos).getBlock.isInstanceOf[BlockPipe]  => //We are checking if it and us are colored
+            case block : BlockPipe if worldObj.getBlockState(pos).getBlock.asInstanceOf[BlockPipe].colored  => //We are checking if it and us are colored
                 if(worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() != 0)
                     worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() == worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() ||
                             worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() == 0

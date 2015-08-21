@@ -58,7 +58,6 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
             GlStateManager.pushAttrib();
 
             RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-            GL11.glPushMatrix();
             GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
 
             RenderUtils.bindMinecraftBlockSheet();
@@ -67,14 +66,9 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
             GlStateManager.disableLighting();
 
             TextureAtlasSprite fluidIcon = resource.getFluid().getFluid().getIcon();
-            RenderHelper.renderCubeWithTexture(-0.2, -0.2, -0.2, 0.2, 0, 0.2, fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());
-            GL11.glPopMatrix();
-
-            GL11.glTranslated(prevX - manager.renderPosX, prevY - manager.renderPosY, prevZ - manager.renderPosZ);
-            RenderHelper.renderCubeWithTexture(-0.19, -0.19, -0.19, 0.19, -0.1, 0.19, fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());
+            RenderHelper.renderCubeWithTexture(-0.2, -0.2, -0.2, 0.2, 0.2, 0.2, fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());
 
             GlStateManager.enableLighting();
-
             RenderUtils.bindMinecraftBlockSheet();
 
             GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -90,9 +84,6 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
         tag.setDouble("X", xPos);
         tag.setDouble("Y", yPos);
         tag.setDouble("Z", zPos);
-        tag.setDouble("PX", prevX);
-        tag.setDouble("PY", prevY);
-        tag.setDouble("PZ", prevZ);
         tag.setDouble("Speed", speed);
         tag.setLong("Destination", destination.toLong());
         tag.setLong("From", from.toLong());
@@ -106,9 +97,6 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
         xPos = tag.getDouble("X");
         yPos = tag.getDouble("Y");
         zPos = tag.getDouble("Z");
-        prevX = tag.getDouble("PX");
-        prevY = tag.getDouble("PY");
-        prevZ = tag.getDouble("PZ");
         nextSpeed = tag.getDouble("Speed");
         destination = BlockPos.fromLong(tag.getLong("Destination"));
         from = BlockPos.fromLong(tag.getLong("From"));

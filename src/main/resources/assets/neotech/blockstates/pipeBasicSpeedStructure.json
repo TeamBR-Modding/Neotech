@@ -1,0 +1,77 @@
+{
+    "forge_marker" : 1,
+    "defaults" : {
+        "textures" : {
+            "base" : "neotech:blocks/pipes/structureBasicSpeed"
+        },
+        "model" : "neotech:pipe"
+    },
+    "variants" : {
+        "up" : {
+            "true" : {
+                "submodel": {
+                    "connectionup": {
+                        "model": "neotech:pipeConnection",
+                        "x": 90
+                    }
+                }
+            },
+            "false" : {}
+        },
+        "down" : {
+            "true" : {
+                "submodel": {
+                    "connectiondown": {
+                        "model": "neotech:pipeConnection",
+                        "x": 270
+                    }
+                }
+            },
+            "false" : {}
+        },
+        "north" : {
+            "true" : {
+                "submodel": {
+                    "connectionnorth": {
+                        "model": "neotech:pipeConnection",
+                        "y": 180
+                    }
+                }
+            },
+            "false" : {}
+        },
+        "south" : {
+            "true" : {
+                "submodel": {
+                    "connectionsouth": {
+                        "model": "neotech:pipeConnection",
+                        "y": 0
+                    }
+                }
+            },
+            "false" : {}
+        },
+        "east" : {
+            "true" : {
+                "submodel": {
+                    "connectioneast": {
+                        "model": "neotech:pipeConnection",
+                        "y": 270
+                    }
+                }
+            },
+            "false" : {}
+        },
+        "west" : {
+            "true" : {
+                "submodel": {
+                    "connectionwest": {
+                        "model": "neotech:pipeConnection",
+                        "y": 90
+                    }
+                }
+            },
+            "false" : {}
+        }
+    }
+}

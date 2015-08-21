@@ -54,9 +54,25 @@ object ItemRenderManager {
     }
 
     def registerPipes() : Unit = {
+        //Colored
         for(color <- EnumDyeColor.values()) {
             Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(Item.getItemFromBlock(BlockManager.pipeBasicStructure), color.getMetadata,
                 new ModelResourceLocation(Reference.MOD_ID + ":pipeStructure_" + color.getName, "inventory"))
         }
+
+        //Speed
+        registerItem(Item.getItemFromBlock(BlockManager.pipeBasicSpeedStructure))
+
+        //Item Stuff
+        registerItem(Item.getItemFromBlock(BlockManager.pipeItemSource))
+        registerItem(Item.getItemFromBlock(BlockManager.pipeItemSink))
+
+        //Fluid Stuff
+        registerItem(Item.getItemFromBlock(BlockManager.pipeFluidSource))
+        registerItem(Item.getItemFromBlock(BlockManager.pipeFluidSink))
+
+        //Energy
+        registerItem(Item.getItemFromBlock(BlockManager.pipeEnergySource))
+        registerItem(Item.getItemFromBlock(BlockManager.pipeEnergySink))
     }
 }

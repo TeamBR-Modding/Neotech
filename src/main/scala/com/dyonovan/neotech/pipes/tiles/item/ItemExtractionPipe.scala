@@ -61,14 +61,13 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
                 case sidedInv : ISidedInventory =>
                     for(i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
                         tempInv.setInventorySlotContents(0, null)
-                        if (sidedInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = false, canStack = true) > 0) {
+                        if (sidedInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = false, canStack = true) > 0) {
                             if(extractResourceOnShortestPath(new ItemResourceEntity(sidedInv.getStackInSlot(i),
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                                 pos, pos, worldObj), simulate = true)) {
-                                InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
-                                extractResourceOnShortestPath(new ItemResourceEntity(tempInv.getStackInSlot(0),
-                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                    pos, pos, worldObj), simulate = false)
+                                InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = true, canStack = true)
+                                nextResource.resource = tempInv.getStackInSlot(0)
+                                extractResourceOnShortestPath(nextResource, simulate = false)
                                 return
                             }
                         }
@@ -81,9 +80,8 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                                 pos, pos, worldObj), simulate = true)) {
                                 InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
-                                extractResourceOnShortestPath(new ItemResourceEntity(tempInv.getStackInSlot(0),
-                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                    pos, pos, worldObj), simulate = false)
+                                nextResource.resource = tempInv.getStackInSlot(0)
+                                extractResourceOnShortestPath(nextResource, simulate = false)
                                 return
                             }
                         }

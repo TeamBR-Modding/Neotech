@@ -70,10 +70,8 @@ class FluidExtractionPipe extends ExtractionPipe[FluidTank, FluidResourceEntity]
                         pos, pos.north(), worldObj), simulate = true)) {
                         tempTank.setFluid(null)
                         tempTank.fill(tank.drain(dir.getOpposite, getMaxFluidDrain, true), true)
-                        val resource = new FluidResourceEntity(tempTank,
-                            pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                            pos, pos.north(), worldObj)
-                        extractResourceOnShortestPath(resource, simulate = false)
+                        nextResource.resource = tempTank
+                        extractResourceOnShortestPath(nextResource, simulate = false)
                         return
                     }
 

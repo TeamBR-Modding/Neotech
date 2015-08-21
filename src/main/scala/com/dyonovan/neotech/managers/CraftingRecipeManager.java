@@ -72,8 +72,6 @@ public class CraftingRecipeManager {
 
         //Colors!!
         for(EnumDyeColor color : EnumDyeColor.values()) {
-            if(color.ordinal() == 0) //Not white
-                continue;
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 1, color.ordinal()),
                     "pipeStructure", new ItemStack(Items.dye, 1, color.getDyeDamage())));
         }

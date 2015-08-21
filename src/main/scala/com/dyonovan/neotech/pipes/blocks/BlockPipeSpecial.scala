@@ -1,13 +1,11 @@
 package com.dyonovan.neotech.pipes.blocks
 
 import com.dyonovan.neotech.NeoTech
-import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.pipes.types.SimplePipe
-import com.teambr.bookshelf.common.blocks.properties.TileAwareState
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
-import net.minecraft.block.state.IBlockState
+import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, EnumWorldBlockLayer}
@@ -31,20 +29,46 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     setCreativeTab(NeoTech.tabPipes)
     setHardness(1.5F)
     setLightOpacity(0)
-    ModelFactory.INSTANCE.pipeRegistry += this
+    setDefaultState(this.blockState.getBaseState
+            .withProperty(PipeProperties.SPECIAL_UP, 0)
+            .withProperty(PipeProperties.SPECIAL_DOWN, 0)
+            .withProperty(PipeProperties.SPECIAL_NORTH, 0)
+            .withProperty(PipeProperties.SPECIAL_EAST, 0)
+            .withProperty(PipeProperties.SPECIAL_SOUTH, 0)
+            .withProperty(PipeProperties.SPECIAL_WEST, 0))
+
+    protected override def createBlockState: BlockState = {
+        new BlockState(this, PipeProperties.SPECIAL_UP, PipeProperties.SPECIAL_DOWN, PipeProperties.SPECIAL_NORTH, PipeProperties.SPECIAL_SOUTH, PipeProperties.SPECIAL_EAST, PipeProperties.SPECIAL_WEST)
+    }
+
+    override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
+        state.withProperty(PipeProperties.SPECIAL_UP, countConnections(worldIn, pos, EnumFacing.UP))
+                .withProperty(PipeProperties.SPECIAL_DOWN, countConnections(worldIn, pos, EnumFacing.DOWN))
+                .withProperty(PipeProperties.SPECIAL_NORTH, countConnections(worldIn, pos, EnumFacing.NORTH))
+                .withProperty(PipeProperties.SPECIAL_EAST, countConnections(worldIn, pos, EnumFacing.EAST))
+                .withProperty(PipeProperties.SPECIAL_SOUTH, countConnections(worldIn, pos, EnumFacing.SOUTH))
+                .withProperty(PipeProperties.SPECIAL_WEST, countConnections(worldIn, pos, EnumFacing.WEST))
+    }
+
+    /**
+     * Convert the given metadata into a BlockState for this Block
+     */
+    override def getStateFromMeta(meta: Int): IBlockState = {
+        getDefaultState
+    }
+
+    /**
+     * Convert the BlockState into the correct metadata value
+     */
+    override def getMetaFromState(state: IBlockState): Int = {
+        0
+    }
 
     override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) : Unit = {
         worldIn.getTileEntity(pos) match {
             case pipe : SimplePipe =>
                 pipe.onPipeBroken()
             case _ =>
-        }
-    }
-
-    override def getExtendedState(state : IBlockState, world : IBlockAccess, pos : BlockPos) : IBlockState = {
-        world.getTileEntity(pos) match {
-            case tile : TileEntity => new TileAwareState(tile, world.getBlockState(pos).getBlock)
-            case _ => state
         }
     }
 
@@ -55,38 +79,51 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         var y2 = 1.0F - y1
         var z1 = 0.25F
         var z2 = 1.0F - z1
-        if(isCableConnected(worldIn, pos, EnumFacing.WEST)) {
+        if(countConnections(worldIn, pos, EnumFacing.WEST) > 0) {
             x1 = 0.0F
         }
 
-        if(isCableConnected(worldIn, pos, EnumFacing.EAST)) {
+        if(countConnections(worldIn, pos, EnumFacing.EAST) > 0) {
             x2 = 1.0F
         }
 
-        if(isCableConnected(worldIn, pos, EnumFacing.NORTH)) {
+        if(countConnections(worldIn, pos, EnumFacing.NORTH) > 0) {
             z1 = 0.0F
         }
 
-        if(isCableConnected(worldIn, pos, EnumFacing.SOUTH)) {
+        if(countConnections(worldIn, pos, EnumFacing.SOUTH) > 0) {
             z2 = 1.0F
         }
 
-        if(isCableConnected(worldIn, pos, EnumFacing.DOWN)) {
+        if(countConnections(worldIn, pos, EnumFacing.DOWN) > 0) {
             y1 = 0.0F
         }
 
-        if(isCableConnected(worldIn, pos, EnumFacing.UP)) {
+        if(countConnections(worldIn, pos, EnumFacing.UP) > 0) {
             y2 = 1.0F
         }
 
         this.setBlockBounds(x1, y1, z1, x2, y2, z2)
     }
 
-    def isCableConnected(world: IBlockAccess, pos: BlockPos, facing: EnumFacing) : Boolean = {
+    def isPipeConnected(world: IBlockAccess, pos: BlockPos, facing: EnumFacing) : Boolean = {
         world.getTileEntity(pos) match {
             case pipe : SimplePipe =>
-                pipe.canConnect(facing)
+                pipe.canConnect(facing) || pipe.isSpecialConnection(facing)
             case _ => false
+        }
+    }
+
+    def countConnections(world: IBlockAccess, pos: BlockPos, facing: EnumFacing) : Int = {
+        world.getTileEntity(pos) match {
+            case pipe : SimplePipe =>
+                if(pipe.isSpecialConnection(facing) && pipe.canConnect(facing))
+                    2
+                else if(pipe.canConnect(facing))
+                    1
+                else
+                    0
+            case _ => 0
         }
     }
 
@@ -94,11 +131,6 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         this.setBlockBoundsBasedOnState(worldIn, pos)
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
-
-    //TODO: Implement Colored networks
-   /* override def colorMultiplier(worldIn : IBlockAccess, pos : BlockPos, renderPass : Int) : Int = {
-        0xFFFFFF
-    }*/
 
     override def getRenderType : Int = 3
 

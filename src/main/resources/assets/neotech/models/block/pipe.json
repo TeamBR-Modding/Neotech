@@ -7,24 +7,24 @@
             "from" : [ 4, 4, 4 ],
             "to" : [ 12, 12, 12 ],
             "faces" : {
-                "down"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" :  "down"},
-                "up"    : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" :    "up"},
-                "north" : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" : "north"},
-                "south" : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" : "south"},
-                "east"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" :  "east"},
-                "west"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" :  "west"}
+                "down"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "up"    : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "north" : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "south" : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "east"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "west"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"}
             }
         },
         {
             "from" : [ 12, 12, 12 ],
-            "to" : [ 12, 12, 12 ],
+            "to" : [ 4, 4, 4 ],
             "faces" : {
-                "down"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" :    "up"},
-                "up"    : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" :  "down"},
-                "north" : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" : "south"},
-                "south" : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" : "north"},
-                "east"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" :  "west"},
-                "west"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base", "cullface" :  "east"}
+                "down"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "up"    : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "north" : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "south" : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "east"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"},
+                "west"  : { "uv" : [ 4, 4, 12, 12], "texture" : "#base"}
             }
         }
     ]

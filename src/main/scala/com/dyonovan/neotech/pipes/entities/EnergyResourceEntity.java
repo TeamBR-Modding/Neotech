@@ -95,9 +95,6 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         tag.setDouble("X", xPos);
         tag.setDouble("Y", yPos);
         tag.setDouble("Z", zPos);
-        tag.setDouble("PX", prevX);
-        tag.setDouble("PY", prevY);
-        tag.setDouble("PZ", prevZ);
         tag.setDouble("Speed", speed);
         tag.setLong("Destination", destination.toLong());
         tag.setLong("From", from.toLong());
@@ -111,9 +108,6 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         xPos = tag.getDouble("X");
         yPos = tag.getDouble("Y");
         zPos = tag.getDouble("Z");
-        prevX = tag.getDouble("PX");
-        prevY = tag.getDouble("PY");
-        prevZ = tag.getDouble("PZ");
         nextSpeed = tag.getDouble("Speed");
         destination = BlockPos.fromLong(tag.getLong("Destination"));
         from = BlockPos.fromLong(tag.getLong("From"));
