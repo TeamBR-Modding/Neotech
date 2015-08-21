@@ -3,7 +3,7 @@ package com.dyonovan.neotech.common.tiles.storage
 import com.dyonovan.neotech.common.blocks.storage.BlockTank
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, UpdatingTile}
 import mcp.mobius.waila.api.ITaggedList
 import mcp.mobius.waila.api.ITaggedList.ITipList
 import net.minecraft.client.Minecraft
@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 16, 2015
  */
-class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Waila {
+class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Waila with RedstoneAware {
 
     var tier = 0
 
@@ -42,13 +42,13 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
     }
 
     override def onServerTick() : Unit = {
-        if(tank != null && tank.getFluid != null && worldObj.getWorldTime % 20 == 0) {
+        if(!isPowered && tank != null && tank.getFluid != null && worldObj.getWorldTime % 20 == 0) {
             worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
                 case otherTank: IFluidHandler =>
                     if (otherTank.canFill(EnumFacing.UP, tank.getFluid.getFluid)) {
                         if (tier != 4)
-                        tank.drain(otherTank.fill(EnumFacing.UP, new FluidStack(tank.getFluid.getFluid,
-                            if (tank.getFluidAmount > 1000) 1000 else tank.getFluidAmount), true), true)
+                            tank.drain(otherTank.fill(EnumFacing.UP, new FluidStack(tank.getFluid.getFluid,
+                                if (tank.getFluidAmount > 1000) 1000 else tank.getFluidAmount), true), true)
                         else otherTank.fill(EnumFacing.UP, new FluidStack(tank.getFluid.getFluid,
                             if (tank.getFluidAmount > 1000) 1000 else tank.getFluidAmount), true)
                         worldObj.markBlockForUpdate(pos)
