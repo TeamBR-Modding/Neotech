@@ -2,10 +2,10 @@ package com.dyonovan.neotech.client.gui.machines
 
 import java.awt.Color
 
-import com.dyonovan.neotech.common.container.machines.ContainerFurnaceGenerator
-import com.dyonovan.neotech.common.tiles.machines.TileFurnaceGenerator
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFlame, GuiComponentPowerBar, GuiComponentText}
-import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
+import com.dyonovan.neotech.common.tiles.machines.TileFluidGenerator
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiBase}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFluidTank, GuiComponentText, GuiComponentPowerBar, GuiComponentFlame}
+import com.teambr.bookshelf.common.container.ContainerGeneric
 import net.minecraft.entity.player.EntityPlayer
 
 import scala.collection.mutable.ArrayBuffer
@@ -18,21 +18,21 @@ import scala.collection.mutable.ArrayBuffer
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author Dyonovan
- * @since August 14, 2015
+ * @since August 21, 2015
  */
-class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator) extends
-        GuiBase[ContainerFurnaceGenerator](new ContainerFurnaceGenerator(player.inventory, tileEntity), 175, 165,
-            "inventory.furnacegenerator.title"){
+class GuiFluidGenerator(player: EntityPlayer, tileEntity: TileFluidGenerator) extends
+        GuiBase[ContainerGeneric](new ContainerGeneric, 140, 120, "inventory.fluidgenerator.title") {
+
 
     override def addComponents(): Unit = {
-        components += new GuiComponentFlame(78, 55) {
+        components += new GuiComponentFlame(62, 52) {
             override def getCurrentBurn: Int = if (tileEntity.isBurning) tileEntity.getBurnTimeRemainingScaled(14) else 0
 
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 ArrayBuffer(tileEntity.values.burnTime + " ticks left.")
             }
         }
-        components += new GuiComponentPowerBar(20, 18, 18, 60, new Color(255, 0, 0)) {
+        components += new GuiComponentPowerBar(20, 30, 18, 60, new Color(255, 0, 0)) {
             override def getEnergyPercent(scale: Int): Int = {
                 tileEntity.getEnergyStored(null) * scale / tileEntity.getMaxEnergyStored(null)
             }
@@ -40,6 +40,11 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                 ArrayBuffer(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null))
             }
         }
-        components += new GuiComponentText(GuiColor.RED + "RF/t = " + tileEntity.RF_TICK, 64, 18)
+        components += new GuiComponentText(GuiColor.RED + "RF/t = " + tileEntity.RF_TICK, 48, 18)
+        components += new GuiComponentFluidTank(102, 30, 18, 60, tileEntity.tank) {
+            override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
+                ArrayBuffer(tileEntity.tank.getFluidAmount + "/" + tileEntity.tank.getCapacity + " mb")
+            }
+        }
     }
 }

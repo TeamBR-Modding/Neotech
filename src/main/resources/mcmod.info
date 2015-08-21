@@ -11,7 +11,7 @@
 "credits": "",
 "logoFile": "",
 "screenshots": [],
-"requiredMods": ["bookshelf@[1.8-2.0.2,)"],
+"requiredMods": ["bookshelf@[1.8-2.0.3,)"],
 "dependencies": ["NotEnoughItems", "poweradvantage"],
 "dependants": [],
 "useDependencyInformation": true
