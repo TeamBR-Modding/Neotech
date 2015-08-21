@@ -46,8 +46,12 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
             worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
                 case otherTank: IFluidHandler =>
                     if (otherTank.canFill(EnumFacing.UP, tank.getFluid.getFluid)) {
+                        if (tier != 4)
                         tank.drain(otherTank.fill(EnumFacing.UP, new FluidStack(tank.getFluid.getFluid,
                             if (tank.getFluidAmount > 1000) 1000 else tank.getFluidAmount), true), true)
+                        else otherTank.fill(EnumFacing.UP, new FluidStack(tank.getFluid.getFluid,
+                            if (tank.getFluidAmount > 1000) 1000 else tank.getFluidAmount), true)
+                        worldObj.markBlockForUpdate(pos)
                     }
                 case _ =>
             }
@@ -100,10 +104,10 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
 
     override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = {
         val fluidAmount = tank.drain(maxDrain, false)
-        if (fluidAmount != null && doDrain && tier != 4) {
+        if (fluidAmount != null && doDrain && tier != 4)
             tank.drain(maxDrain, true)
-            worldObj.markBlockForUpdate(pos)
-        }
+        worldObj.markBlockForUpdate(pos)
+
         fluidAmount
     }
 
