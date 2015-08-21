@@ -6,6 +6,7 @@ tile.neotech:furnaceGenerator.name=Furnace Generator
 tile.neotech:fluidGenerator.name=Fluid Generator
 tile.neotech:electricFurnace.name=Electric Furnace
 tile.neotech:electricCrusher.name=Electric Crusher
+tile.neotech:thermalBinder.name=Thermal Binder
 
 tile.neotech:basicRFStorage.name=Basic RF Storage
 tile.neotech:advancedRFStorage.name=Advanced RF Storage

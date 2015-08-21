@@ -17,6 +17,9 @@
     "furnaceGeneratorFrontActive": "neotech:blocks/furnaceGeneratorActive_front",
     //Fluid Generator
     "fluidGeneratorFront": "neotech:blocks/fluidGenerator_front",
-    "fluidGeneratorFrontActive": "neotech:blocks/fluidGeneratorActive_front"
+    "fluidGeneratorFrontActive": "neotech:blocks/fluidGeneratorActive_front",
+    //ThermalBinder
+    "thermalBinderFront": "neotech:blocks/thermalBinder_front",
+    "thermalBinderFrontActive": "neotech:blocks/thermalBinderActive_front"
   }
 }

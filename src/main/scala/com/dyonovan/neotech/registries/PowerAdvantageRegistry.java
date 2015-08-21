@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.registries;
 
-import com.dyonovan.neotech.common.tiles.AbstractMachine;
+import cofh.api.energy.IEnergyHandler;
 import cyano.poweradvantage.api.ConduitType;
 import cyano.poweradvantage.api.modsupport.ILightWeightPowerAcceptor;
 import cyano.poweradvantage.api.modsupport.LightWeightPowerRegistry;
@@ -36,12 +36,12 @@ public class PowerAdvantageRegistry {
             }
             @Override
             public float addEnergy(TileEntity tileEntity, float v, ConduitType conduitType) {
-                AbstractMachine tile = (AbstractMachine) tileEntity;
+                IEnergyHandler tile = (IEnergyHandler) tileEntity;
                     return tile.receiveEnergy(null, Math.round(v), false);
             }
             @Override
             public float getEnergyDemand(TileEntity tileEntity, ConduitType conduitType) {
-                AbstractMachine tile = (AbstractMachine) tileEntity;
+                IEnergyHandler tile = (IEnergyHandler) tileEntity;
                     return (tile.getMaxEnergyStored(null) - tile.getEnergyStored(null));
             }
         });

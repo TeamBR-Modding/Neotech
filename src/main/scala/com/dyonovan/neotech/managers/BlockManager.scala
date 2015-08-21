@@ -4,7 +4,7 @@ import com.dyonovan.neotech.common.blocks.machines.BlockMachine
 import com.dyonovan.neotech.common.blocks.misc.BlockCrafter
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage.{BlockRFStorage, BlockTank, ItemBlockRFStorage, ItemBlockTank}
-import com.dyonovan.neotech.common.tiles.machines.{TileFluidGenerator, TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
+import com.dyonovan.neotech.common.tiles.machines._
 import com.dyonovan.neotech.common.tiles.misc.TileCrafter
 import com.dyonovan.neotech.common.tiles.storage.{TileRFStorage, TileTank}
 import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockPipe}
@@ -37,6 +37,7 @@ object BlockManager {
     val electricCrusher = new BlockMachine("electricCrusher", classOf[TileElectricCrusher])
     val furnaceGenerator = new BlockMachine("furnaceGenerator", classOf[TileFurnaceGenerator])
     val fluidGenerator = new BlockMachine("fluidGenerator", classOf[TileFluidGenerator])
+    val thermalBinder = new BlockMachine("thermalBinder", classOf[TileThermalBinder])
 
     //ores
     val oreCopper = new BlockOre("oreCopper", 1)
@@ -78,6 +79,8 @@ object BlockManager {
         registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher], powerAcceptor = true)
         registerBlock(furnaceGenerator, "furnaceGenerator", classOf[TileFurnaceGenerator])
         registerBlock(fluidGenerator, "fluidGenerator", classOf[TileFluidGenerator])
+
+        registerBlock(thermalBinder, "thermalBinder", classOf[TileThermalBinder])
 
         //Ores
         registerBlock(oreCopper, "oreCopper", null, "oreCopper", powerAcceptor = false)

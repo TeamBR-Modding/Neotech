@@ -2,12 +2,12 @@ package com.dyonovan.neotech.common.blocks.machines
 
 import java.util.Random
 
-import com.dyonovan.neotech.client.gui.machines.{GuiFluidGenerator, GuiElectricCrusher, GuiElectricFurnace, GuiFurnaceGenerator}
+import com.dyonovan.neotech.client.gui.machines._
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.traits.CoreStates
-import com.dyonovan.neotech.common.container.machines.{ContainerElectricCrusher, ContainerElectricFurnace, ContainerFurnaceGenerator}
+import com.dyonovan.neotech.common.container.machines.{ContainerThermalBinder, ContainerElectricCrusher, ContainerElectricFurnace, ContainerFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.common.tiles.machines.{TileFluidGenerator, TileElectricCrusher, TileElectricFurnace, TileFurnaceGenerator}
+import com.dyonovan.neotech.common.tiles.machines._
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
@@ -76,6 +76,8 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends Bas
             case block: BlockManager.furnaceGenerator.type =>
                 new ContainerFurnaceGenerator(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
             case block: BlockManager.fluidGenerator.type => new ContainerGeneric
+            case block: BlockManager.thermalBinder.type  =>
+                new ContainerThermalBinder(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileThermalBinder])
             case _ => null
         }
     }
@@ -91,6 +93,8 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends Bas
                 new GuiFurnaceGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
             case block: BlockManager.fluidGenerator.type =>
                 new GuiFluidGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFluidGenerator])
+            case block: BlockManager.thermalBinder.type  =>
+                new GuiThermalBinder(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileThermalBinder])
             case _ => null
         }
     }
