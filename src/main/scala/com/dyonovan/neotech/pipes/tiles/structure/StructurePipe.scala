@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.pipes.tiles.structure
 
 import com.dyonovan.neotech.managers.BlockManager
-import com.dyonovan.neotech.pipes.blocks.{PipeProperties, BlockPipe}
+import com.dyonovan.neotech.pipes.blocks.{BlockPipe, PipeProperties}
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
 import com.dyonovan.neotech.pipes.types.SimplePipe
 import net.minecraft.item.EnumDyeColor
@@ -25,6 +25,15 @@ class StructurePipe extends SimplePipe {
      * @return
      */
     override def canConnect(facing: EnumFacing): Boolean = {
+        try {
+            worldObj.getBlockState(pos.offset(facing))
+        } catch {
+            case npe : NullPointerException =>
+                println("Block at: " + pos.offset(facing) + " does not have a blockstate. Please check here and notify the mod author")
+                return false
+            case _ => return false
+        }
+
         worldObj.getBlockState(pos.offset(facing)).getBlock match {
             case block : BlockPipe if worldObj.getBlockState(pos).getBlock.asInstanceOf[BlockPipe].colored  => //We are checking if it and us are colored
                 if(worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() != 0)
