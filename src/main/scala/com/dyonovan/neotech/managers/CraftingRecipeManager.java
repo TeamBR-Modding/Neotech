@@ -102,8 +102,8 @@ public class CraftingRecipeManager {
                 "BAB", " C ", 'A', BlockManager.ironTank(), 'B', Blocks.piston, 'C',
                 BlockManager.pipeBasicStructure());
         //Crafter
-        GameRegistry.addRecipe(new ItemStack(BlockManager.blockCrafter()), "ABA", 'A', Blocks.crafting_table,
-                'B', Blocks.chest);
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockCrafter()), new ItemStack(Blocks.crafting_table),
+                new ItemStack(Blocks.chest), new ItemStack(Blocks.crafting_table));
 
         //Bronze Dust
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.dustBronze()), "AA", "AB",
