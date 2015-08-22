@@ -34,6 +34,10 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.furnaceGenerator()), "ABA", "CDC", "ABA",
                 'A', Items.iron_ingot, 'B', Items.redstone, 'C', Blocks.furnace, 'D', Blocks.chest);
 
+        //Fluid Generator
+        GameRegistry.addRecipe(new ItemStack(BlockManager.fluidGenerator()), "ABA", "CDC", "ABA",
+                'A', Items.gold_ingot, 'B', Items.glowstone_dust, 'C', BlockManager.furnaceGenerator(), 'D', BlockManager.ironTank());
+
         //Ore Blocks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockCopper()), "AAA", "AAA", "AAA",
                 'A', "ingotCopper"));

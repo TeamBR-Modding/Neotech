@@ -24,14 +24,12 @@ class TileFertilizer extends TileEntity with UpdatingTile with Inventory {
 
     var corner1: BlockPos = _ //pos.north(3).west(3)
     var corner2: BlockPos = _ //pos.south(3).east(3)
-    var usesLeft: Int = 100
 
     override def onServerTick(): Unit = {
         if (corner1 == null) {
             corner1 = pos.north(3).west(3)
-            corner2 = pos.south(3).east(3)
+            corner2 = pos.south(3).east(3).down(3)
         }
-        if (usesLeft > 0) {
             val list: util.ArrayList[BlockPos] = Lists.newArrayList(BlockPos.getAllInBox(corner1, corner2))
                     .asInstanceOf[util.ArrayList[BlockPos]]
             for (i <- 0 until list.size()) {
@@ -44,32 +42,20 @@ class TileFertilizer extends TileEntity with UpdatingTile with Inventory {
                                     plant.canUseBonemeal(worldObj, worldObj.rand, plantPOS, state)) {
                                 plant.grow(worldObj, worldObj.rand, plantPOS, state)
                                 //ItemDye.spawnBonemealParticles(worldObj, plantPOS, 10)
-                                usesLeft -= 1
-                                if (usesLeft < 1) worldObj.destroyBlock(pos, false)
                             }
                         case _ =>
                     }
                 }
-            }
+
         }
     }
 
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].writeToNBT(tag)
-        if (corner1 != null) {
-            tag.setLong("Corner1", corner1.toLong)
-            tag.setLong("Corner2", corner2.toLong)
-        }
-        tag.setInteger("Uses", usesLeft)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].readFromNBT(tag)
-        if (tag.hasKey("Corner1")) {
-            corner1 = BlockPos.fromLong(tag.getLong("Corner1"))
-            corner2 = BlockPos.fromLong(tag.getLong("Corner2"))
-        }
-        usesLeft = tag.getInteger("Uses")
     }
 
     override def markDirty(): Unit = {
