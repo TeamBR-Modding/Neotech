@@ -40,6 +40,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.eliteRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.creativeRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.blockCrafter))
+        registerItem(Item.getItemFromBlock(BlockManager.blockFertilizer))
         registerItem(ItemManager.upgradeMBFull)
         registerItem(ItemManager.upgradeMBEmpty)
         registerItem(ItemManager.upgradeCapacity)

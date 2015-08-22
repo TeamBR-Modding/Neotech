@@ -1,11 +1,11 @@
 package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
-import com.dyonovan.neotech.common.blocks.misc.BlockCrafter
+import com.dyonovan.neotech.common.blocks.misc.{BlockFertilizer, BlockCrafter}
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage.{BlockRFStorage, BlockTank, ItemBlockRFStorage, ItemBlockTank}
 import com.dyonovan.neotech.common.tiles.machines._
-import com.dyonovan.neotech.common.tiles.misc.TileCrafter
+import com.dyonovan.neotech.common.tiles.misc.{TileFertilizer, TileCrafter}
 import com.dyonovan.neotech.common.tiles.storage.{TileRFStorage, TileTank}
 import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockPipe}
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
@@ -72,6 +72,7 @@ object BlockManager {
 
     //Misc
     val blockCrafter = new BlockCrafter("blockCrafter", classOf[TileCrafter])
+    val blockFertilizer = new BlockFertilizer("blockFertilizer", classOf[TileFertilizer])
 
     def preInit(): Unit = {
         //Machines
@@ -79,7 +80,6 @@ object BlockManager {
         registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher], powerAcceptor = true)
         registerBlock(furnaceGenerator, "furnaceGenerator", classOf[TileFurnaceGenerator])
         registerBlock(fluidGenerator, "fluidGenerator", classOf[TileFluidGenerator])
-
         registerBlock(thermalBinder, "thermalBinder", classOf[TileThermalBinder])
 
         //Ores
@@ -118,6 +118,7 @@ object BlockManager {
 
         //misc
         registerBlock(blockCrafter, "blockCrafter", classOf[TileCrafter])
+        registerBlock(blockFertilizer, "blockFertilizer", classOf[TileFertilizer])
     }
 
     /**
