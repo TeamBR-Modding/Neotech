@@ -71,19 +71,22 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
 
             if (liquidTag != null) {
                 val liquid = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
-                fluid = liquid.getFluid
-                if (stack.getItem == Item.getItemFromBlock(BlockManager.ironTank))
-                    height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 15.99F)
-                else if (stack.getItem == Item.getItemFromBlock(BlockManager.goldTank))
-                    height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 16), 15.99F)
-                else if (stack.getItem == Item.getItemFromBlock(BlockManager.diamondTank))
-                    height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 64), 15.99F)
-                else if (stack.getItem == Item.getItemFromBlock(BlockManager.creativeTank))
-                    height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 15.99F)
-                else
-                    height = 16
+                if (liquid != null && liquid.getFluid != null) {
+                    fluid = liquid.getFluid
+                    if (stack.getItem == Item.getItemFromBlock(BlockManager.ironTank))
+                        height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 15.99F)
+                    else if (stack.getItem == Item.getItemFromBlock(BlockManager.goldTank))
+                        height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 16), 15.99F)
+                    else if (stack.getItem == Item.getItemFromBlock(BlockManager.diamondTank))
+                        height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 64), 15.99F)
+                    else if (stack.getItem == Item.getItemFromBlock(BlockManager.creativeTank))
+                        height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 15.99F)
+                    else
+                        height = 16
+                }
             }
         }
+
         if (stack.getItem == Item.getItemFromBlock(BlockManager.ironTank))
             top = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
         else if (stack.getItem == Item.getItemFromBlock(BlockManager.goldTank))
