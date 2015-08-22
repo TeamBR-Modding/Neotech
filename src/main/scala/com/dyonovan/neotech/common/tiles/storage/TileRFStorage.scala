@@ -106,20 +106,24 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile wit
     }
 
     override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
-        if (tier == 4) return 0
-        val actual = energy.receiveEnergy(maxReceive, simulate)
-        if (worldObj != null)
-            worldObj.markBlockForUpdate(pos)
-        actual
+        if (energy != null) {
+            if (tier == 4) return 0
+            val actual = energy.receiveEnergy(maxReceive, simulate)
+            if (worldObj != null)
+                worldObj.markBlockForUpdate(pos)
+            actual
+        } else 0
     }
 
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = {
-        var doSimulate = simulate
-        if (tier == 4) doSimulate = true
-        val actual = energy.extractEnergy(maxExtract, doSimulate)
-        if (worldObj != null)
-            worldObj.markBlockForUpdate(pos)
-        actual
+        if (energy != null) {
+            var doSimulate = simulate
+            if (tier == 4) doSimulate = true
+            val actual = energy.extractEnergy(maxExtract, doSimulate)
+            if (worldObj != null)
+                worldObj.markBlockForUpdate(pos)
+            actual
+        } else 0
     }
 
     override def canConnectEnergy(from: EnumFacing): Boolean = true
