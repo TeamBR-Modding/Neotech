@@ -4,7 +4,6 @@ import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.pipes.blocks.{BlockPipe, PipeProperties}
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
 import com.dyonovan.neotech.pipes.types.SimplePipe
-import net.minecraft.block.state.IBlockState
 import net.minecraft.item.EnumDyeColor
 import net.minecraft.util.EnumFacing
 
