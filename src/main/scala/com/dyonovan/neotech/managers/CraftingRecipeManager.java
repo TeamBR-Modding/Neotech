@@ -113,6 +113,10 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.dustBronze()), "AA", "AB",
                 'A', "dustCopper", 'B', "dustTin"));
 
+        //Miniature Sun
+        GameRegistry.addRecipe(new ItemStack(BlockManager.blockFertilizer()), "ABA", "BCB", "ABA",
+                'A', Items.gold_ingot, 'B', Items.glowstone_dust, 'C', Blocks.chest);
+
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);

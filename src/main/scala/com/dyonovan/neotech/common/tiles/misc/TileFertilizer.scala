@@ -31,6 +31,7 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
     var corner1: BlockPos = _
     var corner2: BlockPos = _
     var list: util.ArrayList[BlockPos] = _
+    var disabled = false
 
     override def onServerTick(): Unit = {
         if (corner1 == null) {
@@ -42,13 +43,13 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
         val state = worldObj.getBlockState(plantPOS)
         val block = state.getBlock
         if (block.isInstanceOf[IPlantable] || block.isInstanceOf[IGrowable]) {
-            if (isBoneMeal._1 && worldObj.rand.nextInt(20) == 0) {
+            if (!disabled && isBoneMeal._1 && worldObj.rand.nextInt(20) == 0) {
                 growPlant(block, plantPOS, state)
                 if (worldObj.rand.nextInt(100) <= 14) {
                     decrStackSize(isBoneMeal._2, 1)
                     worldObj.markBlockForUpdate(getPos)
                 }
-            } else if (worldObj.rand.nextInt(100) <= 59) {
+            } else if (worldObj.rand.nextInt(100) <= 79) {
                 growPlant(block, plantPOS, state)
             }
         }
@@ -69,11 +70,13 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
+        tag.setBoolean("Disabled", disabled)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
+        disabled = tag.getBoolean("Disabled")
     }
 
     override def markDirty(): Unit = {

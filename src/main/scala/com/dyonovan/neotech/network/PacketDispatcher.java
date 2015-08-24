@@ -20,6 +20,8 @@ public class PacketDispatcher {
 
     public static void initPackets() {
         net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID().toUpperCase());
+
+        registerMessage(DisableSunPacket.class, DisableSunPacket.class);
     }
 
     @SuppressWarnings("unchecked")

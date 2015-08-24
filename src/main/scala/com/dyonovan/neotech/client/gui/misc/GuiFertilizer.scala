@@ -2,8 +2,11 @@ package com.dyonovan.neotech.client.gui.misc
 
 import com.dyonovan.neotech.common.container.misc.ContainerFertilizer
 import com.dyonovan.neotech.common.tiles.misc.TileFertilizer
+import com.dyonovan.neotech.network.{DisableSunPacket, PacketDispatcher}
 import com.teambr.bookshelf.client.gui.GuiBase
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentCheckBox, GuiComponentButton}
 import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
+import net.minecraft.util.StatCollector
 
 /**
  * This file was created for NeoTech
@@ -18,5 +21,11 @@ import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
 class GuiFertilizer(playerInv: InventoryPlayer, tileEntity: TileFertilizer) extends
 GuiBase[ContainerFertilizer](new ContainerFertilizer(playerInv, tileEntity), 175, 165, "neotech.fertilizer.title") {
 
-    override def addComponents(): Unit = {}
+    override def addComponents(): Unit = {
+        components += new GuiComponentCheckBox(60, 70, "neotech.button.disable", tileEntity.disabled) {
+            override def setValue(bool: Boolean): Unit = {
+                PacketDispatcher.net.sendToServer(new DisableSunPacket(tileEntity.getPos, bool))
+            }
+        }
+    }
 }
