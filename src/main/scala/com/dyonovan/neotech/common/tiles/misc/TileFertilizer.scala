@@ -8,10 +8,12 @@ import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import mcp.mobius.waila.api.ITaggedList
 import mcp.mobius.waila.api.ITaggedList.ITipList
-import net.minecraft.block.IGrowable
+import net.minecraft.block.state.IBlockState
+import net.minecraft.block.{Block, IGrowable}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.BlockPos
+import net.minecraftforge.common.IPlantable
 
 
 /**
@@ -36,24 +38,25 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
             corner1 = pos.south(3).east(3).down(2)
             list = Lists.newArrayList(BlockPos.getAllInBox(corner1, corner2)).asInstanceOf[util.ArrayList[BlockPos]]
         }
-        if (worldObj.rand.nextInt(40) == 0) {
-            val plantPOS = list.get(worldObj.rand.nextInt(list.size()))
-            if (plantPOS != pos) {
-                worldObj.getBlockState(plantPOS).getBlock match {
-                    case plant: IGrowable =>
-                        val state = worldObj.getBlockState(plantPOS)
-                        if (plant.canGrow(worldObj, plantPOS, state, worldObj.isRemote)) {
-                            if (isBoneMeal._1) {
-                                plant.grow(worldObj, worldObj.rand, plantPOS, state)
-                                if (worldObj.rand.nextInt(100) <= 34)
-                                    decrStackSize(isBoneMeal._2, 1)
-                            } else if (worldObj.rand.nextInt(100) <= 34)
-                                plant.grow(worldObj, worldObj.rand, plantPOS, state)
-                        }
-                    case _ =>
+        val plantPOS = list.get(worldObj.rand.nextInt(list.size()))
+        val state = worldObj.getBlockState(plantPOS)
+        val block = state.getBlock
+        if (block.isInstanceOf[IPlantable] || block.isInstanceOf[IGrowable]) {
+            if (isBoneMeal._1 && worldObj.rand.nextInt(20) == 0) {
+                growPlant(block, plantPOS, state)
+                if (worldObj.rand.nextInt(100) <= 14) {
+                    decrStackSize(isBoneMeal._2, 1)
+                    worldObj.markBlockForUpdate(getPos)
                 }
+            } else if (worldObj.rand.nextInt(100) <= 59) {
+                growPlant(block, plantPOS, state)
             }
         }
+    }
+
+    private def growPlant(block: Block, pos: BlockPos, state: IBlockState): Unit = {
+        worldObj.scheduleUpdate(pos, block, 0)
+        block.updateTick(worldObj, pos, state, worldObj.rand)
     }
 
     private def isBoneMeal: (Boolean, Int) = {
@@ -89,8 +92,8 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
         for (i <- 0 until getSizeInventory()) {
             if (getStackInSlot(i) != null)
                 count += getStackInSlot(i).stackSize
-            tipList.add(GuiColor.WHITE + "BoneMeal: " + count)
         }
+        tipList.add(GuiColor.WHITE + "BoneMeal: " + count)
         tipList
     }
 }
