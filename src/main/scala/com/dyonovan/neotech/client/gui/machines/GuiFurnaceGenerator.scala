@@ -22,7 +22,7 @@ import scala.collection.mutable.ArrayBuffer
  */
 class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator) extends
         GuiBase[ContainerFurnaceGenerator](new ContainerFurnaceGenerator(player.inventory, tileEntity), 175, 165,
-            "inventory.furnacegenerator.title"){
+            "neotech.furnacegenerator.title"){
 
     override def addComponents(): Unit = {
         components += new GuiComponentFlame(78, 55) {

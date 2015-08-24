@@ -114,10 +114,12 @@ BaseBlock(Material.iron, name, tileEntity) with OpensGui {
     override def getRenderType : Int = 3
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        new ContainerFertilizer(player.inventory, world.getTileEntity(new BlockPos(x, y, x)).asInstanceOf[TileFertilizer])
+        new ContainerFertilizer(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFertilizer])
     }
 
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        new GuiFertilizer(player, world.getTileEntity(new BlockPos(x, y, x)).asInstanceOf[TileFertilizer])
+        new GuiFertilizer(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFertilizer])
     }
+
+
 }

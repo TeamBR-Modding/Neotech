@@ -31,7 +31,8 @@ public class GuiCrafter extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y) {
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("neotech.container.crafter"), 88 - (fontRendererObj.getStringWidth(StatCollector.translateToLocal("neotech.container.crafter")) / 2), 5, 0x404040);
+        this.fontRendererObj.drawString(StatCollector.translateToLocal("neotech.crafter.title"), 88 - (fontRendererObj
+                .getStringWidth(StatCollector.translateToLocal("neotech.crafter.title")) / 2), 5, 0x404040);
     }
 
     @Override

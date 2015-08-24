@@ -17,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer
  */
 class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) extends
         GuiBase[ContainerThermalBinder](new ContainerThermalBinder(player.inventory, tileEntity), 175, 193,
-            "inventory.thermalbinder.title"){
+            "neotech.thermalbinder.title"){
 
     override def addComponents(): Unit = {}
 }

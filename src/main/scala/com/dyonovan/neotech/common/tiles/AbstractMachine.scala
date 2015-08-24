@@ -177,9 +177,13 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
      * side
      */
-    override def canInsertItem(index: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
-        if (index == 0) {
-            return recipe(itemStackIn) != null
+    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+        if (slot == 0 && recipe(itemStackIn) != null) {
+            if (getStackInSlot(0) == null) return true
+            if (getStackInSlot(0).isItemEqual(itemStackIn)) {
+                if (getStackInSlot(0).getMaxStackSize >= getStackInSlot(0).stackSize + itemStackIn.stackSize)
+                    return true
+            }
         }
         false
     }

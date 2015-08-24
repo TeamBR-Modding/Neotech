@@ -23,7 +23,8 @@ import scala.collection.mutable.ArrayBuffer
  * @since August 13, 2015
  */
 class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) extends
-        GuiBase[ContainerElectricCrusher](new ContainerElectricCrusher(player.inventory, tileEntity), 175, 165, "inventory.crusher.title"){
+        GuiBase[ContainerElectricCrusher](new ContainerElectricCrusher(player.inventory, tileEntity), 175, 165,
+            "neotech.crusher.title"){
 
     protected var tile = tileEntity
 

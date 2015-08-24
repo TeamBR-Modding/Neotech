@@ -16,4 +16,6 @@ import net.minecraft.entity.player.InventoryPlayer
  */
 class ContainerFertilizer(playerInventory: InventoryPlayer, tile: TileFertilizer) extends BaseContainer(playerInventory, tile) {
 
+    addInventoryGrid(70, 30, 2)
+    addPlayerInventorySlots(8, 84)
 }

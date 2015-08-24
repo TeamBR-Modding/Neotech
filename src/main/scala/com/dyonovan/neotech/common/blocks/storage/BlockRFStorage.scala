@@ -81,10 +81,10 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         var title = ""
         tier match {
-            case 1 => title = "inventory.rfstoragebasic.title"
-            case 2 => title = "inventory.rfstorageadvanced.title"
-            case 3 => title = "inventory.rfstorageelite.title"
-            case 4 => title = "inventory.rfstoragecreative.title"
+            case 1 => title = "neotech.rfstoragebasic.title"
+            case 2 => title = "neotech.rfstorageadvanced.title"
+            case 3 => title = "neotech.rfstorageelite.title"
+            case 4 => title = "neotech.rfstoragecreative.title"
             case _ =>
         }
         new GuiRFStorage(player, world.getTileEntity(new BlockPos(x, y, z))

@@ -14,7 +14,8 @@ import scala.collection.mutable.ArrayBuffer
 import scala.reflect.internal.util.Collections
 
 class GuiElectricFurnace(player: EntityPlayer, tileEntity: TileElectricFurnace) extends
-        GuiBase[ContainerElectricFurnace](new ContainerElectricFurnace(player.inventory, tileEntity), 175, 165, "inventory.furnace.title"){
+        GuiBase[ContainerElectricFurnace](new ContainerElectricFurnace(player.inventory, tileEntity), 175, 165,
+            "neotech.furnace.title"){
 
     protected var tile = tileEntity
 
@@ -26,12 +27,6 @@ class GuiElectricFurnace(player: EntityPlayer, tileEntity: TileElectricFurnace) 
     override def addComponents(): Unit = {
         components += new GuiComponentArrow(81, 35) {
             override def getCurrentProgress: Int = tile.getCookProgressScaled(24)
-
-            /*override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
-                if (NeoTech.nei != null)
-                    ArrayBuffer(StatCollector.translateToLocal("inventory.nei.recipes"))
-                null
-            }*/
 
             override def mouseDown(x: Int, y: Int, button: Int) : Unit = {
                 if (NeoTech.nei != null) NeoTech.nei.onArrowClicked(inventory)

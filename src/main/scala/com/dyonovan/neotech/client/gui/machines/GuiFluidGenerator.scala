@@ -21,7 +21,7 @@ import scala.collection.mutable.ArrayBuffer
  * @since August 21, 2015
  */
 class GuiFluidGenerator(player: EntityPlayer, tileEntity: TileFluidGenerator) extends
-        GuiBase[ContainerGeneric](new ContainerGeneric, 140, 120, "inventory.fluidgenerator.title") {
+        GuiBase[ContainerGeneric](new ContainerGeneric, 140, 120, "neotech.fluidgenerator.title") {
 
 
     override def addComponents(): Unit = {

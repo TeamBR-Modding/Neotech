@@ -52,16 +52,19 @@ tile.neotech:diamondTank.name=Diamond Fluid Tank
 tile.neotech:creativeTank.name=Creative Fluid Tank
 
 tile.neotech:blockCrafter.name=Duel Crafter
-neotech.container.crafter=Duel Crafter
+tile.neotech:blockFertilizer.name=Miniature Sun
 
-inventory.furnace.title=Electric Furnace
-inventory.crusher.title=Electric Crusher
-inventory.furnacegenerator.title=Furnace Generator
-inventory.fluidgenerator.title=Fluid Generator
-inventory.rfstoragebasic.title=Basic RF Storage
-inventory.rfstorageadvanced.title=Advanced RF Storage
-inventory.rfstorageelite.title=Elite RF Storage
-inventory.rfstoragecreative.title=Creative RF Storage
+neotech.furnace.title=Electric Furnace
+neotech.crusher.title=Electric Crusher
+neotech.furnacegenerator.title=Furnace Generator
+neotech.fluidgenerator.title=Fluid Generator
+neotech.thermalbinder.title=Thermal Binder
+neotech.crafter.title=Duel Crafter
+neotech.fertilizer.title=Miniature Sun
+neotech.rfstoragebasic.title=Basic RF Storage
+neotech.rfstorageadvanced.title=Advanced RF Storage
+neotech.rfstorageelite.title=Elite RF Storage
+neotech.rfstoragecreative.title=Creative RF Storage
 
 item.neotech:dustIron.name=Iron Dust
 item.neotech:dustGold.name=Gold Dust
@@ -82,5 +85,4 @@ item.neotech:upgradeSecondary.name=Secondary Output Upgrade
 neotech.nei.name=NeoTech
 neotech.nei.furnacerecipes=Electric Furnace
 neotech.nei.crusherrecipes=Electric Crusher
-inventory.nei.recipes=Recipes
 neotech.nei.ecrusher.outputchance=10% Chance per Upgrade
