@@ -35,8 +35,8 @@ class StructurePipe extends SimplePipe {
         }
 
         worldObj.getBlockState(pos.offset(facing)).getBlock match {
-            case block : BlockPipe if worldObj.getBlockState(pos).getBlock.asInstanceOf[BlockPipe].colored  => //We are checking if it and us are colored
-                if(worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() != 0)
+            case block : BlockPipe if worldObj.getBlockState(pos.offset(facing)).getBlock.asInstanceOf[BlockPipe].colored && worldObj.getBlockState(pos).getBlock.asInstanceOf[BlockPipe].colored  => //We are checking if it and us are colored
+                if(worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() != 0)
                     worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() == worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() ||
                             worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() == 0
                 else
