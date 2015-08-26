@@ -4,7 +4,7 @@ import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.registries.CrusherRecipeRegistry
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{EnumParticleTypes, EnumFacing}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 
 import scala.util.Random
 
@@ -18,7 +18,7 @@ import scala.util.Random
  * @author Dyonovan
  * @since August 12, 2015
  */
-class TileElectricCrusher extends AbstractMachine {
+class TileElectricCrusher extends AbstractMachine  {
 
     override def smeltItem() {
         var recipeResult: ItemStack = recipe(getStackInSlot(0))

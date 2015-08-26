@@ -17,12 +17,12 @@ import net.minecraft.entity.player.InventoryPlayer
 class ContainerThermalBinder(playerInventory: InventoryPlayer, tileEntity: TileThermalBinder) extends
         BaseContainer(playerInventory, tileEntity) {
 
-    addSlotToContainer(new RestrictedSlot(tileEntity, 0, 70, 27))
-    addSlotToContainer(new RestrictedSlot(tileEntity, 1, 105, 27))
-    addSlotToContainer(new RestrictedSlot(tileEntity, 2, 70, 61))
-    addSlotToContainer(new RestrictedSlot(tileEntity, 3, 105, 61))
-    addSlotToContainer(new RestrictedSlot(tileEntity, 4, 41, 43))
-    addSlotToContainer(new RestrictedSlot(tileEntity, 5, 138, 44))
-    addPlayerInventorySlots(8, 111)
+    addSlotToContainer(new RestrictedSlot(tileEntity, 0, 67, 32))
+    addSlotToContainer(new RestrictedSlot(tileEntity, 1, 92, 32))
+    addSlotToContainer(new RestrictedSlot(tileEntity, 2, 67, 57))
+    addSlotToContainer(new RestrictedSlot(tileEntity, 3, 92, 57))
+    addSlotToContainer(new RestrictedSlot(tileEntity, 4, 38, 44))
+    addSlotToContainer(new RestrictedSlot(tileEntity, 5, 122, 44))
+    addPlayerInventorySlots(8, 103)
 
 }

@@ -1,8 +1,10 @@
 package com.dyonovan.neotech.common.tiles.machines
 
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumFacing
 
 /**
  * This file was created for NeoTech
@@ -50,4 +52,19 @@ class TileThermalBinder extends AbstractMachine {
      * @return int range 0 - 16
      */
     override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
+
+    override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
+        val item = stack.getItem
+        if (slot >= 0 && slot <= 3)
+            item.isInstanceOf[ItemManager.upgradeControl.type] || item.isInstanceOf[ItemManager.upgradeExpansion.type] ||
+                    item.isInstanceOf[ItemManager.upgradeHardDrive.type] || item.isInstanceOf[ItemManager.upgradeProcessor.type]
+        else if (slot == 4) item.isInstanceOf[ItemManager.upgradeMBEmpty.type] || item.isInstanceOf[ItemManager.upgradeMBFull.type]
+        else false
+    }
+
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == 5
+
+    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+        isItemValidForSlot(slot, itemStackIn)
+    }
 }

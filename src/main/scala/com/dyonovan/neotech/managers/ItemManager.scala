@@ -1,8 +1,7 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.items.{BaseUpgradeItem, BaseItem}
-import net.minecraft.init.Items
-import net.minecraft.item.{ItemStack, Item}
+import com.dyonovan.neotech.common.items.{BaseItem, BaseUpgradeItem}
+import net.minecraft.item.Item
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -33,10 +32,10 @@ object ItemManager {
     //Upgrade System
     val upgradeMBEmpty = new BaseUpgradeItem("upgradeMBEmpty", 1, true)
     val upgradeMBFull = new BaseUpgradeItem("upgradeMBFull", 1, false)
-    val upgradeCapacity = new BaseUpgradeItem("upgradeCapacity", 8, true)
-    val upgradeControl = new BaseUpgradeItem("upgradeControl", 8, true)
-    val upgradeEfficiency = new BaseUpgradeItem("upgradeEfficiency", 8, true)
-    val upgradeSecondary = new BaseUpgradeItem("upgradeSecondary", 8, true)
+    val upgradeHardDrive = new BaseUpgradeItem("upgradeHardDrive", 8, true)
+    val upgradeControl = new BaseUpgradeItem("upgradeControl", 1, true)
+    val upgradeProcessor = new BaseUpgradeItem("upgradeProcessor", 8, true)
+    val upgradeExpansion = new BaseUpgradeItem("upgradeExpansion", 1, true)
 
     def preInit(): Unit = {
         registerItem(dustGold, "dustGold", "dustGold")
@@ -51,10 +50,10 @@ object ItemManager {
 
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
         registerItem(upgradeMBFull, "upgradeMBFull")
-        registerItem(upgradeCapacity, "upgradeCapacity")
+        registerItem(upgradeHardDrive, "upgradeHardDrive")
         registerItem(upgradeControl, "upgradeControl")
-        registerItem(upgradeEfficiency, "upgradeEfficiency")
-        registerItem(upgradeSecondary, "upgradeSecondary")
+        registerItem(upgradeProcessor, "upgradeProcessor")
+        registerItem(upgradeExpansion, "upgradeExpansion")
     }
     /**
      * Helper method to register items

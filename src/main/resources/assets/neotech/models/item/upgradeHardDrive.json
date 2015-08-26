@@ -1,7 +1,7 @@
 {
 	"parent": "builtin/generated",
 	"textures": {
-		"layer0": "neotech:items/upgradeCapacity"
+		"layer0": "neotech:items/upgradeHardDrive"
 	},
 	"display": {
 		"thirdperson": {

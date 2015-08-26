@@ -43,10 +43,10 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.blockFertilizer))
         registerItem(ItemManager.upgradeMBFull)
         registerItem(ItemManager.upgradeMBEmpty)
-        registerItem(ItemManager.upgradeCapacity)
+        registerItem(ItemManager.upgradeHardDrive)
         registerItem(ItemManager.upgradeControl)
-        registerItem(ItemManager.upgradeEfficiency)
-        registerItem(ItemManager.upgradeSecondary)
+        registerItem(ItemManager.upgradeProcessor)
+        registerItem(ItemManager.upgradeExpansion)
 
         registerPipes()
     }
