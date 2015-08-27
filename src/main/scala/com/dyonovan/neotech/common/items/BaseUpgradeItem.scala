@@ -29,15 +29,15 @@ class BaseUpgradeItem(name: String, maxStackSize: Int, creative: Boolean) extend
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, tooltip: java.util.List[_], advanced: Boolean): Unit = {
+        //super.addInformation(stack, player, tooltip, advanced)
         stack.getItem match {
-            case ItemManager.upgradeMBEmpty =>
-                tooltip.asInstanceOf[java.util.List[String]].add("Empty")
             case ItemManager.upgradeMBFull =>
                 val mb = UpgradeBoard.getBoardFromStack(stack)
                 tooltip.asInstanceOf[java.util.List[String]].add("Has Control: " + mb.hasControl)
                 tooltip.asInstanceOf[java.util.List[String]].add("Has Expansion: " + mb.hasExpansion)
                 tooltip.asInstanceOf[java.util.List[String]].add("HardDrives: " + mb.getHardDriveCount)
                 tooltip.asInstanceOf[java.util.List[String]].add("Processors: " + mb.getProcessorCount)
+            case _ =>
         }
     }
 }

@@ -29,7 +29,7 @@ class TileThermalBinder extends AbstractMachine {
     final val MB_OUTPUT = 5
 
     override def doWork(): Unit = {
-        if (getStackInSlot(MB_INPUT) != null) {
+        if (getStackInSlot(MB_INPUT) != null && getEnergyStored(null) >= 1000) {
             getStackInSlot(MB_INPUT).getItem match {
                 case ItemManager.upgradeMBEmpty if hasSlotUpgrades =>
                     val tag = writeToMB()
@@ -37,6 +37,7 @@ class TileThermalBinder extends AbstractMachine {
                     newMB.setTagCompound(tag)
                     setInventorySlotContents(MB_OUTPUT, newMB)
                     setInventorySlotContents(MB_INPUT, null)
+                    energy.extractEnergy(1000, false)
                     worldObj.markBlockForUpdate(pos)
                 case ItemManager.upgradeMBFull if !hasSlotUpgrades =>
                     val mb = UpgradeBoard.getBoardFromStack(getStackInSlot(MB_INPUT))
@@ -59,6 +60,7 @@ class TileThermalBinder extends AbstractMachine {
                     }
                     setInventorySlotContents(MB_INPUT, null)
                     setInventorySlotContents(MB_OUTPUT, new ItemStack(ItemManager.upgradeMBEmpty, 1))
+                    energy.extractEnergy(1000, false)
                     worldObj.markBlockForUpdate(pos)
                 case _ =>
             }
