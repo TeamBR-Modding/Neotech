@@ -12,6 +12,17 @@ import net.minecraft.item.ItemStack
  * @author Dyonovan
  * @since August 24, 2015
  */
+object UpgradeBoard {
+    def getBoardFromStack(stack: ItemStack): UpgradeBoard = {
+        if (stack.hasTagCompound) {
+            val tag = stack.getTagCompound
+            return new UpgradeBoard(tag.getInteger("HardDrive"), tag.getInteger("Processor"), tag.getBoolean("Control"),
+                tag.getBoolean("Expansion"))
+        }
+        null
+    }
+}
+
 class UpgradeBoard {
 
     var hardDrive = 0
@@ -25,15 +36,6 @@ class UpgradeBoard {
         this.processor = processor
         this.control = control
         this.expansion = expansion
-    }
-
-    def getBoardFromStack(stack: ItemStack): UpgradeBoard = {
-        if (stack.hasTagCompound) {
-            val tag = stack.getTagCompound
-            return new UpgradeBoard(tag.getInteger("HardDrive"), tag.getInteger("Processor"), tag.getBoolean("Control"),
-                    tag.getBoolean("Expansion"))
-        }
-        null
     }
 
     def getHardDriveCount: Int = {

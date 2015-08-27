@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.common.tiles.machines
 
+import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 
 /**
@@ -26,10 +28,87 @@ class TileThermalBinder extends AbstractMachine {
     final val MB_INPUT = 4
     final val MB_OUTPUT = 5
 
-
-
     override def doWork(): Unit = {
+        if (getStackInSlot(MB_INPUT) != null) {
+            getStackInSlot(MB_INPUT).getItem match {
+                case ItemManager.upgradeMBEmpty if hasSlotUpgrades =>
+                    val tag = writeToMB()
+                    val newMB = new ItemStack(ItemManager.upgradeMBFull)
+                    newMB.setTagCompound(tag)
+                    setInventorySlotContents(MB_OUTPUT, newMB)
+                    setInventorySlotContents(MB_INPUT, null)
+                    worldObj.markBlockForUpdate(pos)
+                case ItemManager.upgradeMBFull if !hasSlotUpgrades =>
+                    val mb = UpgradeBoard.getBoardFromStack(getStackInSlot(MB_INPUT))
+                    var slot = 0
+                    if (mb.hasControl) {
+                        setInventorySlotContents(slot, new ItemStack(ItemManager.upgradeControl, 1))
+                        slot += 1
+                    }
+                    if (mb.hasExpansion) {
+                        setInventorySlotContents(slot, new ItemStack(ItemManager.upgradeExpansion, 1))
+                        slot += 1
+                    }
+                    if (mb.getHardDriveCount > 0) {
+                        setInventorySlotContents(slot, new ItemStack(ItemManager.upgradeHardDrive, mb.getHardDriveCount))
+                        slot += 1
+                    }
+                    if (mb.getProcessorCount > 0) {
+                        setInventorySlotContents(slot, new ItemStack(ItemManager.upgradeProcessor, mb.getProcessorCount))
+                        slot += 1
+                    }
+                    setInventorySlotContents(MB_INPUT, null)
+                    setInventorySlotContents(MB_OUTPUT, new ItemStack(ItemManager.upgradeMBEmpty, 1))
+                    worldObj.markBlockForUpdate(pos)
+                case _ =>
+            }
+        }
+    }
 
+    private def writeToMB(): NBTTagCompound = {
+        val tag = new NBTTagCompound
+        for (i <- 0 to 3) {
+            if (getStackInSlot(i) != null) {
+                getStackInSlot(i).getItem match {
+                    case item: ItemManager.upgradeControl.type =>
+                        if (!tag.getBoolean("Control")) {
+                            tag.setBoolean("Control", true)
+                            setInventorySlotContents(i, null)
+                        }
+                    case item: ItemManager.upgradeExpansion.type =>
+                        if (!tag.getBoolean("Expansion")) {
+                            tag.setBoolean("Expansion", true)
+                            setInventorySlotContents(i, null)
+                        }
+                    case item: ItemManager.upgradeHardDrive.type =>
+                        val countTag = tag.getInteger("HardDrive")
+                        if (countTag + getStackInSlot(i).stackSize <= 8) {
+                            tag.setInteger("HardDrive", countTag + getStackInSlot(i).stackSize)
+                            setInventorySlotContents(i, null)
+                        } else if (countTag + getStackInSlot(i).stackSize > 8) {
+                            tag.setInteger("HardDrive", 8)
+                            getStackInSlot(i).stackSize -= 8 - countTag
+                        }
+                    case item: ItemManager.upgradeProcessor.type =>
+                        val countTag = tag.getInteger("Processor")
+                        if (countTag + getStackInSlot(i).stackSize <= 8) {
+                            tag.setInteger("Processor", countTag + getStackInSlot(i).stackSize)
+                            setInventorySlotContents(i, null)
+                        } else if (countTag + getStackInSlot(i).stackSize > 8) {
+                            tag.setInteger("Processor", 8)
+                            getStackInSlot(i).stackSize -= 8 - countTag
+                        }
+                }
+            }
+        }
+        tag
+    }
+
+    def hasSlotUpgrades: Boolean = {
+        for (i <- 0 to 3) {
+            if (getStackInSlot(i) != null) return true
+        }
+        false
     }
 
     override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {}

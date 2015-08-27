@@ -77,10 +77,10 @@ item.neotech:ingotTin.name=Tin Ingot
 
 item.neotech:upgradeMBFull.name=Filled Upgrade Controller
 item.neotech:upgradeMBEmpty.name=Empty Upgrade Controller
-item.neotech:upgradeCapacity.name=Capacity Upgrade
+item.neotech:upgradeHardDrive.name=HardDrive Upgrade
 item.neotech:upgradeControl.name=Control Upgrade
-item.neotech:upgradeEfficiency.name=Efficiency Upgrade
-item.neotech:upgradeSecondary.name=Secondary Output Upgrade
+item.neotech:upgradeProcessor.name=Processor Upgrade
+item.neotech:upgradeExpansion.name=Expansion Upgrade
 
 neotech.nei.name=NeoTech
 neotech.nei.furnacerecipes=Electric Furnace
