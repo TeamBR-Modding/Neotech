@@ -22,6 +22,7 @@ public class PacketDispatcher {
         net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID().toUpperCase());
 
         registerMessage(DisableSunPacket.class, DisableSunPacket.class);
+        registerMessage(TBStartPacket.class, TBStartPacket.class);
     }
 
     @SuppressWarnings("unchecked")
