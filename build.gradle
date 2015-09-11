@@ -18,7 +18,7 @@ buildscript {
 repositories {
     maven {
         name 'BR Repo'
-        url "http://www.dyonovan.com/maven2/"
+        url "http://www.teambrmodding.com/maven2/"
     }
     maven {
         name 'CB Maven FS'
