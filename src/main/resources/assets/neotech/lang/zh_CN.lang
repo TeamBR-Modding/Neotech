@@ -1,69 +1,83 @@
-itemGroup.tabNeoTech=????
-itemGroup.tabNeoTechDeco=????: �4-�6-�e-�2?�9?�5?�4?�6-�e-�2-
+﻿itemGroup.tabNeoTech=NeoTech
+itemGroup.tabNeoTechPipes=运输管道
+itemGroup.tabNeoTechDeco=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2e
 
-tile.neotech:furnaceGenerator.name=?????
-tile.neotech:furnaceGeneratorActive.name=?????
-tile.neotech:electricFurnace.name=????
-tile.neotech:electricFurnaceActive.name=????
-tile.neotech:electricCrusher.name=?????
-tile.neotech:electricCrusherActive.name=?????
-tile.neotech:fluidGenerator.name=?????
-tile.neotech:fluidGeneratorActive.name=?????
-tile.neotech:electricMiner.name=?????
-tile.neotech:thermalBinder.name=?????
-tile.neotech:basicCable.name=??RF??
-tile.neotech:advancedCable.name=??RF??
-tile.neotech:eliteCable.name=??RF??
-tile.neotech:basicRFStorage.name=??RF??
-tile.neotech:advancedRFStorage.name=??RF??
-tile.neotech:eliteRFStorage.name=??RF??
-tile.neotech:creativeRFStorage.name=??RF??
-tile.neotech:ironTank.name=??????
-tile.neotech:goldTank.name=??????
-tile.neotech:diamondTank.name=??????
-tile.neotech:crafter.name=???
-tile.neotech:oreCopper.name=???
-tile.neotech:oreTin.name=???
-tile.neotech:blockCopper.name=???
-tile.neotech:blockTin.name=???
-tile.neotech:basicItemPipe.name=??????
-tile.neotech:advancedItemPipe.name=??????
-tile.neotech:eliteItemPipe.name=??????
-tile.neotech:trampoline.name=?? (WIP)
+tile.neotech:furnaceGenerator.name=熔炉发电机
+tile.neotech:electricFurnace.name=电炉
+tile.neotech:electricCrusher.name=电动粉碎机
 
-tile.neotech:phantomGlass.name=????
-tile.neotech:voidGlass.name=�8????�R
-tile.neotech:borderedBrick.name=????
-tile.neotech:borderedStoneBrick.name=????
-tile.neotech:climbingRock.name=????
+tile.neotech:basicRFStorage.name=基础RF电容
+tile.neotech:advancedRFStorage.name=高级RF电容
+tile.neotech:eliteRFStorage.name=精英RF电容
+tile.neotech:creativeRFStorage.name=创造RF电容
 
-item.neotech:dustIron.name=??
-item.neotech:dustGold.name=??
-item.neotech:dustCopper.name=??
-item.neotech:ingotCopper.name=??
-item.neotech:dustTin.name=??
-item.neotech:ingotTin.name=??
-item.neotech:capRam.name=????
-item.neotech:effFan.name=????
-item.neotech:ioPort.name=?????? (WIP)
-item.neotech:speedProcessor.name=????
-item.neotech:minerSize.name=????
-item.neotech:silkTouch.name=???? (WIP)
-item.neotech:upgradeMB.name=????? (??)
-item.neotech:upgradeMBFull.name=?????  (??)
+tile.neotech:pipeStructure_black.name=§8黑色 §r结构管
+tile.neotech:pipeStructure_blue.name=§1蓝色 §r结构管
+tile.neotech:pipeStructure_brown.name=§6棕色 §r结构管
+tile.neotech:pipeStructure_cyan.name=§b青色 §r结构管
+tile.neotech:pipeStructure_gray.name=§8灰色 §r结构管
+tile.neotech:pipeStructure_green.name=§2绿色 §r结构管
+tile.neotech:pipeStructure_lightBlue.name=§9浅蓝色 §r结构管
+tile.neotech:pipeStructure_lime.name=§a绿黄色 §r结构管
+tile.neotech:pipeStructure_magenta.name=§5品红 §r结构管
+tile.neotech:pipeStructure_orange.name=§6橙色 §r结构管
+tile.neotech:pipeStructure_pink.name=§d粉色 §r结构管
+tile.neotech:pipeStructure_purple.name=§5紫色 §r结构管
+tile.neotech:pipeStructure_red.name=§c红色 §r结构管
+tile.neotech:pipeStructure_silver.name=§7银白色 §r结构管
+tile.neotech:pipeStructure_white.name=白色 结构管
+tile.neotech:pipeStructure_yellow.name=§e黄色 §r结构管
 
-neotech.container.crafter=???
+tile.neotech:pipeBasicSpeedStructure.name=基础加速管
 
-button.neotech:buttonStart.name=??
+tile.neotech:pipeItemBasicSource.name=物品提取管
+tile.neotech:pipeItemBasicSink.name=物品导入管
 
-title.neotech:rfUsage.name=RF??:
-title.neotech:processTime.name=????:
-title.neotech:autoOutput.name=????:
-title.neotech:isRunning.name=??:
-title.neotech:waitTime.name=????:
-title.neotech:currentSize.name=????:
-title.neotech:totalBlocks.name=????:
-title.neotech:blocksLeft.name=????:
-title.neotech:scan.name=??
-title.neotech:start.name=??
-title.neotech:stop.name=??
+tile.neotech:pipeEnergyBasicSource.name=能量提取管
+tile.neotech:pipeEnergyBasicSink.name=能量导入管
+
+tile.neotech:pipeFluidBasicSource.name=流体提取管
+tile.neotech:pipeFluidBasicSink.name=流体导入管
+
+tile.neotech:oreCopper.name=铜矿石
+tile.neotech:oreTin.name=锡矿石
+tile.neotech:blockCopper.name=铜块
+tile.neotech:blockTin.name=锡块
+
+tile.neotech:ironTank.name=铁质液罐
+tile.neotech:goldTank.name=金质液罐
+tile.neotech:diamondTank.name=钻石液罐
+tile.neotech:creativeTank.name=创造液罐
+
+tile.neotech:blockCrafter.name=双联合成台
+neotech.container.crafter=双联合成台
+
+inventory.furnace.title=电炉
+inventory.crusher.title=电动粉碎机
+inventory.furnacegenerator.title=熔炉发电机
+inventory.rfstoragebasic.title=基础RF电容
+inventory.rfstorageadvanced.title=高级RF电容
+inventory.rfstorageelite.title=精英RF电容
+inventory.rfstoragecreative.title=创造RF电容
+
+item.neotech:dustIron.name=铁粉
+item.neotech:dustGold.name=金粉
+item.neotech:dustCopper.name=铜粉
+item.neotech:ingotCopper.name=铜锭
+item.neotech:dustBronze.name=青铜粉
+item.neotech:ingotBronze.name=青铜锭
+item.neotech:dustTin.name=锡粉
+item.neotech:ingotTin.name=锡锭
+
+item.neotech:upgradeMBFull.name=填充升级控制器
+item.neotech:upgradeMBEmpty.name=空升级控制器
+item.neotech:upgradeCapacity.name=容量升级
+item.neotech:upgradeControl.name=控制升级
+item.neotech:upgradeEfficiency.name=效率提升
+item.neotech:upgradeSecondary.name=二次输出升级
+
+neotech.nei.name=NeoTech
+neotech.nei.furnacerecipes=电炉
+neotech.nei.crusherrecipes=电动粉碎机
+inventory.nei.recipes=方法
+neotech.nei.ecrusher.outputchance=每次升级10%概率
