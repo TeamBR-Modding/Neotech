@@ -1,13 +1,12 @@
 package com.dyonovan.neotech.pipes.types
 
 import java.util
-import javax.vecmath.Vector3d
 
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing}
+import net.minecraft.util.{Vec3, AxisAlignedBB, BlockPos, EnumFacing}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -130,7 +129,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
             resource.destination = destination
             var u: BlockPos = destination
             while (parent.get(u.toLong) != null) {
-                resource.pathQueue.push(new Vector3d(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
+                resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
                 u = parent.get(u.toLong)
             }
         }
@@ -236,7 +235,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
             resource.destination = destination
             var u: BlockPos = destination
             while (parent.get(u.toLong) != null) {
-                resource.pathQueue.push(new Vector3d(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
+                resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
                 u = parent.get(u.toLong)
             }
         }

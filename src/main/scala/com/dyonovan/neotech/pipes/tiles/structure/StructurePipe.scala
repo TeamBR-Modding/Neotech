@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.pipes.tiles.structure
 
 import com.dyonovan.neotech.managers.BlockManager
-import com.dyonovan.neotech.pipes.blocks.{BlockPipe, PipeProperties}
+import com.dyonovan.neotech.pipes.blocks.{BlockPipeSpecial, BlockPipe, PipeProperties}
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
 import com.dyonovan.neotech.pipes.types.SimplePipe
 import net.minecraft.item.EnumDyeColor
@@ -40,9 +40,11 @@ class StructurePipe extends SimplePipe {
                     worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() == worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() ||
                             worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].ordinal() == 0
                 else
-                    getWorld.getBlockState(pos.offset(facing)).getBlock.isInstanceOf[BlockPipe]
+                    getWorld.getBlockState(pos.offset(facing)).getBlock.isInstanceOf[BlockPipe] ||
+                      getWorld.getBlockState(pos.offset(facing)).getBlock.isInstanceOf[BlockPipeSpecial]
             case _ =>
-                getWorld.getBlockState(pos.offset(facing)).getBlock.isInstanceOf[BlockPipe]
+                getWorld.getBlockState(pos.offset(facing)).getBlock.isInstanceOf[BlockPipe] ||
+                  getWorld.getBlockState(pos.offset(facing)).getBlock.isInstanceOf[BlockPipeSpecial]
         }
     }
 

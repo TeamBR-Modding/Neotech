@@ -1,13 +1,12 @@
 package com.dyonovan.neotech.pipes.tiles.energy
 
 import java.util
-import javax.vecmath.Vector3d
 
 import cofh.api.energy.{EnergyStorage, IEnergyProvider, IEnergyReceiver}
 import com.dyonovan.neotech.pipes.entities.EnergyResourceEntity
 import com.dyonovan.neotech.pipes.types.{SinkPipe, ExtractionPipe, SimplePipe}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.{Vec3, BlockPos, EnumFacing}
 
 /**
  * This file was created for NeoTech
@@ -164,7 +163,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
             resource.destination = destination
             var u: BlockPos = destination
             while (parent.get(u.toLong) != null) {
-                resource.pathQueue.push(new Vector3d(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
+                resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
                 u = parent.get(u.toLong)
             }
         }

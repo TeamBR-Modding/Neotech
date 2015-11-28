@@ -4,9 +4,9 @@ import com.dyonovan.neotech.pipes.types.SimplePipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import javax.vecmath.Vector3d;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -47,8 +47,8 @@ abstract public class ResourceEntity<R> {
     public double nextSpeed;
 
     //The path and destination
-    public Stack<Vector3d> pathQueue;
-    public Vector3d currentTarget;
+    public Stack<Vec3> pathQueue;
+    public Vec3 currentTarget;
     public BlockPos from;
     public BlockPos destination;
 
@@ -128,24 +128,24 @@ abstract public class ResourceEntity<R> {
             double distanceToTravel = speed;
 
             while (distanceToTravel > 0 && currentTarget != null) {
-                int xMod = Integer.signum(Double.compare(xPos, currentTarget.getX()));
-                int yMod = Integer.signum(Double.compare(yPos, currentTarget.getY()));
-                int zMod = Integer.signum(Double.compare(zPos, currentTarget.getZ()));
+                int xMod = Integer.signum(Double.compare(xPos, currentTarget.xCoord));
+                int yMod = Integer.signum(Double.compare(yPos, currentTarget.yCoord));
+                int zMod = Integer.signum(Double.compare(zPos, currentTarget.zCoord));
 
                 prevX = xPos;
                 prevY = yPos;
                 prevZ = zPos;
 
                 if (xMod != 0) {
-                    double distance = (Math.abs(xPos - currentTarget.getX()));
+                    double distance = (Math.abs(xPos - currentTarget.xCoord));
                     distanceToTravel -= Math.min(speed, distance);
                     xPos += Math.min(speed, distance) * -xMod;
                 } else if (yMod != 0) {
-                    double distance = (Math.abs(yPos - currentTarget.getY()));
+                    double distance = (Math.abs(yPos - currentTarget.yCoord));
                     distanceToTravel -= Math.min(speed, distance);
                     yPos += Math.min(speed, distance) * -yMod;
                 } else if (zMod != 0) {
-                    double distance = (Math.abs(zPos - currentTarget.getZ()));
+                    double distance = (Math.abs(zPos - currentTarget.zCoord));
                     distanceToTravel -= Math.min(speed, distance);
                     zPos += Math.min(speed, distance) * -zMod;
                 }
@@ -156,7 +156,7 @@ abstract public class ResourceEntity<R> {
                 }
 
                 //If we have entered the new pipe, then we should update
-                if (xPos == currentTarget.getX() && yPos == currentTarget.getY() && zPos == currentTarget.getZ()) {
+                if (xPos == currentTarget.xCoord && yPos == currentTarget.yCoord && zPos == currentTarget.zCoord) {
                     if (onPipeEntered())
                         nextTarget();
                 }
@@ -174,8 +174,8 @@ abstract public class ResourceEntity<R> {
      * @return True if into a new pipe
      */
     public boolean onPipeEntered() {
-        if(world.getTileEntity(new BlockPos(currentTarget.x, currentTarget.y, currentTarget.z)) instanceof SimplePipe) {
-            SimplePipe pipe = (SimplePipe) world.getTileEntity(new BlockPos(currentTarget.x, currentTarget.y, currentTarget.z));
+        if(world.getTileEntity(new BlockPos(currentTarget.xCoord, currentTarget.yCoord, currentTarget.zCoord)) instanceof SimplePipe) {
+            SimplePipe pipe = (SimplePipe) world.getTileEntity(new BlockPos(currentTarget.xCoord, currentTarget.yCoord, currentTarget.zCoord));
             pipe.onResourceEnteredPipe(this);
             return true;
         } else {
@@ -241,7 +241,7 @@ abstract public class ResourceEntity<R> {
                                         pathQueue.clear();
                                         BlockPos u = destination;
                                         while (parent.get(u.toLong()) != null) {
-                                            pathQueue.push(new Vector3d(u.getX() + 0.5, u.getY() + 0.5, u.getZ() + 0.5));
+                                            pathQueue.push(new Vec3(u.getX() + 0.5, u.getY() + 0.5, u.getZ() + 0.5));
                                             u = parent.get(u.toLong());
                                         }
                                         return true;
