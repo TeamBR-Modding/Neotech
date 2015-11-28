@@ -59,6 +59,25 @@ class ContainerCrafter(playerInventory: InventoryPlayer, tile: TileCrafter) exte
 
     override def canInteractWith(player: EntityPlayer): Boolean = true
 
+    override def transferStackInSlot(player: EntityPlayer, slotId: Int): ItemStack = {
+        val slot: Slot = inventorySlots.get(slotId).asInstanceOf[Slot]
+        if (slot != null && slot.getHasStack) {
+            val itemToTransfer: ItemStack = slot.getStack
+            val copy: ItemStack = itemToTransfer.copy
+            if (slotId < inventorySize) {
+                if (!mergeItemStackSafe(itemToTransfer, inventorySize, inventorySlots.size, reverse = true)) return null
+            }
+            else if (!mergeItemStackSafe(itemToTransfer, 0, inventorySize, reverse = false)) return null
+            if (itemToTransfer.stackSize == 0) slot.putStack(null)
+            else slot.onSlotChanged()
+            if (itemToTransfer.stackSize != copy.stackSize) {
+                slot.onPickupFromSlot(player, copy)
+                return copy
+            }
+        }
+        null
+    }
+
     class DummyCraftingInventory(tile: TileCrafter, container: Container, offset: Int)
             extends InventoryCrafting(null, 3, 3) {
 
