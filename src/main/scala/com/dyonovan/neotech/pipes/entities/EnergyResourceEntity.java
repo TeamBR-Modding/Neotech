@@ -69,7 +69,8 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableLighting();
 
-        RenderHelper.setupBillboard(Minecraft.getMinecraft().thePlayer);
+        //TODO Find another way to render power
+        //RenderHelper.setupBillboard(Minecraft.getMinecraft().thePlayer);
 
         WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
         renderer.startDrawingQuads();
