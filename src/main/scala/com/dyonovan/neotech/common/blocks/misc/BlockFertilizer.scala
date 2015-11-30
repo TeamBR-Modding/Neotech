@@ -29,7 +29,7 @@ object BlockFertilizer {
 }
 
 class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
-BaseBlock(Material.iron, name, tileEntity) with OpensGui {
+    BaseBlock(Material.iron, name, tileEntity) with OpensGui {
 
     setLightLevel(1.0F)
     setDefaultState(this.blockState.getBaseState
@@ -120,6 +120,4 @@ BaseBlock(Material.iron, name, tileEntity) with OpensGui {
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         new GuiFertilizer(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFertilizer])
     }
-
-
 }
