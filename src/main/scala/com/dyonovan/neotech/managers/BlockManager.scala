@@ -105,10 +105,10 @@ object BlockManager {
         registerBlock(pipeFluidSink, "pipeFluidBasicSink", classOf[FluidSinkPipe])
 
         //RF Storage
-        registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
-        registerBlock(advancedRFStorage, "advancedRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
-        registerBlock(eliteRFStorage, "eliteRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
-        registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], powerAcceptor = true, classOf[ItemBlockRFStorage])
+        registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], powerAcceptor = false, classOf[ItemBlockRFStorage])
+        registerBlock(advancedRFStorage, "advancedRFStorage", classOf[TileRFStorage], powerAcceptor = false, classOf[ItemBlockRFStorage])
+        registerBlock(eliteRFStorage, "eliteRFStorage", classOf[TileRFStorage], powerAcceptor = false, classOf[ItemBlockRFStorage])
+        registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], powerAcceptor = false, classOf[ItemBlockRFStorage])
 
         //Tanks
         registerBlock(ironTank, "ironTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
