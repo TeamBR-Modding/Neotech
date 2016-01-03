@@ -27,10 +27,6 @@ class GuiElectricFurnace(player: EntityPlayer, tileEntity: TileElectricFurnace) 
     override def addComponents(): Unit = {
         components += new GuiComponentArrow(81, 35) {
             override def getCurrentProgress: Int = tile.getCookProgressScaled(24)
-
-            override def mouseDown(x: Int, y: Int, button: Int) : Unit = {
-                if (NeoTech.nei != null) NeoTech.nei.onArrowClicked(inventory)
-            }
         }
         components += new GuiComponentPowerBar(20, 18, 18, 60, new Color(255, 0, 0)) {
             override def getEnergyPercent(scale: Int): Int = {

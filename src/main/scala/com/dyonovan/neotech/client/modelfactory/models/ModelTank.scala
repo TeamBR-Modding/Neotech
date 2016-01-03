@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.client.modelfactory.models
 
 import java.util
-import javax.vecmath.Vector3f
 
 import com.dyonovan.neotech.collections.DummyState
 import com.dyonovan.neotech.common.tiles.storage.TileTank
@@ -16,6 +15,7 @@ import net.minecraft.util.{EnumFacing, EnumWorldBlockLayer}
 import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.client.model.{ISmartBlockModel, ISmartItemModel}
 import net.minecraftforge.fluids.{Fluid, FluidContainerRegistry, FluidStack}
+import org.lwjgl.util.vector.Vector3f
 
 /**
  * This file was created for NeoTech
@@ -102,10 +102,11 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
     override def isBuiltInRenderer: Boolean = false
 
     override def getItemCameraTransforms: ItemCameraTransforms = {
-        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
+        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
     }
 
-    override def getTexture: TextureAtlasSprite = glass
+    //override def getTexture: TextureAtlasSprite = glass
+    override def getParticleTexture: TextureAtlasSprite = glass
 
     override def isAmbientOcclusion: Boolean = false
 

@@ -12,19 +12,19 @@ buildscript {
     }
 }
 
-plugins {
+/*plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
-}
+}*/
 
 repositories {
     maven {
         name 'BR Repo'
         url "http://www.teambrmodding.com/maven2/"
     }
-    maven {
+    /*maven {
         name 'CB Maven FS'
         url "http://chickenbones.net/maven/"
-    }
+    }*/
     maven { // The repo from which to get waila
         name "Mobius Repo"
         url "http://mobiusstrip.eu/maven"
@@ -67,7 +67,7 @@ targetCompatibility = 1.7
 
 minecraft {
 
-    version = config.minecraft_version + "-" + config.forge_version + "-" + config.minecraft_version
+    version = config.minecraft_version + "-" + config.forge_version
 
     replaceIn "Reference.scala"
     replace "@VERSION@", "${config.mod_version}"
@@ -80,7 +80,7 @@ minecraft {
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
     //mappings = "snapshot_20141130"
-    mappings = "snapshot_20151218"
+    mappings = "stable_20"
 }
 
 configurations.all {
@@ -88,9 +88,9 @@ configurations.all {
 }
 
 dependencies {
-    //compile "codechicken:CodeChickenCore:${config.minecraft_version}-${config.ccc_version}:dev"
-    //compile "codechicken:CodeChickenLib:${config.minecraft_version}-${config.CCLIB_version}:dev"
-    //compile "codechicken:NotEnoughItems:${config.minecraft_version}-${config.NEI_version}:dev"
+    //compile "codechicken:CodeChickenCore:${config.ccc_version}:dev"
+    //compile "codechicken:CodeChickenLib:${config.CCLIB_version}:dev"
+    //compile "codechicken:NotEnoughItems:${config.NEI_version}:dev"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev", changing: true
 }

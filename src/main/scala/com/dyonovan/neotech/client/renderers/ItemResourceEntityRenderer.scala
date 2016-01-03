@@ -2,7 +2,6 @@ package com.dyonovan.neotech.client.renderers
 
 import com.dyonovan.neotech.pipes.tiles.item.ItemExtractionPipe
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
-import net.minecraft.tileentity.TileEntity
 
 /**
  * This file was created for NeoTech
@@ -14,12 +13,13 @@ import net.minecraft.tileentity.TileEntity
  * @author Paul Davis pauljoda
  * @since August 20, 2015
  */
-class ItemResourceEntityRenderer extends TileEntitySpecialRenderer {
-    override def renderTileEntityAt(tile: TileEntity, posX: Double, posY: Double, posZ: Double, partialTick: Float, integer: Int): Unit = {
-        val resourceList = tile.asInstanceOf[ItemExtractionPipe].resources
+class ItemResourceEntityRenderer extends TileEntitySpecialRenderer[ItemExtractionPipe] {
+
+    override def renderTileEntityAt(te: ItemExtractionPipe, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int): Unit = {
+        val resourceList = te.resources
         for (i <- 0 until resourceList.size()) {
             val resource = resourceList.get(i)
-            resource.renderResource(partialTick)
+            resource.renderResource(partialTicks)
         }
     }
 }
