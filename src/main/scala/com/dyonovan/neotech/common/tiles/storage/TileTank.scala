@@ -4,8 +4,6 @@ import com.dyonovan.neotech.common.blocks.storage.BlockTank
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, UpdatingTile}
-import mcp.mobius.waila.api.ITaggedList
-import mcp.mobius.waila.api.ITaggedList.ITipList
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.nbt.NBTTagCompound
@@ -157,7 +155,7 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
         }
     }
 
-    override def returnWailaBody(tipList: ITaggedList.ITipList): ITipList = {
+    override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
         var fluidName = ""
         var fluidAmount = ""
         if (tank.getFluid != null) {

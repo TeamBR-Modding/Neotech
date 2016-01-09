@@ -4,8 +4,6 @@ import cofh.api.energy.{EnergyStorage, IEnergyHandler, IEnergyReceiver}
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
-import mcp.mobius.waila.api.ITaggedList
-import mcp.mobius.waila.api.ITaggedList.ITipList
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
@@ -128,7 +126,7 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile wit
 
     override def canConnectEnergy(from: EnumFacing): Boolean = true
 
-    override def returnWailaBody(tipList: ITaggedList.ITipList): ITipList = {
+    override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
         var color = ""
         if (getEnergyStored(null) > 0)
             color = GuiColor.GREEN.toString
