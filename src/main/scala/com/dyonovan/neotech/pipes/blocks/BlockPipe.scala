@@ -87,7 +87,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
      */
     @SideOnly(Side.CLIENT)
-    override def getSubBlocks(itemIn: Item, tab: CreativeTabs, list: java.util.List[_]) {
+    override def getSubBlocks(itemIn: Item, tab: CreativeTabs, list: java.util.List[ItemStack]) {
         if(colored) {
             for (color <- EnumDyeColor.values()) {
                 list.asInstanceOf[java.util.List[ItemStack]].add(new ItemStack(itemIn, 1, color.getMetadata))
@@ -193,7 +193,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         }
     }
 
-    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[_], collidingEntity : Entity) {
+    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
         this.setBlockBoundsBasedOnState(worldIn, pos)
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
