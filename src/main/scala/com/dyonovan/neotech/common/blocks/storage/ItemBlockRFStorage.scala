@@ -28,7 +28,7 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with IEnergyCont
     setHasSubtypes(true)
 
     @SideOnly(Side.CLIENT)
-    override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[_]): Unit = {
+    override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[ItemStack]): Unit = {
         var is = new ItemStack(this)
         setEnergy(is, getEnergyInfo._2)
         subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
@@ -41,7 +41,7 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with IEnergyCont
     }
 
     @SideOnly(Side.CLIENT)
-    override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[_], boolean: Boolean): Unit = {
+    override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if (stack.hasTagCompound) {
             if (stack.getTagCompound.getInteger("Energy") != 0) {
                 list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + (stack.getTagCompound.getInteger("Energy") + "/" + getEnergyInfo._2 + " RF"))

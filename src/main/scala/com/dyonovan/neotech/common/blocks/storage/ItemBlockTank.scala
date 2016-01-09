@@ -28,14 +28,14 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
     setHasSubtypes(true)
 
     @SideOnly(Side.CLIENT)
-    override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[_]): Unit = {
+    override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[ItemStack]): Unit = {
         val is = new ItemStack(this)
         is.setItemDamage(16)
         subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
     }
 
     @SideOnly(Side.CLIENT)
-    override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[_], boolean: Boolean): Unit = {
+    override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if (getFluid(stack) != null) {
             list.asInstanceOf[java.util.List[String]].add(GuiColor.WHITE + getFluid(stack).getLocalizedName)
             list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + getFluid(stack).amount.toString + "/" +

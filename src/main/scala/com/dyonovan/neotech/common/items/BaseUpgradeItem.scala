@@ -28,7 +28,7 @@ class BaseUpgradeItem(name: String, maxStackSize: Int, creative: Boolean) extend
     def getName: String = { name }
 
     @SideOnly(Side.CLIENT)
-    override def addInformation(stack: ItemStack, player: EntityPlayer, tooltip: java.util.List[_], advanced: Boolean): Unit = {
+    override def addInformation(stack: ItemStack, player: EntityPlayer, tooltip: java.util.List[String], advanced: Boolean): Unit = {
         //super.addInformation(stack, player, tooltip, advanced)
         stack.getItem match {
             case ItemManager.upgradeMBFull =>
