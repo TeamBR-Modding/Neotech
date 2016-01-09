@@ -1,23 +1,21 @@
 package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.BlockMachine
-import com.dyonovan.neotech.common.blocks.misc.{BlockFertilizer, BlockCrafter}
+import com.dyonovan.neotech.common.blocks.misc.{BlockCrafter, BlockFertilizer}
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage.{BlockRFStorage, BlockTank, ItemBlockRFStorage, ItemBlockTank}
 import com.dyonovan.neotech.common.tiles.machines._
-import com.dyonovan.neotech.common.tiles.misc.{TileFertilizer, TileCrafter}
+import com.dyonovan.neotech.common.tiles.misc.{TileCrafter, TileFertilizer}
 import com.dyonovan.neotech.common.tiles.storage.{TileRFStorage, TileTank}
 import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockPipe}
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
 import com.dyonovan.neotech.pipes.tiles.fluid.{FluidExtractionPipe, FluidSinkPipe}
 import com.dyonovan.neotech.pipes.tiles.item.{ItemExtractionPipe, ItemSinkPipe}
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
-import com.dyonovan.neotech.registries.PowerAdvantageRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -76,20 +74,20 @@ object BlockManager {
 
     def preInit(): Unit = {
         //Machines
-        registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace], powerAcceptor = true)
-        registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher], powerAcceptor = true)
+        registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace])
+        registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher])
         registerBlock(furnaceGenerator, "furnaceGenerator", classOf[TileFurnaceGenerator])
         registerBlock(fluidGenerator, "fluidGenerator", classOf[TileFluidGenerator])
         registerBlock(thermalBinder, "thermalBinder", classOf[TileThermalBinder])
 
         //Ores
-        registerBlock(oreCopper, "oreCopper", null, "oreCopper", powerAcceptor = false)
-        registerBlock(oreTin, "oreTin", null, "oreTin", powerAcceptor = false)
-        registerBlock(blockCopper, "blockCopper", null, "blockCopper", powerAcceptor = false)
-        registerBlock(blockTin, "blockTin", null, "blockTin", powerAcceptor = false)
+        registerBlock(oreCopper, "oreCopper", null, "oreCopper")
+        registerBlock(oreTin, "oreTin", null, "oreTin")
+        registerBlock(blockCopper, "blockCopper", null, "blockCopper")
+        registerBlock(blockTin, "blockTin", null, "blockTin")
 
         //Pipes
-        registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], powerAcceptor = false, classOf[ItemBlockPipe])
+        registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockPipe])
         for(color <- EnumDyeColor.values())
             OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
 
@@ -105,16 +103,16 @@ object BlockManager {
         registerBlock(pipeFluidSink, "pipeFluidBasicSink", classOf[FluidSinkPipe])
 
         //RF Storage
-        registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], powerAcceptor = false, classOf[ItemBlockRFStorage])
-        registerBlock(advancedRFStorage, "advancedRFStorage", classOf[TileRFStorage], powerAcceptor = false, classOf[ItemBlockRFStorage])
-        registerBlock(eliteRFStorage, "eliteRFStorage", classOf[TileRFStorage], powerAcceptor = false, classOf[ItemBlockRFStorage])
-        registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], powerAcceptor = false, classOf[ItemBlockRFStorage])
+        registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])
+        registerBlock(advancedRFStorage, "advancedRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])
+        registerBlock(eliteRFStorage, "eliteRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])
+        registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])
 
         //Tanks
-        registerBlock(ironTank, "ironTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
-        registerBlock(goldTank, "goldTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
-        registerBlock(diamondTank, "diamondTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
-        registerBlock(creativeTank, "creativeTank", classOf[TileTank], powerAcceptor = false, classOf[ItemBlockTank])
+        registerBlock(ironTank, "ironTank", classOf[TileTank], classOf[ItemBlockTank])
+        registerBlock(goldTank, "goldTank", classOf[TileTank], classOf[ItemBlockTank])
+        registerBlock(diamondTank, "diamondTank", classOf[TileTank], classOf[ItemBlockTank])
+        registerBlock(creativeTank, "creativeTank", classOf[TileTank], classOf[ItemBlockTank])
 
         //misc
         registerBlock(blockCrafter, "blockCrafter", classOf[TileCrafter])
@@ -129,28 +127,18 @@ object BlockManager {
      * @param tileEntity The tile entity, null if none
      * @param oreDict    The ore dict tag, should it be needed
      */
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String,
-                      powerAcceptor: Boolean) : Unit = {
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String) : Unit = {
         GameRegistry.registerBlock(block, name)
         if (tileEntity != null)
             GameRegistry.registerTileEntity(tileEntity, name)
         if (oreDict != null)
             OreDictionary.registerOre(oreDict, block)
-
-        if (Loader.isModLoaded("poweradvantage") && powerAcceptor) {
-            PowerAdvantageRegistry.registerPA(block)
-        }
     }
 
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], powerAcceptor: Boolean,
-                      itemBlock: Class[_ <: ItemBlock]) : Unit = {
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], itemBlock: Class[_ <: ItemBlock]) : Unit = {
         GameRegistry.registerBlock(block, itemBlock, name)
         if (tileEntity != null)
             GameRegistry.registerTileEntity(tileEntity, name)
-
-        if (Loader.isModLoaded("poweradvantage") && powerAcceptor) {
-            PowerAdvantageRegistry.registerPA(block)
-        }
     }
 
     /**
@@ -161,12 +149,11 @@ object BlockManager {
      * @param tileEntity The tile
      */
     def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity]) : Unit = {
-        registerBlock(block, name, tileEntity, null, powerAcceptor = false)
+        val oreDict: String = null
+        registerBlock(block, name, tileEntity, oreDict)
+        registerBlock(block, name, tileEntity, oreDict)
     }
 
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], powerAcceptor: Boolean) : Unit = {
-        registerBlock(block, name, tileEntity, null, powerAcceptor)
-    }
 
 
 }
