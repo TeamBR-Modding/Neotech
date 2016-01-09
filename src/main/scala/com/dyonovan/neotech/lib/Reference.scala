@@ -14,7 +14,7 @@ object Reference {
     final val MOD_NAME     = "NeoTech"
     final val MOD_ID       = "neotech"
     final val VERSION      = "@VERSION@"
-    final val DEPENDENCIES = "required-after:bookshelfapi@[2.1.0,)"
+    final val DEPENDENCIES = "required-after:bookshelfapi@[2.2,)"
 
     final val CONFIG_COPPER_GENERATION = "Copper Ore Generation"
     final val CONFIG_TIN_GENERATION = "Tin Ore Generation"
