@@ -136,13 +136,13 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
 
             //Render Fluid
             if (renderFluid != null && (MinecraftForgeClient.getRenderLayer == EnumWorldBlockLayer.TRANSLUCENT || isItem)) {
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, fluidHeight, 0.01F), new Vector3f(15.99F, fluidHeight, 15.99F), face, renderFluid.getIcon, EnumFacing.UP, modelRot, null, scale, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.001F, 0.01F), new Vector3f(15.999F, 0.001F, 15.999F), face, renderFluid.getIcon, EnumFacing.DOWN, modelRot, null, scale, true))
+                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, fluidHeight, 0.01F), new Vector3f(15.99F, fluidHeight, 15.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.UP, modelRot, null, scale, true))
+                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.001F, 0.01F), new Vector3f(15.999F, 0.001F, 15.999F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.DOWN, modelRot, null, scale, true))
 
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 0.01F), new Vector3f(15.99F, fluidHeight, 0.01F), face, renderFluid.getIcon, EnumFacing.NORTH, modelRot, null, scale, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 15.99F), new Vector3f(15.99F, fluidHeight, 15.99F), face, renderFluid.getIcon, EnumFacing.SOUTH, modelRot, null, scale, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 0.01F), new Vector3f(0.01F, fluidHeight, 15.99F), face, renderFluid.getIcon, EnumFacing.WEST, modelRot, null, scale, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(15.99F, 0.01F, 0.01F), new Vector3f(15.99F, fluidHeight, 15.99F), face, renderFluid.getIcon, EnumFacing.EAST, modelRot, null, scale, true))
+                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 0.01F), new Vector3f(15.99F, fluidHeight, 0.01F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.NORTH, modelRot, null, scale, true))
+                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 15.99F), new Vector3f(15.99F, fluidHeight, 15.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.SOUTH, modelRot, null, scale, true))
+                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 0.01F), new Vector3f(0.01F, fluidHeight, 15.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.WEST, modelRot, null, scale, true))
+                list.add(faceBakery.makeBakedQuad(new Vector3f(15.99F, 0.01F, 0.01F), new Vector3f(15.99F, fluidHeight, 15.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.EAST, modelRot, null, scale, true))
             }
         }
         list
