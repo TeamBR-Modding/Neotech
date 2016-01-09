@@ -110,7 +110,7 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
 
     override def isAmbientOcclusion: Boolean = false
 
-    override def getGeneralQuads: util.List[_] = {
+    override def getGeneralQuads: util.List[BakedQuad] = {
         val list: util.ArrayList[BakedQuad] = new util.ArrayList[BakedQuad]()
         val uv = new BlockFaceUV(Array(0.0F, 0.0F, 16.0F, 16.0F), 0)
         val face = new BlockPartFace(null, 0, "", uv)
@@ -150,7 +150,7 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
 
     override def isGui3d: Boolean = true
 
-    override def getFaceQuads(p_177551_1_ : EnumFacing): util.List[_] = new util.ArrayList[Nothing]()
+    override def getFaceQuads(p_177551_1_ : EnumFacing): util.List[BakedQuad] = new util.ArrayList[BakedQuad]()
 
     def MovedUp: ItemTransformVec3f = {
         new ItemTransformVec3f(new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F))

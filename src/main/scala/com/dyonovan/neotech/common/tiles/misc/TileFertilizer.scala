@@ -6,6 +6,7 @@ import com.google.common.collect.Lists
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
+import net.minecraft.block.state.IBlockState
 import net.minecraft.block.{Block, IGrowable}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity

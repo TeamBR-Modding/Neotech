@@ -14,7 +14,7 @@ import net.minecraft.item.EnumDyeColor
  * @since August 19, 2015
  */
 object PipeProperties {
-    lazy val COLOR = PropertyEnum.create("color", classOf[EnumDyeColor])
+    lazy val COLOR  = PropertyEnum.create("color", classOf[EnumDyeColor])
     lazy val UP = PropertyBool.create("up")
     lazy val DOWN = PropertyBool.create("down")
     lazy val NORTH = PropertyBool.create("north")

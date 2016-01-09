@@ -30,24 +30,24 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     setHardness(1.5F)
     setLightOpacity(0)
     setDefaultState(this.blockState.getBaseState
-            .withProperty(PipeProperties.SPECIAL_UP, 0)
-            .withProperty(PipeProperties.SPECIAL_DOWN, 0)
-            .withProperty(PipeProperties.SPECIAL_NORTH, 0)
-            .withProperty(PipeProperties.SPECIAL_EAST, 0)
-            .withProperty(PipeProperties.SPECIAL_SOUTH, 0)
-            .withProperty(PipeProperties.SPECIAL_WEST, 0))
+            .withProperty(PipeProperties.SPECIAL_UP, 0.asInstanceOf[Integer])
+            .withProperty(PipeProperties.SPECIAL_DOWN, 0.asInstanceOf[Integer])
+            .withProperty(PipeProperties.SPECIAL_NORTH, 0.asInstanceOf[Integer])
+            .withProperty(PipeProperties.SPECIAL_EAST, 0.asInstanceOf[Integer])
+            .withProperty(PipeProperties.SPECIAL_SOUTH, 0.asInstanceOf[Integer])
+            .withProperty(PipeProperties.SPECIAL_WEST, 0.asInstanceOf[Integer]))
 
     protected override def createBlockState: BlockState = {
         new BlockState(this, PipeProperties.SPECIAL_UP, PipeProperties.SPECIAL_DOWN, PipeProperties.SPECIAL_NORTH, PipeProperties.SPECIAL_SOUTH, PipeProperties.SPECIAL_EAST, PipeProperties.SPECIAL_WEST)
     }
 
     override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
-        state.withProperty(PipeProperties.SPECIAL_UP, countConnections(worldIn, pos, EnumFacing.UP))
-                .withProperty(PipeProperties.SPECIAL_DOWN, countConnections(worldIn, pos, EnumFacing.DOWN))
-                .withProperty(PipeProperties.SPECIAL_NORTH, countConnections(worldIn, pos, EnumFacing.NORTH))
-                .withProperty(PipeProperties.SPECIAL_EAST, countConnections(worldIn, pos, EnumFacing.EAST))
-                .withProperty(PipeProperties.SPECIAL_SOUTH, countConnections(worldIn, pos, EnumFacing.SOUTH))
-                .withProperty(PipeProperties.SPECIAL_WEST, countConnections(worldIn, pos, EnumFacing.WEST))
+        state.withProperty(PipeProperties.SPECIAL_UP, countConnections(worldIn, pos, EnumFacing.UP).asInstanceOf[Integer])
+                .withProperty(PipeProperties.SPECIAL_DOWN, countConnections(worldIn, pos, EnumFacing.DOWN).asInstanceOf[Integer])
+                .withProperty(PipeProperties.SPECIAL_NORTH, countConnections(worldIn, pos, EnumFacing.NORTH).asInstanceOf[Integer])
+                .withProperty(PipeProperties.SPECIAL_EAST, countConnections(worldIn, pos, EnumFacing.EAST).asInstanceOf[Integer])
+                .withProperty(PipeProperties.SPECIAL_SOUTH, countConnections(worldIn, pos, EnumFacing.SOUTH).asInstanceOf[Integer])
+                .withProperty(PipeProperties.SPECIAL_WEST, countConnections(worldIn, pos, EnumFacing.WEST).asInstanceOf[Integer])
     }
 
     /**
@@ -127,7 +127,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
     }
 
-    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[_], collidingEntity : Entity) {
+    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
         this.setBlockBoundsBasedOnState(worldIn, pos)
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }

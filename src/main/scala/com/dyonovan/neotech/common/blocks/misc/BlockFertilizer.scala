@@ -6,7 +6,7 @@ import com.dyonovan.neotech.common.container.misc.ContainerFertilizer
 import com.dyonovan.neotech.common.tiles.misc.TileFertilizer
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.PropertyInteger
+import net.minecraft.block.properties.{IProperty, PropertyInteger}
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
@@ -25,7 +25,7 @@ import net.minecraft.world.{IBlockAccess, World}
  * @since August 22, 2015
  */
 object BlockFertilizer {
-    lazy val ON_BLOCK = PropertyInteger.create("attached_side", 0, 6)
+    lazy val ON_BLOCK  = PropertyInteger.create("attached_side", 0, 6)
 }
 
 class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
@@ -33,7 +33,7 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
 
     setLightLevel(1.0F)
     setDefaultState(this.blockState.getBaseState
-            .withProperty(BlockFertilizer.ON_BLOCK, 6))
+            .withProperty(BlockFertilizer.ON_BLOCK, 6.asInstanceOf[Integer]))
 
     override def isFullBlock: Boolean = false
     override def isFullCube : Boolean = false
@@ -45,7 +45,7 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
         placer match {
             case player : EntityPlayer =>
                 if(player.isSneaking)
-                    return getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attachedSide)
+                    return getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attachedSide.asInstanceOf[Integer])
             case _ =>
         }
 
@@ -60,14 +60,14 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
             }
         }
 
-        getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attachedSide)
+        getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attachedSide.asInstanceOf[Integer])
     }
 
     /**
      * Convert the given metadata into a BlockState for this Block
      */
     override def getStateFromMeta(meta: Int): IBlockState = {
-        getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, meta)
+        getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, meta.asInstanceOf[Integer])
     }
 
     /**

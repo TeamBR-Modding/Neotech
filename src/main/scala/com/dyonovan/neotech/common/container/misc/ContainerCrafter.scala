@@ -101,7 +101,7 @@ class ContainerCrafter(playerInventory: InventoryPlayer, tile: TileCrafter) exte
                 null
         }
 
-        override def getStackInSlotOnClosing(slot: Int): ItemStack = tile.getStackInSlotOnClosing(slot + offset)
+        //override def getStackInSlotOnClosing(slot: Int): ItemStack = tile.getStackInSlotOnClosing(slot + offset)
 
         override def decrStackSize(slot: Int, size: Int): ItemStack = {
             val stack:ItemStack = tile.decrStackSize(slot + offset, size)

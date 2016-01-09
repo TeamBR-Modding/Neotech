@@ -34,20 +34,20 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     setLightOpacity(0)
     if(colored)
         setDefaultState(this.blockState.getBaseState.withProperty(PipeProperties.COLOR, EnumDyeColor.WHITE)
-                .withProperty(PipeProperties.UP, false)
-                .withProperty(PipeProperties.DOWN, false)
-                .withProperty(PipeProperties.NORTH, false)
-                .withProperty(PipeProperties.EAST, false)
-                .withProperty(PipeProperties.SOUTH, false)
-                .withProperty(PipeProperties.WEST, false))
+                .withProperty(PipeProperties.UP, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.DOWN, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.NORTH, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.EAST, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.SOUTH, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.WEST, false.asInstanceOf[java.lang.Boolean]))
     else
         setDefaultState(this.blockState.getBaseState
-                .withProperty(PipeProperties.UP, false)
-                .withProperty(PipeProperties.DOWN, false)
-                .withProperty(PipeProperties.NORTH, false)
-                .withProperty(PipeProperties.EAST, false)
-                .withProperty(PipeProperties.SOUTH, false)
-                .withProperty(PipeProperties.WEST, false))
+                .withProperty(PipeProperties.UP, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.DOWN, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.NORTH, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.EAST, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.SOUTH, false.asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.WEST, false.asInstanceOf[java.lang.Boolean]))
 
     override def onBlockPlaced(world: World, pos: BlockPos, facing: EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
         if(colored)
@@ -135,12 +135,12 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     }
 
     override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState=  {
-        state.withProperty(PipeProperties.UP, isPipeConnected(worldIn, pos, EnumFacing.UP))
-                .withProperty(PipeProperties.DOWN, isPipeConnected(worldIn, pos, EnumFacing.DOWN))
-                .withProperty(PipeProperties.NORTH, isPipeConnected(worldIn, pos, EnumFacing.NORTH))
-                .withProperty(PipeProperties.EAST, isPipeConnected(worldIn, pos, EnumFacing.EAST))
-                .withProperty(PipeProperties.SOUTH, isPipeConnected(worldIn, pos, EnumFacing.SOUTH))
-                .withProperty(PipeProperties.WEST, isPipeConnected(worldIn, pos, EnumFacing.WEST))
+        state.withProperty(PipeProperties.UP, isPipeConnected(worldIn, pos, EnumFacing.UP).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.DOWN, isPipeConnected(worldIn, pos, EnumFacing.DOWN).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.NORTH, isPipeConnected(worldIn, pos, EnumFacing.NORTH).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.EAST, isPipeConnected(worldIn, pos, EnumFacing.EAST).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.SOUTH, isPipeConnected(worldIn, pos, EnumFacing.SOUTH).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.WEST, isPipeConnected(worldIn, pos, EnumFacing.WEST).asInstanceOf[java.lang.Boolean])
     }
 
     override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) : Unit = {

@@ -30,7 +30,7 @@ trait CoreStates extends Block {
     override def onBlockPlaced(world : World, blockPos : BlockPos, facing : EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
         val playerFacingDirection = if (placer == null) 0 else MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3
         val enumFacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite
-        this.getDefaultState.withProperty(PropertyRotation.FOUR_WAY, enumFacing).withProperty(PROPERTY_ACTIVE, false)
+        this.getDefaultState.withProperty(PropertyRotation.FOUR_WAY, enumFacing).withProperty(PROPERTY_ACTIVE, false.asInstanceOf[java.lang.Boolean])
     }
 
     /**
@@ -50,7 +50,7 @@ trait CoreStates extends Block {
     override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
         worldIn.getTileEntity(pos) match {
             case tile : AbstractMachine =>
-                state.withProperty(PROPERTY_ACTIVE, tile.values.burnTime > 0)
+                state.withProperty(PROPERTY_ACTIVE, (tile.values.burnTime > 0).asInstanceOf[java.lang.Boolean])
             case _ => state
         }
     }
@@ -64,7 +64,8 @@ trait CoreStates extends Block {
         var facing = EnumFacing.getFront(meta & 5)
         if(facing.getAxis == EnumFacing.Axis.Y)
             facing = EnumFacing.NORTH
-        getDefaultState.withProperty(PropertyRotation.FOUR_WAY, facing).withProperty(PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1) true else false)
+        getDefaultState.withProperty(PropertyRotation.FOUR_WAY, facing).withProperty(PROPERTY_ACTIVE, if((Integer.valueOf(meta & 15) >> 2) == 1)
+            true.asInstanceOf[java.lang.Boolean] else false.asInstanceOf[java.lang.Boolean])
     }
 
     /**
