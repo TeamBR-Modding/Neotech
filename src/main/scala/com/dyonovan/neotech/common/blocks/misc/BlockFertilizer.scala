@@ -106,7 +106,7 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
 
     def facingToInt(facing : EnumFacing) : Int = facing.ordinal()
 
-    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[_], collidingEntity : Entity) {
+    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
         this.setBlockBoundsBasedOnState(worldIn, pos)
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
