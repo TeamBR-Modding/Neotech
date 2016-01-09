@@ -65,7 +65,7 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GlStateManager.disableLighting();
 
-            TextureAtlasSprite fluidIcon = resource.getFluid().getFluid().getIcon();
+            TextureAtlasSprite fluidIcon =  Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(resource.getFluid().getFluid().getStill(resource.getFluid()).toString());
             RenderHelper.renderCubeWithTexture(-0.2, -0.2, -0.2, 0.2, 0.2, 0.2, fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());
 
             GlStateManager.enableLighting();

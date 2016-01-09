@@ -5,10 +5,12 @@ import com.dyonovan.neotech.helpers.RenderHelper;
 import com.dyonovan.neotech.lib.Reference;
 import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
@@ -73,11 +75,11 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         //RenderHelper.setupBillboard(Minecraft.getMinecraft().thePlayer);
 
         WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
-        renderer.startDrawingQuads();
-        renderer.addVertexWithUV(-0.2, -0.2, -0.2, 0, 0);
-        renderer.addVertexWithUV(-0.2, 0.2, -0.2, 0, 1);
-        renderer.addVertexWithUV(0.2, 0.2, -0.2, 1, 1);
-        renderer.addVertexWithUV(0.2, -0.2, -0.2, 1, 0);
+        renderer.begin(7, DefaultVertexFormats.POSITION_TEX);
+        renderer.pos(-0.2, -0.2, -0.2).tex(0, 0);
+        renderer.pos(-0.2, 0.2, -0.2).tex(0, 1);
+        renderer.pos(0.2, 0.2, -0.2).tex(1, 1);
+        renderer.pos(0.2, -0.2, -0.2).tex(1, 0);
         Tessellator.getInstance().draw();
 
         GlStateManager.enableLighting();

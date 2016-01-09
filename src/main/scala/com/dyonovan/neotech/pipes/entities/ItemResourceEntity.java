@@ -3,6 +3,7 @@ package com.dyonovan.neotech.pipes.entities;
 import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -65,7 +66,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
         RenderUtils.bindMinecraftBlockSheet();
         GL11.glScaled(0.5, 0.5, 0.5);
         try {
-            Minecraft.getMinecraft().getRenderItem().renderItemModel(resource);
+            Minecraft.getMinecraft().getRenderItem().renderItem(resource, ItemCameraTransforms.TransformType.GROUND);
         } catch(NullPointerException ignored) {}
 
         GlStateManager.popAttrib();
