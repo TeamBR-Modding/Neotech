@@ -149,7 +149,8 @@ object BlockManager {
      * @param tileEntity The tile
      */
     def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity]) : Unit = {
-        registerBlock(block, name, tileEntity, oreDict = null)
+        val oreDict: String = null
+        registerBlock(block, name, tileEntity, oreDict)
     }
 
 
