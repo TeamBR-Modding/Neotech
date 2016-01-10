@@ -1,8 +1,7 @@
 package com.dyonovan.neotech.helpers
 
-import net.minecraft.client.gui.Gui
-import net.minecraft.client.renderer.{GlStateManager, Tessellator}
-import net.minecraft.client.renderer.vertex.{VertexFormat, VertexFormatElement, DefaultVertexFormats}
+import net.minecraft.client.renderer.Tessellator
+import net.minecraft.client.renderer.vertex.{DefaultVertexFormats, VertexFormat, VertexFormatElement}
 import net.minecraft.entity.Entity
 import org.lwjgl.opengl.GL11
 
