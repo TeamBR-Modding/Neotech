@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.items.{BaseItem, BaseUpgradeItem}
+import com.dyonovan.neotech.common.items.{ItemWrench, BaseItem, BaseUpgradeItem}
 import net.minecraft.item.Item
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -37,6 +37,9 @@ object ItemManager {
     val upgradeProcessor = new BaseUpgradeItem("upgradeProcessor", 8, true)
     val upgradeExpansion = new BaseUpgradeItem("upgradeExpansion", 1, true)
 
+    //Utils
+    val wrench = new ItemWrench()
+
     def preInit(): Unit = {
         registerItem(dustGold, "dustGold", "dustGold")
         registerItem(dustIron, "dustIron", "dustIron")
@@ -54,6 +57,8 @@ object ItemManager {
         registerItem(upgradeControl, "upgradeControl")
         registerItem(upgradeProcessor, "upgradeProcessor")
         registerItem(upgradeExpansion, "upgradeExpansion")
+
+        registerItem(wrench, "wrench")
     }
     /**
      * Helper method to register items

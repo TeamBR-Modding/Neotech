@@ -16,43 +16,41 @@ import net.minecraft.nbt.NBTTagCompound
   * @author Paul Davis <pauljoda>
   * @since 1/9/2016
   */
-trait Upgradeable extends UpdatingTile with Inventory {
-    //Inventory Info
-    override var inventoryName: String = _
-    override def hasCustomName(): Boolean = false
-    override def initialSize: Int = 1
+trait Upgradeable {
+    lazy val upgradeInventory = new Inventory {
+        override def hasCustomName(): Boolean = false
+        override def initialSize: Int = 1
+        override var inventoryName: String = _
 
-    //NBT
-    override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super[TileEntity].readFromNBT(tag)
-        super[Inventory].readFromNBT(tag)
+        /**
+          * Used to define if an item is valid for a slot, we only want full MotherBoards
+          * @param index The slot id
+          * @param stack The stack to check
+          * @return True if you can put this there
+          */
+        override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = stack.getItem == ItemManager.upgradeMBFull
     }
 
-    override def writeToNBT(tag : NBTTagCompound): Unit = {
-        super[TileEntity].writeToNBT(tag)
-        super[Inventory].writeToNBT(tag)
+    //NBT, must overwrite
+    def readFromNBT(tag: NBTTagCompound): Unit = {
+        upgradeInventory.readFromNBT(tag, "upgrade")
     }
 
-    override def markDirty(): Unit = {
-        super[TileEntity].markDirty()
-        super[Inventory].markDirty()
+    def writeToNBT(tag : NBTTagCompound): Unit = {
+        upgradeInventory.writeToNBT(tag, "upgrade")
     }
 
-    /**
-      * Used to define if an item is valid for a slot, we only want full MotherBoards
-      * @param index The slot id
-      * @param stack The stack to check
-      * @return True if you can put this there
-      */
-    override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = stack.getItem == ItemManager.upgradeMBFull
+    def markDirty(): Unit = {
+        upgradeInventory.markDirty()
+    }
 
     /**
       * Returns an object for the Upgrade Board, if it exists
       * @return
       */
     def getUpgradeBoard : UpgradeBoard = {
-        if(inventoryContents.get(0) != null)
-            UpgradeBoard.getBoardFromStack(inventoryContents.get(0))
+        if(upgradeInventory.getStackInSlot(0) != null)
+            UpgradeBoard.getBoardFromStack(upgradeInventory.getStackInSlot(0))
         else
             null
     }

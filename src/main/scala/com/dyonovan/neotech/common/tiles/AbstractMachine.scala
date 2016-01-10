@@ -2,6 +2,7 @@ package com.dyonovan.neotech.common.tiles
 
 import cofh.api.energy.{EnergyStorage, IEnergyHandler}
 import com.dyonovan.neotech.collections.StandardValues
+import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 11, 2015
  */
-abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedInventory with IEnergyHandler {
+abstract class AbstractMachine extends UpdatingTile with Upgradeable with Inventory with ISidedInventory with IEnergyHandler {
 
     final val cookSpeed = 200
     final val ENERGY_SMELT = 200
@@ -137,6 +138,7 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
         ((this.values.burnTime * scaleVal) / Math.max(this.values.currentItemBurnTime, 0.001)).toInt
 
     override def markDirty(): Unit = {
+        super[Upgradeable].markDirty()
         super[TileEntity].markDirty()
         super[Inventory].markDirty()
     }
@@ -150,6 +152,7 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
     }
 
     override def writeToNBT(tag: NBTTagCompound): Unit = {
+        super[Upgradeable].writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         values.writeToNBT(tag)
@@ -157,6 +160,7 @@ abstract class AbstractMachine extends UpdatingTile with Inventory with ISidedIn
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
+        super[Upgradeable].readFromNBT(tag)
         super[TileEntity].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
         values.readFromNBT(tag)

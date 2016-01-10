@@ -47,6 +47,7 @@ object ItemRenderManager {
         registerItem(ItemManager.upgradeControl)
         registerItem(ItemManager.upgradeProcessor)
         registerItem(ItemManager.upgradeExpansion)
+        registerItem(ItemManager.wrench)
 
         registerPipes()
     }
