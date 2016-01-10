@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.collections
 
+import com.dyonovan.neotech.managers.ItemManager
 import net.minecraft.item.ItemStack
 
 /**
@@ -14,7 +15,7 @@ import net.minecraft.item.ItemStack
  */
 object UpgradeBoard {
     def getBoardFromStack(stack: ItemStack): UpgradeBoard = {
-        if (stack.hasTagCompound) {
+        if (stack.hasTagCompound && stack.getItem == ItemManager.upgradeMBFull) {
             val tag = stack.getTagCompound
             return new UpgradeBoard(tag.getInteger("HardDrive"), tag.getInteger("Processor"), tag.getBoolean("Control"),
                 tag.getBoolean("Expansion"))
