@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.helpers
 
-import net.minecraft.client.renderer.Tessellator
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraft.client.gui.Gui
+import net.minecraft.client.renderer.{GlStateManager, Tessellator}
+import net.minecraft.client.renderer.vertex.{VertexFormat, VertexFormatElement, DefaultVertexFormats}
 import net.minecraft.entity.Entity
 import org.lwjgl.opengl.GL11
 
@@ -16,6 +17,13 @@ import org.lwjgl.opengl.GL11
  * @since August 17, 2015
  */
 object RenderHelper {
+
+    val POSITION_TEX_NORMALF = new VertexFormat()
+    val NORMAL_3F = new VertexFormatElement(0, VertexFormatElement.EnumType.FLOAT, VertexFormatElement.EnumUsage.NORMAL, 3)
+    POSITION_TEX_NORMALF.addElement(DefaultVertexFormats.POSITION_3F)
+    POSITION_TEX_NORMALF.addElement(DefaultVertexFormats.TEX_2F)
+    POSITION_TEX_NORMALF.addElement(NORMAL_3F)
+
     /***
       * Used to draw a 3d cube, provide opposite corners
       * @param x1 First X Position
@@ -31,37 +39,47 @@ object RenderHelper {
       */
     def renderCubeWithTexture(x1 : Double, y1 : Double, z1 : Double, x2 : Double, y2 : Double, z2 : Double, u : Double, v : Double, u1 : Double, v1 : Double): Unit = {
         val tes = Tessellator.getInstance().getWorldRenderer
-        tes.begin(7, DefaultVertexFormats.BLOCK)
-        tes.pos(x1, y1, z1).tex(u, v)
-        tes.pos(x1, y2, z1).tex(u, v1)
-        tes.pos(x2, y2, z1).tex(u1, v1)
-        tes.pos(x2, y1, z1).tex(u1, v)
 
-        tes.pos(x1, y1, z2).tex(u, v)
-        tes.pos(x2, y1, z2).tex(u, v1)
-        tes.pos(x2, y2, z2).tex(u1, v1)
-        tes.pos(x1, y2, z2).tex(u1, v)
+        tes.begin(GL11.GL_QUADS, POSITION_TEX_NORMALF)
+        tes.pos(x1, y1, z1).tex(u, v).normal(0, -1, 0).endVertex()
+        tes.pos(x1, y2, z1).tex(u, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y2, z1).tex(u1, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y1, z1).tex(u1, v).normal(0, -1, 0).endVertex()
+        Tessellator.getInstance().draw()
 
-        tes.pos(x1, y1, z1).tex(u, v)
-        tes.pos(x1, y1, z2).tex(u, v1)
-        tes.pos(x1, y2, z2).tex(u1, v1)
-        tes.pos(x1, y2, z1).tex(u1, v)
+        tes.begin(GL11.GL_QUADS, POSITION_TEX_NORMALF)
+        tes.pos(x1, y1, z2).tex(u, v).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y1, z2).tex(u, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y2, z2).tex(u1, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x1, y2, z2).tex(u1, v).normal(0, -1, 0).endVertex()
+        Tessellator.getInstance().draw()
 
-        tes.pos(x2, y1, z1).tex(u, v)
-        tes.pos(x2, y2, z1).tex(u, v1)
-        tes.pos(x2, y2, z2).tex(u1, v1)
-        tes.pos(x2, y1, z2).tex(u1, v)
+        tes.begin(GL11.GL_QUADS, POSITION_TEX_NORMALF)
+        tes.pos(x1, y1, z1).tex(u, v).normal(0, -1, 0).endVertex()
+        tes.pos(x1, y1, z2).tex(u, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x1, y2, z2).tex(u1, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x1, y2, z1).tex(u1, v).normal(0, -1, 0).endVertex()
+        Tessellator.getInstance().draw()
 
-        tes.pos(x1, y1, z1).tex(u, v)
-        tes.pos(x2, y1, z1).tex(u, v1)
-        tes.pos(x2, y1, z2).tex(u1, v1)
-        tes.pos(x1, y1, z2).tex(u1, v)
+        tes.begin(GL11.GL_QUADS, POSITION_TEX_NORMALF)
+        tes.pos(x2, y1, z1).tex(u, v).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y2, z1).tex(u, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y2, z2).tex(u1, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y1, z2).tex(u1, v).normal(0, -1, 0).endVertex()
+        Tessellator.getInstance().draw()
 
-        tes.pos(x1, y2, z1).tex(u, v)
-        tes.pos(x1, y2, z2).tex(u, v1)
-        tes.pos(x2, y2, z2).tex(u1, v1)
-        tes.pos(x2, y2, z1).tex(u1, v)
+        tes.begin(GL11.GL_QUADS, POSITION_TEX_NORMALF)
+        tes.pos(x1, y1, z1).tex(u, v).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y1, z1).tex(u, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y1, z2).tex(u1, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x1, y1, z2).tex(u1, v).normal(0, -1, 0).endVertex()
+        Tessellator.getInstance().draw()
 
+        tes.begin(GL11.GL_QUADS, POSITION_TEX_NORMALF)
+        tes.pos(x1, y2, z1).tex(u, v).normal(0, -1, 0).endVertex()
+        tes.pos(x1, y2, z2).tex(u, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y2, z2).tex(u1, v1).normal(0, -1, 0).endVertex()
+        tes.pos(x2, y2, z1).tex(u1, v).normal(0, -1, 0).endVertex()
         Tessellator.getInstance().draw()
     }
 

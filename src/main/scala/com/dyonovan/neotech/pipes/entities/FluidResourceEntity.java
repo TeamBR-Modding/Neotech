@@ -58,7 +58,7 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
             GlStateManager.pushAttrib();
 
             RenderManager manager = Minecraft.getMinecraft().getRenderManager();
-            GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
+            GlStateManager.translate(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
 
             RenderUtils.bindMinecraftBlockSheet();
             GL11.glEnable(GL11.GL_BLEND);
