@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.pipes.entities;
 
-import com.dyonovan.neotech.helpers.RenderHelper;
 import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -66,7 +65,7 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
             GlStateManager.disableLighting();
 
             TextureAtlasSprite fluidIcon =  Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(resource.getFluid().getFluid().getStill(resource.getFluid()).toString());
-            RenderHelper.renderCubeWithTexture(-0.2, -0.2, -0.2, 0.2, 0.2, 0.2, fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());
+            RenderUtils.renderCubeWithTexture(-0.2, -0.2, -0.2, 0.2, 0.2, 0.2, fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());
 
             GlStateManager.enableLighting();
             RenderUtils.bindMinecraftBlockSheet();

@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.pipes.entities;
 
 import cofh.api.energy.EnergyStorage;
-import com.dyonovan.neotech.helpers.RenderHelper;
 import com.dyonovan.neotech.lib.Reference;
 import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -9,7 +8,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
@@ -71,10 +69,10 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         GlStateManager.disableLighting();
 
         //TODO Find another way to render power
-        RenderHelper.setupBillboard(Minecraft.getMinecraft().thePlayer);
+        RenderUtils.setupBillboard(Minecraft.getMinecraft().thePlayer);
 
         WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
-        renderer.begin(GL11.GL_QUADS, RenderHelper.POSITION_TEX_NORMALF());
+        renderer.begin(GL11.GL_QUADS, RenderUtils.POSITION_TEX_NORMALF());
         renderer.pos(-0.2, -0.2, -0.2).tex(0, 0).normal(0, -1, 0).endVertex();
         renderer.pos(-0.2, 0.2, -0.2).tex(0, 1).normal(0, -1, 0).endVertex();
         renderer.pos(0.2, 0.2, -0.2).tex(1, 1).normal(0, -1, 0).endVertex();
