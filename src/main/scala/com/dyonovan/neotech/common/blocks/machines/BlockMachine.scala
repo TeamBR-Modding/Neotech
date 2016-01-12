@@ -9,7 +9,6 @@ import com.dyonovan.neotech.common.tiles.machines._
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material

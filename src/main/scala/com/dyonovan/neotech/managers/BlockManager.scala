@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.machines.BlockMachine
+import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine}
 import com.dyonovan.neotech.common.blocks.misc.{BlockCrafter, BlockFertilizer}
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage.{BlockRFStorage, BlockTank, ItemBlockRFStorage, ItemBlockTank}
@@ -30,6 +30,9 @@ import net.minecraftforge.oredict.OreDictionary
  * @since August 12, 2015
  */
 object BlockManager {
+
+    //Machines
+    val grinder = new BlockGrinder()
 
     val electricFurnace = new BlockMachine("electricFurnace", classOf[TileElectricFurnace])
     val electricCrusher = new BlockMachine("electricCrusher", classOf[TileElectricCrusher])
@@ -74,6 +77,8 @@ object BlockManager {
 
     def preInit(): Unit = {
         //Machines
+        registerBlock(grinder, "grinder", classOf[TileGrinder])
+
         registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace])
         registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher])
         registerBlock(furnaceGenerator, "furnaceGenerator", classOf[TileFurnaceGenerator])

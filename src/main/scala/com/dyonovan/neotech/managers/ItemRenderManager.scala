@@ -26,6 +26,7 @@ object ItemRenderManager {
         registerItem(ItemManager.ingotCopper)
         registerItem(ItemManager.ingotTin)
         registerItem(ItemManager.ingotBronze)
+        registerItem(Item.getItemFromBlock(BlockManager.grinder))
         registerItem(Item.getItemFromBlock(BlockManager.electricFurnace))
         registerItem(Item.getItemFromBlock(BlockManager.electricCrusher))
         registerItem(Item.getItemFromBlock(BlockManager.furnaceGenerator))

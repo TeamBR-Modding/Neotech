@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "neotech:blocks/grinderTop",
+    "front": "neotech:blocks/grinderSide",
+    "side": "neotech:blocks/grinderSide"
+  }
+}
