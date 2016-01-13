@@ -12,6 +12,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Stack;
@@ -54,6 +56,7 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         //If we are evil, maybe we should spawn an explosion...
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void renderResource(float tickPartial) {
         GlStateManager.pushMatrix();

@@ -61,14 +61,14 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
      */
     override def tryExtractResources(): Unit = {
         for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
+            getWorld.getTileEntity(pos.offset(dir)) match {
                 case provider : IEnergyProvider =>
                     if(provider.getEnergyStored(dir.getOpposite) > 0) {
                         val tempStorage = new EnergyStorage(getMaxRFDrain)
                         tempStorage.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true))
                         val energyResourceEntity = new EnergyResourceEntity(tempStorage,
                             pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                            pos, pos.north(), worldObj)
+                            pos, pos.north(), getWorld)
                         if(extractOnRoundRobin(energyResourceEntity, simulate = true)) {
                               nextResource.resource.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false))
                               extractOnRoundRobin(nextResource, simulate = false)
