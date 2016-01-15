@@ -4,7 +4,7 @@ import java.util
 
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
-import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, UpdatingTile}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{Vec3, AxisAlignedBB, BlockPos, EnumFacing}
@@ -20,11 +20,12 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis pauljoda
   * @since August 16, 2015
   */
-trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgradeable with SimplePipe {
+trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgradeable with RedstoneAware with SimplePipe {
     /**
       * Useful in round robin
       */
     var lastSink: Long = 0
+    var mode : Int = 0
 
     val sinks = new util.ArrayList[Long]()
     val distance: util.HashMap[Long, Integer] = new util.HashMap[Long, Integer]
@@ -365,6 +366,21 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
     }
 
     /**
+      * Extracts on the current mode
+      * @param resource
+      * @param simulate
+      * @return
+      */
+    def extractOnMode(resource : R, simulate : Boolean) : Boolean = {
+        mode match {
+            case 0 => extractResourceOnShortestPath(resource, simulate)
+            case 1 => extractResourceOnLongestPath(resource, simulate)
+            case 2 => extractOnRoundRobin(resource, simulate)
+            case _ => extractResourceOnShortestPath(resource, simulate)
+        }
+    }
+
+    /**
       * This is called when we fail to send a resource. You should put the resource back where you found it or
       * add it to the world
       * @param resource
@@ -391,6 +407,8 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
 
         coolDown = coolDown - 1
         if(coolDown <= 0) {
+            if(getUpgradeBoard != null && getUpgradeBoard.hasControl && isPowered)
+                return
             coolDown = getDelay
             doExtraction() //TODO: Add different modes
         }
@@ -445,6 +463,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
       */
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].writeToNBT(tag)
+        tag.setInteger("mode", mode)
     }
 
     /**
@@ -458,6 +477,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
       */
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].readFromNBT(tag)
+        mode = tag.getInteger("mode")
     }
 
     /**
@@ -478,5 +498,15 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
             TileEntity.INFINITE_EXTENT_AABB
         else
             super.getRenderBoundingBox
+    }
+
+    @SideOnly(Side.CLIENT)
+    def getGUIHeight : Int = {
+        var baseHeight = 50
+        if(getUpgradeBoard != null && getUpgradeBoard.hasControl)
+            baseHeight += 30
+        if(getUpgradeBoard != null && getUpgradeBoard.hasExpansion)
+            baseHeight += 30
+        baseHeight
     }
 }

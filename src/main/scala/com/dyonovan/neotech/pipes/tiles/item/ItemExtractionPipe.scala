@@ -12,38 +12,53 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.{BlockPos, EnumFacing}
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Paul Davis pauljoda
- * @since August 16, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Paul Davis pauljoda
+  * @since August 16, 2015
+  */
 class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
     override def canConnect(facing: EnumFacing): Boolean =
         getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory]
 
     /**
-     * This is the speed to extract from. You should be calling this when building your resources to send.
-     *
-     * This is included as a reminder to the child to have variable speeds
-     * @return
-     */
-    override def getSpeed: Double = 0.05
+      * This is the speed to extract from. You should be calling this when building your resources to send.
+      *
+      * This is included as a reminder to the child to have variable speeds
+      * @return
+      */
+    override def getSpeed: Double = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            getUpgradeBoard.getProcessorCount * 0.05
+        else
+            0.05
+    }
 
     /**
-     * Used to specify how big a stack to pull. Judge with upgrades here
-     * @return
-     */
-    def getMaxStackExtract : Int = 1
+      * Used to specify how big a stack to pull. Judge with upgrades here
+      * @return
+      */
+    def getMaxStackExtract : Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
+            getUpgradeBoard.getHardDriveCount * 8
+        } else
+            1
+    }
 
     /**
-     * Get how many ticks to 'cooldown' between operations.
-     * @return 20 = 1 second
-     */
-    override def getDelay: Int = 20
+      * Get how many ticks to 'cooldown' between operations.
+      * @return 20 = 1 second
+      */
+    override def getDelay: Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            20 - getUpgradeBoard.getProcessorCount * 2
+        else
+            20
+    }
 
     override def doExtraction(): Unit = {
         tryExtractResources()
@@ -62,12 +77,12 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
                     for(i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
                         tempInv.setInventorySlotContents(0, null)
                         if (sidedInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = false, canStack = true) > 0) {
-                            if(extractResourceOnShortestPath(new ItemResourceEntity(sidedInv.getStackInSlot(i),
+                            if(extractOnMode(new ItemResourceEntity(sidedInv.getStackInSlot(i),
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                                 pos, pos, worldObj), simulate = true)) {
                                 InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = true, canStack = true)
                                 nextResource.resource = tempInv.getStackInSlot(0)
-                                extractResourceOnShortestPath(nextResource, simulate = false)
+                                extractOnMode(nextResource, simulate = false)
                                 return
                             }
                         }
@@ -76,12 +91,12 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
                     for(i <- 0 until otherInv.getSizeInventory) {
                         tempInv.setInventorySlotContents(0, null)
                         if (otherInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = false, canStack = true) > 0) {
-                            if(extractResourceOnShortestPath(new ItemResourceEntity(otherInv.getStackInSlot(i),
+                            if(extractOnMode(new ItemResourceEntity(otherInv.getStackInSlot(i),
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                                 pos, pos, worldObj), simulate = true)) {
                                 InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
                                 nextResource.resource = tempInv.getStackInSlot(0)
-                                extractResourceOnShortestPath(nextResource, simulate = false)
+                                extractOnMode(nextResource, simulate = false)
                                 return
                             }
                         }
@@ -92,9 +107,9 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
     }
 
     /**
-     * This is called when we fail to send a resource. You should put the resource back where you found it or
-     * add it to the world
-     */
+      * This is called when we fail to send a resource. You should put the resource back where you found it or
+      * add it to the world
+      */
     override def resourceReturned(resource: ItemResourceEntity): Unit = {
         val tempInventory = new Inventory() {
             override var inventoryName: String = "TEMPINV"

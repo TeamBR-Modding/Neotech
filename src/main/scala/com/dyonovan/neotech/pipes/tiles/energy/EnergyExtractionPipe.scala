@@ -20,6 +20,8 @@ import net.minecraft.util.{Vec3, BlockPos, EnumFacing}
  */
 class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceEntity] {
 
+    mode = 2
+
     override def canConnect(facing: EnumFacing): Boolean =
         getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
                 (getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IEnergyProvider] && getWorld.getTileEntity(pos.offset(facing)).asInstanceOf[IEnergyProvider].canConnectEnergy(facing.getOpposite))
@@ -30,21 +32,36 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
      * This is included as a reminder to the child to have variable speeds
      * @return
      */
-    override def getSpeed: Double = 0.5
-
+    override def getSpeed: Double = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            getUpgradeBoard.getProcessorCount * 0.5
+        else
+            0.5
+    }
     /**
      * Used to specify how much RF, check for upgrades here
      * @return
      */
-    def getMaxRFDrain : Int = if(acceptRF == -1) 200 * 10 else acceptRF
+    def getMaxRFDrain : Int = {
+        var rate = 200
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
+            rate *= getUpgradeBoard.getHardDriveCount
+        if(acceptRF == -1)
+            rate * 10
+        else acceptRF
+    }
     var acceptRF : Int = -1
 
     /**
      * Get how many ticks to 'cooldown' between operations.
      * @return 20 = 1 second
      */
-    override def getDelay: Int = 10
-
+    override def getDelay: Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            10 - getUpgradeBoard.getProcessorCount
+        else
+            10
+    }
     /**
      * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
      * this pipe to do on its action phase. The parent will not automatically call extract
@@ -69,9 +86,9 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
                         val energyResourceEntity = new EnergyResourceEntity(tempStorage,
                             pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                             pos, pos.north(), getWorld)
-                        if(extractOnRoundRobin(energyResourceEntity, simulate = true)) {
+                        if(extractOnMode(energyResourceEntity, simulate = true)) {
                               nextResource.resource.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false))
-                              extractOnRoundRobin(nextResource, simulate = false)
+                            extractOnMode(nextResource, simulate = false)
                               return
                         }
                     }

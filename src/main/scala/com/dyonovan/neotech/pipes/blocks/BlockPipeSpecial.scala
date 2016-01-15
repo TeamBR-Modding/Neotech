@@ -6,7 +6,9 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.common.container.machines.ContainerMachineUpgrade
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.pipes.gui.GuiExtractionMenu
 import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe}
+import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.BlockContainer
@@ -19,6 +21,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.{WorldServer, IBlockAccess, World}
+import net.minecraftforge.client.MinecraftForgeClient
+import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
 import scala.util.Random
@@ -194,25 +198,39 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = tileClass.newInstance()
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getTileEntity(new BlockPos(x, y, z)) match {
+       /* world.getTileEntity(new BlockPos(x, y, z)) match {
             case upgradeable: Upgradeable =>
                 if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
                     return new ContainerMachineUpgrade(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
                 }
             case __ =>
-        }
+        }*/
         null
     }
 
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getTileEntity(new BlockPos(x, y, z)) match {
+      /**  world.getTileEntity(new BlockPos(x, y, z)) match {
             case upgradeable: Upgradeable =>
                 if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
                     return new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
                 }
             case _ =>
-        }
+        }*/
         null
+    }
+
+    /**
+      * Called when the block is activated
+      *
+      * If you want to override this but still call it, make sure you call
+      *      super[OpensGui].onBlockActivated(...)
+      */
+    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
+        if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+            FMLClientHandler.instance().showGuiScreen(new GuiExtractionMenu(world.getTileEntity(pos).asInstanceOf[ExtractionPipe[_, _]]))
+            return true
+        }
+        false
     }
 }
