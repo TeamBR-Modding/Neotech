@@ -56,25 +56,39 @@ public class CraftingRecipeManager {
                 .blockTin()));
 
         //Basic RF Storage
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage()), 1, 16), "ABA",
+        //GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage()), 1, 16), "ABA",
+                //"DCD", "ABA", 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', Items.comparator);
+        GameRegistry.addRecipe(new ItemStack(BlockManager.basicRFStorage()), "ABA",
                 "DCD", "ABA", 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', Items.comparator);
 
         //Advanced RF Storage
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage()), 1, 16), "ABA",
+        /*GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage()), 1, 16), "ABA",
+                "DCD", "ABA", 'A', Items.gold_ingot, 'B', Blocks.iron_bars, 'C',
+                BlockManager.basicRFStorage(), 'D', Items.comparator);*/
+        GameRegistry.addRecipe(new ItemStack(BlockManager.advancedRFStorage()), "ABA",
                 "DCD", "ABA", 'A', Items.gold_ingot, 'B', Blocks.iron_bars, 'C',
                 BlockManager.basicRFStorage(), 'D', Items.comparator);
 
         //Elite RF Storage
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage()), 1, 16), "ABA",
+        /*GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage()), 1, 16), "ABA",
+                "DCD", "ABA", 'A', Items.diamond, 'B', Blocks.iron_bars, 'C',
+                BlockManager.advancedRFStorage(), 'D', Items.comparator);*/
+        GameRegistry.addRecipe(new ItemStack(BlockManager.eliteRFStorage()), "ABA",
                 "DCD", "ABA", 'A', Items.diamond, 'B', Blocks.iron_bars, 'C',
                 BlockManager.advancedRFStorage(), 'D', Items.comparator);
 
         //Tanks
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.ironTank()), 1, 16),
+        /*GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.ironTank()), 1, 16),
                 "ABA", "BCB", "ABA", 'A', Items.iron_ingot, 'B', "blockGlass", 'C', Items.bucket));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.goldTank()), 1, 16),
                 "ABA", "BCB", "ABA", 'A', Items.gold_ingot, 'B', "blockGlass", 'C', BlockManager.ironTank()));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.diamondTank()), 1, 16),
+                "ABA", "BCB", "ABA", 'A', Items.diamond, 'B', "blockGlass", 'C', BlockManager.goldTank()));*/
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.ironTank())),
+                "ABA", "BCB", "ABA", 'A', Items.iron_ingot, 'B', "blockGlass", 'C', Items.bucket));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.goldTank())),
+                "ABA", "BCB", "ABA", 'A', Items.gold_ingot, 'B', "blockGlass", 'C', BlockManager.ironTank()));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.diamondTank())),
                 "ABA", "BCB", "ABA", 'A', Items.diamond, 'B', "blockGlass", 'C', BlockManager.goldTank()));
 
         //Pipes

@@ -27,12 +27,12 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
     setMaxDamage(16)
     setHasSubtypes(true)
 
-    @SideOnly(Side.CLIENT)
+    /*@SideOnly(Side.CLIENT)
     override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[ItemStack]): Unit = {
         val is = new ItemStack(this)
         is.setItemDamage(16)
         subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
-    }
+    }*/
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {

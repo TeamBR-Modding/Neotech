@@ -41,7 +41,7 @@ object NeoTech {
     var proxy : CommonProxy = null
 
     val tabNeoTech: CreativeTabs = new CreativeTabs("tabNeoTech") {
-        override def getTabIconItem: Item = Item.getItemFromBlock(Blocks.furnace)
+        override def getTabIconItem: Item = Item.getItemFromBlock(BlockManager.eliteRFStorage)
     }
 
     val tabPipes = new CreativeTabs("tabNeoTechPipes") {
