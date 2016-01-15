@@ -14,15 +14,15 @@ class CrusherRecipeCategory extends IRecipeCategory {
 
 
     var background: IDrawable = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/nei/crusher.png"),
-        3, 4, 155, 65)
+        10, 15, 150, 50)
 
     override def getBackground: IDrawable = { background }
 
     override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper): Unit = {
         val stacks: IGuiItemStackGroup = recipeLayout.getItemStacks
-        stacks.init(0, true, 24, 10)
-        stacks.init(1, false, 69, 19)
-        stacks.init(2, false, 87,19)
+        stacks.init(0, true, 31, 20)
+        stacks.init(1, false, 96, 20)
+        stacks.init(2, false, 125, 20)
 
         recipeWrapper match {
             case crusherRecipeWrapper: CrusherRecipeJEI =>
@@ -33,7 +33,9 @@ class CrusherRecipeCategory extends IRecipeCategory {
         }
     }
 
-    override def drawAnimations(minecraft: Minecraft): Unit = { }
+    override def drawAnimations(minecraft: Minecraft): Unit = {
+
+    }
 
     override def drawExtras(minecraft: Minecraft): Unit = { }
 
