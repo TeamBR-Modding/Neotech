@@ -5,17 +5,18 @@ import mezz.jei.api.IGuiHelper
 import mezz.jei.api.gui.{IGuiItemStackGroup, IDrawable, IRecipeLayout}
 import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeCategory}
 import net.minecraft.client.Minecraft
-import net.minecraft.util.StatCollector
+import net.minecraft.util.{ResourceLocation, StatCollector}
 
 /**
   * Created by Dyonovan on 1/13/2016.
   */
-class CrusherRecipeCatagory extends IRecipeCategory {
+class CrusherRecipeCategory extends IRecipeCategory {
 
     var background: IDrawable = _
 
-    def CrusherRecipeCatagory(guiHelper: IGuiHelper): Unit = {
-        background = guiHelper.createBlankDrawable(100, 100)
+    def CrusherRecipeCategory(guiHelper: IGuiHelper): Unit = {
+        background = guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID + "textures/gui/nei/crusher.png"),
+            3, 4, 155, 65)
     }
     override def getBackground: IDrawable = { background }
 

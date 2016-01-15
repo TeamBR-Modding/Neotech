@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.api.jei
 
-import com.dyonovan.neotech.api.jei.crusher.{CrusherRecipeHandler, CrusherRecipeCatagory}
+import com.dyonovan.neotech.api.jei.crusher.{CrusherRecipeMaker, CrusherRecipeHandler, CrusherRecipeCategory}
 import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.registries.CrusherRecipeRegistry
 import mezz.jei.api._
@@ -19,10 +19,10 @@ class NeoTechPlugin extends IModPlugin {
     override def onRecipeRegistryAvailable(recipeRegistry: IRecipeRegistry): Unit = { }
 
     override def register(registry: IModRegistry): Unit = {
-        registry.addRecipeCategories(new CrusherRecipeCatagory)
+        registry.addRecipeCategories(new CrusherRecipeCategory)
         registry.addRecipeHandlers(new CrusherRecipeHandler)
 
-        registry.addRecipes(CrusherRecipeRegistry.getRecipes)
+        registry.addRecipes(CrusherRecipeMaker.getRecipes)
 
         //Descriptions
         registry.addDescription(new ItemStack(BlockManager.grinder), "neotech.grinder.description")

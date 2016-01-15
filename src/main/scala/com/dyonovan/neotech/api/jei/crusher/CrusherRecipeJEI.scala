@@ -9,17 +9,11 @@ import net.minecraft.item.ItemStack
 /**
   * Created by Dyonovan on 1/13/2016.
   */
-class CrusherRecipeJEI extends BlankRecipeWrapper {
+class CrusherRecipeJEI(in: ItemStack, out: ItemStack, sec: ItemStack) extends BlankRecipeWrapper {
 
-    var input: ItemStack = _
-    var output: ItemStack = _
-    var secondary: ItemStack = _
-
-    def CrusherRecipeJEI(in: ItemStack, out: ItemStack, sec: ItemStack): Unit = {
-        input = in
-        output = out
-        secondary = sec
-    }
+    var input: ItemStack = in
+    var output: ItemStack = out
+    var secondary: ItemStack = sec
 
     override def getInputs: java.util.List[ItemStack] = Collections.singletonList(input)
 
