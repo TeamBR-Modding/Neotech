@@ -56,6 +56,10 @@ tile.neotech:creativeTank.name=Creative Fluid Tank
 tile.neotech:blockCrafter.name=Duel Crafter
 tile.neotech:blockFertilizer.name=Miniature Sun
 
+neotech.grinder.title=Grinder
+neotech.grinder.input=Input
+neotech.grinder.grinding=Grinding
+neotech.grinder.output=Output
 neotech.furnace.title=Electric Furnace
 neotech.crusher.title=Electric Crusher
 neotech.furnacegenerator.title=Furnace Generator
