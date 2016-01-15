@@ -22,6 +22,10 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 public class CraftingRecipeManager {
 
     public static void preInit() {
+        //Grinder
+        GameRegistry.addRecipe(new ItemStack(BlockManager.grinder()), "SSS", "CsC", "SSS",
+                'S', Blocks.stone, 'C', Blocks.cobblestone, 's', Items.stick);
+
         //Electric Furnace
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricFurnace()), "ACA", "BDB", "ACA",
                 'A', "ingotCopper", 'B', Items.redstone, 'C', Blocks.furnace, 'D', Blocks.redstone_block));
@@ -37,6 +41,10 @@ public class CraftingRecipeManager {
         //Fluid Generator
         GameRegistry.addRecipe(new ItemStack(BlockManager.fluidGenerator()), "ABA", "CDC", "ABA",
                 'A', Items.gold_ingot, 'B', Items.glowstone_dust, 'C', BlockManager.furnaceGenerator(), 'D', BlockManager.ironTank());
+
+        //Thermal Binder
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.thermalBinder()), "ACA", "BDB", "ACA",
+                'A', "ingotGold", 'B', Items.slime_ball, 'C', Blocks.furnace, 'D', Blocks.redstone_block));
 
         //Ore Blocks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockCopper()), "AAA", "AAA", "AAA",
