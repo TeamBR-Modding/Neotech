@@ -48,6 +48,8 @@ trait Upgradeable {
     //NBT, must overwrite
     def readFromNBT(tag: NBTTagCompound): Unit = {
         upgradeInventory.readFromNBT(tag, "upgrade")
+        if(upgradeInventory.getSizeInventory() == 0)
+            upgradeInventory.addInventorySlot(null)
     }
 
     def writeToNBT(tag : NBTTagCompound): Unit = {
