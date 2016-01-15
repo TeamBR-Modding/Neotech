@@ -26,6 +26,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
       */
     var lastSink: Long = 0
     var mode : Int = 0
+    var redstone : Int = 0
 
     val sinks = new util.ArrayList[Long]()
     val distance: util.HashMap[Long, Integer] = new util.HashMap[Long, Integer]
@@ -407,10 +408,14 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
 
         coolDown = coolDown - 1
         if(coolDown <= 0) {
-            if(getUpgradeBoard != null && getUpgradeBoard.hasControl && isPowered)
-                return
+            if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
+                if(redstone == -1 && isPowered)
+                    return
+                if(redstone == 1 && !isPowered)
+                    return
+            }
             coolDown = getDelay
-            doExtraction() //TODO: Add different modes
+            doExtraction()
         }
     }
 
@@ -464,6 +469,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].writeToNBT(tag)
         tag.setInteger("mode", mode)
+        tag.setInteger("redstone", redstone)
     }
 
     /**
@@ -478,6 +484,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].readFromNBT(tag)
         mode = tag.getInteger("mode")
+        redstone = tag.getInteger("redstone")
     }
 
     /**
@@ -485,6 +492,15 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
       */
     override def markDirty() : Unit = {
         super[Upgradeable].markDirty()
+    }
+
+    /**
+      * Called when the board is removed, reset to default values
+      */
+    override def resetValues(): Unit = {
+        mode = 0
+        redstone = 0
+        getWorld.markBlockForUpdate(getPos)
     }
 
     /**
@@ -502,11 +518,53 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
 
     @SideOnly(Side.CLIENT)
     def getGUIHeight : Int = {
-        var baseHeight = 50
+        var baseHeight = 41
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl)
             baseHeight += 30
         if(getUpgradeBoard != null && getUpgradeBoard.hasExpansion)
             baseHeight += 30
         baseHeight
+    }
+
+    def moveRedstoneMode(mod : Int) : Unit = {
+        redstone += mod
+        if(redstone < -1)
+            redstone = 1
+        else if(redstone > 1)
+            redstone = -1
+    }
+
+    def getRedstoneModeName : String = {
+        redstone match {
+            case -1 => "Low"
+            case 0 => "Disabled"
+            case 1 => "High"
+            case _ => "Error"
+        }
+    }
+
+    def setRedstoneMode(newMode : Int) : Unit = {
+        this.redstone = newMode
+    }
+
+    def moveMode(mod : Int) : Unit = {
+        mode += mod
+        if(mode < 0)
+            mode = 2
+        else if(mode > 2)
+            mode = 0
+    }
+
+    def getModeName : String = {
+        mode match {
+            case 0 => "First Available"
+            case 1 => "Last Available"
+            case 2 => "Round-Robin"
+            case _ => "Error"
+        }
+    }
+
+    def setMode(newMode : Int) : Unit = {
+        this.mode = newMode
     }
 }

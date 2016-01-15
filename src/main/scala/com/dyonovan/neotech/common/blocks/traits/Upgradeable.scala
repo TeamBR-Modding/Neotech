@@ -2,7 +2,9 @@ package com.dyonovan.neotech.common.blocks.traits
 
 import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.managers.ItemManager
+import com.teambr.bookshelf.common.container.IInventoryCallback
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
+import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -29,7 +31,19 @@ trait Upgradeable {
           * @return True if you can put this there
           */
         override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = stack.getItem == ItemManager.upgradeMBFull
+
+        addCallback(new IInventoryCallback {
+            override def onInventoryChanged(inventory: IInventory, slotNumber: Int): Unit = {
+                if(inventory.getStackInSlot(slotNumber) == null)
+                    resetValues()
+            }
+        })
     }
+
+    /**
+      * Called when the board is removed, reset to default values
+      */
+    def resetValues()
 
     //NBT, must overwrite
     def readFromNBT(tag: NBTTagCompound): Unit = {

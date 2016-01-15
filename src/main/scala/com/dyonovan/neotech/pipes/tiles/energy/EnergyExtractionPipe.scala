@@ -265,4 +265,13 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
             resources.add(item)
         }
     }
+
+    /**
+      * Called when the board is removed, reset to default values
+      */
+    override def resetValues(): Unit = {
+        mode = 2
+        redstone = 0
+        worldObj.markBlockForUpdate(pos)
+    }
 }

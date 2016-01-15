@@ -169,6 +169,13 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
             worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
+    /**
+      * Called when the board is removed, reset to default values
+      */
+    override def resetValues(): Unit = {
+       //TODO: reset upgrade things
+    }
+
     /** *****************************************************************************************************************
       * *********************************************** Inventory methods ***********************************************
       * *****************************************************************************************************************/

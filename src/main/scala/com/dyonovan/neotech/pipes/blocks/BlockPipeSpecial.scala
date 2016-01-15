@@ -198,25 +198,25 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = tileClass.newInstance()
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-       /* world.getTileEntity(new BlockPos(x, y, z)) match {
+        world.getTileEntity(new BlockPos(x, y, z)) match {
             case upgradeable: Upgradeable =>
-                if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+                if (ID == 0) {
                     return new ContainerMachineUpgrade(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
                 }
             case __ =>
-        }*/
+        }
         null
     }
 
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-      /**  world.getTileEntity(new BlockPos(x, y, z)) match {
+       world.getTileEntity(new BlockPos(x, y, z)) match {
             case upgradeable: Upgradeable =>
-                if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+                if (ID == 0) {
                     return new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
                 }
             case _ =>
-        }*/
+        }
         null
     }
 
@@ -227,7 +227,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       *      super[OpensGui].onBlockActivated(...)
       */
     override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
-        if (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+        if (world.isRemote && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
             FMLClientHandler.instance().showGuiScreen(new GuiExtractionMenu(world.getTileEntity(pos).asInstanceOf[ExtractionPipe[_, _]]))
             return true
         }
