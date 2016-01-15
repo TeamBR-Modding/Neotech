@@ -1,8 +1,10 @@
 package com.dyonovan.neotech.api.jei
 
 import com.dyonovan.neotech.api.jei.crusher.{CrusherRecipeHandler, CrusherRecipeCatagory}
+import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.registries.CrusherRecipeRegistry
 import mezz.jei.api._
+import net.minecraft.item.ItemStack
 
 /**
   * Created by Dyonovan on 1/9/2016.
@@ -21,6 +23,9 @@ class NeoTechPlugin extends IModPlugin {
         registry.addRecipeHandlers(new CrusherRecipeHandler)
 
         registry.addRecipes(CrusherRecipeRegistry.getRecipes)
+
+        //Descriptions
+        registry.addDescription(new ItemStack(BlockManager.grinder), "neotech.grinder.description")
     }
 
     override def onItemRegistryAvailable(itemRegistry: IItemRegistry): Unit = { }
