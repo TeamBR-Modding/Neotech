@@ -1,9 +1,9 @@
 package com.dyonovan.neotech.api.jei.crusher
 
+import com.dyonovan.neotech.api.jei.NeoTechPlugin
 import com.dyonovan.neotech.lib.Reference
-import mezz.jei.api.IGuiHelper
-import mezz.jei.api.gui.{IGuiItemStackGroup, IDrawable, IRecipeLayout}
-import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeCategory}
+import mezz.jei.api.gui.{IDrawable, IGuiItemStackGroup, IRecipeLayout}
+import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
 import net.minecraft.util.{ResourceLocation, StatCollector}
 
@@ -12,12 +12,10 @@ import net.minecraft.util.{ResourceLocation, StatCollector}
   */
 class CrusherRecipeCategory extends IRecipeCategory {
 
-    var background: IDrawable = _
 
-    def CrusherRecipeCategory(guiHelper: IGuiHelper): Unit = {
-        background = guiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID + "textures/gui/nei/crusher.png"),
-            3, 4, 155, 65)
-    }
+    var background: IDrawable = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/nei/crusher.png"),
+        3, 4, 155, 65)
+
     override def getBackground: IDrawable = { background }
 
     override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper): Unit = {
