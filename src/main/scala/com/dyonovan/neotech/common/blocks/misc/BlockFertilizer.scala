@@ -4,6 +4,7 @@ import com.dyonovan.neotech.client.gui.misc.GuiFertilizer
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.container.misc.ContainerFertilizer
 import com.dyonovan.neotech.common.tiles.misc.TileFertilizer
+import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.{IProperty, PropertyInteger}
@@ -29,7 +30,7 @@ object BlockFertilizer {
 }
 
 class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
-    BaseBlock(Material.iron, name, tileEntity) with OpensGui {
+    BaseBlock(Material.iron, name, tileEntity) with OpensGui with DropsItems {
 
     setLightLevel(1.0F)
     setDefaultState(this.blockState.getBaseState
