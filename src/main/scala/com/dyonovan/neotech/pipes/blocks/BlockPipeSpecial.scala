@@ -227,7 +227,8 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       *      super[OpensGui].onBlockActivated(...)
       */
     override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
-        if (world.isRemote && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+        if (world.isRemote && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench &&
+                world.getTileEntity(pos).isInstanceOf[ExtractionPipe[_, _]]) {
             FMLClientHandler.instance().showGuiScreen(new GuiExtractionMenu(world.getTileEntity(pos).asInstanceOf[ExtractionPipe[_, _]]))
             return true
         }
