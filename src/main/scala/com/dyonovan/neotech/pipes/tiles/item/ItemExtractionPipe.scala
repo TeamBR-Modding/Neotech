@@ -142,6 +142,7 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
 
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super.writeToNBT(tag)
+        super[TileEntity].writeToNBT(tag)
         tag.setInteger("SizeResources", resources.size())
         val resourceList = new NBTTagList
         for(i <- 0 until resources.size()) {
@@ -154,6 +155,7 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super.readFromNBT(tag)
+        super[TileEntity].readFromNBT(tag)
         val resourceList = tag.getTagList("Resources", 10)
         resources = new util.ArrayList[ItemResourceEntity]()
         for(i <- 0 until resourceList.tagCount()) {

@@ -37,15 +37,6 @@ import scala.util.Random
 class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.iron, name, tileEntity)
     with OpensGui with CoreStates {
 
-    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-        world.getTileEntity(pos) match {
-            case tile: AbstractMachine =>
-                player.openGui(Bookshelf, 0, world, pos.getX, pos.getY, pos.getZ)
-            case _ =>
-        }
-        true
-    }
-
     @SideOnly(Side.CLIENT)
     override def randomDisplayTick(world: World, pos: BlockPos, state: IBlockState, rand: java.util.Random): Unit = {
         if (getActualState(state, world, pos).getValue(this.PROPERTY_ACTIVE).asInstanceOf[Boolean]) {

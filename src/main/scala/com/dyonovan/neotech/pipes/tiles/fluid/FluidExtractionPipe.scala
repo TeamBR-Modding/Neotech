@@ -110,6 +110,7 @@ class FluidExtractionPipe extends ExtractionPipe[FluidTank, FluidResourceEntity]
 
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super.writeToNBT(tag)
+        super[TileEntity].writeToNBT(tag)
         tag.setInteger("SizeResources", resources.size())
         val resourceList = new NBTTagList
         for(i <- 0 until resources.size()) {
@@ -122,6 +123,7 @@ class FluidExtractionPipe extends ExtractionPipe[FluidTank, FluidResourceEntity]
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super.readFromNBT(tag)
+        super[TileEntity].readFromNBT(tag)
         val resourceList = tag.getTagList("Resources", 10)
         resources = new util.ArrayList[FluidResourceEntity]()
         for(i <- 0 until resourceList.tagCount()) {

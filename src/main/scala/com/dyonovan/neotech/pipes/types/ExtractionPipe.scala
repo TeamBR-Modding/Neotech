@@ -2,6 +2,7 @@ package com.dyonovan.neotech.pipes.types
 
 import java.util
 
+import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
 import net.minecraft.nbt.NBTTagCompound
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis pauljoda
   * @since August 16, 2015
   */
-trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with SimplePipe {
+trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgradeable with SimplePipe {
     /**
       * Useful in round robin
       */
@@ -442,7 +443,9 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
       *
       * @param tag
       */
-    override def writeToNBT(tag : NBTTagCompound)
+    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+        super[Upgradeable].writeToNBT(tag)
+    }
 
     /**
       * Receives the data from the server. Will not be full info needed for the resources.
@@ -453,7 +456,16 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Simple
       * Note, if you do forget to set the world, the onServerTick method will try to save it. But for safety, just add it
       * @param tag
       */
-    override def readFromNBT(tag : NBTTagCompound)
+    override def readFromNBT(tag : NBTTagCompound) : Unit = {
+        super[Upgradeable].readFromNBT(tag)
+    }
+
+    /**
+      * Used to mark for update
+      */
+    override def markDirty() : Unit = {
+        super[Upgradeable].markDirty()
+    }
 
     /**
       * If we have some important stuff, make sure we always render. Otherwise you'll only see what is in the pipe
