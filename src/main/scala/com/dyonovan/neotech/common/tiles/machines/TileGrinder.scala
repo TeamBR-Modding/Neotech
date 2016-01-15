@@ -31,8 +31,10 @@ class TileGrinder extends UpdatingTile with Inventory {
         if(getStackInSlot(3) != null && hasOutputAvailable) {
             progress += (progressValue * multiplier).toInt
             if(progress >= MAX_PROGRESS) {
-                progress = MAX_PROGRESS - progress
+                progress = progress - MAX_PROGRESS
                 grindItem()
+                if(progress >= MAX_PROGRESS)
+                    activateGrinder(0, 0)
             }
         } else
             progress = 0

@@ -5,6 +5,7 @@ import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.container.machines.ContainerGrinder
 import com.dyonovan.neotech.common.tiles.machines.TileGrinder
 import com.teambr.bookshelf.client.gui.GuiColor
+import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.bookshelf.traits.HasToolTip
 import net.minecraft.block.material.Material
@@ -25,7 +26,7 @@ import org.lwjgl.input.Keyboard
   * @author Paul Davis <pauljoda>
   * @since 1/11/2016
   */
-class BlockGrinder extends BaseBlock(Material.rock, "grinder", classOf[TileGrinder]) with OpensGui with HasToolTip {
+class BlockGrinder extends BaseBlock(Material.rock, "grinder", classOf[TileGrinder]) with OpensGui with DropsItems with HasToolTip {
     override def getRenderType : Int = 3
 
     override def onLanded(world : World, entity : Entity) : Unit = {
