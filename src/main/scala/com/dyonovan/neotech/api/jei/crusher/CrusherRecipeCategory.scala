@@ -2,7 +2,7 @@ package com.dyonovan.neotech.api.jei.crusher
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
 import com.dyonovan.neotech.lib.Reference
-import mezz.jei.api.gui.{IDrawable, IGuiItemStackGroup, IRecipeLayout}
+import mezz.jei.api.gui.{IDrawableAnimated, IDrawable, IGuiItemStackGroup, IRecipeLayout}
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
 import net.minecraft.util.{ResourceLocation, StatCollector}
@@ -12,11 +12,13 @@ import net.minecraft.util.{ResourceLocation, StatCollector}
   */
 class CrusherRecipeCategory extends IRecipeCategory {
 
+    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/nei/crusher.png")
+    val arrow = NeoTechPlugin.jeiHelpers.getGuiHelper.createAnimatedDrawable(
+        NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 176, 14, 24, 17), 75, IDrawableAnimated.StartDirection.LEFT, false)
+    val power = NeoTechPlugin.jeiHelpers.getGuiHelper.createAnimatedDrawable(
+        NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 175, 31, 12, 45), 75, IDrawableAnimated.StartDirection.TOP, true)
 
-    var background: IDrawable = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(new ResourceLocation(Reference.MOD_ID, "textures/gui/nei/crusher.png"),
-        10, 15, 150, 50)
-
-    override def getBackground: IDrawable = { background }
+    override def getBackground: IDrawable = { NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 10, 15, 150, 50) }
 
     override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper): Unit = {
         val stacks: IGuiItemStackGroup = recipeLayout.getItemStacks
@@ -34,6 +36,8 @@ class CrusherRecipeCategory extends IRecipeCategory {
     }
 
     override def drawAnimations(minecraft: Minecraft): Unit = {
+        arrow.draw(minecraft, 59, 21)
+        power.draw(minecraft, 5, 4)
 
     }
 
