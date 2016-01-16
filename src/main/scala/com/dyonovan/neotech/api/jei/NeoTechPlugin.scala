@@ -29,6 +29,9 @@ class NeoTechPlugin extends IModPlugin {
 
         //Blacklists
         //NeoTechPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage), 1, 16))
+
+        //NBT Ignore
+
     }
 
     override def onItemRegistryAvailable(itemRegistry: IItemRegistry): Unit = { }
