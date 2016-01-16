@@ -104,24 +104,24 @@ public class CraftingRecipeManager {
                 .glowstone_dust));
         //Power
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergySource())),
-                " C ", "BAB", "   ", 'A', BlockManager.basicRFStorage(), 'B', Blocks.sticky_piston, 'C',
+                " C ", "BA ", "   ", 'A', Blocks.redstone_block, 'B', Blocks.sticky_piston, 'C',
                 BlockManager.pipeBasicStructure());
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergySink())),
-                "   ", "BAB", " C ", 'A', BlockManager.basicRFStorage(), 'B', Blocks.piston, 'C',
+                "   ", "BA ", " C ", 'A', Blocks.redstone_block, 'B', Blocks.piston, 'C',
                 BlockManager.pipeBasicStructure());
         //Item
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeItemSource())),
-                " C ", "BAB", "   ", 'A', Blocks.chest, 'B', Blocks.sticky_piston, 'C',
+                " C ", "BA ", "   ", 'A', Blocks.chest, 'B', Blocks.sticky_piston, 'C',
                 BlockManager.pipeBasicStructure());
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeItemSink())),
-                "   ", "BAB", " C ", 'A', Blocks.chest, 'B', Blocks.piston, 'C',
+                "   ", "BA ", " C ", 'A', Blocks.chest, 'B', Blocks.piston, 'C',
                 BlockManager.pipeBasicStructure());
         //Liquid
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeFluidSource())),
-                " C ", "BAB", 'A', BlockManager.ironTank(), 'B', Blocks.sticky_piston, 'C',
+                " C ", "BA ", "   ", 'A', Items.bucket, 'B', Blocks.sticky_piston, 'C',
                 BlockManager.pipeBasicStructure());
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeFluidSink())),
-                "BAB", " C ", 'A', BlockManager.ironTank(), 'B', Blocks.piston, 'C',
+                "   ", "BA ", " C ", 'A', Items.bucket, 'B', Blocks.piston, 'C',
                 BlockManager.pipeBasicStructure());
         //Crafter
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockCrafter()), new ItemStack(Blocks.crafting_table),
