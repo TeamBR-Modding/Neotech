@@ -57,7 +57,7 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
         var didWork: Boolean = false
         if (this.values.burnTime > 0) {
             this.values.burnTime = values.burnTime - 1
-            worldObj.markBlockForUpdate(pos)
+           // worldObj.markBlockForUpdate(pos)
         }
         if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1)) && !values.isPowered) {
 
