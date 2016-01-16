@@ -4,9 +4,8 @@ import cofh.api.energy.IEnergyContainerItem
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.client.gui.GuiColor
 import net.minecraft.block.Block
-import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemBlock, ItemStack}
+import net.minecraft.item.{ItemBlock, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -27,7 +26,7 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with IEnergyCont
     setMaxDamage(16)
     setHasSubtypes(true)
 
-    @SideOnly(Side.CLIENT)
+    /*@SideOnly(Side.CLIENT)
     override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[ItemStack]): Unit = {
         var is = new ItemStack(this)
         setEnergy(is, getEnergyInfo._2)
@@ -38,15 +37,17 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with IEnergyCont
             setEnergy(is, 0)
             subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
         }
-    }
+    }*/
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
-        if (stack.hasTagCompound) {
-            if (stack.getTagCompound.getInteger("Energy") != 0) {
-                list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + (stack.getTagCompound.getInteger("Energy") + "/" + getEnergyInfo._2 + " RF"))
+        if (getEnergyInfo._1 != 4) {
+            if (stack.hasTagCompound) {
+                if (stack.getTagCompound.getInteger("Energy") != 0) {
+                    list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + (stack.getTagCompound.getInteger("Energy") + "/" + getEnergyInfo._2 + " RF"))
+                } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0/" + getEnergyInfo._2 + " RF")
             } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0/" + getEnergyInfo._2 + " RF")
-        } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0/" + getEnergyInfo._2 + " RF")
+        }
     }
 
     private def setEnergy(container: ItemStack, energy: Int): Unit = {
