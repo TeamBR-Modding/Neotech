@@ -132,7 +132,7 @@ public class CraftingRecipeManager {
                 new ItemStack(Blocks.chest), new ItemStack(Blocks.crafting_table));
 
         //Bronze Dust
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.dustBronze()), "AA", "AB",
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.dustBronze(), 4), "AA", "AB",
                 'A', "dustCopper", 'B', "dustTin"));
 
         //Miniature Sun
