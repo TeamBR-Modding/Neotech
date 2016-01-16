@@ -25,6 +25,7 @@ object OnCraftedEvent {
                     event.crafting.getItem == Item.getItemFromBlock(BlockManager.goldTank) ||
                     event.crafting.getItem == Item.getItemFromBlock(BlockManager.diamondTank)) {
                 val tag = event.craftMatrix.getStackInSlot(4).getTagCompound
+                tag.setInteger("Tier", tag.getInteger("Tier") + 1)
                 event.crafting.setTagCompound(tag)
             }
         }
