@@ -33,6 +33,7 @@ class TileGrinder extends UpdatingTile with Inventory {
             if(progress >= MAX_PROGRESS) {
                 progress = progress - MAX_PROGRESS
                 grindItem()
+                worldObj.markBlockForUpdate(pos)
                 if(progress >= MAX_PROGRESS)
                     activateGrinder(0, 0)
             }
