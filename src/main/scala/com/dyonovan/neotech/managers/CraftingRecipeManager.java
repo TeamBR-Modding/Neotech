@@ -135,6 +135,9 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.blockFertilizer()), "ABA", "BCB", "ABA",
                 'A', Items.gold_ingot, 'B', Items.glowstone_dust, 'C', Blocks.chest);
 
+        //Player Plate
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BlockManager.playerPlate()), "ingotCopper", "ingotCopper"));
+
         //Empty Motherboard
         GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeMBEmpty()), "RRR", "RIR", "RRR", 'R', Items.redstone, 'I', Items.iron_ingot);
 

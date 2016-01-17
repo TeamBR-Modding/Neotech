@@ -4,6 +4,7 @@ import com.dyonovan.neotech.client.gui.machines.GuiGrinder
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.container.machines.ContainerGrinder
 import com.dyonovan.neotech.common.tiles.machines.TileGrinder
+import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
@@ -37,9 +38,11 @@ class BlockGrinder extends BaseBlock(Material.rock, "grinder", classOf[TileGrind
                 case Blocks.wooden_pressure_plate =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.00)
                 case Blocks.stone_pressure_plate =>
-                    world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.33)
+                    world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.25)
+                case BlockManager.playerPlate =>
+                    world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.50)
                 case Blocks.light_weighted_pressure_plate =>
-                    world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.66)
+                    world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.75)
                 case Blocks.heavy_weighted_pressure_plate =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 2.00)
                 case _ =>
