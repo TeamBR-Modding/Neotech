@@ -38,8 +38,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 apply plugin: 'scala'
 apply plugin: 'maven'
-apply plugin: 'java'
-apply plugin: 'idea'
+//apply plugin: 'java'
+//apply plugin: 'idea'
 
 ext.configFile = file "gradle.properties"
 
@@ -84,6 +84,7 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     //mappings = "snapshot_20141130"
     mappings = "stable_20"
+    makeObfSourceJar = false
 }
 
 configurations.all {
@@ -99,13 +100,13 @@ dependencies {
     compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev", changing: true
 }
 
-task devJar(type: Jar, dependsOn: 'classes') {
+/*task devJar(type: Jar, dependsOn: 'classes') {
     from(sourceSets.main.output) {
         include '**'
     }
     extension = 'jar'
     classifier = 'dev'
-}
+}*/
 
 /*
 task sourceJar(type: Jar, dependsOn: "sourceMainScala") {
@@ -115,7 +116,7 @@ task sourceJar(type: Jar, dependsOn: "sourceMainScala") {
 */
 
 artifacts {
-    archives devJar
+    //archives devJar
     //archives sourceJar
 }
 
