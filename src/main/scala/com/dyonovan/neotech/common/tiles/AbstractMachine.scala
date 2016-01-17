@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 abstract class AbstractMachine extends Syncable with Upgradeable with Inventory with ISidedInventory with IEnergyHandler {
 
     final val cookSpeed = 200
-    final val ENERGY_SMELT = 200
+    final val ENERGY_TICK = 20
 
     val values = new StandardValues
     val energy = new EnergyStorage(10000)
@@ -59,7 +59,11 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
 
     protected def doWork(): Unit = {
         var didWork: Boolean = false
-        val tempCook = this.values.cookTime
+        if(this.values.cookTime > 0) {
+            energy.extractEnergy(ENERGY_TICK, false)
+            worldObj.markBlockForUpdate(pos)
+        }
+
         if (this.values.burnTime > 0) {
             this.values.burnTime = values.burnTime - 1
             sendValueToClient(BURNTIME_FIELD_ID, this.values.burnTime)
@@ -102,7 +106,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     }
 
     def canSmelt(input: ItemStack, result: ItemStack, output: ItemStack): Boolean = {
-        if (energy.getEnergyStored >= ENERGY_SMELT) {
+        if (energy.getEnergyStored >= ENERGY_TICK) {
             if (input == null || result == null)
                 return false
             else if (output == null)
@@ -128,7 +132,6 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
             getStackInSlot(1).stackSize += recipeResult.stackSize
         }
 
-        energy.extractEnergy(ENERGY_SMELT, false)
         worldObj.markBlockForUpdate(pos)
     }
 
