@@ -57,7 +57,7 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile wit
                             if (want > 0) {
                                 val actual = extractEnergy(null, want, simulate = false)
                                 tile.receiveEnergy(i.getOpposite, actual, false)
-                                worldObj.markBlockForUpdate(pos)
+                                //worldObj.markBlockForUpdate(pos)
                             }
                         case _ =>
                     }
