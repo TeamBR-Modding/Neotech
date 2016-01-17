@@ -66,7 +66,7 @@ class TileThermalBinder extends AbstractMachine {
     }
 
     override def doWork(): Unit = {
-        if(getStackInSlot(0) == null) {
+        if(getStackInSlot(MB_INPUT) == null) {
             reset()
         }
         if (this.values.burnTime > 0) {
