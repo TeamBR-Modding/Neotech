@@ -245,10 +245,9 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
             List[String](GuiColor.ORANGE + "Press <SHIFT> for possible upgrades...")
         else
-            List[String](GuiColor.BLUE + "Hard Drive: " + GuiColor.GRAY + "Increases amount extracted per tick.",
-                GuiColor.BLUE + "Control Upgrade: " + GuiColor.GRAY + "Adds Redstone Control.",
-                GuiColor.BLUE + "Processor Upgrade: " + GuiColor.GRAY + "Increases Extraction Rate.",
-                GuiColor.BLUE + "Expansion Upgrade: " + GuiColor.GRAY + "Allows Mode Selection (Round Robin, etc).")
-
+            List[String](GuiColor.YELLOW + "Control Upgrade (Max 1): " + GuiColor.WHITE + "Adds Redstone Control.",
+                GuiColor.YELLOW + "Expansion Upgrade (Max 1): " + GuiColor.WHITE + "Allows Mode Selection (Round Robin, etc).",
+                GuiColor.YELLOW + "Hard Drive (Max 8): " + GuiColor.WHITE + "Increases amount extracted per tick.",
+                GuiColor.YELLOW + "Processor Upgrade (Max 8): " + GuiColor.WHITE + "Increases Extraction Rate.")
     }
 }
