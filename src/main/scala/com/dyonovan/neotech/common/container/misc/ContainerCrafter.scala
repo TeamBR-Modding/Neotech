@@ -60,6 +60,7 @@ class ContainerCrafter(playerInventory: InventoryPlayer, tile: TileCrafter) exte
     override def canInteractWith(player: EntityPlayer): Boolean = true
 
     override def transferStackInSlot(player: EntityPlayer, slotId: Int): ItemStack = {
+        println(slotId)
         val slot: Slot = inventorySlots.get(slotId).asInstanceOf[Slot]
         if (slot != null && slot.getHasStack) {
             val itemToTransfer: ItemStack = slot.getStack

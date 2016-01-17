@@ -2,8 +2,10 @@ package com.dyonovan.neotech.api.jei
 
 import com.dyonovan.neotech.api.jei.crusher.{CrusherRecipeCategory, CrusherRecipeHandler, CrusherRecipeMaker}
 import com.dyonovan.neotech.api.jei.grinder.{GrinderRecipeMaker, GrinderRecipeHandler, GrinderRecipeCategory}
+import com.dyonovan.neotech.common.container.misc.ContainerCrafter
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import mezz.jei.api._
+import mezz.jei.api.recipe.VanillaRecipeCategoryUid
 import net.minecraft.item.ItemStack
 
 /**
@@ -19,6 +21,9 @@ class NeoTechPlugin extends IModPlugin {
     override def onRecipeRegistryAvailable(recipeRegistry: IRecipeRegistry): Unit = { }
 
     override def register(registry: IModRegistry): Unit = {
+        //Crafter Shift Right Click
+        registry.getRecipeTransferRegistry.addRecipeTransferHandler(classOf[ContainerCrafter], VanillaRecipeCategoryUid.CRAFTING,  2, 9, 20, 36)
+
         registry.addRecipeCategories(new CrusherRecipeCategory, new GrinderRecipeCategory)
         registry.addRecipeHandlers(new CrusherRecipeHandler, new GrinderRecipeHandler)
 

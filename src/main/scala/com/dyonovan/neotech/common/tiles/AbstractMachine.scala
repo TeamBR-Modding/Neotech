@@ -217,16 +217,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
       * @param itemStackIn The stack to check
       * @return True if you can put this there
       */
-    override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean = {
-        if (slot == 0 && recipe(itemStackIn) != null) {
-            if (getStackInSlot(0) == null) return true
-            if (getStackInSlot(0).isItemEqual(itemStackIn)) {
-                if (getStackInSlot(0).getMaxStackSize >= getStackInSlot(0).stackSize + itemStackIn.stackSize)
-                    return true
-            }
-        }
-        false
-    }
+    override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean = slot == 0 && recipe(itemStackIn) != null
 
     override var inventoryName: String = _
 
