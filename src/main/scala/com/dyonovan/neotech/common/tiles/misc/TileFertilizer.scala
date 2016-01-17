@@ -33,9 +33,9 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
 
     override def onServerTick(): Unit = {
         if (corner1 == null) {
-            corner2 = pos.north(3).west(3)
-            corner1 = pos.south(3).east(3).down(2)
-            list = Lists.newArrayList(BlockPos.getAllInBox(corner1, corner2)).asInstanceOf[util.ArrayList[BlockPos]]
+            corner2 = pos.north(4).west(4)
+            corner1 = pos.south(4).east(4).down(2)
+            list = Lists.newArrayList(BlockPos.getAllInBox(corner1, corner2))
         }
         val plantPOS = list.get(worldObj.rand.nextInt(list.size()))
         val state = worldObj.getBlockState(plantPOS)
