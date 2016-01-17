@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.pipes.gui
 
-import com.dyonovan.neotech.network.{UpdateExtractionPipeValue, OpenContainerGui, PacketDispatcher}
+import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher}
 import com.dyonovan.neotech.pipes.types.ExtractionPipe
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton

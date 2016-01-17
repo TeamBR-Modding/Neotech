@@ -24,7 +24,6 @@ public class PacketDispatcher {
         registerMessage(DisableSunPacket.class, DisableSunPacket.class);
         registerMessage(TBStartPacket.class, TBStartPacket.class);
         registerMessage(OpenContainerGui.class, OpenContainerGui.class);
-        registerMessage(UpdateExtractionPipeValue.class, UpdateExtractionPipeValue.class);
     }
 
     @SuppressWarnings("unchecked")
