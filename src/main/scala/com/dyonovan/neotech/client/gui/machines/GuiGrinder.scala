@@ -26,6 +26,11 @@ class GuiGrinder(player : EntityPlayer, tile : TileGrinder) extends
         components += new GuiComponentText(StatCollector.translateToLocal("neotech.grinder.input"), 8, 26, new Color(77, 77, 77))
         components += new GuiComponentText(StatCollector.translateToLocal("neotech.grinder.grinding"), 8, 48, new Color(77, 77, 77))
         components += new GuiComponentText(StatCollector.translateToLocal("neotech.grinder.output"), 8, 70, new Color(77, 77, 77))
-        components += new GuiComponentText(new DecimalFormat("#.##").format((tile.progress / tile.MAX_PROGRESS.toDouble) * 100) + "%", 100, 48, new Color(77, 77, 77))
+        components += new GuiComponentText(new DecimalFormat("#.##").format((tile.progress / tile.MAX_PROGRESS.toDouble) * 100) + "%", 100, 48, new Color(77, 77, 77)) {
+            override def renderOverlay(i : Int, j : Int) = {
+                this.setText(new DecimalFormat("#.##").format((tile.progress / tile.MAX_PROGRESS.toDouble) * 100) + "%")
+                super.renderOverlay(i, j)
+            }
+        }
     }
 }
