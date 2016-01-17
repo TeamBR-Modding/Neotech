@@ -22,7 +22,7 @@ class GuiExtractionMode(tile : ExtractionPipe[_, _]) extends GuiBase[ContainerGe
         components += new GuiComponentButton(5, 20, 15, 20, "<") {
             override def doAction(): Unit = {
                 tile.moveMode(-1)
-                PacketDispatcher.net.sendToServer(new UpdateExtractionPipeValue(tile.getPos, 1, tile.mode))
+                tile.sendValueToServer(tile.MODE_FIELD_ID, tile.mode)
                 FMLClientHandler.instance().showGuiScreen(new GuiExtractionMode(tile))
             }
         }
@@ -32,7 +32,7 @@ class GuiExtractionMode(tile : ExtractionPipe[_, _]) extends GuiBase[ContainerGe
         components += new GuiComponentButton(130, 20, 15, 20, ">") {
             override def doAction(): Unit = {
                 tile.moveMode(1)
-                PacketDispatcher.net.sendToServer(new UpdateExtractionPipeValue(tile.getPos, 1, tile.mode))
+                tile.sendValueToServer(tile.MODE_FIELD_ID, tile.mode)
                 FMLClientHandler.instance().showGuiScreen(new GuiExtractionMode(tile))
             }
         }

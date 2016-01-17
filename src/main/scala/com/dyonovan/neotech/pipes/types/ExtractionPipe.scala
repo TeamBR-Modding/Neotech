@@ -4,7 +4,7 @@ import java.util
 
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
-import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, UpdatingTile}
+import com.teambr.bookshelf.common.tiles.traits.{Syncable, RedstoneAware, UpdatingTile}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{Vec3, AxisAlignedBB, BlockPos, EnumFacing}
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis pauljoda
   * @since August 16, 2015
   */
-trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgradeable with RedstoneAware with SimplePipe {
+trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeable with RedstoneAware with SimplePipe {
     /**
       * Useful in round robin
       */
@@ -46,6 +46,9 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
 
     //Our storage of resources
     var resources: util.ArrayList[R] = new util.ArrayList[R]()
+
+    val REDSTONE_FIELD_ID = 0
+    val MODE_FIELD_ID = 1
 
     /**
       * Used to add a resource
@@ -566,5 +569,19 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends UpdatingTile with Upgrad
 
     def setMode(newMode : Int) : Unit = {
         this.mode = newMode
+    }
+
+    override def setVariable(id : Int, value : Double) = {
+        id match {
+            case REDSTONE_FIELD_ID => redstone = value.toInt
+            case MODE_FIELD_ID => mode = value.toInt
+        }
+    }
+
+    override def getVariable(id : Int) : Double = {
+        id match {
+            case REDSTONE_FIELD_ID => redstone
+            case MODE_FIELD_ID => mode
+        }
     }
 }

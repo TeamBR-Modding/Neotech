@@ -3,24 +3,25 @@ package com.dyonovan.neotech.common.tiles
 import cofh.api.energy.{EnergyStorage, IEnergyHandler}
 import com.dyonovan.neotech.collections.StandardValues
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
-import net.minecraft.inventory.ISidedInventory
+import com.teambr.bookshelf.common.container.IInventoryCallback
+import com.teambr.bookshelf.common.tiles.traits.{Syncable, Inventory, UpdatingTile}
+import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 11, 2015
- */
-abstract class AbstractMachine extends UpdatingTile with Upgradeable with Inventory with ISidedInventory with IEnergyHandler {
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 11, 2015
+  */
+abstract class AbstractMachine extends Syncable with Upgradeable with Inventory with ISidedInventory with IEnergyHandler {
 
     final val cookSpeed = 200
     final val ENERGY_SMELT = 200
@@ -28,25 +29,28 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
     val values = new StandardValues
     val energy = new EnergyStorage(10000)
 
+    val BURNTIME_FIELD_ID = 0
+    val COOKTIME_FIELD_ID = 1
+
     def spawnActiveParticles(x: Double, y: Double, z: Double)
 
     /**
-     * Get the output of the recipe
-     * @param stack The input
-     * @return The output
-     */
+      * Get the output of the recipe
+      * @param stack The input
+      * @return The output
+      */
     def recipe(stack: ItemStack): ItemStack
 
     /**
-     * Used to output the redstone single from this structure
-     *
-     * Use a range from 0 - 16.
-     *
-     * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
-     * 16 is usually the flip side of that. Output 16 when it is totally full and not less
-     *
-     * @return int range 0 - 16
-     */
+      * Used to output the redstone single from this structure
+      *
+      * Use a range from 0 - 16.
+      *
+      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
+      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
+      *
+      * @return int range 0 - 16
+      */
     def getRedstoneOutput: Int
 
     /** *****************************************************************************************************************
@@ -55,12 +59,12 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
 
     protected def doWork(): Unit = {
         var didWork: Boolean = false
+        val tempCook = this.values.cookTime
         if (this.values.burnTime > 0) {
             this.values.burnTime = values.burnTime - 1
-           // worldObj.markBlockForUpdate(pos)
+            sendValueToClient(BURNTIME_FIELD_ID, this.values.burnTime)
         }
         if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1)) && !values.isPowered) {
-
             if (this.values.burnTime <= 0) {
                 this.values.burnTime = cookSpeed
                 this.values.currentItemBurnTime = this.values.burnTime
@@ -125,6 +129,7 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
         }
 
         energy.extractEnergy(ENERGY_SMELT, false)
+        worldObj.markBlockForUpdate(pos)
     }
 
     def isBurning: Boolean = {
@@ -163,9 +168,10 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
         super[Upgradeable].readFromNBT(tag)
         super[TileEntity].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
+        val tempCook = values.cookTime
         values.readFromNBT(tag)
         energy.readFromNBT(tag)
-        if (worldObj != null)
+        if(worldObj != null && (tempCook == 0 && this.values.cookTime > 0) || (tempCook > 0 && this.values.cookTime == 0))
             worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
@@ -173,7 +179,7 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
       * Called when the board is removed, reset to default values
       */
     override def resetValues(): Unit = {
-       //TODO: reset upgrade things
+        //TODO: reset upgrade things
     }
 
     /** *****************************************************************************************************************
@@ -185,9 +191,9 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
     }
 
     /**
-     * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
-     * side
-     */
+      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
         if (slot == 0 && recipe(itemStackIn) != null) {
             if (getStackInSlot(0) == null) return true
@@ -200,17 +206,17 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
     }
 
     /**
-     * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
-     * side
-     */
+      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
     override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == 1
 
     /**
-     * Used to define if an item is valid for a slot
-     * @param index The slot id
-     * @param stack The stack to check
-     * @return True if you can put this there
-     */
+      * Used to define if an item is valid for a slot
+      * @param index The slot id
+      * @param stack The stack to check
+      * @return True if you can put this there
+      */
     override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0
 
     override var inventoryName: String = _
@@ -223,16 +229,16 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
       * *********************************************** Energy methods **************************************************
       * *****************************************************************************************************************/
     /**
-     * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
-     *
-     * @param from
+      * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
+      *
+      * @param from
 	 * Orientation the energy is received from.
-     * @param maxReceive
+      * @param maxReceive
 	 * Maximum amount of energy to receive.
-     * @param simulate
+      * @param simulate
 	 * If TRUE, the charge will only be simulated.
-     * @return Amount of energy that was (or would have been, if simulated) received.
-     */
+      * @return Amount of energy that was (or would have been, if simulated) received.
+      */
     override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
         if (energy != null) {
             val actual = energy.receiveEnergy(maxReceive, simulate)
@@ -245,17 +251,31 @@ abstract class AbstractMachine extends UpdatingTile with Upgradeable with Invent
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
 
     /**
-     * Returns the amount of energy currently stored.
-     */
+      * Returns the amount of energy currently stored.
+      */
     override def getEnergyStored(from: EnumFacing): Int = energy.getEnergyStored
 
     /**
-     * Returns the maximum amount of energy that can be stored.
-     */
+      * Returns the maximum amount of energy that can be stored.
+      */
     override def getMaxEnergyStored(from: EnumFacing): Int = energy.getMaxEnergyStored
 
     /**
-     * Returns TRUE if the TileEntity can connect on a given side.
-     */
+      * Returns TRUE if the TileEntity can connect on a given side.
+      */
     override def canConnectEnergy(from: EnumFacing): Boolean = true
+
+    override def setVariable(id : Int, value : Double): Unit = {
+        id match {
+            case BURNTIME_FIELD_ID => this.values.burnTime = value.toInt
+            case COOKTIME_FIELD_ID => this.values.cookTime = value.toInt
+        }
+    }
+
+    override def getVariable(id : Int) : Double = {
+        id match {
+            case BURNTIME_FIELD_ID => this.values.burnTime
+            case COOKTIME_FIELD_ID => this.values.cookTime
+        }
+    }
 }

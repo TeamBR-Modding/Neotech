@@ -23,7 +23,7 @@ class GuiExtractionRedstone(tile : ExtractionPipe[_, _]) extends GuiBase[Contain
         components += new GuiComponentButton(5, 20, 15, 20, "<") {
             override def doAction(): Unit = {
                 tile.moveRedstoneMode(-1)
-                PacketDispatcher.net.sendToServer(new UpdateExtractionPipeValue(tile.getPos, 0, tile.redstone))
+                tile.sendValueToServer(tile.REDSTONE_FIELD_ID, tile.redstone)
                 FMLClientHandler.instance().showGuiScreen(new GuiExtractionRedstone(tile))
             }
         }
@@ -33,7 +33,7 @@ class GuiExtractionRedstone(tile : ExtractionPipe[_, _]) extends GuiBase[Contain
         components += new GuiComponentButton(130, 20, 15, 20, ">") {
             override def doAction(): Unit = {
                 tile.moveRedstoneMode(1)
-                PacketDispatcher.net.sendToServer(new UpdateExtractionPipeValue(tile.getPos, 0, tile.redstone))
+                tile.sendValueToServer(tile.REDSTONE_FIELD_ID, tile.redstone)
                 FMLClientHandler.instance().showGuiScreen(new GuiExtractionRedstone(tile))
             }
         }
