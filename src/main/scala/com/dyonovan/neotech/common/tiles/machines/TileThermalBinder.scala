@@ -71,7 +71,7 @@ class TileThermalBinder extends AbstractMachine {
         }
         if (this.values.burnTime > 0) {
             this.values.burnTime = values.burnTime - 1
-            val actual = energy.extractEnergy(count * 100, true)
+            val actual = energy.extractEnergy(count * 10, true)
             if (actual < count * 10)
                 reset()
             else
