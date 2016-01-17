@@ -51,8 +51,13 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case otherInv : IInventory =>
-                    if(InventoryUtils.moveItemInto(tempInventory, 0, addAllWaiting(otherInv, dir), -1, 64, dir, doMove = false, canStack = true) > 0) {
+                case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
+                    if(InventoryUtils.moveItemInto(tempInventory, 0, testNormal(otherInv, dir), -1, 64, dir, doMove = false, canStack = true) > 0) {
+                        waitingQueue.add(resource)
+                        return true
+                    }
+                case sided : ISidedInventory =>
+                    if(InventoryUtils.moveItemInto(tempInventory, 0, testSided(sided, dir), -1, 64, dir, doMove = false, canStack = true) > 0) {
                         waitingQueue.add(resource)
                         return true
                     }
@@ -62,7 +67,7 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
         false
     }
 
-    def addAllWaiting(otherInv : IInventory, dir : EnumFacing): IInventory = {
+    def testNormal(otherInv : IInventory, dir : EnumFacing) : IInventory = {
         if(waitingQueue.isEmpty)
             otherInv
         else {
@@ -71,26 +76,46 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
                 if (iterator.next().isDead)
                     iterator.remove()
             }
-            var tempInventory : Inventory = null
-            otherInv match {
-                case sidedInv: ISidedInventory =>
-                    tempInventory = new ISidedWrapper(sidedInv) {
-                        override var inventoryName: String = "TEMPINV"
+            val tempInventory  = new Inventory() {
+                override var inventoryName: String = "TEMPINV"
+                override def hasCustomName(): Boolean = false
+                override def initialSize: Int = otherInv.getSizeInventory
+            }
+            tempInventory.copyFrom(otherInv)
 
-                        override def hasCustomName(): Boolean = false
+            for(x <- 0 until waitingQueue.size) {
+                val tempInventoryUs = new Inventory() {
+                    override var inventoryName: String = "TEMPINV"
+                    override def hasCustomName(): Boolean = false
+                    override def initialSize: Int = 1
+                }
 
-                        override def initialSize: Int = otherInv.getSizeInventory
-                    }
-                case _ =>
-                    tempInventory = new Inventory() {
-                        override var inventoryName: String = "TEMPINV"
+                val resource = waitingQueue.get(x)
 
-                        override def hasCustomName(): Boolean = false
+                tempInventoryUs.setInventorySlotContents(0, resource.resource.copy())
+                InventoryUtils.moveItemInto(tempInventoryUs, 0, tempInventory, -1, 64, dir, doMove = true, canStack = true)
+            }
+            tempInventory
+        }
+    }
 
-                        override def initialSize: Int = otherInv.getSizeInventory
-
-                    }
-                    tempInventory.copyFrom(otherInv)
+    def testSided(otherInv : ISidedInventory, dir : EnumFacing) : ISidedWrapper = {
+        if(waitingQueue.isEmpty)
+            new ISidedWrapper(otherInv) {
+                override var inventoryName: String = "TEMPINV"
+                override def hasCustomName(): Boolean = false
+                override def initialSize: Int = otherInv.getSizeInventory
+            }
+        else {
+            val iterator = waitingQueue.iterator() //Remove deads
+            while (iterator.hasNext) {
+                if (iterator.next().isDead)
+                    iterator.remove()
+            }
+            val tempInventory = new ISidedWrapper(otherInv) {
+                override var inventoryName: String = "TEMPINV"
+                override def hasCustomName(): Boolean = false
+                override def initialSize: Int = otherInv.getSizeInventory
             }
 
             for(x <- 0 until waitingQueue.size) {

@@ -120,8 +120,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                 case _ =>
             }
         }
-        else
-            super.breakBlock(worldIn, pos, state)
+        super.breakBlock(worldIn, pos, state)
     }
 
     override def setBlockBoundsBasedOnState(worldIn: IBlockAccess, pos: BlockPos) {
@@ -214,7 +213,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
 
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-       world.getTileEntity(new BlockPos(x, y, z)) match {
+        world.getTileEntity(new BlockPos(x, y, z)) match {
             case upgradeable: Upgradeable =>
                 if (ID == 0) {
                     return new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])

@@ -17,15 +17,15 @@ import net.minecraft.util.EnumFacing
   */
 abstract class ISidedWrapper(iSided : ISidedInventory) extends Inventory with ISidedInventory {
     copyFrom(iSided)
-    override def getSlotsForFace(side: EnumFacing): Array[Int] = {
+    override def getSlotsForFace(side: EnumFacing): Array[Int] =
         iSided.getSlotsForFace(side)
-    }
 
-    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = {
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean =
         iSided.canExtractItem(index, stack, direction)
-    }
 
-    override def canInsertItem(index: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+    override def canInsertItem(index: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean =
         iSided.canInsertItem(index, itemStackIn, direction)
-    }
+
+    override def isItemValidForSlot(index : Int, itemStack : ItemStack) : Boolean =
+        iSided.isItemValidForSlot(index, itemStack)
 }
