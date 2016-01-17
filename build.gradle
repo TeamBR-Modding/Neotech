@@ -116,7 +116,7 @@ task sourceJar(type: Jar, dependsOn: "sourceMainScala") {
 
 artifacts {
     archives devJar
-    archives sourceJar
+    //archives sourceJar
 }
 
 
