@@ -17,7 +17,7 @@ import net.minecraftforge.fml.client.FMLClientHandler
   * @author Paul Davis <pauljoda>
   * @since 1/15/2016
   */
-class GuiExtractionMenu(tile : ExtractionPipe[_, _]) extends GuiBase[ContainerGeneric](new ContainerGeneric(), 150, tile.getGUIHeight, "") {
+class GuiExtractionMenu(tile : ExtractionPipe[_, _]) extends GuiBase[ContainerGeneric](new ContainerGeneric(), 150, tile.getGUIHeight, " ") {
     override def addComponents(): Unit = {
         components += new GuiComponentButton(25, 10, 100, 20, "Motherboard") {
             override def doAction(): Unit = {
@@ -32,7 +32,7 @@ class GuiExtractionMenu(tile : ExtractionPipe[_, _]) extends GuiBase[ContainerGe
             }
         }
         if(tile.getUpgradeBoard != null && tile.getUpgradeBoard.hasExpansion) {
-            components += new GuiComponentButton(25, 70, 100, 20, "Mode") {
+            components += new GuiComponentButton(25, if(tile.getUpgradeBoard.hasControl) 70 else 40, 100, 20, "Mode") {
                 override def doAction(): Unit = {
                     FMLClientHandler.instance().showGuiScreen(new GuiExtractionMode(tile))
                 }
