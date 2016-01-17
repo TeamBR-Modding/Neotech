@@ -8,10 +8,10 @@
   "variants": {
     "powered" : {
       "true" : {
-        "model": "wooden_pressure_plate_up"
+        "model": "wooden_pressure_plate_down"
       },
       "false" : {
-        "model": "wooden_pressure_plate_down"
+        "model": "wooden_pressure_plate_up"
       }
     }
   }
