@@ -15,6 +15,7 @@ object Reference {
     final val MOD_ID       = "neotech"
     final val VERSION      = "@VERSION@"
     final val DEPENDENCIES = "required-after:bookshelfapi"
+    final val UPDATE_JSON  = "https://raw.githubusercontent.com/TeamBR-Modding/NeoTech/1.8.9/update.json"
 
     final val CONFIG_COPPER_GENERATION = "Copper Ore Generation"
     final val CONFIG_TIN_GENERATION = "Tin Ore Generation"

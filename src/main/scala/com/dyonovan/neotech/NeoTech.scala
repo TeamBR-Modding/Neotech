@@ -8,7 +8,6 @@ import com.dyonovan.neotech.managers._
 import com.dyonovan.neotech.network.PacketDispatcher
 import com.dyonovan.neotech.registries._
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.init.Blocks
 import net.minecraft.item.Item
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
@@ -28,7 +27,7 @@ import org.apache.logging.log4j.LogManager
   * @since August 07, 2015
   */
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION,
-    dependencies = Reference.DEPENDENCIES, modLanguage = "scala")
+    dependencies = Reference.DEPENDENCIES, modLanguage = "scala", updateJSON = Reference.UPDATE_JSON)
 object NeoTech {
 
     //The logger. For logging
