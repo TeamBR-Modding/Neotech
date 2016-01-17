@@ -22,7 +22,7 @@ class TileFurnaceGenerator extends AbstractMachine {
 
     final val RF_TICK = 20
 
-    override val energy = new EnergyStorage(100000)
+    energy = new EnergyStorage(100000)
 
     override def doWork(): Unit = {
 

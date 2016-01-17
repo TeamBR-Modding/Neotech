@@ -27,10 +27,32 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     final val ENERGY_TICK = 20
 
     val values = new StandardValues
-    val energy = new EnergyStorage(10000)
+    var energy = new EnergyStorage(10000)
 
     val BURNTIME_FIELD_ID = 0
     val COOKTIME_FIELD_ID = 1
+
+    var updateClient = false
+    def changeEnergy(): Unit = {
+        val current = energy.getEnergyStored
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
+            energy = new EnergyStorage(10000 * (getUpgradeBoard.getHardDriveCount * 10))
+            energy.setEnergyStored(current)
+        }
+        else {
+            energy = new EnergyStorage(10000)
+            energy.setEnergyStored(current)
+        }
+        updateClient = true
+        worldObj.markBlockForUpdate(pos)
+    }
+
+    def getSupposedEnergy : Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
+            10000 * (getUpgradeBoard.getHardDriveCount * 10)
+        else
+            10000
+    }
 
     def spawnActiveParticles(x: Double, y: Double, z: Double)
 
@@ -59,8 +81,15 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
 
     protected def doWork(): Unit = {
         var didWork: Boolean = false
+
+        if(getSupposedEnergy != energy.getMaxEnergyStored)
+            changeEnergy()
+
         if(this.values.cookTime > 0) {
-            energy.extractEnergy(ENERGY_TICK, false)
+            if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+                energy.extractEnergy(ENERGY_TICK * getUpgradeBoard.getProcessorCount, false)
+            else
+                energy.extractEnergy(ENERGY_TICK, false)
             worldObj.markBlockForUpdate(pos)
         }
 
@@ -94,7 +123,10 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     }
 
     private def cook(): Boolean = {
-        this.values.cookTime += 1
+        var movement : Int = 1
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            movement = 20 * getUpgradeBoard.getProcessorCount
+        this.values.cookTime += movement
         if (this.values.cookTime >= this.values.currentItemBurnTime) {
             this.values.cookTime = 0
             this.smeltItem()
@@ -165,6 +197,9 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         super[Inventory].writeToNBT(tag)
         values.writeToNBT(tag)
         energy.writeToNBT(tag)
+        if(updateClient)
+            tag.setBoolean("UpdateEnergy", true)
+        updateClient = false
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
@@ -173,6 +208,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         super[Inventory].readFromNBT(tag)
         val tempCook = values.cookTime
         values.readFromNBT(tag)
+        if(tag.hasKey("UpdateEnergy"))
+            changeEnergy()
         energy.readFromNBT(tag)
         if(worldObj != null && (tempCook == 0 && this.values.cookTime > 0) || (tempCook > 0 && this.values.cookTime == 0))
             worldObj.markBlockRangeForRenderUpdate(pos, pos)

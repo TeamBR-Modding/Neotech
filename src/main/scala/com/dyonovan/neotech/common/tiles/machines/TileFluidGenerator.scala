@@ -22,7 +22,7 @@ import net.minecraftforge.fluids._
 class TileFluidGenerator extends AbstractMachine with IFluidHandler {
 
     final val RF_TICK = 80
-    override val energy = new EnergyStorage(100000)
+    energy = new EnergyStorage(100000)
     val tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10)
 
     override def doWork(): Unit = {
