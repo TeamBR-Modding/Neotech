@@ -66,6 +66,9 @@ class TileThermalBinder extends AbstractMachine {
     }
 
     override def doWork(): Unit = {
+        if(getStackInSlot(0) == null) {
+            reset()
+        }
         if (this.values.burnTime > 0) {
             this.values.burnTime = values.burnTime - 1
             val actual = energy.extractEnergy(count * 100, true)
@@ -77,7 +80,6 @@ class TileThermalBinder extends AbstractMachine {
         } else if (this.values.currentItemBurnTime > 0 && this.values.burnTime <= 0) {
             build()
             reset()
-            worldObj.markBlockForUpdate(pos)
         }
     }
 
