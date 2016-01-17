@@ -25,13 +25,13 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile wit
     def this(t: Int) {
         this()
         tier = t
-        initEnergy()
+        initEnergy(t)
     }
 
     var energy: EnergyStorage = _
 
-    def initEnergy(): Unit = {
-        tier match {
+    def initEnergy(t: Int): Unit = {
+        t match {
             case 1 => energy = new EnergyStorage(25000, 200, 200)
             case 2 => energy = new EnergyStorage(1000000, 1000, 1000)
             case 3 => energy = new EnergyStorage(10000000, 10000, 10000)
@@ -79,7 +79,7 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile wit
         super[TileEntity].readFromNBT(tag)
         super[UpdatingTile].readFromNBT(tag)
         if (tag.hasKey("Tier")) {
-            if (tier == 0) updateEnergy(tag.getInteger("Tier"))
+            if (tier == 0) initEnergy(tag.getInteger("Tier"))
             tier = tag.getInteger("Tier")
 
             //initEnergy()
@@ -87,20 +87,6 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile wit
                 energy.readFromNBT(tag)
         }
 
-    }
-
-    def updateEnergy(newTier: Int): Unit = {
-        newTier match {
-            case 1 => energy = new EnergyStorage(25000, 200, 200)
-            case 2 => energy = new EnergyStorage(1000000, 1000, 1000)
-            case 3 => energy = new EnergyStorage(10000000, 10000, 10000)
-            case 4 =>
-                energy = new EnergyStorage(100000000, 100000, 100000)
-                energy.setEnergyStored(energy.getMaxEnergyStored)
-            case _ =>
-        }
-        if (worldObj != null)
-            worldObj.markBlockForUpdate(pos)
     }
 
     /** *****************************************************************************************************************
