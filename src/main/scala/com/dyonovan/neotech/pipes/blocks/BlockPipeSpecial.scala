@@ -9,7 +9,9 @@ import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.pipes.gui.GuiExtractionMenu
 import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe}
 import com.teambr.bookshelf.Bookshelf
+import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
+import com.teambr.bookshelf.traits.HasToolTip
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
@@ -24,6 +26,7 @@ import net.minecraft.world.{WorldServer, IBlockAccess, World}
 import net.minecraftforge.client.MinecraftForgeClient
 import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
+import org.lwjgl.input.Keyboard
 
 import scala.util.Random
 
@@ -37,7 +40,7 @@ import scala.util.Random
   * @author Paul Davis pauljoda
   * @since August 14, 2015
   */
-class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: SimplePipe]) extends BlockContainer(mat) with OpensGui {
+class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: SimplePipe]) extends BlockContainer(mat) with OpensGui with HasToolTip {
 
     //Constructor
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
@@ -236,5 +239,16 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
             return true
         }
         false
+    }
+
+    override def getToolTip() : List[String] = {
+        if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+            List[String](GuiColor.ORANGE + "Press <SHIFT> for possible upgrades...")
+        else
+            List[String](GuiColor.BLUE + "Hard Drive: " + GuiColor.GRAY + "Increases amount extracted per tick.",
+                GuiColor.BLUE + "Control Upgrade: " + GuiColor.GRAY + "Adds Redstone Control.",
+                GuiColor.BLUE + "Processor Upgrade: " + GuiColor.GRAY + "Increases Extraction Rate.",
+                GuiColor.BLUE + "Expansion Upgrade: " + GuiColor.GRAY + "Allows Mode Selection (Round Robin, etc).")
+
     }
 }
