@@ -1,55 +1,95 @@
 itemGroup.tabNeoTech=NeoTech
+itemGroup.tabNeoTechPipes=Tuyaux de transport
 itemGroup.tabNeoTechDeco=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ef
 
 tile.neotech:furnaceGenerator.name=Four générateur
-tile.neotech:furnaceGeneratorActive.name=Four générateur
-tile.neotech:electricFurnace.name=Four électrique
-tile.neotech:electricFurnaceActive.name=Four électrique
-tile.neotech:electricCrusher.name=Broyeur électrique
-tile.neotech:electricCrusherActive.name=Broyeur électrique
 tile.neotech:fluidGenerator.name=Générateur de fluide
-tile.neotech:fluidGeneratorActive.name=Générateur de fluide
-tile.neotech:electricMiner.name=Mineur électrique (WIP)
+tile.neotech:electricFurnace.name=Four électrique
+tile.neotech:electricCrusher.name=Broyeur électrique
 tile.neotech:thermalBinder.name=Agglutinant thermique
-tile.neotech:basicCable.name=Câble RF de base
-tile.neotech:advancedCable.name=Câble RF avancé
-tile.neotech:eliteCable.name=Câble RF d'élite
+
 tile.neotech:basicRFStorage.name=Stockage RF de base
 tile.neotech:advancedRFStorage.name=Stockage RF avancé
 tile.neotech:eliteRFStorage.name=Stockage RF d'élite
 tile.neotech:creativeRFStorage.name=Stockage RF créatif
-tile.neotech:ironTank.name=Réservoir de fluide en fer
-tile.neotech:goldTank.name=Réservoir de fluide en or
-tile.neotech:diamondTank.name=Réservoir de fluide en diamant
-tile.neotech:crafter.name=Atelier de duel
+
+tile.neotech:pipeStructure_black.name=Structure de tuyau §8noire §r
+tile.neotech:pipeStructure_blue.name=Structure de tuyau §1bleue §r
+tile.neotech:pipeStructure_brown.name=Structure de tuyau §6marron §r
+tile.neotech:pipeStructure_cyan.name=Structure de tuyau §bcyan §r
+tile.neotech:pipeStructure_gray.name=Structure de tuyau §8grise §r
+tile.neotech:pipeStructure_green.name=Structure de tuyau §2verte §r
+tile.neotech:pipeStructure_lightBlue.name=Structure de tuyau §9bleue claire §r
+tile.neotech:pipeStructure_lime.name=Structure de tuyau §aVerte claire §r
+tile.neotech:pipeStructure_magenta.name=Structure de tuyau §5magenta §r
+tile.neotech:pipeStructure_orange.name=Structure de tuyau §6orange §r
+tile.neotech:pipeStructure_pink.name=Structure de tuyau §drose §r
+tile.neotech:pipeStructure_purple.name=Structure de tuyau §5violette §r
+tile.neotech:pipeStructure_red.name=Structure de tuyau §crouge §r
+tile.neotech:pipeStructure_silver.name=Structure de tuyau §7argent §r
+tile.neotech:pipeStructure_white.name=Structure de tuyau blanche
+tile.neotech:pipeStructure_yellow.name=Structure de tuyau §ejaune §r
+
+tile.neotech:pipeBasicSpeedStructure.name=Tuyau d'accélération de base
+
+tile.neotech:pipeItemBasicSource.name=Tuyau d'extraction d'élément
+tile.neotech:pipeItemBasicSink.name=Tuyau d'insertion d'élément
+
+tile.neotech:pipeEnergyBasicSource.name=Tuyau d'extraction d'énergie
+tile.neotech:pipeEnergyBasicSink.name=Tuyau d'insertion d'énergie
+
+tile.neotech:pipeFluidBasicSource.name=Tuyau d'extraction de fluide
+tile.neotech:pipeFluidBasicSink.name=Tuyau d'insertion de fluide
+
 tile.neotech:oreCopper.name=Minerai de cuivre
 tile.neotech:oreTin.name=Minerai d'étain
 tile.neotech:blockCopper.name=Bloc de cuivre
 tile.neotech:blockTin.name=Bloc d'étain
-tile.neotech:basicItemPipe.name=Conduite d'élément de base
-tile.neotech:advancedItemPipe.name=Conduite d'élément avancé
-tile.neotech:eliteItemPipe.name=Conduite d'élémentd'élite
 
-tile.neotech:phantomGlass.name=Verre fantôme
-tile.neotech:voidGlass.name=§8Verre du néant§R
+tile.neotech:ironTank.name=Réservoir de fluide en fer
+tile.neotech:goldTank.name=Réservoir de fluide en or
+tile.neotech:diamondTank.name=Réservoir de fluide en diamant
+tile.neotech:creativeTank.name=Réservoir de fluide créatif
+
+tile.neotech:crafter.name=Atelier de duel
+tile.neotech:blockFertilizer.name=Soleil miniature
+
+neotech.furnace.title=Four électrique
+neotech.crusher.title=Broyeur électrique
+neotech.furnacegenerator.title=Four générateur
+neotech.fluidgenerator.title=Générateur de fluide
+neotech.thermalbinder.title=Agglutinant thermique
+neotech.crafter.title=Atelier de duel
+neotech.fertilizer.title=Soleil miniature
+neotech.rfstoragebasic.title=Stockage RF de base
+neotech.rfstorageadvanced.title=Stockage RF avancé
+neotech.rfstorageelite.title=Stockage RF d'élite
+neotech.rfstoragecreative.title=Stockage RF créatif
 
 item.neotech:dustIron.name=Poussière de fer
 item.neotech:dustGold.name=Poussière d'or
 item.neotech:dustCopper.name=Poussière de cuivre
 item.neotech:ingotCopper.name=Lingot de cuivre
+item.neotech:dustBronze.name=Poussière de bronze
+item.neotech:ingotBronze.name=lingot de bronze
 item.neotech:dustTin.name=Poussière d'étain
 item.neotech:ingotTin.name=Lingot d'étain
-item.neotech:capRam.name=Amélioration de capacité
-item.neotech:effFan.name=Amélioration d'efficacité
-item.neotech:ioPort.name=Amélioration d'auto-éjection (WIP)
-item.neotech:speedProcessor.name=Amélioration de vitesse
-item.neotech:upgradeMB.name=Carte mère d'amélioration de machine (vide)
-item.neotech:upgradeMBFull.name=Carte mère d'amélioration de machine (pleine)
 
-neotech.container.crafter=Atelier de duel
+item.neotech:upgradeMBFull.name=Amélioration du controleur plein
+item.neotech:upgradeMBEmpty.name=Amélioration du controleur vide
+item.neotech:upgradeHardDrive.name=Amélioration du disque dur
+item.neotech:upgradeControl.name=Amélioration de controle
+item.neotech:upgradeProcessor.name=Amélioration du processeur
+item.neotech:upgradeExpansion.name=Amélioration d'extension
 
-button.neotech:buttonStart.name=Démarrer
+neotech.nei.name=NeoTech
+neotech.nei.furnacerecipes=Four électrique
+neotech.nei.crusherrecipes=Broyeur électrique
+neotech.nei.ecrusher.outputchance=10% de chance par amélioration
 
-title.neotech:rfUsage.name=Utilisation RF :
-title.neotech:processTime.name=Temps de processus :
-title.neotech:autoOutput.name=Auto-éjection :
+neotech.button.disable=Désactiver ?
+
+neotech.text.in=Entrée
+neotech.text.out=Sortie
+neotech.text.upgrade=Améliorations
+neotech.text.start=Lancer
