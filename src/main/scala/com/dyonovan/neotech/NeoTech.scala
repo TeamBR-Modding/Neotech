@@ -54,7 +54,7 @@ object NeoTech {
         BlockManager.preInit()
         ItemManager.preInit()
         proxy.preInit()
-        GameRegistry.registerWorldGenerator(WorldGenManager, 2)
+        GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
         CraftingRecipeManager.preInit()
     }
 
