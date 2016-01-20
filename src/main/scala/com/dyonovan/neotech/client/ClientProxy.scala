@@ -3,6 +3,7 @@ package com.dyonovan.neotech.client
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.client.renderers.{FluidResourceEntityRenderer, EnergyResourceEntityRenderer, ItemResourceEntityRenderer}
 import com.dyonovan.neotech.common.CommonProxy
+import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemRenderManager
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyExtractionPipe

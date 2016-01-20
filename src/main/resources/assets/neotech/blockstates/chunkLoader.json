@@ -1,0 +1,13 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "textures" : {
+      "piller" : "blocks/gold_block",
+      "center" : "blocks/redstone_block",
+      "side" : "blocks/iron_block"
+    }
+  },
+  "variants": {
+    "normal" : { "model" : "neotech:chunkLoader" }
+  }
+}

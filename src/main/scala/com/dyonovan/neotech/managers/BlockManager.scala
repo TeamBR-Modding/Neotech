@@ -1,13 +1,11 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.BlockChunkLoader
 import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine}
-import com.dyonovan.neotech.common.blocks.misc.{BlockPlayerPlate, BlockCrafter, BlockFertilizer}
+import com.dyonovan.neotech.common.blocks.misc.{BlockChunkLoader, BlockPlayerPlate, BlockCrafter, BlockFertilizer}
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage.{BlockRFStorage, BlockTank, ItemBlockRFStorage, ItemBlockTank}
-import com.dyonovan.neotech.common.tiles.TileChunkLoader
 import com.dyonovan.neotech.common.tiles.machines._
-import com.dyonovan.neotech.common.tiles.misc.{TileCrafter, TileFertilizer}
+import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, TileCrafter, TileFertilizer}
 import com.dyonovan.neotech.common.tiles.storage.{TileRFStorage, TileTank}
 import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockPipe}
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}

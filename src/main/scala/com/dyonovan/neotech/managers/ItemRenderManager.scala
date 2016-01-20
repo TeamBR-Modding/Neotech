@@ -43,6 +43,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.blockCrafter))
         registerItem(Item.getItemFromBlock(BlockManager.blockFertilizer))
         registerItem(Item.getItemFromBlock(BlockManager.playerPlate))
+        registerItem(Item.getItemFromBlock(BlockManager.chunkLoader))
         registerItem(ItemManager.upgradeMBFull)
         registerItem(ItemManager.upgradeMBEmpty)
         registerItem(ItemManager.upgradeHardDrive)

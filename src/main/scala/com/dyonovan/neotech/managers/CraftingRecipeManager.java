@@ -138,6 +138,10 @@ public class CraftingRecipeManager {
         //Player Plate
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BlockManager.playerPlate()), "ingotCopper", "ingotCopper"));
 
+       //Chunk Loader
+        GameRegistry.addRecipe(new ItemStack(BlockManager.chunkLoader()), "GIG", "IRI", "GIG", 'G', Blocks.gold_block, 'I', Blocks.iron_block,
+                'R', Blocks.redstone_block);
+
         //Empty Motherboard
         GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeMBEmpty()), "RRR", "RIR", "RRR", 'R', Items.redstone, 'I', Items.iron_ingot);
 
