@@ -9,6 +9,7 @@ import com.dyonovan.neotech.network.PacketDispatcher
 import com.dyonovan.neotech.registries._
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
+import net.minecraftforge.common.ForgeChunkManager
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -67,5 +68,6 @@ object NeoTech {
 
     @EventHandler def postInit(event : FMLPostInitializationEvent) = {
         proxy.postInit()
+        ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoaderManager)
     }
  }

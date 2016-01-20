@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.managers
 
+import com.dyonovan.neotech.common.blocks.BlockChunkLoader
 import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine}
 import com.dyonovan.neotech.common.blocks.misc.{BlockPlayerPlate, BlockCrafter, BlockFertilizer}
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage.{BlockRFStorage, BlockTank, ItemBlockRFStorage, ItemBlockTank}
+import com.dyonovan.neotech.common.tiles.TileChunkLoader
 import com.dyonovan.neotech.common.tiles.machines._
 import com.dyonovan.neotech.common.tiles.misc.{TileCrafter, TileFertilizer}
 import com.dyonovan.neotech.common.tiles.storage.{TileRFStorage, TileTank}
@@ -75,6 +77,7 @@ object BlockManager {
     val blockCrafter = new BlockCrafter("blockCrafter", classOf[TileCrafter])
     val blockFertilizer = new BlockFertilizer("blockFertilizer", classOf[TileFertilizer])
     val playerPlate = new BlockPlayerPlate
+    val chunkLoader = new BlockChunkLoader
 
     def preInit(): Unit = {
         //Machines
@@ -124,6 +127,7 @@ object BlockManager {
         registerBlock(blockCrafter, "blockCrafter", classOf[TileCrafter])
         registerBlock(blockFertilizer, "blockFertilizer", classOf[TileFertilizer])
         registerBlock(playerPlate, "playerPlate", null)
+        registerBlock(chunkLoader, "chunkLoader", classOf[TileChunkLoader])
     }
 
     /**
