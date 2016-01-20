@@ -11,8 +11,10 @@ import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
+import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.Minecraft
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
@@ -25,17 +27,17 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import scala.util.Random
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 11, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 11, 2015
+  */
 class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.iron, name, tileEntity)
-    with OpensGui with CoreStates {
+with OpensGui with CoreStates {
 
     @SideOnly(Side.CLIENT)
     override def randomDisplayTick(world: World, pos: BlockPos, state: IBlockState, rand: java.util.Random): Unit = {
@@ -60,42 +62,60 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends Bas
         }
     }
 
+    override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
+        if(side != EnumFacing.UP && side != EnumFacing.DOWN)
+            world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, side))
+        else
+            world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, WorldUtils.rotateRight(world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))))
+        true
+    }
+
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
-            return new ContainerMachineUpgrade(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
+        if(player.isSneaking && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+            new ContainerMachineUpgrade(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
         }
-        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
-            case block: BlockManager.electricFurnace.type =>
-                new ContainerElectricFurnace(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricFurnace])
-            case block: BlockManager.electricCrusher.type =>
-                new ContainerElectricCrusher(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricCrusher])
-            case block: BlockManager.furnaceGenerator.type =>
-                new ContainerFurnaceGenerator(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
-            case block: BlockManager.fluidGenerator.type => new ContainerGeneric
-            case block: BlockManager.thermalBinder.type  =>
-                new ContainerThermalBinder(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileThermalBinder])
-            case _ => null
+        else if(player.inventory.getCurrentItem == null || (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem != ItemManager.wrench)) {
+            world.getBlockState(new BlockPos(x, y, z)).getBlock match {
+                case block: BlockManager.electricFurnace.type =>
+                    new ContainerElectricFurnace(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricFurnace])
+                case block: BlockManager.electricCrusher.type =>
+                    new ContainerElectricCrusher(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricCrusher])
+                case block: BlockManager.furnaceGenerator.type =>
+                    new ContainerFurnaceGenerator(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
+                case block: BlockManager.fluidGenerator.type => new ContainerGeneric
+                case block: BlockManager.thermalBinder.type =>
+                    new ContainerThermalBinder(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileThermalBinder])
+                case _ => null
+            }
         }
+        else
+            null
     }
 
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
-            return new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
+        if(player.isSneaking && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+            new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
         }
-        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
-            case block: BlockManager.electricFurnace.type =>
-                new GuiElectricFurnace(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricFurnace])
-            case block: BlockManager.electricCrusher.type =>
-                new GuiElectricCrusher(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricCrusher])
-            case block: BlockManager.furnaceGenerator.type =>
-                new GuiFurnaceGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
-            case block: BlockManager.fluidGenerator.type =>
-                new GuiFluidGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFluidGenerator])
-            case block: BlockManager.thermalBinder.type  =>
-                new GuiThermalBinder(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileThermalBinder])
-            case _ => null
+        else if(player.inventory.getCurrentItem == null || (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem != ItemManager.wrench)) {
+            world.getBlockState(new BlockPos(x, y, z)).getBlock match {
+                case block: BlockManager.electricFurnace.type =>
+                    new GuiElectricFurnace(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricFurnace])
+                case block: BlockManager.electricCrusher.type =>
+                    new GuiElectricCrusher(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricCrusher])
+                case block: BlockManager.furnaceGenerator.type =>
+                    new GuiFurnaceGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
+                case block: BlockManager.fluidGenerator.type =>
+                    new GuiFluidGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFluidGenerator])
+                case block: BlockManager.thermalBinder.type =>
+                    new GuiThermalBinder(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileThermalBinder])
+                case _ => null
+            }
         }
+        else if(Minecraft.getMinecraft.currentScreen != null) //Sometimes called twice, no idea why so work around
+            new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
+        else
+            null
     }
 
     /***
@@ -111,8 +131,8 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity]) extends Bas
 
                         //Add all from inventory
                         for (i <- 0 until tile.getSizeInventory) {
-                                if(tile.getStackInSlot(i) != null)
-                            items.add(tile.getStackInSlot(i))
+                            if(tile.getStackInSlot(i) != null)
+                                items.add(tile.getStackInSlot(i))
                         }
 
                         tile match {

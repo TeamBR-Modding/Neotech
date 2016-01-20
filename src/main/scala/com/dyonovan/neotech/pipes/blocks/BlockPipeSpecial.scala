@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.pipes.blocks
 
+import java.util.Random
+
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.client.gui.machines.GuiMachineUpgrade
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
@@ -28,7 +30,6 @@ import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 import org.lwjgl.input.Keyboard
 
-import scala.util.Random
 
 /**
   * This file was created for NeoTech
@@ -232,8 +233,43 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * If you want to override this but still call it, make sure you call
       *      super[OpensGui].onBlockActivated(...)
       */
-    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, player : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
-        if (world.isRemote && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench &&
+    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, playerIn : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
+        playerIn.getCurrentEquippedItem match {
+            case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
+                if(!world.isRemote) {
+                    val random = new Random
+                    val stack = new ItemStack(world.getBlockState(pos).getBlock.getItemDropped(world.getBlockState(pos), random, 0), 1, damageDropped(world.getBlockState(pos)))
+                    if(stack != null && stack.stackSize > 0) {
+                        val rx = random.nextFloat * 0.8F + 0.1F
+                        val ry = random.nextFloat * 0.8F + 0.1F
+                        val rz = random.nextFloat * 0.8F + 0.1F
+
+                        val itemEntity = new EntityItem(world,
+                            pos.getX + rx, pos.getY + ry, pos.getZ + rz,
+                            new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
+
+                        if (stack.hasTagCompound)
+                            itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
+
+                        val factor = 0.05F
+
+                        itemEntity.motionX = random.nextGaussian * factor
+                        itemEntity.motionY = random.nextGaussian * factor + 0.2F
+                        itemEntity.motionZ = random.nextGaussian * factor
+                        world.spawnEntityInWorld(itemEntity)
+                    }
+                    world.setBlockToAir(pos)
+                    world.markBlockForUpdate(pos)
+                    return true
+                } else {
+                    playerIn.swingItem()
+                    return true
+                }
+
+            case _ =>
+        }
+
+        if (world.isRemote && playerIn.inventory.getCurrentItem != null && playerIn.inventory.getCurrentItem.getItem == ItemManager.wrench &&
                 world.getTileEntity(pos).isInstanceOf[ExtractionPipe[_, _]]) {
             FMLClientHandler.instance().showGuiScreen(new GuiExtractionMenu(world.getTileEntity(pos).asInstanceOf[ExtractionPipe[_, _]]))
             return true

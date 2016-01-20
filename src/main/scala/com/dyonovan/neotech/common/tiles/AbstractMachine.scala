@@ -33,16 +33,14 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     val COOKTIME_FIELD_ID = 1
 
     var updateClient = false
-    def changeEnergy(): Unit = {
-        val current = energy.getEnergyStored
+    def changeEnergy(initial : Int): Unit = {
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
             energy = new EnergyStorage(10000 * (getUpgradeBoard.getHardDriveCount * 10))
-            energy.setEnergyStored(current)
         }
         else {
             energy = new EnergyStorage(10000)
-            energy.setEnergyStored(current)
         }
+        energy.setEnergyStored(initial)
         updateClient = true
         worldObj.markBlockForUpdate(pos)
     }
@@ -83,7 +81,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         var didWork: Boolean = false
 
         if(getSupposedEnergy != energy.getMaxEnergyStored)
-            changeEnergy()
+            changeEnergy(energy.getEnergyStored)
 
         if(this.values.cookTime > 0) {
             if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
@@ -191,15 +189,21 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         doWork()
     }
 
+    override def onClientTick() : Unit = {
+        if(getSupposedEnergy != energy.getMaxEnergyStored)
+            sendValueToServer(3, 0)
+    }
+
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super[Upgradeable].writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         values.writeToNBT(tag)
         energy.writeToNBT(tag)
-        if(updateClient)
+        if(updateClient && worldObj != null) {
             tag.setBoolean("UpdateEnergy", true)
-        updateClient = false
+            updateClient = false
+        }
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
@@ -208,8 +212,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         super[Inventory].readFromNBT(tag)
         val tempCook = values.cookTime
         values.readFromNBT(tag)
-        if(tag.hasKey("UpdateEnergy"))
-            changeEnergy()
+        if(tag.hasKey("UpdateEnergy") && worldObj != null  )
+            changeEnergy(tag.getInteger("Energy"))
         energy.readFromNBT(tag)
         if(worldObj != null && (tempCook == 0 && this.values.cookTime > 0) || (tempCook > 0 && this.values.cookTime == 0))
             worldObj.markBlockRangeForRenderUpdate(pos, pos)
@@ -309,6 +313,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         id match {
             case BURNTIME_FIELD_ID => this.values.burnTime = value.toInt
             case COOKTIME_FIELD_ID => this.values.cookTime = value.toInt
+            case 3 => updateClient = true
         }
     }
 

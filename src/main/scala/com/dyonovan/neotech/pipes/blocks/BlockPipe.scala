@@ -1,12 +1,16 @@
 package com.dyonovan.neotech.pipes.blocks
 
+import java.util.Random
+
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.pipes.types.SimplePipe
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.{MapColor, Material}
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{ItemDye, EnumDyeColor, Item, ItemStack}
@@ -56,12 +60,45 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
             getDefaultState
     }
 
-    override def onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
+        playerIn.getCurrentEquippedItem match {
+            case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
+                if(!world.isRemote) {
+                    val random = new Random
+                    val stack = new ItemStack(world.getBlockState(pos).getBlock.getItemDropped(world.getBlockState(pos), random, 0), 1, damageDropped(world.getBlockState(pos)))
+                    if(stack != null && stack.stackSize > 0) {
+                        val rx = random.nextFloat * 0.8F + 0.1F
+                        val ry = random.nextFloat * 0.8F + 0.1F
+                        val rz = random.nextFloat * 0.8F + 0.1F
+
+                        val itemEntity = new EntityItem(world,
+                            pos.getX + rx, pos.getY + ry, pos.getZ + rz,
+                            new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
+
+                        if (stack.hasTagCompound)
+                            itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
+
+                        val factor = 0.05F
+
+                        itemEntity.motionX = random.nextGaussian * factor
+                        itemEntity.motionY = random.nextGaussian * factor + 0.2F
+                        itemEntity.motionZ = random.nextGaussian * factor
+                        world.spawnEntityInWorld(itemEntity)
+                    }
+                    world.setBlockToAir(pos)
+                    world.markBlockForUpdate(pos)
+                    return true
+                } else
+                    playerIn.swingItem()
+
+            case _ =>
+        }
+
         if(colored) {
             playerIn.getCurrentEquippedItem match {
                 case stack: ItemStack if stack.getItem.isInstanceOf[ItemDye] =>
-                    if (stack.getItemDamage != worldIn.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMetadata) {
-                        worldIn.setBlockState(pos, state.withProperty(PipeProperties.COLOR, EnumDyeColor.byDyeDamage(stack.getItemDamage)))
+                    if (stack.getItemDamage != world.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMetadata) {
+                        world.setBlockState(pos, state.withProperty(PipeProperties.COLOR, EnumDyeColor.byDyeDamage(stack.getItemDamage)))
                         if (!playerIn.capabilities.isCreativeMode) {
                             playerIn.getCurrentEquippedItem.stackSize -= 1
                         }
