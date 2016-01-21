@@ -36,7 +36,7 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
 
     def initTank(): Unit = {
         tank = new FluidTank(getTierInfo(tier)._2)
-        if (worldObj != null) worldObj.markBlockForUpdate(pos)
+        markForUpdate()
     }
 
     override def onServerTick() : Unit = {
@@ -49,7 +49,7 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
                                 if (tank.getFluidAmount > 1000) 1000 else tank.getFluidAmount), true), true)
                         else otherTank.fill(EnumFacing.UP, new FluidStack(tank.getFluid.getFluid,
                             if (tank.getFluidAmount > 1000) 1000 else tank.getFluidAmount), true)
-                        worldObj.markBlockForUpdate(pos)
+                        markForUpdate()
                     }
                 case _ =>
             }
@@ -104,7 +104,7 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
         val fluidAmount = tank.drain(maxDrain, false)
         if (fluidAmount != null && doDrain && tier != 4)
             tank.drain(maxDrain, true)
-        worldObj.markBlockForUpdate(pos)
+        markForUpdate()
 
         fluidAmount
     }
@@ -121,7 +121,7 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
         if (canFill(from, resource.getFluid)) {
             if (tank.fill(resource, false) > 0) {
                 val actual = tank.fill(resource, doFill)
-                worldObj.markBlockForUpdate(pos)
+                markForUpdate()
                 return actual
             } else return fillAbove(from, resource, doFill)
         }
@@ -130,8 +130,10 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
 
     def fillAbove(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
         val newPos = pos.offset(EnumFacing.UP)
-        while(!worldObj.isAirBlock(newPos) && worldObj.getBlockState(newPos).getBlock.isInstanceOf[BlockTank])
-            return worldObj.getTileEntity(newPos).asInstanceOf[TileTank].fill(from, resource, doFill)
+        if(worldObj != null) {
+            while (!worldObj.isAirBlock(newPos) && worldObj.getBlockState(newPos).getBlock.isInstanceOf[BlockTank])
+                return worldObj.getTileEntity(newPos).asInstanceOf[TileTank].fill(from, resource, doFill)
+        }
         0
     }
 
@@ -153,6 +155,11 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
             if (worldObj != null)
                 worldObj.markBlockRangeForRenderUpdate(pos, pos)
         }
+    }
+
+    def markForUpdate() = {
+        if(worldObj != null)
+            worldObj.markBlockForUpdate(pos)
     }
 
     override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
