@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.pipes.entities;
 
+import com.google.common.primitives.SignedBytes;
 import com.teambr.bookshelf.util.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.RenderEntityItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -26,10 +28,26 @@ import java.util.Stack;
  */
 public class ItemResourceEntity extends ResourceEntity<ItemStack> {
 
+    private RenderEntityItem itemRenderer;
     /**
      * Stub for reading from server
      */
-    public ItemResourceEntity() {}
+    public ItemResourceEntity() {
+        itemRenderer = new RenderEntityItem(Minecraft.getMinecraft().getRenderManager(), Minecraft.getMinecraft().getRenderItem()){
+            @Override
+            public int func_177078_a(ItemStack stack) {
+                return SignedBytes.saturatedCast(Math.min(stack.stackSize / 32, 15) + 1);
+            }
+            @Override
+            public boolean shouldBob() {
+                return false;
+            }
+            @Override
+            public boolean shouldSpreadItems() {
+                return false;
+            }
+        };
+    }
 
     /**
      * Move an entity with momentum. Use this for most cases
@@ -63,12 +81,23 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
 
         RenderManager manager = Minecraft.getMinecraft().getRenderManager();
         GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
-        RenderUtils.bindMinecraftBlockSheet();
-        GL11.glScaled(0.5, 0.5, 0.5);
+        /** RenderUtils.bindMinecraftBlockSheet();
+         GL11.glScaled(0.5, 0.5, 0.5);
+         try {
+         Minecraft.getMinecraft().getRenderItem().renderItem(resource, ItemCameraTransforms.TransformType.GROUND);
+         } catch(NullPointerException ignored) {}
+         */
         try {
-            Minecraft.getMinecraft().getRenderItem().renderItem(resource, ItemCameraTransforms.TransformType.GROUND);
-        } catch(NullPointerException ignored) {}
-
+            EntityItem itemStack = new EntityItem(Minecraft.getMinecraft().theWorld);
+            itemStack.hoverStart = 0f;
+            itemStack.setEntityItemStack(resource);
+            GlStateManager.scale(0.75, 0.75, 0.75);
+            GlStateManager.rotate((float) (360.0 * (double) (System.currentTimeMillis() & 0x3FFFL) / (double) 0x3FFFL), 0.0F, 1.0F, 0.0F);
+            itemRenderer.doRender(itemStack, 0, -0.25, 0, 0, 0);
+        } catch(NullPointerException ignored) {
+            GlStateManager.popAttrib();
+            GlStateManager.popMatrix();
+        } //Sometimes it tries to render after its gone, just to be safe
         GlStateManager.popAttrib();
         GlStateManager.popMatrix();
     }
