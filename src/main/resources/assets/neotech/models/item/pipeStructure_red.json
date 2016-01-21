@@ -1,5 +1,5 @@
 {
-    "parent" : "neotech:block/pipe",
+    "parent" : "neotech:block/pipeItem",
     "textures" : {
         "base" :  "neotech:blocks/pipes/basic_structure_pipe_red"
     },

@@ -13,6 +13,17 @@
                 "west" : { "texture" : "#extra"},
                 "north" :{ "texture" : "#extra"}
             }
+        },
+        {
+            "from" : [ 13, 13, 16 ],
+            "to" : [ 3, 3, 12 ],
+            "faces" : {
+                "up"   : { "texture" : "#extra"},
+                "down" : { "uv" : [3, 0, 13, 4], "texture" : "#extra"},
+                "east" : { "uv" : [0, 3, 4, 13], "texture" : "#extra"},
+                "west" : { "texture" : "#extra"},
+                "north" :{ "texture" : "#extra"}
+            }
         }
     ]
 }

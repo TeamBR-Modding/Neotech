@@ -95,11 +95,13 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
             GlStateManager.rotate((float) (360.0 * (double) (System.currentTimeMillis() & 0x3FFFL) / (double) 0x3FFFL), 0.0F, 1.0F, 0.0F);
             itemRenderer.doRender(itemStack, 0, -0.25, 0, 0, 0);
         } catch(NullPointerException ignored) {
+           // GlStateManager.popAttrib();
+            GlStateManager.popMatrix();
+        }//Sometimes it tries to render after its gone, just to be safe
+        finally {
             GlStateManager.popAttrib();
             GlStateManager.popMatrix();
-        } //Sometimes it tries to render after its gone, just to be safe
-        GlStateManager.popAttrib();
-        GlStateManager.popMatrix();
+        }
     }
 
     @Override

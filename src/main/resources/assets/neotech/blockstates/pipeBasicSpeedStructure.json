@@ -3,8 +3,7 @@
     "defaults" : {
         "textures" : {
             "base" : "neotech:blocks/pipes/structureBasicSpeed"
-        },
-        "model" : "neotech:pipe"
+        }
     },
     "variants" : {
         "up" : {
@@ -16,7 +15,14 @@
                     }
                 }
             },
-            "false" : {}
+            "false" : {
+                "submodel": {
+                    "noconnectionup": {
+                        "model": "neotech:pipe",
+                        "x": 90
+                    }
+                }
+            }
         },
         "down" : {
             "true" : {
@@ -27,7 +33,14 @@
                     }
                 }
             },
-            "false" : {}
+            "false" : {
+                "submodel": {
+                    "noconnectiondown": {
+                        "model": "neotech:pipe",
+                        "x": 270
+                    }
+                }
+            }
         },
         "north" : {
             "true" : {
@@ -38,7 +51,14 @@
                     }
                 }
             },
-            "false" : {}
+            "false" : {
+                "submodel": {
+                    "noconnectionnorth": {
+                        "model": "neotech:pipe",
+                        "y": 180
+                    }
+                }
+            }
         },
         "south" : {
             "true" : {
@@ -49,7 +69,14 @@
                     }
                 }
             },
-            "false" : {}
+            "false" : {
+                "submodel": {
+                    "noconnectionsouth": {
+                        "model": "neotech:pipe",
+                        "y": 0
+                    }
+                }
+            }
         },
         "east" : {
             "true" : {
@@ -60,7 +87,14 @@
                     }
                 }
             },
-            "false" : {}
+            "false" : {
+                "submodel": {
+                    "noconnectioneast": {
+                        "model": "neotech:pipe",
+                        "y": 270
+                    }
+                }
+            }
         },
         "west" : {
             "true" : {
@@ -71,7 +105,14 @@
                     }
                 }
             },
-            "false" : {}
+            "false" : {
+                "submodel": {
+                    "noconnectionwest": {
+                        "model": "neotech:pipe",
+                        "y": 90
+                    }
+                }
+            }
         }
     }
 }

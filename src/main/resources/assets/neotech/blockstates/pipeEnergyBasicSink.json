@@ -4,12 +4,18 @@
         "textures" : {
             "base" : "neotech:blocks/pipes/basicEnergySink",
             "extra" : "neotech:blocks/pipes/basicEnergySinkExtras"
-        },
-        "model" : "neotech:pipe"
+        }
     },
     "variants" : {
         "up" : {
-            "0" : {},
+            "0" : {
+                "submodel": {
+                    "no_connection_up": {
+                        "model": "neotech:pipe",
+                        "x": 90
+                    }
+                }
+            },
             "1" : {
                 "submodel": {
                     "connection_up": {
@@ -34,7 +40,14 @@
             }
         },
         "down" : {
-            "0" : {},
+            "0" : {
+                "submodel": {
+                    "no_connection_down": {
+                        "model": "neotech:pipe",
+                        "x": 270
+                    }
+                }
+            },
             "1" : {
                 "submodel": {
                     "connection_down": {
@@ -59,7 +72,14 @@
             }
         },
         "north" : {
-            "0" : {},
+            "0" : {
+                "submodel": {
+                    "no_connection_north": {
+                        "model": "neotech:pipe",
+                        "x": 180
+                    }
+                }
+            },
             "1" : {
                 "submodel": {
                     "connection_north": {
@@ -84,7 +104,14 @@
             }
         },
         "south" : {
-            "0" : {},
+            "0" : {
+                "submodel": {
+                    "no_connection_south": {
+                        "model": "neotech:pipe",
+                        "x": 0
+                    }
+                }
+            },
             "1" : {
                 "submodel": {
                     "connection_south": {
@@ -109,7 +136,14 @@
             }
         },
         "east" : {
-            "0" : {},
+            "0" : {
+                "submodel": {
+                    "no_connection_east": {
+                        "model": "neotech:pipe",
+                        "y" : 270
+                    }
+                }
+            },
             "1" : {
                 "submodel": {
                     "connection_east": {
@@ -134,7 +168,14 @@
             }
         },
         "west" : {
-            "0" : {},
+            "0" : {
+                "submodel": {
+                    "no_connection_west": {
+                        "model": "neotech:pipe",
+                        "y" : 90
+                    }
+                }
+            },
             "1" : {
                 "submodel": {
                     "connection_west": {
