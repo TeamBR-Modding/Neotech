@@ -52,6 +52,7 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
 
     @Override
     public void onDropInWorld() {
+        isDead = true;
         //Since we are just energy, lets not do anything for now.
         //If we are evil, maybe we should spawn an explosion...
     }

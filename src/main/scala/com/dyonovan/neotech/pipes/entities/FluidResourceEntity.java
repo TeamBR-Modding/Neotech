@@ -47,6 +47,7 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
 
     @Override
     public void onDropInWorld() {
+        isDead = true;
         //Since we are just fluid, lets not do anything for now.
     }
 

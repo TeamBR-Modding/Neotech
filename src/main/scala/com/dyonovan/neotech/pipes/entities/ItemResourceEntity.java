@@ -72,6 +72,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
             item.setEntityItemStack(resource);
             world.spawnEntityInWorld(item);
         }
+        isDead = true;
     }
 
     @Override
