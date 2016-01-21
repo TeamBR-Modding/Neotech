@@ -85,7 +85,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
 
         if(this.values.cookTime > 0) {
             if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-                energy.extractEnergy(ENERGY_TICK * getUpgradeBoard.getProcessorCount, false)
+                energy.extractEnergy(ENERGY_TICK * getUpgradeBoard.getProcessorCount + (ENERGY_TICK * 0.4).toInt, false)
             else
                 energy.extractEnergy(ENERGY_TICK, false)
             worldObj.markBlockForUpdate(pos)
