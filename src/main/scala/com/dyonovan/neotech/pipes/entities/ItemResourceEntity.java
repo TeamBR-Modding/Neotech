@@ -76,6 +76,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderResource(float tickPartial) {
         GlStateManager.pushMatrix();
         GlStateManager.pushAttrib();
