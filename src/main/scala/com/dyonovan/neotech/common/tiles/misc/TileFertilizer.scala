@@ -2,6 +2,7 @@ package com.dyonovan.neotech.common.tiles.misc
 
 import java.util
 
+import com.dyonovan.neotech.managers.FertilizerBlacklistManager
 import com.google.common.collect.Lists
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
@@ -40,15 +41,17 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
         val plantPOS = list.get(worldObj.rand.nextInt(list.size()))
         val state = worldObj.getBlockState(plantPOS)
         val block = state.getBlock
-        if (block.isInstanceOf[IPlantable] || block.isInstanceOf[IGrowable]) {
-            if (!disabled && isBoneMeal._1 && worldObj.rand.nextInt(20) == 0) {
-                growPlant(block, plantPOS, state)
-                if (worldObj.rand.nextInt(100) <= 14) {
-                    decrStackSize(isBoneMeal._2, 1)
-                    worldObj.markBlockForUpdate(getPos)
+        if (!FertilizerBlacklistManager.getBlacklist.contains(block)) {
+            if (block.isInstanceOf[IPlantable] || block.isInstanceOf[IGrowable]) {
+                if (!disabled && isBoneMeal._1 && worldObj.rand.nextInt(20) == 0) {
+                    growPlant(block, plantPOS, state)
+                    if (worldObj.rand.nextInt(100) <= 14) {
+                        decrStackSize(isBoneMeal._2, 1)
+                        worldObj.markBlockForUpdate(getPos)
+                    }
+                } else if (worldObj.rand.nextInt(100) <= 79) {
+                    growPlant(block, plantPOS, state)
                 }
-            } else if (worldObj.rand.nextInt(100) <= 79) {
-                growPlant(block, plantPOS, state)
             }
         }
     }
