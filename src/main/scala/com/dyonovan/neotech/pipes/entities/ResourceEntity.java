@@ -6,6 +6,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -188,6 +190,7 @@ abstract public class ResourceEntity<R> {
      * Used to render the resource
      * @param tickPartial The tick partial time
      */
+    @SideOnly(Side.CLIENT)
     abstract public void renderResource(float tickPartial);
 
     /**
