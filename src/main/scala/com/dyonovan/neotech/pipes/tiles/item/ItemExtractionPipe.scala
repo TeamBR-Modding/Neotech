@@ -23,8 +23,9 @@ import net.minecraft.util.{BlockPos, EnumFacing}
   */
 class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
     override def canConnect(facing: EnumFacing): Boolean =
-        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory]
-
+        super.canConnect(facing) &&
+                (getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
+                        getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory])
     /**
       * This is the speed to extract from. You should be calling this when building your resources to send.
       *
@@ -72,36 +73,38 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
         }
 
         for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case sidedInv : ISidedInventory =>
-                    for(i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
-                        tempInv.setInventorySlotContents(0, null)
-                        if (sidedInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = false, canStack = true) > 0) {
-                            if(extractOnMode(new ItemResourceEntity(sidedInv.getStackInSlot(i),
-                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                pos, pos, worldObj), simulate = true)) {
-                                InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = true, canStack = true)
-                                nextResource.resource = tempInv.getStackInSlot(0)
-                                extractOnMode(nextResource, simulate = false)
-                                return
+            if (canConnect(dir)) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case sidedInv: ISidedInventory =>
+                        for (i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
+                            tempInv.setInventorySlotContents(0, null)
+                            if (sidedInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = false, canStack = true) > 0) {
+                                if (extractOnMode(new ItemResourceEntity(sidedInv.getStackInSlot(i),
+                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                    pos, pos, worldObj), simulate = true)) {
+                                    InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = true, canStack = true)
+                                    nextResource.resource = tempInv.getStackInSlot(0)
+                                    extractOnMode(nextResource, simulate = false)
+                                    return
+                                }
                             }
                         }
-                    }
-                case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
-                    for(i <- 0 until otherInv.getSizeInventory) {
-                        tempInv.setInventorySlotContents(0, null)
-                        if (otherInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = false, canStack = true) > 0) {
-                            if(extractOnMode(new ItemResourceEntity(otherInv.getStackInSlot(i),
-                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                pos, pos, worldObj), simulate = true)) {
-                                InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
-                                nextResource.resource = tempInv.getStackInSlot(0)
-                                extractOnMode(nextResource, simulate = false)
-                                return
+                    case otherInv: IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
+                        for (i <- 0 until otherInv.getSizeInventory) {
+                            tempInv.setInventorySlotContents(0, null)
+                            if (otherInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = false, canStack = true) > 0) {
+                                if (extractOnMode(new ItemResourceEntity(otherInv.getStackInSlot(i),
+                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                    pos, pos, worldObj), simulate = true)) {
+                                    InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
+                                    nextResource.resource = tempInv.getStackInSlot(0)
+                                    extractOnMode(nextResource, simulate = false)
+                                    return
+                                }
                             }
                         }
-                    }
-                case _ =>
+                    case _ =>
+                }
             }
         }
     }

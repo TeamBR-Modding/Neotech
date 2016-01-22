@@ -4,12 +4,14 @@ import java.util
 
 import com.dyonovan.neotech.collections.ISidedWrapper
 import com.dyonovan.neotech.pipes.entities.{ResourceEntity, ItemResourceEntity}
-import com.dyonovan.neotech.pipes.types.{SimplePipe, SinkPipe}
+import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe, SinkPipe}
 import com.teambr.bookshelf.common.tiles.traits.{UpdatingTile, Syncable, Inventory}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraftforge.fluids.IFluidHandler
 
 /**
   * This file was created for NeoTech
@@ -25,7 +27,16 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
     val waitingQueue  = new util.ArrayList[ItemResourceEntity]()
 
     override def canConnect(facing: EnumFacing): Boolean =
-        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory]
+        if(super.canConnect(facing))
+            getWorld.getTileEntity(pos.offset(facing)) match {
+                case tank : IInventory => true
+                case source: ExtractionPipe[_, _] => source.connections.get(facing.getOpposite.ordinal())
+                case sink: SinkPipe[_, _] => sink.connections.get(facing.getOpposite.ordinal())
+                case pipe : SimplePipe => true
+                case _ => false
+            }
+        else
+            super.canConnect(facing)
 
     /**
       * Used to check if this pipe can accept a resource
@@ -182,5 +193,15 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
                 }
             }
         }
+    }
+
+    override def writeToNBT(tag : NBTTagCompound) = {
+        super.writeToNBT(tag)
+        super[TileEntity].writeToNBT(tag)
+    }
+
+    override def readFromNBT(tag : NBTTagCompound) = {
+        super.readFromNBT(tag)
+        super[TileEntity].readFromNBT(tag)
     }
 }

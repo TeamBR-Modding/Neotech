@@ -3,6 +3,7 @@ package com.dyonovan.neotech.pipes.types
 import java.util
 
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
+import com.dyonovan.neotech.pipes.collections.ConnectedSides
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
 import com.teambr.bookshelf.common.tiles.traits.{Syncable, RedstoneAware, UpdatingTile}
 import net.minecraft.nbt.NBTTagCompound
@@ -35,6 +36,8 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
     //Create a queue
     var nextResource: R = _
 
+    val connections = new ConnectedSides
+
     /**
       * Get how many ticks to 'cooldown' between operations.
       * @return 20 = 1 second
@@ -49,6 +52,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
 
     val REDSTONE_FIELD_ID = 0
     val MODE_FIELD_ID = 1
+    val CONNECTIONS = 2
 
     /**
       * Used to add a resource
@@ -56,6 +60,8 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
     def addResource(resource: R): Unit = {
         resources.add(resource)
     }
+
+    override def canConnect(facing: EnumFacing): Boolean = connections.get(facing.ordinal()) && super[SimplePipe].canConnect(facing)
 
     /**
       * Used to extract the resource on the shortest path possible
@@ -471,6 +477,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
       */
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].writeToNBT(tag)
+        connections.writeToNBT(tag)
         tag.setInteger("mode", mode)
         tag.setInteger("redstone", redstone)
     }
@@ -486,6 +493,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
       */
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].readFromNBT(tag)
+        connections.readFromNBT(tag)
         mode = tag.getInteger("mode")
         redstone = tag.getInteger("redstone")
     }
@@ -503,6 +511,8 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
     override def resetValues(): Unit = {
         mode = 0
         redstone = 0
+        for(x <- connections.connections.indices)
+            connections.set(x, value = true)
         getWorld.markBlockForUpdate(getPos)
     }
 
@@ -523,7 +533,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
     def getGUIHeight : Int = {
         var baseHeight = 41
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl)
-            baseHeight += 30
+            baseHeight += 60
         if(getUpgradeBoard != null && getUpgradeBoard.hasExpansion)
             baseHeight += 30
         baseHeight
@@ -575,6 +585,9 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
         id match {
             case REDSTONE_FIELD_ID => redstone = value.toInt
             case MODE_FIELD_ID => mode = value.toInt
+            case CONNECTIONS =>
+                connections.set(value.toInt, !connections.get(value.toInt))
+                getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
         }
     }
 

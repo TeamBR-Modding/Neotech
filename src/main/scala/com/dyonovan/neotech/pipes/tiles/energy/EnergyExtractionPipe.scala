@@ -9,29 +9,31 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.{Vec3, BlockPos, EnumFacing}
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Paul Davis pauljoda
- * @since August 17, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Paul Davis pauljoda
+  * @since August 17, 2015
+  */
 class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceEntity] {
 
     mode = 2
 
     override def canConnect(facing: EnumFacing): Boolean =
-        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
-                (getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IEnergyProvider] && getWorld.getTileEntity(pos.offset(facing)).asInstanceOf[IEnergyProvider].canConnectEnergy(facing.getOpposite))
+        super.canConnect(facing) &&
+                (getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
+                    (getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IEnergyProvider] &&
+                            getWorld.getTileEntity(pos.offset(facing)).asInstanceOf[IEnergyProvider].canConnectEnergy(facing.getOpposite)))
 
     /**
-     * This is the speed to extract from. You should be calling this when building your resources to send.
-     *
-     * This is included as a reminder to the child to have variable speeds
-     * @return
-     */
+      * This is the speed to extract from. You should be calling this when building your resources to send.
+      *
+      * This is included as a reminder to the child to have variable speeds
+      * @return
+      */
     override def getSpeed: Double = {
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
             getUpgradeBoard.getProcessorCount * 0.5
@@ -39,9 +41,9 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
             0.5
     }
     /**
-     * Used to specify how much RF, check for upgrades here
-     * @return
-     */
+      * Used to specify how much RF, check for upgrades here
+      * @return
+      */
     def getMaxRFDrain : Int = {
         var rate = 200
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
@@ -53,9 +55,9 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
     var acceptRF : Int = -1
 
     /**
-     * Get how many ticks to 'cooldown' between operations.
-     * @return 20 = 1 second
-     */
+      * Get how many ticks to 'cooldown' between operations.
+      * @return 20 = 1 second
+      */
     override def getDelay: Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
             10 - getUpgradeBoard.getProcessorCount
@@ -63,36 +65,38 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
             10
     }
     /**
-     * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
-     * this pipe to do on its action phase. The parent will not automatically call extract
-     *
-     * This is useful if you wish to set different modes and call different path finding
-     */
+      * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
+      * this pipe to do on its action phase. The parent will not automatically call extract
+      *
+      * This is useful if you wish to set different modes and call different path finding
+      */
     override def doExtraction(): Unit = {
         tryExtractResources()
     }
 
     /**
-     * The first step in moving things. You should call this from doExtraction. This is an outside method so you can
-     * have additional functions to the pipe besides just extracting. For example, a pipe that pulls items in the world
-     */
+      * The first step in moving things. You should call this from doExtraction. This is an outside method so you can
+      * have additional functions to the pipe besides just extracting. For example, a pipe that pulls items in the world
+      */
     override def tryExtractResources(): Unit = {
         for(dir <- EnumFacing.values()) {
-            getWorld.getTileEntity(pos.offset(dir)) match {
-                case provider : IEnergyProvider =>
-                    if(provider.getEnergyStored(dir.getOpposite) > 0) {
-                        val tempStorage = new EnergyStorage(getMaxRFDrain)
-                        tempStorage.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true))
-                        val energyResourceEntity = new EnergyResourceEntity(tempStorage,
-                            pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                            pos, pos.north(), getWorld)
-                        if(extractOnMode(energyResourceEntity, simulate = true)) {
-                              nextResource.resource.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false))
-                            extractOnMode(nextResource, simulate = false)
-                              return
+            if (canConnect(dir)) {
+                getWorld.getTileEntity(pos.offset(dir)) match {
+                    case provider: IEnergyProvider =>
+                        if (provider.getEnergyStored(dir.getOpposite) > 0) {
+                            val tempStorage = new EnergyStorage(getMaxRFDrain)
+                            tempStorage.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true))
+                            val energyResourceEntity = new EnergyResourceEntity(tempStorage,
+                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                pos, pos.north(), getWorld)
+                            if (extractOnMode(energyResourceEntity, simulate = true)) {
+                                nextResource.resource.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false))
+                                extractOnMode(nextResource, simulate = false)
+                                return
+                            }
                         }
-                    }
-                case _ =>
+                    case _ =>
+                }
             }
         }
     }
@@ -210,10 +214,10 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
     }
 
     /**
-     * This is called when we fail to send a resource. You should put the resource back where you found it or
-     * add it to the world
-     * @param resource
-     */
+      * This is called when we fail to send a resource. You should put the resource back where you found it or
+      * add it to the world
+      * @param resource
+      */
     override def resourceReturned(resource: EnergyResourceEntity): Unit = {
         val tempStorage = new EnergyStorage(resource.resource.getMaxEnergyStored, resource.resource.getMaxReceive, resource.resource.getMaxExtract)
         tempStorage.setEnergyStored(resource.resource.getEnergyStored)
@@ -272,6 +276,8 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
     override def resetValues(): Unit = {
         mode = 2
         redstone = 0
+        for(x <- connections.connections.indices)
+            connections.set(x, value = true)
         worldObj.markBlockForUpdate(pos)
     }
 }

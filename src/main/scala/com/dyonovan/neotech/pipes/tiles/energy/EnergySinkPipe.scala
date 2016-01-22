@@ -2,31 +2,40 @@ package com.dyonovan.neotech.pipes.tiles.energy
 
 import cofh.api.energy.{EnergyStorage, IEnergyReceiver}
 import com.dyonovan.neotech.pipes.entities.{ResourceEntity, EnergyResourceEntity}
-import com.dyonovan.neotech.pipes.types.{SimplePipe, SinkPipe}
+import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe, SinkPipe}
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing}
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Paul Davis pauljoda
- * @since August 17, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Paul Davis pauljoda
+  * @since August 17, 2015
+  */
 class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
     override def canConnect(facing: EnumFacing): Boolean =
-        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
-                (getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IEnergyReceiver] && getWorld.getTileEntity(pos.offset(facing)).asInstanceOf[IEnergyReceiver].canConnectEnergy(facing.getOpposite))
+        if(super.canConnect(facing))
+            getWorld.getTileEntity(pos.offset(facing)) match {
+                case energy : IEnergyReceiver => energy.canConnectEnergy(facing.getOpposite)
+                case source: ExtractionPipe[_, _] => source.connections.get(facing.getOpposite.ordinal())
+                case sink: SinkPipe[_, _] => sink.connections.get(facing.getOpposite.ordinal())
+                case pipe : SimplePipe => true
+                case _ => false
+            }
+        else
+            super.canConnect(facing)
 
     /**
-     * Used to check if this pipe can accept a resource
-     *
-     * You should not actually change anything, all simulation
-     * @param resourceEntity
-     * @return
-     */
+      * Used to check if this pipe can accept a resource
+      *
+      * You should not actually change anything, all simulation
+      * @param resourceEntity
+      * @return
+      */
     override def willAcceptResource(resourceEntity: ResourceEntity[_]): Boolean = {
         if(resourceEntity == null || !resourceEntity.isInstanceOf[EnergyResourceEntity] || resourceEntity.resource == null)
             return false
@@ -35,22 +44,24 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
 
         //Try and insert the energy
         for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case receiver : IEnergyReceiver =>
-                    if(receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true) > 0)
-                        return true
-                case _ =>
+            if (canConnect(dir)) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case receiver: IEnergyReceiver =>
+                        if (receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true) > 0)
+                            return true
+                    case _ =>
+                }
             }
         }
         false
     }
 
     /**
-     * Try and insert the resource into an inventory.
-     *
-     * It is pretty good practice to send the resource back if you can't remove all of it
-     * @param resource
-     */
+      * Try and insert the resource into an inventory.
+      *
+      * It is pretty good practice to send the resource back if you can't remove all of it
+      * @param resource
+      */
     override def tryInsertResource(resource: EnergyResourceEntity): Unit = {
         if(resource == null || resource.resource == null)
             return
@@ -87,5 +98,15 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
             }
         }
         -1
+    }
+
+    override def writeToNBT(tag : NBTTagCompound) = {
+        super.writeToNBT(tag)
+        super[TileEntity].writeToNBT(tag)
+    }
+
+    override def readFromNBT(tag : NBTTagCompound) = {
+        super.readFromNBT(tag)
+        super[TileEntity].readFromNBT(tag)
     }
 }

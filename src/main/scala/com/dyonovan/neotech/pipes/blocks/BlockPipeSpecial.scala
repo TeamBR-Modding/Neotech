@@ -8,8 +8,8 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.common.container.machines.ContainerMachineUpgrade
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
-import com.dyonovan.neotech.pipes.gui.GuiExtractionMenu
-import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe}
+import com.dyonovan.neotech.pipes.gui.{GuiSinkMenu, GuiExtractionMenu}
+import com.dyonovan.neotech.pipes.types.{SinkPipe, ExtractionPipe, SimplePipe}
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
@@ -84,7 +84,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     }
 
     override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
-        if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos).isInstanceOf[ExtractionPipe[_, _]]) {
+        if(worldIn.getTileEntity(pos) != null) {
             worldIn match {
                 case _: WorldServer => //We are on a server
                     worldIn.getTileEntity(pos) match {
@@ -272,6 +272,11 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         if (world.isRemote && playerIn.inventory.getCurrentItem != null && playerIn.inventory.getCurrentItem.getItem == ItemManager.wrench &&
                 world.getTileEntity(pos).isInstanceOf[ExtractionPipe[_, _]]) {
             FMLClientHandler.instance().showGuiScreen(new GuiExtractionMenu(world.getTileEntity(pos).asInstanceOf[ExtractionPipe[_, _]]))
+            return true
+        }
+        if (world.isRemote && playerIn.inventory.getCurrentItem != null && playerIn.inventory.getCurrentItem.getItem == ItemManager.wrench &&
+                world.getTileEntity(pos).isInstanceOf[SinkPipe[_, _]]) {
+            FMLClientHandler.instance().showGuiScreen(new GuiSinkMenu(world.getTileEntity(pos).asInstanceOf[SinkPipe[_, _]]))
             return true
         }
         false

@@ -21,8 +21,9 @@ import net.minecraftforge.fluids.{FluidTank, IFluidHandler}
 class FluidExtractionPipe extends ExtractionPipe[FluidTank, FluidResourceEntity] {
 
     override def canConnect(facing: EnumFacing): Boolean =
-        getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
-                getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IFluidHandler]
+        super.canConnect(facing) &&
+                (getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
+                    getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IFluidHandler])
 
     /**
       * This is the speed to extract from. You should be calling this when building your resources to send.
@@ -74,21 +75,23 @@ class FluidExtractionPipe extends ExtractionPipe[FluidTank, FluidResourceEntity]
     override def tryExtractResources(): Unit = {
 
         for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case tank : IFluidHandler =>
-                    val tempTank = new FluidTank(getMaxFluidDrain)
-                    tempTank.fill(tank.drain(dir.getOpposite, getMaxFluidDrain, false), true)
-                    if(extractOnMode(new FluidResourceEntity(tempTank,
-                        pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                        pos, pos.north(), worldObj), simulate = true)) {
-                        tempTank.setFluid(null)
-                        tempTank.fill(tank.drain(dir.getOpposite, getMaxFluidDrain, true), true)
-                        nextResource.resource = tempTank
-                        extractOnMode(nextResource, simulate = false)
-                        return
-                    }
+            if (canConnect(dir)) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case tank: IFluidHandler =>
+                        val tempTank = new FluidTank(getMaxFluidDrain)
+                        tempTank.fill(tank.drain(dir.getOpposite, getMaxFluidDrain, false), true)
+                        if (extractOnMode(new FluidResourceEntity(tempTank,
+                            pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                            pos, pos.north(), worldObj), simulate = true)) {
+                            tempTank.setFluid(null)
+                            tempTank.fill(tank.drain(dir.getOpposite, getMaxFluidDrain, true), true)
+                            nextResource.resource = tempTank
+                            extractOnMode(nextResource, simulate = false)
+                            return
+                        }
 
-                case _ =>
+                    case _ =>
+                }
             }
         }
     }
