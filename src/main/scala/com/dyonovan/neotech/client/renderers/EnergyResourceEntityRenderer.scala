@@ -2,6 +2,7 @@ package com.dyonovan.neotech.client.renderers
 
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyExtractionPipe
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
+import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
 /**
  * This file was created for NeoTech
@@ -13,6 +14,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
  * @author Paul Davis pauljoda
  * @since August 20, 2015
  */
+@SideOnly(Side.CLIENT)
 class EnergyResourceEntityRenderer extends TileEntitySpecialRenderer[EnergyExtractionPipe] {
     override def renderTileEntityAt(tile: EnergyExtractionPipe, posX: Double, posY: Double, posZ: Double, partialTick: Float, integer: Int): Unit = {
         val resourceList = tile.asInstanceOf[EnergyExtractionPipe].resources

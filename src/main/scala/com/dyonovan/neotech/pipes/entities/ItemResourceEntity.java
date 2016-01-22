@@ -97,7 +97,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
             itemRenderer.doRender(itemStack, 0, -0.25, 0, 0, 0);
         } catch(NullPointerException ignored) {
             GlStateManager.popMatrix();
-        }catch(NoClassDefFoundError ignored){}//Sometimes it tries to render after its gone, just to be safe
+        }//Sometimes it tries to render after its gone, just to be safe
         finally {
             GlStateManager.popAttrib();
             GlStateManager.popMatrix();
