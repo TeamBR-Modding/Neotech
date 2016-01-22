@@ -52,13 +52,15 @@ class FluidSinkPipe extends SinkPipe[FluidTank, FluidResourceEntity] with Updati
 
         //Try and insert the fluid
         for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case tank : IFluidHandler =>
-                    if(test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false) > 0) {
-                        waitingQueue.add(resource)
-                        return true
-                    }
-                case _ =>
+            if (canConnect(dir)) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case tank: IFluidHandler =>
+                        if (test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false) > 0) {
+                            waitingQueue.add(resource)
+                            return true
+                        }
+                    case _ =>
+                }
             }
         }
         false

@@ -61,18 +61,20 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
 
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
-                    if(InventoryUtils.moveItemInto(tempInventory, 0, testNormal(otherInv, dir), -1, 64, dir, doMove = false, canStack = true) > 0) {
-                        waitingQueue.add(resource)
-                        return true
-                    }
-                case sided : ISidedInventory =>
-                    if(InventoryUtils.moveItemInto(tempInventory, 0, testSided(sided, dir), -1, 64, dir, doMove = false, canStack = true) > 0) {
-                        waitingQueue.add(resource)
-                        return true
-                    }
-                case _ =>
+            if (canConnect(dir)) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case otherInv: IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
+                        if (InventoryUtils.moveItemInto(tempInventory, 0, testNormal(otherInv, dir), -1, 64, dir, doMove = false, canStack = true) > 0) {
+                            waitingQueue.add(resource)
+                            return true
+                        }
+                    case sided: ISidedInventory =>
+                        if (InventoryUtils.moveItemInto(tempInventory, 0, testSided(sided, dir), -1, 64, dir, doMove = false, canStack = true) > 0) {
+                            waitingQueue.add(resource)
+                            return true
+                        }
+                    case _ =>
+                }
             }
         }
         false
