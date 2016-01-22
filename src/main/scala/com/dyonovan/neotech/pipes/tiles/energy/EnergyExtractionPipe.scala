@@ -47,7 +47,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
     def getMaxRFDrain : Int = {
         var rate = 200
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
-            rate *= getUpgradeBoard.getHardDriveCount
+            rate *= (getUpgradeBoard.getHardDriveCount * 4)
         if(acceptRF == -1)
             rate * 10
         else acceptRF
@@ -60,9 +60,9 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
       */
     override def getDelay: Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            10 - getUpgradeBoard.getProcessorCount
+            20 - getUpgradeBoard.getProcessorCount * 2
         else
-            10
+            20
     }
     /**
       * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
