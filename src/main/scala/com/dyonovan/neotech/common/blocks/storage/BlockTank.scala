@@ -146,7 +146,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
 
     override def getLightValue(world: IBlockAccess, pos: BlockPos): Int = {
         world.getTileEntity(pos) match {
-            case tank: TileTank => 0//tank.getBrightness
+            case tank: TileTank => tank.getBrightness
             case _ => 0
         }
     }

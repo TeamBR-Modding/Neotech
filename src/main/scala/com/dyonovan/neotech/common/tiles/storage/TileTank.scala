@@ -79,7 +79,7 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
 
     def getBrightness: Int = {
         if (tank.getFluid != null) {
-            return (tank.getFluid.getFluid.getLuminosity * tank.getFluidAmount) / tank.getCapacity
+            return tank.getFluid.getFluid.getLuminosity * (tank.getFluidAmount / tank.getCapacity)
         }
         0
     }
