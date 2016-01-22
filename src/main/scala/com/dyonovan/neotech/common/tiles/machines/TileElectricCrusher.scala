@@ -94,7 +94,11 @@ class TileElectricCrusher extends AbstractMachine  {
     }
 
     override def getSlotsForFace(side: EnumFacing): Array[Int] = {
-        Array[Int](0, 1, 2)
+        side match {
+            case EnumFacing.UP => Array[Int](0)
+            case EnumFacing.DOWN => Array[Int](1, 2)
+            case _ => Array[Int](0, 1, 2)
+        }
     }
 
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0

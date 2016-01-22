@@ -184,6 +184,13 @@ class TileThermalBinder extends AbstractMachine {
      */
     override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
 
+    override def getSlotsForFace(side: EnumFacing): Array[Int] = {
+        side match {
+            case EnumFacing.DOWN => Array[Int](MB_OUTPUT)
+            case _ => Array[Int](INPUT1, INPUT2, INPUT3, INPUT4, MB_INPUT, MB_OUTPUT)
+        }
+    }
+
     override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
         val item = stack.getItem
         if (slot >= 0 && slot <= 3)

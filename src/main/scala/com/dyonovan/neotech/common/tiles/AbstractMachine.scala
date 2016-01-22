@@ -231,7 +231,11 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
       * *****************************************************************************************************************/
 
     override def getSlotsForFace(side: EnumFacing): Array[Int] = {
-        Array[Int](0, 1)
+        side match {
+            case EnumFacing.UP => Array[Int](0)
+            case EnumFacing.DOWN => Array[Int](1)
+            case _ => Array[Int](0, 1)
+        }
     }
 
     /**
