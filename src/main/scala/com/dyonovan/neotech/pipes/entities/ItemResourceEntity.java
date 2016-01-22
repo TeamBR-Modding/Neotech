@@ -29,20 +29,7 @@ import java.util.Stack;
 public class ItemResourceEntity extends ResourceEntity<ItemStack> {
 
     @SideOnly(Side.CLIENT)
-    private RenderEntityItem itemRenderer = new RenderEntityItem(Minecraft.getMinecraft().getRenderManager(), Minecraft.getMinecraft().getRenderItem()){
-        @Override
-        public int func_177078_a(ItemStack stack) {
-            return SignedBytes.saturatedCast(Math.min(stack.stackSize / 32, 15) + 1);
-        }
-        @Override
-        public boolean shouldBob() {
-            return false;
-        }
-        @Override
-        public boolean shouldSpreadItems() {
-            return false;
-        }
-    };
+    private RenderEntityItem itemRenderer;
 
     /**
      * Stub for reading from server
@@ -90,6 +77,22 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
          } catch(NullPointerException ignored) {}
          */
         try {
+            if(itemRenderer == null) {
+                itemRenderer = new RenderEntityItem(Minecraft.getMinecraft().getRenderManager(), Minecraft.getMinecraft().getRenderItem()){
+                    @Override
+                    public int func_177078_a(ItemStack stack) {
+                        return SignedBytes.saturatedCast(Math.min(stack.stackSize / 32, 15) + 1);
+                    }
+                    @Override
+                    public boolean shouldBob() {
+                        return false;
+                    }
+                    @Override
+                    public boolean shouldSpreadItems() {
+                        return false;
+                    }
+                };
+            }
             EntityItem itemStack = new EntityItem(Minecraft.getMinecraft().theWorld);
             itemStack.hoverStart = 0f;
             itemStack.setEntityItemStack(resource);
