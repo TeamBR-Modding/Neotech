@@ -28,8 +28,7 @@ trait SimplePipe extends TileEntity {
       */
     def canConnect(facing: EnumFacing): Boolean =
         getWorld.getTileEntity(getPos.offset(facing)) match {
-            case source : ExtractionPipe[_, _] => source.connections.get(facing.getOpposite.ordinal())
-            case sink : SinkPipe[_, _] => sink.connections.get(facing.getOpposite.ordinal())
+            case advanced : AdvancedPipe => advanced.connections.get(facing.getOpposite.ordinal())
             case pipe : SimplePipe => true
             case _ => true
         }

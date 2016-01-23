@@ -8,8 +8,8 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.common.container.machines.ContainerMachineUpgrade
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
-import com.dyonovan.neotech.pipes.gui.{GuiSinkMenu, GuiExtractionMenu}
-import com.dyonovan.neotech.pipes.types.{SinkPipe, ExtractionPipe, SimplePipe}
+import com.dyonovan.neotech.pipes.gui.GuiAdvancedPipeMenu
+import com.dyonovan.neotech.pipes.types.{AdvancedPipe, SinkPipe, ExtractionPipe, SimplePipe}
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
@@ -72,16 +72,12 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     /**
       * Convert the given metadata into a BlockState for this Block
       */
-    override def getStateFromMeta(meta: Int): IBlockState = {
-        getDefaultState
-    }
+    override def getStateFromMeta(meta: Int): IBlockState = getDefaultState
 
     /**
       * Convert the BlockState into the correct metadata value
       */
-    override def getMetaFromState(state: IBlockState): Int = {
-        0
-    }
+    override def getMetaFromState(state: IBlockState): Int = 0
 
     override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
         if(worldIn.getTileEntity(pos) != null) {
@@ -210,7 +206,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                 if (ID == 0) {
                     return new ContainerMachineUpgrade(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
                 }
-            case __ =>
+            case _ =>
         }
         null
     }
@@ -270,13 +266,8 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
 
         if (world.isRemote && playerIn.inventory.getCurrentItem != null && playerIn.inventory.getCurrentItem.getItem == ItemManager.wrench &&
-                world.getTileEntity(pos).isInstanceOf[ExtractionPipe[_, _]]) {
-            FMLClientHandler.instance().showGuiScreen(new GuiExtractionMenu(world.getTileEntity(pos).asInstanceOf[ExtractionPipe[_, _]]))
-            return true
-        }
-        if (world.isRemote && playerIn.inventory.getCurrentItem != null && playerIn.inventory.getCurrentItem.getItem == ItemManager.wrench &&
-                world.getTileEntity(pos).isInstanceOf[SinkPipe[_, _]]) {
-            FMLClientHandler.instance().showGuiScreen(new GuiSinkMenu(world.getTileEntity(pos).asInstanceOf[SinkPipe[_, _]]))
+                world.getTileEntity(pos).isInstanceOf[AdvancedPipe]) {
+            FMLClientHandler.instance().showGuiScreen(new GuiAdvancedPipeMenu(world.getTileEntity(pos).asInstanceOf[AdvancedPipe]))
             return true
         }
         false

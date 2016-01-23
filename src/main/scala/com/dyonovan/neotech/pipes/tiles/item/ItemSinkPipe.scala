@@ -46,7 +46,7 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
       * @return
       */
     override def willAcceptResource(resourceEntity: ResourceEntity[_]): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null )
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity))
             return false
 
         val resource = resourceEntity.asInstanceOf[ItemResourceEntity]
