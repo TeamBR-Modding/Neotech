@@ -45,6 +45,7 @@ object BlockManager {
     val blockCopper = new BlockOre("blockCopper", 1)
     val oreTin = new BlockOre("oreTin", 1)
     val blockTin = new BlockOre("blockTin", 1)
+    val blockTin = new BlockOre("blockBronze", 1)
 
     //Pipes
     val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, true, classOf[StructurePipe])
@@ -93,6 +94,7 @@ object BlockManager {
         registerBlock(oreTin, "oreTin", null, "oreTin")
         registerBlock(blockCopper, "blockCopper", null, "blockCopper")
         registerBlock(blockTin, "blockTin", null, "blockTin")
+        registerBlock(blockBronze, "blockBronze", null, "blockBronze")
 
         //Pipes
         registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockPipe])

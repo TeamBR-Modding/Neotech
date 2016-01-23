@@ -34,6 +34,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.thermalBinder))
         registerItem(Item.getItemFromBlock(BlockManager.blockCopper))
         registerItem(Item.getItemFromBlock(BlockManager.blockTin))
+        registerItem(Item.getItemFromBlock(BlockManager.blockBronze))
         registerItem(Item.getItemFromBlock(BlockManager.oreCopper))
         registerItem(Item.getItemFromBlock(BlockManager.oreTin))
         registerItem(Item.getItemFromBlock(BlockManager.basicRFStorage))

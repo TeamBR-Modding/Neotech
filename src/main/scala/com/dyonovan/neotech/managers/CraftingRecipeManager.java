@@ -52,8 +52,10 @@ public class CraftingRecipeManager {
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotCopper(), 9), new ItemStack(BlockManager.blockCopper()));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockTin()), "AAA", "AAA", "AAA",
                 'A', "ingotTin"));
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotTin(), 9), new ItemStack(BlockManager
-                .blockTin()));
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotTin(), 9), new ItemStack(BlockManager.blockTin()));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockBronze()), "AAA", "AAA", "AAA",
+                'A', "ingotBronze"));
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotBronze(), 9), new ItemStack(BlockManager.blockBronze()));
 
         //RF Storage
         /*GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage()), 1, 16), "ABA",
