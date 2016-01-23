@@ -54,6 +54,7 @@ trait Filter {
                     return false
 
                 var hasItems = false
+                var matched = false
                 for(x  <- 0 until filterInventory.inventoryContents.size()) {
                     val item = filterInventory.getStackInSlot(x)
                     if(item != null && item.getItem != null) {
@@ -61,12 +62,15 @@ trait Filter {
                         if(FluidContainerRegistry.isFilledContainer(item)) {
                             if (FluidContainerRegistry.getFluidForFilledItem(item) != null &&
                                     FluidContainerRegistry.getFluidForFilledItem(item).getFluid != null &&
-                                    FluidContainerRegistry.getFluidForFilledItem(item).getFluid == liquid.resource.getFluid.getFluid && !blackList)
-                                return true
+                                    FluidContainerRegistry.getFluidForFilledItem(item).getFluid == liquid.resource.getFluid.getFluid) {
+                                matched = true
+                                if(!blackList)
+                                    return true
+                            }
                         }
                     }
                 }
-                !hasItems || (if(blackList) false else true)
+                !hasItems || (if(blackList) !matched else matched)
             case item : ItemResourceEntity =>
                 if(item.resource.getItem == null)
                     return false
