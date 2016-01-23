@@ -148,7 +148,7 @@ object CrusherRecipeRegistry {
      * Get the output for an input
      */
     def getOutput(itemStack: ItemStack): Option[(ItemStack, ItemStack)] = {
-        if (itemStack != null) {
+        if (itemStack != null && itemStack.getItem != null) {
             for (i <- crusherRecipes) {
                 val name = i.input.split(":")
                 val stackOut = getItemStackFromString(i.output)
