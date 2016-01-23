@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.dyonovan.neotech.pipes.collections.{Filter, ConnectedSides}
+import com.dyonovan.neotech.pipes.collections.{WorldPipes, Filter, ConnectedSides}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -109,10 +109,11 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
             case AdvancedPipe.MODE_FIELD_ID => mode = value.toInt
             case AdvancedPipe.CONNECTIONS =>
                 connections.set(value.toInt, !connections.get(value.toInt))
+                WorldPipes.notifyPipes()
                 getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
             case AdvancedPipe.FREQUENCY =>
                 frequency = value.toInt
-                //TODO: Notify extractions to rebuild
+                WorldPipes.notifyPipes()
             case AdvancedPipe.FILTER =>
                 value.toInt match {
                     case AdvancedPipe.FILTER_MATCH_TAG => matchTag = !matchTag
@@ -121,6 +122,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
                     case AdvancedPipe.FILTER_BLACKLIST => blackList = !blackList
                     case _ =>
                 }
+                WorldPipes.notifyPipes()
             case _ =>
         }
     }

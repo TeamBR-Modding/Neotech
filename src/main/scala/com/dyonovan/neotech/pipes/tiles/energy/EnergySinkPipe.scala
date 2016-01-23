@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.pipes.tiles.energy
 
 import cofh.api.energy.{EnergyStorage, IEnergyReceiver}
+import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.entities.{ResourceEntity, EnergyResourceEntity}
 import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe, SinkPipe}
 import net.minecraft.nbt.NBTTagCompound
@@ -33,6 +34,7 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
       * Used to check if this pipe can accept a resource
       *
       * You should not actually change anything, all simulation
+ *
       * @param resourceEntity
       * @return
       */
@@ -63,6 +65,7 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
       * Try and insert the resource into an inventory.
       *
       * It is pretty good practice to send the resource back if you can't remove all of it
+ *
       * @param resource
       */
     override def tryInsertResource(resource: EnergyResourceEntity): Unit = {
@@ -82,6 +85,7 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
 
         //If we couldn't fill, move back to source
         if(!resource.isDead) {
+            WorldPipes.notifyPipes()
             val tempLocation = new BlockPos(resource.from)
             resource.from = new BlockPos(pos)
             resource.destination = new BlockPos(tempLocation)

@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.pipes.types
 
+import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
 import net.minecraft.inventory.IInventory
 import net.minecraft.tileentity.TileEntity
@@ -20,9 +21,14 @@ import scala.xml.dtd.ContentModel._labelT
   * This is the base pipe and interface for all pipes. Every pipe should extend this
   */
 trait SimplePipe extends TileEntity {
+    WorldPipes.notifyPipes()
+
+    override def invalidate() = WorldPipes.notifyPipes()
+
     /**
       * Used as a simple check to see if the pipe can connect. At it's most basic, it just checks if the tile in that
       * direction is a pipe. This is mainly used for path finding but also on the renderer
+ *
       * @param facing The direction from this block
       * @return
       */
@@ -36,6 +42,7 @@ trait SimplePipe extends TileEntity {
     /**
       * Sometimes we need to know if the connection is more than just a pipe. Usually an inventory of some sort.
       * This is used primarily on the renderer to render the block on the pipe
+      *
       * @param facing The direction from this block
       * @return
       */
@@ -47,12 +54,14 @@ trait SimplePipe extends TileEntity {
       *
       * NOTE: If you are applying a speed update, either use the helper method or set nextSpeed. The resource will update to
       * the next speed
+      *
       * @param resource
       */
     def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {}
 
     /**
       * Convert the position to a long format
+      *
       * @return
       */
     def getPosAsLong: Long = getPos.toLong

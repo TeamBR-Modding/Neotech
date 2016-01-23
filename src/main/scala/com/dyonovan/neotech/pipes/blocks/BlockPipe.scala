@@ -5,8 +5,9 @@ import java.util.Random
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.types.SimplePipe
-import net.minecraft.block.BlockContainer
+import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.{MapColor, Material}
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
@@ -20,15 +21,15 @@ import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Paul Davis pauljoda
- * @since August 14, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Paul Davis pauljoda
+  * @since August 14, 2015
+  */
 class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: SimplePipe]) extends BlockContainer(mat) {
 
     //Constructor
@@ -111,8 +112,8 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         false
     }
     /**
-     * Get the damage value that this Block should drop
-     */
+      * Get the damage value that this Block should drop
+      */
     override def damageDropped (state: IBlockState) : Int = {
         if(colored)
             state.getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMetadata
@@ -121,8 +122,8 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     }
 
     /**
-     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
-     */
+      * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
+      */
     @SideOnly(Side.CLIENT)
     override def getSubBlocks(itemIn: Item, tab: CreativeTabs, list: java.util.List[ItemStack]) {
         if(colored) {
@@ -134,8 +135,8 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     }
 
     /**
-     * Get the MapColor for this Block and the given BlockState
-     */
+      * Get the MapColor for this Block and the given BlockState
+      */
     override def getMapColor(state: IBlockState): MapColor = {
         if(colored)
             state.getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMapColor
@@ -144,8 +145,8 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     }
 
     /**
-     * Convert the given metadata into a BlockState for this Block
-     */
+      * Convert the given metadata into a BlockState for this Block
+      */
     override def getStateFromMeta(meta: Int): IBlockState = {
         if(colored)
             this.getDefaultState.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(meta))
@@ -154,8 +155,8 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     }
 
     /**
-     * Convert the BlockState into the correct metadata value
-     */
+      * Convert the BlockState into the correct metadata value
+      */
     override def getMetaFromState(state: IBlockState): Int = {
         if(colored)
             state.getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMetadata
@@ -163,6 +164,12 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
             0
     }
 
+    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
+        if (!world.isRemote) {
+            WorldPipes.notifyPipes()
+        }
+        super.onNeighborBlockChange(world, pos, state, block)
+    }
 
     protected override def createBlockState: BlockState = {
         if(colored)
