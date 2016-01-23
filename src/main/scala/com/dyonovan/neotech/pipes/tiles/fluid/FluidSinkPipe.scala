@@ -42,7 +42,7 @@ class FluidSinkPipe extends SinkPipe[FluidTank, FluidResourceEntity] with Updati
       * @return
       */
     override def willAcceptResource(resourceEntity: ResourceEntity[_]): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[FluidResourceEntity] || resourceEntity.resource == null)
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[FluidResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity))
             return false
 
         val resource = resourceEntity.asInstanceOf[FluidResourceEntity]

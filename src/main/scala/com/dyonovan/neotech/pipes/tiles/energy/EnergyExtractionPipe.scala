@@ -142,7 +142,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
 
                                     getWorld.getTileEntity(otherPos) match {
                                         //Add to sinks
-                                        case pipe: SinkPipe[EnergyStorage, EnergyResourceEntity] =>
+                                        case pipe: SinkPipe[EnergyStorage, EnergyResourceEntity] if pipe.frequency == frequency =>
                                             if (pipe.willAcceptResource(resource))
                                                 sinks.add(pipe.getPosAsLong)
                                         case _ =>
@@ -276,6 +276,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
     override def resetValues(): Unit = {
         mode = 2
         redstone = 0
+        frequency = 0
         for(x <- connections.connections.indices)
             connections.set(x, value = true)
         worldObj.markBlockForUpdate(pos)

@@ -21,28 +21,23 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis pauljoda
   * @since August 16, 2015
   */
-trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeable with RedstoneAware with SimplePipe {
+trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
     /**
       * Useful in round robin
       */
     var lastSink: Long = 0
-    var mode : Int = 0
-    var redstone : Int = 0
+    var shouldRefreshCache = false
 
-    val sinks = new util.ArrayList[Long]()
+    //Cache for locations
+    val sinks = new util.ArrayList[Long]() //TODO: Add caching
+
+    //Used in path finding
     val distance: util.HashMap[Long, Integer] = new util.HashMap[Long, Integer]
     val parent: util.HashMap[Long, BlockPos] = new util.HashMap[Long, BlockPos]
     val queue: util.Queue[BlockPos] = new util.LinkedList[BlockPos]
+
     //Create a queue
     var nextResource: R = _
-
-    val connections = new ConnectedSides
-
-    /**
-      * Get how many ticks to 'cooldown' between operations.
-      * @return 20 = 1 second
-      */
-    def getDelay: Int
 
     //Set the initial cooldown to max
     var coolDown = getDelay
@@ -50,18 +45,114 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
     //Our storage of resources
     var resources: util.ArrayList[R] = new util.ArrayList[R]()
 
-    val REDSTONE_FIELD_ID = 0
-    val MODE_FIELD_ID = 1
-    val CONNECTIONS = 2
+    /**
+      * Get how many ticks to 'cooldown' between operations.
+      * @return 20 = 1 second
+      */
+    def getDelay: Int
+
+    /**
+      * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
+      * this pipe to do on its action phase. The parent will not automatically call extract
+      *
+      * This is useful if you wish to set different modes and call different path finding
+      */
+    def doExtraction() : Unit
+
+    /**
+      * The first step in moving things. You should call this from doExtraction. This is an outside method so you can
+      * have additional functions to the pipe besides just extracting. For example, a pipe that pulls items in the world
+      */
+    def tryExtractResources() : Unit
+
+    /**
+      * This is the speed to extract from. You should be calling this when building your resources to send.
+      *
+      * This is included as a reminder to the child to have variable speeds
+      * @return
+      */
+    def getSpeed : Double
 
     /**
       * Used to add a resource
       */
-    def addResource(resource: R): Unit = {
-        resources.add(resource)
+    def addResource(resource: R): Unit = resources.add(resource)
+
+    /**
+      * Used to tell if this pipe is allowed to connect
+      * @param facing The direction from this block
+      * @return Can connect
+      */
+    override def canConnect(facing: EnumFacing): Boolean = connections.get(facing.ordinal()) && super.canConnect(facing)
+
+    /**
+      * Extracts on the current mode
+      * @return
+      */
+    def extractOnMode(resource : R, simulate : Boolean) : Boolean = {
+        mode match {
+            case 0 => extractResourceOnShortestPath(resource, simulate)
+            case 1 => extractResourceOnLongestPath(resource, simulate)
+            case 2 => extractOnRoundRobin(resource, simulate)
+            case _ => extractResourceOnShortestPath(resource, simulate)
+        }
     }
 
-    override def canConnect(facing: EnumFacing): Boolean = connections.get(facing.ordinal()) && super[SimplePipe].canConnect(facing)
+    /**
+      * This is called when we fail to send a resource. You should put the resource back where you found it or
+      * add it to the world
+      * @param resource The returned resource
+      */
+    def resourceReturned(resource : R)
+
+    override def onServerTick() : Unit = {
+        //Update our resources
+        if(!resources.isEmpty) {
+            val iterator = resources.iterator()
+            while (iterator.hasNext) {
+                val resource = iterator.next()
+                if(getWorld != null)
+                    resource.setWorld(getWorld)
+                if ( resource == null || resource.isDead || resource.resource == null) {
+                    resource.onDropInWorld()
+                    iterator.remove()
+                }
+                else
+                    resource.updateEntity()
+            }
+            getWorld.markBlockForUpdate(getPos)
+        }
+
+        coolDown -= 1
+        if(coolDown <= 0) {
+            if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
+                if(redstone == -1 && isPowered)
+                    return
+                if(redstone == 1 && !isPowered)
+                    return
+            }
+            coolDown = getDelay
+            doExtraction()
+        }
+    }
+
+    /**
+      * Called when something passes by. We only care if the resource is being sent back to us
+      */
+    override def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {
+        resource match {
+            case matchingResource: R if resource.destination == getPos && !resource.isDead =>
+                resourceReturned(matchingResource)
+            case _ =>
+        }
+    }
+
+    /**
+      * Make sure we don't lose everything when we are broken
+      */
+    override def onPipeBroken(): Unit =
+        for(i <- 0 until resources.size())
+            resources.get(i).onDropInWorld()
 
     /**
       * Used to extract the resource on the shortest path possible
@@ -113,7 +204,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
 
                                     getWorld.getTileEntity(otherPos) match {
                                         //Add to sinks
-                                        case pipe: SinkPipe[T, R] =>
+                                        case pipe: SinkPipe[T, R] if pipe.frequency == frequency =>
                                             if (pipe.willAcceptResource(resource))
                                                 sinks.add(pipe.getPosAsLong)
                                         case _ =>
@@ -213,7 +304,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
 
                                     getWorld.getTileEntity(otherPos) match {
                                         //Add to sinks
-                                        case pipe: SinkPipe[T, R] =>
+                                        case pipe: SinkPipe[T, R] if pipe.frequency == frequency =>
                                             if (pipe.willAcceptResource(resource))
                                                 sinks.add(pipe.getPosAsLong)
                                         case _ =>
@@ -310,7 +401,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
 
                                     getWorld.getTileEntity(otherPos) match {
                                         //Add to sinks
-                                        case pipe: SinkPipe[T, R] =>
+                                        case pipe: SinkPipe[T, R] if pipe.frequency == frequency =>
                                             if (pipe.willAcceptResource(resource))
                                                 sinks.add(pipe.getPosAsLong)
                                         case _ =>
@@ -376,147 +467,6 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
     }
 
     /**
-      * Extracts on the current mode
-      * @param resource
-      * @param simulate
-      * @return
-      */
-    def extractOnMode(resource : R, simulate : Boolean) : Boolean = {
-        mode match {
-            case 0 => extractResourceOnShortestPath(resource, simulate)
-            case 1 => extractResourceOnLongestPath(resource, simulate)
-            case 2 => extractOnRoundRobin(resource, simulate)
-            case _ => extractResourceOnShortestPath(resource, simulate)
-        }
-    }
-
-    /**
-      * This is called when we fail to send a resource. You should put the resource back where you found it or
-      * add it to the world
-      * @param resource
-      */
-    def resourceReturned(resource : R)
-
-    override def onServerTick() : Unit = {
-        //Update our resources
-        if(!resources.isEmpty) {
-            val iterator = resources.iterator()
-            while (iterator.hasNext) {
-                val resource = iterator.next()
-                if(getWorld != null)
-                    resource.setWorld(getWorld)
-                if (resource.isDead || resource.resource == null || resource == null) {
-                    resource.onDropInWorld()
-                    iterator.remove()
-                }
-                else
-                    resource.updateEntity()
-            }
-            getWorld.markBlockForUpdate(getPos)
-        }
-
-        coolDown = coolDown - 1
-        if(coolDown <= 0) {
-            if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
-                if(redstone == -1 && isPowered)
-                    return
-                if(redstone == 1 && !isPowered)
-                    return
-            }
-            coolDown = getDelay
-            doExtraction()
-        }
-    }
-
-    /**
-      * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
-      * this pipe to do on its action phase. The parent will not automatically call extract
-      *
-      * This is useful if you wish to set different modes and call different path finding
-      */
-    def doExtraction() : Unit
-
-    /**
-      * The first step in moving things. You should call this from doExtraction. This is an outside method so you can
-      * have additional functions to the pipe besides just extracting. For example, a pipe that pulls items in the world
-      */
-    def tryExtractResources() : Unit
-
-    /**
-      * This is the speed to extract from. You should be calling this when building your resources to send.
-      *
-      * This is included as a reminder to the child to have variable speeds
-      * @return
-      */
-    def getSpeed : Double
-
-    /**
-      * Called when something passes by. We only care if the resource is being sent back to us
-      */
-    override def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {
-        resource match {
-            case matchingResource: R if resource.destination == getPos && !resource.isDead =>
-                resourceReturned(matchingResource)
-            case _ =>
-        }
-    }
-
-    /**
-      * Make sure we don't lose everything when we are broken
-      */
-    override def onPipeBroken(): Unit = {
-        for(i <- 0 until resources.size())
-            resources.get(i).onDropInWorld()
-    }
-
-    /**
-      * This is mainly used to sending info to the client so it knows what to render. It will also be used to save on world
-      * exit. You should only be saving the things needed for those instances.
-      *
-      * @param tag
-      */
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
-        super[Upgradeable].writeToNBT(tag)
-        connections.writeToNBT(tag)
-        tag.setInteger("mode", mode)
-        tag.setInteger("redstone", redstone)
-    }
-
-    /**
-      * Receives the data from the server. Will not be full info needed for the resources.
-      *
-      * If you are on the server side, you must set the resource world object to the worldObj. Additional info may be
-      * required.
-      *
-      * Note, if you do forget to set the world, the onServerTick method will try to save it. But for safety, just add it
-      * @param tag
-      */
-    override def readFromNBT(tag : NBTTagCompound) : Unit = {
-        super[Upgradeable].readFromNBT(tag)
-        connections.readFromNBT(tag)
-        mode = tag.getInteger("mode")
-        redstone = tag.getInteger("redstone")
-    }
-
-    /**
-      * Used to mark for update
-      */
-    override def markDirty() : Unit = {
-        super[Upgradeable].markDirty()
-    }
-
-    /**
-      * Called when the board is removed, reset to default values
-      */
-    override def resetValues(): Unit = {
-        mode = 0
-        redstone = 0
-        for(x <- connections.connections.indices)
-            connections.set(x, value = true)
-        getWorld.markBlockForUpdate(getPos)
-    }
-
-    /**
       * If we have some important stuff, make sure we always render. Otherwise you'll only see what is in the pipe
       * if the pipe is in view. To cut on resources, if there is nothing in the buffer we return the standard render box
       * @return
@@ -527,74 +477,5 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends Syncable with Upgradeabl
             TileEntity.INFINITE_EXTENT_AABB
         else
             super.getRenderBoundingBox
-    }
-
-    @SideOnly(Side.CLIENT)
-    def getGUIHeight : Int = {
-        var baseHeight = 41
-        if(getUpgradeBoard != null && getUpgradeBoard.hasControl)
-            baseHeight += 60
-        if(getUpgradeBoard != null && getUpgradeBoard.hasExpansion)
-            baseHeight += 30
-        baseHeight
-    }
-
-    def moveRedstoneMode(mod : Int) : Unit = {
-        redstone += mod
-        if(redstone < -1)
-            redstone = 1
-        else if(redstone > 1)
-            redstone = -1
-    }
-
-    def getRedstoneModeName : String = {
-        redstone match {
-            case -1 => "Low"
-            case 0 => "Disabled"
-            case 1 => "High"
-            case _ => "Error"
-        }
-    }
-
-    def setRedstoneMode(newMode : Int) : Unit = {
-        this.redstone = newMode
-    }
-
-    def moveMode(mod : Int) : Unit = {
-        mode += mod
-        if(mode < 0)
-            mode = 2
-        else if(mode > 2)
-            mode = 0
-    }
-
-    def getModeName : String = {
-        mode match {
-            case 0 => "First Available"
-            case 1 => "Last Available"
-            case 2 => "Round-Robin"
-            case _ => "Error"
-        }
-    }
-
-    def setMode(newMode : Int) : Unit = {
-        this.mode = newMode
-    }
-
-    override def setVariable(id : Int, value : Double) = {
-        id match {
-            case REDSTONE_FIELD_ID => redstone = value.toInt
-            case MODE_FIELD_ID => mode = value.toInt
-            case CONNECTIONS =>
-                connections.set(value.toInt, !connections.get(value.toInt))
-                getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
-        }
-    }
-
-    override def getVariable(id : Int) : Double = {
-        id match {
-            case REDSTONE_FIELD_ID => redstone
-            case MODE_FIELD_ID => mode
-        }
     }
 }
