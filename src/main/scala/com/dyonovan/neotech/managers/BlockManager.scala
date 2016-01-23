@@ -45,7 +45,7 @@ object BlockManager {
     val blockCopper = new BlockOre("blockCopper", 1)
     val oreTin = new BlockOre("oreTin", 1)
     val blockTin = new BlockOre("blockTin", 1)
-    val blockTin = new BlockOre("blockBronze", 1)
+    val blockBronze = new BlockOre("blockBronze", 1)
 
     //Pipes
     val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, true, classOf[StructurePipe])
