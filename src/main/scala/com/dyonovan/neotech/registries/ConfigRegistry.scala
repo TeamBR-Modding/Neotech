@@ -30,7 +30,7 @@ object ConfigRegistry {
     var tinMax = 70
     var tinSize = 12
     var tinPerChunk = 6
-
+    var fertBlacklist: Array[String] = _
 
 
     def preInit(): Unit = {
@@ -48,6 +48,9 @@ object ConfigRegistry {
         tinMax       = config.get(Reference.CONFIG_TIN_GENERATION, "Tin Max Level", 50).getInt
         tinSize      = config.get(Reference.CONFIG_TIN_GENERATION, "Tin Vein Size", 12).getInt
         tinPerChunk  = config.get(Reference.CONFIG_TIN_GENERATION, "Tin Veins per Chunk", 6).getInt
+
+        fertBlacklist= config.get(Reference.CONFIG_FERT_BLACKLIST, "Blocks to Blacklist from Being Fertilized",
+                        Array(""),"Format MODID:BLOCKNAME 1 per Line").getStringList
 
         config.save()
 

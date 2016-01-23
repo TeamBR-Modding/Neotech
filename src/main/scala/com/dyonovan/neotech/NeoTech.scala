@@ -59,6 +59,7 @@ object NeoTech {
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
+        FertilizerBlacklistRegistry.init()
         CrusherRecipeRegistry.init()
         FluidFuelValues.init()
         PacketDispatcher.initPackets()

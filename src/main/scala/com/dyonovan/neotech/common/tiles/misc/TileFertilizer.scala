@@ -2,7 +2,7 @@ package com.dyonovan.neotech.common.tiles.misc
 
 import java.util
 
-import com.dyonovan.neotech.managers.FertilizerBlacklistManager
+import com.dyonovan.neotech.registries.FertilizerBlacklistRegistry
 import com.google.common.collect.Lists
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
@@ -41,7 +41,7 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
         val plantPOS = list.get(worldObj.rand.nextInt(list.size()))
         val state = worldObj.getBlockState(plantPOS)
         val block = state.getBlock
-        if (!FertilizerBlacklistManager.getBlacklist.contains(block)) {
+        if (!FertilizerBlacklistRegistry.isBlacklisted(block)) {
             if (block.isInstanceOf[IPlantable] || block.isInstanceOf[IGrowable]) {
                 if (!disabled && isBoneMeal._1 && worldObj.rand.nextInt(20) == 0) {
                     growPlant(block, plantPOS, state)
