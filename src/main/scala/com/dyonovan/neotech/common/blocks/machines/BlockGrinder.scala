@@ -41,9 +41,9 @@ class BlockGrinder extends BaseBlock(Material.rock, "grinder", classOf[TileGrind
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.25)
                 case BlockManager.playerPlate =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.50)
-                case Blocks.light_weighted_pressure_plate =>
-                    world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.75)
                 case Blocks.heavy_weighted_pressure_plate =>
+                    world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 1.75)
+                case Blocks.light_weighted_pressure_plate =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder].activateGrinder(entity.fallDistance.toInt, 2.00)
                 case _ =>
             }
