@@ -27,7 +27,9 @@ GuiBase[ContainerGeneric](new ContainerGeneric(), 150,
                 PacketDispatcher.net.sendToServer(new OpenContainerGui(tile.getPos, 0))
             }
         }
+        var x = 40
         if(tile.getUpgradeBoard != null && tile.getUpgradeBoard.hasControl) {
+            x += 60
             components += new GuiComponentButton(25, 40, 100, 20, "Redstone Control") {
                 override def doAction(): Unit = {
                     FMLClientHandler.instance().showGuiScreen(new GuiAdvancedPipeRedstone(tile))
@@ -39,6 +41,7 @@ GuiBase[ContainerGeneric](new ContainerGeneric(), 150,
                 }
             }
             if(!tile.isInstanceOf[EnergyExtractionPipe] && !tile.isInstanceOf[EnergySinkPipe]) {
+                x += 30
                 components += new GuiComponentButton(25, 100, 100, 20, "Filter") {
                     override def doAction(): Unit = {
                         PacketDispatcher.net.sendToServer(new OpenContainerGui(tile.getPos, 1))
@@ -47,16 +50,15 @@ GuiBase[ContainerGeneric](new ContainerGeneric(), 150,
             }
         }
         if(tile.getUpgradeBoard != null && tile.getUpgradeBoard.hasExpansion) {
-            var x = if(tile.isInstanceOf[EnergyExtractionPipe] || tile.isInstanceOf[EnergySinkPipe]) 70 else 100
             if(tile.isInstanceOf[ExtractionPipe[_, _]]) {
-                x = 130
-                components += new GuiComponentButton(25, if (tile.getUpgradeBoard.hasControl) x else x - 60, 100, 20, "Mode") {
+                components += new GuiComponentButton(25, x, 100, 20, "Mode") {
                     override def doAction(): Unit = {
                         FMLClientHandler.instance().showGuiScreen(new GuiExtractionMode(tile))
                     }
                 }
+                x += 30
             }
-            components += new GuiComponentButton(25, if(tile.getUpgradeBoard.hasControl) x + 30 else x - 30, 100, 20, "Frequency") {
+            components += new GuiComponentButton(25, x, 100, 20, "Frequency") {
                 override def doAction(): Unit = {
                     FMLClientHandler.instance().showGuiScreen(new GuiAdvancePipeFrequency(tile))
                 }
