@@ -47,6 +47,7 @@ tile.neotech:oreCopper.name=Copper Ore
 tile.neotech:oreTin.name=Tin Ore
 tile.neotech:blockCopper.name=Block of Copper
 tile.neotech:blockTin.name=Block of Tin
+tile.neotech:blockBronze.name=Block of Bronze
 
 tile.neotech:ironTank.name=Iron Fluid Tank
 tile.neotech:goldTank.name=Gold Fluid Tank
