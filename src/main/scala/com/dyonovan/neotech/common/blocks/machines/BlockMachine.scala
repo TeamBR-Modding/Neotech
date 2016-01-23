@@ -7,7 +7,6 @@ import com.dyonovan.neotech.common.container.machines._
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.machines._
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
-import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
@@ -42,7 +41,7 @@ with OpensGui with CoreStates {
     @SideOnly(Side.CLIENT)
     override def randomDisplayTick(world: World, pos: BlockPos, state: IBlockState, rand: java.util.Random): Unit = {
         if (getActualState(state, world, pos).getValue(this.PROPERTY_ACTIVE).asInstanceOf[Boolean]) {
-            val enumFacing:EnumFacing = state.getValue(PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing]
+            val enumFacing:EnumFacing = state.getValue(PropertyRotation.FOUR_WAY)
             val d0: Double = pos.getX + 0.5
             val d1: Double = pos.getY + rand.nextDouble() * 6.0D / 16.0D
             val d2: Double = pos.getZ + 0.5D
