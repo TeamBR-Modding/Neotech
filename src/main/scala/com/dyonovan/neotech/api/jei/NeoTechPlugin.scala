@@ -32,6 +32,7 @@ class NeoTechPlugin extends IModPlugin {
 
         //Descriptions
         registry.addDescription(new ItemStack(BlockManager.grinder), "neotech.grinder.description")
+        registry.addDescription(new ItemStack(BlockManager.flushableChest), "neotech.flushableChest.description")
         registry.addDescription(new ItemStack(BlockManager.playerPlate), "neotech.playerPlate.description")
 
         //Blacklists

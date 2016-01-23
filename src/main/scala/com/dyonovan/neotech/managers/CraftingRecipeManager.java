@@ -142,6 +142,9 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.chunkLoader()), "GIG", "IRI", "GIG", 'G', Blocks.gold_block, 'I', Blocks.iron_block,
                 'R', Blocks.redstone_block);
 
+        //Flushable Chest
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.flushableChest()), Blocks.chest, Items.flint_and_steel);
+
         //Empty Motherboard
         GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeMBEmpty()), "RRR", "RIR", "RRR", 'R', Items.redstone, 'I', Items.iron_ingot);
 

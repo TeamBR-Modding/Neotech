@@ -1,14 +1,16 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
-import com.dyonovan.neotech.client.renderers.{FluidResourceEntityRenderer, EnergyResourceEntityRenderer, ItemResourceEntityRenderer}
+import com.dyonovan.neotech.client.renderers.{TileFlushableChestRenderer, FluidResourceEntityRenderer, EnergyResourceEntityRenderer, ItemResourceEntityRenderer}
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader
+import com.dyonovan.neotech.common.tiles.storage.TileFlushableChest
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.ItemRenderManager
+import com.dyonovan.neotech.managers.{BlockManager, ItemRenderManager}
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyExtractionPipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidExtractionPipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemExtractionPipe
+import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.model.ModelBakery
 import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -60,6 +62,10 @@ class ClientProxy extends CommonProxy {
     override def init() = {
         ModelFactory.register()
         ItemRenderManager.registerItemRenderer()
+
+        Minecraft.getMinecraft.getRenderItem.getItemModelMesher.getModelManager.getBlockModelShapes.registerBuiltInBlocks(BlockManager.flushableChest)
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileFlushableChest], new TileFlushableChestRenderer[TileFlushableChest])
+
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[ItemExtractionPipe], new ItemResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[EnergyExtractionPipe], new EnergyResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[FluidExtractionPipe], new FluidResourceEntityRenderer)

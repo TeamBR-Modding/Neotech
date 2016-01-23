@@ -2,7 +2,7 @@ package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.lib.Reference
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.resources.model.{ModelBakery, ModelResourceLocation}
 import net.minecraft.item.{EnumDyeColor, Item}
 
 /**
@@ -44,6 +44,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.blockFertilizer))
         registerItem(Item.getItemFromBlock(BlockManager.playerPlate))
         registerItem(Item.getItemFromBlock(BlockManager.chunkLoader))
+        registerItem(Item.getItemFromBlock(BlockManager.flushableChest))
         registerItem(ItemManager.upgradeMBFull)
         registerItem(ItemManager.upgradeMBEmpty)
         registerItem(ItemManager.upgradeHardDrive)
