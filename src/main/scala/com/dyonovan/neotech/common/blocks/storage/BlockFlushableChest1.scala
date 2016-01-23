@@ -16,7 +16,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.{EnumFacing, BlockPos}
 import net.minecraft.world.World
-import net.minecraftforge.fml.relauncher.{SideOnly, Side}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * This file was created for NeoTech
@@ -26,10 +26,10 @@ import net.minecraftforge.fml.relauncher.{SideOnly, Side}
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
   * @author Dyonovan
-  * @since 1/22/2016
+  * @since 1/23/2016
   */
-class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", classOf[TileFlushableChest])
-        with CoreStates with DropsItems with OpensGui{
+class BlockFlushableChest1 extends BaseBlock(Material.iron, "flushableChest", classOf[TileFlushableChest])
+  with CoreStates with DropsItems with OpensGui{
 
     this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F)
 
@@ -42,11 +42,11 @@ class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", cla
         }
     }
 
-    override def isOpaqueCube(): Boolean = false
+    override def isOpaqueCube: Boolean = false
 
-    override def isFullCube(): Boolean = false
+    override def isFullCube: Boolean = false
 
-    override def getRenderType(): Int = 2
+    override def getRenderType: Int = 2
 
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
         if(side != EnumFacing.UP && side != EnumFacing.DOWN)
