@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 1/23/2016
   */
-class BlockFlushableChest1 extends BaseBlock(Material.iron, "flushableChest", classOf[TileFlushableChest])
+class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", classOf[TileFlushableChest])
   with CoreStates with DropsItems with OpensGui{
 
     this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F)

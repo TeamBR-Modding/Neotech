@@ -76,7 +76,7 @@ object BlockManager {
     val blockFertilizer = new BlockFertilizer("blockFertilizer", classOf[TileFertilizer])
     val playerPlate = new BlockPlayerPlate
     val chunkLoader = new BlockChunkLoader
-    val flushableChest = new BlockFlushableChest1
+    val flushableChest = new BlockFlushableChest
 
     def preInit(): Unit = {
         //Machines
