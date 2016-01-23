@@ -4,6 +4,7 @@ import com.dyonovan.neotech.client.gui.misc.GuiFertilizer
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.container.misc.ContainerFertilizer
 import com.dyonovan.neotech.common.tiles.misc.TileFertilizer
+import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
@@ -16,21 +17,21 @@ import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 22, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 22, 2015
+  */
 object BlockFertilizer {
     lazy val ON_BLOCK  = PropertyInteger.create("attached_side", 0, 6)
 }
 
 class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
-    BaseBlock(Material.iron, name, tileEntity) with OpensGui with DropsItems {
+        BaseBlock(Material.iron, name, tileEntity) with OpensGui with DropsItems {
 
     setLightLevel(1.0F)
     setDefaultState(this.blockState.getBaseState
@@ -64,16 +65,25 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
         getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attachedSide.asInstanceOf[Integer])
     }
 
+    override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
+        var attached = world.getBlockState(pos).getValue(BlockFertilizer.ON_BLOCK)
+        attached += 1
+        if(attached > 6)
+            attached = 0
+        world.setBlockState(pos, getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attached))
+        true
+    }
+
     /**
-     * Convert the given metadata into a BlockState for this Block
-     */
+      * Convert the given metadata into a BlockState for this Block
+      */
     override def getStateFromMeta(meta: Int): IBlockState = {
         getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, meta.asInstanceOf[Integer])
     }
 
     /**
-     * Convert the BlockState into the correct metadata value
-     */
+      * Convert the BlockState into the correct metadata value
+      */
     override def getMetaFromState(state: IBlockState): Int = {
         state.getValue(BlockFertilizer.ON_BLOCK).asInstanceOf[Int]
     }
@@ -115,10 +125,16 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
     override def getRenderType : Int = 3
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        new ContainerFertilizer(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFertilizer])
+        if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench)
+            null
+        else
+            new ContainerFertilizer(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFertilizer])
     }
 
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        new GuiFertilizer(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFertilizer])
+        if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench)
+            null
+        else
+            new GuiFertilizer(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFertilizer])
     }
 }
