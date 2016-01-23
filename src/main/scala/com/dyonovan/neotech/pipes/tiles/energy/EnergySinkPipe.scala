@@ -47,8 +47,11 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
             if (canConnect(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case receiver: IEnergyReceiver =>
-                        if (receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true) > 0)
+                        val usedEnergy = receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true)
+                        if (usedEnergy > 0) {
+                            resource.resource.setEnergyStored(usedEnergy)
                             return true
+                        }
                     case _ =>
                 }
             }
@@ -84,20 +87,6 @@ class EnergySinkPipe extends SinkPipe[EnergyStorage, EnergyResourceEntity] {
             resource.destination = new BlockPos(tempLocation)
             resource.findPathToDestination()
         }
-    }
-
-    def pingAmountNeeded() : Int = {
-        //Try and insert the energy
-        for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case receiver : IEnergyReceiver =>
-                    val requested = receiver.receiveEnergy(dir.getOpposite, receiver.getEnergyStored(dir.getOpposite), true)
-                    if(requested > 0)
-                        return requested
-                case _ =>
-            }
-        }
-        -1
     }
 
     override def writeToNBT(tag : NBTTagCompound) = {

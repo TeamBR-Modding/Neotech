@@ -55,7 +55,9 @@ class FluidSinkPipe extends SinkPipe[FluidTank, FluidResourceEntity] with Updati
             if (canConnect(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case tank: IFluidHandler =>
-                        if (test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false) > 0) {
+                        val filledAmount = test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false)
+                        if (filledAmount > 0) {
+                            resource.resource.getFluid.amount = filledAmount
                             waitingQueue.add(resource)
                             return true
                         }

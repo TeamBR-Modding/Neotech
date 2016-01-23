@@ -90,7 +90,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                                 pos, pos.north(), getWorld)
                             if (extractOnMode(energyResourceEntity, simulate = true)) {
-                                nextResource.resource.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false))
+                                provider.extractEnergy(dir.getOpposite, tempStorage.getEnergyStored, false)
                                 extractOnMode(nextResource, simulate = false)
                                 return
                             }
@@ -99,118 +99,6 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
                 }
             }
         }
-    }
-
-    override def extractOnRoundRobin(resource: EnergyResourceEntity, simulate: Boolean): Boolean = {
-        //Sometimes we won't get anything, get lost
-        if (resource == null)
-            return false
-
-        if (simulate) {
-            sinks.clear()
-            distance.clear()
-            parent.clear()
-            queue.clear()
-
-            distance.put(getPosAsLong, 0) //We are right here
-            parent.put(getPosAsLong, null) //No parent
-
-            queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
-
-            //Search the graph
-            while (!queue.isEmpty) {
-                val thisPos: BlockPos = queue.poll
-                getWorld.getTileEntity(thisPos) match {
-                    //Make sure this is a pipe
-                    case thisPipe: SimplePipe =>
-                        for (facing <- EnumFacing.values) {
-                            //Add children
-                            if (thisPipe.canConnect(facing)) {
-                                val otherPos: BlockPos = thisPos.offset(facing)
-                                if (distance.get(otherPos.toLong) == null) {
-                                    //If it hasn't already been added
-                                    queue.add(otherPos)
-                                    distance.put(otherPos.toLong, Integer.MAX_VALUE) //We will set the distance later
-                                    parent.put(otherPos.toLong, null) //Also parent
-
-                                    val newDistance: Int = (distance.get(thisPos.toLong) + thisPos.distanceSq(otherPos)).toInt
-                                    //If our distance is less than what existed, replace
-                                    if (newDistance < distance.get(otherPos.toLong)) {
-                                        distance.put(otherPos.toLong, newDistance)
-                                        parent.put(otherPos.toLong, thisPos)
-                                    }
-
-                                    getWorld.getTileEntity(otherPos) match {
-                                        //Add to sinks
-                                        case pipe: SinkPipe[EnergyStorage, EnergyResourceEntity] if pipe.frequency == frequency =>
-                                            if (pipe.willAcceptResource(resource))
-                                                sinks.add(pipe.getPosAsLong)
-                                        case _ =>
-                                    }
-                                }
-                            }
-                        }
-                    case _ =>
-                }
-            }
-
-            //Find the next source
-            var destination: BlockPos = null
-            var pickNext: Boolean = lastSink == 0
-            val lastLastSink = lastSink
-            for (i <- 0 until sinks.size()) {
-                if (pickNext) {
-                    destination = BlockPos.fromLong(sinks.get(i))
-                    lastSink = sinks.get(i)
-                    pickNext = false
-                }
-                if (sinks.get(i) == lastSink && destination == null)
-                    pickNext = true
-            }
-
-            if (destination == null && !sinks.isEmpty) {
-                destination = BlockPos.fromLong(sinks.get(0))
-                lastSink = sinks.get(0)
-            }
-            else if (destination == null) {
-                lastSink = 0
-                return false
-            }
-
-            if(!simulate)
-                lastSink = lastLastSink
-
-            //Build the path to the shortest
-            resource.pathQueue.clear()
-            resource.destination = destination
-            var u: BlockPos = destination
-            while (parent.get(u.toLong) != null) {
-                resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
-                u = parent.get(u.toLong)
-            }
-        }
-
-        if (!resource.pathQueue.isEmpty) {
-            worldObj.getTileEntity(resource.destination) match {
-                case acceptor:EnergySinkPipe=>
-                    acceptRF = acceptor.pingAmountNeeded()
-                case _=> acceptRF = -1
-            }
-
-            //If we have a path add it
-            if (!simulate) {
-                resources.add(resource)
-                sinks.clear()
-                distance.clear()
-                parent.clear()
-                queue.clear()
-            } else {
-                nextResource = resource
-            }
-            true
-        }
-        else
-            false
     }
 
     /**
