@@ -45,6 +45,8 @@ trait SinkPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             if(redstone == 1 && !isPowered)
                 return false
         }
+        if(!isResourceValidForFilter(resource))
+            return false
         true
     }
 
@@ -63,7 +65,7 @@ trait SinkPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
     override def getGUIHeight : Int = {
         var baseHeight = 41
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl)
-            baseHeight += 60
+            baseHeight += 90
         if(getUpgradeBoard != null && getUpgradeBoard.hasExpansion)
             baseHeight += 30
         baseHeight

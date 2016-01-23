@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.dyonovan.neotech.pipes.collections.ConnectedSides
+import com.dyonovan.neotech.pipes.collections.{Filter, ConnectedSides}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -22,9 +22,15 @@ object AdvancedPipe {
     val MODE_FIELD_ID = 1
     val CONNECTIONS = 2
     val FREQUENCY = 3
+    val FILTER = 4
+
+    val FILTER_MATCH_TAG = 0
+    val FILTER_MATCH_DAMAGE = 1
+    val FILTER_MATCH_ORE = 2
+    val FILTER_BLACKLIST = 3
 }
 
-trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with SimplePipe {
+trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with SimplePipe with Filter {
 
     //Variables
     var mode : Int = 0 //Used to set mode (Round Robin etc) only used in extract pipe
@@ -42,6 +48,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
       */
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].writeToNBT(tag)
+        super[Filter].writeToNBT(tag)
         connections.writeToNBT(tag)
         tag.setInteger("mode", mode)
         tag.setInteger("redstone", redstone)
@@ -59,6 +66,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
       */
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].readFromNBT(tag)
+        super[Filter].readFromNBT(tag)
         connections.readFromNBT(tag)
         mode = tag.getInteger("mode")
         redstone = tag.getInteger("redstone")
@@ -79,6 +87,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
         mode = 0
         redstone = 0
         frequency = 0
+        resetFilter()
         for(x <- connections.connections.indices)
             connections.set(x, value = true)
         getWorld.markBlockForUpdate(getPos)
@@ -88,7 +97,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
     def getGUIHeight : Int = {
         var baseHeight = 41
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl)
-            baseHeight += 60
+            baseHeight += 90
         if(getUpgradeBoard != null && getUpgradeBoard.hasExpansion)
             baseHeight += 60
         baseHeight
@@ -104,6 +113,14 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
             case AdvancedPipe.FREQUENCY =>
                 frequency = value.toInt
                 //TODO: Notify extractions to rebuild
+            case AdvancedPipe.FILTER =>
+                value.toInt match {
+                    case AdvancedPipe.FILTER_MATCH_TAG => matchTag = !matchTag
+                    case AdvancedPipe.FILTER_MATCH_DAMAGE => matchDamage = !matchDamage
+                    case AdvancedPipe.FILTER_MATCH_ORE => matchOreDict = !matchOreDict
+                    case AdvancedPipe.FILTER_BLACKLIST => blackList = !blackList
+                    case _ =>
+                }
             case _ =>
         }
     }
@@ -114,6 +131,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
             case AdvancedPipe.MODE_FIELD_ID => mode
             case AdvancedPipe.CONNECTIONS => 0.0
             case AdvancedPipe.FREQUENCY => frequency
+            case _ => 0.0
         }
     }
 

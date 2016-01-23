@@ -90,6 +90,8 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
       * @return
       */
     def extractOnMode(resource : R, simulate : Boolean) : Boolean = {
+        if(!isResourceValidForFilter(resource))
+            return false
         mode match {
             case 0 => extractResourceOnShortestPath(resource, simulate)
             case 1 => extractResourceOnLongestPath(resource, simulate)

@@ -8,7 +8,8 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.common.container.machines.ContainerMachineUpgrade
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
-import com.dyonovan.neotech.pipes.gui.GuiAdvancedPipeMenu
+import com.dyonovan.neotech.pipes.container.ContainerPipeFilter
+import com.dyonovan.neotech.pipes.gui.{GuiPipeFilter, GuiAdvancedPipeMenu}
 import com.dyonovan.neotech.pipes.types.{AdvancedPipe, SinkPipe, ExtractionPipe, SimplePipe}
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.client.gui.GuiColor
@@ -205,6 +206,8 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
             case upgradeable: Upgradeable =>
                 if (ID == 0) {
                     return new ContainerMachineUpgrade(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
+                } else if(ID == 1) {
+                    return new ContainerPipeFilter(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
                 }
             case _ =>
         }
@@ -217,6 +220,8 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
             case upgradeable: Upgradeable =>
                 if (ID == 0) {
                     return new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
+                } else if(ID == 1) {
+                    return new GuiPipeFilter(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
                 }
             case _ =>
         }
