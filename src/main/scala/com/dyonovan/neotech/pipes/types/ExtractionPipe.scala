@@ -26,10 +26,10 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
       * Useful in round robin
       */
     var lastSink: Long = 0
-    var shouldRefreshCache = false
+    var shouldRefreshCache = true
 
     //Cache for locations
-    val sinks = new util.ArrayList[Long]() //TODO: Add caching
+    val sinks = new util.ArrayList[Long]()
 
     //Used in path finding
     val distance: util.HashMap[Long, Integer] = new util.HashMap[Long, Integer]
