@@ -49,6 +49,8 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
         }
     }
 
+    override def getRenderType : Int = 3
+
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
         if(side != EnumFacing.UP && side != EnumFacing.DOWN)
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, side))
