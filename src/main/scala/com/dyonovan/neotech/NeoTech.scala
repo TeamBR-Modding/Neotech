@@ -77,8 +77,5 @@ object NeoTech {
         proxy.postInit()
         ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoaderManager)
         new IGWSupportNotifier
-
-        //Version Test
-
     }
  }
