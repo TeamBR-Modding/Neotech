@@ -13,7 +13,7 @@ import net.minecraft.item.{EnumDyeColor, ItemStack, ItemBlock}
  * @author Paul Davis pauljoda
  * @since August 20, 2015
  */
-class ItemBlockPipe(block : Block) extends ItemBlock(block) {
+class ItemBlockColored(block : Block) extends ItemBlock(block) {
     setMaxDamage(0)
     setHasSubtypes(true)
 

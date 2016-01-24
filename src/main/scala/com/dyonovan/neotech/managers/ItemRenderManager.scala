@@ -42,7 +42,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.eliteRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.creativeRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.blockCrafter))
-        registerItem(Item.getItemFromBlock(BlockManager.blockFertilizer))
+        registerItem(Item.getItemFromBlock(BlockManager.blockMiniatureSun))
         registerItem(Item.getItemFromBlock(BlockManager.playerPlate))
         registerItem(Item.getItemFromBlock(BlockManager.chunkLoader))
         registerItem(Item.getItemFromBlock(BlockManager.flushableChest))
@@ -54,7 +54,7 @@ object ItemRenderManager {
         registerItem(ItemManager.upgradeExpansion)
         registerItem(ItemManager.wrench)
 
-        registerPipes()
+        registerPipesAndColored()
     }
 
     def registerItem(item: Item): Unit = {
@@ -62,11 +62,13 @@ object ItemRenderManager {
             new ModelResourceLocation(item.getUnlocalizedName.substring(5), "inventory"))
     }
 
-    def registerPipes() : Unit = {
+    def registerPipesAndColored() : Unit = {
         //Colored
         for(color <- EnumDyeColor.values()) {
             Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(Item.getItemFromBlock(BlockManager.pipeBasicStructure), color.getMetadata,
                 new ModelResourceLocation(Reference.MOD_ID + ":pipeStructure_" + color.getName, "inventory"))
+            Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(Item.getItemFromBlock(BlockManager.blockMiniatureStar), color.getMetadata,
+                new ModelResourceLocation(Reference.MOD_ID + ":blockMiniatureStar_" + color.getName, "inventory"))
         }
 
         //Speed

@@ -1,0 +1,57 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "base": "neotech:blocks/star/star"
+        },
+        "model" : "neotech:sun"
+    },
+    "variants": {
+        "color": {
+            "white": { "textures": { "base": "neotech:blocks/star/star_white" } },
+            //Don't do anything, set in default
+            "orange": {},
+            "magenta": { "textures": { "base": "neotech:blocks/star/star_magenta" } },
+            "light_blue": { "textures": { "base": "neotech:blocks/star/star_light_blue" } },
+            "yellow": { "textures": { "base": "neotech:blocks/star/star_yellow" } },
+            "lime": { "textures": { "base": "neotech:blocks/star/star_lime" } },
+            "pink": { "textures": { "base": "neotech:blocks/star/star_pink" } },
+            "gray": { "textures": { "base": "neotech:blocks/star/star_gray"} },
+            "silver": { "textures": { "base": "neotech:blocks/star/star_silver" } },
+            "cyan": { "textures": { "base": "neotech:blocks/star/star_cyan" } },
+            "purple": { "textures": { "base": "neotech:blocks/star/star_purple" } },
+            "blue": { "textures": { "base": "neotech:blocks/star/star_blue" } },
+            "brown": { "textures": { "base": "neotech:blocks/star/star_brown" } },
+            "green": { "textures": { "base": "neotech:blocks/star/star_green" } },
+            "red": { "textures": { "base": "neotech:blocks/star/star_red" } },
+            "black": { "textures": { "base": "neotech:blocks/star/star_black" } }
+        },
+        "attached_side": {
+            "0": {
+                "model": "neotech:sunRoof",
+                "x": 270
+            },
+            "1": {
+                "model": "neotech:sunRoof",
+                "x": 90
+            },
+            "2": {
+                "model": "neotech:sunRoof",
+                "y": 180
+            },
+            "3": {
+                "model": "neotech:sunRoof",
+                "y": 0
+            },
+            "4": {
+                "model": "neotech:sunRoof",
+                "y": 90
+            },
+            "5": {
+                "model": "neotech:sunRoof",
+                "y": 270
+            },
+            "6": {}
+        }
+    }
+}

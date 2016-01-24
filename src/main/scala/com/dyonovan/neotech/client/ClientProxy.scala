@@ -33,9 +33,8 @@ class ClientProxy extends CommonProxy {
      */
     override def preInit() = {
         //Setup sub items
-        val basicStructurePipeItem = GameRegistry.findItem(Reference.MOD_ID, "pipeStructure")
         val baseString = "neotech:pipeStructure"
-        ModelBakery.addVariantName(basicStructurePipeItem,
+        ModelBakery.addVariantName( GameRegistry.findItem(Reference.MOD_ID, "pipeStructure"),
             baseString + "_black",
             baseString + "_blue",
             baseString + "_brown",
@@ -52,6 +51,25 @@ class ClientProxy extends CommonProxy {
             baseString + "_silver",
             baseString + "_white",
             baseString + "_yellow")
+
+        val baseStringStar = "neotech:blockMiniatureStar"
+        ModelBakery.addVariantName(GameRegistry.findItem(Reference.MOD_ID, "blockMiniatureStar"),
+            baseStringStar + "_black",
+            baseStringStar + "_blue",
+            baseStringStar + "_brown",
+            baseStringStar + "_cyan",
+            baseStringStar + "_gray",
+            baseStringStar + "_green",
+            baseStringStar + "_light_blue",
+            baseStringStar + "_lime",
+            baseStringStar + "_magenta",
+            baseStringStar + "_orange",
+            baseStringStar + "_pink",
+            baseStringStar + "_purple",
+            baseStringStar + "_red",
+            baseStringStar + "_silver",
+            baseStringStar + "_white",
+            baseStringStar + "_yellow")
     }
 
     /**

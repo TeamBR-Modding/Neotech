@@ -74,7 +74,7 @@ trait CoreStates extends Block {
      * @return
      */
     override def getMetaFromState(state : IBlockState) = {
-        var i : Int = state.getValue(PropertyRotation.FOUR_WAY).asInstanceOf[EnumFacing].ordinal()
+        var i : Int = state.getValue(PropertyRotation.FOUR_WAY).ordinal()
         i |= (if(state.getValue(PROPERTY_ACTIVE).asInstanceOf[Boolean]) 1 else 0 ) << 2
         i
     }

@@ -1,13 +1,13 @@
 package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine}
-import com.dyonovan.neotech.common.blocks.misc.{BlockChunkLoader, BlockPlayerPlate, BlockCrafter, BlockFertilizer}
+import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage._
 import com.dyonovan.neotech.common.tiles.machines._
-import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, TileCrafter, TileFertilizer}
+import com.dyonovan.neotech.common.tiles.misc.{TileStar, TileChunkLoader, TileCrafter, TileFertilizer}
 import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileRFStorage, TileTank}
-import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockPipe}
+import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockColored}
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
 import com.dyonovan.neotech.pipes.tiles.fluid.{FluidExtractionPipe, FluidSinkPipe}
 import com.dyonovan.neotech.pipes.tiles.item.{ItemExtractionPipe, ItemSinkPipe}
@@ -74,7 +74,8 @@ object BlockManager {
 
     //Misc
     val blockCrafter = new BlockCrafter("blockCrafter", classOf[TileCrafter])
-    val blockFertilizer = new BlockFertilizer("blockFertilizer", classOf[TileFertilizer])
+    val blockMiniatureSun = new BlockMiniatureSun("blockMiniatureSun", classOf[TileFertilizer])
+    val blockMiniatureStar = new BlockStar("blockMiniatureStar")
     val playerPlate = new BlockPlayerPlate
     val chunkLoader = new BlockChunkLoader
     val flushableChest = new BlockFlushableChest
@@ -97,7 +98,7 @@ object BlockManager {
         registerBlock(blockBronze, "blockBronze", null, "blockBronze")
 
         //Pipes
-        registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockPipe])
+        registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockColored])
         for(color <- EnumDyeColor.values())
             OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
 
@@ -126,7 +127,10 @@ object BlockManager {
 
         //misc
         registerBlock(blockCrafter, "blockCrafter", classOf[TileCrafter])
-        registerBlock(blockFertilizer, "blockFertilizer", classOf[TileFertilizer])
+        registerBlock(blockMiniatureSun, "blockMiniatureSun", classOf[TileFertilizer])
+        registerBlock(blockMiniatureStar, "blockMiniatureStar", classOf[TileStar], classOf[ItemBlockColored])
+        for(color <- EnumDyeColor.values())
+            OreDictionary.registerOre("blockMiniatureStar", new ItemStack(blockMiniatureStar, 1, color.getMetadata))
         registerBlock(playerPlate, "playerPlate", null)
         registerBlock(chunkLoader, "chunkLoader", classOf[TileChunkLoader])
         registerBlock(flushableChest, "flushableChest", classOf[TileFlushableChest])

@@ -111,12 +111,13 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         }
         false
     }
+
     /**
       * Get the damage value that this Block should drop
       */
     override def damageDropped (state: IBlockState) : Int = {
         if(colored)
-            state.getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMetadata
+            state.getValue(PipeProperties.COLOR).getMetadata
         else
             0
     }
@@ -139,7 +140,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       */
     override def getMapColor(state: IBlockState): MapColor = {
         if(colored)
-            state.getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMapColor
+            state.getValue(PipeProperties.COLOR).getMapColor
         else
             MapColor.grayColor
     }
@@ -159,7 +160,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       */
     override def getMetaFromState(state: IBlockState): Int = {
         if(colored)
-            state.getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMetadata
+            state.getValue(PipeProperties.COLOR).getMetadata
         else
             0
     }

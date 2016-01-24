@@ -2,6 +2,7 @@ package com.dyonovan.neotech.common.blocks.misc
 
 import com.dyonovan.neotech.client.gui.misc.GuiFertilizer
 import com.dyonovan.neotech.common.blocks.BaseBlock
+import com.dyonovan.neotech.common.blocks.states.NeoStates
 import com.dyonovan.neotech.common.container.misc.ContainerFertilizer
 import com.dyonovan.neotech.common.tiles.misc.TileFertilizer
 import com.dyonovan.neotech.managers.ItemManager
@@ -26,16 +27,13 @@ import net.minecraft.world.{IBlockAccess, World}
   * @author Dyonovan
   * @since August 22, 2015
   */
-object BlockFertilizer {
-    lazy val ON_BLOCK  = PropertyInteger.create("attached_side", 0, 6)
-}
 
-class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
+class BlockMiniatureSun(name: String, tileEntity: Class[_ <: TileEntity]) extends
         BaseBlock(Material.iron, name, tileEntity) with OpensGui with DropsItems {
 
     setLightLevel(1.0F)
     setDefaultState(this.blockState.getBaseState
-            .withProperty(BlockFertilizer.ON_BLOCK, 6.asInstanceOf[Integer]))
+            .withProperty(NeoStates.ON_BLOCK, 6.asInstanceOf[Integer]))
 
     override def isFullBlock: Boolean = false
     override def isFullCube : Boolean = false
@@ -47,7 +45,7 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
         placer match {
             case player : EntityPlayer =>
                 if(player.isSneaking)
-                    return getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attachedSide.asInstanceOf[Integer])
+                    return getDefaultState.withProperty(NeoStates.ON_BLOCK, attachedSide.asInstanceOf[Integer])
             case _ =>
         }
 
@@ -62,15 +60,15 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
             }
         }
 
-        getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attachedSide.asInstanceOf[Integer])
+        getDefaultState.withProperty(NeoStates.ON_BLOCK, attachedSide.asInstanceOf[Integer])
     }
 
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
-        var attached = world.getBlockState(pos).getValue(BlockFertilizer.ON_BLOCK)
+        var attached = world.getBlockState(pos).getValue(NeoStates.ON_BLOCK)
         attached += 1
         if(attached > 6)
             attached = 0
-        world.setBlockState(pos, getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, attached))
+        world.setBlockState(pos, getDefaultState.withProperty(NeoStates.ON_BLOCK, attached))
         true
     }
 
@@ -78,25 +76,25 @@ class BlockFertilizer(name: String, tileEntity: Class[_ <: TileEntity]) extends
       * Convert the given metadata into a BlockState for this Block
       */
     override def getStateFromMeta(meta: Int): IBlockState = {
-        getDefaultState.withProperty(BlockFertilizer.ON_BLOCK, meta.asInstanceOf[Integer])
+        getDefaultState.withProperty(NeoStates.ON_BLOCK, meta.asInstanceOf[Integer])
     }
 
     /**
       * Convert the BlockState into the correct metadata value
       */
     override def getMetaFromState(state: IBlockState): Int = {
-        state.getValue(BlockFertilizer.ON_BLOCK).asInstanceOf[Int]
+        state.getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]
     }
 
     override def createBlockState: BlockState = {
-        new BlockState(this, BlockFertilizer.ON_BLOCK)
+        new BlockState(this, NeoStates.ON_BLOCK)
     }
 
     override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos): Unit = {
-        if(worldIn.getBlockState(pos).getValue(BlockFertilizer.ON_BLOCK).asInstanceOf[Int] == 6) {
+        if(worldIn.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int] == 6) {
             this.setBlockBounds(6F / 16F, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F, 10F / 16F)
         } else {
-            EnumFacing.getFront(worldIn.getBlockState(pos).getValue(BlockFertilizer.ON_BLOCK).asInstanceOf[Int]) match {
+            EnumFacing.getFront(worldIn.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]) match {
                 case EnumFacing.UP =>
                     this.setBlockBounds(6F / 16F, 12F / 16F, 6F / 16F, 10F / 16F, 16F / 16F, 10F / 16F)
                 case EnumFacing.DOWN =>

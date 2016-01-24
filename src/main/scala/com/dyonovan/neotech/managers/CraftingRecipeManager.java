@@ -120,8 +120,15 @@ public class CraftingRecipeManager {
                 'A', "dustCopper", 'B', "dustTin"));
 
         //Miniature Sun
-        GameRegistry.addRecipe(new ItemStack(BlockManager.blockFertilizer()), "ABA", "BCB", "ABA",
+        GameRegistry.addRecipe(new ItemStack(BlockManager.blockMiniatureSun()), "ABA", "BCB", "ABA",
                 'A', Items.gold_ingot, 'B', Items.glowstone_dust, 'C', Items.nether_star);
+
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockMiniatureStar()), Items.glowstone_dust, Item.getItemFromBlock(Blocks.torch));
+
+        for(EnumDyeColor color : EnumDyeColor.values()) {
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.blockMiniatureStar()), 1, color.ordinal()),
+                    "blockMiniatureStar", new ItemStack(Items.dye, 1, color.getDyeDamage())));
+        }
 
         //Player Plate
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BlockManager.playerPlate()), "ingotCopper", "ingotCopper"));
