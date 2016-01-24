@@ -1,29 +1,24 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine}
+import com.dyonovan.neotech.common.blocks.machines.{BlockMachine, BlockGrinder}
 import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage._
 import com.dyonovan.neotech.common.tiles.machines._
-<<<<<<< HEAD
-import com.dyonovan.neotech.common.tiles.misc.{TileStar, TileChunkLoader, TileCrafter, TileFertilizer}
-import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileRFStorage, TileTank}
-import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockColored}
-=======
-import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, TileCrafter, TileFertilizer}
-import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileRFStorage, TileTank}
-import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockPipe}
->>>>>>> origin/1.8.9
+import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, TileStar, TileFertilizer, TileCrafter}
+import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank, TileRFStorage}
+import com.dyonovan.neotech.pipes.blocks.{ItemBlockColored, BlockPipeSpecial, BlockPipe}
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
-import com.dyonovan.neotech.pipes.tiles.fluid.{FluidExtractionPipe, FluidSinkPipe}
-import com.dyonovan.neotech.pipes.tiles.item.{ItemExtractionPipe, ItemSinkPipe}
+import com.dyonovan.neotech.pipes.tiles.fluid.{FluidSinkPipe, FluidExtractionPipe}
+import com.dyonovan.neotech.pipes.tiles.item.{ItemSinkPipe, ItemExtractionPipe}
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
+import net.minecraft.item.{ItemBlock, ItemStack, EnumDyeColor}
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
+
 
 /**
  * This file was created for NeoTech
