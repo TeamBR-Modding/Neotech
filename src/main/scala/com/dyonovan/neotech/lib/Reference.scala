@@ -21,4 +21,5 @@ object Reference {
     final val CONFIG_TIN_GENERATION = "Tin Ore Generation"
     final val CONFIG_ORE_GENERATION = "Ore Generation"
     final val CONFIG_FERT_BLACKLIST = "Fertilizer Blacklist"
+    final val CONFIG_VERSION_CHECK = "Show if NeoTech is Outdated?"
 }
