@@ -59,6 +59,7 @@ tile.neotech:blockMiniatureSun.name=Miniature Sun
 tile.neotech:playerPlate.name=Player Sensitive Pressure Plate
 tile.neotech:chunkLoader.name=Chunk Loader
 tile.neotech:flushableChest.name=Flushable Chest
+<<<<<<< HEAD
 
 tile.neotech:blockMiniatureStar_black.name=§8Black §rStar Light
 tile.neotech:blockMiniatureStar_blue.name=§1Blue §rStar Light
@@ -76,6 +77,10 @@ tile.neotech:blockMiniatureStar_red.name=§cRed §rStar Light
 tile.neotech:blockMiniatureStar_silver.name=§7Silver §rStar Light
 tile.neotech:blockMiniatureStar_white.name=White Star Light
 tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
+=======
+tile.neotech:dimStorage.name=Dimensional Crate
+
+>>>>>>> origin/1.8.9
 
 neotech.grinder.title=Grinder
 neotech.grinder.input=Input

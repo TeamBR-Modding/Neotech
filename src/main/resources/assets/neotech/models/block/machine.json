@@ -20,6 +20,9 @@
     "fluidGeneratorFrontActive": "neotech:blocks/fluidGeneratorActive_front",
     //ThermalBinder
     "thermalBinderFront": "neotech:blocks/thermalBinder_front",
-    "thermalBinderFrontActive": "neotech:blocks/thermalBinderActive_front"
+    "thermalBinderFrontActive": "neotech:blocks/thermalBinderActive_front",
+
+    //DimStorage
+    "dimStorageFront": "neotech:blocks/dimStorage_front"
   }
 }

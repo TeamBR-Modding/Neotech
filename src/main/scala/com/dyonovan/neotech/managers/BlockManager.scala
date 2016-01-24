@@ -5,9 +5,15 @@ import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage._
 import com.dyonovan.neotech.common.tiles.machines._
+<<<<<<< HEAD
 import com.dyonovan.neotech.common.tiles.misc.{TileStar, TileChunkLoader, TileCrafter, TileFertilizer}
 import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileRFStorage, TileTank}
 import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockColored}
+=======
+import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, TileCrafter, TileFertilizer}
+import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileRFStorage, TileTank}
+import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockPipe}
+>>>>>>> origin/1.8.9
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
 import com.dyonovan.neotech.pipes.tiles.fluid.{FluidExtractionPipe, FluidSinkPipe}
 import com.dyonovan.neotech.pipes.tiles.item.{ItemExtractionPipe, ItemSinkPipe}
@@ -79,6 +85,7 @@ object BlockManager {
     val playerPlate = new BlockPlayerPlate
     val chunkLoader = new BlockChunkLoader
     val flushableChest = new BlockFlushableChest
+    val dimStorage = new BlockDimStorage
 
     def preInit(): Unit = {
         //Machines
@@ -134,6 +141,7 @@ object BlockManager {
         registerBlock(playerPlate, "playerPlate", null)
         registerBlock(chunkLoader, "chunkLoader", classOf[TileChunkLoader])
         registerBlock(flushableChest, "flushableChest", classOf[TileFlushableChest])
+        registerBlock(dimStorage, "dimStorage", classOf[TileDimStorage])
     }
 
     /**

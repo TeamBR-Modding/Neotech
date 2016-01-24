@@ -2,6 +2,7 @@ package com.dyonovan.neotech
 
 import java.io.File
 
+import com.dyonovan.neotech.api.igw.IGWSupportNotifier
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers._
@@ -74,5 +75,6 @@ object NeoTech {
     @EventHandler def postInit(event : FMLPostInitializationEvent) = {
         proxy.postInit()
         ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoaderManager)
+        new IGWSupportNotifier
     }
  }
