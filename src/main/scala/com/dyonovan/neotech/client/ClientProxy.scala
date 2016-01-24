@@ -1,10 +1,10 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
-import com.dyonovan.neotech.client.renderers.{TileFlushableChestRenderer, FluidResourceEntityRenderer, EnergyResourceEntityRenderer, ItemResourceEntityRenderer}
+import com.dyonovan.neotech.client.renderers._
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader
-import com.dyonovan.neotech.common.tiles.storage.TileFlushableChest
+import com.dyonovan.neotech.common.tiles.storage.{TileTank, TileFlushableChest}
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemRenderManager}
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyExtractionPipe
@@ -84,6 +84,8 @@ class ClientProxy extends CommonProxy {
 
         Minecraft.getMinecraft.getRenderItem.getItemModelMesher.getModelManager.getBlockModelShapes.registerBuiltInBlocks(BlockManager.flushableChest)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileFlushableChest], new TileFlushableChestRenderer[TileFlushableChest])
+
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileTank], new TileTankFluidRenderer)
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[ItemExtractionPipe], new ItemResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[EnergyExtractionPipe], new EnergyResourceEntityRenderer)

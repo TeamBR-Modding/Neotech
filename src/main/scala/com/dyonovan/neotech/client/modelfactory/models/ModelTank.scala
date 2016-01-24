@@ -18,97 +18,54 @@ import net.minecraftforge.fluids.{Fluid, FluidContainerRegistry, FluidStack}
 import org.lwjgl.util.vector.Vector3f
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 17, 2015
- */
-class ModelTank extends ISmartBlockModel with ISmartItemModel{
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 17, 2015
+  */
+class ModelTank(baseModel: IBakedModel) extends ISmartItemModel {
 
-    var topIcon: TextureAtlasSprite = null
-    val glass: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/glass")
     val faceBakery = new FaceBakery
     var fluidHeight: Float = 0.0F
     var renderFluid: Fluid = null
-    var isItem: Boolean = _
-
-    def this(renderHeight: Float, fluid: Fluid, icon: TextureAtlasSprite) {
-        this()
-        this.fluidHeight = renderHeight
-        this.renderFluid = fluid
-        this.topIcon = icon
-        if (topIcon == null)
-            topIcon = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
-        isItem = true
-    }
-
-    override def handleBlockState(s: IBlockState): IBakedModel = {
-        s match {
-            case state: DummyState =>
-                if(state.blockAccess.getTileEntity(state.pos) != null) {
-                    fluidHeight = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getFluidLevelScaled
-                    renderFluid = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getCurrentFluid
-                    topIcon = state.blockAccess.getTileEntity(state.pos).asInstanceOf[TileTank].getTierIcon
-                }
-                if (topIcon == null)
-                    topIcon = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
-                isItem = false
-                new ModelTank(fluidHeight, renderFluid, topIcon)
-            case _ => null
-        }
-    }
 
     override def handleItemState(stack: ItemStack): IBakedModel = {
-        var height = 0.01F
-        var fluid: Fluid = null
-        var top: TextureAtlasSprite = null
+        fluidHeight = 2.01F
+        renderFluid = null
         if (stack.hasTagCompound) {
             val liquidTag = stack.getTagCompound.getString("FluidName")
 
             if (liquidTag != null) {
                 val liquid = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
                 if (liquid != null && liquid.getFluid != null) {
-                    fluid = liquid.getFluid
+                    renderFluid = liquid.getFluid
                     if (stack.getItem == Item.getItemFromBlock(BlockManager.ironTank))
-                        height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 15.99F)
+                        fluidHeight = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 13.99F)
                     else if (stack.getItem == Item.getItemFromBlock(BlockManager.goldTank))
-                        height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 16), 15.99F)
+                        fluidHeight = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 16), 13.99F)
                     else if (stack.getItem == Item.getItemFromBlock(BlockManager.diamondTank))
-                        height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 64), 15.99F)
+                        fluidHeight = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 64), 13.99F)
                     else if (stack.getItem == Item.getItemFromBlock(BlockManager.creativeTank))
-                        height = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 15.99F)
+                        fluidHeight = Math.min((16 * liquid.amount) / (FluidContainerRegistry.BUCKET_VOLUME * 8), 13.99F)
                     else
-                        height = 16
+                        fluidHeight = 16
                 }
             }
         }
-
-        if (stack.getItem == Item.getItemFromBlock(BlockManager.ironTank))
-            top = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
-        else if (stack.getItem == Item.getItemFromBlock(BlockManager.goldTank))
-            top = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/gold_block")
-        else if (stack.getItem == Item.getItemFromBlock(BlockManager.diamondTank))
-            top = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/diamond_block")
-        else if (stack.getItem == Item.getItemFromBlock(BlockManager.creativeTank))
-            top = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/emerald_block")
-
-        new ModelTank(height, fluid, top)
+        this
     }
 
     override def isBuiltInRenderer: Boolean = false
 
     override def getItemCameraTransforms: ItemCameraTransforms = {
-        new ItemCameraTransforms(MovedUp, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT, ItemTransformVec3f.DEFAULT)
+        ItemCameraTransforms.DEFAULT
     }
 
-    //override def getTexture: TextureAtlasSprite = glass
-    override def getParticleTexture: TextureAtlasSprite = glass
-
-    override def isAmbientOcclusion: Boolean = false
+    override def isAmbientOcclusion: Boolean = true
 
     override def getGeneralQuads: util.List[BakedQuad] = {
         val list: util.ArrayList[BakedQuad] = new util.ArrayList[BakedQuad]()
@@ -117,42 +74,23 @@ class ModelTank extends ISmartBlockModel with ISmartItemModel{
         val modelRot = ModelRotation.X0_Y0
         val scale = true
 
-        if(MinecraftForgeClient.getRenderLayer == EnumWorldBlockLayer.CUTOUT || isItem) {
-            //Top and Bottom (Iron)
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 0.0F, 16.0F), face, topIcon, EnumFacing.DOWN, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.01F, 0.0F), new Vector3f(16.0F, 0.01F, 16.0F), face, topIcon, EnumFacing.DOWN.getOpposite, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 16.0F, 0.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, topIcon, EnumFacing.UP, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 15.99F, 0.0F), new Vector3f(16.0F, 15.99F, 16.0F), face, topIcon, EnumFacing.UP.getOpposite, modelRot, null, scale, true))
+        list.addAll(baseModel.getGeneralQuads)
 
-            //Sides (Glass)
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(16.0F, 16.0F, 0.0F), face, glass, EnumFacing.NORTH, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 16.0F, 0.01F), new Vector3f(0.0F, 0.0F, 0.01F), face, glass, EnumFacing.NORTH.getOpposite, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 16.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, glass, EnumFacing.SOUTH, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 16.0F, 15.99F), new Vector3f(0.0F, 0.0F, 15.99F), face, glass, EnumFacing.SOUTH.getOpposite, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.0F, 0.0F, 0.0F), new Vector3f(0.0F, 16.0F, 16.0F), face, glass, EnumFacing.WEST, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 16.0F, 16.0F), new Vector3f(0.01F, 0.0F, 0.0F), face, glass, EnumFacing.WEST.getOpposite, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(16.0F, 0.0F, 0.0F), new Vector3f(16.0F, 16.0F, 16.0F), face, glass, EnumFacing.EAST, modelRot, null, scale, true))
-            list.add(faceBakery.makeBakedQuad(new Vector3f(15.99F, 16.0F, 16.0F), new Vector3f(15.99F, 0.0F, 0.0F), face, glass, EnumFacing.EAST.getOpposite, modelRot, null, scale, true))
+        if(renderFluid != null) {
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, fluidHeight, 2.01F), new Vector3f(13.99F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.UP, modelRot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 0.001F, 2.01F), new Vector3f(13.999F, 0.001F, 13.999F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.DOWN, modelRot, null, scale, true))
 
-            //Render Fluid
-            if (renderFluid != null && (MinecraftForgeClient.getRenderLayer == EnumWorldBlockLayer.TRANSLUCENT || isItem)) {
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, fluidHeight, 0.01F), new Vector3f(15.99F, fluidHeight, 15.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.UP, modelRot, null, scale, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.001F, 0.01F), new Vector3f(15.999F, 0.001F, 15.999F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.DOWN, modelRot, null, scale, true))
-
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 0.01F), new Vector3f(15.99F, fluidHeight, 0.01F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.NORTH, modelRot, null, scale, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 15.99F), new Vector3f(15.99F, fluidHeight, 15.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.SOUTH, modelRot, null, scale, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(0.01F, 0.01F, 0.01F), new Vector3f(0.01F, fluidHeight, 15.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.WEST, modelRot, null, scale, true))
-                list.add(faceBakery.makeBakedQuad(new Vector3f(15.99F, 0.01F, 0.01F), new Vector3f(15.99F, fluidHeight, 15.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.EAST, modelRot, null, scale, true))
-            }
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 2.01F), new Vector3f(13.99F, fluidHeight, 2.01F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.NORTH, modelRot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 13.99F), new Vector3f(13.99F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.SOUTH, modelRot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 2.01F), new Vector3f(2.01F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.WEST, modelRot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(13.99F, 2.01F, 2.01F), new Vector3f(13.99F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.EAST, modelRot, null, scale, true))
         }
         list
     }
 
     override def isGui3d: Boolean = true
 
-    override def getFaceQuads(p_177551_1_ : EnumFacing): util.List[BakedQuad] = new util.ArrayList[BakedQuad]()
+    override def getFaceQuads(face : EnumFacing): util.List[BakedQuad] = baseModel.getFaceQuads(face)
 
-    def MovedUp: ItemTransformVec3f = {
-        new ItemTransformVec3f(new Vector3f(-1.0F, 1.0F, 0.0F), new Vector3f(-0.05F, 0.05F, -0.15F), new Vector3f(-0.5F, -0.5F, -0.5F))
-    }
+    override def getParticleTexture: TextureAtlasSprite = baseModel.getParticleTexture
 }

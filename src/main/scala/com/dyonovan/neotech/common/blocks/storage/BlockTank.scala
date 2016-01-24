@@ -37,6 +37,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
     setHardness(3.0F)
+    setBlockBounds(1F / 16F, 0F, 1F / 16F, 15F / 16F, 1F,  15F/ 16F)
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing,
                                   hitX: Float, hitY: Float, hitZ: Float): Boolean = {
@@ -190,6 +191,8 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
 
     @SideOnly(Side.CLIENT)
     override def isTranslucent : Boolean = true
+
+    override def isFullCube = false
 
     @SideOnly(Side.CLIENT)
     override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT

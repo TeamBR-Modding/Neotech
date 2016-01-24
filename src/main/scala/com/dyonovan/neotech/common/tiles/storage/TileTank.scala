@@ -57,7 +57,7 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
     }
 
     def getFluidLevelScaled: Float = {
-        Math.min(15.99F, 16 * tank.getFluidAmount / tank.getCapacity)
+        Math.min(14.99F, 14 * tank.getFluidAmount / tank.getCapacity)
     }
 
     def getCurrentFluid: Fluid = {
@@ -154,8 +154,6 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
             tier = tag.getInteger("Tier")
             initTank()
             tank.readFromNBT(tag)
-            if (worldObj != null)
-                worldObj.markBlockRangeForRenderUpdate(pos, pos)
         }
     }
 
