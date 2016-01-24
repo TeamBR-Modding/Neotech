@@ -13,15 +13,15 @@ import net.minecraftforge.fluids._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 16, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 16, 2015
+  */
 class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Waila with RedstoneAware {
 
     var tier = 0
@@ -104,7 +104,8 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
         val fluidAmount = tank.drain(maxDrain, false)
         if (fluidAmount != null && doDrain && tier != 4)
             tank.drain(maxDrain, true)
-        markForUpdate()
+        if(doDrain)
+            markForUpdate()
 
         fluidAmount
     }
@@ -121,7 +122,8 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
         if (canFill(from, resource.getFluid)) {
             if (tank.fill(resource, false) > 0) {
                 val actual = tank.fill(resource, doFill)
-                markForUpdate()
+                if(doFill)
+                    markForUpdate()
                 return actual
             } else return fillAbove(from, resource, doFill)
         }
