@@ -1,5 +1,9 @@
 {
-	"variants": {
-		"normal": { "model": "neotech:creativeRFStorage" }
-	}
+	"forge_marker" : 1,
+	"defaults": {
+		"textures": {
+			"all": "neotech:blocks/creativeRFStorage"
+		}
+	},
+	"variants" : { "normal" : { "model": "neotech:block" } }
 }

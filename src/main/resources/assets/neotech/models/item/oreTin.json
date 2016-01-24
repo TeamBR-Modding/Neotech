@@ -1,5 +1,8 @@
 {
-	"parent": "neotech:block/oreTin",
+	"parent": "neotech:block/block",
+	"textures" : {
+		"all" : "neotech:blocks/oreTin"
+	},
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],
