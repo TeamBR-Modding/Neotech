@@ -32,7 +32,7 @@ class TileTankFluidRenderer extends TileEntitySpecialRenderer[TileTank] {
             GlStateManager.disableLighting()
 
             val fluidIcon: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(te.getCurrentFluid.getStill(te.tank.getFluid).toString)
-            RenderUtils.renderCubeWithTexture(2.01 / 16.0, 1.01 / 16, 2.01 / 16.0, 13.99 / 16.0, (te.getFluidLevelScaled + 1.01) / 16, 13.99 / 16.0,
+            RenderUtils.renderCubeWithTexture(2.01 / 16.0, 1.01 / 16, 2.01 / 16.0, 13.99 / 16.0, te.getFluidLevelScaled / 16, 13.99 / 16.0,
                 fluidIcon.getMinU, fluidIcon.getMinV, fluidIcon.getMaxU, fluidIcon.getMaxV)
 
             GlStateManager.enableLighting()

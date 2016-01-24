@@ -62,7 +62,7 @@ class ModelTank(baseModel: IBakedModel) extends ISmartItemModel {
     override def isBuiltInRenderer: Boolean = false
 
     override def getItemCameraTransforms: ItemCameraTransforms = {
-        ItemCameraTransforms.DEFAULT
+        baseModel.getItemCameraTransforms
     }
 
     override def isAmbientOcclusion: Boolean = true

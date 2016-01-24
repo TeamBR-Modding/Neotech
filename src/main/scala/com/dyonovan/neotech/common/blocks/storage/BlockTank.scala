@@ -88,7 +88,11 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
                 fluidAmount = "0 / " + tank.tank.getCapacity + " mb"
             }
 
-            val notify = new Notification(new ItemStack(Item.getItemFromBlock(BlockManager.ironTank)), fluidName, fluidAmount)
+            val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
+            val tag = new NBTTagCompound
+            tank.writeToNBT(tag)
+            item.setTagCompound(tag)
+            val notify = new Notification(item, fluidName, fluidAmount)
             NotificationHelper.addNotification(notify)
         }
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
