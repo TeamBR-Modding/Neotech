@@ -25,6 +25,8 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Waila with RedstoneAware {
 
     var tier = 0
+    var offset = 0.0F
+    var dir = 0.01F
 
     def this(t: Int) = {
         this()
@@ -56,8 +58,16 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
         }
     }
 
+    override def onClientTick(): Unit = {
+        if(tank.getFluid != null) {
+            offset += dir
+            if (offset >= 0.3 || offset <= -0.3)
+                dir = -dir
+        }
+    }
+
     def getFluidLevelScaled: Float = {
-        Math.min(15.99F, 16 * tank.getFluidAmount / tank.getCapacity)
+        Math.min(14.99F, (14 * tank.getFluidAmount / tank.getCapacity.toFloat) + 1.31F + offset)
     }
 
     def getCurrentFluid: Fluid = {
@@ -154,8 +164,6 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
             tier = tag.getInteger("Tier")
             initTank()
             tank.readFromNBT(tag)
-            if (worldObj != null)
-                worldObj.markBlockRangeForRenderUpdate(pos, pos)
         }
     }
 

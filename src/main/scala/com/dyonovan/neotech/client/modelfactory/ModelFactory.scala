@@ -4,7 +4,7 @@ import com.dyonovan.neotech.client.modelfactory.models.ModelTank
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.BlockManager
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.resources.model.{IBakedModel, ModelResourceLocation}
 import net.minecraft.item.Item
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.common.MinecraftForge
@@ -35,21 +35,13 @@ class ModelFactory {
         val itemModelMesher = Minecraft.getMinecraft.getRenderItem.getItemModelMesher
 
         //tanks
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "ironTank", "normal"), new ModelTank)
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "goldTank", "normal"), new ModelTank)
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "diamondTank", "normal"), new ModelTank)
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "creativeTank", "normal"), new ModelTank)
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "ironTank", "inventory"), new ModelTank)
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "goldTank", "inventory"), new ModelTank)
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "diamondTank", "inventory"), new ModelTank)
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "creativeTank", "inventory"), new ModelTank)
-        itemModelMesher.register(Item.getItemFromBlock(BlockManager.ironTank), 0, new ModelResourceLocation(Reference
-                .MOD_ID + ":ironTank", "inventory"))
-        itemModelMesher.register(Item.getItemFromBlock(BlockManager.goldTank), 0, new ModelResourceLocation(Reference
-                .MOD_ID + ":goldTank", "inventory"))
-        itemModelMesher.register(Item.getItemFromBlock(BlockManager.diamondTank), 0, new ModelResourceLocation(Reference
-                .MOD_ID + ":diamondTank", "inventory"))
-        itemModelMesher.register(Item.getItemFromBlock(BlockManager.creativeTank), 0, new ModelResourceLocation(Reference
-                .MOD_ID + ":creativeTank", "inventory"))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "ironTank", "inventory"),
+            new ModelTank(event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "ironTank", "inventory"))))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "goldTank", "inventory"),
+            new ModelTank(event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "goldTank", "inventory"))))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "diamondTank", "inventory"),
+            new ModelTank(event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "diamondTank", "inventory"))))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "creativeTank", "inventory"),
+            new ModelTank(event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "creativeTank", "inventory"))))
     }
 }

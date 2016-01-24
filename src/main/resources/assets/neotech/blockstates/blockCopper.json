@@ -1,5 +1,9 @@
 {
-	"variants": {
-		"normal": { "model": "neotech:blockCopper" }
-	}
+	"forge_marker" : 1,
+	"defaults": {
+		"textures": {
+			"all": "neotech:blocks/blockCopper"
+		}
+	},
+	"variants" : { "normal" : { "model": "neotech:block" } }
 }

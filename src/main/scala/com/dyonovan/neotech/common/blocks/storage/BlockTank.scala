@@ -37,6 +37,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
     setHardness(3.0F)
+    setBlockBounds(1F / 16F, 0F, 1F / 16F, 15F / 16F, 1F,  15F/ 16F)
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing,
                                   hitX: Float, hitY: Float, hitZ: Float): Boolean = {
@@ -87,7 +88,11 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
                 fluidAmount = "0 / " + tank.tank.getCapacity + " mb"
             }
 
-            val notify = new Notification(new ItemStack(Item.getItemFromBlock(BlockManager.ironTank)), fluidName, fluidAmount)
+            val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
+            val tag = new NBTTagCompound
+            tank.writeToNBT(tag)
+            item.setTagCompound(tag)
+            val notify = new Notification(item, fluidName, fluidAmount)
             NotificationHelper.addNotification(notify)
         }
         super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
@@ -190,6 +195,8 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
 
     @SideOnly(Side.CLIENT)
     override def isTranslucent : Boolean = true
+
+    override def isFullCube = false
 
     @SideOnly(Side.CLIENT)
     override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
