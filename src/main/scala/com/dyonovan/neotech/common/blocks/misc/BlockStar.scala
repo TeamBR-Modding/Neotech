@@ -38,7 +38,7 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
 
     setLightLevel(1.0F)
     setDefaultState(this.blockState.getBaseState
-            .withProperty(PipeProperties.COLOR, EnumDyeColor.ORANGE))
+            .withProperty(NeoStates.ON_BLOCK, 6.asInstanceOf[Integer]))
 
     override def isFullBlock: Boolean = false
 
@@ -46,38 +46,33 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
 
     override def isOpaqueCube: Boolean = false
 
-    override def onBlockPlaced(world: World, pos: BlockPos, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, meta: Int, placer: EntityLivingBase): IBlockState = {
+    override def onBlockPlaced(world: World, pos: BlockPos, facing: EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
+        var attachedSide = 6
 
-        getDefaultState.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(meta))
+        placer match {
+            case player : EntityPlayer =>
+                if(player.isSneaking)
+                    return getDefaultState.withProperty(NeoStates.ON_BLOCK, attachedSide.asInstanceOf[Integer])
+            case _ =>
+        }
+
+        if (attachedSide == 6 && world.getBlockState(pos.offset(facing.getOpposite)) != null && world.getBlockState(pos.offset(facing.getOpposite)).getBlock.isSideSolid(world, pos.offset(facing.getOpposite), facing)) {
+            attachedSide = facing.getOpposite.ordinal()
+        }
+
+        if(attachedSide == 6) {
+            for (dir <- EnumFacing.values()) {
+                if (attachedSide == 6 && world.getBlockState(pos.offset(dir)) != null && world.getBlockState(pos.offset(dir)).getBlock.isSideSolid(world, pos.offset(dir), dir.getOpposite))
+                    attachedSide = dir.ordinal()
+            }
+        }
+
+        getDefaultState.withProperty(NeoStates.ON_BLOCK, attachedSide.asInstanceOf[Integer])
     }
 
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack: ItemStack) : Unit = {
         if(!world.isRemote && world.getTileEntity(pos) != null) {
-            var attachedSide = 6
-
-            placer match {
-                case player: EntityPlayer =>
-                    if (player.isSneaking) {
-                        getDefaultState.withProperty(NeoStates.ON_BLOCK, attachedSide.asInstanceOf[Integer])
-                        return
-                    }
-                case _ =>
-            }
-
-            val facing = EnumFacing.getFront((360 / (placer.getRotationYawHead / 4) + 2).toInt)
-
-            if (attachedSide == 6 && world.getBlockState(pos.offset(facing.getOpposite)) != null && world.getBlockState(pos.offset(facing.getOpposite)).getBlock.isSideSolid(world, pos.offset(facing.getOpposite), facing)) {
-                attachedSide = facing.getOpposite.ordinal()
-            }
-
-            if (attachedSide == 6) {
-                for (dir <- EnumFacing.values()) {
-                    if (attachedSide == 6 && world.getBlockState(pos.offset(dir)) != null && world.getBlockState(pos.offset(dir)).getBlock.isSideSolid(world, pos.offset(dir), dir.getOpposite))
-                        attachedSide = dir.ordinal()
-                }
-            }
-
-            world.getTileEntity(pos).asInstanceOf[TileStar].side = attachedSide
+            world.getTileEntity(pos).asInstanceOf[TileStar].color = EnumDyeColor.byMetadata(stack.getItemDamage).getMetadata
             world.markBlockForUpdate(pos)
         }
     }
@@ -86,7 +81,8 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
         playerIn.getCurrentEquippedItem match {
             case stack: ItemStack if stack.getItem.isInstanceOf[ItemDye] =>
                 if (stack.getItemDamage != world.getBlockState(pos).getValue(PipeProperties.COLOR).getMetadata) {
-                    world.setBlockState(pos, state.withProperty(PipeProperties.COLOR, EnumDyeColor.byDyeDamage(stack.getItemDamage)))
+                    world.getTileEntity(pos).asInstanceOf[TileStar].color = EnumDyeColor.byDyeDamage(stack.getItemDamage).getMetadata
+                    world.markBlockForUpdate(pos)
                     return true
                 }
                 false
@@ -94,15 +90,12 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
         }
     }
 
-    override def rotateBlock(world: World, pos: BlockPos, side: EnumFacing): Boolean = {
-        if(world.getTileEntity(pos) != null) {
-            var attached = world.getTileEntity(pos).asInstanceOf[TileStar].side
-            attached += 1
-            if (attached > 6)
-                attached = 0
-            world.getTileEntity(pos).asInstanceOf[TileStar].side = attached
-            world.markBlockForUpdate(pos)
-        }
+    override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
+        var attached = world.getBlockState(pos).getValue(NeoStates.ON_BLOCK)
+        attached += 1
+        if(attached > 6)
+            attached = 0
+        world.setBlockState(pos, getDefaultState.withProperty(NeoStates.ON_BLOCK, attached))
         true
     }
 
@@ -110,18 +103,18 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
       * Convert the given metadata into a BlockState for this Block
       */
     override def getStateFromMeta(meta: Int): IBlockState = {
-        this.getDefaultState.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(meta))
+        getDefaultState.withProperty(NeoStates.ON_BLOCK, meta.asInstanceOf[Integer])
     }
 
     /**
       * Convert the BlockState into the correct metadata value
       */
     override def getMetaFromState(state: IBlockState): Int = {
-        state.getValue(PipeProperties.COLOR).getMetadata
+        state.getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]
     }
 
     override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState= {
-        state.withProperty(NeoStates.ON_BLOCK, worldIn.getTileEntity(pos).asInstanceOf[TileStar].side.asInstanceOf[Integer])
+        state.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(worldIn.getTileEntity(pos).asInstanceOf[TileStar].color))
     }
         /**
       * Get the damage value that this Block should drop
@@ -152,10 +145,10 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
     }
 
     override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos): Unit = {
-        if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos).asInstanceOf[TileStar].side == 6) {
+        if(worldIn.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int] == 6) {
             this.setBlockBounds(6F / 16F, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F, 10F / 16F)
         } else {
-            EnumFacing.getFront(if(worldIn.getTileEntity(pos) != null) worldIn.getTileEntity(pos).asInstanceOf[TileStar].side else -1) match {
+            EnumFacing.getFront(worldIn.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]) match {
                 case EnumFacing.UP =>
                     this.setBlockBounds(6F / 16F, 12F / 16F, 6F / 16F, 10F / 16F, 16F / 16F, 10F / 16F)
                 case EnumFacing.DOWN =>
