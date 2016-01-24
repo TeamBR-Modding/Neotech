@@ -59,7 +59,7 @@ tile.neotech:blockFertilizer.name=Miniature Sun
 tile.neotech:playerPlate.name=Player Sensitive Pressure Plate
 tile.neotech:chunkLoader.name=Chunk Loader
 tile.neotech:flushableChest.name=Flushable Chest
-
+tile.neotech:dimStorage.name=Dimensional Crate
 
 
 neotech.grinder.title=Grinder
