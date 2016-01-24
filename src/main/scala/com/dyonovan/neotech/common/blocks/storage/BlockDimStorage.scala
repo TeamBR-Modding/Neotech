@@ -3,7 +3,7 @@ package com.dyonovan.neotech.common.blocks.storage
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.tiles.storage.TileDimStorage
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.bookshelf.common.blocks.traits.KeepInventory
+import com.teambr.bookshelf.common.blocks.traits.{DropsItems, KeepInventory}
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
@@ -19,7 +19,7 @@ import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty
   * Created by Dyonovan on 1/23/2016.
   */
 class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[TileDimStorage])
-        with KeepInventory {
+        with DropsItems { //todo shift click with wrench will break and keep inventory / Override Drops Items
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, facing: EnumFacing, f1: Float, f2: Float, f3: Float): Boolean = {
         val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]

@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "neotech:blocks/StorageCrate",
+    "front": "neotech:blocks/StorageCrate",
+    "side": "neotech:blocks/StorageCrate",
+    "dimStorageFront": "neotech:blocks/StorageCrateFace"
+  }
+}

@@ -2,9 +2,9 @@
     "forge_marker" : 1,
     "defaults" : {
         "textures" : {
-            "front" : "neotech:blocks/dimStorage_front"
+            "front" : "neotech:blocks/StorageCrateFace"
         },
-        "model" : "neotech:machine",
+        "model" : "neotech:dimStorage",
         "uvlock" : true
     },
     "variants" : {

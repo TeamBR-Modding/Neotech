@@ -88,7 +88,7 @@ object CrusherRecipeRegistry {
             getItemStackString(new ItemStack(Items.glowstone_dust)), 3, getItemStackString(new ItemStack(Items.glowstone_dust))))
         crusherRecipes.add(new CrusherRecipes("oreCoal",
             getItemStackString(new ItemStack(Items.coal, 1, 0)), 3, getItemStackString(new ItemStack(Items.coal, 1, 0))))
-        crusherRecipes.add(new CrusherRecipes(getOreDict(new ItemStack(Blocks.wool)),
+        crusherRecipes.add(new CrusherRecipes("minecraft:wool:" + OreDictionary.WILDCARD_VALUE ,
             getItemStackString(new ItemStack(Items.string)), 3, getItemStackString(new ItemStack(Items.string))))
         crusherRecipes.add(new CrusherRecipes("blockGlass",
             getItemStackString(new ItemStack(Blocks.sand)), 1, ""))
@@ -158,6 +158,9 @@ object CrusherRecipeRegistry {
                         val stackIn = getItemStackFromString(i.input)
                         if (stackIn != null && itemStack.isItemEqual(stackIn)) {
                             return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
+                        } else if (stackIn != null && stackIn.getItemDamage == OreDictionary.WILDCARD_VALUE) {
+                            if (itemStack.getItem == stackIn.getItem)
+                                return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
                         }
                     case 1 =>
                         if (checkOreDict(i.input, itemStack))

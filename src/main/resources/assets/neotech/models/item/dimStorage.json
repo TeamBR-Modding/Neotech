@@ -1,7 +1,7 @@
 {
-    "parent": "neotech:block/machine",
+    "parent": "neotech:block/dimStorage",
     "textures" : {
-        "front" : "neotech:blocks/dimStorage_front"
+        "front" : "neotech:blocks/StorageCrateFace"
     },
 	"display": {
 		"thirdperson": {

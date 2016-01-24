@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.common.tiles.storage
 
+import com.teambr.bookshelf.api.waila.Waila
+import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -8,7 +10,7 @@ import net.minecraft.tileentity.TileEntity
 /**
   * Created by Dyonovan on 1/23/2016.
   */
-class TileDimStorage extends TileEntity with Inventory {
+class TileDimStorage extends TileEntity with Inventory with Waila {
 
     private var qty = 0
     final val maxStacks = 64
@@ -72,4 +74,15 @@ class TileDimStorage extends TileEntity with Inventory {
     def checkQty(): Unit = {
         if (qty == 0) setInventorySlotContents(0, null)
     }
+
+    override def returnWailaHead(tipList: java.util.List[String]): java.util.List[String] = {
+        if (getStackInSlot(0) == null)
+            tipList.add(GuiColor.WHITE + "Empty")
+        else {
+            tipList.add(GuiColor.ORANGE + getStackInSlot(0).getDisplayName)
+            tipList.add(GuiColor.YELLOW + "Qty: " + GuiColor.WHITE + qty )
+        }
+        tipList
+    }
+
 }
