@@ -18,6 +18,7 @@ import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.{World, WorldServer}
@@ -62,10 +63,15 @@ with OpensGui with CoreStates {
     }
 
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
+        val tag = new NBTTagCompound
+        world.getTileEntity(pos).writeToNBT(tag)
         if(side != EnumFacing.UP && side != EnumFacing.DOWN)
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, side))
         else
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, WorldUtils.rotateRight(world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))))
+        if(tag != null) {
+            world.getTileEntity(pos).readFromNBT(tag)
+        }
         true
     }
 
