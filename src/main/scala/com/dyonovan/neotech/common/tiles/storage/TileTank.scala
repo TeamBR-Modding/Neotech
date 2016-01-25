@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
+import net.minecraft.world.EnumSkyBlock
 import net.minecraftforge.fluids._
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -27,6 +28,8 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
     var tier = 0
     var offset = 0.0F
     var dir = 0.01F
+
+    var lastLightLevel = 0
 
     def this(t: Int) = {
         this()
@@ -58,11 +61,18 @@ class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Wail
         }
     }
 
+
     override def onClientTick(): Unit = {
         if(tank.getFluid != null) {
             offset += dir
             if (offset >= 0.3 || offset <= -0.3)
                 dir = -dir
+        }
+
+        val light = getBrightness
+        if(lastLightLevel != getBrightness) {
+            lastLightLevel = light
+            worldObj.setLightFor(EnumSkyBlock.BLOCK, pos, light)
         }
     }
 

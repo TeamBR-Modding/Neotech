@@ -148,14 +148,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
     override def createNewTileEntity(world: World, meta: Int): TileEntity = {
         new TileTank(tier)
     }
-
-    override def getLightValue(world: IBlockAccess, pos: BlockPos): Int = {
-        world.getTileEntity(pos) match {
-            case tank: TileTank => tank.getBrightness
-            case _ => 0
-        }
-    }
-
+    
     def getName: String = name
 
     def getTier: Int = tier

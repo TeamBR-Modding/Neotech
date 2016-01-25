@@ -5,19 +5,23 @@ import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.states.NeoStates
 import com.dyonovan.neotech.common.tiles.misc.TileStar
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.pipes.blocks.PipeProperties
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import net.minecraft.block.Block
 import net.minecraft.block.material.{MapColor, Material}
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemDye, ItemStack, Item, EnumDyeColor}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{AxisAlignedBB, EnumFacing, BlockPos}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.world.{WorldServer, IBlockAccess, World}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
+import scala.util.Random
 
 /**
   * This file was created for NeoTech
@@ -122,12 +126,6 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
     override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState= {
         state.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(worldIn.getTileEntity(pos).asInstanceOf[TileStar].color))
     }
-    /**
-      * Get the damage value that this Block should drop
-      */
-    override def damageDropped(state: IBlockState): Int = {
-        state.getValue(PipeProperties.COLOR).getMetadata
-    }
 
     /**
       * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
@@ -181,4 +179,45 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
     }
 
     override def getRenderType : Int = 3
+
+    /***
+      * Overwritten as we want to also drop the mother board
+      */
+    override def breakBlock(world: World, pos: BlockPos, state : IBlockState): Unit = {
+        world match {
+            case _: WorldServer => //We are on a server
+                world.getTileEntity(pos) match {
+                    case star : TileStar =>
+                        val stack = new ItemStack(BlockManager.blockMiniatureStar, 1, star.color)
+                        val random = new Random()
+
+                        if(stack != null && stack.stackSize > 0) {
+                            val rx = random.nextFloat * 0.8F + 0.1F
+                            val ry = random.nextFloat * 0.8F + 0.1F
+                            val rz = random.nextFloat * 0.8F + 0.1F
+
+                            val itemEntity = new EntityItem(world,
+                                pos.getX + rx, pos.getY + ry, pos.getZ + rz,
+                                new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
+
+                            if (stack.hasTagCompound)
+                                itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
+
+                            val factor = 0.05F
+
+                            itemEntity.motionX = random.nextGaussian * factor
+                            itemEntity.motionY = random.nextGaussian * factor + 0.2F
+                            itemEntity.motionZ = random.nextGaussian * factor
+                            world.spawnEntityInWorld(itemEntity)
+
+                            stack.stackSize = 0
+                        }
+                    case _ =>
+                }
+        }
+    }
+
+    override def getItemDropped(state: IBlockState, rand: java.util.Random, fortune: Int) : Item = {
+        null
+    }
 }
