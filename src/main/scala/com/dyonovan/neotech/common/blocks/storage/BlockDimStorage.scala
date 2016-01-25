@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{MathHelper, EnumFacing, BlockPos}
 import net.minecraft.world.World
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * Created by Dyonovan on 1/23/2016.
@@ -97,4 +98,11 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
       * @return
       */
     override def getMetaFromState(state : IBlockState) = state.getValue(PropertyRotation.FOUR_WAY).getIndex
+
+    override def isOpaqueCube : Boolean = false
+
+    @SideOnly(Side.CLIENT)
+    override def isTranslucent : Boolean = true
+
+    override def isFullCube = false
 }
