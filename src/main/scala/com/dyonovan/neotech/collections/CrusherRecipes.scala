@@ -10,9 +10,10 @@ package com.dyonovan.neotech.collections
  * @author Dyonovan
  * @since August 12, 2015
  */
-class CrusherRecipes(s1: String, s2: String, i: Int, s3: String) {
+class CrusherRecipes(s1: String, s2: String, i1: Int, s3: String, i2: Int) {
     var input = s1
     var output = s2
-    var qty = i
+    var qty = i1
     var outputSecondary = s3
+    var percentChance = i2
 }

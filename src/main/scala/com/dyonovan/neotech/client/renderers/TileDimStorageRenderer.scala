@@ -25,7 +25,7 @@ import org.lwjgl.opengl.{GL12, GL11}
 class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
 
     override def renderTileEntityAt(tile: TileDimStorage, x: Double, y: Double, z: Double,  partialTicks: Float, breakPart: Int): Unit = {
-        if (tile.getQty() > 0) {
+        if (tile.getQty > 0) {
             val savedGLState = modifyGLState(Array(GL11.GL_BLEND, GL11.GL_LIGHTING), null)
             GL11.glEnable(GL11.GL_BLEND)
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
@@ -42,7 +42,7 @@ class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
                     RenderHelper.disableStandardItemLighting()
                     mc.entityRenderer.enableLightmap()
 
-                    renderTextOnBlock(tile.getQty().toString, dir, dir, new LocationDouble(x, y, z), 3.0F, 128.0F, 55.0F, 0xFFFFFF, TileRenderHelper.ALIGNCENTER)
+                    renderTextOnBlock(tile.getQty.toString, dir, dir, new LocationDouble(x, y, z), 3.0F, 128.0F, 55.0F, 0xFFFFFF, TileRenderHelper.ALIGNCENTER)
                 }
             }
 

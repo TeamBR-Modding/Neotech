@@ -136,7 +136,7 @@ object BlockManager {
         registerBlock(playerPlate, "playerPlate", null)
         registerBlock(chunkLoader, "chunkLoader", classOf[TileChunkLoader])
         registerBlock(flushableChest, "flushableChest", classOf[TileFlushableChest])
-        registerBlock(dimStorage, "dimStorage", classOf[TileDimStorage])
+        registerBlock(dimStorage, "dimStorage", classOf[TileDimStorage], classOf[ItemBlockDimStorage])
     }
 
     /**
