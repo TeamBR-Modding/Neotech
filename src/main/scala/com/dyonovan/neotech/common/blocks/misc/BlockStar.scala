@@ -14,6 +14,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemDye, ItemStack, Item, EnumDyeColor}
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{AxisAlignedBB, EnumFacing, BlockPos}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -92,10 +93,15 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
 
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
         var attached = world.getBlockState(pos).getValue(NeoStates.ON_BLOCK)
+        val tag = new NBTTagCompound
+        if(world.getTileEntity(pos) != null)
+            world.getTileEntity(pos).writeToNBT(tag)
         attached += 1
         if(attached > 6)
             attached = 0
         world.setBlockState(pos, getDefaultState.withProperty(NeoStates.ON_BLOCK, attached))
+        if(tag != null && world.getTileEntity(pos) != null)
+            world.getTileEntity(pos).readFromNBT(tag)
         true
     }
 
@@ -116,7 +122,7 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
     override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState= {
         state.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(worldIn.getTileEntity(pos).asInstanceOf[TileStar].color))
     }
-        /**
+    /**
       * Get the damage value that this Block should drop
       */
     override def damageDropped(state: IBlockState): Int = {
