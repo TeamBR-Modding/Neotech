@@ -3,6 +3,7 @@ package com.dyonovan.neotech.common.tiles.storage
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.Inventory
+import com.teambr.bookshelf.traits.NBTSavable
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -27,11 +28,13 @@ class TileDimStorage extends TileEntity with Inventory with Waila {
     }
 
     override def writeToNBT(tag: NBTTagCompound): Unit = {
+        super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         tag.setInteger("Qty", qty)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
+        super[TileEntity].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
         qty = tag.getInteger("Qty")
     }
@@ -74,6 +77,8 @@ class TileDimStorage extends TileEntity with Inventory with Waila {
     def checkQty(): Unit = {
         if (qty == 0) setInventorySlotContents(0, null)
     }
+
+    def getQty() : Int = qty
 
     override def returnWailaHead(tipList: java.util.List[String]): java.util.List[String] = {
         if (getStackInSlot(0) == null)

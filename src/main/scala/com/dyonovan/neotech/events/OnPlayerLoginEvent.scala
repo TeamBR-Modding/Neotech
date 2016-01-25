@@ -3,14 +3,13 @@ package com.dyonovan.neotech.events
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.registries.ConfigRegistry
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.helper.GuiHelper
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.event.ClickEvent
-import net.minecraft.util.{ChatStyle, IChatComponent, ChatComponentText}
+import net.minecraft.util.{ChatComponentText, ChatStyle}
 import net.minecraftforge.common.ForgeVersion
 import net.minecraftforge.event.entity.EntityJoinWorldEvent
-import net.minecraftforge.fml.common.{FMLModContainer, Loader}
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.{FMLModContainer, Loader}
 
 /**
   * This file was created for NeoTech
