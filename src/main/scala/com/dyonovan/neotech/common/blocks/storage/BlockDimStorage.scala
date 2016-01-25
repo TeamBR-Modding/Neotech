@@ -25,10 +25,11 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, facing: EnumFacing, f1: Float, f2: Float, f3: Float): Boolean = {
         val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
 
-        if (player.getHeldItem != null) {
+        if (player.getHeldItem != null && !world.isRemote) {
             val actual = tile.increaseQty(player.getHeldItem)
             if (actual > 0) player.getHeldItem.stackSize -= actual
         }
+        world.markBlockForUpdate(pos)
         true
     }
 

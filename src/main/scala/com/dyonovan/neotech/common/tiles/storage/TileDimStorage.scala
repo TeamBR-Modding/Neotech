@@ -2,7 +2,7 @@ package com.dyonovan.neotech.common.tiles.storage
 
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.common.tiles.traits.Inventory
+import com.teambr.bookshelf.common.tiles.traits.{UpdatingTile, Inventory}
 import com.teambr.bookshelf.traits.NBTSavable
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity
 /**
   * Created by Dyonovan on 1/23/2016.
   */
-class TileDimStorage extends TileEntity with Inventory with Waila {
+class TileDimStorage extends UpdatingTile with Inventory with Waila {
 
     private var qty = 0
     final val maxStacks = 64
@@ -46,10 +46,12 @@ class TileDimStorage extends TileEntity with Inventory with Waila {
         val amount = stack.stackSize
         if (qty + amount <= maxStacks * getStackInSlot(0).getMaxStackSize) {
             qty += amount
+            worldObj.markBlockForUpdate(pos)
             amount
         } else {
             val leftover = (qty + amount) - (maxStacks * getStackInSlot(0).getMaxStackSize)
             qty += amount - leftover
+            worldObj.markBlockForUpdate(pos)
             amount - leftover
         }
     }
@@ -61,9 +63,11 @@ class TileDimStorage extends TileEntity with Inventory with Waila {
         } else if (fullStack && qty < 64 && qty > 0) {
             val removed = qty
             qty = 0
+            worldObj.markBlockForUpdate(pos)
             removed
         } else if (!fullStack && qty > 0){
             qty -= 1
+            worldObj.markBlockForUpdate(pos)
             1
         } else 0
     }
