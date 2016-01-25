@@ -2,9 +2,13 @@
 itemGroup.tabNeoTechPipes=运输管道
 itemGroup.tabNeoTechDeco=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2e
 
+tile.neotech:grinder.name=研磨器
+
 tile.neotech:furnaceGenerator.name=熔炉发电机
+tile.neotech:fluidGenerator.name=流体发电机
 tile.neotech:electricFurnace.name=电炉
 tile.neotech:electricCrusher.name=电动粉碎机
+tile.neotech:thermalBinder.name=热能组装机
 
 tile.neotech:basicRFStorage.name=基础RF电容
 tile.neotech:advancedRFStorage.name=高级RF电容
@@ -43,6 +47,7 @@ tile.neotech:oreCopper.name=铜矿石
 tile.neotech:oreTin.name=锡矿石
 tile.neotech:blockCopper.name=铜块
 tile.neotech:blockTin.name=锡块
+tile.neotech:blockBronze.name=青铜块
 
 tile.neotech:ironTank.name=铁质液罐
 tile.neotech:goldTank.name=金质液罐
@@ -50,15 +55,51 @@ tile.neotech:diamondTank.name=钻石液罐
 tile.neotech:creativeTank.name=创造液罐
 
 tile.neotech:blockCrafter.name=双联合成台
-neotech.container.crafter=双联合成台
+tile.neotech:blockMiniatureSun.name=微型太阳
+tile.neotech:playerPlate.name=玩家感应压力板
+tile.neotech:chunkLoader.name=区块加载器
+tile.neotech:flushableChest.name=可清空箱子
 
+tile.neotech:blockMiniatureStar_black.name=§8黑色 §r星光
+tile.neotech:blockMiniatureStar_blue.name=§1蓝色 §r星光
+tile.neotech:blockMiniatureStar_brown.name=§6棕色 §r星光
+tile.neotech:blockMiniatureStar_cyan.name=§b青色 §r星光
+tile.neotech:blockMiniatureStar_gray.name=§8灰色 §r星光
+tile.neotech:blockMiniatureStar_green.name=§2绿色 §r星光
+tile.neotech:blockMiniatureStar_lightBlue.name=§9浅蓝色 §r星光
+tile.neotech:blockMiniatureStar_lime.name=§a黄绿色 §r星光
+tile.neotech:blockMiniatureStar_magenta.name=§5品红 §r星光
+tile.neotech:blockMiniatureStar_orange.name=§6橙色 §r星光
+tile.neotech:blockMiniatureStar_pink.name=§d粉色 §r星光
+tile.neotech:blockMiniatureStar_purple.name=§5紫色 §r星光
+tile.neotech:blockMiniatureStar_red.name=§c红色 §r星光
+tile.neotech:blockMiniatureStar_silver.name=§7银色 §r星光
+tile.neotech:blockMiniatureStar_white.name=白色星光
+tile.neotech:blockMiniatureStar_yellow.name=§e黄色 §r星光
+tile.neotech:dimStorage.name=维度箱
+
+
+neotech.grinder.title=研磨器
+neotech.grinder.input=输入
+neotech.grinder.grinding=正在研磨
+neotech.grinder.output=输出
 inventory.furnace.title=电炉
 inventory.crusher.title=电动粉碎机
 inventory.furnacegenerator.title=熔炉发电机
+neotech.fluidgenerator.title=流体发电机
+neotech.thermalbinder.title=热能组装机
+neotech.crafter.title=双联合成台
+neotech.fertilizer.title=微型太阳
 inventory.rfstoragebasic.title=基础RF电容
 inventory.rfstorageadvanced.title=高级RF电容
 inventory.rfstorageelite.title=精英RF电容
 inventory.rfstoragecreative.title=创造RF电容
+
+neotech.upgrade.title=主板
+
+neotech.chunkLoader.title=区块载入范围
+
+neotech.flushchest.title=可清空箱子
 
 item.neotech:dustIron.name=铁粉
 item.neotech:dustGold.name=金粉
@@ -69,15 +110,27 @@ item.neotech:ingotBronze.name=青铜锭
 item.neotech:dustTin.name=锡粉
 item.neotech:ingotTin.name=锡锭
 
-item.neotech:upgradeMBFull.name=填充升级控制器
-item.neotech:upgradeMBEmpty.name=空升级控制器
-item.neotech:upgradeCapacity.name=容量升级
+item.neotech:upgradeMBFull.name=主板
+item.neotech:upgradeMBEmpty.name=空主板
+item.neotech:upgradeHardDrive.name=硬盘升级
 item.neotech:upgradeControl.name=控制升级
-item.neotech:upgradeEfficiency.name=效率提升
-item.neotech:upgradeSecondary.name=二次输出升级
+item.neotech:upgradeProcessor.name=处理器提升
+item.neotech:upgradeExpansion.name=扩展升级
+
+item.neotech:wrench.name=扳手
 
 neotech.nei.name=NeoTech
 neotech.nei.furnacerecipes=电炉
 neotech.nei.crusherrecipes=电动粉碎机
-inventory.nei.recipes=方法
 neotech.nei.ecrusher.outputchance=每次升级10%概率
+
+neotech.button.disable=禁用?
+
+neotech.text.in=输入
+neotech.text.out=输出
+neotech.text.upgrade=升级
+neotech.text.start=开始
+
+neotech.grinder.description=研磨器是游戏早期双倍化矿物的方式.要使用它，首先要把矿石放在它GUI顶部的三个槽中.接着，放置任何一种原版的压力板在它的上方.压力板越好，它研磨的速度越快.在压力板上跳跃将会使得研磨器开始磨矿.你跳的越高，它每次研磨的进度越大.当你开始研磨后，矿物将会进入到中间的槽中.你可以自动输入矿物进来，但是你无法将产物抽取出去.
+neotech.flushableChest.description=当你把物品放入可清空箱子并给它提供一个红石信号时，可清空箱子将会销毁所有放入它的物品.它也会根据其物品栏被填满的程度输出一个相应强度的红石信号.
+neotech.playerPlate.description=玩家感应压力板和其他的压力板类似，但它只会在玩家走上去时被触发.
