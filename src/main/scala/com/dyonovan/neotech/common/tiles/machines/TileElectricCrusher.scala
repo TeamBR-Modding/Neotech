@@ -101,6 +101,8 @@ class TileElectricCrusher extends AbstractMachine  {
         }
     }
 
+    override def getOutputSlots : Array[Int] = Array(1, 2)
+
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
 
     override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {

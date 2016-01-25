@@ -73,6 +73,10 @@ class TileFurnaceGenerator extends AbstractMachine {
 
     override def initialSize: Int = 1
 
+    override def getOutputSlots : Array[Int] = Array()
+
+    override def getInputSlots : Array[Int] = Array(0)
+
     override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = false
 
     override def getSlotsForFace(side: EnumFacing): Array[Int] = Array[Int](0)

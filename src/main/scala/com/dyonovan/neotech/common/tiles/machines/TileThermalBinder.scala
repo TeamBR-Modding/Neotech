@@ -153,6 +153,10 @@ class TileThermalBinder extends AbstractMachine {
         tag
     }
 
+    override def getOutputSlots : Array[Int] = Array(MB_OUTPUT)
+
+    override def getInputSlots : Array[Int] = Array(INPUT1, INPUT2, INPUT3, INPUT4, MB_INPUT)
+
     def hasSlotUpgrades: Boolean = {
         for (i <- 0 to 3) {
             if (getStackInSlot(i) != null) return true

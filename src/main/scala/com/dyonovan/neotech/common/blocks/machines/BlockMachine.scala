@@ -76,7 +76,7 @@ with OpensGui with CoreStates {
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        if(player.isSneaking && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+        if(ID == 1 || (player.isSneaking && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench)) {
             new ContainerMachineUpgrade(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
         }
         else if(player.inventory.getCurrentItem == null || (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem != ItemManager.wrench)) {
@@ -99,7 +99,7 @@ with OpensGui with CoreStates {
 
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        if(player.isSneaking && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench) {
+        if(ID == 1 || (player.isSneaking && player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench)) {
             new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
         }
         else if(player.inventory.getCurrentItem == null || (player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem != ItemManager.wrench)) {

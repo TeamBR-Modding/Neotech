@@ -3,8 +3,11 @@ package com.dyonovan.neotech.common.tiles
 import cofh.api.energy.{EnergyStorage, IEnergyHandler}
 import com.dyonovan.neotech.collections.StandardValues
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
+import com.dyonovan.neotech.common.tiles.machines.AutomaticIO
+import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.container.IInventoryCallback
-import com.teambr.bookshelf.common.tiles.traits.{Syncable, Inventory, UpdatingTile}
+import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable, Inventory, UpdatingTile}
+import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -21,7 +24,8 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since August 11, 2015
   */
-abstract class AbstractMachine extends Syncable with Upgradeable with Inventory with ISidedInventory with IEnergyHandler {
+abstract class AbstractMachine extends Syncable with Upgradeable with Inventory with ISidedInventory
+        with IEnergyHandler with RedstoneAware with AutomaticIO {
 
     final val cookSpeed = 200
     final val ENERGY_TICK = 20
@@ -29,8 +33,12 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     val values = new StandardValues
     var energy = new EnergyStorage(10000)
 
+    var redstone : Int = 0
+
     val BURNTIME_FIELD_ID = 0
     val COOKTIME_FIELD_ID = 1
+    val REDSTONE_FIELD_ID = 4
+    val IO_FIELD_ID = 5
 
     var updateClient = false
     def changeEnergy(initial : Int): Unit = {
@@ -56,6 +64,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
 
     /**
       * Get the output of the recipe
+      *
       * @param stack The input
       * @return The output
       */
@@ -186,7 +195,47 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
       * *****************************************************************************************************************/
 
     override def onServerTick(): Unit = {
+        if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
+            if(redstone == -1 && isPowered)
+                return
+            if(redstone == 1 && !isPowered)
+                return
+        }
+
+        if(worldObj.getWorldTime % 20 == 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
+            tryInput()
+            tryOutput()
+        }
+
         doWork()
+    }
+
+    def tryOutput() : Unit = {
+        for(dir <- EnumFacing.values) {
+            if(canOutputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case otherInv : IInventory =>
+                        for (slot <- getOutputSlots) {
+                            InventoryUtils.moveItemInto(this, slot, otherInv, -1, 64, dir.getOpposite, doMove = true, canStack = true)
+                        }
+                    case _ =>
+                }
+            }
+        }
+    }
+
+    def tryInput() : Unit = {
+        for(dir <- EnumFacing.values) {
+            if(canInputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case otherInv : IInventory =>
+                        for (slot <- 0 until otherInv.getSizeInventory) {
+                            InventoryUtils.moveItemInto(otherInv, slot, this, -1, 64, dir.getOpposite, doMove = true, canStack = true)
+                        }
+                    case _ =>
+                }
+            }
+        }
     }
 
     override def onClientTick() : Unit = {
@@ -198,6 +247,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         super[Upgradeable].writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
+        super[AutomaticIO].writeToNBT(tag)
         values.writeToNBT(tag)
         energy.writeToNBT(tag)
         if(updateClient && worldObj != null) {
@@ -210,6 +260,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         super[Upgradeable].readFromNBT(tag)
         super[TileEntity].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
+        super[AutomaticIO].readFromNBT(tag)
         val tempCook = values.cookTime
         values.readFromNBT(tag)
         if(tag.hasKey("UpdateEnergy") && worldObj != null  )
@@ -259,8 +310,13 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
       */
     override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == 1
 
+    def getOutputSlots : Array[Int] = Array(1)
+
+    def getInputSlots : Array[Int] = Array(0)
+
     /**
       * Used to define if an item is valid for a slot
+      *
       * @param slot The slot id
       * @param itemStackIn The stack to check
       * @return True if you can put this there
@@ -280,11 +336,11 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
       * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
       *
       * @param from
-	 * Orientation the energy is received from.
+      * Orientation the energy is received from.
       * @param maxReceive
-	 * Maximum amount of energy to receive.
+      * Maximum amount of energy to receive.
       * @param simulate
-	 * If TRUE, the charge will only be simulated.
+      * If TRUE, the charge will only be simulated.
       * @return Amount of energy that was (or would have been, if simulated) received.
       */
     override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
@@ -317,6 +373,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         id match {
             case BURNTIME_FIELD_ID => this.values.burnTime = value.toInt
             case COOKTIME_FIELD_ID => this.values.cookTime = value.toInt
+            case REDSTONE_FIELD_ID => redstone = value.toInt
+            case IO_FIELD_ID => toggleMode(EnumFacing.getFront(value.toInt))
             case 3 => updateClient = true
         }
     }
@@ -326,5 +384,26 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
             case BURNTIME_FIELD_ID => this.values.burnTime
             case COOKTIME_FIELD_ID => this.values.cookTime
         }
+    }
+
+    def moveRedstoneMode(mod : Int) : Unit = {
+        redstone += mod
+        if(redstone < -1)
+            redstone = 1
+        else if(redstone > 1)
+            redstone = -1
+    }
+
+    def getRedstoneModeName : String = {
+        redstone match {
+            case -1 => "Low"
+            case 0 => "Disabled"
+            case 1 => "High"
+            case _ => "Error"
+        }
+    }
+
+    def setRedstoneMode(newMode : Int) : Unit = {
+        this.redstone = newMode
     }
 }
