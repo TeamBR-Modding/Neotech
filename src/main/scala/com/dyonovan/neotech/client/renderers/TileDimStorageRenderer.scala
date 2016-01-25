@@ -18,11 +18,11 @@ import org.lwjgl.opengl.GL11
 class TileDimStorageRenderer extends TileEntitySpecialRenderer[TileDimStorage]{
 
     override def renderTileEntityAt(tile: TileDimStorage, v: Double, v1: Double, v2: Double, v3: Float, i: Int): Unit = {
-        if (tile.getQty() > 0) {
+        if (tile.getQty > 0) {
             GlStateManager.pushMatrix()
             GlStateManager.pushAttrib()
 
-            this.getFontRenderer.drawString(tile.getQty().toString, 0, 0, 2)
+            this.getFontRenderer.drawString(tile.getQty.toString, 0, 0, 2)
 
             GlStateManager.popAttrib()
             GlStateManager.popMatrix()

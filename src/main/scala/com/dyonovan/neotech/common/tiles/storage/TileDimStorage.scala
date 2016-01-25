@@ -78,11 +78,17 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
         else false
     }
 
+    def clearQty(): Int = {
+        val ret = qty
+        qty = 0
+        ret
+    }
+
     def checkQty(): Unit = {
         if (qty == 0) setInventorySlotContents(0, null)
     }
 
-    def getQty() : Int = qty
+    def getQty : Int = qty
 
     override def returnWailaHead(tipList: java.util.List[String]): java.util.List[String] = {
         if (getStackInSlot(0) == null)
