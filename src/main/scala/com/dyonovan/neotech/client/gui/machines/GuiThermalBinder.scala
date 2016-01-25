@@ -73,7 +73,7 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
                 redstoneTab += new GuiComponentButton(5, 20, 15, 20, "<") {
                     override def doAction(): Unit = {
                         tileEntity.moveRedstoneMode(-1)
-                        tileEntity.sendValueToServer(tile.REDSTONE_FIELD_ID, tileEntity.redstone)
+                        tileEntity.sendValueToServer(tileEntity.REDSTONE_FIELD_ID, tileEntity.redstone)
                     }
                 }
                 redstoneTab += new GuiComponentButton(25, 20, 50, 20, tileEntity.getRedstoneModeName) {
@@ -87,7 +87,7 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
                 redstoneTab += new GuiComponentButton(80, 20, 15, 20, ">") {
                     override def doAction(): Unit = {
                         tileEntity.moveRedstoneMode(1)
-                        tileEntity.sendValueToServer(tile.REDSTONE_FIELD_ID, tileEntity.redstone)
+                        tileEntity.sendValueToServer(tileEntity.REDSTONE_FIELD_ID, tileEntity.redstone)
                     }
                 }
                 tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
