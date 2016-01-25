@@ -3,22 +3,24 @@ package com.dyonovan.neotech.common.tiles.machines
 import cofh.api.energy.{IEnergyReceiver, EnergyStorage}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.registries.FluidFuelValues
-import net.minecraft.inventory.Container
+import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
+import com.teambr.bookshelf.util.InventoryUtils
+import net.minecraft.inventory.{IInventory, Container}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids._
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 21, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 21, 2015
+  */
 class TileFluidGenerator extends AbstractMachine with IFluidHandler {
 
     final val RF_TICK = 80
@@ -58,23 +60,37 @@ class TileFluidGenerator extends AbstractMachine with IFluidHandler {
 
     override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {}
 
+    override def tryInput() : Unit = {
+        for(dir <- EnumFacing.values) {
+            if(canInputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case otherTank : IFluidHandler =>
+                        if(otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid))
+                            fill(dir, otherTank.drain(dir.getOpposite, 1000, true), doFill = true)
+                    case _ =>
+                }
+            }
+        }
+    }
+
     /**
-     * Get the output of the recipe
-     * @param stack The input
-     * @return The output
-     */
+      * Get the output of the recipe
+      *
+      * @param stack The input
+      * @return The output
+      */
     override def recipe(stack: ItemStack): ItemStack = null
 
     /**
-     * Used to output the redstone single from this structure
-     *
-     * Use a range from 0 - 16.
-     *
-     * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
-     * 16 is usually the flip side of that. Output 16 when it is totally full and not less
-     *
-     * @return int range 0 - 16
-     */
+      * Used to output the redstone single from this structure
+      *
+      * Use a range from 0 - 16.
+      *
+      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
+      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
+      *
+      * @return int range 0 - 16
+      */
     override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
 
     override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)
