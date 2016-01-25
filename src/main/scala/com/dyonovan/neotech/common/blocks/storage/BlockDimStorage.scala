@@ -11,6 +11,7 @@ import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{MathHelper, EnumFacing, BlockPos}
 import net.minecraft.world.World
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
@@ -52,10 +53,15 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
     override def getRenderType : Int = 3
 
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
+        val tag = new NBTTagCompound
+        world.getTileEntity(pos).writeToNBT(tag)
         if(side != EnumFacing.UP && side != EnumFacing.DOWN)
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, side))
         else
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, WorldUtils.rotateRight(world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))))
+        if(tag != null) {
+            world.getTileEntity(pos).readFromNBT(tag)
+        }
         true
     }
 

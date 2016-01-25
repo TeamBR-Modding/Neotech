@@ -13,6 +13,7 @@ import net.minecraft.block.properties.PropertyInteger
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
@@ -65,10 +66,15 @@ class BlockMiniatureSun(name: String, tileEntity: Class[_ <: TileEntity]) extend
 
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
         var attached = world.getBlockState(pos).getValue(NeoStates.ON_BLOCK)
+        val tag = new NBTTagCompound
+        if(world.getTileEntity(pos) != null)
+            world.getTileEntity(pos).writeToNBT(tag)
         attached += 1
         if(attached > 6)
             attached = 0
         world.setBlockState(pos, getDefaultState.withProperty(NeoStates.ON_BLOCK, attached))
+        if(tag != null && world.getTileEntity(pos) != null)
+            world.getTileEntity(pos).readFromNBT(tag)
         true
     }
 

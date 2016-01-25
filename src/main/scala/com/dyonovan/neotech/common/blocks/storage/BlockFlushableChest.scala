@@ -17,6 +17,7 @@ import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{Container, IInventory}
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{EnumParticleTypes, MathHelper, EnumFacing, BlockPos}
 import net.minecraft.world.World
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
@@ -53,10 +54,15 @@ class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", cla
     override def getRenderType: Int = 2
 
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
+        val tag = new NBTTagCompound
+        world.getTileEntity(pos).writeToNBT(tag)
         if(side != EnumFacing.UP && side != EnumFacing.DOWN)
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, side))
         else
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, WorldUtils.rotateRight(world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))))
+        if(tag != null) {
+            world.getTileEntity(pos).readFromNBT(tag)
+        }
         true
     }
 
@@ -91,6 +97,7 @@ class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", cla
 
     /**
       * Used to convert the meta to state
+      *
       * @param meta The meta
       * @return
       */
@@ -98,6 +105,7 @@ class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", cla
 
     /**
       * Called to convert state from meta
+      *
       * @param state The state
       * @return
       */
