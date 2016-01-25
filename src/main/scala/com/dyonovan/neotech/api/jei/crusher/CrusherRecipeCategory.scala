@@ -2,9 +2,10 @@ package com.dyonovan.neotech.api.jei.crusher
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
 import com.dyonovan.neotech.lib.Reference
-import mezz.jei.api.gui.{IDrawableAnimated, IDrawable, IGuiItemStackGroup, IRecipeLayout}
+import mezz.jei.api.gui._
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
+import net.minecraft.item.ItemStack
 import net.minecraft.util.{ResourceLocation, StatCollector}
 
 /**
@@ -17,8 +18,9 @@ class CrusherRecipeCategory extends IRecipeCategory {
         NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 176, 14, 24, 17), 75, IDrawableAnimated.StartDirection.LEFT, false)
     val power = NeoTechPlugin.jeiHelpers.getGuiHelper.createAnimatedDrawable(
         NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 175, 31, 12, 45), 75, IDrawableAnimated.StartDirection.TOP, true)
+    val background = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 10, 15, 150, 50)
 
-    override def getBackground: IDrawable = { NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 10, 15, 150, 50) }
+    override def getBackground: IDrawable = background
 
     override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper): Unit = {
         val stacks: IGuiItemStackGroup = recipeLayout.getItemStacks
@@ -31,6 +33,14 @@ class CrusherRecipeCategory extends IRecipeCategory {
                 recipeLayout.getItemStacks.set(0, crusherRecipeWrapper.getInputs)
                 recipeLayout.getItemStacks.set(1, crusherRecipeWrapper.getOutputs.get(0))
                 recipeLayout.getItemStacks.set(2, crusherRecipeWrapper.getOutputs.get(1))
+                val tip = new ITooltipCallback[ItemStack] {
+                    override def onTooltip(slotIndex: Int, input: Boolean, ingredient: ItemStack, tooltip: java.util.List[String]): Unit = {
+                        if (slotIndex == 2 && crusherRecipeWrapper.secPercent > 0) {
+                            tooltip.add(crusherRecipeWrapper.secPercent.toString + "% chance")
+                        }
+                    }
+                }
+                recipeLayout.getItemStacks.addTooltipCallback(tip)
             case _ =>
         }
     }

@@ -94,8 +94,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
         if (getStackInSlot(0) == null)
             tipList.add(GuiColor.WHITE + "Empty")
         else {
-            tipList.add(GuiColor.ORANGE + getStackInSlot(0).getDisplayName)
-            tipList.add(GuiColor.YELLOW + "Qty: " + GuiColor.WHITE + qty )
+            tipList.add(GuiColor.ORANGE + getStackInSlot(0).getDisplayName + ": " + GuiColor.WHITE + qty)
         }
         tipList
     }
