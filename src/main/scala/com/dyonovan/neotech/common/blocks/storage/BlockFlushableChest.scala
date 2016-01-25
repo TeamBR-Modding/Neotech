@@ -48,7 +48,7 @@ class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", cla
 
     override def isOpaqueCube: Boolean = false
 
-    override def isFullCube: Boolean = true
+    override def isFullCube: Boolean = false
 
     override def getRenderType: Int = 2
 
