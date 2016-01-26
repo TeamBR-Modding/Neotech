@@ -1,5 +1,6 @@
-package com.dyonovan.neotech.managers;
+package com.dyonovan.neotech.world;
 
+import com.dyonovan.neotech.managers.BlockManager;
 import com.dyonovan.neotech.registries.ConfigRegistry;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;

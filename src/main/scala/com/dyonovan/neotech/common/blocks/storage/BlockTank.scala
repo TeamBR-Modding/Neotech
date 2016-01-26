@@ -81,7 +81,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
             var fluidName: String = ""
             var fluidAmount: String = ""
             if (tank.getCurrentFluid != null) {
-                fluidName = StatCollector.translateToLocal(tank.getCurrentFluid.getUnlocalizedName)
+                fluidName = tank.tank.getFluid.getLocalizedName
                 fluidAmount = tank.tank.getFluid.amount.toString + " / " + tank.tank.getCapacity + " mb"
             } else {
                 fluidName = "Empty"

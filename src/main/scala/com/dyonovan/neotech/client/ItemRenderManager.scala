@@ -1,8 +1,9 @@
-package com.dyonovan.neotech.managers
+package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.{ModelBakery, ModelResourceLocation}
+import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.item.{EnumDyeColor, Item}
 
 /**
@@ -58,6 +59,7 @@ object ItemRenderManager {
         registerItem(ItemManager.upgradeProcessor)
         registerItem(ItemManager.upgradeExpansion)
         registerItem(ItemManager.wrench)
+        registerItem(ItemManager.trashBag)
 
         registerPipesAndColored()
     }

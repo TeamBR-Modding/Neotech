@@ -1,6 +1,7 @@
-package com.dyonovan.neotech.managers;
+package com.dyonovan.neotech.world;
 
 import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader;
+import com.dyonovan.neotech.managers.BlockManager;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.util.BlockPos;
