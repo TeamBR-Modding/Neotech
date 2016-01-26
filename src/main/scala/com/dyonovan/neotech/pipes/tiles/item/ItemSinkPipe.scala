@@ -25,6 +25,9 @@ import net.minecraftforge.fluids.IFluidHandler
   */
 class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with UpdatingTile {
     val waitingQueue  = new util.ArrayList[ItemResourceEntity]()
+    var tempInventory: Inventory = null
+    var tempInventoryTest: Inventory = null
+    var tempInventorySided: ISidedWrapper = null
 
     override def canConnect(facing: EnumFacing): Boolean =
         if(super.canConnect(facing))
@@ -42,6 +45,7 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
       * Used to check if this pipe can accept a resource
       *
       * You should not actually change anything, all simulation
+      *
       * @param resourceEntity
       * @return
       */
@@ -51,7 +55,7 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
 
         val resource = resourceEntity.asInstanceOf[ItemResourceEntity]
 
-        val tempInventory = new Inventory() {
+        tempInventory = new Inventory() {
             override var inventoryName: String = "TEMPINV"
             override def hasCustomName(): Boolean = false
             override def initialSize: Int = 1
@@ -89,12 +93,12 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
                 if (iterator.next().isDead)
                     iterator.remove()
             }
-            val tempInventory  = new Inventory() {
+            tempInventoryTest  = new Inventory() {
                 override var inventoryName: String = "TEMPINV"
                 override def hasCustomName(): Boolean = false
                 override def initialSize: Int = otherInv.getSizeInventory
             }
-            tempInventory.copyFrom(otherInv)
+            tempInventoryTest.copyFrom(otherInv)
 
             for(x <- 0 until waitingQueue.size) {
                 val tempInventoryUs = new Inventory() {
@@ -106,9 +110,9 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
                 val resource = waitingQueue.get(x)
 
                 tempInventoryUs.setInventorySlotContents(0, resource.resource.copy())
-                InventoryUtils.moveItemInto(tempInventoryUs, 0, tempInventory, -1, 64, dir, doMove = true, canStack = true)
+                InventoryUtils.moveItemInto(tempInventoryUs, 0, tempInventoryTest, -1, 64, dir, doMove = true, canStack = true)
             }
-            tempInventory
+            tempInventoryTest
         }
     }
 
@@ -125,7 +129,7 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
                 if (iterator.next().isDead)
                     iterator.remove()
             }
-            val tempInventory = new ISidedWrapper(otherInv) {
+            tempInventorySided = new ISidedWrapper(otherInv) {
                 override var inventoryName: String = "TEMPINV"
                 override def hasCustomName(): Boolean = false
                 override def initialSize: Int = otherInv.getSizeInventory
@@ -142,27 +146,27 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
                 val resource = waitingQueue.get(x)
 
                 tempInventoryUs.setInventorySlotContents(0, resource.resource.copy())
-                InventoryUtils.moveItemInto(tempInventoryUs, 0, tempInventory, -1, 64, dir, doMove = true, canStack = true)
+                InventoryUtils.moveItemInto(tempInventoryUs, 0, tempInventorySided, -1, 64, dir, doMove = true, canStack = true)
             }
-            tempInventory
+            tempInventorySided
         }
     }
 
     override def tryInsertResource(resource : ItemResourceEntity) : Unit = {
-        val tempInventory = new Inventory() {
+        val tempActualInsert = new Inventory() {
             override var inventoryName: String = "TEMPINV"
             override def hasCustomName(): Boolean = false
             override def initialSize: Int = 1
         }
 
-        tempInventory.setInventorySlotContents(0, resource.resource)
+        tempActualInsert.setInventorySlotContents(0, resource.resource)
 
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
             worldObj.getTileEntity(pos.offset(dir)) match {
                 case otherInv : IInventory =>
-                    if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir, doMove = true, canStack = true) > 0) {
-                        resource.resource = tempInventory.getStackInSlot(0)
+                    if(InventoryUtils.moveItemInto(tempActualInsert, 0, otherInv, -1, 64, dir, doMove = true, canStack = true) > 0) {
+                        resource.resource = tempActualInsert.getStackInSlot(0)
                         if(resource.resource == null || resource.resource.stackSize <= 0) {
                             resource.isDead = true
                             resource.resource = null

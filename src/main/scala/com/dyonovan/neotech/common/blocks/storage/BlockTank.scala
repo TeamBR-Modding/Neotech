@@ -148,7 +148,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
     override def createNewTileEntity(world: World, meta: Int): TileEntity = {
         new TileTank(tier)
     }
-    
+
     def getName: String = name
 
     def getTier: Int = tier

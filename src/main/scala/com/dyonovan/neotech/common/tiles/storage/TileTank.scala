@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since August 16, 2015
   */
-class TileTank extends TileEntity with IFluidHandler with UpdatingTile with Waila with RedstoneAware {
+class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneAware {
 
     var tier = 0
     var offset = 0.0F

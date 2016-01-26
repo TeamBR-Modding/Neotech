@@ -21,6 +21,7 @@ import net.minecraftforge.fluids._
   */
 class FluidSinkPipe extends SinkPipe[FluidTank, FluidResourceEntity] with UpdatingTile {
     val waitingQueue  = new util.ArrayList[FluidResourceEntity]()
+    var tempTank : IFluidHandler = null
 
     override def canConnect(facing: EnumFacing): Boolean =
         if(super.canConnect(facing))
@@ -78,7 +79,7 @@ class FluidSinkPipe extends SinkPipe[FluidTank, FluidResourceEntity] with Updati
                     iterator.remove()
             }
 
-            val tempTank = new IFluidHandler {
+            tempTank = new IFluidHandler {
                 val tank = new FluidTank(if(otherTank.getTankInfo(dir)(0).fluid != null)otherTank.getTankInfo(dir)(0).fluid.copy() else null, otherTank.getTankInfo(dir)(0).capacity)
                 override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)
                 override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = {
