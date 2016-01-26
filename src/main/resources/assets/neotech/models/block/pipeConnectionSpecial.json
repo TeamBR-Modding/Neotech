@@ -21,8 +21,7 @@
                 "up"   : { "texture" : "#extra"},
                 "down" : { "uv" : [3, 0, 13, 4], "texture" : "#extra"},
                 "east" : { "uv" : [0, 3, 4, 13], "texture" : "#extra"},
-                "west" : { "texture" : "#extra"},
-                "north" :{ "texture" : "#extra"}
+                "west" : { "texture" : "#extra"}
             }
         }
     ]

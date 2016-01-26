@@ -37,12 +37,12 @@ class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
                     RenderHelper.enableGUIStandardItemLighting()
                     setLight(tile, dir)
 
-                    renderStackOnBlock(tile.getStackInSlot(0), dir,  tile.getWorld.getBlockState(tile.getPos).getValue(PropertyRotation.FOUR_WAY), new LocationDouble(x, y, z), 7.0F, 70.0F, 110.0F)
+                    renderStackOnBlock(tile.getStackInSlot(0), dir,  tile.getWorld.getBlockState(tile.getPos).getValue(PropertyRotation.FOUR_WAY), new LocationDouble(x, y, z), 6.8F, 72.0F, 112.0F)
 
                     RenderHelper.disableStandardItemLighting()
                     mc.entityRenderer.enableLightmap()
 
-                    renderTextOnBlock(tile.getQty.toString, dir, dir, new LocationDouble(x, y, z), 3.0F, 128.0F, 55.0F, 0xFFFFFF, TileRenderHelper.ALIGNCENTER)
+                    renderTextOnBlock(tile.getQty.toString, dir, dir, new LocationDouble(x, y, z), 2.6F, 129.0F, 55.0F, 0xFFFFFF, TileRenderHelper.ALIGNCENTER)
                 }
             }
 
