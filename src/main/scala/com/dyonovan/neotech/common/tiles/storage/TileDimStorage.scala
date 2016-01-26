@@ -37,11 +37,11 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila  {
         qty = tag.getInteger("Qty")
     }
 
-    def increaseQty(stack: ItemStack): Int = {
+    /*def increaseQty(stack: ItemStack): Int = {
         if (getStackInSlot(0) == null) {
-            val inStack = stack.copy()
-            inStack.stackSize = 1
-            setInventorySlotContents(0, inStack)
+            //val inStack = stack.copy()
+            //inStack.stackSize = 1
+            setInventorySlotContents(0, stack)
         }
         if (!isStackEqual(stack)) return 0
 
@@ -72,7 +72,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila  {
             worldObj.markBlockForUpdate(pos)
             1
         } else 0
-    }
+    }*/
 
     def isStackEqual(stack: ItemStack): Boolean = {
         if (getStackInSlot(0) != null && stack != null)
@@ -80,7 +80,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila  {
         else false
     }
 
-    def clearQty(): Int = {
+    /*def clearQty(): Int = {
         val ret = qty
         qty = 0
         ret
@@ -88,9 +88,14 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila  {
 
     def checkQty(): Unit = {
         if (qty == 0) setInventorySlotContents(0, null)
-    }
+    }*/
 
     def getQty : Int = qty
+
+    def addQty(amount: Int): Unit = {
+        qty += amount
+        if (qty == 0) setInventorySlotContents(0, null)
+    }
 
     override def returnWailaHead(tipList: java.util.List[String]): java.util.List[String] = {
         if (getStackInSlot(0) == null)
@@ -103,4 +108,47 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila  {
 
     override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0 && isStackEqual(stack)
 
+    override def getStackInSlot(index: Int): ItemStack = {
+        if(index == 0 && qty > 0 && inventoryContents.get(0) != null) {
+            //inventoryContents.get(index)
+            val returnStack: ItemStack = inventoryContents.get(0).copy()
+            if (qty > inventoryContents.get(0).getMaxStackSize)
+                returnStack.stackSize = returnStack.getMaxStackSize
+            else
+                returnStack.stackSize = qty
+            returnStack
+        } else
+            null
+    }
+
+    override def setInventorySlotContents(index: Int, stack: ItemStack): Unit = {
+        if (stack != null) {
+            val setStack = stack.copy()
+            setStack.stackSize = 1
+            this.inventoryContents.set(index, setStack)
+            qty = stack.stackSize
+            onInventoryChanged(index)
+        } else if (stack == null) {
+            this.inventoryContents.set(index, stack)
+            qty = 0
+        }
+    }
+
+    override def decrStackSize(slot : Int, amount : Int) : ItemStack = {
+        if (qty > 0) {
+            val stack: ItemStack = inventoryContents.get(slot).copy()
+
+            if (qty <= amount) {
+                stack.stackSize = qty
+                qty = 0
+                inventoryContents.set(slot, null)
+            }
+
+            qty -= amount
+            stack.stackSize = amount
+            onInventoryChanged(slot)
+            return stack
+        }
+        null
+    }
 }

@@ -41,7 +41,17 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                 dropItem(world, item, pos)
                 world.setBlockToAir(pos)
             } else if (player.getHeldItem != null) {
-                val actual = tile.increaseQty(player.getHeldItem)
+                if (tile.getStackInSlot(0) == null) tile.setInventorySlotContents(0, player.getHeldItem)
+                var actual = 0
+                val amount = player.getHeldItem.stackSize
+                if (tile.getQty + amount <= tile.maxStacks * tile.getStackInSlot(0).getMaxStackSize) {
+                    tile.addQty(amount)
+                    actual = amount
+                } else {
+                    val leftover = (tile.getQty + amount) - (tile.maxStacks * tile.getStackInSlot(0).getMaxStackSize)
+                    tile.addQty(amount - leftover)
+                    actual = amount - leftover
+                }
                 if (actual > 0) {
                     player.getHeldItem.stackSize -= actual
                     world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
@@ -66,15 +76,18 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
 
         if (tile.getStackInSlot(0) != null) {
             var actual = 0
-            if (!player.isSneaking)
-                actual = tile.decreaseQty(false)
-            else actual = tile.decreaseQty(true)
+            val outStack = tile.getStackInSlot(0).copy
+            if (!player.isSneaking) {
+                tile.addQty(-1)
+                actual = 1
+            } else {
+                actual = Math.min(tile.getQty, tile.getStackInSlot(0).getMaxStackSize)
+                tile.addQty(-actual)
+            }
 
             if (actual > 0) {
-                val outStack = tile.getStackInSlot(0).copy
                 outStack.stackSize = actual
                 player.inventory.addItemStackToInventory(outStack)
-                tile.checkQty()
                 world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
             }
 
@@ -90,10 +103,13 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                     breakable {
                         while (true) {
                             if (tile.getQty == 0) break
-                            else if (tile.getQty > tile.getStackInSlot(0).getMaxStackSize)
-                                stacks.add(new ItemStack(tile.getStackInSlot(0).getItem, tile.decreaseQty(true), tile.getStackInSlot(0).getItemDamage))
-                            else
-                                stacks.add(new ItemStack(tile.getStackInSlot(0).getItem, tile.clearQty(), tile.getStackInSlot(0).getItemDamage))
+                            else if (tile.getQty > tile.getStackInSlot(0).getMaxStackSize) {
+                                tile.addQty(tile.getStackInSlot(0).getMaxStackSize)
+                                stacks.add(new ItemStack(tile.getStackInSlot(0).getItem, tile.getStackInSlot(0).getMaxStackSize, tile.getStackInSlot(0).getItemDamage))
+                            } else {
+                                stacks.add(new ItemStack(tile.getStackInSlot(0).getItem, tile.getQty, tile.getStackInSlot(0).getItemDamage))
+                                tile.addQty(-tile.getQty)
+                            }
                         }
                     }
                     for (stack <- stacks.toArray()) {
@@ -106,6 +122,7 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
         //super.breakBlock(world, pos, state)
         dropItem(world, new ItemStack(BlockManager.dimStorage), pos)
         world.removeTileEntity(pos)
+        world.markBlockForUpdate(pos)
     }
 
     override def getItemDropped(state: IBlockState, rand: java.util.Random, fortune: Int): Item = {
