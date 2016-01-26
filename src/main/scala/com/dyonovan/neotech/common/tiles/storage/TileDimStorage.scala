@@ -2,16 +2,14 @@ package com.dyonovan.neotech.common.tiles.storage
 
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.common.tiles.traits.{UpdatingTile, Inventory}
-import com.teambr.bookshelf.traits.NBTSavable
+import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
 
 /**
   * Created by Dyonovan on 1/23/2016.
   */
-class TileDimStorage extends UpdatingTile with Inventory with Waila {
+class TileDimStorage extends UpdatingTile with Inventory with Waila  {
 
     private var qty = 0
     final val maxStacks = 64
@@ -40,8 +38,12 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
     }
 
     def increaseQty(stack: ItemStack): Int = {
-        if (getStackInSlot(0) == null) setInventorySlotContents(0, new ItemStack(stack.getItem, 1, stack.getItemDamage))
-        if (!getStackInSlot(0).isItemEqual(stack)) return 0
+        if (getStackInSlot(0) == null) {
+            val inStack = stack.copy()
+            inStack.stackSize = 1
+            setInventorySlotContents(0, inStack)
+        }
+        if (!isStackEqual(stack)) return 0
 
         val amount = stack.stackSize
         if (qty + amount <= maxStacks * getStackInSlot(0).getMaxStackSize) {
@@ -74,7 +76,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
 
     def isStackEqual(stack: ItemStack): Boolean = {
         if (getStackInSlot(0) != null && stack != null)
-            getStackInSlot(0).isItemEqual(stack)
+            getStackInSlot(0).isItemEqual(stack) && ItemStack.areItemStackTagsEqual(getStackInSlot(0), stack)
         else false
     }
 
@@ -98,5 +100,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
         }
         tipList
     }
+
+    override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0 && isStackEqual(stack)
 
 }

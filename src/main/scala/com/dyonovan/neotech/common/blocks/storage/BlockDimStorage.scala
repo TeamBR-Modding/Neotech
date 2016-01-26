@@ -42,7 +42,10 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                 world.setBlockToAir(pos)
             } else if (player.getHeldItem != null) {
                 val actual = tile.increaseQty(player.getHeldItem)
-                if (actual > 0) player.getHeldItem.stackSize -= actual
+                if (actual > 0) {
+                    player.getHeldItem.stackSize -= actual
+                    world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
+                }
             }
             world.markBlockForUpdate(pos)
         }
@@ -68,9 +71,11 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
             else actual = tile.decreaseQty(true)
 
             if (actual > 0) {
-                player.inventory.addItemStackToInventory(
-                    new ItemStack(tile.getStackInSlot(0).getItem, actual, tile.getStackInSlot(0).getItemDamage))
+                val outStack = tile.getStackInSlot(0).copy
+                outStack.stackSize = actual
+                player.inventory.addItemStackToInventory(outStack)
                 tile.checkQty()
+                world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
             }
 
         }
