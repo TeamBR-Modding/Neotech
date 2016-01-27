@@ -41,7 +41,14 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                 dropItem(world, item, pos)
                 world.setBlockToAir(pos)
             } else if (player.getHeldItem != null) {
-                if (tile.getStackInSlot(0) == null) tile.setInventorySlotContents(0, player.getHeldItem)
+                if (tile.getStackInSlot(0) == null) {
+                    tile.setInventorySlotContents(0, player.getHeldItem)
+                    player.getHeldItem.stackSize = 0
+                    world.markBlockForUpdate(pos)
+                    world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
+                    return true
+                }
+
                 var actual = 0
                 val amount = player.getHeldItem.stackSize
                 if (tile.getQty + amount <= tile.maxStacks * tile.getStackInSlot(0).getMaxStackSize) {

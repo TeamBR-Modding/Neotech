@@ -133,7 +133,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila  {
             qty = 0
         }
     }
-
+/*
     override def decrStackSize(slot : Int, amount : Int) : ItemStack = {
         if (qty > 0) {
             val stack: ItemStack = inventoryContents.get(slot).copy()
@@ -150,5 +150,5 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila  {
             return stack
         }
         null
-    }
+    }*/
 }

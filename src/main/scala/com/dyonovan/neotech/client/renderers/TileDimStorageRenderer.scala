@@ -37,7 +37,9 @@ class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
                     RenderHelper.enableGUIStandardItemLighting()
                     setLight(tile, dir)
 
-                    renderStackOnBlock(tile.getStackInSlot(0), dir,  tile.getWorld.getBlockState(tile.getPos).getValue(PropertyRotation.FOUR_WAY), new LocationDouble(x, y, z), 6.8F, 72.0F, 112.0F)
+                    val stack = tile.getStackInSlot(0).copy()
+                    stack.stackSize = 1
+                    renderStackOnBlock(stack, dir,  tile.getWorld.getBlockState(tile.getPos).getValue(PropertyRotation.FOUR_WAY), new LocationDouble(x, y, z), 6.8F, 72.0F, 112.0F)
 
                     RenderHelper.disableStandardItemLighting()
                     mc.entityRenderer.enableLightmap()
