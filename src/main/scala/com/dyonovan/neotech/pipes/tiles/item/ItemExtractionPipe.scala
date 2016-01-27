@@ -10,6 +10,8 @@ import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraftforge.items.IItemHandler
+import net.minecraftforge.items.wrapper.{SidedInvWrapper, InvWrapper}
 
 /**
   * This file was created for NeoTech
@@ -30,6 +32,7 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
       * This is the speed to extract from. You should be calling this when building your resources to send.
       *
       * This is included as a reminder to the child to have variable speeds
+      *
       * @return
       */
     override def getSpeed: Double = {
@@ -41,6 +44,7 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
 
     /**
       * Used to specify how big a stack to pull. Judge with upgrades here
+      *
       * @return
       */
     def getMaxStackExtract : Int = {
@@ -52,6 +56,7 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
 
     /**
       * Get how many ticks to 'cooldown' between operations.
+      *
       * @return 20 = 1 second
       */
     override def getDelay: Int = {
@@ -74,40 +79,37 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
 
         for(dir <- EnumFacing.values()) {
             if (canConnect(dir)) {
-                worldObj.getTileEntity(pos.offset(dir)) match {
-                    case sidedInv: ISidedInventory =>
-                        for (i <- sidedInv.getSlotsForFace(dir.getOpposite)) {
-                            tempInv.setInventorySlotContents(0, null)
-                            if (sidedInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = false, canStack = true) > 0) {
-                                if (extractOnMode(new ItemResourceEntity(sidedInv.getStackInSlot(i),
-                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                    pos, pos, worldObj), simulate = true)) {
-                                    InventoryUtils.moveItemInto(sidedInv, i, tempInv, 0, getMaxStackExtract, EnumFacing.UP, doMove = true, canStack = true)
-                                    nextResource.resource = tempInv.getStackInSlot(0)
-                                    extractOnMode(nextResource, simulate = false)
-                                    return
-                                }
-                            }
-                        }
-                    case otherInv: IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
-                        for (i <- 0 until otherInv.getSizeInventory) {
-                            tempInv.setInventorySlotContents(0, null)
-                            if (otherInv.getStackInSlot(i) != null && InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = false, canStack = true) > 0) {
-                                if (extractOnMode(new ItemResourceEntity(otherInv.getStackInSlot(i),
-                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                    pos, pos, worldObj), simulate = true)) {
-                                    InventoryUtils.moveItemInto(otherInv, i, tempInv, 0, getMaxStackExtract, dir.getOpposite, doMove = true, canStack = true)
-                                    nextResource.resource = tempInv.getStackInSlot(0)
-                                    extractOnMode(nextResource, simulate = false)
-                                    return
-                                }
-                            }
-                        }
+                val otherObject = worldObj.getTileEntity(pos.offset(dir))
+                var otherInv: IItemHandler = null
+
+                if (!otherObject.isInstanceOf[IItemHandler]) {
+                    otherObject match {
+                        case iInventory: IInventory if !iInventory.isInstanceOf[ISidedInventory] => otherInv = new InvWrapper(iInventory)
+                        case iSided: ISidedInventory => otherInv = new SidedInvWrapper(iSided, dir.getOpposite)
+                        case _ =>
+                    }
+                } else otherObject match { //If we are a ItemHandler, we want to make sure not to wrap, it can be both IInventory and IItemHandler
+                    case itemHandler: IItemHandler => otherInv = itemHandler
                     case _ =>
+                }
+                if (otherInv != null) {
+                    for (x <- 0 until otherInv.getSlots) {
+                        if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.getStackInSlot(x),
+                            pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                            pos, pos, worldObj), simulate = true)) {
+                            InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, getMaxStackExtract, dir, doMove = true)
+                            if(tempInv.getStackInSlot(0) != null) {
+                                nextResource.resource = tempInv.getStackInSlot(0)
+                                extractOnMode(nextResource, simulate = false)
+                                return
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+
 
     /**
       * This is called when we fail to send a resource. You should put the resource back where you found it or
@@ -124,29 +126,21 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
 
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case isided : ISidedInventory =>
-                    for(i <- isided.getSlotsForFace(dir.getOpposite)) {
-                        if(InventoryUtils.moveItemInto(tempInventory, 0, isided, i, 64, dir, doMove = true, canStack = true) > 0) {
-                            resource.resource = tempInventory.getStackInSlot(0)
-                            if(resource.resource == null || resource.resource.stackSize <= 0) {
-                                resource.isDead = true
-                                resource.resource = null
-                            }
-                        }
-                    }
-                case otherInv : IInventory if !otherInv.isInstanceOf[ISidedInventory] =>
-                    for(i <- 0 until otherInv.getSizeInventory) {
-                        if(InventoryUtils.moveItemInto(tempInventory, 0, otherInv, i, 64, dir, doMove = true, canStack = true) > 0) {
-                            resource.resource = tempInventory.getStackInSlot(0)
-                            if(resource.resource == null || resource.resource.stackSize <= 0) {
-                                resource.isDead = true
-                                resource.resource = null
-                            }
-                        }
-                    }
-                case _ =>
+            val otherObject = worldObj.getTileEntity(pos.offset(dir))
+            var otherInv : IItemHandler = null
+
+            if(!otherObject.isInstanceOf[IItemHandler]) {
+                otherObject match {
+                    case iInventory: IInventory if !iInventory.isInstanceOf[ISidedInventory] => otherInv = new InvWrapper(iInventory)
+                    case iSided: ISidedInventory => otherInv = new SidedInvWrapper(iSided, dir.getOpposite)
+                    case _ => return
+                }
+            } else otherObject match { //If we are a ItemHandler, we want to make sure not to wrap, it can be both IInventory and IItemHandler
+                case itemHandler: IItemHandler => otherInv = itemHandler
+                case _ => return
             }
+
+            InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir, doMove = true)
         }
 
         //If we couldn't fill, move back to source

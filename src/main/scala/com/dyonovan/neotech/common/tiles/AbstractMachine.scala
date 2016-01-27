@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import net.minecraftforge.items.IItemHandler
+import net.minecraftforge.items.wrapper.{SidedInvWrapper, InvWrapper}
 
 /**
   * This file was created for NeoTech
@@ -213,13 +215,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     def tryOutput() : Unit = {
         for(dir <- EnumFacing.values) {
             if(canOutputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
-                worldObj.getTileEntity(pos.offset(dir)) match {
-                    case otherInv : IInventory =>
-                        for (slot <- getOutputSlots) {
-                            InventoryUtils.moveItemInto(this, slot, otherInv, -1, 64, dir.getOpposite, doMove = true, canStack = true)
-                        }
-                    case _ =>
-                }
+                for(slot <- getOutputSlots)
+                    InventoryUtils.moveItemInto(new SidedInvWrapper(this, dir.getOpposite), slot, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true)
             }
         }
     }
@@ -227,13 +224,22 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     def tryInput() : Unit = {
         for(dir <- EnumFacing.values) {
             if(canInputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
-                worldObj.getTileEntity(pos.offset(dir)) match {
-                    case otherInv : IInventory =>
-                        for (slot <- 0 until otherInv.getSizeInventory) {
-                            InventoryUtils.moveItemInto(otherInv, slot, this, -1, 64, dir.getOpposite, doMove = true, canStack = true)
-                        }
+                val otherObject = worldObj.getTileEntity(pos.offset(dir))
+                var otherInv : IItemHandler = null
+
+                if(!otherObject.isInstanceOf[IItemHandler]) {
+                    otherObject match {
+                        case iInventory: IInventory if !iInventory.isInstanceOf[ISidedInventory] => otherInv = new InvWrapper(iInventory)
+                        case iSided: ISidedInventory => otherInv = new SidedInvWrapper(iSided, dir.getOpposite)
+                        case _ =>
+                    }
+                } else otherObject match { //If we are a ItemHandler, we want to make sure not to wrap, it can be both IInventory and IItemHandler
+                    case itemHandler: IItemHandler => otherInv = itemHandler
                     case _ =>
                 }
+
+                for(x <- getInputSlots)
+                    InventoryUtils.moveItemInto(otherInv, -1, this, x, 64, dir, doMove = true)
             }
         }
     }
