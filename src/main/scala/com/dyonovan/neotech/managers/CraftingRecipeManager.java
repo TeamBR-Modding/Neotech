@@ -194,6 +194,11 @@ public class CraftingRecipeManager {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.flushableChest()),
                 Blocks.chest, Items.flint_and_steel);
 
+        GameRegistry.addRecipe(new ItemStack(BlockManager.redstoneClock()),
+                "SRS",
+                "SBS",
+                "SRS", 'S', Blocks.stone, 'R', Items.redstone, 'B', Blocks.redstone_block);
+
         //Empty Motherboard
         GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeMBEmpty()),
                 "RRR",

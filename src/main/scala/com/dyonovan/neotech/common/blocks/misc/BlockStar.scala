@@ -35,7 +35,6 @@ import scala.util.Random
   */
 class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[TileStar]) {
 
-    setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabDecorations)
     setHardness(1.5F)
 

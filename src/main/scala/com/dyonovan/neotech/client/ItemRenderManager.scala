@@ -52,6 +52,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.chunkLoader))
         registerItem(Item.getItemFromBlock(BlockManager.flushableChest))
         registerItem(Item.getItemFromBlock(BlockManager.dimStorage))
+        registerItem(Item.getItemFromBlock(BlockManager.redstoneClock))
         registerItem(ItemManager.upgradeMBFull)
         registerItem(ItemManager.upgradeMBEmpty)
         registerItem(ItemManager.upgradeHardDrive)

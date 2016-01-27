@@ -5,7 +5,7 @@ import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage._
 import com.dyonovan.neotech.common.tiles.machines._
-import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, TileStar, TileFertilizer, TileCrafter}
+import com.dyonovan.neotech.common.tiles.misc._
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank, TileRFStorage}
 import com.dyonovan.neotech.pipes.blocks.{ItemBlockColored, BlockPipeSpecial, BlockPipe}
 import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
@@ -81,6 +81,7 @@ object BlockManager {
     val chunkLoader = new BlockChunkLoader
     val flushableChest = new BlockFlushableChest
     val dimStorage = new BlockDimStorage
+    val redstoneClock = new BlockRedstoneClock
 
     def preInit(): Unit = {
         //Machines
@@ -137,6 +138,7 @@ object BlockManager {
         registerBlock(chunkLoader, "chunkLoader", classOf[TileChunkLoader])
         registerBlock(flushableChest, "flushableChest", classOf[TileFlushableChest])
         registerBlock(dimStorage, "dimStorage", classOf[TileDimStorage], classOf[ItemBlockDimStorage])
+        registerBlock(redstoneClock, "redstoneClock", classOf[TileRedstoneClock])
     }
 
     /**
