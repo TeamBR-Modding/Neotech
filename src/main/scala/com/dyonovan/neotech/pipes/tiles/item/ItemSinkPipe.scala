@@ -32,7 +32,8 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
     override def canConnect(facing: EnumFacing): Boolean =
         if(super.canConnect(facing))
             getWorld.getTileEntity(pos.offset(facing)) match {
-                case tank : IInventory => true
+                case inventory : IInventory => true
+                case itemHandler : IItemHandler => true
                 case source: ExtractionPipe[_, _] => source.connections.get(facing.getOpposite.ordinal())
                 case sink: SinkPipe[_, _] => sink.connections.get(facing.getOpposite.ordinal())
                 case pipe : SimplePipe => true
@@ -56,8 +57,6 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
         val resource = resourceEntity.asInstanceOf[ItemResourceEntity]
 
         tempInventory = new Inventory() {
-            override var inventoryName: String = "TEMPINV"
-            override def hasCustomName(): Boolean = false
             override def initialSize: Int = 1
         }
 
@@ -101,8 +100,6 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
 
 
             tempInventoryTest  = new Inventory() {
-                override var inventoryName: String = "TEMPINV"
-                override def hasCustomName(): Boolean = false
                 override def initialSize: Int = otherInv.getSlots
             }
 
@@ -110,8 +107,6 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
 
             for(x <- 0 until waitingQueue.size) {
                 val tempInventoryUs = new Inventory() {
-                    override var inventoryName: String = "TEMPINV"
-                    override def hasCustomName(): Boolean = false
                     override def initialSize: Int = 1
                 }
 
@@ -129,8 +124,6 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
 
     override def tryInsertResource(resource : ItemResourceEntity) : Unit = {
         val tempActualInsert = new Inventory() {
-            override var inventoryName: String = "TEMPINV"
-            override def hasCustomName(): Boolean = false
             override def initialSize: Int = 1
         }
 

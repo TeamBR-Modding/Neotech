@@ -77,9 +77,7 @@ trait AutomaticIO extends NBTSavable {
     }
 
     val sideModes = new util.HashMap[EnumFacing, IOMODE]()
-    for(dir <- EnumFacing.values()) {
-        sideModes.put(dir, DISABLED)
-    }
+    resetIO()
 
     def toggleMode(dir : EnumFacing): Unit = {
         sideModes.put(dir, getNextMode(sideModes.get(dir)))
@@ -128,6 +126,12 @@ trait AutomaticIO extends NBTSavable {
 
     def getModeForSide(dir : EnumFacing) : IOMODE = {
         sideModes.get(dir)
+    }
+
+    def resetIO() : Unit = {
+        for(dir <- EnumFacing.values()) {
+            sideModes.put(dir, DISABLED)
+        }
     }
 
     override def readFromNBT(tag : NBTTagCompound) = {

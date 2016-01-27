@@ -9,8 +9,9 @@ import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraftforge.items.IItemHandler
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
 import net.minecraftforge.items.wrapper.{SidedInvWrapper, InvWrapper}
 
 /**
@@ -27,7 +28,7 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
     override def canConnect(facing: EnumFacing): Boolean =
         super.canConnect(facing) &&
                 (getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
-                        getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory])
+                        (getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IItemHandler] || getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IInventory]))
     /**
       * This is the speed to extract from. You should be calling this when building your resources to send.
       *
@@ -72,8 +73,6 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
 
     override def tryExtractResources(): Unit = {
         val tempInv = new Inventory() {
-            override var inventoryName: String = "TEMPINV"
-            override def hasCustomName(): Boolean = false
             override def initialSize: Int = 1
         }
 
@@ -92,16 +91,25 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
                     case itemHandler: IItemHandler => otherInv = itemHandler
                     case _ =>
                 }
+
+                otherObject match { //Check for sidedness
+                    case tileEntity: TileEntity if tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite) =>
+                        otherInv = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
+                    case _ =>
+                }
+
                 if (otherInv != null) {
                     for (x <- 0 until otherInv.getSlots) {
-                        if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.getStackInSlot(x),
-                            pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                            pos, pos, worldObj), simulate = true)) {
-                            InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, getMaxStackExtract, dir, doMove = true)
-                            if(tempInv.getStackInSlot(0) != null) {
-                                nextResource.resource = tempInv.getStackInSlot(0)
-                                extractOnMode(nextResource, simulate = false)
-                                return
+                        if (otherInv.extractItem(x, getMaxStackExtract, true) != null) {
+                            if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.getStackInSlot(x),
+                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                pos, pos, worldObj), simulate = true)) {
+                                InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, getMaxStackExtract, dir, doMove = true)
+                                if (tempInv.getStackInSlot(0) != null) {
+                                    nextResource.resource = tempInv.getStackInSlot(0)
+                                    extractOnMode(nextResource, simulate = false)
+                                    return
+                                }
                             }
                         }
                     }
@@ -117,8 +125,6 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
       */
     override def resourceReturned(resource: ItemResourceEntity): Unit = {
         val tempInventory = new Inventory() {
-            override var inventoryName: String = "TEMPINV"
-            override def hasCustomName(): Boolean = false
             override def initialSize: Int = 1
         }
 

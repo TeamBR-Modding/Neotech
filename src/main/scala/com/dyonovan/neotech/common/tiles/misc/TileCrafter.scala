@@ -32,10 +32,6 @@ class TileCrafter extends TileEntity with Inventory {
         super[Inventory].markDirty()
     }
 
-    override var inventoryName: String = _
-
-    override def hasCustomName(): Boolean = false
-
     override def initialSize: Int = 20
 
     override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = {

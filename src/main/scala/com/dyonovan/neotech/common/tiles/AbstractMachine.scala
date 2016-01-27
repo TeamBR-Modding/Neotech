@@ -5,16 +5,13 @@ import com.dyonovan.neotech.collections.StandardValues
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.common.tiles.machines.AutomaticIO
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.bookshelf.common.container.IInventoryCallback
-import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable, Inventory, UpdatingTile}
+import com.teambr.bookshelf.common.tiles.traits.{InventorySided, RedstoneAware, Syncable}
 import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import net.minecraftforge.items.IItemHandler
-import net.minecraftforge.items.wrapper.{SidedInvWrapper, InvWrapper}
 
 /**
   * This file was created for NeoTech
@@ -26,7 +23,7 @@ import net.minecraftforge.items.wrapper.{SidedInvWrapper, InvWrapper}
   * @author Dyonovan
   * @since August 11, 2015
   */
-abstract class AbstractMachine extends Syncable with Upgradeable with Inventory with ISidedInventory
+abstract class AbstractMachine extends Syncable with Upgradeable with InventorySided
         with IEnergyHandler with RedstoneAware with AutomaticIO {
 
     final val cookSpeed = 200
@@ -189,7 +186,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     override def markDirty(): Unit = {
         super[Upgradeable].markDirty()
         super[TileEntity].markDirty()
-        super[Inventory].markDirty()
+        super[InventorySided].markDirty()
     }
 
     /** ****************************************************************************************************************
@@ -216,7 +213,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
         for(dir <- EnumFacing.values) {
             if(canOutputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
                 for(slot <- getOutputSlots)
-                    InventoryUtils.moveItemInto(new SidedInvWrapper(this, dir.getOpposite), slot, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true)
+                    InventoryUtils.moveItemInto(this, slot, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true)
             }
         }
     }
@@ -224,22 +221,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     def tryInput() : Unit = {
         for(dir <- EnumFacing.values) {
             if(canInputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
-                val otherObject = worldObj.getTileEntity(pos.offset(dir))
-                var otherInv : IItemHandler = null
-
-                if(!otherObject.isInstanceOf[IItemHandler]) {
-                    otherObject match {
-                        case iInventory: IInventory if !iInventory.isInstanceOf[ISidedInventory] => otherInv = new InvWrapper(iInventory)
-                        case iSided: ISidedInventory => otherInv = new SidedInvWrapper(iSided, dir.getOpposite)
-                        case _ =>
-                    }
-                } else otherObject match { //If we are a ItemHandler, we want to make sure not to wrap, it can be both IInventory and IItemHandler
-                    case itemHandler: IItemHandler => otherInv = itemHandler
-                    case _ =>
-                }
-
                 for(x <- getInputSlots)
-                    InventoryUtils.moveItemInto(otherInv, -1, this, x, 64, dir, doMove = true)
+                    InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, x, 64, dir, doMove = true)
             }
         }
     }
@@ -252,7 +235,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super[Upgradeable].writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
-        super[Inventory].writeToNBT(tag)
+        super[InventorySided].writeToNBT(tag)
         super[AutomaticIO].writeToNBT(tag)
         values.writeToNBT(tag)
         energy.writeToNBT(tag)
@@ -265,7 +248,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[Upgradeable].readFromNBT(tag)
         super[TileEntity].readFromNBT(tag)
-        super[Inventory].readFromNBT(tag)
+        super[InventorySided].readFromNBT(tag)
         super[AutomaticIO].readFromNBT(tag)
         val tempCook = values.cookTime
         values.readFromNBT(tag)
@@ -280,7 +263,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
       * Called when the board is removed, reset to default values
       */
     override def resetValues(): Unit = {
-        //TODO: reset upgrade things
+        resetIO()
     }
 
     /** *****************************************************************************************************************
@@ -329,11 +312,15 @@ abstract class AbstractMachine extends Syncable with Upgradeable with Inventory 
       */
     override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean = slot == 0 && recipe(itemStackIn) != null
 
-    override var inventoryName: String = _
-
-    override def hasCustomName(): Boolean = false
-
     override def initialSize: Int = 2
+
+    override def hasCapability(capability: Capability[_], facing : EnumFacing) = true
+
+    override def getCapabilityFromTile[T](capability: Capability[T], facing: EnumFacing) : T = super[TileEntity].getCapability[T](capability, facing)
+
+    override def getCapability[T](capability: Capability[T], facing: EnumFacing) : T =
+        super[InventorySided].getCapability[T](capability, facing)
+
 
     /** *****************************************************************************************************************
       * *********************************************** Energy methods **************************************************

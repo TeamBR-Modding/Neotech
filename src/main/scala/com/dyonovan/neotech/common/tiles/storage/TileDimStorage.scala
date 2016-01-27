@@ -14,10 +14,6 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila  {
     private var qty = 0
     final val maxStacks = 64
 
-    override var inventoryName: String = _
-
-    override def hasCustomName(): Boolean = false
-
     override def initialSize: Int = 1
 
     override def markDirty(): Unit = {

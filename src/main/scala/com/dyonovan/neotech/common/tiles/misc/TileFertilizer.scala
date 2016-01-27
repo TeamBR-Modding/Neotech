@@ -62,7 +62,7 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
     }
 
     private def isBoneMeal: (Boolean, Int) = {
-        for (i <- 0 until getSizeInventory()) {
+        for (i <- 0 until getSizeInventory) {
             if (getStackInSlot(i) != null && getStackInSlot(i).stackSize > 0) return (true, i)
         }
         (false, -1)
@@ -85,15 +85,11 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
         super[Inventory].markDirty()
     }
 
-    override var inventoryName: String = _
-
-    override def hasCustomName(): Boolean = false
-
     override def initialSize: Int = 4
 
     override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
         var count = 0
-        for (i <- 0 until getSizeInventory()) {
+        for (i <- 0 until getSizeInventory) {
             if (getStackInSlot(i) != null)
                 count += getStackInSlot(i).stackSize
         }

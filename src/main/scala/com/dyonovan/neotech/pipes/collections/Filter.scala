@@ -20,9 +20,7 @@ import scala.util.control.Breaks._
   */
 trait Filter {
     val filterInventory = new Inventory {
-        override def hasCustomName(): Boolean = false
         override def initialSize: Int = 9
-        override var inventoryName: String = "Pipe Filter"
     }
 
     var matchTag = false

@@ -18,8 +18,6 @@ import net.minecraft.nbt.NBTTagCompound
   * @since 1/11/2016
   */
 class TileGrinder extends UpdatingTile with Inventory {
-    override var inventoryName: String = "Grinder"
-    override def hasCustomName(): Boolean = false
     override def initialSize: Int = 7
 
     var progress : Int = 0

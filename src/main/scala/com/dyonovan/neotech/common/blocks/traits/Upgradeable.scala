@@ -2,11 +2,12 @@ package com.dyonovan.neotech.common.blocks.traits
 
 import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.managers.ItemManager
-import com.teambr.bookshelf.common.container.IInventoryCallback
-import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
+import com.teambr.bookshelf.common.container.InventoryCallback
+import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.items.IItemHandler
 
 /**
   * This file was created for NeoTech
@@ -20,20 +21,19 @@ import net.minecraft.nbt.NBTTagCompound
   */
 trait Upgradeable {
     lazy val upgradeInventory = new Inventory {
-        override def hasCustomName(): Boolean = false
         override def initialSize: Int = 1
-        override var inventoryName: String = _
 
         /**
           * Used to define if an item is valid for a slot, we only want full MotherBoards
+          *
           * @param index The slot id
           * @param stack The stack to check
           * @return True if you can put this there
           */
         override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = stack.getItem == ItemManager.upgradeMBFull
 
-        addCallback(new IInventoryCallback {
-            override def onInventoryChanged(inventory: IInventory, slotNumber: Int): Unit = {
+        addCallback(new InventoryCallback {
+            override def onInventoryChanged(inventory: IItemHandler, slotNumber: Int): Unit = {
                 if(inventory.getStackInSlot(slotNumber) == null)
                     resetValues()
             }
@@ -48,7 +48,7 @@ trait Upgradeable {
     //NBT, must overwrite
     def readFromNBT(tag: NBTTagCompound): Unit = {
         upgradeInventory.readFromNBT(tag, "upgrade")
-        if(upgradeInventory.getSizeInventory() == 0)
+        if(upgradeInventory.getSizeInventory == 0)
             upgradeInventory.addInventorySlot(null)
     }
 
@@ -62,6 +62,7 @@ trait Upgradeable {
 
     /**
       * Returns an object for the Upgrade Board, if it exists
+      *
       * @return
       */
     def getUpgradeBoard : UpgradeBoard = {

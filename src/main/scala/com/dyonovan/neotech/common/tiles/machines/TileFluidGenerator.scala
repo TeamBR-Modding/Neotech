@@ -91,7 +91,7 @@ class TileFluidGenerator extends AbstractMachine with IFluidHandler {
       *
       * @return int range 0 - 16
       */
-    override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
+    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
 
     override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)
 

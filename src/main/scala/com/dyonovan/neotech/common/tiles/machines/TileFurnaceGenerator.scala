@@ -2,6 +2,7 @@ package com.dyonovan.neotech.common.tiles.machines
 
 import cofh.api.energy.{IEnergyReceiver, EnergyStorage}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
+import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntityFurnace
@@ -54,6 +55,7 @@ class TileFurnaceGenerator extends AbstractMachine {
     }
     /**
      * Get the output of the recipe
+ *
      * @param stack The input
      * @return The output
      */
@@ -69,7 +71,7 @@ class TileFurnaceGenerator extends AbstractMachine {
      *
      * @return int range 0 - 16
      */
-    override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
+    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
 
     override def initialSize: Int = 1
 

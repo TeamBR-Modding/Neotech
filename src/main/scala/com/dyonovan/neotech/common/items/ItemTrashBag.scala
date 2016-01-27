@@ -3,18 +3,13 @@ package com.dyonovan.neotech.common.items
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.managers.{ItemGuiManager, ItemManager}
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.common.container.IInventoryCallback
 import com.teambr.bookshelf.common.tiles.traits.Inventory
-import com.teambr.bookshelf.traits.HasToolTip
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import net.minecraftforge.oredict.OreDictionary
 
 import scala.util.control.Breaks._
 
@@ -58,9 +53,7 @@ object ItemTrashBag {
     class TrashBagInventory(stack : ItemStack) extends Inventory {
         if(stack != null && stack.hasTagCompound)
             setInventorySlotContents(0, ItemStack.loadItemStackFromNBT(stack.getTagCompound))
-        override def hasCustomName(): Boolean = false
         override def initialSize: Int = 1
-        override var inventoryName: String = "TRASH_BAG"
     }
 
     @SubscribeEvent

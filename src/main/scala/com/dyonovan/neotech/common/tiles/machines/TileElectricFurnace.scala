@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.common.tiles.machines
 
 import com.dyonovan.neotech.common.tiles.AbstractMachine
+import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
@@ -19,6 +20,7 @@ import net.minecraft.util.EnumParticleTypes
 class TileElectricFurnace extends AbstractMachine {
     /**
      * Get the output of the recipe
+ *
      * @param stack The input
      * @return The output
      */
@@ -39,7 +41,7 @@ class TileElectricFurnace extends AbstractMachine {
      *
      * @return int range 0 - 16
      */
-    override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
+    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
 
     override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
         worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 0.01, 0.49, 0.72)

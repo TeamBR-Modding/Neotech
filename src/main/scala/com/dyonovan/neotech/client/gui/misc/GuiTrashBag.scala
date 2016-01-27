@@ -2,6 +2,7 @@ package com.dyonovan.neotech.client.gui.misc
 
 import com.dyonovan.neotech.common.container.misc.ContainerTrashBag
 import com.teambr.bookshelf.client.gui.GuiBase
+import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
@@ -16,7 +17,7 @@ import net.minecraft.item.ItemStack
   * @author Paul Davis <pauljoda>
   * @since 1/26/2016
   */
-class GuiTrashBag(inventory : IInventory, inventoryPlayer: InventoryPlayer, bag : ItemStack) extends
+class GuiTrashBag(inventory : Inventory, inventoryPlayer: InventoryPlayer, bag : ItemStack) extends
     GuiBase[ContainerTrashBag](new ContainerTrashBag(inventory, inventoryPlayer, bag), 175, 165, "inventory.trashBag.title") {
     override def addComponents(): Unit = {}
 }

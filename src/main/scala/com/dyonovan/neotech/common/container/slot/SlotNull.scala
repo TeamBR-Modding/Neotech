@@ -1,8 +1,8 @@
-package com.dyonovan.neotech.common.container
+package com.dyonovan.neotech.common.container.slot
 
 import com.teambr.bookshelf.common.container.slots.{ICustomSlot, SLOT_SIZE}
-import net.minecraft.inventory.{Slot, IInventory}
-import net.minecraftforge.fml.relauncher.{SideOnly, Side}
+import net.minecraft.inventory.{IInventory, Slot}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 
 /**

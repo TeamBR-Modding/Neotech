@@ -14,10 +14,6 @@ import net.minecraft.util.{EnumParticleTypes, AxisAlignedBB}
   */
 class TileFlushableChest extends Syncable with Inventory {
 
-    override var inventoryName: String = _
-
-    override def hasCustomName(): Boolean = false
-
     override def initialSize: Int = 27
 
     var prevLidAngle : Float = 0

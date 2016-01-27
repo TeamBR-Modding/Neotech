@@ -1,8 +1,10 @@
 package com.dyonovan.neotech.common.container.misc
 
-import com.dyonovan.neotech.common.container.{InventoryNull, SlotNull}
+import com.dyonovan.neotech.common.container.InventoryNull
+import com.dyonovan.neotech.common.container.slot.SlotNull
 import com.teambr.bookshelf.common.container.BaseContainer
 import com.teambr.bookshelf.common.container.slots.{PhantomSlot, SLOT_SIZE}
+import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.entity.item.EntityPainting
 import net.minecraft.entity.player.{EntityPlayer, InventoryPlayer}
 import net.minecraft.inventory.IInventory
@@ -20,7 +22,7 @@ import scala.util.control.Breaks._
   * @author Paul Davis <pauljoda>
   * @since 1/26/2016
   */
-class ContainerTrashBag(inventory : IInventory, playerInventory : InventoryPlayer, bag : ItemStack)
+class ContainerTrashBag(inventory : Inventory, playerInventory : InventoryPlayer, bag : ItemStack)
         extends BaseContainer(playerInventory, inventory) {
     addPlayerInventorySlots(85)
     val replacer = new SlotNull(SLOT_SIZE.STANDARD, new InventoryNull, 0, -1000, 0)

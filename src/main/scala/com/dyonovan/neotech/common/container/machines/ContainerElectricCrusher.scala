@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.common.container.machines
 
+import com.dyonovan.neotech.common.container.slot.SlotFurnaceOutputItemHandler
 import com.dyonovan.neotech.common.tiles.machines.TileElectricCrusher
 import com.teambr.bookshelf.common.container.BaseContainer
 import net.minecraft.entity.player.InventoryPlayer
@@ -19,7 +20,7 @@ class ContainerElectricCrusher(playerInventory: InventoryPlayer, tile: TileElect
         BaseContainer(playerInventory, tile) {
 
     addSlotToContainer(new RestrictedSlot(tile, 0, 41, 35))
-    addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, tile, 1, 101, 35))
-    addSlotToContainer(new SlotFurnaceOutput(playerInventory.player, tile, 2, 131, 35))
+    addSlotToContainer(new SlotFurnaceOutputItemHandler(playerInventory.player, tile, 1, 101, 35))
+    addSlotToContainer(new SlotFurnaceOutputItemHandler(playerInventory.player, tile, 2, 131, 35))
     addPlayerInventorySlots(8, 84)
 }

@@ -3,6 +3,7 @@ package com.dyonovan.neotech.common.tiles.machines
 import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.managers.ItemManager
+import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -171,6 +172,7 @@ class TileThermalBinder extends AbstractMachine {
 
     /**
      * Get the output of the recipe
+ *
      * @param stack The input
      * @return The output
      */
@@ -186,7 +188,7 @@ class TileThermalBinder extends AbstractMachine {
      *
      * @return int range 0 - 16
      */
-    override def getRedstoneOutput: Int = Container.calcRedstoneFromInventory(this)
+    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
 
     override def getSlotsForFace(side: EnumFacing): Array[Int] = {
         side match {
