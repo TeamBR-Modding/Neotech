@@ -146,6 +146,12 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
                 case _ => return
             }
 
+            otherObject match { //Check for sidedness
+                case tileEntity: TileEntity if tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite) =>
+                    otherInv = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
+                case _ =>
+            }
+
             InventoryUtils.moveItemInto(tempInventory, 0, otherInv, -1, 64, dir, doMove = true)
         }
 

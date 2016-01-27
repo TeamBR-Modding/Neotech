@@ -3,15 +3,16 @@ package com.dyonovan.neotech.pipes.tiles.item
 import java.util
 import com.dyonovan.neotech.pipes.entities.{ResourceEntity, ItemResourceEntity}
 import com.dyonovan.neotech.pipes.types.{ExtractionPipe, SimplePipe, SinkPipe}
-import com.teambr.bookshelf.common.tiles.traits.{UpdatingTile, Syncable, Inventory}
+import com.teambr.bookshelf.common.tiles.traits.{InventorySided, UpdatingTile, Syncable, Inventory}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fluids.IFluidHandler
-import net.minecraftforge.items.IItemHandler
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
 import net.minecraftforge.items.wrapper.{SidedInvWrapper, InvWrapper}
 
 /**
@@ -65,7 +66,7 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
             if (canConnect(dir)) {
-                if (InventoryUtils.moveItemInto(tempInventory, 0, test(worldObj.getTileEntity(pos.offset(dir)), dir), -1, 64, dir, doMove = false)) {
+                if (InventoryUtils.moveItemInto(tempInventory, 0, test(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite), -1, 64, dir, doMove = false)) {
                     waitingQueue.add(resource)
                     return true
                 }
@@ -75,32 +76,47 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
         false
     }
 
-    def test(otherObject : AnyRef, dir : EnumFacing) : IItemHandler = {
-        var otherInv : IItemHandler = null
+    def test(otherObject : AnyRef, dir : EnumFacing) : AnyRef = {
+        if(waitingQueue.isEmpty)
+            otherObject
+        else {
+            var otherInv : IItemHandler = null
 
-        if(!otherObject.isInstanceOf[IItemHandler]) {
-            otherObject match {
-                case iInventory: IInventory if !iInventory.isInstanceOf[ISidedInventory] => otherInv = new InvWrapper(iInventory)
-                case iSided: ISidedInventory => otherInv = new SidedInvWrapper(iSided, dir.getOpposite)
+            if(!otherObject.isInstanceOf[IItemHandler]) {
+                otherObject match {
+                    case iInventory: IInventory if !iInventory.isInstanceOf[ISidedInventory] => otherInv = new InvWrapper(iInventory)
+                    case iSided: ISidedInventory => otherInv = new SidedInvWrapper(iSided, dir)
+                    case _ => return null
+                }
+            } else otherObject match { //If we are a ItemHandler, we want to make sure not to wrap, it can be both IInventory and IItemHandler
+                case itemHandler: IItemHandler => otherInv = itemHandler
                 case _ => return null
             }
-        } else otherObject match { //If we are a ItemHandler, we want to make sure not to wrap, it can be both IInventory and IItemHandler
-            case itemHandler: IItemHandler => otherInv = itemHandler
-            case _ => return null
-        }
 
-        if(waitingQueue.isEmpty)
-            otherInv
-        else {
+            otherObject match { //Check for sidedness
+                case tileEntity: TileEntity if tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir) =>
+                    otherInv = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir)
+                case _ =>
+            }
             val iterator = waitingQueue.iterator() //Remove deads
             while (iterator.hasNext) {
                 if (iterator.next().isDead)
                     iterator.remove()
             }
 
-
-            tempInventoryTest  = new Inventory() {
-                override def initialSize: Int = otherInv.getSlots
+            otherInv match {
+                case sided: InventorySided =>
+                    tempInventoryTest = new InventorySided() {
+                        override def initialSize: Int = otherInv.getSlots
+                        override def getSlotsForFace(side: EnumFacing): Array[Int] = sided.getSlotsForFace(side)
+                        override def getCapabilityFromTile[T](capability: Capability[T], facing: EnumFacing): T = sided.getCapability(capability, facing)
+                        override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = sided.canExtractItem(index, stack, direction)
+                        override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = sided.canInsertItem(slot, itemStackIn, direction)
+                    }
+                case _ =>
+                    tempInventoryTest = new Inventory() {
+                        override def initialSize: Int = otherInv.getSlots
+                    }
             }
 
             tempInventoryTest.copyFrom(otherInv)
@@ -116,7 +132,7 @@ class ItemSinkPipe extends SinkPipe[ItemStack, ItemResourceEntity] with Updating
                     return tempInventoryTest
 
                 tempInventoryUs.setInventorySlotContents(0, resource.resource.copy())
-                InventoryUtils.moveItemInto(tempInventoryUs, 0, tempInventoryTest, -1, 64, dir, doMove = true)
+                InventoryUtils.moveItemInto(tempInventoryUs, 0, tempInventoryTest, -1, 64, dir.getOpposite, doMove = true)
             }
             tempInventoryTest
         }
