@@ -27,19 +27,21 @@ GuiBase[ContainerGeneric](new ContainerGeneric(), 150,
                 PacketDispatcher.net.sendToServer(new OpenContainerGui(tile.getPos, 0))
             }
         }
-        var x = 40
+        components += new GuiComponentButton(25, 40, 100, 20, "Connections") {
+            override def doAction(): Unit = {
+                FMLClientHandler.instance().showGuiScreen(new GuiAdvancedPipeConnections(tile, tile))
+            }
+        }
+
+        var x = 70
         if(tile.getUpgradeBoard != null && tile.getUpgradeBoard.hasControl) {
-            x += 60
-            components += new GuiComponentButton(25, 40, 100, 20, "Redstone Control") {
+            x += 30
+            components += new GuiComponentButton(25, 70, 100, 20, "Redstone Control") {
                 override def doAction(): Unit = {
                     FMLClientHandler.instance().showGuiScreen(new GuiAdvancedPipeRedstone(tile))
                 }
             }
-            components += new GuiComponentButton(25, 70, 100, 20, "Connections") {
-                override def doAction(): Unit = {
-                    FMLClientHandler.instance().showGuiScreen(new GuiAdvancedPipeConnections(tile, tile))
-                }
-            }
+
             if(!tile.isInstanceOf[EnergyInterfacePipe]) {
                 x += 30
                 components += new GuiComponentButton(25, 100, 100, 20, "Filter") {
