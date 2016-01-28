@@ -64,12 +64,14 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
     override def onBlockClicked(world: World, pos: BlockPos, player: EntityPlayer): Unit = {
         val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
 
-        val amt = if (!player.isSneaking) 1 else tile.getStackInSlot(0).getMaxStackSize
-        var actual = tile.extractItem(0, amt, simulate = true)
-        if (actual != null) {
-            actual = tile.extractItem(0, amt, simulate = false)
-            player.inventory.addItemStackToInventory(actual)
-            world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
+        if(tile.getStackInSlot(0) != null) {
+            val amt = if (!player.isSneaking) 1 else tile.getStackInSlot(0).getMaxStackSize
+            var actual = tile.extractItem(0, amt, simulate = true)
+            if (actual != null) {
+                actual = tile.extractItem(0, amt, simulate = false)
+                player.inventory.addItemStackToInventory(actual)
+                world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
+            }
         }
     }
 

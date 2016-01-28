@@ -74,6 +74,7 @@ object ItemTrashBag {
                         if (containedStack.getItem == pickedUp.getItem && containedStack.getItemDamage == pickedUp.getItemDamage &&
                                 ItemStack.areItemStackTagsEqual(containedStack, pickedUp)) {
                             pickedUp.stackSize = 0
+                            event.entityPlayer.worldObj.playSoundEffect(event.entityPlayer.posX, event.entityPlayer.posY, event.entityPlayer.posZ, "random.pop", 0.5F, event.entityPlayer.worldObj.rand.nextFloat() * 0.1F + 0.9F)
                             break
                         }
                     }
