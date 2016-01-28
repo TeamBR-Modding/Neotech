@@ -237,6 +237,12 @@ public class CraftingRecipeManager {
                 "L L",
                 "LLL", 'L', Items.leather, 'S', Items.string);
 
+        //Dim Storage
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.dimStorage(), 1),
+                "CCC",
+                "CLC",
+                "CCC", 'C', Blocks.chest, 'L', "logWood"));
+
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);
