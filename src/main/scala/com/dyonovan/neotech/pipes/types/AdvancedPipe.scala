@@ -117,7 +117,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
     def getGUIHeight : Int = {
         var baseHeight = 71
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl)
-            baseHeight += 90
+            baseHeight += 60
         if(getUpgradeBoard != null && getUpgradeBoard.hasExpansion)
             baseHeight += 60
         baseHeight
