@@ -167,7 +167,7 @@ object CrusherRecipeRegistry {
     /**
      * Get the output for an input
      */
-    def getOutput(itemStack: ItemStack): Option[(ItemStack, ItemStack)] = {
+    def getOutput(itemStack: ItemStack): Option[(ItemStack, ItemStack, Int)] = {
         if (itemStack != null && itemStack.getItem != null) {
             for (i <- crusherRecipes) {
                 val name = i.input.split(":")
@@ -177,14 +177,14 @@ object CrusherRecipeRegistry {
                     case 3 =>
                         val stackIn = getItemStackFromString(i.input)
                         if (stackIn != null && itemStack.isItemEqual(stackIn)) {
-                            return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
+                            return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra, i.percentChance))
                         } else if (stackIn != null && stackIn.getItemDamage == OreDictionary.WILDCARD_VALUE) {
                             if (itemStack.getItem == stackIn.getItem)
-                                return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
+                                return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra, i.percentChance))
                         }
                     case 1 =>
                         if (checkOreDict(i.input, itemStack))
-                            return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra))
+                            return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra, i.percentChance))
                 }
             }
         }

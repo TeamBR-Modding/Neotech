@@ -43,8 +43,13 @@ class TBStartPacket extends IMessage with IMessageHandler[TBStartPacket, IMessag
             val tile = world.getTileEntity(pos).asInstanceOf[TileThermalBinder]
             if (tile != null && tile.values.currentItemBurnTime <= 0) {
                 tile.count = message.count
+                if (tile.count > 0 && ctx.getServerHandler.playerEntity.capabilities.isCreativeMode) {
+                    tile.build()
+                    tile.reset()
+                    return null
+                }
                 if (tile.count > 0)
-                tile.values.burnTime = 20 * 20 * message.count
+                    tile.values.burnTime = 20 * 20 * message.count
                 tile.values.currentItemBurnTime = tile.values.burnTime
                 world.markBlockForUpdate(pos)
             }

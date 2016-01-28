@@ -84,7 +84,7 @@ class TileThermalBinder extends AbstractMachine {
         }
     }
 
-    private def reset(): Unit = {
+    def reset(): Unit = {
         values.burnTime = 0
         values.currentItemBurnTime = 0
         count = 0
