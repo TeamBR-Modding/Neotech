@@ -5,7 +5,7 @@ import com.dyonovan.neotech.collections.StandardValues
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.common.tiles.machines.AutomaticIO
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.bookshelf.common.tiles.traits.{InventorySided, RedstoneAware, Syncable}
+import com.teambr.bookshelf.common.tiles.traits.{Inventory, InventorySided, RedstoneAware, Syncable}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -213,7 +213,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         for(dir <- EnumFacing.values) {
             if(canOutputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
                 for(slot <- getOutputSlots)
-                    InventoryUtils.moveItemInto(this, slot, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true)
+                    InventoryUtils.moveItemInto(this, slot, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true, checkSidedSource = false)
             }
         }
     }
@@ -222,7 +222,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         for(dir <- EnumFacing.values) {
             if(canInputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
                 for(x <- getInputSlots)
-                    InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, x, 64, dir, doMove = true)
+                    InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, x, 64, dir.getOpposite, doMove = true, checkSidedTarget = false)
             }
         }
     }
