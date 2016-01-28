@@ -101,7 +101,7 @@ class ItemExtractionPipe extends ExtractionPipe[ItemStack, ItemResourceEntity] {
                 if (otherInv != null) {
                     for (x <- 0 until otherInv.getSlots) {
                         if (otherInv.extractItem(x, getMaxStackExtract, true) != null) {
-                            if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.getStackInSlot(x),
+                            if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.extractItem(x, getMaxStackExtract, true),
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                                 pos, pos, worldObj), simulate = true)) {
                                 InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, getMaxStackExtract, dir, doMove = true)
