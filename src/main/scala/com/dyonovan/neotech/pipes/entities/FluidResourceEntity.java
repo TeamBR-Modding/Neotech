@@ -41,8 +41,8 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
      * @param receiver
      * @param theWorld
      */
-    public FluidResourceEntity(FluidTank toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
-        super(toMove, x, y, z, momentum, sender, receiver, theWorld);
+    public FluidResourceEntity(FluidTank toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos senderTile, BlockPos receiver, World theWorld) {
+        super(toMove, x, y, z, momentum, sender, senderTile, receiver, theWorld);
     }
 
     @Override
@@ -87,6 +87,7 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
         tag.setDouble("Speed", speed);
         tag.setLong("Destination", destination.toLong());
         tag.setLong("From", from.toLong());
+        tag.setLong("FromTile", fromTileLocation.toLong());
     }
 
     @Override
@@ -100,6 +101,7 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
         nextSpeed = tag.getDouble("Speed");
         destination = BlockPos.fromLong(tag.getLong("Destination"));
         from = BlockPos.fromLong(tag.getLong("From"));
+        fromTileLocation = BlockPos.fromLong(tag.getLong("FromTile"));
         pathQueue = new Stack<>();
     }
 }

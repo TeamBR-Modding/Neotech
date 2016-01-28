@@ -10,7 +10,7 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.pipes.container.ContainerPipeFilter
 import com.dyonovan.neotech.pipes.gui.{GuiPipeFilter, GuiAdvancedPipeMenu}
-import com.dyonovan.neotech.pipes.types.{AdvancedPipe, SinkPipe, ExtractionPipe, SimplePipe}
+import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe, SimplePipe}
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
@@ -42,7 +42,7 @@ import org.lwjgl.input.Keyboard
   * @author Paul Davis pauljoda
   * @since August 14, 2015
   */
-class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: SimplePipe]) extends BlockContainer(mat) with OpensGui with HasToolTip {
+class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockContainer(mat) with OpensGui with HasToolTip {
 
     //Constructor
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
@@ -168,10 +168,11 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
 
     def countConnections(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Int = {
         world.getTileEntity(pos) match {
-            case pipe: SimplePipe =>
-                if (pipe.isSpecialConnection(facing) && pipe.canConnect(facing))
+            case pipe: AdvancedPipe =>
+                if (pipe.canConnectExtract(facing) && pipe.canConnect(facing) && world.getTileEntity(pos.offset(facing)) != null
+                    && !world.getTileEntity(pos.offset(facing)).isInstanceOf[SimplePipe])
                     2
-                else if (pipe.canConnect(facing))
+                else if (pipe.canConnect(facing) && pipe.canConnectSink(facing))
                     1
                 else
                     0

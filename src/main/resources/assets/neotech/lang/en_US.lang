@@ -34,14 +34,11 @@ tile.neotech:pipeStructure_yellow.name=§eYellow §rStructure Pipe
 
 tile.neotech:pipeBasicSpeedStructure.name=Basic Acceleration Pipe
 
-tile.neotech:pipeItemBasicSource.name=Item Extract Pipe
-tile.neotech:pipeItemBasicSink.name=Item Insert Pipe
+tile.neotech:pipeItemBasicInterface.name=Item Interface Pipe
 
-tile.neotech:pipeEnergyBasicSource.name=Energy Extract Pipe
-tile.neotech:pipeEnergyBasicSink.name=Energy Insert Pipe
+tile.neotech:pipeEnergyBasicInterface.name=Energy Interface Pipe
 
-tile.neotech:pipeFluidBasicSource.name=Fluid Extract Pipe
-tile.neotech:pipeFluidBasicSink.name=Fluid Insert Pipe
+tile.neotech:pipeFluidBasicInterface.name=Fluid Interface Pipe
 
 tile.neotech:oreCopper.name=Copper Ore
 tile.neotech:oreTin.name=Tin Ore

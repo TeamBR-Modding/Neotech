@@ -32,12 +32,17 @@ trait SimplePipe extends TileEntity {
       * @param facing The direction from this block
       * @return
       */
-    def canConnect(facing: EnumFacing): Boolean =
+    def canConnect(facing: EnumFacing): Boolean = {
+        getWorld.getTileEntity(getPos) match {
+            case advanced : AdvancedPipe if advanced.isDisabled(facing) => return false
+            case _ =>
+        }
         getWorld.getTileEntity(getPos.offset(facing)) match {
-            case advanced : AdvancedPipe => advanced.connections.get(facing.getOpposite.ordinal())
-            case pipe : SimplePipe => true
+            case advanced: AdvancedPipe => !advanced.isDisabled(facing)
+            case pipe: SimplePipe => true
             case _ => true
         }
+    }
 
     /**
       * Sometimes we need to know if the connection is more than just a pipe. Usually an inventory of some sort.

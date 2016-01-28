@@ -48,8 +48,8 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
      * @param receiver
      * @param theWorld
      */
-    public ItemResourceEntity(ItemStack toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
-        super(toMove, x, y, z, momentum, sender, receiver, theWorld);
+    public ItemResourceEntity(ItemStack toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos senderTile, BlockPos receiver, World theWorld) {
+        super(toMove, x, y, z, momentum, sender, senderTile, receiver, theWorld);
     }
 
     @Override
@@ -70,12 +70,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
 
         RenderManager manager = Minecraft.getMinecraft().getRenderManager();
         GL11.glTranslated(xPos - manager.renderPosX, yPos - manager.renderPosY, zPos - manager.renderPosZ);
-        /** RenderUtils.bindMinecraftBlockSheet();
-         GL11.glScaled(0.5, 0.5, 0.5);
-         try {
-         Minecraft.getMinecraft().getRenderItem().renderItem(resource, ItemCameraTransforms.TransformType.GROUND);
-         } catch(NullPointerException ignored) {}
-         */
+
         try {
             if(itemRenderer == null) {
                 itemRenderer = new RenderEntityItem(Minecraft.getMinecraft().getRenderManager(), Minecraft.getMinecraft().getRenderItem()){
@@ -118,6 +113,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
         tag.setDouble("Speed", speed);
         tag.setLong("Destination", destination.toLong());
         tag.setLong("From", from.toLong());
+        tag.setLong("FromTile", fromTileLocation.toLong());
     }
 
     @Override
@@ -131,6 +127,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
         nextSpeed = tag.getDouble("Speed");
         destination = BlockPos.fromLong(tag.getLong("Destination"));
         from = BlockPos.fromLong(tag.getLong("From"));
+        fromTileLocation = BlockPos.fromLong(tag.getLong("FromTile"));
         pathQueue = new Stack<>();
     }
 }

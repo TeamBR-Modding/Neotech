@@ -46,8 +46,8 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
      * @param receiver
      * @param theWorld
      */
-    public EnergyResourceEntity(EnergyStorage toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
-        super(toMove, x, y, z, momentum, sender, receiver, theWorld);
+    public EnergyResourceEntity(EnergyStorage toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos senderTile, BlockPos receiver, World theWorld) {
+        super(toMove, x, y, z, momentum, sender, senderTile, receiver, theWorld);
     }
 
     @Override

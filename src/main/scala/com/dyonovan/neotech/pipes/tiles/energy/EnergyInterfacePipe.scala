@@ -3,8 +3,9 @@ package com.dyonovan.neotech.pipes.tiles.energy
 import java.util
 
 import cofh.api.energy.{EnergyStorage, IEnergyProvider, IEnergyReceiver}
-import com.dyonovan.neotech.pipes.entities.EnergyResourceEntity
-import com.dyonovan.neotech.pipes.types.{SinkPipe, ExtractionPipe, SimplePipe}
+import com.dyonovan.neotech.pipes.collections.WorldPipes
+import com.dyonovan.neotech.pipes.entities.{ResourceEntity, EnergyResourceEntity}
+import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.{Vec3, BlockPos, EnumFacing}
 
@@ -18,20 +19,30 @@ import net.minecraft.util.{Vec3, BlockPos, EnumFacing}
   * @author Paul Davis pauljoda
   * @since August 17, 2015
   */
-class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceEntity] {
+class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEntity] {
+
+/*******************************************************************************************************************
+  ************************************** Extraction Methods ********************************************************
+  ******************************************************************************************************************/
 
     mode = 2
 
     override def canConnect(facing: EnumFacing): Boolean =
-        super.canConnect(facing) &&
-                (getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe] ||
-                    (getWorld.getTileEntity(pos.offset(facing)).isInstanceOf[IEnergyProvider] &&
-                            getWorld.getTileEntity(pos.offset(facing)).asInstanceOf[IEnergyProvider].canConnectEnergy(facing.getOpposite)))
+        if(super.canConnect(facing))
+            getWorld.getTileEntity(pos.offset(facing)) match {
+                case energy : IEnergyReceiver => energy.canConnectEnergy(facing.getOpposite)
+                case energy : IEnergyProvider => energy.canConnectEnergy(facing.getOpposite)
+                case pipe : SimplePipe => true
+                case _ => false
+            }
+        else
+            super.canConnect(facing)
 
     /**
       * This is the speed to extract from. You should be calling this when building your resources to send.
       *
       * This is included as a reminder to the child to have variable speeds
+      *
       * @return
       */
     override def getSpeed: Double = {
@@ -42,6 +53,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
     }
     /**
       * Used to specify how much RF, check for upgrades here
+      *
       * @return
       */
     def getMaxRFDrain : Int = {
@@ -56,6 +68,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
 
     /**
       * Get how many ticks to 'cooldown' between operations.
+      *
       * @return 20 = 1 second
       */
     override def getDelay: Int = {
@@ -80,7 +93,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
       */
     override def tryExtractResources(): Unit = {
         for(dir <- EnumFacing.values()) {
-            if (canConnect(dir)) {
+            if (canConnectExtract(dir)) {
                 getWorld.getTileEntity(pos.offset(dir)) match {
                     case provider: IEnergyProvider =>
                         if (provider.getEnergyStored(dir.getOpposite) > 0) {
@@ -88,7 +101,7 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
                             tempStorage.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true))
                             val energyResourceEntity = new EnergyResourceEntity(tempStorage,
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                pos, pos.north(), getWorld)
+                                pos, pos.offset(dir), pos.north(), getWorld)
                             if (extractOnMode(energyResourceEntity, simulate = true)) {
                                 provider.extractEnergy(dir.getOpposite, tempStorage.getEnergyStored, false)
                                 extractOnMode(nextResource, simulate = false)
@@ -104,27 +117,14 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
     /**
       * This is called when we fail to send a resource. You should put the resource back where you found it or
       * add it to the world
+      *
       * @param resource
       */
-    override def resourceReturned(resource: EnergyResourceEntity): Unit = {
-        val tempStorage = new EnergyStorage(resource.resource.getMaxEnergyStored, resource.resource.getMaxReceive, resource.resource.getMaxExtract)
-        tempStorage.setEnergyStored(resource.resource.getEnergyStored)
-
-        for(dir <- EnumFacing.values()) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case receiver : IEnergyReceiver if tempStorage.getEnergyStored > 0 =>
-                    receiver.receiveEnergy(dir.getOpposite, tempStorage.extractEnergy(tempStorage.getEnergyStored, false), false)
-                case _ =>
-            }
-        }
-
-        resource.resource = tempStorage
+    override def returnResource(resource: EnergyResourceEntity): Unit = {
         if(resource.resource.getEnergyStored <= 0) {
             resource.isDead = true
         } else {
-            val tempLocation = new BlockPos(resource.from)
-            resource.from = new BlockPos(pos)
-            resource.destination = new BlockPos(tempLocation)
+            resource.destination = new BlockPos(resource.from)
             resource.findPathToDestination()
         }
     }
@@ -162,11 +162,73 @@ class EnergyExtractionPipe extends ExtractionPipe[EnergyStorage, EnergyResourceE
       * Called when the board is removed, reset to default values
       */
     override def resetValues(): Unit = {
+        super.resetValues()
         mode = 2
-        redstone = 0
-        frequency = 0
-        for(x <- connections.connections.indices)
-            connections.set(x, value = true)
         worldObj.markBlockForUpdate(pos)
+    }
+
+    /*******************************************************************************************************************
+      *************************************** Insertion Methods ********************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to check if this pipe can accept a resource
+      *
+      * You should not actually change anything, all simulation
+      *
+      * @param resourceEntity
+      * @return
+      */
+    override def willAcceptResource(resourceEntity: ResourceEntity[_]): Boolean = {
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[EnergyResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity))
+            return false
+
+        val resource = resourceEntity.asInstanceOf[EnergyResourceEntity]
+
+        //Try and insert the energy
+        for(dir <- EnumFacing.values()) {
+            if (canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case receiver: IEnergyReceiver =>
+                        val usedEnergy = receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true)
+                        if (usedEnergy > 0) {
+                            resource.resource.setEnergyStored(usedEnergy)
+                            return true
+                        }
+                    case _ =>
+                }
+            }
+        }
+        false
+    }
+
+    /**
+      * Try and insert the resource into an inventory.
+      *
+      * It is pretty good practice to send the resource back if you can't remove all of it
+      *
+      * @param resource
+      */
+    override def tryInsertResource(resource: EnergyResourceEntity): Unit = {
+        if(resource == null || resource.resource == null)
+            return
+
+        //Try and insert the energy
+        for(dir <- EnumFacing.values()) {
+            if(canConnectSink(dir)) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case receiver: IEnergyReceiver if !resource.isDead =>
+                        receiver.receiveEnergy(dir.getOpposite, resource.resource.extractEnergy(resource.resource.getEnergyStored, false), false)
+                        if (resource.resource.getEnergyStored <= 0)
+                            resource.isDead = true
+                    case _ =>
+                }
+            }
+        }
+
+        //If we couldn't fill, move back to source
+        if(!resource.isDead) {
+            resource.isDead = true
+        }
     }
 }

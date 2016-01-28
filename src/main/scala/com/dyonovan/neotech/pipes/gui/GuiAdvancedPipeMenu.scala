@@ -1,8 +1,8 @@
 package com.dyonovan.neotech.pipes.gui
 
 import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher}
-import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
-import com.dyonovan.neotech.pipes.types.{AdvancedPipe, ExtractionPipe}
+import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
+import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe}
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
 import com.teambr.bookshelf.common.container.ContainerGeneric
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.client.FMLClientHandler
   */
 class GuiAdvancedPipeMenu(tile : AdvancedPipe) extends
 GuiBase[ContainerGeneric](new ContainerGeneric(), 150,
-    if((tile.getUpgradeBoard != null && tile.getUpgradeBoard.hasControl) && (tile.isInstanceOf[EnergyExtractionPipe] || tile.isInstanceOf[EnergySinkPipe])) tile.getGUIHeight - 30 else tile.getGUIHeight, " ") {
+    if((tile.getUpgradeBoard != null && tile.getUpgradeBoard.hasControl) && tile.isInstanceOf[EnergyInterfacePipe]) tile.getGUIHeight - 30 else tile.getGUIHeight, " ") {
     override def addComponents(): Unit = {
         components += new GuiComponentButton(25, 10, 100, 20, "Motherboard") {
             override def doAction(): Unit = {
@@ -37,10 +37,10 @@ GuiBase[ContainerGeneric](new ContainerGeneric(), 150,
             }
             components += new GuiComponentButton(25, 70, 100, 20, "Connections") {
                 override def doAction(): Unit = {
-                    FMLClientHandler.instance().showGuiScreen(new GuiAdvancedPipeConnections(tile.connections, tile))
+                    FMLClientHandler.instance().showGuiScreen(new GuiAdvancedPipeConnections(tile, tile))
                 }
             }
-            if(!tile.isInstanceOf[EnergyExtractionPipe] && !tile.isInstanceOf[EnergySinkPipe]) {
+            if(!tile.isInstanceOf[EnergyInterfacePipe]) {
                 x += 30
                 components += new GuiComponentButton(25, 100, 100, 20, "Filter") {
                     override def doAction(): Unit = {
@@ -50,7 +50,7 @@ GuiBase[ContainerGeneric](new ContainerGeneric(), 150,
             }
         }
         if(tile.getUpgradeBoard != null && tile.getUpgradeBoard.hasExpansion) {
-            if(tile.isInstanceOf[ExtractionPipe[_, _]]) {
+            if(tile.isInstanceOf[InterfacePipe[_, _]]) {
                 components += new GuiComponentButton(25, x, 100, 20, "Mode") {
                     override def doAction(): Unit = {
                         FMLClientHandler.instance().showGuiScreen(new GuiExtractionMode(tile))

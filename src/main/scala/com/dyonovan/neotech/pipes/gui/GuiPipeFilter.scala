@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.pipes.gui
 
 import com.dyonovan.neotech.pipes.container.ContainerPipeFilter
-import com.dyonovan.neotech.pipes.tiles.item.{ItemSinkPipe, ItemExtractionPipe}
+import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import com.dyonovan.neotech.pipes.types.AdvancedPipe
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.control.{GuiComponentCheckBox, GuiComponentButton}
@@ -20,7 +20,7 @@ import net.minecraft.entity.player.EntityPlayer
 class GuiPipeFilter(player : EntityPlayer, tile : AdvancedPipe) extends
     GuiBase[ContainerPipeFilter](new ContainerPipeFilter(player.inventory, tile), 175, 165, "Filter") {
     override def addComponents(): Unit = {
-        components += new GuiComponentButton(if(tile.isInstanceOf[ItemExtractionPipe] || tile.isInstanceOf[ItemSinkPipe]) 8 else 61, 45, 50, 20, if(tile.blackList) "Blacklist" else "Whitelist") {
+        components += new GuiComponentButton(if(tile.isInstanceOf[ItemInterfacePipe]) 8 else 61, 45, 50, 20, if(tile.blackList) "Blacklist" else "Whitelist") {
             override def doAction(): Unit = {
                 tile.setVariable(AdvancedPipe.FILTER, AdvancedPipe.FILTER_BLACKLIST)
                 tile.sendValueToServer(AdvancedPipe.FILTER, AdvancedPipe.FILTER_BLACKLIST)
@@ -30,7 +30,7 @@ class GuiPipeFilter(player : EntityPlayer, tile : AdvancedPipe) extends
                 super.renderOverlay(i, j)
             }
         }
-        if(tile.isInstanceOf[ItemExtractionPipe] || tile.isInstanceOf[ItemSinkPipe]) {
+        if(tile.isInstanceOf[ItemInterfacePipe]) {
             components += new GuiComponentCheckBox(8, 70, "Ore Dict", tile.matchOreDict) {
                 override def setValue(bool: Boolean): Unit = {
                     tile.setVariable(AdvancedPipe.FILTER, AdvancedPipe.FILTER_MATCH_ORE)

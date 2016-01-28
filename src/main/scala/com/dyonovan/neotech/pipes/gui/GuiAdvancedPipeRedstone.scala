@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.pipes.gui
 
 import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher}
-import com.dyonovan.neotech.pipes.types.{AdvancedPipe, ExtractionPipe}
+import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe}
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
 import com.teambr.bookshelf.common.container.ContainerGeneric

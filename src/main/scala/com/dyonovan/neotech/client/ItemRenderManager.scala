@@ -83,15 +83,12 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.pipeBasicSpeedStructure))
 
         //Item Stuff
-        registerItem(Item.getItemFromBlock(BlockManager.pipeItemSource))
-        registerItem(Item.getItemFromBlock(BlockManager.pipeItemSink))
+        registerItem(Item.getItemFromBlock(BlockManager.pipeItemInterface))
 
         //Fluid Stuff
-        registerItem(Item.getItemFromBlock(BlockManager.pipeFluidSource))
-        registerItem(Item.getItemFromBlock(BlockManager.pipeFluidSink))
+        registerItem(Item.getItemFromBlock(BlockManager.pipeFluidInterface))
 
         //Energy
-        registerItem(Item.getItemFromBlock(BlockManager.pipeEnergySource))
-        registerItem(Item.getItemFromBlock(BlockManager.pipeEnergySink))
+        registerItem(Item.getItemFromBlock(BlockManager.pipeEnergyInterface))
     }
 }

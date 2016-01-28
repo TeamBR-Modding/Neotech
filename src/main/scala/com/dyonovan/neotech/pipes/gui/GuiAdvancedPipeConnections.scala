@@ -1,14 +1,15 @@
 package com.dyonovan.neotech.pipes.gui
 
-import com.dyonovan.neotech.pipes.collections.ConnectedSides
-import com.dyonovan.neotech.pipes.types.{SinkPipe, ExtractionPipe}
-import com.teambr.bookshelf.client.gui.GuiBase
-import com.teambr.bookshelf.client.gui.component.control.GuiComponentCheckBox
+import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe}
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentText
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiBase}
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentTexturedButton, GuiComponentCheckBox}
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.Syncable
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.client.FMLClientHandler
 
+import scala.collection.mutable.ArrayBuffer
 import scala.reflect.internal.util.StringOps
 
 /**
@@ -21,13 +22,30 @@ import scala.reflect.internal.util.StringOps
   * @author Paul Davis <pauljoda>
   * @since 1/21/2016
   */
-class GuiAdvancedPipeConnections(sides : ConnectedSides, tile : Syncable) extends GuiBase[ContainerGeneric](new ContainerGeneric, 75, 110, "Connections") {
+class GuiAdvancedPipeConnections(tileEntity : AdvancedPipe, tile : Syncable) extends GuiBase[ContainerGeneric](new ContainerGeneric, 75, 150, "Connections") {
     override def addComponents(): Unit = {
-        for(x <- 0 until EnumFacing.values().size) {
-            components += new GuiComponentCheckBox(8, 20 + (x * 15), EnumFacing.getFront(x).getName.toUpperCase, sides.get(x)) {
-                override def setValue(bool: Boolean): Unit = {
-                    tile.setVariable(2, x)
-                    tile.sendValueToServer(2, x)
+        components += new GuiComponentText(" FIX FOR MINECRAFT ", -100, -10000000)
+
+        for(dir <- EnumFacing.values()) {
+            components += new GuiComponentText(dir.getName.toUpperCase, 7, 20 * dir.ordinal() + 20)
+            components += new GuiComponentTexturedButton(50, 20 * dir.ordinal() + 15,
+                tileEntity.getUVForMode(tileEntity.getModeForSide(dir))._1,
+                tileEntity.getUVForMode(tileEntity.getModeForSide(dir))._2,
+                16, 16, 20, 20) {
+                override def doAction(): Unit = {
+                    tileEntity.setVariable(AdvancedPipe.IO_FIELD_ID, dir.ordinal())
+                    tileEntity.sendValueToServer(AdvancedPipe.IO_FIELD_ID, dir.ordinal())
+                }
+
+                override def render(i : Int, j : Int) = {
+                    setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(dir)))
+                    super.render(i, j)
+                }
+
+                override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
+                    val tip = new ArrayBuffer[String]()
+                    tip += GuiColor.YELLOW + dir.getName.toUpperCase + ": " + GuiColor.WHITE + tileEntity.getDisplayNameForIOMode(tileEntity.getModeForSide(dir))
+                    tip
                 }
             }
         }

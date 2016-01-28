@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.client.renderers
 
-import com.dyonovan.neotech.pipes.tiles.energy.EnergyExtractionPipe
+import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
@@ -15,9 +15,9 @@ import net.minecraftforge.fml.relauncher.{SideOnly, Side}
  * @since August 20, 2015
  */
 @SideOnly(Side.CLIENT)
-class EnergyResourceEntityRenderer extends TileEntitySpecialRenderer[EnergyExtractionPipe] {
-    override def renderTileEntityAt(tile: EnergyExtractionPipe, posX: Double, posY: Double, posZ: Double, partialTick: Float, integer: Int): Unit = {
-        val resourceList = tile.asInstanceOf[EnergyExtractionPipe].resources
+class EnergyResourceEntityRenderer extends TileEntitySpecialRenderer[EnergyInterfacePipe] {
+    override def renderTileEntityAt(tile: EnergyInterfacePipe, posX: Double, posY: Double, posZ: Double, partialTick: Float, integer: Int): Unit = {
+        val resourceList = tile.asInstanceOf[EnergyInterfacePipe].resources
         for (i <- 0 until resourceList.size()) {
             val resource = resourceList.get(i)
             resource.renderResource(partialTick)

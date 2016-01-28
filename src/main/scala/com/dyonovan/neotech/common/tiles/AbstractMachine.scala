@@ -1,9 +1,8 @@
 package com.dyonovan.neotech.common.tiles
 
 import cofh.api.energy.{EnergyStorage, IEnergyHandler}
-import com.dyonovan.neotech.collections.StandardValues
+import com.dyonovan.neotech.collections.{InputOutput, StandardValues}
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.dyonovan.neotech.common.tiles.machines.AutomaticIO
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, InventorySided, RedstoneAware, Syncable}
 import com.teambr.bookshelf.util.InventoryUtils
@@ -24,7 +23,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @since August 11, 2015
   */
 abstract class AbstractMachine extends Syncable with Upgradeable with InventorySided
-        with IEnergyHandler with RedstoneAware with AutomaticIO {
+        with IEnergyHandler with RedstoneAware with InputOutput {
 
     final val cookSpeed = 200
     final val ENERGY_TICK = 20
@@ -236,7 +235,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         super[Upgradeable].writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
         super[InventorySided].writeToNBT(tag)
-        super[AutomaticIO].writeToNBT(tag)
+        super[InputOutput].writeToNBT(tag)
         values.writeToNBT(tag)
         energy.writeToNBT(tag)
         if(updateClient && worldObj != null) {
@@ -249,7 +248,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         super[Upgradeable].readFromNBT(tag)
         super[TileEntity].readFromNBT(tag)
         super[InventorySided].readFromNBT(tag)
-        super[AutomaticIO].readFromNBT(tag)
+        super[InputOutput].readFromNBT(tag)
         val tempCook = values.cookTime
         values.readFromNBT(tag)
         if(tag.hasKey("UpdateEnergy") && worldObj != null  )

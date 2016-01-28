@@ -2,7 +2,7 @@ package com.dyonovan.neotech.pipes.collections
 
 import java.util
 
-import com.dyonovan.neotech.pipes.types.ExtractionPipe
+import com.dyonovan.neotech.pipes.types.InterfacePipe
 
 /**
   * This file was created for NeoTech
@@ -15,7 +15,7 @@ import com.dyonovan.neotech.pipes.types.ExtractionPipe
   * @since 1/23/2016
   */
 object WorldPipes {
-    val pipes = new util.ArrayList[ExtractionPipe[_, _]]()
+    val pipes = new util.ArrayList[InterfacePipe[_, _]]()
 
     def notifyPipes() = {
         for(x <- 0 until pipes.size())

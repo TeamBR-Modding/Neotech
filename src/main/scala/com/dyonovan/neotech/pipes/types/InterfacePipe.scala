@@ -3,7 +3,7 @@ package com.dyonovan.neotech.pipes.types
 import java.util
 
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.dyonovan.neotech.pipes.collections.{WorldPipes, ConnectedSides}
+import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
 import com.teambr.bookshelf.common.tiles.traits.{Syncable, RedstoneAware, UpdatingTile}
 import net.minecraft.nbt.NBTTagCompound
@@ -21,7 +21,11 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis pauljoda
   * @since August 16, 2015
   */
-trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
+trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
+
+    /*******************************************************************************************************************
+      ************************************** Extraction Methods ********************************************************
+      ******************************************************************************************************************/
 
     WorldPipes.pipes.add(this)
 
@@ -79,17 +83,17 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
     def getSpeed : Double
 
     /**
+      * This is called when we fail to send a resource. You should put the resource back where you found it or
+      * add it to the world
+      *
+      * @param resource The returned resource
+      */
+    def returnResource(resource : R)
+
+    /**
       * Used to add a resource
       */
     def addResource(resource: R): Unit = resources.add(resource)
-
-    /**
-      * Used to tell if this pipe is allowed to connect
-      *
-      * @param facing The direction from this block
-      * @return Can connect
-      */
-    override def canConnect(facing: EnumFacing): Boolean = connections.get(facing.ordinal()) && super.canConnect(facing)
 
     /**
       * Extracts on the current mode
@@ -106,14 +110,6 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             case _ => extractResourceOnShortestPath(resource, simulate)
         }
     }
-
-    /**
-      * This is called when we fail to send a resource. You should put the resource back where you found it or
-      * add it to the world
-      *
-      * @param resource The returned resource
-      */
-    def resourceReturned(resource : R)
 
     override def onServerTick() : Unit = {
         //Update our resources
@@ -151,8 +147,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
       */
     override def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {
         resource match {
-            case matchingResource: R if resource.destination == getPos && !resource.isDead =>
-                resourceReturned(matchingResource)
+            case matchedResource: R if resource.destination == getPos => tryInsertResource(matchedResource)
             case _ =>
         }
     }
@@ -187,6 +182,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                 distance.put(getPosAsLong, 0) //We are right here
                 parent.put(getPosAsLong, null) //No parent
+                sinks.add(getPosAsLong)
 
                 queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
 
@@ -215,7 +211,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                                         getWorld.getTileEntity(otherPos) match {
                                             //Add to sinks
-                                            case pipe: SinkPipe[T, R] if pipe.frequency == frequency =>
+                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency =>
                                                 sinks.add(pipe.getPosAsLong)
                                             case _ =>
                                         }
@@ -232,7 +228,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var destination = new BlockPos(getPos)
             var shortest = Integer.MAX_VALUE
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[SinkPipe[T, R]].willAcceptResource(resource)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource)) {
                     val d = BlockPos.fromLong(sinks.get(i))
                     if (distance.get(d.toLong) < shortest) {
                         destination = d
@@ -245,6 +241,9 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
+            if (getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource))
+                resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
+
             while (parent.get(u.toLong) != null) {
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
                 u = parent.get(u.toLong)
@@ -288,6 +287,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                 distance.put(getPosAsLong, 0) //We are right here
                 parent.put(getPosAsLong, null) //No parent
+                sinks.add(getPosAsLong)
 
                 queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
 
@@ -316,7 +316,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                                         getWorld.getTileEntity(otherPos) match {
                                             //Add to sinks
-                                            case pipe: SinkPipe[T, R] if pipe.frequency == frequency =>
+                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency =>
                                                 sinks.add(pipe.getPosAsLong)
                                             case _ =>
                                         }
@@ -333,7 +333,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var destination = new BlockPos(getPos)
             var longest = Integer.MIN_VALUE
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[SinkPipe[T, R]].willAcceptResource(resource)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource)) {
                     val d = BlockPos.fromLong(sinks.get(i))
                     if (distance.get(d.toLong) > longest) {
                         destination = d
@@ -346,6 +346,8 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
+            if (getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource))
+                resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
             while (parent.get(u.toLong) != null) {
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
                 u = parent.get(u.toLong)
@@ -387,6 +389,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                 distance.put(getPosAsLong, 0) //We are right here
                 parent.put(getPosAsLong, null) //No parent
+                sinks.add(getPosAsLong)
 
                 queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
 
@@ -415,7 +418,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                                         getWorld.getTileEntity(otherPos) match {
                                             //Add to sinks
-                                            case pipe: SinkPipe[T, R] if pipe.frequency == frequency =>
+                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency =>
                                                 sinks.add(pipe.getPosAsLong)
                                             case _ =>
                                         }
@@ -433,7 +436,7 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var pickNext: Boolean = lastSink == 0
             val lastLastSink = lastSink
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[SinkPipe[T, R]].willAcceptResource(resource)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource)) {
                     if (pickNext) {
                         destination = BlockPos.fromLong(sinks.get(i))
                         lastSink = sinks.get(i)
@@ -457,6 +460,8 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
+            if (getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource))
+                resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
             while (parent.get(u.toLong) != null) {
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
                 u = parent.get(u.toLong)
@@ -489,5 +494,37 @@ trait ExtractionPipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             TileEntity.INFINITE_EXTENT_AABB
         else
             super.getRenderBoundingBox
+    }
+
+    /*******************************************************************************************************************
+      *************************************** Insertion Methods ********************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Try and insert the resource into an inventory.
+      *
+      * It is pretty good practice to send the resource back if you can't remove all of it
+      * @param resource
+      */
+    def tryInsertResource(resource : R)
+
+
+    /**
+      * Used to check if this pipe can accept a resource
+      *
+      * You should not actually change anything, all simulation
+      * @param resource
+      * @return
+      */
+    def willAcceptResource(resource: ResourceEntity[_]) : Boolean = {
+        if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
+            if(redstone == -1 && isPowered)
+                return false
+            if(redstone == 1 && !isPowered)
+                return false
+        }
+        if(!isResourceValidForFilter(resource))
+            return false
+        true
     }
 }

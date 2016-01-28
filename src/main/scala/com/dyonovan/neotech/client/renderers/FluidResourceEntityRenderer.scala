@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.client.renderers
 
-import com.dyonovan.neotech.pipes.tiles.fluid.FluidExtractionPipe
+import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 
@@ -15,9 +15,9 @@ import net.minecraftforge.fml.relauncher.{SideOnly, Side}
  * @since August 20, 2015
  */
 @SideOnly(Side.CLIENT)
-class FluidResourceEntityRenderer extends TileEntitySpecialRenderer[FluidExtractionPipe] {
-    override def renderTileEntityAt(tile: FluidExtractionPipe, posX: Double, posY: Double, posZ: Double, partialTick: Float, integer: Int): Unit = {
-        val resourceList = tile.asInstanceOf[FluidExtractionPipe].resources
+class FluidResourceEntityRenderer extends TileEntitySpecialRenderer[FluidInterfacePipe] {
+    override def renderTileEntityAt(tile: FluidInterfacePipe, posX: Double, posY: Double, posZ: Double, partialTick: Float, integer: Int): Unit = {
+        val resourceList = tile.asInstanceOf[FluidInterfacePipe].resources
         for (i <- 0 until resourceList.size()) {
             val resource = resourceList.get(i)
             resource.renderResource(partialTick)

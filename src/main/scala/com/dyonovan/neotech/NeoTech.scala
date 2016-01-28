@@ -50,7 +50,7 @@ object NeoTech {
     }
 
     val tabPipes = new CreativeTabs("tabNeoTechPipes") {
-        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemSource)
+        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemInterface)
     }
 
     val tabDecorations = new CreativeTabs("tabNeoTechDecorations") {

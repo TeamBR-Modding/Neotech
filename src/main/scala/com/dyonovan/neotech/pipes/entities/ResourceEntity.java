@@ -52,6 +52,7 @@ abstract public class ResourceEntity<R> {
     public Stack<Vec3> pathQueue;
     public Vec3 currentTarget;
     public BlockPos from;
+    public BlockPos fromTileLocation;
     public BlockPos destination;
 
     /**
@@ -67,7 +68,7 @@ abstract public class ResourceEntity<R> {
      * @param z The Z Position
      * @param momentum How fast to move
      */
-    public ResourceEntity(R toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos receiver, World theWorld) {
+    public ResourceEntity(R toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos senderTile, BlockPos receiver, World theWorld) {
         resource = toMove;
         xPos = prevX = x;
         yPos = prevY = y;
@@ -75,6 +76,7 @@ abstract public class ResourceEntity<R> {
         speed = nextSpeed = momentum;
 
         from = new BlockPos(sender);
+        fromTileLocation = new BlockPos(senderTile);
         destination = new BlockPos(receiver);
         world = theWorld;
 

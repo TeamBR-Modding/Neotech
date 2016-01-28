@@ -8,9 +8,9 @@ import com.dyonovan.neotech.common.tiles.machines._
 import com.dyonovan.neotech.common.tiles.misc._
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank, TileRFStorage}
 import com.dyonovan.neotech.pipes.blocks.{ItemBlockColored, BlockPipeSpecial, BlockPipe}
-import com.dyonovan.neotech.pipes.tiles.energy.{EnergyExtractionPipe, EnergySinkPipe}
-import com.dyonovan.neotech.pipes.tiles.fluid.{FluidSinkPipe, FluidExtractionPipe}
-import com.dyonovan.neotech.pipes.tiles.item.{ItemSinkPipe, ItemExtractionPipe}
+import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
+import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
+import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -52,14 +52,11 @@ object BlockManager {
     val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, true, classOf[StructurePipe])
     val pipeBasicSpeedStructure = new BlockPipe("pipeBasicSpeedStructure", Material.rock, false, classOf[StructurePipe])
 
-    val pipeItemSource = new BlockPipeSpecial("pipeItemBasicSource", Material.rock, classOf[ItemExtractionPipe])
-    val pipeItemSink = new BlockPipeSpecial("pipeItemBasicSink", Material.rock, classOf[ItemSinkPipe])
+    val pipeItemInterface = new BlockPipeSpecial("pipeItemBasicInterface", Material.rock, classOf[ItemInterfacePipe])
 
-    val pipeEnergySource = new BlockPipeSpecial("pipeEnergyBasicSource", Material.rock, classOf[EnergyExtractionPipe])
-    val pipeEnergySink = new BlockPipeSpecial("pipeEnergyBasicSink", Material.rock, classOf[EnergySinkPipe])
+    val pipeEnergyInterface = new BlockPipeSpecial("pipeEnergyBasicInterface", Material.rock, classOf[EnergyInterfacePipe])
 
-    val pipeFluidSource = new BlockPipeSpecial("pipeFluidBasicSource", Material.rock, classOf[FluidExtractionPipe])
-    val pipeFluidSink = new BlockPipeSpecial("pipeFluidBasicSink", Material.rock, classOf[FluidSinkPipe])
+    val pipeFluidInterface = new BlockPipeSpecial("pipeFluidBasicInterface", Material.rock, classOf[FluidInterfacePipe])
 
     //RF Storage
     val basicRFStorage = new BlockRFStorage("basicRFStorage", 1)
@@ -107,14 +104,11 @@ object BlockManager {
 
         registerBlock(pipeBasicSpeedStructure, "pipeBasicSpeedStructure", classOf[StructurePipe])
 
-        registerBlock(pipeItemSource, "pipeItemBasicSource", classOf[ItemExtractionPipe])
-        registerBlock(pipeItemSink, "pipeItemBasicSink", classOf[ItemSinkPipe])
+        registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
 
-        registerBlock(pipeEnergySource, "pipeEnergyBasicSource", classOf[EnergyExtractionPipe])
-        registerBlock(pipeEnergySink, "pipeEnergyBasicSink", classOf[EnergySinkPipe])
+        registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
 
-        registerBlock(pipeFluidSource, "pipeFluidBasicSource", classOf[FluidExtractionPipe])
-        registerBlock(pipeFluidSink, "pipeFluidBasicSink", classOf[FluidSinkPipe])
+        registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])
 
         //RF Storage
         registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])

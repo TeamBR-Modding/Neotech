@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.pipes.types
 
+import com.dyonovan.neotech.collections.InputOutput
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.dyonovan.neotech.pipes.collections.{WorldPipes, Filter, ConnectedSides}
+import com.dyonovan.neotech.pipes.collections.{WorldPipes, Filter}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -20,7 +22,7 @@ object AdvancedPipe {
     //Set and Get field constants
     val REDSTONE_FIELD_ID = 0
     val MODE_FIELD_ID = 1
-    val CONNECTIONS = 2
+    val IO_FIELD_ID = 2
     val FREQUENCY = 3
     val FILTER = 4
 
@@ -30,15 +32,33 @@ object AdvancedPipe {
     val FILTER_BLACKLIST = 3
 }
 
-trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with SimplePipe with Filter {
+trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with SimplePipe with Filter with InputOutput {
+
+    override def resetIO() : Unit = {
+        for(dir <- EnumFacing.values()) {
+            sideModes.put(dir, BOTH)
+        }
+    }
 
     //Variables
     var mode : Int = 0 //Used to set mode (Round Robin etc) only used in extract pipe
     var redstone : Int = 0
     var frequency : Int = 0
 
-    //Used to set connections
-    val connections = new ConnectedSides
+    /**
+      * Used to tell if this pipe is allowed to connect
+      *
+      * @param facing The direction from this block
+      * @return Can connect
+      */
+    def canConnectExtract(facing: EnumFacing): Boolean = canOutputFromSideNoRotate(facing) && super.canConnect(facing)
+
+    /**
+      * Can this pipe connect
+      * @param facing The direction from this block
+      * @return
+      */
+    def canConnectSink(facing: EnumFacing): Boolean = canInputFromSideNoRotate(facing) && super.canConnect(facing)
 
     /**
       * This is mainly used to sending info to the client so it knows what to render. It will also be used to save on world
@@ -49,7 +69,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].writeToNBT(tag)
         super[Filter].writeToNBT(tag)
-        connections.writeToNBT(tag)
+        super[InputOutput].writeToNBT(tag)
         tag.setInteger("mode", mode)
         tag.setInteger("redstone", redstone)
         tag.setInteger("frequency", frequency)
@@ -62,12 +82,13 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
       * required.
       *
       * Note, if you do forget to set the world, the onServerTick method will try to save it. But for safety, just add it
+ *
       * @param tag
       */
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[Upgradeable].readFromNBT(tag)
         super[Filter].readFromNBT(tag)
-        connections.readFromNBT(tag)
+        super[InputOutput].readFromNBT(tag)
         mode = tag.getInteger("mode")
         redstone = tag.getInteger("redstone")
         frequency = tag.getInteger("frequency")
@@ -88,8 +109,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
         redstone = 0
         frequency = 0
         resetFilter()
-        for(x <- connections.connections.indices)
-            connections.set(x, value = true)
+        resetIO()
         getWorld.markBlockForUpdate(getPos)
     }
 
@@ -107,10 +127,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
         id match {
             case AdvancedPipe.REDSTONE_FIELD_ID => redstone = value.toInt
             case AdvancedPipe.MODE_FIELD_ID => mode = value.toInt
-            case AdvancedPipe.CONNECTIONS =>
-                connections.set(value.toInt, !connections.get(value.toInt))
-                WorldPipes.notifyPipes()
-                getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
+            case AdvancedPipe.IO_FIELD_ID => toggleMode(EnumFacing.getFront(value.toInt)); getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
             case AdvancedPipe.FREQUENCY =>
                 frequency = value.toInt
                 WorldPipes.notifyPipes()
@@ -131,7 +148,6 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
         id match {
             case AdvancedPipe.REDSTONE_FIELD_ID => redstone
             case AdvancedPipe.MODE_FIELD_ID => mode
-            case AdvancedPipe.CONNECTIONS => 0.0
             case AdvancedPipe.FREQUENCY => frequency
             case _ => 0.0
         }

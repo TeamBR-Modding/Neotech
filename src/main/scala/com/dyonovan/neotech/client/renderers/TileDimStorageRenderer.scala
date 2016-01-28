@@ -48,9 +48,9 @@ class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
                 }
             }
 
-            restoreGlState(savedGLState)
             RenderUtils.restoreRenderState()
             RenderUtils.restoreColor()
+            restoreGlState(savedGLState)
         }
     }
 }

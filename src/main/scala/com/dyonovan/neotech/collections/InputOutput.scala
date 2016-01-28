@@ -1,11 +1,9 @@
-package com.dyonovan.neotech.common.tiles.machines
+package com.dyonovan.neotech.collections
 
 import java.util
 
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.traits.NBTSavable
-import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.IInventory
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 
@@ -19,7 +17,7 @@ import net.minecraft.util.EnumFacing
   * @author Paul Davis <pauljoda>
   * @since 1/24/2016
   */
-trait AutomaticIO extends NBTSavable {
+trait InputOutput extends NBTSavable {
     sealed trait IOMODE { def name: String }
     case object DISABLED extends IOMODE { val name = "DISABLED" }
     case object OUTONLY extends IOMODE { val name = "OUTONLY" }
@@ -89,6 +87,18 @@ trait AutomaticIO extends NBTSavable {
 
     def canInputFromSide(dir : EnumFacing, facing : EnumFacing): Boolean = {
         sideModes.get(getDirFromFacing(dir, facing)) == INONLY || sideModes.get(getDirFromFacing(dir, facing)) == BOTH
+    }
+
+    def canOutputFromSideNoRotate(dir : EnumFacing): Boolean = {
+        sideModes.get(dir) == OUTONLY || sideModes.get(dir) == BOTH
+    }
+
+    def canInputFromSideNoRotate(dir : EnumFacing): Boolean = {
+        sideModes.get(dir) == INONLY || sideModes.get(dir) == BOTH
+    }
+
+    def isDisabled(dir : EnumFacing) : Boolean = {
+        sideModes.get(dir) == DISABLED
     }
 
     def getDirFromFacing(dir : EnumFacing, facing : EnumFacing) = {
