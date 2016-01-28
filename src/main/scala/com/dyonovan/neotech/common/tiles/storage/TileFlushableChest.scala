@@ -81,7 +81,6 @@ class TileFlushableChest extends Syncable with Inventory {
     }
 
     override def markDirty(): Unit = {
-        super[Inventory].markDirty()
         super[TileEntity].markDirty()
     }
 

@@ -17,7 +17,6 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
     override def initialSize: Int = 1
 
     override def markDirty(): Unit = {
-        super[Inventory].markDirty()
         super[TileEntity].markDirty()
     }
 

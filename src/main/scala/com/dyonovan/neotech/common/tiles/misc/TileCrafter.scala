@@ -29,7 +29,6 @@ class TileCrafter extends TileEntity with Inventory {
 
     override def markDirty(): Unit = {
         super[TileEntity].markDirty()
-        super[Inventory].markDirty()
     }
 
     override def initialSize: Int = 20

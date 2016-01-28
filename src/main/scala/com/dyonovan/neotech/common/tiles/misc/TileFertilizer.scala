@@ -82,7 +82,6 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
 
     override def markDirty(): Unit = {
         super[TileEntity].markDirty()
-        super[Inventory].markDirty()
     }
 
     override def initialSize: Int = 4

@@ -185,7 +185,6 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     override def markDirty(): Unit = {
         super[Upgradeable].markDirty()
         super[TileEntity].markDirty()
-        super[InventorySided].markDirty()
     }
 
     /** ****************************************************************************************************************
