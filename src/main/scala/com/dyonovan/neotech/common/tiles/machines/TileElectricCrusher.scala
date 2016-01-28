@@ -21,7 +21,7 @@ import scala.util.Random
 class TileElectricCrusher extends AbstractMachine {
 
     override def smeltItem() {
-        val input = recipe(getStackInSlot(0)).copy
+        val input = getStackInSlot(0)
         var recipeResult: ItemStack = recipe(getStackInSlot(0))
         decrStackSize(0, 1)
         if (getStackInSlot(1) == null) {
