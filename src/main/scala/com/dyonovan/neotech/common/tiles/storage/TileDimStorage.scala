@@ -92,7 +92,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
                 worldObj.markBlockForUpdate(pos)
             }
             val returnStack = inventoryContents.get(0).copy()
-            returnStack.stackSize = inventoryContents.get(0).getMaxStackSize
+            returnStack.stackSize = amount
             returnStack
         } else {
             val actual = Math.min(amount, qty)
