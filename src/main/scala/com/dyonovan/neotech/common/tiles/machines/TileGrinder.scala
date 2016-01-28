@@ -130,6 +130,5 @@ class TileGrinder extends UpdatingTile with Inventory {
 
     override def markDirty(): Unit = {
         super[TileEntity].markDirty()
-        super[Inventory].markDirty()
     }
 }
