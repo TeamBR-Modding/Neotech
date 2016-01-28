@@ -12,9 +12,9 @@ buildscript {
     }
 }
 
-/*plugins {
+plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
-}*/
+}
 
 repositories {
     maven {

@@ -32,7 +32,7 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, facing: EnumFacing, f1: Float, f2: Float, f3: Float): Boolean = {
         val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
         if (!world.isRemote) {
-            if (player.getHeldItem.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
+            if (player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
                 val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
                 val tag = new NBTTagCompound
                 tile.writeToNBT(tag)
@@ -41,28 +41,11 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                 dropItem(world, item, pos)
                 world.setBlockToAir(pos)
             } else if (player.getHeldItem != null) {
-                if (tile.getStackInSlot(0) == null) {
-                    tile.setInventorySlotContents(0, player.getHeldItem)
-                    player.getHeldItem.stackSize = 0
-                    world.markBlockForUpdate(pos)
-                    world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
-                    return true
-                }
-
-                var actual = 0
-                val amount = player.getHeldItem.stackSize
-                if (tile.getQty + amount <= tile.maxStacks * tile.getStackInSlot(0).getMaxStackSize) {
-                    tile.addQty(amount)
-                    actual = amount
-                } else {
-                    val leftover = (tile.getQty + amount) - (tile.maxStacks * tile.getStackInSlot(0).getMaxStackSize)
-                    tile.addQty(amount - leftover)
-                    actual = amount - leftover
-                }
-                if (actual > 0) {
-                    player.getHeldItem.stackSize -= actual
-                    world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
-                }
+                var actual = tile.insertItem(0, player.getHeldItem, simulate = true)
+                if (actual != null && actual.stackSize == player.getHeldItem.stackSize) return true
+                actual = tile.insertItem(0, player.getHeldItem, simulate = false)
+                if (actual == null) player.getHeldItem.stackSize = 0 else player.getHeldItem.stackSize = actual.stackSize
+                world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
             }
             world.markBlockForUpdate(pos)
         }
@@ -81,23 +64,12 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
     override def onBlockClicked(world: World, pos: BlockPos, player: EntityPlayer): Unit = {
         val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
 
-        if (tile.getStackInSlot(0) != null) {
-            var actual = 0
-            val outStack = tile.getStackInSlot(0).copy
-            if (!player.isSneaking) {
-                tile.addQty(-1)
-                actual = 1
-            } else {
-                actual = Math.min(tile.getQty, tile.getStackInSlot(0).getMaxStackSize)
-                tile.addQty(-actual)
-            }
-
-            if (actual > 0) {
-                outStack.stackSize = actual
-                player.inventory.addItemStackToInventory(outStack)
-                world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
-            }
-
+        val amt = if (!player.isSneaking) 1 else tile.getStackInSlot(0).getMaxStackSize
+        var actual = tile.extractItem(0, amt, simulate = true)
+        if (actual != null) {
+            actual = tile.extractItem(0, amt, simulate = false)
+            player.inventory.addItemStackToInventory(actual)
+            world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
         }
     }
 
@@ -111,7 +83,7 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                         while (true) {
                             if (tile.getQty == 0) break
                             else if (tile.getQty > tile.getStackInSlot(0).getMaxStackSize) {
-                                tile.addQty(tile.getStackInSlot(0).getMaxStackSize)
+                                tile.addQty(-tile.getStackInSlot(0).getMaxStackSize)
                                 stacks.add(new ItemStack(tile.getStackInSlot(0).getItem, tile.getStackInSlot(0).getMaxStackSize, tile.getStackInSlot(0).getItemDamage))
                             } else {
                                 stacks.add(new ItemStack(tile.getStackInSlot(0).getItem, tile.getQty, tile.getStackInSlot(0).getItemDamage))
