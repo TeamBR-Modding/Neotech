@@ -21,15 +21,12 @@ repositories {
         name 'BR Repo'
         url "http://www.teambrmodding.com/maven2/"
     }
-    /*maven {
-        name 'CB Maven FS'
-        url "http://chickenbones.net/maven/"
-    }*/
     maven { // The repo from which to get waila
         name "Mobius Repo"
         url "http://mobiusstrip.eu/maven"
     }
-    maven {
+    maven { //JEI
+        name 'DVS1 Maven FS'
         url "http://dvs1.progwml6.com/files/maven"
     }
     maven {
@@ -80,7 +77,8 @@ minecraft {
     replace "@VERSION@", "${config.mod_version}"
 
     runDir = "eclipse"
-    
+    useDepAts = true
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -96,9 +94,6 @@ configurations.all {
 }
 
 dependencies {
-    //compile "codechicken:CodeChickenCore:${config.ccc_version}:dev"
-    //compile "codechicken:CodeChickenLib:${config.CCLIB_version}:dev"
-    //compile "codechicken:NotEnoughItems:${config.NEI_version}:dev"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev", changing: true
@@ -136,11 +131,11 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
