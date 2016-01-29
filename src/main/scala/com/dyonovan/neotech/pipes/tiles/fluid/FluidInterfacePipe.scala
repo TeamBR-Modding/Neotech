@@ -167,8 +167,8 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
       * @param resourceEntity
       * @return
       */
-    override def willAcceptResource(resourceEntity: ResourceEntity[_]): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[FluidResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity))
+    override def willAcceptResource(resourceEntity: ResourceEntity[_], isSending : Boolean): Boolean = {
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[FluidResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, isSending))
             return false
 
         val resource = resourceEntity.asInstanceOf[FluidResourceEntity]
@@ -184,7 +184,8 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
                         val filledAmount = test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false)
                         if (filledAmount > 0) {
                             resource.resource.getFluid.amount = filledAmount
-                            waitingQueue.add(resource)
+                            if(isSending)
+                                waitingQueue.add(resource)
                             return true
                         }
                     case _ =>

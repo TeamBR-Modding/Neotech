@@ -228,7 +228,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var destination = new BlockPos(getPos)
             var shortest = Integer.MAX_VALUE
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate)) {
                     val d = BlockPos.fromLong(sinks.get(i))
                     if (distance.get(d.toLong) < shortest) {
                         destination = d
@@ -241,7 +241,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
-            if (getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource))
+            if (u == getPos)
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
 
             while (parent.get(u.toLong) != null) {
@@ -333,7 +333,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var destination = new BlockPos(getPos)
             var longest = Integer.MIN_VALUE
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate)) {
                     val d = BlockPos.fromLong(sinks.get(i))
                     if (distance.get(d.toLong) > longest) {
                         destination = d
@@ -346,7 +346,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
-            if (getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource))
+            if (u == getPos)
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
             while (parent.get(u.toLong) != null) {
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
@@ -436,7 +436,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var pickNext: Boolean = lastSink == 0
             val lastLastSink = lastSink
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate)) {
                     if (pickNext) {
                         destination = BlockPos.fromLong(sinks.get(i))
                         lastSink = sinks.get(i)
@@ -447,7 +447,11 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
                 }
             }
 
-            if (destination == null) {
+            if (destination == null && pickNext) {
+                lastSink = 0
+                coolDown = 0
+                return false
+            } else if(destination == null) {
                 lastSink = 0
                 return false
             }
@@ -460,7 +464,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
-            if (getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource))
+            if (u == getPos)
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
             while (parent.get(u.toLong) != null) {
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
@@ -504,6 +508,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
       * Try and insert the resource into an inventory.
       *
       * It is pretty good practice to send the resource back if you can't remove all of it
+      *
       * @param resource
       */
     def tryInsertResource(resource : R)
@@ -513,10 +518,11 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
       * Used to check if this pipe can accept a resource
       *
       * You should not actually change anything, all simulation
+      *
       * @param resource
       * @return
       */
-    def willAcceptResource(resource: ResourceEntity[_]) : Boolean = {
+    def willAcceptResource(resource: ResourceEntity[_], isSending : Boolean) : Boolean = {
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
             if(redstone == -1 && isPowered)
                 return false

@@ -179,8 +179,8 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
       * @param resourceEntity
       * @return
       */
-    override def willAcceptResource(resourceEntity: ResourceEntity[_]): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[EnergyResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity))
+    override def willAcceptResource(resourceEntity: ResourceEntity[_], isSending : Boolean): Boolean = {
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[EnergyResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, isSending))
             return false
 
         val resource = resourceEntity.asInstanceOf[EnergyResourceEntity]

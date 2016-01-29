@@ -189,8 +189,8 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
       * @param resourceEntity
       * @return
       */
-    override def willAcceptResource(resourceEntity: ResourceEntity[_]): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity))
+    override def willAcceptResource(resourceEntity: ResourceEntity[_], isSending : Boolean): Boolean = {
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, isSending))
             return false
 
         val resource = resourceEntity.asInstanceOf[ItemResourceEntity]
@@ -205,7 +205,8 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
         for(dir <- EnumFacing.values()) {
             if (canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation) {
                 if (InventoryUtils.moveItemInto(tempInventory, 0, test(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite), -1, 64, dir, doMove = false)) {
-                    waitingQueue.add(resource)
+                    if(isSending)
+                        waitingQueue.add(resource)
                     return true
                 }
             }
