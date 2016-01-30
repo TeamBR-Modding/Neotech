@@ -43,4 +43,6 @@ class NeoTechPlugin extends IModPlugin {
     override def onItemRegistryAvailable(itemRegistry: IItemRegistry): Unit = { }
 
     override def onJeiHelpersAvailable(jeiHelpers: IJeiHelpers): Unit = { NeoTechPlugin.jeiHelpers = jeiHelpers }
+
+    override def onRuntimeAvailable(iJeiRuntime: IJeiRuntime): Unit = { }
 }
