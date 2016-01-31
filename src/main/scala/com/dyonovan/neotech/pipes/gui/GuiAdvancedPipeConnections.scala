@@ -1,16 +1,11 @@
 package com.dyonovan.neotech.pipes.gui
 
-import java.awt.Color
-import javax.annotation.Nullable
 import com.dyonovan.neotech.pipes.types.AdvancedPipe
-import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentSideSelector, GuiComponentTexturedButton}
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiTabCollection}
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentTexturedButton
+import com.teambr.bookshelf.client.gui.component.display.GuiComponentText
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.Syncable
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 
 import scala.collection.mutable.ArrayBuffer
@@ -52,27 +47,5 @@ class GuiAdvancedPipeConnections(tileEntity : AdvancedPipe, tile : Syncable) ext
                 }
             }
         }
-    }
-
-    override def addRightTabs(tabs : GuiTabCollection): Unit = {
-        val selectorTab = new ArrayBuffer[BaseComponent]
-        selectorTab += new GuiComponentSideSelectorTemp(20, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
-            override def setToggleController(): Unit = {
-                toggleableSidesController = new ToggleableSidesController {
-
-                    override def onSideToggled(side: EnumFacing, modifier: Int): Unit = {
-                        tileEntity.setVariable(AdvancedPipe.IO_FIELD_ID, side.ordinal())
-                        tileEntity.sendValueToServer(AdvancedPipe.IO_FIELD_ID, side.ordinal())
-
-                    }
-
-                    @Nullable
-                    override def getColorForMode(side: EnumFacing): Color = {
-                        tileEntity.getColor(tileEntity.getModeForSide(side))
-                    }
-                }
-            }
-        }
-        tabs.addTab(selectorTab.toList, 100, 100, new Color(255, 255, 255), new ItemStack(Blocks.piston))
     }
 }

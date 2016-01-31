@@ -8,7 +8,6 @@ import com.dyonovan.neotech.common.tiles.machines.TileElectricFurnace
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher}
 import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.GuiComponentSideSelector.ToggleableSidesController
 import com.teambr.bookshelf.client.gui.component.control.{GuiComponentSideSelector, GuiComponentButton, GuiComponentTexturedButton}
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener

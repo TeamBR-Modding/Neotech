@@ -6,13 +6,12 @@ import javax.annotation.Nullable
 import com.dyonovan.neotech.common.container.machines.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.machines.TileThermalBinder
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
-import com.dyonovan.neotech.network.{OpenContainerGui, TBStartPacket, PacketDispatcher}
+import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher, TBStartPacket}
 import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.GuiComponentSideSelector.ToggleableSidesController
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentSideSelector, GuiComponentTexturedButton, GuiComponentButton}
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentButton, GuiComponentSideSelector}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
-import com.teambr.bookshelf.client.gui.{GuiColor, GuiBase}
-import com.teambr.bookshelf.client.gui.component.display.{GuiTabCollection, GuiComponentArrow, GuiComponentText, GuiComponentPowerBar}
+import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack

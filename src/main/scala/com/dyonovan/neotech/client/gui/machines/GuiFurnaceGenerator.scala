@@ -8,9 +8,8 @@ import com.dyonovan.neotech.common.tiles.machines.TileFurnaceGenerator
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher}
 import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.GuiComponentSideSelector.ToggleableSidesController
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentSideSelector, GuiComponentTexturedButton, GuiComponentButton}
-import com.teambr.bookshelf.client.gui.component.display.{GuiTabCollection, GuiComponentFlame, GuiComponentPowerBar, GuiComponentText}
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentButton, GuiComponentSideSelector}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFlame, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import net.minecraft.entity.player.EntityPlayer
