@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.collections
 
+import java.awt.Color
 import java.util
 
 import com.teambr.bookshelf.client.gui.GuiColor
@@ -71,6 +72,16 @@ trait InputOutput extends NBTSavable {
             case INONLY => (111, 239)
             case BOTH => (143, 239)
             case _ => (90, 239)
+        }
+    }
+
+    def getColor(mode : IOMODE) : Color = {
+        mode match {
+            case DISABLED => null
+            case OUTONLY => new Color(255, 102, 0, 150)
+            case INONLY => new Color(0, 102, 255, 150)
+            case BOTH => new Color(0, 153, 0, 150)
+            case _ => null
         }
     }
 

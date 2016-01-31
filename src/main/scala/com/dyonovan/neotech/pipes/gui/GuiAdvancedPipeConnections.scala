@@ -1,16 +1,21 @@
 package com.dyonovan.neotech.pipes.gui
 
-import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe}
-import com.teambr.bookshelf.client.gui.component.display.GuiComponentText
-import com.teambr.bookshelf.client.gui.{GuiColor, GuiBase}
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentTexturedButton, GuiComponentCheckBox}
+import java.awt.Color
+import javax.annotation.Nullable
+
+import com.dyonovan.neotech.client.gui.GuiComponentSideSelectorTemp
+import com.dyonovan.neotech.pipes.types.AdvancedPipe
+import com.teambr.bookshelf.client.gui.component.BaseComponent
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentSideSelector, GuiComponentTexturedButton}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiTabCollection}
+import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.Syncable
+import net.minecraft.init.Blocks
+import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.fml.client.FMLClientHandler
 
 import scala.collection.mutable.ArrayBuffer
-import scala.reflect.internal.util.StringOps
 
 /**
   * This file was created for NeoTech
@@ -37,9 +42,9 @@ class GuiAdvancedPipeConnections(tileEntity : AdvancedPipe, tile : Syncable) ext
                     tileEntity.sendValueToServer(AdvancedPipe.IO_FIELD_ID, dir.ordinal())
                 }
 
-                override def render(i : Int, j : Int) = {
+                override def render(i : Int, j : Int, x : Int, y : Int) = {
                     setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(dir)))
-                    super.render(i, j)
+                    super.render(i, j, x, y)
                 }
 
                 override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -49,5 +54,27 @@ class GuiAdvancedPipeConnections(tileEntity : AdvancedPipe, tile : Syncable) ext
                 }
             }
         }
+    }
+
+    override def addRightTabs(tabs : GuiTabCollection): Unit = {
+        val selectorTab = new ArrayBuffer[BaseComponent]
+        selectorTab += new GuiComponentSideSelectorTemp(20, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
+            override def setToggleController(): Unit = {
+                toggleableSidesController = new ToggleableSidesController {
+
+                    override def onSideToggled(side: EnumFacing, modifier: Int): Unit = {
+                        tileEntity.setVariable(AdvancedPipe.IO_FIELD_ID, side.ordinal())
+                        tileEntity.sendValueToServer(AdvancedPipe.IO_FIELD_ID, side.ordinal())
+
+                    }
+
+                    @Nullable
+                    override def getColorForMode(side: EnumFacing): Color = {
+                        tileEntity.getColor(tileEntity.getModeForSide(side))
+                    }
+                }
+            }
+        }
+        tabs.addTab(selectorTab.toList, 100, 100, new Color(255, 255, 255), new ItemStack(Blocks.piston))
     }
 }

@@ -1,22 +1,23 @@
 package com.dyonovan.neotech.client.gui.machines
 
 import java.awt.Color
+import javax.annotation.Nullable
 
-import com.dyonovan.neotech.NeoTech
+import com.dyonovan.neotech.client.gui.GuiComponentSideSelectorTemp
 import com.dyonovan.neotech.common.container.machines.ContainerElectricCrusher
 import com.dyonovan.neotech.common.tiles.machines.TileElectricCrusher
-import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
-import com.dyonovan.neotech.network.{PacketDispatcher, OpenContainerGui}
-import com.teambr.bookshelf.client.gui.{GuiColor, GuiBase}
+import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher}
+import com.dyonovan.neotech.pipes.types.AdvancedPipe
+import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentTexturedButton, GuiComponentButton}
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiTabCollection, GuiComponentArrow, GuiComponentPowerBar}
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
-import com.teambr.bookshelf.network.PacketManager
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items
+import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.util.EnumFacing
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -73,9 +74,9 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                 redstoneTab += new GuiComponentButton(25, 20, 50, 20, tileEntity.getRedstoneModeName) {
                     override def doAction(): Unit = {}
 
-                    override def renderOverlay(i: Int, j: Int): Unit = {
+                    override def renderOverlay(i: Int, j: Int, x : Int, y : Int): Unit = {
                         setText(tileEntity.getRedstoneModeName)
-                        super.renderOverlay(i, j)
+                        super.renderOverlay(i, j, x, y)
                     }
                 }
                 redstoneTab += new GuiComponentButton(80, 20, 15, 20, ">") {
@@ -87,7 +88,7 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                 tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
             }
 
-            if(tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
+            /*if(tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
                 val controlTab = new ArrayBuffer[BaseComponent]()
                 controlTab += new GuiComponentText("I/O Mode", 29, 6)
 
@@ -100,9 +101,9 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.UP.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.UP)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -121,9 +122,9 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.DOWN.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.DOWN)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -142,9 +143,9 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.NORTH.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.NORTH)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -163,9 +164,9 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.EAST.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.EAST)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -184,9 +185,9 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.WEST.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.WEST)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -205,9 +206,9 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.SOUTH.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.SOUTH)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -225,7 +226,35 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
                 }
                 override def onMouseDrag(component: BaseComponent, mouseX: Int, mouseY: Int, button: Int, time: Long): Unit = {}
                 override def onMouseUp(component: BaseComponent, mouseX: Int, mouseY: Int, button: Int): Unit = {}
-            })
+            })*/
+
+            val selectorTab = new ArrayBuffer[BaseComponent]
+            selectorTab += new GuiComponentSideSelectorTemp(20, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
+                override def setToggleController(): Unit = {
+                    toggleableSidesController = new ToggleableSidesController {
+
+                        override def onSideToggled(side: EnumFacing, modifier: Int): Unit = {
+                            tileEntity.setVariable(tileEntity.IO_FIELD_ID, side.ordinal())
+                            tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, side.ordinal())
+                            setBlockState(tileEntity.getWorld.getBlockState(tileEntity.getPos))
+                        }
+
+                        @Nullable
+                        override def getColorForMode(side: EnumFacing): Color = {
+                            tileEntity.getColor(tileEntity.getModeForSide(side))
+                        }
+                    }
+                }
+            }
+            tabs.addTab(selectorTab.toList, 100, 100, new Color(255, 255, 255), new ItemStack(Blocks.piston))
         }
+
+        tabs.getTabs.head.setMouseEventListener(new IMouseEventListener {
+            override def onMouseDown(component: BaseComponent, mouseX: Int, mouseY: Int, button: Int): Unit = {
+                PacketDispatcher.net.sendToServer(new OpenContainerGui(tileEntity.getPos, 1))
+            }
+            override def onMouseDrag(component: BaseComponent, mouseX: Int, mouseY: Int, button: Int, time: Long): Unit = {}
+            override def onMouseUp(component: BaseComponent, mouseX: Int, mouseY: Int, button: Int): Unit = {}
+        })
     }
 }

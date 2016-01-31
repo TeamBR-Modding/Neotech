@@ -28,9 +28,9 @@ class GuiAdvancedPipeRedstone(tile : AdvancedPipe) extends GuiBase[ContainerGene
         }
         components += new GuiComponentButton(25, 20, 100, 20, tile.getRedstoneModeName) {
             override def doAction(): Unit = {}
-            override def renderOverlay(i : Int, j : Int) : Unit = {
+            override def renderOverlay(i : Int, j : Int, x : Int, y : Int) : Unit = {
                 setText(tile.getRedstoneModeName)
-                super.renderOverlay(i, j)
+                super.renderOverlay(i, j, x, y)
             }
         }
         components += new GuiComponentButton(130, 20, 15, 20, ">") {

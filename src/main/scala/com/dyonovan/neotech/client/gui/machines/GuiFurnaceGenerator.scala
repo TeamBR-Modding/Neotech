@@ -70,9 +70,9 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                 redstoneTab += new GuiComponentButton(25, 20, 50, 20, tileEntity.getRedstoneModeName) {
                     override def doAction(): Unit = {}
 
-                    override def renderOverlay(i: Int, j: Int): Unit = {
+                    override def renderOverlay(i: Int, j: Int, x : Int, y : Int): Unit = {
                         setText(tileEntity.getRedstoneModeName)
-                        super.renderOverlay(i, j)
+                        super.renderOverlay(i, j, x, y)
                     }
                 }
                 redstoneTab += new GuiComponentButton(80, 20, 15, 20, ">") {
@@ -97,9 +97,9 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.UP.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.UP)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -118,9 +118,9 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.DOWN.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.DOWN)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -139,9 +139,9 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.NORTH.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.NORTH)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -160,9 +160,9 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.EAST.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.EAST)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -181,9 +181,9 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.WEST.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.WEST)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
@@ -202,9 +202,9 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                         tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.SOUTH.ordinal())
                     }
 
-                    override def render(i : Int, j : Int) = {
+                    override def render(i : Int, j : Int, x : Int, y : Int) = {
                         setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.SOUTH)))
-                        super.render(i, j)
+                        super.render(i, j, x, y)
                     }
 
                     override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {

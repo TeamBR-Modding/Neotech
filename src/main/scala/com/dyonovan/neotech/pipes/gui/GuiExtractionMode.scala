@@ -27,9 +27,9 @@ class GuiExtractionMode(tile : AdvancedPipe) extends GuiBase[ContainerGeneric](n
         }
         components += new GuiComponentButton(25, 20, 100, 20, tile.getModeName) {
             override def doAction(): Unit = {}
-            override def renderOverlay(i : Int, j : Int) : Unit = {
+            override def renderOverlay(i : Int, j : Int, x : Int, y : Int) : Unit = {
                 setText(tile.getModeName)
-                super.renderOverlay(i, j)
+                super.renderOverlay(i, j, x, y)
             }
         }
         components += new GuiComponentButton(130, 20, 15, 20, ">") {

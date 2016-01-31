@@ -25,9 +25,9 @@ class GuiPipeFilter(player : EntityPlayer, tile : AdvancedPipe) extends
                 tile.setVariable(AdvancedPipe.FILTER, AdvancedPipe.FILTER_BLACKLIST)
                 tile.sendValueToServer(AdvancedPipe.FILTER, AdvancedPipe.FILTER_BLACKLIST)
             }
-            override def renderOverlay(i : Int, j : Int) = {
+            override def renderOverlay(i : Int, j : Int, x : Int, y : Int) = {
                 setText(if(tile.blackList) "Blacklist" else "Whitelist")
-                super.renderOverlay(i, j)
+                super.renderOverlay(i, j, x, y)
             }
         }
         if(tile.isInstanceOf[ItemInterfacePipe]) {
