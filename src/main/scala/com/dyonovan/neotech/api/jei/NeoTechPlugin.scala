@@ -1,10 +1,15 @@
 package com.dyonovan.neotech.api.jei
 
+import java.awt.Rectangle
+import java.util
+
 import com.dyonovan.neotech.api.jei.crusher.{CrusherRecipeCategory, CrusherRecipeHandler, CrusherRecipeMaker}
 import com.dyonovan.neotech.api.jei.grinder.{GrinderRecipeMaker, GrinderRecipeHandler, GrinderRecipeCategory}
 import com.dyonovan.neotech.common.container.misc.ContainerCrafter
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.teambr.bookshelf.client.gui.GuiBase
 import mezz.jei.api._
+import mezz.jei.api.gui.IAdvancedGuiHandler
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid
 import net.minecraft.item.ItemStack
 
@@ -29,6 +34,12 @@ class NeoTechPlugin extends IModPlugin {
 
         registry.addRecipes(CrusherRecipeMaker.getRecipes)
         registry.addRecipes(GrinderRecipeMaker.getRecipes)
+
+        registry.addAdvancedGuiHandlers(new IAdvancedGuiHandler[GuiBase[_]] {
+            override def getGuiContainerClass: Class[GuiBase[_]] = classOf[GuiBase[_]]
+
+            override def getGuiExtraAreas(t: GuiBase[_]): util.List[Rectangle] = t.getCoveredAreas
+        })
 
         //Descriptions
         registry.addDescription(new ItemStack(BlockManager.grinder), "neotech.grinder.description")
