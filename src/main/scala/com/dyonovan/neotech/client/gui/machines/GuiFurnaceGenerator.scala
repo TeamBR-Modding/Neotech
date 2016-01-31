@@ -1,13 +1,15 @@
 package com.dyonovan.neotech.client.gui.machines
 
 import java.awt.Color
+import javax.annotation.Nullable
 
 import com.dyonovan.neotech.common.container.machines.ContainerFurnaceGenerator
 import com.dyonovan.neotech.common.tiles.machines.TileFurnaceGenerator
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher}
 import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentTexturedButton, GuiComponentButton}
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentSideSelector.ToggleableSidesController
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentSideSelector, GuiComponentTexturedButton, GuiComponentButton}
 import com.teambr.bookshelf.client.gui.component.display.{GuiTabCollection, GuiComponentFlame, GuiComponentPowerBar, GuiComponentText}
 import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
@@ -84,136 +86,27 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                 tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
             }
 
-            if(tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
-                val controlTab = new ArrayBuffer[BaseComponent]()
-                controlTab += new GuiComponentText("I/O Mode", 29, 6)
+            if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
+                val selectorTab = new ArrayBuffer[BaseComponent]
+                selectorTab += new GuiComponentText("I/O Mode", 29, 6)
+                selectorTab += new GuiComponentSideSelector(20, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
+                    override def setToggleController(): Unit = {
+                        toggleableSidesController = new ToggleableSidesController {
 
-                controlTab += new GuiComponentTexturedButton(40, 20,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.UP))._1,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.UP))._2,
-                    16, 16, 20, 20) {
-                    override def doAction(): Unit = {
-                        tileEntity.setVariable(tileEntity.IO_FIELD_ID, EnumFacing.UP.ordinal())
-                        tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.UP.ordinal())
-                    }
+                            override def onSideToggled(side: EnumFacing, modifier: Int): Unit = {
+                                tileEntity.setVariable(tileEntity.IO_FIELD_ID, side.ordinal())
+                                tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, side.ordinal())
+                                setBlockState(tileEntity.getWorld.getBlockState(tileEntity.getPos))
+                            }
 
-                    override def render(i : Int, j : Int, x : Int, y : Int) = {
-                        setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.UP)))
-                        super.render(i, j, x, y)
-                    }
-
-                    override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
-                        val tip = new ArrayBuffer[String]()
-                        tip += GuiColor.YELLOW + "Top: " + GuiColor.WHITE + tileEntity.getDisplayNameForIOMode(tileEntity.getModeForSide(EnumFacing.UP))
-                        tip
+                            @Nullable
+                            override def getColorForMode(side: EnumFacing): Color = {
+                                tileEntity.getColor(tileEntity.getModeForSide(side))
+                            }
+                        }
                     }
                 }
-
-                controlTab += new GuiComponentTexturedButton(40, 70,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.DOWN))._1,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.DOWN))._2,
-                    16, 16, 20, 20) {
-                    override def doAction(): Unit = {
-                        tileEntity.setVariable(tileEntity.IO_FIELD_ID, EnumFacing.DOWN.ordinal())
-                        tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.DOWN.ordinal())
-                    }
-
-                    override def render(i : Int, j : Int, x : Int, y : Int) = {
-                        setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.DOWN)))
-                        super.render(i, j, x, y)
-                    }
-
-                    override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
-                        val tip = new ArrayBuffer[String]()
-                        tip += GuiColor.YELLOW + "Bottom: " + GuiColor.WHITE + tileEntity.getDisplayNameForIOMode(tileEntity.getModeForSide(EnumFacing.DOWN))
-                        tip
-                    }
-                }
-
-                controlTab += new GuiComponentTexturedButton(40, 45,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.NORTH))._1,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.NORTH))._2,
-                    16, 16, 20, 20) {
-                    override def doAction(): Unit = {
-                        tileEntity.setVariable(tileEntity.IO_FIELD_ID, EnumFacing.NORTH.ordinal())
-                        tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.NORTH.ordinal())
-                    }
-
-                    override def render(i : Int, j : Int, x : Int, y : Int) = {
-                        setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.NORTH)))
-                        super.render(i, j, x, y)
-                    }
-
-                    override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
-                        val tip = new ArrayBuffer[String]()
-                        tip += GuiColor.YELLOW + "Front: " + GuiColor.WHITE + tileEntity.getDisplayNameForIOMode(tileEntity.getModeForSide(EnumFacing.NORTH))
-                        tip
-                    }
-                }
-
-                controlTab += new GuiComponentTexturedButton(15, 45,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.EAST))._1,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.EAST))._2,
-                    16, 16, 20, 20) {
-                    override def doAction(): Unit = {
-                        tileEntity.setVariable(tileEntity.IO_FIELD_ID, EnumFacing.EAST.ordinal())
-                        tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.EAST.ordinal())
-                    }
-
-                    override def render(i : Int, j : Int, x : Int, y : Int) = {
-                        setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.EAST)))
-                        super.render(i, j, x, y)
-                    }
-
-                    override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
-                        val tip = new ArrayBuffer[String]()
-                        tip += GuiColor.YELLOW + "Right Side: " + GuiColor.WHITE + tileEntity.getDisplayNameForIOMode(tileEntity.getModeForSide(EnumFacing.EAST))
-                        tip
-                    }
-                }
-
-                controlTab += new GuiComponentTexturedButton(65, 45,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.WEST))._1,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.WEST))._2,
-                    16, 16, 20, 20) {
-                    override def doAction(): Unit = {
-                        tileEntity.setVariable(tileEntity.IO_FIELD_ID, EnumFacing.WEST.ordinal())
-                        tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.WEST.ordinal())
-                    }
-
-                    override def render(i : Int, j : Int, x : Int, y : Int) = {
-                        setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.WEST)))
-                        super.render(i, j, x, y)
-                    }
-
-                    override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
-                        val tip = new ArrayBuffer[String]()
-                        tip += GuiColor.YELLOW + "Left Side: " + GuiColor.WHITE + tileEntity.getDisplayNameForIOMode(tileEntity.getModeForSide(EnumFacing.WEST))
-                        tip
-                    }
-                }
-
-                controlTab += new GuiComponentTexturedButton(65, 70,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.SOUTH))._1,
-                    tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.SOUTH))._2,
-                    16, 16, 20, 20) {
-                    override def doAction(): Unit = {
-                        tileEntity.setVariable(tileEntity.IO_FIELD_ID, EnumFacing.SOUTH.ordinal())
-                        tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, EnumFacing.SOUTH.ordinal())
-                    }
-
-                    override def render(i : Int, j : Int, x : Int, y : Int) = {
-                        setUV(tileEntity.getUVForMode(tileEntity.getModeForSide(EnumFacing.SOUTH)))
-                        super.render(i, j, x, y)
-                    }
-
-                    override def getDynamicToolTip(mouseX: Int, mouseY: Int): ArrayBuffer[String] = {
-                        val tip = new ArrayBuffer[String]()
-                        tip += GuiColor.YELLOW + "Back: " + GuiColor.WHITE + tileEntity.getDisplayNameForIOMode(tileEntity.getModeForSide(EnumFacing.SOUTH))
-                        tip
-                    }
-                }
-                tabs.addTab(controlTab.toList, 100, 100, new Color(0, 0, 255), new ItemStack(BlockManager.furnaceGenerator))
+                tabs.addTab(selectorTab.toList, 100, 100, new Color(150, 150, 150), new ItemStack(BlockManager.furnaceGenerator))
             }
 
             tabs.getTabs.head.setMouseEventListener(new IMouseEventListener {

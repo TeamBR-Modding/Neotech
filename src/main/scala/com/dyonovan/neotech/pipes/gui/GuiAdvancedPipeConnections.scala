@@ -2,8 +2,6 @@ package com.dyonovan.neotech.pipes.gui
 
 import java.awt.Color
 import javax.annotation.Nullable
-
-import com.dyonovan.neotech.client.gui.GuiComponentSideSelectorTemp
 import com.dyonovan.neotech.pipes.types.AdvancedPipe
 import com.teambr.bookshelf.client.gui.component.BaseComponent
 import com.teambr.bookshelf.client.gui.component.control.{GuiComponentSideSelector, GuiComponentTexturedButton}
