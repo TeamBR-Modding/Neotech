@@ -31,8 +31,7 @@ class StructurePipe extends SimplePipe {
             case npe : NullPointerException =>
                 println("Block at: " + pos.offset(facing) + " does not have a blockstate. Please check here and notify the mod author")
                 return false
-            case Throwable => return false
-            case _ => return false
+            case _ : Throwable => return false
         }
 
         (worldObj.getBlockState(pos.offset(facing)).getBlock match {
