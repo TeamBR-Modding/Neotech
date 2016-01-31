@@ -54,7 +54,8 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
 
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:
     ItemStack): Unit = {
-        if(stack.hasTagCompound && !world.isRemote) { //If there is a tag and is on the server
+        if (stack.hasTagCompound && !world.isRemote) {
+            //If there is a tag and is on the server
             world.getTileEntity(pos).readFromNBT(stack.getTagCompound) //Set the tag
             world.getTileEntity(pos).setPos(pos) //Set the saved tag to here
             world.markBlockForUpdate(pos) //Mark for update to client
@@ -62,15 +63,18 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
     }
 
     override def onBlockClicked(world: World, pos: BlockPos, player: EntityPlayer): Unit = {
-        val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
+        if (!world.isRemote) {
+            val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
 
-        if(tile.getStackInSlot(0) != null) {
-            val amt = if (!player.isSneaking) 1 else tile.getStackInSlot(0).getMaxStackSize
-            var actual = tile.extractItem(0, amt, simulate = true)
-            if (actual != null) {
-                actual = tile.extractItem(0, amt, simulate = false)
-                player.inventory.addItemStackToInventory(actual)
-                world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
+            if (tile.getStackInSlot(0) != null) {
+                val amt = if (!player.isSneaking) 1 else tile.getStackInSlot(0).getMaxStackSize
+                var actual = tile.extractItem(0, amt, simulate = true)
+                if (actual != null) {
+                    actual = tile.extractItem(0, amt, simulate = false)
+                    val status = player.inventory.addItemStackToInventory(actual)
+                    if (!status) dropItem(world, actual, pos)
+                    world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
+                }
             }
         }
     }
@@ -110,22 +114,22 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
         null
     }
 
-    override def getRenderType : Int = 3
+    override def getRenderType: Int = 3
 
-    override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
+    override def rotateBlock(world: World, pos: BlockPos, side: EnumFacing): Boolean = {
         val tag = new NBTTagCompound
         world.getTileEntity(pos).writeToNBT(tag)
-        if(side != EnumFacing.UP && side != EnumFacing.DOWN)
+        if (side != EnumFacing.UP && side != EnumFacing.DOWN)
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, side))
         else
             world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, WorldUtils.rotateRight(world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))))
-        if(tag != null) {
+        if (tag != null) {
             world.getTileEntity(pos).readFromNBT(tag)
         }
         true
     }
 
-    override def onBlockPlaced(world : World, blockPos : BlockPos, facing : EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
+    override def onBlockPlaced(world: World, blockPos: BlockPos, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, meta: Int, placer: EntityLivingBase): IBlockState = {
         val playerFacingDirection = if (placer == null) 0 else MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3
         val enumFacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite
         this.getDefaultState.withProperty(PropertyRotation.FOUR_WAY, enumFacing)
@@ -134,7 +138,7 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
     /**
       * Used to say what our block state is
       */
-    override def createBlockState() : BlockState = {
+    override def createBlockState(): BlockState = {
         val listed = new Array[IProperty[_]](1)
         listed(0) = PropertyRotation.FOUR_WAY
         val unlisted = new Array[IUnlistedProperty[_]](0)
@@ -147,7 +151,7 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
       * @param meta The meta
       * @return
       */
-    override def getStateFromMeta(meta : Int) : IBlockState = getDefaultState.withProperty(PropertyRotation.FOUR_WAY, EnumFacing.getFront(meta))
+    override def getStateFromMeta(meta: Int): IBlockState = getDefaultState.withProperty(PropertyRotation.FOUR_WAY, EnumFacing.getFront(meta))
 
     /**
       * Called to convert state from meta
@@ -155,12 +159,12 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
       * @param state The state
       * @return
       */
-    override def getMetaFromState(state : IBlockState) = state.getValue(PropertyRotation.FOUR_WAY).getIndex
+    override def getMetaFromState(state: IBlockState) = state.getValue(PropertyRotation.FOUR_WAY).getIndex
 
-    override def isOpaqueCube : Boolean = false
+    override def isOpaqueCube: Boolean = false
 
     @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean = true
+    override def isTranslucent: Boolean = true
 
     override def isFullCube = false
 
