@@ -83,16 +83,21 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
         world match {
             case _: WorldServer =>
                 val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
-                if (tile.getQty > 0) {
+                if (tile.getQty > 0 && tile.getStackInSlot(0) != null) {
                     val stacks = new util.ArrayList[ItemStack]()
+                    val returnStack = tile.getStackInSlot(0).copy()
                     breakable {
                         while (true) {
                             if (tile.getQty == 0) break
                             else if (tile.getQty > tile.getStackInSlot(0).getMaxStackSize) {
                                 tile.addQty(-tile.getStackInSlot(0).getMaxStackSize)
-                                stacks.add(new ItemStack(tile.getStackInSlot(0).getItem, tile.getStackInSlot(0).getMaxStackSize, tile.getStackInSlot(0).getItemDamage))
+                                val addStack = returnStack.copy()
+                                addStack.stackSize = tile.getStackInSlot(0).getMaxStackSize
+                                stacks.add(addStack)
                             } else {
-                                stacks.add(new ItemStack(tile.getStackInSlot(0).getItem, tile.getQty, tile.getStackInSlot(0).getItemDamage))
+                                val addStack = returnStack.copy()
+                                addStack.stackSize = tile.getQty
+                                stacks.add(addStack)
                                 tile.addQty(-tile.getQty)
                             }
                         }
@@ -104,7 +109,6 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                 }
             case _ =>
         }
-        //super.breakBlock(world, pos, state)
         dropItem(world, new ItemStack(BlockManager.dimStorage), pos)
         world.removeTileEntity(pos)
         world.markBlockForUpdate(pos)
