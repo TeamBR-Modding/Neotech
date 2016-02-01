@@ -62,7 +62,7 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
         components += new GuiComponentArrow(76, 45) {
             override def getCurrentProgress: Int = tileEntity.getCookProgressScaled(24)
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
-                ArrayBuffer(tileEntity.values.burnTime + " ticks left")
+                ArrayBuffer((tileEntity.getCookTime - tileEntity.cookTime) + " ticks left")
             }
         }
         components += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.in"), 41, 63)
@@ -70,7 +70,6 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
         components += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.upgrade"),
             65, 87)
     }
-
 
     override def addRightTabs(tabs : GuiTabCollection) = {
         if (tileEntity != null)

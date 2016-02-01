@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 abstract class MachineProcessor extends AbstractMachine {
 
     var cookTime = 0
-    var didWork : Boolean = false
+    var didWork  = false
 
     /**
       * Get the output of the recipe
@@ -30,7 +30,7 @@ abstract class MachineProcessor extends AbstractMachine {
     def getOutputForStack(stack: ItemStack): ItemStack
 
     /**
-      * Used to actually cook the item. You should reset values here if need be
+      * Used to actually cook the item
       */
     def cook() : Unit
 
@@ -60,17 +60,14 @@ abstract class MachineProcessor extends AbstractMachine {
       */
     def getEnergyCostPerTick : Int
 
-    /**
-      * The initial size of the inventory
-      *
-      * @return
-      */
-    override def initialSize: Int
-
     /*******************************************************************************************************************
       ************************************************ Processor methods ***********************************************
       ******************************************************************************************************************/
 
+    /**
+      * Used to actually do the processes needed. For processors this should be cooking items and generators should
+      * generate RF. This is called every tick allowed, provided redstone mode requirements are met
+      */
     override def doWork() = {
         didWork = false
 
@@ -78,7 +75,7 @@ abstract class MachineProcessor extends AbstractMachine {
          *  we don't run into issues with going one tick over */
         if(cookTime >= getCookTime) {
             completeCook()
-            cookTime = 0
+            reset()
         }
 
         //Do Operations
@@ -86,7 +83,7 @@ abstract class MachineProcessor extends AbstractMachine {
             cook()
             didWork = true
         } else {
-            cookTime = 0
+            reset()
         }
 
         if (didWork) {
@@ -94,16 +91,38 @@ abstract class MachineProcessor extends AbstractMachine {
         }
     }
 
+    /**
+      * Use this to set all variables back to the default values, usually means the operation failed
+      */
+    override def reset() = cookTime = 0
+
+    /**
+      * Used to check if this tile is active or not
+      * @return True if active state
+      */
+    override def isActive = cookTime > 0
+
+    /**
+      * Write the tag
+      */
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super.writeToNBT(tag)
         tag.setInteger("CookTime", cookTime)
     }
 
+    /**
+      * Read the tag
+      */
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super.readFromNBT(tag)
         cookTime = tag.getInteger("CookTime")
     }
 
+    /**
+      * Client side method to get how far along this process is to a scale variable
+      * @param scaleVal What scale to move to, usually pixels
+      * @return What value on new scale this is complete
+      */
     @SideOnly(Side.CLIENT)
     def getCookProgressScaled(scaleVal: Int): Int =
         ((cookTime * scaleVal) / Math.max(getCookTime, 0.001)).toInt
@@ -155,26 +174,4 @@ abstract class MachineProcessor extends AbstractMachine {
       */
     override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean =
         slot == 0 && getOutputForStack(itemStackIn) != null
-
-    /**
-      * Flag to let use know we are sided
-      */
-    override def hasCapability(capability: Capability[_], facing : EnumFacing) = true
-
-    /**
-      * Used to get the capability from the tile, since the InventorySide can't access these methods
-      */
-    override def getCapabilityFromTile[T](capability: Capability[T], facing: EnumFacing) : T
-        = super[TileEntity].getCapability[T](capability, facing)
-
-    /**
-      * Gets the IItemHandler for the face, allows ISided interactions without needing to implement ISided
-      *
-      * @param capability What kind of capability
-      * @param facing What side
-      * @tparam T The type
-      * @return The IItemHandler for that side
-      */
-    override def getCapability[T](capability: Capability[T], facing: EnumFacing) : T =
-        super[InventorySided].getCapability[T](capability, facing)
 }

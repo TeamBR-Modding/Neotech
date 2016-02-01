@@ -83,12 +83,7 @@ class TileElectricCrusher extends MachineProcessor {
     /**
       * Used to actually cook the item. You should reset values here if need be
       */
-    override def cook(): Unit = {
-        var movement : Int = 1
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            movement = 20 * getUpgradeBoard.getProcessorCount
-        cookTime += movement
-    }
+    override def cook(): Unit = cookTime += 1
 
     override def completeCook() {
         val input = getStackInSlot(INPUT_SLOT)
@@ -146,6 +141,10 @@ class TileElectricCrusher extends MachineProcessor {
             BASE_ENERGY_TICK
     }
 
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
     /**
       * Used to get what slots are allowed to be output
       *
@@ -159,30 +158,6 @@ class TileElectricCrusher extends MachineProcessor {
       * @return The slots to input from
       */
     override def getInputSlots: Array[Int] = Array(INPUT_SLOT)
-
-    /**
-      * Used to output the redstone single from this structure
-      *
-      * Use a range from 0 - 16.
-      *
-      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
-      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
-      *
-      * @return int range 0 - 16
-      */
-    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
-
-    /**
-      * Used to get what particles to spawn. This will be called when the tile is active
-      */
-    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
-    }
-
-    /*******************************************************************************************************************
-      ************************************************ Inventory methods ***********************************************
-      ******************************************************************************************************************/
 
     /**
       * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
@@ -205,5 +180,29 @@ class TileElectricCrusher extends MachineProcessor {
             }
         }
         false
+    }
+
+    /*******************************************************************************************************************
+      *************************************************** Misc methods *************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to output the redstone single from this structure
+      *
+      * Use a range from 0 - 16.
+      *
+      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
+      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
+      *
+      * @return int range 0 - 16
+      */
+    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
+
+    /**
+      * Used to get what particles to spawn. This will be called when the tile is active
+      */
+    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
     }
 }

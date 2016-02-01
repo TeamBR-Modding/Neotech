@@ -50,7 +50,7 @@ trait CoreStates extends Block {
     override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
         worldIn.getTileEntity(pos) match {
             case tile : AbstractMachine =>
-                state.withProperty(PROPERTY_ACTIVE, (tile.values.burnTime > 0).asInstanceOf[java.lang.Boolean])
+                state.withProperty(PROPERTY_ACTIVE, tile.isActive.asInstanceOf[java.lang.Boolean])
             case _ => state
         }
     }

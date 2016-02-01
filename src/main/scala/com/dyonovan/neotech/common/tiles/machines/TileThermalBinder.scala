@@ -8,7 +8,7 @@ import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{EnumParticleTypes, EnumFacing}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -23,13 +23,14 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  */
 class TileThermalBinder extends MachineProcessor {
 
-
     final val INPUT1 = 0
     final val INPUT2 = 1
     final val INPUT3 = 2
     final val INPUT4 = 3
     final val MB_INPUT = 4
     final val MB_OUTPUT = 5
+
+    final val BASE_ENERGY_TICK = 200
 
     var count = 0
 
@@ -82,6 +83,32 @@ class TileThermalBinder extends MachineProcessor {
             null
     }
 
+    /**
+      * Used to actually cook the item. You should reset values here if need be
+      */
+    override def cook(): Unit = cookTime += 1
+
+    /**
+      * Called when the tile has completed the cook process
+      */
+    override def completeCook(): Unit = build()
+
+
+    /**
+      * Used to get how much energy to drain per tick, you should check for upgrades at this point
+      *
+      * @return How much energy to drain per tick
+      */
+    override def getEnergyCostPerTick: Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            BASE_ENERGY_TICK * (getUpgradeBoard.getProcessorCount * 0.4).toInt
+        else
+            BASE_ENERGY_TICK
+    }
+
+    /**
+      * Creates the Motherboard or removes the upgrades from it
+      */
     def build(): Unit = {
         getStackInSlot(MB_INPUT).getItem match {
             case ItemManager.upgradeMBEmpty if hasSlotUpgrades =>
@@ -115,31 +142,10 @@ class TileThermalBinder extends MachineProcessor {
         }
     }
 
-    override def doWork(): Unit = {
-        if(getStackInSlot(MB_INPUT) == null) {
-            reset()
-        }
-        if (this.values.burnTime > 0) {
-            this.values.burnTime = values.burnTime - 1
-            val actual = energy.extractEnergy(count * 10, true)
-            if (actual < count * 10)
-                reset()
-            else
-                energy.extractEnergy(actual, false)
-            worldObj.markBlockForUpdate(pos)
-        } else if (this.values.currentItemBurnTime > 0 && this.values.burnTime <= 0) {
-            build()
-            reset()
-        }
-    }
-
-    def reset(): Unit = {
-        values.burnTime = 0
-        values.currentItemBurnTime = 0
-        count = 0
-        worldObj.markBlockForUpdate(pos)
-    }
-
+    /**
+      * Used to get the count of upgrades on the motherboard or to be added to the empty motherboard
+      * @return How many upgrades are present
+      */
     def getCount: Int = {
         if (getStackInSlot(MB_INPUT) != null) {
             getStackInSlot(MB_INPUT).getItem match {
@@ -164,6 +170,10 @@ class TileThermalBinder extends MachineProcessor {
         0
     }
 
+    /**
+      * Used to write the tag needed to the ItemStack to hold the upgrade info
+      * @return The tag to write to the ItemStack
+      */
     private def writeToMB(): NBTTagCompound = {
         val tag = new NBTTagCompound
         for (i <- 0 to 3) {
@@ -203,10 +213,10 @@ class TileThermalBinder extends MachineProcessor {
         tag
     }
 
-    override def getOutputSlots : Array[Int] = Array(MB_OUTPUT)
-
-    override def getInputSlots : Array[Int] = Array(INPUT1, INPUT2, INPUT3, INPUT4, MB_INPUT)
-
+    /**
+      * Used to tell if the upgrades are in the slots
+      * @return True if upgrades are present
+      */
     def hasSlotUpgrades: Boolean = {
         for (i <- 0 to 3) {
             if (getStackInSlot(i) != null) return true
@@ -214,18 +224,74 @@ class TileThermalBinder extends MachineProcessor {
         false
     }
 
-    @SideOnly(Side.CLIENT) override def getCookProgressScaled(scaleVal: Int): Int =
-        (((this.values.currentItemBurnTime - this.values.burnTime) * scaleVal) / Math.max(20 * 20 * count, 0.001)).toInt
-
-    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {}
+    /**
+      * Write the tag
+      */
+    override def writeToNBT(tag: NBTTagCompound): Unit = {
+        super.writeToNBT(tag)
+        tag.setInteger("Count", count)
+    }
 
     /**
-     * Get the output of the recipe
- *
-     * @param stack The input
-     * @return The output
-     */
-    override def recipe(stack: ItemStack): ItemStack = null
+      * Read the tag
+      */
+    override def readFromNBT(tag: NBTTagCompound): Unit = {
+        super.readFromNBT(tag)
+        count = tag.getInteger("Count")
+    }
+
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to get what slots are allowed to be output
+      *
+      * @return The slots to output from
+      */
+    override def getOutputSlots : Array[Int] = Array(MB_OUTPUT)
+
+    /**
+      * Used to get what slots are allowed to be input
+      *
+      * @return The slots to input from
+      */
+    override def getInputSlots : Array[Int] = Array(INPUT1, INPUT2, INPUT3, INPUT4, MB_INPUT)
+
+
+    /**
+      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+        isItemValidForSlot(slot, itemStackIn)
+    }
+
+    /**
+      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == MB_OUTPUT
+
+    /**
+      * Used to define if an item is valid for a slot
+      *
+      * @param slot The slot id
+      * @param stack The stack to check
+      * @return True if you can put this there
+      */
+    override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
+        val item = stack.getItem
+        if (slot >= MB_INPUT && slot <= INPUT4)
+            item.isInstanceOf[ItemManager.upgradeControl.type] || item.isInstanceOf[ItemManager.upgradeExpansion.type] ||
+                    item.isInstanceOf[ItemManager.upgradeHardDrive.type] || item.isInstanceOf[ItemManager.upgradeProcessor.type]
+        else if (slot == 4) item.isInstanceOf[ItemManager.upgradeMBEmpty.type] || item.isInstanceOf[ItemManager.upgradeMBFull.type]
+        else false
+    }
+
+    /*******************************************************************************************************************
+      *************************************************** Misc methods *************************************************
+      ******************************************************************************************************************/
 
     /**
      * Used to output the redstone single from this structure
@@ -239,35 +305,11 @@ class TileThermalBinder extends MachineProcessor {
      */
     override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
 
-    override def getSlotsForFace(side: EnumFacing): Array[Int] = {
-        side match {
-            case EnumFacing.DOWN => Array[Int](MB_OUTPUT)
-            case _ => Array[Int](INPUT1, INPUT2, INPUT3, INPUT4, MB_INPUT, MB_OUTPUT)
-        }
-    }
-
-    override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
-        val item = stack.getItem
-        if (slot >= 0 && slot <= 3)
-            item.isInstanceOf[ItemManager.upgradeControl.type] || item.isInstanceOf[ItemManager.upgradeExpansion.type] ||
-                    item.isInstanceOf[ItemManager.upgradeHardDrive.type] || item.isInstanceOf[ItemManager.upgradeProcessor.type]
-        else if (slot == 4) item.isInstanceOf[ItemManager.upgradeMBEmpty.type] || item.isInstanceOf[ItemManager.upgradeMBFull.type]
-        else false
-    }
-
-    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == 5
-
-    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
-        isItemValidForSlot(slot, itemStackIn)
-    }
-
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
-        super.writeToNBT(tag)
-        tag.setInteger("Count", count)
-    }
-
-    override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
-        count = tag.getInteger("Count")
+    /**
+      * Used to get what particles to spawn. This will be called when the tile is active
+      */
+    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
+        worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y + 0.4, z, 0, 255, 0)
+        worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y + 0.4, z, 0, 255, 0)
     }
 }

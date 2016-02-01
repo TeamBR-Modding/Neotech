@@ -66,6 +66,24 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       */
     protected def doWork(): Unit
 
+    /**
+      * Use this to set all variables back to the default values, usually means the operation failed
+      */
+    def reset() : Unit
+
+    /**
+      * Used to check if this tile is active or not
+      * @return True if active state
+      */
+    def isActive: Boolean
+
+    /**
+      * The initial size of the inventory
+      *
+      * @return
+      */
+    override def initialSize: Int
+
     /** ****************************************************************************************************************
       * *************************************************  Tile Methods  ************************************************
       * *****************************************************************************************************************/
@@ -154,11 +172,34 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     }
 
     /**
-      * Called when the board is removed, reset to default values
+      * Called when the board is removed, reset to default values for any upgrades
       */
     override def resetValues(): Unit = {
         resetIO()
+        redstone = 0
     }
+
+    /**
+      * Flag to let use know we are sided
+      */
+    override def hasCapability(capability: Capability[_], facing : EnumFacing) = true
+
+    /**
+      * Used to get the capability from the tile, since the InventorySide can't access these methods
+      */
+    override def getCapabilityFromTile[T](capability: Capability[T], facing: EnumFacing) : T =
+        super[TileEntity].getCapability[T](capability, facing)
+
+    /**
+      * Gets the IItemHandler for the face, allows ISided interactions without needing to implement ISided
+      *
+      * @param capability What kind of capability
+      * @param facing What side
+      * @tparam T The type
+      * @return The IItemHandler for that side
+      */
+    override def getCapability[T](capability: Capability[T], facing: EnumFacing) : T =
+        super[InventorySided].getCapability[T](capability, facing)
 
     /*******************************************************************************************************************
       ************************************************ Energy methods **************************************************

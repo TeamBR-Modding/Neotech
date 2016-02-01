@@ -80,12 +80,7 @@ class TileElectricFurnace extends MachineProcessor {
     /**
       * Used to actually cook the item. You should reset values here if need be
       */
-    override def cook(): Unit = {
-        var movement : Int = 1
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            movement = 20 * getUpgradeBoard.getProcessorCount
-        cookTime += movement
-    }
+    override def cook(): Unit = cookTime += 1
 
     /**
       * Called when the tile has completed the cook process
@@ -116,6 +111,10 @@ class TileElectricFurnace extends MachineProcessor {
             BASE_ENERGY_TICK
     }
 
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
     /**
       * Used to get what slots are allowed to be output
       *
@@ -129,6 +128,10 @@ class TileElectricFurnace extends MachineProcessor {
       * @return The slots to input from
       */
     override def getInputSlots: Array[Int] = Array(INPUT_SLOT)
+
+    /*******************************************************************************************************************
+      *************************************************** Misc methods *************************************************
+      ******************************************************************************************************************/
 
     /**
       * Used to output the redstone single from this structure
