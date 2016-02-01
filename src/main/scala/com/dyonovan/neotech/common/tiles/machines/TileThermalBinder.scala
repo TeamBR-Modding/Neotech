@@ -1,11 +1,12 @@
 package com.dyonovan.neotech.common.tiles.machines
 
 import com.dyonovan.neotech.collections.UpgradeBoard
-import com.dyonovan.neotech.common.tiles.AbstractMachine
+import com.dyonovan.neotech.common.tiles.{MachineProcessor, AbstractMachine}
 import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
+import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -17,12 +18,11 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
- * @author Dyonovan
+ * @author Dyonovan, Paul Davis <pauljoda>
  * @since August 21, 2015
  */
-class TileThermalBinder extends AbstractMachine {
+class TileThermalBinder extends MachineProcessor {
 
-    override def initialSize: Int = 6
 
     final val INPUT1 = 0
     final val INPUT2 = 1
@@ -32,6 +32,55 @@ class TileThermalBinder extends AbstractMachine {
     final val MB_OUTPUT = 5
 
     var count = 0
+
+    var isRunning = false
+    var lastCount = 0
+
+    /**
+      * The initial size of the inventory
+      *
+      * @return
+      */
+    override def initialSize: Int = 6
+
+    /**
+      * Used to get how long it takes to cook things, you should check for upgrades at this point
+      *
+      * @return The time it takes in ticks to cook the current item
+      */
+    override def getCookTime : Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            (200 * getCount) - (getUpgradeBoard.getProcessorCount * 24)
+        else
+            200 * getCount
+    }
+
+    /**
+      * Used to tell if this tile is able to process
+      *
+      * @return True if you are able to process
+      */
+    override def canProcess : Boolean = {
+        if(isRunning && energy.getEnergyStored >= getEnergyCostPerTick) {
+            if(getStackInSlot(MB_OUTPUT) == null && getStackInSlot(MB_INPUT) != null && getCount == lastCount)
+                return true
+        }
+        isRunning = false
+        false
+    }
+
+    /**
+      * Get the output of the recipe
+      *
+      * @param stack The input
+      * @return The output
+      */
+    override def getOutputForStack(stack: ItemStack): ItemStack = {
+        if (stack != null && (stack.getItem == ItemManager.upgradeMBEmpty || stack.getItem == ItemManager.upgradeMBFull))
+            new ItemStack(ItemManager.upgradeMBFull) //Just used to tell the Sided inventory that we have something, not actual output
+        else
+            null
+    }
 
     def build(): Unit = {
         getStackInSlot(MB_INPUT).getItem match {

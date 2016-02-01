@@ -8,7 +8,7 @@ import com.teambr.bookshelf.common.tiles.traits.{Inventory, InventorySided, Reds
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{StatCollector, EnumFacing}
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -25,48 +25,28 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 abstract class AbstractMachine extends Syncable with Upgradeable with InventorySided
         with IEnergyHandler with RedstoneAware with InputOutput {
 
-    final val cookSpeed = 200
-    final val ENERGY_TICK = 20
-
-    val values = new StandardValues
     var energy = new EnergyStorage(10000)
-
     var redstone : Int = 0
-
-    val BURNTIME_FIELD_ID = 0
-    val COOKTIME_FIELD_ID = 1
-    val REDSTONE_FIELD_ID = 4
-    val IO_FIELD_ID = 5
-
-    var updateClient = false
-    def changeEnergy(initial : Int): Unit = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
-            energy = new EnergyStorage(10000 * (getUpgradeBoard.getHardDriveCount * 10))
-        }
-        else {
-            energy = new EnergyStorage(10000)
-        }
-        energy.setEnergyStored(initial)
-        updateClient = true
-        worldObj.markBlockForUpdate(pos)
-    }
-
-    def getSupposedEnergy : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
-            10000 * (getUpgradeBoard.getHardDriveCount * 10)
-        else
-            10000
-    }
-
-    def spawnActiveParticles(x: Double, y: Double, z: Double)
+    val REDSTONE_FIELD_ID = 0
+    val IO_FIELD_ID = 1
+    val UPDATE_CLIENT = 2
 
     /**
-      * Get the output of the recipe
-      *
-      * @param stack The input
-      * @return The output
+      * Used to get what particles to spawn. This will be called when the tile is active
       */
-    def recipe(stack: ItemStack): ItemStack
+    def spawnActiveParticles(xPos: Double, yPos: Double, zPos: Double)
+
+    /**
+      * Used to get what slots are allowed to be output
+      * @return The slots to output from
+      */
+    def getOutputSlots : Array[Int]
+
+    /**
+      * Used to get what slots are allowed to be input
+      * @return The slots to input from
+      */
+    def getInputSlots : Array[Int]
 
     /**
       * Used to output the redstone single from this structure
@@ -80,117 +60,30 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       */
     def getRedstoneOutput: Int
 
-    /** *****************************************************************************************************************
-      * ***********************************************  Furnace Methods  ***********************************************
-      * *****************************************************************************************************************/
-
-    protected def doWork(): Unit = {
-        var didWork: Boolean = false
-
-        if(getSupposedEnergy != energy.getMaxEnergyStored)
-            changeEnergy(energy.getEnergyStored)
-
-        if(this.values.cookTime > 0) {
-            if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-                energy.extractEnergy(ENERGY_TICK * getUpgradeBoard.getProcessorCount + (ENERGY_TICK * 0.4).toInt, false)
-            else
-                energy.extractEnergy(ENERGY_TICK, false)
-            worldObj.markBlockForUpdate(pos)
-        }
-
-        if (this.values.burnTime > 0) {
-            this.values.burnTime = values.burnTime - 1
-            sendValueToClient(BURNTIME_FIELD_ID, this.values.burnTime)
-        }
-        if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1))) {
-            if (this.values.burnTime <= 0) {
-                this.values.burnTime = cookSpeed
-                this.values.currentItemBurnTime = this.values.burnTime
-                cook()
-                didWork = true
-            }
-            else if (isBurning) {
-                didWork = cook()
-            }
-            else {
-                this.values.cookTime = 0
-                this.values.burnTime = 0
-                didWork = true
-            }
-        }
-        else if (this.values.burnTime <= 0) {
-            this.values.cookTime = 0
-            didWork = true
-        }
-        if (didWork) {
-            worldObj.markBlockForUpdate(pos)
-        }
-    }
-
-    private def cook(): Boolean = {
-        var movement : Int = 1
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            movement = 20 * getUpgradeBoard.getProcessorCount
-        this.values.cookTime += movement
-        if (this.values.cookTime >= this.values.currentItemBurnTime) {
-            this.values.cookTime = 0
-            this.smeltItem()
-            true
-        }
-        else {
-            false
-        }
-    }
-
-    def canSmelt(input: ItemStack, result: ItemStack, output: ItemStack): Boolean = {
-        if (energy.getEnergyStored >= ENERGY_TICK) {
-            if (input == null || result == null)
-                return false
-            else if (output == null)
-                return true
-            else if (!output.isItemEqual(result))
-                return false
-            else {
-                val minStackSize: Int = output.stackSize + result.stackSize
-                return minStackSize <= getInventoryStackLimit && minStackSize <= result.getMaxStackSize
-            }
-        }
-        false
-    }
-
-    def smeltItem(): Unit = {
-        var recipeResult = recipe(getStackInSlot(0))
-        decrStackSize(0, 1)
-        if (getStackInSlot(1) == null) {
-            recipeResult = recipeResult.copy
-            recipeResult.stackSize = recipeResult.stackSize
-            setInventorySlotContents(1, recipeResult)
-        } else {
-            getStackInSlot(1).stackSize += recipeResult.stackSize
-        }
-
-        worldObj.markBlockForUpdate(pos)
-    }
-
-    def isBurning: Boolean = {
-        values.burnTime > 0
-    }
-
-    @SideOnly(Side.CLIENT) def getCookProgressScaled(scaleVal: Int): Int =
-        ((this.values.cookTime * scaleVal) / Math.max(cookSpeed, 0.001)).toInt
-
-    @SideOnly(Side.CLIENT) def getBurnTimeRemainingScaled(scaleVal: Int): Int =
-        ((this.values.burnTime * scaleVal) / Math.max(this.values.currentItemBurnTime, 0.001)).toInt
-
-    override def markDirty(): Unit = {
-        super[TileEntity].markDirty()
-    }
+    /**
+      * Used to actually do the processes needed. For processors this should be cooking items and generators should
+      * generate RF. This is called every tick allowed, provided redstone mode requirements are met
+      */
+    protected def doWork(): Unit
 
     /** ****************************************************************************************************************
       * *************************************************  Tile Methods  ************************************************
       * *****************************************************************************************************************/
 
+    /**
+      * We want to make sure the client knows what to render
+      */
+    override def onClientTick() : Unit = {
+        if(getSupposedEnergy != energy.getMaxEnergyStored)
+            sendValueToServer(UPDATE_CLIENT, 0)
+    }
+
     override def onServerTick(): Unit = {
+        //Make sure our energy storage is correct
+        if(getSupposedEnergy != energy.getMaxEnergyStored)
+            changeEnergy(energy.getEnergyStored)
+
+        //If redstone mode is not matched, break out of the method
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
             if(redstone == -1 && isPowered)
                 return
@@ -198,14 +91,19 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
                 return
         }
 
+        //We want to try automatic IO if we are able to once a tick
         if(worldObj.getWorldTime % 20 == 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
             tryInput()
             tryOutput()
         }
 
+        //Do what we are programed to do
         doWork()
     }
 
+    /**
+      * This will try to take things from our inventory and try to place them in others
+      */
     def tryOutput() : Unit = {
         for(dir <- EnumFacing.values) {
             if(canOutputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
@@ -215,6 +113,9 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         }
     }
 
+    /**
+      * This will try to take things from other inventories and put it into ours
+      */
     def tryInput() : Unit = {
         for(dir <- EnumFacing.values) {
             if(canInputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
@@ -224,17 +125,14 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         }
     }
 
-    override def onClientTick() : Unit = {
-        if(getSupposedEnergy != energy.getMaxEnergyStored)
-            sendValueToServer(3, 0)
-    }
-
+    /**
+      * Write the tag
+      */
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super[Upgradeable].writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
         super[InventorySided].writeToNBT(tag)
         super[InputOutput].writeToNBT(tag)
-        values.writeToNBT(tag)
         energy.writeToNBT(tag)
         if(updateClient && worldObj != null) {
             tag.setBoolean("UpdateEnergy", true)
@@ -242,18 +140,17 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         }
     }
 
+    /**
+      * Read the tag
+      */
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[Upgradeable].readFromNBT(tag)
         super[TileEntity].readFromNBT(tag)
         super[InventorySided].readFromNBT(tag)
         super[InputOutput].readFromNBT(tag)
-        val tempCook = values.cookTime
-        values.readFromNBT(tag)
         if(tag.hasKey("UpdateEnergy") && worldObj != null  )
             changeEnergy(tag.getInteger("Energy"))
         energy.readFromNBT(tag)
-        if(worldObj != null && (tempCook == 0 && this.values.cookTime > 0) || (tempCook > 0 && this.values.cookTime == 0))
-            worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
     /**
@@ -263,74 +160,45 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         resetIO()
     }
 
-    /** *****************************************************************************************************************
-      * *********************************************** Inventory methods ***********************************************
-      * *****************************************************************************************************************/
+    /*******************************************************************************************************************
+      ************************************************ Energy methods **************************************************
+      ******************************************************************************************************************/
 
-    override def getSlotsForFace(side: EnumFacing): Array[Int] = {
-        side match {
-            case EnumFacing.UP => Array[Int](0)
-            case EnumFacing.DOWN => Array[Int](1)
-            case _ => Array[Int](0, 1)
+    //Tag to let us know if we need to send info to the client
+    var updateClient = false
+
+    /**
+      * Used to change the energy to a new storage with a different size
+      * @param initial How much was in the old storage
+      */
+    def changeEnergy(initial : Int): Unit = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
+            energy = new EnergyStorage(10000 * (getUpgradeBoard.getHardDriveCount * 10))
         }
+        else {
+            energy = new EnergyStorage(10000)
+        }
+        energy.setEnergyStored(initial)
+        updateClient = true
+        worldObj.markBlockForUpdate(pos)
     }
 
     /**
-      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
-      * side
+      * Used to determine how much energy should be in this tile
+      * @return How much energy should be available
       */
-    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
-        if (slot == 0 && recipe(itemStackIn) != null) {
-            if (getStackInSlot(0) == null) return true
-            if (getStackInSlot(0).isItemEqual(itemStackIn)) {
-                if (getStackInSlot(0).getMaxStackSize >= getStackInSlot(0).stackSize + itemStackIn.stackSize)
-                    return true
-            }
-        }
-        false
+    def getSupposedEnergy : Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
+            10000 * (getUpgradeBoard.getHardDriveCount * 10)
+        else
+            10000
     }
 
-    /**
-      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
-      * side
-      */
-    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == 1
-
-    def getOutputSlots : Array[Int] = Array(1)
-
-    def getInputSlots : Array[Int] = Array(0)
-
-    /**
-      * Used to define if an item is valid for a slot
-      *
-      * @param slot The slot id
-      * @param itemStackIn The stack to check
-      * @return True if you can put this there
-      */
-    override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean = slot == 0 && recipe(itemStackIn) != null
-
-    override def initialSize: Int = 2
-
-    override def hasCapability(capability: Capability[_], facing : EnumFacing) = true
-
-    override def getCapabilityFromTile[T](capability: Capability[T], facing: EnumFacing) : T = super[TileEntity].getCapability[T](capability, facing)
-
-    override def getCapability[T](capability: Capability[T], facing: EnumFacing) : T =
-        super[InventorySided].getCapability[T](capability, facing)
-
-
-    /** *****************************************************************************************************************
-      * *********************************************** Energy methods **************************************************
-      * *****************************************************************************************************************/
     /**
       * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
-      *
-      * @param from
-      * Orientation the energy is received from.
-      * @param maxReceive
-      * Maximum amount of energy to receive.
-      * @param simulate
-      * If TRUE, the charge will only be simulated.
+      * @param from Orientation the energy is received from.
+      * @param maxReceive Maximum amount of energy to receive.
+      * @param simulate If TRUE, the charge will only be simulated.
       * @return Amount of energy that was (or would have been, if simulated) received.
       */
     override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
@@ -342,40 +210,70 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         } else 0
     }
 
+    /**
+      * Used to extract energy from this tile. You should return zero if you don't want to be able to extract
+      * @param from The direction pulling from
+      * @param maxExtract The maximum amount to extract
+      * @param simulate True to just simulate, not actually drain
+      * @return How much energy was/should be drained
+      */
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
 
     /**
-      * Returns the amount of energy currently stored.
+      * Get the current energy stored in the energy tank
+      * @param from The side to check (can be used if you have different energy storages)
+      * @return
       */
     override def getEnergyStored(from: EnumFacing): Int = energy.getEnergyStored
 
     /**
-      * Returns the maximum amount of energy that can be stored.
+      * Get the maximum energy this handler can store, not the current
+      * @param from The side to check from (can be used if you have different energy storages)
+      * @return The maximum potential energy
       */
     override def getMaxEnergyStored(from: EnumFacing): Int = energy.getMaxEnergyStored
 
     /**
-      * Returns TRUE if the TileEntity can connect on a given side.
+      * Checks if energy can connect to a given side
+      * @param from The face to check
+      * @return True if the face allows energy flow
       */
     override def canConnectEnergy(from: EnumFacing): Boolean = true
 
+    /*******************************************************************************************************************
+      ********************************************** Syncable methods **************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to set the variable for this tile, the Syncable will use this when you send a value to the server
+      *
+      * @param id The ID of the variable to send
+      * @param value The new value to set to (you can use this however you want, eg using the ordinal of EnumFacing)
+      */
     override def setVariable(id : Int, value : Double): Unit = {
         id match {
-            case BURNTIME_FIELD_ID => this.values.burnTime = value.toInt
-            case COOKTIME_FIELD_ID => this.values.cookTime = value.toInt
             case REDSTONE_FIELD_ID => redstone = value.toInt
             case IO_FIELD_ID => toggleMode(EnumFacing.getFront(value.toInt))
-            case 3 => updateClient = true
+            case UPDATE_CLIENT => updateClient = true
+            case _ => //No Operation, not defined ID
         }
     }
 
-    override def getVariable(id : Int) : Double = {
-        id match {
-            case BURNTIME_FIELD_ID => this.values.burnTime
-            case COOKTIME_FIELD_ID => this.values.cookTime
-        }
-    }
+    /**
+      * Used to get the variable
+      *
+      * @param id The variable ID
+      * @return The value of the variable
+      */
+    override def getVariable(id : Int) : Double = { 0.0 }
 
+    /**
+      * Moves the current redstone mode in either direction
+      *
+      * @param mod The direction to move. This will move it in that direction as many as provided, usually 1
+      *            Positive : To the right
+      *            Negative : To the left
+      */
     def moveRedstoneMode(mod : Int) : Unit = {
         redstone += mod
         if(redstone < -1)
@@ -384,15 +282,24 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             redstone = -1
     }
 
+    /**
+      * Get's the display name for the current mode
+      *
+      * @return The translated name to display
+      */
     def getRedstoneModeName : String = {
         redstone match {
-            case -1 => "Low"
-            case 0 => "Disabled"
-            case 1 => "High"
-            case _ => "Error"
+            case -1 => StatCollector.translateToLocal("neotech.text.low")
+            case 0 =>  StatCollector.translateToLocal("neotech.text.disabled")
+            case 1 =>  StatCollector.translateToLocal("neotech.text.high")
+            case _ =>  StatCollector.translateToLocal("neotech.text.error")
         }
     }
 
+    /**
+      * Set the mode manually
+      * @param newMode The new mode to set to
+      */
     def setRedstoneMode(newMode : Int) : Unit = {
         this.redstone = newMode
     }

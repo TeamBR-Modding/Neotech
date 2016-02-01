@@ -126,12 +126,18 @@ neotech.nei.ecrusher.outputchance=10% Chance per Upgrade
 
 neotech.button.disable=Disabled?
 
+neotech.text.error=Error
+
 neotech.text.in=In
 neotech.text.out=Out
 neotech.text.upgrade=Upgrades
 neotech.text.start=Start
 
-neotech.grinder.description=The grinder is an early game ore doubling mechanic. To use, place ores in the top three slots. Then, place any vanilla pressure plate on top. The better the plate, the faster it goes. Jump on the pressure plate to make the grinder start grinding ores. The higher you jump, the more it progresses. Ores will move into the center slot once you start the grinding process. You can automate placing items into the inventory, but you can not pull items out of the inventory.
+neotech.text.low=Low
+neotech.text.high=High
+neotech.text.disabled=Disabled
+
+neotech.grinder.description=The grinder is an early game ore doubling mechanic. To use, place ores in the top three slots. Then, place any vanilla pressure plate on top. The better the plate, the faster it goes. Jump on the pressure plate to make the grinder start grinding ores. The higher you jump, the more it progresses. Ores will move into the center slot once you start the grinding process. You can automate placing items into the inventory, but you can not pull items out of the output slots.
 neotech.flushableChest.description=The flushable chest allows you to put items into the inventory and when a redstone signal is applied, it will destroy all items inside. It will output a redstone signal based on how full the inventory is.
 neotech.playerPlate.description=The Player Sensitive Plate is like any other pressure plate, except it will only activate when a player entity is on the plate
 neotech.trashBag.description=The Trash Bag is an automatic item removal system. Right click with it to open the inventory and place an item in the slot to automatically trash that item on pickup. You can also trash items manually by opening the GUI and placing items on the trash bag icon.

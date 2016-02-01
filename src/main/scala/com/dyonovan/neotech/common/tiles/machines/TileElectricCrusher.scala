@@ -1,9 +1,10 @@
 package com.dyonovan.neotech.common.tiles.machines
 
-import com.dyonovan.neotech.common.tiles.AbstractMachine
+import com.dyonovan.neotech.common.tiles.{MachineProcessor, AbstractMachine}
 import com.dyonovan.neotech.registries.CrusherRecipeRegistry
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.item.ItemStack
+import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 
 import scala.util.Random
@@ -15,28 +16,100 @@ import scala.util.Random
   * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
-  * @author Dyonovan
+  * @author Paul Davis <pauljoda>
   * @since August 12, 2015
   */
-class TileElectricCrusher extends AbstractMachine {
+class TileElectricCrusher extends MachineProcessor {
 
-    override def smeltItem() {
-        val input = getStackInSlot(0)
-        var recipeResult: ItemStack = recipe(getStackInSlot(0))
-        decrStackSize(0, 1)
-        if (getStackInSlot(1) == null) {
+    val INPUT_SLOT = 0
+    val OUTPUT_SLOT_1 : Int = 1
+    val OUTPUT_SLOT_2  : Int = 2
+
+    val BASE_ENERGY_TICK = 20
+
+    /**
+      * The initial size of the inventory
+      *
+      * @return
+      */
+    override def initialSize: Int = 3
+
+    /**
+      * Used to get how long it takes to cook things, you should check for upgrades at this point
+      *
+      * @return The time it takes in ticks to cook the current item
+      */
+    override def getCookTime : Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            200 - (getUpgradeBoard.getProcessorCount * 24)
+        else
+            200
+    }
+
+    /**
+      * Used to tell if this tile is able to process
+      *
+      * @return True if you are able to process
+      */
+    override def canProcess : Boolean = {
+        if(energy.getEnergyStored >= getEnergyCostPerTick) {
+            if(getStackInSlot(INPUT_SLOT) == null || getOutputForStack(getStackInSlot(INPUT_SLOT)) == null)
+                return false
+            else if(getStackInSlot(OUTPUT_SLOT_1) == null)
+                return true
+            else if(!getStackInSlot(OUTPUT_SLOT_1).isItemEqual(getOutputForStack(getStackInSlot(INPUT_SLOT))))
+                return false
+            else {
+                val minStackSize = getStackInSlot(OUTPUT_SLOT_1).stackSize - getOutputForStack(getStackInSlot(INPUT_SLOT)).stackSize
+                return minStackSize <= getInventoryStackLimit && minStackSize <= getOutputForStack(getStackInSlot(INPUT_SLOT)).getMaxStackSize
+            }
+        }
+        false
+    }
+
+    /**
+      * Get the output of the recipe
+      *
+      * @param stack The input
+      * @return The output
+      */
+    override def getOutputForStack(stack: ItemStack): ItemStack = {
+        if (recipeCrusher(stack) == null)
+            null
+        else
+            recipeCrusher(stack)._1
+    }
+
+    /**
+      * Used to actually cook the item. You should reset values here if need be
+      */
+    override def cook(): Unit = {
+        var movement : Int = 1
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            movement = 20 * getUpgradeBoard.getProcessorCount
+        cookTime += movement
+    }
+
+    override def completeCook() {
+        val input = getStackInSlot(INPUT_SLOT)
+        var recipeResult: ItemStack = getOutputForStack(getStackInSlot(INPUT_SLOT))
+        decrStackSize(INPUT_SLOT, 1)
+        if (getStackInSlot(OUTPUT_SLOT_1) == null) {
             recipeResult = recipeResult.copy
             recipeResult.stackSize = recipeResult.stackSize
-            setInventorySlotContents(1, recipeResult)
+            setInventorySlotContents(OUTPUT_SLOT_1, recipeResult)
         }
         else {
-            getStackInSlot(1).stackSize += recipeResult.stackSize
+            getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize
         }
         if (getUpgradeBoard != null && getUpgradeBoard.hasExpansion) extraOutput(input)
     }
 
+    /**
+      * Used to get the extra output of a cook operation
+      * @param input The item in
+      */
     def extraOutput(input: ItemStack): Unit = {
-
         val recipeResult = recipeCrusher(input)
         if (recipeResult != null && recipeResult._2 != null && recipeResult._3 > 0) {
             val random = Random.nextInt(100)
@@ -55,16 +128,37 @@ class TileElectricCrusher extends AbstractMachine {
     }
 
     /**
-      * Get the output of the recipe
-      *
-      * @param stack The input
-      * @return The output
+      * Used to get the recipe for the crusher
       */
-    override def recipe(stack: ItemStack): ItemStack = if (recipeCrusher(stack) == null) null else recipeCrusher(stack)._1
-
     def recipeCrusher(stack: ItemStack): (ItemStack, ItemStack, Int) = {
         CrusherRecipeRegistry.getOutput(stack).orNull
     }
+
+    /**
+      * Used to get how much energy to drain per tick, you should check for upgrades at this point
+      *
+      * @return How much energy to drain per tick
+      */
+    override def getEnergyCostPerTick: Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            BASE_ENERGY_TICK * (getUpgradeBoard.getProcessorCount * 0.4).toInt
+        else
+            BASE_ENERGY_TICK
+    }
+
+    /**
+      * Used to get what slots are allowed to be output
+      *
+      * @return The slots to output from
+      */
+    override def getOutputSlots: Array[Int] = Array(OUTPUT_SLOT_1, OUTPUT_SLOT_2)
+
+    /**
+      * Used to get what slots are allowed to be input
+      *
+      * @return The slots to input from
+      */
+    override def getInputSlots: Array[Int] = Array(INPUT_SLOT)
 
     /**
       * Used to output the redstone single from this structure
@@ -78,27 +172,24 @@ class TileElectricCrusher extends AbstractMachine {
       */
     override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
 
-    override def initialSize: Int = 3
-
-    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = {
-        index == 1 || index == 2
-    }
-
-    override def getSlotsForFace(side: EnumFacing): Array[Int] = {
-        side match {
-            case EnumFacing.UP => Array[Int](0)
-            case EnumFacing.DOWN => Array[Int](1, 2)
-            case _ => Array[Int](0, 1, 2)
-        }
-    }
-
-    override def getOutputSlots: Array[Int] = Array(1, 2)
-
-    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
-
+    /**
+      * Used to get what particles to spawn. This will be called when the tile is active
+      */
     override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
         worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
         worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
+    }
+
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = {
+        index == OUTPUT_SLOT_1 || index == OUTPUT_SLOT_2
     }
 
     /**
@@ -106,10 +197,10 @@ class TileElectricCrusher extends AbstractMachine {
       * side
       */
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
-        if (slot == 0 && recipe(itemStackIn) != null) {
-            if (getStackInSlot(0) == null) return true
-            if (getStackInSlot(0).isItemEqual(itemStackIn)) {
-                if (getStackInSlot(0).getMaxStackSize >= getStackInSlot(0).stackSize + itemStackIn.stackSize)
+        if (slot == INPUT_SLOT && getOutputForStack(itemStackIn) != null) {
+            if (getStackInSlot(INPUT_SLOT) == null) return true
+            if (getStackInSlot(INPUT_SLOT).isItemEqual(itemStackIn)) {
+                if (getStackInSlot(INPUT_SLOT).getMaxStackSize >= getStackInSlot(INPUT_SLOT).stackSize + itemStackIn.stackSize)
                     return true
             }
         }
