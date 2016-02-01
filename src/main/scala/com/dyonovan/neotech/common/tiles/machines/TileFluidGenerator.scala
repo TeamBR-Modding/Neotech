@@ -23,13 +23,88 @@ import net.minecraftforge.fluids._
   */
 class TileFluidGenerator extends MachineGenerator with IFluidHandler {
 
-    energy = new EnergyStorage(100000)
+    final val BASE_ENERGY_TICK = 80
+    final val INPUT_SLOT       = 0
+    final val OUTPUT_SLOT      = 1
+
+    energy   = new EnergyStorage(BASE_ENERGY)
     val tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10)
 
+    /**
+      * The initial size of the inventory
+      *
+      * @return
+      */
+    override def initialSize: Int = 2
 
-    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {}
+    /**
+      * This method handles how much energy to produce per tick
+      *
+      * @return How much energy to produce per tick
+      */
+    override def getEnergyProduced: Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 10)
+        else
+            BASE_ENERGY_TICK
+    }
 
+    /**
+      * Called to tick generation. This is where you add power to the generator
+      */
+    override def generate(): Unit =
+        energy.receiveEnergy(getEnergyProduced, false)
+
+    /**
+      * Called per tick to manage burn time. You can do nothing here if there is nothing to generate. You should decrease burn time here
+      * You should be handling checks if burnTime is 0 in this method, otherwise the tile won't know what to do
+      *
+      * @return True if able to continue generating
+      */
+    override def manageBurnTime(): Boolean = {
+
+        //Handle Items
+        if(getStackInSlot(INPUT_SLOT) != null && FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)) != null &&
+            getStackInSlot(OUTPUT_SLOT) == null) {
+            val fluidStackCopy = FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT))
+            if(tank.getFluidAmount + FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)).amount < tank.getCapacity &&
+                    FluidContainerRegistry.drainFluidContainer(getStackInSlot(INPUT_SLOT)) != null) {
+                tank.fill(fluidStackCopy, true)
+
+                if(getStackInSlot(OUTPUT_SLOT) == null) {
+                    setInventorySlotContents(OUTPUT_SLOT, FluidContainerRegistry.drainFluidContainer(getStackInSlot(INPUT_SLOT)))
+                    setInventorySlotContents(INPUT_SLOT, null)
+                }
+            }
+        }
+
+        //Do burntime
+        if(burnTime <= 0) {
+            val fluidDrained = tank.drain(FluidContainerRegistry.BUCKET_VOLUME / 10, true)
+            if(fluidDrained == null || fluidDrained.getFluid == null || fluidDrained.amount <= 0)
+                return false
+
+            burnTime = FluidFuelValues.getFluidFuelValue(fluidDrained.getFluid.getName) / 10
+            if(burnTime > 0) {
+                currentObjectBurnTime = burnTime
+                return true
+            }
+        } else {
+            burnTime -= 1
+            return burnTime > 0
+        }
+        false
+    }
+
+    /*******************************************************************************************************************
+      **************************************************  Tile Methods  ************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * This will try to take things from other inventories and put it into ours
+      */
     override def tryInput() : Unit = {
+        super.tryInput()
         for(dir <- EnumFacing.values) {
             if(canInputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
@@ -42,17 +117,19 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
         }
     }
 
-    /**
-      * Used to output the redstone single from this structure
-      *
-      * Use a range from 0 - 16.
-      *
-      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
-      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
-      *
-      * @return int range 0 - 16
-      */
-    override def getRedstoneOutput: Int = InventoryUtils.calcRedstoneFromInventory(this)
+    override def writeToNBT(tag: NBTTagCompound): Unit = {
+        super.writeToNBT(tag)
+        tank.writeToNBT(tag)
+    }
+
+    override def readFromNBT(tag: NBTTagCompound): Unit = {
+        super.readFromNBT(tag)
+        tank.readFromNBT(tag)
+    }
+
+    /*******************************************************************************************************************
+      ********************************************* FluidHandler methods ***********************************************
+      ******************************************************************************************************************/
 
     override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)
 
@@ -65,9 +142,8 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
         fluidAmount
     }
 
-    override def canFill(from: EnumFacing, fluid: Fluid): Boolean = {
+    override def canFill(from: EnumFacing, fluid: Fluid): Boolean =
         (tank.getFluid == null || tank.getFluid.getFluid == fluid) && FluidFuelValues.isFluidFuel(fluid.getName)
-    }
 
 
     override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = false
@@ -85,14 +161,65 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
 
     override def getTankInfo(from: EnumFacing): Array[FluidTankInfo] = Array(tank.getInfo)
 
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
-        super.writeToNBT(tag)
-        tank.writeToNBT(tag)
-    }
+    /**
+      * Used to get what slots are allowed to be input
+      *
+      * @return The slots to input from
+      */
+    override def getInputSlots: Array[Int] = Array(INPUT_SLOT)
 
-    override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
-        tank.readFromNBT(tag)
-    }
+    /**
+      * Used to get what slots are allowed to be output
+      *
+      * @return The slots to output from
+      */
+    override def getOutputSlots: Array[Int] = Array(OUTPUT_SLOT)
+
+    /**
+      * Used to define if an item is valid for a slot
+      *
+      * @param slot The slot id
+      * @param itemStackIn The stack to check
+      * @return True if you can put this there
+      */
+    override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean =
+        slot == INPUT_SLOT
+
+    /**
+      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean =
+        slot == INPUT_SLOT && FluidContainerRegistry.isContainer(itemStackIn)
+
+    /**
+      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == OUTPUT_SLOT
+
+    /*******************************************************************************************************************
+      *************************************************** Misc methods *************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to output the redstone single from this structure
+      *
+      * Use a range from 0 - 16.
+      *
+      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
+      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
+      *
+      * @return int range 0 - 16
+      */
+    override def getRedstoneOutput: Int = (energy.getEnergyStored * 16) / energy.getMaxEnergyStored
+
+    /**
+      * Used to get what particles to spawn. This will be called when the tile is active
+      */
+    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {}
 }

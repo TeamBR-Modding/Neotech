@@ -71,19 +71,23 @@ abstract class MachineProcessor extends AbstractMachine {
     override def doWork() = {
         didWork = false
 
-        /** We want to check if we are above the value needed before we actually start checking for cooking, this will ensure
-         *  we don't run into issues with going one tick over */
-        if(cookTime >= getCookTime) {
-            completeCook()
-            reset()
-        }
-
         //Do Operations
         if (canProcess) {
-            cook()
+            /** We want to check if we are above the value needed before we actually start checking for cooking, this will ensure
+              *  we don't run into issues with going one tick over */
+            if(cookTime >= getCookTime) {
+                completeCook()
+                reset()
+            }
+            if(canProcess) { //For those moments where we completeCook and then are reset, can change this result
+                cook()
+                energy.extractEnergy(getEnergyCostPerTick, false)
+            }
             didWork = true
         } else {
+            val update = cookTime > 0
             reset()
+            if(update) worldObj.markBlockForUpdate(pos)
         }
 
         if (didWork) {
@@ -98,6 +102,7 @@ abstract class MachineProcessor extends AbstractMachine {
 
     /**
       * Used to check if this tile is active or not
+      *
       * @return True if active state
       */
     override def isActive = cookTime > 0
@@ -120,6 +125,7 @@ abstract class MachineProcessor extends AbstractMachine {
 
     /**
       * Client side method to get how far along this process is to a scale variable
+      *
       * @param scaleVal What scale to move to, usually pixels
       * @return What value on new scale this is complete
       */
@@ -133,6 +139,7 @@ abstract class MachineProcessor extends AbstractMachine {
 
     /**
       * Used to get what slots you can use per face
+      *
       * @param side The face to check
       * @return An array of slots to interface with
       */

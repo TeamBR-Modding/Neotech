@@ -31,6 +31,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     val IO_FIELD_ID = 1
     val UPDATE_CLIENT = 2
 
+    var working  = false
+
     /**
       * Used to get what particles to spawn. This will be called when the tile is active
       */
@@ -94,8 +96,13 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     override def onClientTick() : Unit = {
         if(getSupposedEnergy != energy.getMaxEnergyStored)
             sendValueToServer(UPDATE_CLIENT, 0)
+        //Mark for render update if needed
+        if(working != isActive)
+            worldObj.markBlockRangeForRenderUpdate(pos, pos)
+        working = isActive
     }
 
+    var ticker = 0
     override def onServerTick(): Unit = {
         //Make sure our energy storage is correct
         if(getSupposedEnergy != energy.getMaxEnergyStored)
@@ -110,10 +117,12 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         }
 
         //We want to try automatic IO if we are able to once a tick
-        if(worldObj.getWorldTime % 20 == 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
+        if(ticker <= 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
+            ticker = 20
             tryInput()
             tryOutput()
         }
+        ticker -= 1
 
         //Do what we are programed to do
         doWork()
@@ -281,6 +290,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       */
     override def canConnectEnergy(from: EnumFacing): Boolean = true
 
+
     /*******************************************************************************************************************
       ********************************************** Syncable methods **************************************************
       ******************************************************************************************************************/
@@ -294,8 +304,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     override def setVariable(id : Int, value : Double): Unit = {
         id match {
             case REDSTONE_FIELD_ID => redstone = value.toInt
-            case IO_FIELD_ID => toggleMode(EnumFacing.getFront(value.toInt))
-            case UPDATE_CLIENT => updateClient = true
+            case IO_FIELD_ID       => toggleMode(EnumFacing.getFront(value.toInt))
+            case UPDATE_CLIENT     => updateClient = true
             case _ => //No Operation, not defined ID
         }
     }
@@ -331,9 +341,9 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     def getRedstoneModeName : String = {
         redstone match {
             case -1 => StatCollector.translateToLocal("neotech.text.low")
-            case 0 =>  StatCollector.translateToLocal("neotech.text.disabled")
-            case 1 =>  StatCollector.translateToLocal("neotech.text.high")
-            case _ =>  StatCollector.translateToLocal("neotech.text.error")
+            case 0  =>  StatCollector.translateToLocal("neotech.text.disabled")
+            case 1  =>  StatCollector.translateToLocal("neotech.text.high")
+            case _  =>  StatCollector.translateToLocal("neotech.text.error")
         }
     }
 

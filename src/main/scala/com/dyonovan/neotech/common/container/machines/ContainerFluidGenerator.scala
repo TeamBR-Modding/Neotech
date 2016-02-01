@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.common.container.machines
 
-import com.dyonovan.neotech.common.container.slot.SlotFurnaceOutputItemHandler
-import com.dyonovan.neotech.common.tiles.machines.{TileFluidGenerator, TileElectricFurnace}
+import com.dyonovan.neotech.common.tiles.machines.TileFluidGenerator
 import net.minecraft.entity.player.InventoryPlayer
 
 /**
@@ -16,6 +15,9 @@ import net.minecraft.entity.player.InventoryPlayer
   */
 class ContainerFluidGenerator(playerInventory: InventoryPlayer, tile: TileFluidGenerator) extends
         ContainerAbstractMachine(playerInventory, tile) {
+
+    addSlotToContainer(new RestrictedSlot(tile, 0, 30, 20))
+    addSlotToContainer(new RestrictedSlot(tile, 1, 30, 60))
 
     addPlayerInventorySlots(8, 84)
 }

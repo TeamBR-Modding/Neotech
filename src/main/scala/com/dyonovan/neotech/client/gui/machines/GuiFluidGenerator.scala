@@ -50,14 +50,18 @@ class GuiFluidGenerator(player: EntityPlayer, tileEntity: TileFluidGenerator) ex
     }
 
     override def addComponents(): Unit = {
-        components += new GuiComponentFlame(62, 52) {
-            override def getCurrentBurn: Int = if (tileEntity.isBurning) tileEntity.getBurnTimeRemainingScaled(14) else 0
+
+        //Flame for Burning
+        components += new GuiComponentFlame(78, 55) {
+            override def getCurrentBurn: Int = if (tileEntity.isActive) tileEntity.getBurnProgressScaled(14) else 0
 
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
-                ArrayBuffer(tileEntity.values.burnTime + " ticks left.")
+                ArrayBuffer(tileEntity.burnTime + " ticks left.")
             }
         }
-        components += new GuiComponentPowerBar(20, 30, 18, 60, new Color(255, 0, 0)) {
+
+        //Power Bar
+        components += new GuiComponentPowerBar(150, 18, 18, 60, new Color(255, 0, 0)) {
             override def getEnergyPercent(scale: Int): Int = {
                 tileEntity.getEnergyStored(null) * scale / tileEntity.getMaxEnergyStored(null)
             }
@@ -65,14 +69,22 @@ class GuiFluidGenerator(player: EntityPlayer, tileEntity: TileFluidGenerator) ex
                 ArrayBuffer(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null))
             }
         }
-        components += new GuiComponentText(GuiColor.RED + "RF/t = " + tileEntity.RF_TICK, 48, 18)
-        components += new GuiComponentFluidTank(102, 30, 18, 60, tileEntity.tank) {
+
+        //Current Production
+        components += new GuiComponentText(GuiColor.RED + "RF/t = " + tileEntity.getEnergyProduced, 64, 18) {
+            override def renderOverlay(i : Int, j : Int, x : Int, y : Int) = {
+                setText(GuiColor.RED + "RF/t = " + tileEntity.getEnergyProduced)
+                super.renderOverlay(i, j, x, y)
+            }
+        }
+
+        //Stored Fluid
+        components += new GuiComponentFluidTank(7, 18, 18, 60, tileEntity.tank) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 ArrayBuffer(tileEntity.tank.getFluidAmount + "/" + tileEntity.tank.getCapacity + " mb")
             }
         }
     }
-
 
     override def addRightTabs(tabs : GuiTabCollection) = {
         if (tileEntity != null)

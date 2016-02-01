@@ -6,7 +6,7 @@ import com.dyonovan.neotech.registries.FertilizerBlacklistRegistry
 import com.google.common.collect.Lists
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
+import com.teambr.bookshelf.common.tiles.traits.{Syncable, Inventory, UpdatingTile}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.block.{Block, IGrowable}
 import net.minecraft.nbt.NBTTagCompound
@@ -25,7 +25,7 @@ import net.minecraftforge.common.IPlantable
  * @author Dyonovan
  * @since August 22, 2015
  */
-class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Waila {
+class TileFertilizer extends TileEntity with Inventory with Syncable with Waila {
 
     var corner1: BlockPos = _
     var corner2: BlockPos = _
@@ -95,4 +95,8 @@ class TileFertilizer extends TileEntity with Inventory with UpdatingTile with Wa
         tipList.add(GuiColor.WHITE + "BoneMeal: " + count)
         tipList
     }
+
+    override def setVariable(id: Int, value: Double): Unit = { this.disabled = !this.disabled; worldObj.markBlockForUpdate(pos) }
+
+    override def getVariable(id: Int): Double = { 0.0 }
 }

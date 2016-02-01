@@ -4,25 +4,26 @@ import java.awt.Color
 
 import com.dyonovan.neotech.common.container.machines.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.machines.TileThermalBinder
-import com.dyonovan.neotech.network.{PacketDispatcher, TBStartPacket}
+import com.dyonovan.neotech.network.PacketDispatcher
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
+import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.StatCollector
 
 import scala.collection.mutable.ArrayBuffer
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 21, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 21, 2015
+  */
 class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) extends
         GuiBase[ContainerThermalBinder](new ContainerThermalBinder(player.inventory, tileEntity), 175, 185,
             "neotech.thermalbinder.title") {
@@ -55,7 +56,10 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
         components += new GuiComponentButton(120, 75, 40, 20, "neotech.text.start") {
             override def doAction(): Unit = {
                 if (tileEntity.getStackInSlot(tileEntity.MB_INPUT) != null) {
-                    PacketDispatcher.net.sendToServer(new TBStartPacket(tileEntity.getPos, tileEntity.getCount))
+                    if(!Minecraft.getMinecraft.thePlayer.capabilities.isCreativeMode)
+                        tileEntity.sendValueToServer(tileEntity.RUNNING_VARIABLE_ID, 0)
+                    else
+                        tileEntity.sendValueToServer(tileEntity.BUILD_NOW_ID, 0)
                 }
             }
         }

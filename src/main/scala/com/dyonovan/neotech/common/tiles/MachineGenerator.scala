@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.common.tiles
 
+import cofh.api.energy.{IEnergyReceiver, EnergyStorage}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -21,6 +22,8 @@ abstract class MachineGenerator extends AbstractMachine {
     var burnTime              = 0
     var currentObjectBurnTime = 0
     var didWork               = false
+
+    final val BASE_ENERGY     = 32000
 
     /**
       * Called to tick generation. This is where you add power to the generator
@@ -52,6 +55,22 @@ abstract class MachineGenerator extends AbstractMachine {
       */
     override def doWork(): Unit = {
         didWork = false
+
+        //Transfer
+        if (energy.getEnergyStored > 0) {
+            for (i <- EnumFacing.values()) {
+                worldObj.getTileEntity(pos.offset(i)) match {
+                    case tile: IEnergyReceiver =>
+                        val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
+                        if (want > 0) {
+                            val actual = energy.extractEnergy(want, false)
+                            tile.receiveEnergy(i.getOpposite, actual, false)
+                            didWork = true
+                        }
+                    case _ =>
+                }
+            }
+        }
 
         if(manageBurnTime()) {
             generate()
@@ -112,6 +131,35 @@ abstract class MachineGenerator extends AbstractMachine {
       ******************************************************************************************************************/
 
     /**
+      * Used to change the energy to a new storage with a different size
+      *
+      * @param initial How much was in the old storage
+      */
+    override def changeEnergy(initial : Int): Unit = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
+            energy = new EnergyStorage(BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10))
+        }
+        else {
+            energy = new EnergyStorage(BASE_ENERGY)
+        }
+        energy.setEnergyStored(initial)
+        updateClient = true
+        worldObj.markBlockForUpdate(pos)
+    }
+
+    /**
+      * Used to determine how much energy should be in this tile
+      *
+      * @return How much energy should be available
+      */
+    override def getSupposedEnergy : Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
+            BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10)
+        else
+            BASE_ENERGY
+    }
+
+    /**
       * Used to extract energy from this tile. You should return zero if you don't want to be able to extract
       *
       * @param from The direction pulling from
@@ -127,10 +175,28 @@ abstract class MachineGenerator extends AbstractMachine {
 
     /**
       * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
+      *
       * @param from Orientation the energy is received from.
       * @param maxReceive Maximum amount of energy to receive.
       * @param simulate If TRUE, the charge will only be simulated.
       * @return Amount of energy that was (or would have been, if simulated) received.
       */
     override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = 0
+
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to get what slots you can use per face
+      * @param side The face to check
+      * @return An array of slots to interface with
+      */
+    override def getSlotsForFace(side: EnumFacing): Array[Int] = {
+        side match {
+            case EnumFacing.UP => getInputSlots
+            case EnumFacing.DOWN => getOutputSlots
+            case _ => getInputSlots ++ getOutputSlots
+        }
+    }
 }

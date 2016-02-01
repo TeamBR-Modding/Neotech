@@ -31,14 +31,14 @@ object GuiAbstractMachineHelper {
         if (tileEntity != null) {
 
             val motherBoardTag = new ArrayBuffer[BaseComponent]
-            motherBoardTag += new GuiComponentText("Motherboard", 26, 6, new Color(255, 204, 0))
+            motherBoardTag += new GuiComponentText(GuiColor.ORANGE + "Motherboard", 26, 6)
             tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.upgradeMBFull))
 
             tabs.getTabs.head.addChild(new GuiComponentTabSlotHolder(41, 25, 18, 18, tabs.getTabs.head, container.motherboardSlot,  170 + 41, 27))
 
             if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasControl) {
                 var redstoneTab = new ArrayBuffer[BaseComponent]
-                redstoneTab += new GuiComponentText("Redstone Mode", 20, 7)
+                redstoneTab += new GuiComponentText(GuiColor.ORANGE + "Redstone Mode", 20, 7)
                 redstoneTab += new GuiComponentButton(5, 20, 15, 20, "<") {
                     override def doAction(): Unit = {
                         tileEntity.moveRedstoneMode(-1)
@@ -64,7 +64,7 @@ object GuiAbstractMachineHelper {
 
             if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
                 val selectorTab = new ArrayBuffer[BaseComponent]
-                selectorTab += new GuiComponentText("I/O Mode", 29, 6)
+                selectorTab += new GuiComponentText(GuiColor.ORANGE + "I/O Config", 29, 6)
                 selectorTab += new GuiComponentSideSelector(15, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
                     override def setToggleController(): Unit = {
                         toggleableSidesController = new ToggleableSidesController {
@@ -82,7 +82,10 @@ object GuiAbstractMachineHelper {
                         }
                     }
                 }
-                tabs.addTab(selectorTab.toList, 100, 100, new Color(150, 150, 150), new ItemStack(BlockManager.electricCrusher))
+                selectorTab += new GuiComponentText(GuiColor.ORANGE + "Orange: " + GuiColor.WHITE + "Output", 10, 100)
+                selectorTab += new GuiComponentText(GuiColor.BLUE + "Blue: " + GuiColor.WHITE + "Input", 10, 90)
+                selectorTab += new GuiComponentText(GuiColor.GREEN + "Green: " + GuiColor.WHITE + "Both", 10, 110)
+                tabs.addTab(selectorTab.toList, 100, 125, new Color(150, 150, 150), new ItemStack(BlockManager.electricCrusher))
             }
         }
     }

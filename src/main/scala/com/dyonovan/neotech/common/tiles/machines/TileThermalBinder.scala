@@ -23,6 +23,9 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  */
 class TileThermalBinder extends MachineProcessor {
 
+    final val RUNNING_VARIABLE_ID = 10
+    final val BUILD_NOW_ID        = 11
+
     final val INPUT1 = 0
     final val INPUT2 = 1
     final val INPUT3 = 2
@@ -63,7 +66,7 @@ class TileThermalBinder extends MachineProcessor {
       */
     override def canProcess : Boolean = {
         if(isRunning && energy.getEnergyStored >= getEnergyCostPerTick) {
-            if(getStackInSlot(MB_OUTPUT) == null && getStackInSlot(MB_INPUT) != null && getCount == lastCount)
+            if(getStackInSlot(MB_OUTPUT) == null && getStackInSlot(MB_INPUT) != null && lastCount != 0 && getCount == lastCount)
                 return true
         }
         isRunning = false
@@ -91,8 +94,7 @@ class TileThermalBinder extends MachineProcessor {
     /**
       * Called when the tile has completed the cook process
       */
-    override def completeCook(): Unit = build()
-
+    override def completeCook(): Unit = build(); lastCount = 0
 
     /**
       * Used to get how much energy to drain per tick, you should check for upgrades at this point
@@ -282,11 +284,32 @@ class TileThermalBinder extends MachineProcessor {
       */
     override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
         val item = stack.getItem
-        if (slot >= MB_INPUT && slot <= INPUT4)
+        if (slot >= INPUT1 && slot <= INPUT4)
             item.isInstanceOf[ItemManager.upgradeControl.type] || item.isInstanceOf[ItemManager.upgradeExpansion.type] ||
                     item.isInstanceOf[ItemManager.upgradeHardDrive.type] || item.isInstanceOf[ItemManager.upgradeProcessor.type]
-        else if (slot == 4) item.isInstanceOf[ItemManager.upgradeMBEmpty.type] || item.isInstanceOf[ItemManager.upgradeMBFull.type]
+        else if (slot == MB_INPUT) item.isInstanceOf[ItemManager.upgradeMBEmpty.type] || item.isInstanceOf[ItemManager.upgradeMBFull.type]
         else false
+    }
+
+    /*******************************************************************************************************************
+      ********************************************** Syncable methods **************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to set the variable for this tile, the Syncable will use this when you send a value to the server
+      *
+      * @param id The ID of the variable to send
+      * @param value The new value to set to (you can use this however you want, eg using the ordinal of EnumFacing)
+      */
+    override def setVariable(id : Int, value : Double): Unit = {
+        id match {
+            case REDSTONE_FIELD_ID   => redstone = value.toInt
+            case IO_FIELD_ID         => toggleMode(EnumFacing.getFront(value.toInt))
+            case UPDATE_CLIENT       => updateClient = true
+            case RUNNING_VARIABLE_ID => isRunning = true; lastCount = getCount; worldObj.markBlockForUpdate(pos)
+            case BUILD_NOW_ID        => build(); worldObj.markBlockForUpdate(pos)
+            case _ => //No Operation, not defined ID
+        }
     }
 
     /*******************************************************************************************************************
