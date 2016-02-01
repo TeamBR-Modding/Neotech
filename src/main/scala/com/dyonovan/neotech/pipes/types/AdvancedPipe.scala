@@ -97,9 +97,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
     /**
       * Used to mark for update
       */
-    override def markDirty() : Unit = {
-        super[Upgradeable].markDirty()
-    }
+    override def markDirty() : Unit = {}
 
     /**
       * Called when the board is removed, reset to default values

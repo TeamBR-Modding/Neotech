@@ -7,7 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.inventory.SlotFurnaceOutput
 
 class ContainerElectricFurnace(playerInventory: InventoryPlayer, tile: TileElectricFurnace) extends
-        BaseContainer(playerInventory, tile) {
+        ContainerAbstractMachine(playerInventory, tile) {
 
     addSlotToContainer(new RestrictedSlot(tile, 0, 56, 35))
     addSlotToContainer(new SlotFurnaceOutputItemHandler(playerInventory.player, tile, 1, 116, 35))

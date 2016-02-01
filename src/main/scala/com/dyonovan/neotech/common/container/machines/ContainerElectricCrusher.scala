@@ -17,7 +17,7 @@ import net.minecraft.inventory.SlotFurnaceOutput
  * @since August 13, 2015
  */
 class ContainerElectricCrusher(playerInventory: InventoryPlayer, tile: TileElectricCrusher) extends
-        BaseContainer(playerInventory, tile) {
+        ContainerAbstractMachine(playerInventory, tile) {
 
     addSlotToContainer(new RestrictedSlot(tile, 0, 41, 35))
     addSlotToContainer(new SlotFurnaceOutputItemHandler(playerInventory.player, tile, 1, 101, 35))

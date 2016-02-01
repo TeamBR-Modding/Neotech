@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.common.container.slot
 
+import java.awt.Color
+
 import com.teambr.bookshelf.common.container.slots.{ICustomSlot, SLOT_SIZE}
 import net.minecraft.inventory.{IInventory, Slot}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}

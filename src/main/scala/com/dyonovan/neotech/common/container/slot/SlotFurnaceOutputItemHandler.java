@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.common.container.slot;
 
+import com.teambr.bookshelf.common.container.slots.ICustomSlot;
+import com.teambr.bookshelf.common.container.slots.SLOT_SIZE;
 import com.teambr.bookshelf.common.tiles.traits.Inventory;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +13,10 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.items.SlotItemHandler;
+import scala.Enumeration;
+import scala.Tuple2;
+
+import java.awt.*;
 
 /**
  * This file was created for NeoTech
@@ -23,8 +29,7 @@ import net.minecraftforge.items.SlotItemHandler;
  * @since 1/27/2016
  */
 
-public class SlotFurnaceOutputItemHandler extends SlotItemHandler
-{
+public class SlotFurnaceOutputItemHandler extends SlotItemHandler implements ICustomSlot {
     /** The player that is using the GUI where this slot resides. */
     private EntityPlayer thePlayer;
     private int stackSize;
@@ -110,4 +115,20 @@ public class SlotFurnaceOutputItemHandler extends SlotItemHandler
             this.thePlayer.triggerAchievement(AchievementList.cookFish);
         }
     }
+
+    @Override
+    public Enumeration.Value getSlotSize() {
+        return SLOT_SIZE.LARGE();
+    }
+
+    @Override
+    public Tuple2<Integer, Integer> getPoint() {
+        return new Tuple2<>(xDisplayPosition - 5, yDisplayPosition - 5);
+    }
+
+    @Override
+    public boolean hasColor() { return false; }
+
+    @Override
+    public Color getColor() { return new Color(0, 0, 0); }
 }

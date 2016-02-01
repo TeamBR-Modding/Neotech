@@ -56,8 +56,6 @@ trait Upgradeable {
         upgradeInventory.writeToNBT(tag, "upgrade")
     }
 
-    def markDirty(): Unit = {}
-
     /**
       * Returns an object for the Upgrade Board, if it exists
       *

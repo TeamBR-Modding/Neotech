@@ -25,8 +25,21 @@ class GuiElectricFurnace(player: EntityPlayer, tileEntity: TileElectricFurnace) 
 
     protected var tile = tileEntity
 
+    var hasUpgrade = tileEntity.getUpgradeBoard != null
+
     override def drawGuiContainerBackgroundLayer(f: Float, i: Int, j: Int): Unit = {
         tile = tile.getWorld.getTileEntity(tile.getPos).asInstanceOf[TileElectricFurnace]
+
+        val oldValue = hasUpgrade
+        hasUpgrade = tile.getUpgradeBoard != null
+
+        if(oldValue != hasUpgrade) {
+            val motherBoardTab = rightTabs.getTabs.head
+            rightTabs.getTabs.clear()
+            rightTabs.getTabs += motherBoardTab
+            GuiAbstractMachineHelper.updateRightTabs(rightTabs, tileEntity, inventory)
+        }
+
         super[GuiBase].drawGuiContainerBackgroundLayer(f, i, j)
     }
 
@@ -46,72 +59,9 @@ class GuiElectricFurnace(player: EntityPlayer, tileEntity: TileElectricFurnace) 
     }
 
 
-    override def addRightTabs(tabs: GuiTabCollection) = {
-        if (tileEntity != null) {
-
-            val motherBoardTag = new ArrayBuffer[BaseComponent]
-            tabs.addTab(motherBoardTag.toList, 100, 100, new Color(0, 155, 0), new ItemStack(ItemManager.upgradeMBFull))
-
-            if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasControl) {
-                var redstoneTab = new ArrayBuffer[BaseComponent]
-                redstoneTab += new GuiComponentText("Redstone Mode", 20, 7)
-                redstoneTab += new GuiComponentButton(5, 20, 15, 20, "<") {
-                    override def doAction(): Unit = {
-                        tileEntity.moveRedstoneMode(-1)
-                        tileEntity.sendValueToServer(tileEntity.REDSTONE_FIELD_ID, tileEntity.redstone)
-                    }
-                }
-                redstoneTab += new GuiComponentButton(25, 20, 50, 20, tileEntity.getRedstoneModeName) {
-                    override def doAction(): Unit = {}
-
-                    override def renderOverlay(i: Int, j: Int, x: Int, y: Int): Unit = {
-                        setText(tileEntity.getRedstoneModeName)
-                        super.renderOverlay(i, j, x, y)
-                    }
-                }
-                redstoneTab += new GuiComponentButton(80, 20, 15, 20, ">") {
-                    override def doAction(): Unit = {
-                        tileEntity.moveRedstoneMode(1)
-                        tileEntity.sendValueToServer(tileEntity.REDSTONE_FIELD_ID, tileEntity.redstone)
-                    }
-                }
-                tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
-            }
-
-            if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
-                val selectorTab = new ArrayBuffer[BaseComponent]
-                selectorTab += new GuiComponentText("I/O Mode", 29, 6)
-                selectorTab += new GuiComponentSideSelector(20, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
-                    override def setToggleController(): Unit = {
-                        toggleableSidesController = new ToggleableSidesController {
-
-                            override def onSideToggled(side: EnumFacing, modifier: Int): Unit = {
-                                tileEntity.setVariable(tileEntity.IO_FIELD_ID, side.ordinal())
-                                tileEntity.sendValueToServer(tileEntity.IO_FIELD_ID, side.ordinal())
-                                setBlockState(tileEntity.getWorld.getBlockState(tileEntity.getPos))
-                            }
-
-                            @Nullable
-                            override def getColorForMode(side: EnumFacing): Color = {
-                                tileEntity.getColor(tileEntity.getModeForSide(side))
-                            }
-                        }
-                    }
-                }
-                tabs.addTab(selectorTab.toList, 100, 100, new Color(150, 150, 150), new ItemStack(BlockManager.electricFurnace))
-            }
-
-
-            tabs.getTabs.head.setMouseEventListener(new IMouseEventListener {
-                override def onMouseDown(component: BaseComponent, mouseX: Int, mouseY: Int, button: Int): Unit = {
-                    PacketDispatcher.net.sendToServer(new OpenContainerGui(tileEntity.getPos, 1))
-                }
-
-                override def onMouseDrag(component: BaseComponent, mouseX: Int, mouseY: Int, button: Int, time: Long): Unit = {}
-
-                override def onMouseUp(component: BaseComponent, mouseX: Int, mouseY: Int, button: Int): Unit = {}
-            })
-        }
+    override def addRightTabs(tabs : GuiTabCollection) = {
+        if (tileEntity != null)
+            GuiAbstractMachineHelper.addRightTabs(tabs, tileEntity, inventory)
     }
 }
 

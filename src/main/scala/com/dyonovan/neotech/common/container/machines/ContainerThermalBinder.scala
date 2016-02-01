@@ -15,7 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer
  * @since August 21, 2015
  */
 class ContainerThermalBinder(playerInventory: InventoryPlayer, tileEntity: TileThermalBinder) extends
-        BaseContainer(playerInventory, tileEntity) {
+        ContainerAbstractMachine(playerInventory, tileEntity) {
 
     addSlotToContainer(new RestrictedSlot(tileEntity, 0, 67, 22))
     addSlotToContainer(new RestrictedSlot(tileEntity, 1, 92, 22))

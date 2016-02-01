@@ -19,21 +19,15 @@ class StandardValues extends NBTSavable {
     var currentItemBurnTime = 0
     var cookTime = 0
 
-    var isPowered = false
-
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         tag.setInteger("Burn Time", burnTime)
         tag.setInteger("Cook Time", cookTime)
         tag.setInteger("Current Burn", currentItemBurnTime)
-
-        tag.setBoolean("IsPowered", isPowered)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         burnTime = tag.getInteger("Burn Time")
         cookTime = tag.getInteger("Cook Time")
         currentItemBurnTime = tag.getInteger("Current Burn")
-
-        isPowered = tag.getBoolean("IsPowered")
     }
 }

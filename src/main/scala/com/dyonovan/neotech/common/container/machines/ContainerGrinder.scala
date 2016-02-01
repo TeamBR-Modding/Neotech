@@ -15,7 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer
   * @since 1/14/2016
   */
 class ContainerGrinder(playerInventory : InventoryPlayer, tile : TileGrinder) extends
-    BaseContainer(playerInventory, tile) {
+        BaseContainer(playerInventory, tile) {
     addInventoryLine(62, 22, 0, 3)
     addSlotToContainer(new RestrictedSlot(tile, 3, 80, 44))
     addInventoryLine(62, 66, 4, 3)

@@ -15,7 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer
  * @since August 14, 2015
  */
 class ContainerFurnaceGenerator(playerInventory: InventoryPlayer, tile: TileFurnaceGenerator) extends
-        BaseContainer(playerInventory, tile) {
+        ContainerAbstractMachine(playerInventory, tile) {
 
     addSlotToContainer(new RestrictedSlot(tile, 0, 78, 35))
     addPlayerInventorySlots(8, 84)

@@ -102,7 +102,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             this.values.burnTime = values.burnTime - 1
             sendValueToClient(BURNTIME_FIELD_ID, this.values.burnTime)
         }
-        if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1)) && !values.isPowered) {
+        if (canSmelt(getStackInSlot(0), recipe(getStackInSlot(0)), getStackInSlot(1))) {
             if (this.values.burnTime <= 0) {
                 this.values.burnTime = cookSpeed
                 this.values.currentItemBurnTime = this.values.burnTime
@@ -183,7 +183,6 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         ((this.values.burnTime * scaleVal) / Math.max(this.values.currentItemBurnTime, 0.001)).toInt
 
     override def markDirty(): Unit = {
-        super[Upgradeable].markDirty()
         super[TileEntity].markDirty()
     }
 
