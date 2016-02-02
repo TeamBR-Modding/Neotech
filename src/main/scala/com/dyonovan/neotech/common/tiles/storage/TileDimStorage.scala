@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound
 class TileDimStorage extends UpdatingTile with Inventory with Waila {
 
     private var qty = 0
+    private var lock = false
     final val maxStacks = 64
 
     override def initialSize: Int = 1
@@ -24,12 +25,14 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
         super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         tag.setInteger("Qty", qty)
+        tag.setBoolean("Lock", lock)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
         qty = tag.getInteger("Qty")
+        if (tag.hasKey("Lock")) lock = tag.getBoolean("Lock")
     }
 
     def isStackEqual(stack: ItemStack): Boolean = {
@@ -43,17 +46,25 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
 
     def addQty(amount: Int): Unit = {
         qty += amount
-        if (qty == 0) setInventorySlotContents(0, null)
+        checkQty()
     }
 
-    override def returnWailaHead(tipList: java.util.List[String]): java.util.List[String] = {
-        if (getStackInSlot(0) == null)
-            tipList.add(GuiColor.WHITE + "Empty")
-        else {
-            tipList.add(GuiColor.ORANGE + getStackInSlot(0).getDisplayName + ": " + GuiColor.WHITE + qty)
-        }
-        tipList
+    def checkQty(): Unit = {
+        if (qty == 0 && !isLocked)
+            inventoryContents.set(0, null)
     }
+
+    def isLocked: Boolean = {
+        lock
+    }
+
+    def setLock(l: Boolean): Unit = {
+        lock = l
+        checkQty()
+    }
+    /*
+     * Inventory Methods
+     */
 
     override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0 && isStackEqual(stack)
 
@@ -83,16 +94,29 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
     }
 
     override def extractItem(extractSlot: Int, amount: Int, simulate: Boolean): ItemStack = {
-        if (amount == 0 || inventoryContents.get(0) == null) return null
+        if (amount == 0 || inventoryContents.get(0) == null || qty == 0) return null
 
         val actual = Math.min(amount, qty)
         val returnStack = inventoryContents.get(0).copy()
         returnStack.stackSize = actual
         if (!simulate) {
             qty -= actual
-            if (qty == 0) inventoryContents.set(0, null)
+            checkQty()
             worldObj.markBlockForUpdate(pos)
         }
         returnStack
+    }
+
+    /*
+     * Waila Methods
+     */
+    override def returnWailaHead(tipList: java.util.List[String]): java.util.List[String] = {
+        if (getStackInSlot(0) == null)
+            tipList.add(GuiColor.WHITE + "Empty")
+        else {
+            tipList.add(GuiColor.ORANGE + getStackInSlot(0).getDisplayName + ": " + GuiColor.WHITE + qty)
+            if (isLocked) tipList.add(GuiColor.RED + "Locked")
+        }
+        tipList
     }
 }

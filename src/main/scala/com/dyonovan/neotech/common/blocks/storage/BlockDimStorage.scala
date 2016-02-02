@@ -46,7 +46,7 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                 actual = tile.insertItem(0, player.getHeldItem, simulate = false)
                 if (actual == null) player.getHeldItem.stackSize = 0 else player.getHeldItem.stackSize = actual.stackSize
                 world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
-            }
+            } else if (player.getHeldItem == null && player.isSneaking) tile.setLock(!tile.isLocked)
             world.markBlockForUpdate(pos)
         }
         true
