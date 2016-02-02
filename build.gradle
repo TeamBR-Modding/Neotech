@@ -94,7 +94,12 @@ configurations.all {
     resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
+configurations {
+    deployerJars
+}
+
 dependencies {
+    deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev", changing: true
@@ -110,15 +115,15 @@ task devJar(type: Jar, dependsOn: 'classes') {
 }
 
 
-/*task sourceJar(type: Jar, dependsOn: "sourceMainScala") {
-    from 'build/sources/scala'
+task sourceJarScala(type: Jar, dependsOn: "classes") {
+    from sourceSets.main.allSource
     classifier = 'sources'
-}*/
+}
 
 
 artifacts {
     archives devJar
-    //archives sourceJar
+    archives sourceJarScala
 }
 
 
@@ -146,6 +151,63 @@ processResources
 jar {
     manifest {
         attributes 'FMLAT': 'neotech_at.cfg'
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            configuration = configurations.deployerJars
+            //repository(url: System.properties['URL']) {
+            repository(url: System.properties['URL']) {
+                authentication(userName: System.properties['HTTPUSERNAME'], password: System.properties['HTTPPASSWORD'])
+            }
+
+            pom {
+                groupId = project.group
+                version = project.version
+                artifactId = project.archivesBaseName
+
+                pom.project {
+                    name project.archivesBaseName
+                    packaging 'jar'
+                    description 'NeoTech'
+                    url 'https://github.com/TeamBR-Modding/NeoTech'
+                    scm {
+                        url 'https://github.com/TeamBR-Modding/NeoTech'
+                        connection 'scm:git:git@github.com/TeamBR-Modding/NeoTech.git'
+                        developerConnection 'scm:git:git@github.com/TeamBR-Modding/NeoTech.git'
+                    }
+                    issueManagement {
+                        system 'github'
+                        url 'https://github.com/TeamBR-Modding/NeoTech/issues'
+                    }
+                    licenses {
+                        license {
+                            name 'Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License'
+                            url 'http://creativecommons.org/licenses/by-nc-sa/4.0/'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'Dyonovan'
+                            name 'Dyonovan'
+                            roles {
+                                role 'developer'
+                            }
+                        }
+                        developer {
+                            id 'pauljoda'
+                            name 'pauljoda'
+                            roles {
+                                role 'developer'
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
