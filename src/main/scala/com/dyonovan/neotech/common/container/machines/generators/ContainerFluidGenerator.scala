@@ -1,6 +1,7 @@
-package com.dyonovan.neotech.common.container.machines
+package com.dyonovan.neotech.common.container.machines.generators
 
-import com.dyonovan.neotech.common.tiles.machines.TileFluidGenerator
+import com.dyonovan.neotech.common.container.machines.ContainerAbstractMachine
+import com.dyonovan.neotech.common.tiles.machines.generators.TileFluidGenerator
 import net.minecraft.entity.player.InventoryPlayer
 
 /**

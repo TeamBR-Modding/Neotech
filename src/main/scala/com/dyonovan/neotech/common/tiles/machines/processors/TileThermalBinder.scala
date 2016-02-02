@@ -1,15 +1,12 @@
-package com.dyonovan.neotech.common.tiles.machines
+package com.dyonovan.neotech.common.tiles.machines.processors
 
 import com.dyonovan.neotech.collections.UpgradeBoard
-import com.dyonovan.neotech.common.tiles.{MachineProcessor, AbstractMachine}
+import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
-import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{EnumParticleTypes, EnumFacing}
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 
 /**
  * This file was created for NeoTech

@@ -1,21 +1,13 @@
-package com.dyonovan.neotech.client.gui.machines
+package com.dyonovan.neotech.client.gui.machines.processors
 
 import java.awt.Color
-import javax.annotation.Nullable
 
-import com.dyonovan.neotech.common.container.machines.ContainerElectricFurnace
-import com.dyonovan.neotech.common.tiles.machines.TileElectricFurnace
-import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
-import com.dyonovan.neotech.network.{OpenContainerGui, PacketDispatcher}
-import com.teambr.bookshelf.client.gui.component.BaseComponent
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentSideSelector, GuiComponentButton, GuiComponentTexturedButton}
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
-import com.teambr.bookshelf.client.gui.component.listeners.IMouseEventListener
-import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
+import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachineHelper
+import com.dyonovan.neotech.common.container.machines.processors.ContainerElectricFurnace
+import com.dyonovan.neotech.common.tiles.machines.processors.TileElectricFurnace
+import com.teambr.bookshelf.client.gui.GuiBase
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiTabCollection}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items
-import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
 
 import scala.collection.mutable.ArrayBuffer
 

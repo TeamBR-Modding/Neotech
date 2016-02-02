@@ -1,7 +1,7 @@
-package com.dyonovan.neotech.common.container.machines
+package com.dyonovan.neotech.common.container.machines.generators
 
-import com.dyonovan.neotech.common.tiles.machines.TileFurnaceGenerator
-import com.teambr.bookshelf.common.container.BaseContainer
+import com.dyonovan.neotech.common.container.machines.ContainerAbstractMachine
+import com.dyonovan.neotech.common.tiles.machines.generators.TileFurnaceGenerator
 import net.minecraft.entity.player.InventoryPlayer
 
 /**

@@ -3,13 +3,11 @@ package com.dyonovan.neotech.pipes.blocks
 import java.util.Random
 
 import com.dyonovan.neotech.NeoTech
-import com.dyonovan.neotech.client.gui.machines.GuiMachineUpgrade
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.dyonovan.neotech.common.container.machines.ContainerMachineUpgrade
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
-import com.dyonovan.neotech.pipes.container.ContainerPipeFilter
-import com.dyonovan.neotech.pipes.gui.{GuiPipeFilter, GuiAdvancedPipeMenu}
+import com.dyonovan.neotech.pipes.container.ContainerAdvancedPipeMenu
+import com.dyonovan.neotech.pipes.gui.GuiAdvancedPipeMenu
 import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe, SimplePipe}
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.client.gui.GuiColor
@@ -170,7 +168,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         world.getTileEntity(pos) match {
             case pipe: AdvancedPipe =>
                 if (pipe.canConnectExtract(facing) && pipe.canConnect(facing) && world.getTileEntity(pos.offset(facing)) != null
-                    && !world.getTileEntity(pos.offset(facing)).isInstanceOf[SimplePipe])
+                        && !world.getTileEntity(pos.offset(facing)).isInstanceOf[SimplePipe])
                     2
                 else if (pipe.canConnect(facing) && pipe.canConnectSink(facing))
                     1
@@ -203,29 +201,17 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = tileClass.newInstance()
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getTileEntity(new BlockPos(x, y, z)) match {
-            case upgradeable: Upgradeable =>
-                if (ID == 0) {
-                    return new ContainerMachineUpgrade(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
-                } else if(ID == 1) {
-                    return new ContainerPipeFilter(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
-                }
-            case _ =>
-        }
+        if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench &&
+                world.getTileEntity(new BlockPos(x, y, z)).isInstanceOf[AdvancedPipe])
+                return new ContainerAdvancedPipeMenu(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
         null
     }
 
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getTileEntity(new BlockPos(x, y, z)) match {
-            case upgradeable: Upgradeable =>
-                if (ID == 0) {
-                    return new GuiMachineUpgrade(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[Upgradeable])
-                } else if(ID == 1) {
-                    return new GuiPipeFilter(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
-                }
-            case _ =>
-        }
+        if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench &&
+                world.getTileEntity(new BlockPos(x, y, z)).isInstanceOf[AdvancedPipe])
+                return new GuiAdvancedPipeMenu(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
         null
     }
 
@@ -270,13 +256,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
 
             case _ =>
         }
-
-        if (world.isRemote && playerIn.inventory.getCurrentItem != null && playerIn.inventory.getCurrentItem.getItem == ItemManager.wrench &&
-                world.getTileEntity(pos).isInstanceOf[AdvancedPipe]) {
-            FMLClientHandler.instance().showGuiScreen(new GuiAdvancedPipeMenu(world.getTileEntity(pos).asInstanceOf[AdvancedPipe]))
-            return true
-        }
-        false
+        super.onBlockActivated(world, pos, state, playerIn, side, hitX, hitY, hitZ)
     }
 
     override def getToolTip() : List[String] = {

@@ -1,11 +1,17 @@
 package com.dyonovan.neotech.common.blocks.machines
 
 import com.dyonovan.neotech.client.gui.machines._
+import com.dyonovan.neotech.client.gui.machines.generators.{GuiFurnaceGenerator, GuiFluidGenerator}
+import com.dyonovan.neotech.client.gui.machines.processors.{GuiThermalBinder, GuiElectricFurnace, GuiElectricCrusher}
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.traits.{CoreStates, Upgradeable}
 import com.dyonovan.neotech.common.container.machines._
+import com.dyonovan.neotech.common.container.machines.generators.{ContainerFluidGenerator, ContainerFurnaceGenerator}
+import com.dyonovan.neotech.common.container.machines.processors.{ContainerThermalBinder, ContainerElectricFurnace, ContainerElectricCrusher}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.machines._
+import com.dyonovan.neotech.common.tiles.machines.generators.{TileFurnaceGenerator, TileFluidGenerator}
+import com.dyonovan.neotech.common.tiles.machines.processors.{TileElectricFurnace, TileElectricCrusher, TileThermalBinder}
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.container.ContainerGeneric

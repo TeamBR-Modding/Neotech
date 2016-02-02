@@ -85,7 +85,7 @@ object GuiAbstractMachineHelper {
                 selectorTab += new GuiComponentText(GuiColor.ORANGE + "Orange: " + GuiColor.WHITE + "Output", 10, 100)
                 selectorTab += new GuiComponentText(GuiColor.BLUE + "Blue: " + GuiColor.WHITE + "Input", 10, 90)
                 selectorTab += new GuiComponentText(GuiColor.GREEN + "Green: " + GuiColor.WHITE + "Both", 10, 110)
-                tabs.addTab(selectorTab.toList, 100, 125, new Color(150, 150, 150), new ItemStack(BlockManager.electricCrusher))
+                tabs.addTab(selectorTab.toList, 100, 125, new Color(150, 150, 150), new ItemStack(tileEntity.getBlockType))
             }
         }
     }
@@ -139,7 +139,7 @@ object GuiAbstractMachineHelper {
                         }
                     }
                 }
-                tabs.addTab(selectorTab.toList, 100, 100, new Color(150, 150, 150), new ItemStack(BlockManager.electricCrusher))
+                tabs.addTab(selectorTab.toList, 100, 100, new Color(150, 150, 150), new ItemStack(tileEntity.getBlockType))
             }
         }
     }

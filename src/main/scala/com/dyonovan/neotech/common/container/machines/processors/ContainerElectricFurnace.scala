@@ -1,10 +1,9 @@
-package com.dyonovan.neotech.common.container.machines
+package com.dyonovan.neotech.common.container.machines.processors
 
+import com.dyonovan.neotech.common.container.machines.ContainerAbstractMachine
 import com.dyonovan.neotech.common.container.slot.SlotFurnaceOutputItemHandler
-import com.dyonovan.neotech.common.tiles.machines.TileElectricFurnace
-import com.teambr.bookshelf.common.container.BaseContainer
+import com.dyonovan.neotech.common.tiles.machines.processors.TileElectricFurnace
 import net.minecraft.entity.player.InventoryPlayer
-import net.minecraft.inventory.SlotFurnaceOutput
 
 class ContainerElectricFurnace(playerInventory: InventoryPlayer, tile: TileElectricFurnace) extends
         ContainerAbstractMachine(playerInventory, tile) {

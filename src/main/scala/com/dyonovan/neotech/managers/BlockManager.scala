@@ -5,6 +5,8 @@ import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage._
 import com.dyonovan.neotech.common.tiles.machines._
+import com.dyonovan.neotech.common.tiles.machines.generators.{TileFurnaceGenerator, TileFluidGenerator}
+import com.dyonovan.neotech.common.tiles.machines.processors.{TileThermalBinder, TileElectricFurnace, TileElectricCrusher}
 import com.dyonovan.neotech.common.tiles.misc._
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank, TileRFStorage}
 import com.dyonovan.neotech.pipes.blocks.{ItemBlockColored, BlockPipeSpecial, BlockPipe}

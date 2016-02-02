@@ -1,10 +1,10 @@
-package com.dyonovan.neotech.client.gui.machines
+package com.dyonovan.neotech.client.gui.machines.processors
 
 import java.awt.Color
 
-import com.dyonovan.neotech.common.container.machines.ContainerThermalBinder
-import com.dyonovan.neotech.common.tiles.machines.TileThermalBinder
-import com.dyonovan.neotech.network.PacketDispatcher
+import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachineHelper
+import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
+import com.dyonovan.neotech.common.tiles.machines.processors.TileThermalBinder
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}

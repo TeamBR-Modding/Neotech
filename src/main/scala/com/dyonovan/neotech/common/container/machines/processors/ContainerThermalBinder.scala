@@ -1,7 +1,7 @@
-package com.dyonovan.neotech.common.container.machines
+package com.dyonovan.neotech.common.container.machines.processors
 
-import com.dyonovan.neotech.common.tiles.machines.TileThermalBinder
-import com.teambr.bookshelf.common.container.BaseContainer
+import com.dyonovan.neotech.common.container.machines.ContainerAbstractMachine
+import com.dyonovan.neotech.common.tiles.machines.processors.TileThermalBinder
 import net.minecraft.entity.player.InventoryPlayer
 
 /**

@@ -1,11 +1,12 @@
-package com.dyonovan.neotech.common.tiles.machines
+package com.dyonovan.neotech.common.tiles.machines.processors
 
-import com.dyonovan.neotech.common.tiles.{MachineProcessor, AbstractMachine}
+import com.dyonovan.neotech.common.tiles.MachineProcessor
+import com.dyonovan.neotech.registries.CrusherRecipeRegistry
 import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
-import net.minecraft.item.crafting.FurnaceRecipes
-import net.minecraft.util.EnumParticleTypes
+import net.minecraft.util.{EnumFacing, EnumParticleTypes}
+
+import scala.util.Random
 
 /**
   * This file was created for NeoTech
@@ -15,12 +16,13 @@ import net.minecraft.util.EnumParticleTypes
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
   * @author Paul Davis <pauljoda>
-  * @since August 11, 2015
+  * @since August 12, 2015
   */
-class TileElectricFurnace extends MachineProcessor {
+class TileElectricCrusher extends MachineProcessor {
 
     val INPUT_SLOT = 0
-    val OUTPUT_SLOT = 1
+    val OUTPUT_SLOT_1 : Int = 1
+    val OUTPUT_SLOT_2  : Int = 2
 
     val BASE_ENERGY_TICK = 20
 
@@ -29,7 +31,7 @@ class TileElectricFurnace extends MachineProcessor {
       *
       * @return
       */
-    override def initialSize: Int = 2
+    override def initialSize: Int = 3
 
     /**
       * Used to get how long it takes to cook things, you should check for upgrades at this point
@@ -52,12 +54,12 @@ class TileElectricFurnace extends MachineProcessor {
         if(energy.getEnergyStored >= getEnergyCostPerTick) {
             if(getStackInSlot(INPUT_SLOT) == null || getOutputForStack(getStackInSlot(INPUT_SLOT)) == null)
                 return false
-            else if(getStackInSlot(OUTPUT_SLOT) == null)
+            else if(getStackInSlot(OUTPUT_SLOT_1) == null)
                 return true
-            else if(!getStackInSlot(OUTPUT_SLOT).isItemEqual(getOutputForStack(getStackInSlot(INPUT_SLOT))))
+            else if(!getStackInSlot(OUTPUT_SLOT_1).isItemEqual(getOutputForStack(getStackInSlot(INPUT_SLOT))))
                 return false
             else {
-                val minStackSize = getStackInSlot(OUTPUT_SLOT).stackSize - getOutputForStack(getStackInSlot(INPUT_SLOT)).stackSize
+                val minStackSize = getStackInSlot(OUTPUT_SLOT_1).stackSize - getOutputForStack(getStackInSlot(INPUT_SLOT)).stackSize
                 return minStackSize <= getInventoryStackLimit && minStackSize <= getOutputForStack(getStackInSlot(INPUT_SLOT)).getMaxStackSize
             }
         }
@@ -71,10 +73,10 @@ class TileElectricFurnace extends MachineProcessor {
       * @return The output
       */
     override def getOutputForStack(stack: ItemStack): ItemStack = {
-        if (stack != null)
-            FurnaceRecipes.instance().getSmeltingResult(stack)
-        else
+        if (recipeCrusher(stack) == null)
             null
+        else
+            recipeCrusher(stack)._1
     }
 
     /**
@@ -82,21 +84,48 @@ class TileElectricFurnace extends MachineProcessor {
       */
     override def cook(): Unit = cookTime += 1
 
-    /**
-      * Called when the tile has completed the cook process
-      */
-    override def completeCook(): Unit = {
-        var recipeResult = getOutputForStack(getStackInSlot(0))
+    override def completeCook() {
+        val input = getStackInSlot(INPUT_SLOT)
+        var recipeResult: ItemStack = getOutputForStack(getStackInSlot(INPUT_SLOT))
         decrStackSize(INPUT_SLOT, 1)
-        if (getStackInSlot(OUTPUT_SLOT) == null) {
+        if (getStackInSlot(OUTPUT_SLOT_1) == null) {
             recipeResult = recipeResult.copy
             recipeResult.stackSize = recipeResult.stackSize
-            setInventorySlotContents(1, recipeResult)
-        } else {
-            getStackInSlot(1).stackSize += recipeResult.stackSize
+            setInventorySlotContents(OUTPUT_SLOT_1, recipeResult)
         }
+        else {
+            getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize
+        }
+        if (getUpgradeBoard != null && getUpgradeBoard.hasExpansion) extraOutput(input)
+    }
 
-        worldObj.markBlockForUpdate(pos)
+    /**
+      * Used to get the extra output of a cook operation
+      * @param input The item in
+      */
+    def extraOutput(input: ItemStack): Unit = {
+        val recipeResult = recipeCrusher(input)
+        if (recipeResult != null && recipeResult._2 != null && recipeResult._3 > 0) {
+            val random = Random.nextInt(100)
+            if (recipeResult._3 >= random) {
+                val extra = recipeResult._2.copy
+                if (getStackInSlot(2) == null) {
+                    setInventorySlotContents(2, extra)
+                } else if (getStackInSlot(2).isItemEqual(extra)) {
+                    if (getStackInSlot(2).stackSize + 1 > extra.getMaxStackSize)
+                        getStackInSlot(2).stackSize = extra.getMaxStackSize
+                    else
+                        getStackInSlot(2).stackSize += 1
+                }
+            }
+        }
+    }
+
+    /**
+      * Used to get the recipe for the crusher
+      */
+    def recipeCrusher(stack: ItemStack): (ItemStack, ItemStack, Int) = {
+        CrusherRecipeRegistry.getOutput(stack).orNull
     }
 
     /**
@@ -120,7 +149,7 @@ class TileElectricFurnace extends MachineProcessor {
       *
       * @return The slots to output from
       */
-    override def getOutputSlots: Array[Int] = Array(OUTPUT_SLOT)
+    override def getOutputSlots: Array[Int] = Array(OUTPUT_SLOT_1, OUTPUT_SLOT_2)
 
     /**
       * Used to get what slots are allowed to be input
@@ -128,6 +157,29 @@ class TileElectricFurnace extends MachineProcessor {
       * @return The slots to input from
       */
     override def getInputSlots: Array[Int] = Array(INPUT_SLOT)
+
+    /**
+      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = {
+        index == OUTPUT_SLOT_1 || index == OUTPUT_SLOT_2
+    }
+
+    /**
+      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+        if (slot == INPUT_SLOT && getOutputForStack(itemStackIn) != null) {
+            if (getStackInSlot(INPUT_SLOT) == null) return true
+            if (getStackInSlot(INPUT_SLOT).isItemEqual(itemStackIn)) {
+                if (getStackInSlot(INPUT_SLOT).getMaxStackSize >= getStackInSlot(INPUT_SLOT).stackSize + itemStackIn.stackSize)
+                    return true
+            }
+        }
+        false
+    }
 
     /*******************************************************************************************************************
       *************************************************** Misc methods *************************************************
@@ -149,7 +201,7 @@ class TileElectricFurnace extends MachineProcessor {
       * Used to get what particles to spawn. This will be called when the tile is active
       */
     override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
-        worldObj.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, 0.01, 0.49, 0.72)
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0)
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y + 0.4, z, 0, 0, 0)
     }
 }

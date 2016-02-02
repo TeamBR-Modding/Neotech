@@ -1,13 +1,10 @@
-package com.dyonovan.neotech.common.tiles.machines
+package com.dyonovan.neotech.common.tiles.machines.generators
 
-import cofh.api.energy.{IEnergyReceiver, EnergyStorage}
-import com.dyonovan.neotech.common.tiles.{MachineGenerator, AbstractMachine}
-import com.dyonovan.neotech.registries.FluidFuelValues
-import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.Container
+import cofh.api.energy.EnergyStorage
+import com.dyonovan.neotech.common.tiles.MachineGenerator
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntityFurnace
-import net.minecraft.util.{EnumParticleTypes, EnumFacing}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraftforge.fluids.FluidContainerRegistry
 
 /**
