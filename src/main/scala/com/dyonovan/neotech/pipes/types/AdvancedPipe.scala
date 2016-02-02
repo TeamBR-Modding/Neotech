@@ -125,7 +125,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
         id match {
             case AdvancedPipe.REDSTONE_FIELD_ID => redstone = value.toInt
             case AdvancedPipe.MODE_FIELD_ID => mode = value.toInt
-            case AdvancedPipe.IO_FIELD_ID => toggleMode(EnumFacing.getFront(value.toInt)); getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
+            case AdvancedPipe.IO_FIELD_ID => toggleMode(EnumFacing.getFront(value.toInt)); getWorld.markBlockForUpdate(getPos);  getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
             case AdvancedPipe.FREQUENCY =>
                 frequency = value.toInt
                 WorldPipes.notifyPipes()

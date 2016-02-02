@@ -6,6 +6,7 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.container.ContainerAdvancedPipeMenu
 import com.dyonovan.neotech.pipes.gui.GuiAdvancedPipeMenu
 import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe, SimplePipe}
@@ -14,7 +15,7 @@ import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.bookshelf.traits.HasToolTip
 import com.teambr.bookshelf.util.WorldUtils
-import net.minecraft.block.BlockContainer
+import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.Entity
@@ -200,10 +201,16 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
 
     override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = tileClass.newInstance()
 
+    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
+        if (!world.isRemote) {
+            WorldPipes.notifyPipes()
+        }
+    }
+
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench &&
                 world.getTileEntity(new BlockPos(x, y, z)).isInstanceOf[AdvancedPipe])
-                return new ContainerAdvancedPipeMenu(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
+            return new ContainerAdvancedPipeMenu(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
         null
     }
 
@@ -211,7 +218,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench &&
                 world.getTileEntity(new BlockPos(x, y, z)).isInstanceOf[AdvancedPipe])
-                return new GuiAdvancedPipeMenu(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
+            return new GuiAdvancedPipeMenu(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
         null
     }
 

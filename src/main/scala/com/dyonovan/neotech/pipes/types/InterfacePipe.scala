@@ -448,8 +448,13 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             }
 
             if(destination == null) {
-                lastSink = 0
-                return false
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(0))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate)) {
+                    destination = BlockPos.fromLong(sinks.get(0))
+                    lastSink = sinks.get(0)
+                } else {
+                    lastSink = 0
+                    return false
+                }
             }
 
 
