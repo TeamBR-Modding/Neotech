@@ -1,18 +1,11 @@
 package com.dyonovan.neotech.common.tiles.misc
 
 import com.dyonovan.neotech.NeoTech
-import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.common.tiles.traits.Syncable
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.ChunkCoordIntPair
 import net.minecraftforge.common.ForgeChunkManager
 import net.minecraftforge.common.ForgeChunkManager.{Ticket, Type}
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-import org.lwjgl.opengl.GL11
 
 /**
   * This file was created for NeoTech
