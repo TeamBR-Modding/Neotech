@@ -13,13 +13,11 @@ package com.dyonovan.neotech.lib
 object Reference {
     final val MOD_NAME     = "NeoTech"
     final val MOD_ID       = "neotech"
-    final val VERSION      = "2.3.0"//@VERSION@"
-    final val DEPENDENCIES = "required-after:Forge@[11.15.1.1724,);required-after:bookshelfapi@[2.2.5,)"
+    final val VERSION      = "2.3.1"//@VERSION@"
+    final val DEPENDENCIES = "required-after:Forge@[11.15.1.1724,);required-after:bookshelfapi@[2.2.6,)"
     final val UPDATE_JSON  = "https://raw.githubusercontent.com/TeamBR-Modding/NeoTech/1.8.9/update.json"
 
-    final val CONFIG_COPPER_GENERATION = "Copper Ore Generation"
-    final val CONFIG_TIN_GENERATION = "Tin Ore Generation"
-    final val CONFIG_ORE_GENERATION = "Ore Generation"
+    final val CONFIG_WORLD = "World Generation"
     final val CONFIG_FERT_BLACKLIST = "Fertilizer Blacklist"
     final val CONFIG_VERSION_CHECK = "Show if NeoTech is Outdated?"
 }

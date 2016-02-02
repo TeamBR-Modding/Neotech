@@ -37,17 +37,17 @@ object ConfigRegistry {
     def preInit(): Unit = {
         config.load()
 
-        genCopper       = config.get(Reference.CONFIG_COPPER_GENERATION, "Generate Copper", true).getBoolean
-        copperMin       = config.get(Reference.CONFIG_COPPER_GENERATION, "Copper Min Level", 40).getInt
-        copperMax       = config.get(Reference.CONFIG_COPPER_GENERATION, "Copper Max Level", 70).getInt
-        copperSize      = config.get(Reference.CONFIG_COPPER_GENERATION, "Copper Vein Size", 12).getInt
-        copperPerChunk  = config.get(Reference.CONFIG_COPPER_GENERATION, "Copper Veins per Chunk", 6).getInt
+        genCopper       = config.get(Reference.CONFIG_WORLD, "copperEnable", true, "Generate Copper").getBoolean
+        copperMin       = config.get(Reference.CONFIG_WORLD, "copperMin", 40, "Copper Min Level").getInt
+        copperMax       = config.get(Reference.CONFIG_WORLD, "copperMax", 70, "Copper Max Level").getInt
+        copperSize      = config.get(Reference.CONFIG_WORLD, "copperVeinSize", 12, "Copper Vein Size").getInt
+        copperPerChunk  = config.get(Reference.CONFIG_WORLD, "copperVeinsPerChunk", 6, "Copper Veins per Chunk").getInt
 
-        genTin       = config.get(Reference.CONFIG_TIN_GENERATION, "Generate Tin", true).getBoolean
-        tinMin       = config.get(Reference.CONFIG_TIN_GENERATION, "Tin Min Level", 20).getInt
-        tinMax       = config.get(Reference.CONFIG_TIN_GENERATION, "Tin Max Level", 50).getInt
-        tinSize      = config.get(Reference.CONFIG_TIN_GENERATION, "Tin Vein Size", 12).getInt
-        tinPerChunk  = config.get(Reference.CONFIG_TIN_GENERATION, "Tin Veins per Chunk", 6).getInt
+        genTin       = config.get(Reference.CONFIG_WORLD, "tinEnable", true, "Generate Tin").getBoolean
+        tinMin       = config.get(Reference.CONFIG_WORLD, "tinMin", 20, "Tin Min Level").getInt
+        tinMax       = config.get(Reference.CONFIG_WORLD, "tinMax", 50, "Tin Max Level").getInt
+        tinSize      = config.get(Reference.CONFIG_WORLD, "tinVeinSize", 12, "Tin Vein Size").getInt
+        tinPerChunk  = config.get(Reference.CONFIG_WORLD, "tinVeinsPerChunk", 6, "Tin Veins per Chunk").getInt
 
         fertBlacklist= config.get(Reference.CONFIG_FERT_BLACKLIST, "Blocks to Blacklist from Being Fertilized",
                         Array(""),"Format MODID:BLOCKNAME 1 per Line").getStringList

@@ -148,11 +148,14 @@ jar {
     }
 }
 
-/*curse {
-    projectId = 228643
+curseforge {
     apiKey = APIToken
-    changelog = 'Changelog: https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog'
-    releaseType 'release'
-    addGameVersion '1.8'
-    relatedProject 'bookshelf-api-library'
-}*/
+    project {
+        id = '228643'
+        changelog = 'Changelog: https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog'
+        releaseType = 'beta'
+        addGameVersion '1.8.9'
+        addArtifact devJar
+        relatedProject 'bookshelf-api-library'
+    }
+}
