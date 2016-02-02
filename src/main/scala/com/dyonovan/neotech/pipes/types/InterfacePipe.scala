@@ -447,11 +447,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
                 }
             }
 
-            if (destination == null && pickNext) {
-                lastSink = 0
-                coolDown = 0
-                return false
-            } else if(destination == null) {
+            if(destination == null) {
                 lastSink = 0
                 return false
             }
