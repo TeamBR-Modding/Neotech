@@ -13,6 +13,7 @@ buildscript {
 }
 
 plugins {
+    id 'com.matthewprenger.cursegradle' version '1.0.7'
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 
@@ -156,6 +157,8 @@ curseforge {
         releaseType = 'beta'
         addGameVersion '1.8.9'
         addArtifact devJar
-        relatedProject 'bookshelf-api-library'
+        relations {
+            requiredLibrary 'bookshelf-api-library'
+        }
     }
 }
