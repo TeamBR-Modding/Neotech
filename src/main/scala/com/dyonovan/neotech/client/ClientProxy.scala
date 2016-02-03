@@ -3,6 +3,7 @@ package com.dyonovan.neotech.client
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.client.renderers._
 import com.dyonovan.neotech.common.CommonProxy
+import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileTank, TileFlushableChest}
 import com.dyonovan.neotech.lib.Reference
@@ -86,6 +87,8 @@ class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileFlushableChest], new TileFlushableChestRenderer[TileFlushableChest])
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileTank], new TileTankFluidRenderer)
+
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[AbstractMachine], new TileMachineIORenderer)
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[ItemInterfacePipe], new ItemResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[EnergyInterfacePipe], new EnergyResourceEntityRenderer)

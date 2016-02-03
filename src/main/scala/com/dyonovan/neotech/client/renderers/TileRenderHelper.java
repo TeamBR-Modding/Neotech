@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -123,6 +124,26 @@ public abstract class TileRenderHelper<T extends TileEntity> extends TileEntityS
         restoreGlState(savedGLState);
     }
 
+    protected void renderIconOnBlock(TextureAtlasSprite icon, int sheet, EnumFacing side, EnumFacing orientation, LocationDouble barrelPos, float size, double posx, double posy, double zdepth){
+        if (icon == null) { return ; }
+
+        int[][] savedGLState = modifyGLState(new int[]{ GL11.GL_LIGHTING }, new int[]{ GL11.GL_ALPHA_TEST });
+        GL11.glPushMatrix();
+
+        this.alignRendering(side, orientation, barrelPos);
+        this.moveRendering(size, posx, posy, zdepth);
+
+        if(sheet == 0)
+            RenderUtils.bindMinecraftBlockSheet();
+        else
+            RenderUtils.bindMinecraftItemSheet();
+
+        this.drawIcon(0, 0, icon, side);
+
+        GL11.glPopMatrix();
+        restoreGlState(savedGLState);
+    }
+
     protected void alignRendering(EnumFacing side, EnumFacing orientation, LocationDouble position){
         GL11.glTranslated(position.x + 0.5F, position.y + 0.5F, position.z + 0.5F);     // We align the rendering on the center of the block
         GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
@@ -136,6 +157,23 @@ public abstract class TileRenderHelper<T extends TileEntity> extends TileEntityS
         GL11.glScalef(scale, scale, -0.0001f);			  // We flatten the rendering and scale it to the right size
         GL11.glTranslated(posX, posY, 0);		  // Finally, we translate the icon itself to the correct position
         GL11.glScalef(size, size, 1.0f);
+    }
+
+    protected void drawIcon(int posX, int posY, TextureAtlasSprite icon, EnumFacing side) {
+        float minU = icon.getMinU();
+        float minV = icon.getMinV();
+        float maxU = icon.getMaxU();
+        float maxV = icon.getMaxV();
+        int sizeX = 16;
+        int sizeY = 16;
+        WorldRenderer tes = Tessellator.getInstance().getWorldRenderer();
+
+        tes.begin(GL11.GL_QUADS, RenderUtils.POSITION_TEX_NORMALF());
+        tes.pos(posX, posY + sizeY, 0).tex(minU, maxV).normal(0, -1, 0).endVertex();
+        tes.pos(posX + sizeX, posY + sizeY, 0).tex(maxU, maxV).normal(0, -1, 0).endVertex();
+        tes.pos(posX + sizeX, posY, 0).tex(maxU, minV).normal(0, -1, 0).endVertex();
+        tes.pos(posX, posY,     0).tex(minU, minV).normal(0, -1, 0).endVertex();
+        Tessellator.getInstance().draw();
     }
 
     static final int orientRotation[] = {0,0,0,2,3,1,0};

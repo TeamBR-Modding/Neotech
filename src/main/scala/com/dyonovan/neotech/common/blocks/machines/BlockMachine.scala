@@ -1,28 +1,22 @@
 package com.dyonovan.neotech.common.blocks.machines
 
-import com.dyonovan.neotech.client.gui.machines._
-import com.dyonovan.neotech.client.gui.machines.generators.{GuiFurnaceGenerator, GuiFluidGenerator}
-import com.dyonovan.neotech.client.gui.machines.processors.{GuiThermalBinder, GuiElectricFurnace, GuiElectricCrusher}
+import com.dyonovan.neotech.client.gui.machines.generators.{GuiFluidGenerator, GuiFurnaceGenerator}
+import com.dyonovan.neotech.client.gui.machines.processors.{GuiElectricCrusher, GuiElectricFurnace, GuiThermalBinder}
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.traits.{CoreStates, Upgradeable}
-import com.dyonovan.neotech.common.container.machines._
 import com.dyonovan.neotech.common.container.machines.generators.{ContainerFluidGenerator, ContainerFurnaceGenerator}
-import com.dyonovan.neotech.common.container.machines.processors.{ContainerThermalBinder, ContainerElectricFurnace, ContainerElectricCrusher}
+import com.dyonovan.neotech.common.container.machines.processors.{ContainerElectricCrusher, ContainerElectricFurnace, ContainerThermalBinder}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.common.tiles.machines._
-import com.dyonovan.neotech.common.tiles.machines.generators.{TileFurnaceGenerator, TileFluidGenerator}
-import com.dyonovan.neotech.common.tiles.machines.processors.{TileElectricFurnace, TileElectricCrusher, TileThermalBinder}
-import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator, TileFurnaceGenerator}
+import com.dyonovan.neotech.common.tiles.machines.processors.{TileElectricCrusher, TileElectricFurnace, TileThermalBinder}
+import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, OpensGui}
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
-import net.minecraft.client.Minecraft
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity

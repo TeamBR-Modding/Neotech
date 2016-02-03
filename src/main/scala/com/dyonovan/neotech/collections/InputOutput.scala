@@ -28,8 +28,8 @@ trait InputOutput extends NBTSavable {
     def modeToInt(mode : IOMODE): Int = {
         mode match {
             case DISABLED => 0
-            case OUTONLY => 1
-            case INONLY => 2
+            case OUTONLY => 2
+            case INONLY => 1
             case BOTH => 3
             case _ => 0
         }
@@ -38,8 +38,8 @@ trait InputOutput extends NBTSavable {
     def modeFromInt(mode : Int) : IOMODE = {
         mode match {
             case 0 => DISABLED
-            case 1 => OUTONLY
-            case 2 => INONLY
+            case 2 => OUTONLY
+            case 1 => INONLY
             case 3 => BOTH
             case _ => DISABLED
         }
@@ -47,9 +47,9 @@ trait InputOutput extends NBTSavable {
 
     def getNextMode(mode : IOMODE) : IOMODE = {
         mode match {
-            case DISABLED => OUTONLY
-            case OUTONLY => INONLY
-            case INONLY => BOTH
+            case DISABLED => INONLY
+            case OUTONLY => BOTH
+            case INONLY => OUTONLY
             case BOTH => DISABLED
             case _ => DISABLED
         }

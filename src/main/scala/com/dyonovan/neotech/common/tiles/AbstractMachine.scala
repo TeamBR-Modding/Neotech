@@ -153,6 +153,12 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     }
 
     /**
+      * Used to manually disable the IO rendering on tile, true by default
+      * @return False to prevent rendering
+      */
+    def shouldRenderInputOutputOnTile = true
+
+    /**
       * Write the tag
       */
     override def writeToNBT(tag: NBTTagCompound): Unit = {
