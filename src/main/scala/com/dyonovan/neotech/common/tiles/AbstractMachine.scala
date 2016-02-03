@@ -117,7 +117,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         }
 
         //We want to try automatic IO if we are able to once a tick
-        if(ticker <= 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
+        if(shouldHandleIO && ticker <= 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
             ticker = 20
             tryInput()
             tryOutput()
@@ -157,6 +157,12 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * @return False to prevent rendering
       */
     def shouldRenderInputOutputOnTile = true
+
+    /**
+      * Used to specify if this tile should handle IO, and render in GUI
+      * @return False to prevent
+      */
+    def shouldHandleIO = true
 
     /**
       * Write the tag

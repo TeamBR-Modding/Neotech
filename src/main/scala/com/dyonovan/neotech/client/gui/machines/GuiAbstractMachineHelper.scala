@@ -62,7 +62,7 @@ object GuiAbstractMachineHelper {
                 tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
             }
 
-            if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
+            if (tileEntity.shouldHandleIO && tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
                 val selectorTab = new ArrayBuffer[BaseComponent]
                 selectorTab += new GuiComponentText(GuiColor.ORANGE + "I/O Config", 29, 6)
                 selectorTab += new GuiComponentSideSelector(15, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
@@ -119,7 +119,7 @@ object GuiAbstractMachineHelper {
                 tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
             }
 
-            if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
+            if (tileEntity.shouldHandleIO && tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
                 val selectorTab = new ArrayBuffer[BaseComponent]
                 selectorTab += new GuiComponentText("I/O Mode", 29, 6)
                 selectorTab += new GuiComponentSideSelector(20, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
