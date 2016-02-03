@@ -2,7 +2,6 @@ package com.dyonovan.neotech
 
 import java.io.File
 
-import com.dyonovan.neotech.api.igw.IGWSupportNotifier
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.events.EventManager
 import com.dyonovan.neotech.lib.Reference
@@ -12,15 +11,13 @@ import com.dyonovan.neotech.registries._
 import com.dyonovan.neotech.world.{ChunkLoaderManager, NeotechWorldGenerator}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
-import net.minecraftforge.common.{MinecraftForge, ForgeVersion, ForgeChunkManager}
+import net.minecraftforge.common.ForgeChunkManager
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
-import net.minecraftforge.fml.common.{FMLModContainer, Loader, Mod, SidedProxy}
+import net.minecraftforge.fml.common.{Mod, SidedProxy}
 import org.apache.logging.log4j.LogManager
-
-import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -80,6 +77,5 @@ object NeoTech {
     @EventHandler def postInit(event : FMLPostInitializationEvent) = {
         proxy.postInit()
         ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoaderManager)
-        new IGWSupportNotifier
     }
  }

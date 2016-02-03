@@ -95,8 +95,6 @@ class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[FluidInterfacePipe], new FluidResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileDimStorage], new TileDimStorageRenderer)
 
-        //IGW Mod
-        FMLInterModComms.sendMessage("IGWMod","com.dyonovan.neotech.api.igw.IGWHandler", "init")
     }
 
     /**
