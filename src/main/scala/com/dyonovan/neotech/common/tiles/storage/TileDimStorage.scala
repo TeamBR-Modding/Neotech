@@ -62,6 +62,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
     }
 
     def setLock(l: Boolean): Unit = {
+        if (l && qty == 0) return
         lock = l
         checkQty()
     }
