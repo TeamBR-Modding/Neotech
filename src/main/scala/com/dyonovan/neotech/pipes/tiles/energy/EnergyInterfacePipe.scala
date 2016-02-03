@@ -3,11 +3,11 @@ package com.dyonovan.neotech.pipes.tiles.energy
 import java.util
 
 import cofh.api.energy.{EnergyStorage, IEnergyProvider, IEnergyReceiver}
-import com.dyonovan.neotech.pipes.collections.WorldPipes
-import com.dyonovan.neotech.pipes.entities.{ResourceEntity, EnergyResourceEntity}
+import com.dyonovan.neotech.pipes.entities.{EnergyResourceEntity, ResourceEntity}
 import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.util.{Vec3, BlockPos, EnumFacing}
+import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
 
 /**
   * This file was created for NeoTech
@@ -20,6 +20,20 @@ import net.minecraft.util.{Vec3, BlockPos, EnumFacing}
   * @since August 17, 2015
   */
 class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEntity] {
+
+    override def getDescription : String = {
+        GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.energyInterfacePipe.name") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.energyInterfacePipe.expansionUpgrade.desc")
+    }
 
 /*******************************************************************************************************************
   ************************************** Extraction Methods ********************************************************

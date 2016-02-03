@@ -3,10 +3,11 @@ package com.dyonovan.neotech.common.tiles.machines.processors
 import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.dyonovan.neotech.managers.ItemManager
+import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{EnumFacing, EnumParticleTypes}
+import net.minecraft.util.{StatCollector, EnumFacing, EnumParticleTypes}
 
 /**
  * This file was created for NeoTech
@@ -51,7 +52,7 @@ class TileThermalBinder extends MachineProcessor {
       */
     override def getCookTime : Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            (200 * getCount) - (getUpgradeBoard.getProcessorCount * 24)
+            (200 * getCount) - (getUpgradeBoard.getProcessorCount * ((200 * getCount) / 8.33).toInt)
         else
             200 * getCount
     }
@@ -105,6 +106,20 @@ class TileThermalBinder extends MachineProcessor {
             BASE_ENERGY_TICK
     }
 
+    override def getDescription : String = {
+        GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:thermalBinder.name") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.thermalBinder.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.thermalBinder.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+    }
+
     /**
       * Creates the Motherboard or removes the upgrades from it
       */
@@ -143,6 +158,7 @@ class TileThermalBinder extends MachineProcessor {
 
     /**
       * Used to get the count of upgrades on the motherboard or to be added to the empty motherboard
+      *
       * @return How many upgrades are present
       */
     def getCount: Int = {
@@ -171,6 +187,7 @@ class TileThermalBinder extends MachineProcessor {
 
     /**
       * Used to write the tag needed to the ItemStack to hold the upgrade info
+      *
       * @return The tag to write to the ItemStack
       */
     private def writeToMB(): NBTTagCompound = {
@@ -214,6 +231,7 @@ class TileThermalBinder extends MachineProcessor {
 
     /**
       * Used to tell if the upgrades are in the slots
+      *
       * @return True if upgrades are present
       */
     def hasSlotUpgrades: Boolean = {

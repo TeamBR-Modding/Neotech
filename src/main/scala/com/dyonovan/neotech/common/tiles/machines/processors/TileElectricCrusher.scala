@@ -2,9 +2,10 @@ package com.dyonovan.neotech.common.tiles.machines.processors
 
 import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.dyonovan.neotech.registries.CrusherRecipeRegistry
+import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{EnumFacing, EnumParticleTypes}
+import net.minecraft.util.{StatCollector, EnumFacing, EnumParticleTypes}
 
 import scala.util.Random
 
@@ -101,6 +102,7 @@ class TileElectricCrusher extends MachineProcessor {
 
     /**
       * Used to get the extra output of a cook operation
+      *
       * @param input The item in
       */
     def extraOutput(input: ItemStack): Unit = {
@@ -138,6 +140,20 @@ class TileElectricCrusher extends MachineProcessor {
             BASE_ENERGY_TICK * (getUpgradeBoard.getProcessorCount * 0.4).toInt
         else
             BASE_ENERGY_TICK
+    }
+
+    override def getDescription : String = {
+        GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:electricCrusher.name") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrusher.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricCrusher.expansionUpgrade.desc")
     }
 
     /*******************************************************************************************************************

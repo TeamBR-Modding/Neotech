@@ -13,7 +13,7 @@ import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{StatCollector, EnumFacing}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -46,13 +46,13 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
         super[GuiBase].drawGuiContainerBackgroundLayer(f, i, j)
     }
 
-    override def addRightTabs(tabs : GuiTabCollection) = addRightTabs(tabs, tileEntity, inventory, true)
+    override def addRightTabs(tabs : GuiTabCollection) = addRightTabs(tabs, tileEntity, inventory, updateMotherBoard = true)
 
     override def addLeftTabs(tabs : GuiTabCollection) = {
         val infoTab = new ArrayBuffer[BaseComponent]()
-        infoTab += new GuiComponentText(GuiColor.YELLOW + "Information", 10, 7)
-        infoTab += new GuiComponentLongText(10, 20, tileEntity.getDescription, 80, 65, textScale = 50)
-        tabs.addReverseTab(infoTab.toList, 100, 100, new Color(130, 0, 0), new ItemStack(tileEntity.getBlockType))
+        infoTab += new GuiComponentText(GuiColor.YELLOW + StatCollector.translateToLocal("neotech.text.information"), 10, 7)
+        infoTab += new GuiComponentLongText(10, 20, tileEntity.getDescription, 100, 65, textScale = 50)
+        tabs.addReverseTab(infoTab.toList, 120, 100, new Color(130, 0, 0), new ItemStack(tileEntity.getBlockType))
     }
 
     def addRightTabs(tabs : GuiTabCollection, tileEntity : AbstractMachine, container : ContainerAbstractMachine, updateMotherBoard : Boolean = true): Unit = {
@@ -60,14 +60,14 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
 
             if(updateMotherBoard) {
                 val motherBoardTag = new ArrayBuffer[BaseComponent]
-                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + "Motherboard", 26, 6)
+                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.motherboard"), 26, 6)
                 tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.upgradeMBFull))
 
                 tabs.getTabs.head.addChild(new GuiComponentTabSlotHolder(41, 25, 18, 18, tabs.getTabs.head, container.motherboardSlot, 170 + 41, 27))
             }
             if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasControl) {
                 var redstoneTab = new ArrayBuffer[BaseComponent]
-                redstoneTab += new GuiComponentText(GuiColor.ORANGE + "Redstone Mode", 20, 7)
+                redstoneTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneMode"), 20, 7)
                 redstoneTab += new GuiComponentButton(5, 20, 15, 20, "<") {
                     override def doAction(): Unit = {
                         tileEntity.moveRedstoneMode(-1)
@@ -93,7 +93,7 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
 
             if (tileEntity.shouldHandleIO && tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
                 val selectorTab = new ArrayBuffer[BaseComponent]
-                selectorTab += new GuiComponentText(GuiColor.ORANGE + "I/O Config", 29, 6)
+                selectorTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.ioConfig"), 29, 6)
                 selectorTab += new GuiComponentSideSelector(15, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
                     override def setToggleController(): Unit = {
                         toggleableSidesController = new ToggleableSidesController {
@@ -111,9 +111,9 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
                         }
                     }
                 }
-                selectorTab += new GuiComponentText(GuiColor.ORANGE + "Orange: " + GuiColor.WHITE + "Output", 10, 100)
-                selectorTab += new GuiComponentText(GuiColor.BLUE + "Blue: " + GuiColor.WHITE + "Input", 10, 90)
-                selectorTab += new GuiComponentText(GuiColor.GREEN + "Green: " + GuiColor.WHITE + "Both", 10, 110)
+                selectorTab += new GuiComponentText(GuiColor.BLUE + StatCollector.translateToLocal("neotech.text.blue") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.input"), 10, 90)
+                selectorTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.orange") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.output"), 10, 100)
+                selectorTab += new GuiComponentText(GuiColor.GREEN + StatCollector.translateToLocal("neotech.text.green") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.both"), 10, 110)
                 tabs.addTab(selectorTab.toList, 100, 125, new Color(150, 150, 150), new ItemStack(tileEntity.getBlockType))
             }
         }

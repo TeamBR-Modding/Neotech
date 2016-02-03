@@ -4,8 +4,9 @@ import java.util
 
 import com.dyonovan.neotech.pipes.entities.{ResourceEntity, FluidResourceEntity}
 import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
+import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.{StatCollector, BlockPos, EnumFacing}
 import net.minecraftforge.fluids._
 
 /**
@@ -19,6 +20,20 @@ import net.minecraftforge.fluids._
   * @since August 17, 2015
   */
 class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
+
+    override def getDescription : String = {
+        GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.fluidInterfacePipe.name") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.fluidInterfacePipe.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.fluidInterfacePipe.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.fluidInterfacePipe.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.energyInterfacePipe.expansionUpgrade.desc")
+    }
 
     /*******************************************************************************************************************
       ************************************** Extraction Methods ********************************************************

@@ -3,10 +3,11 @@ package com.dyonovan.neotech.common.tiles.machines.generators
 import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.dyonovan.neotech.registries.FluidFuelValues
+import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{StatCollector, EnumFacing}
 import net.minecraftforge.fluids._
 
 /**
@@ -92,6 +93,20 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
             return burnTime > 0
         }
         false
+    }
+
+    override def getDescription : String = {
+        GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:fluidGenerator.name") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.fluidGenerator.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.furnaceGenerator.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
     }
 
     /*******************************************************************************************************************

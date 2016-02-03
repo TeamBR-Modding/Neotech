@@ -1,4 +1,3 @@
-PARSE_ESCAPES
 
 # Creative Tabs
 itemGroup.tabNeoTech=NeoTech
@@ -6,21 +5,98 @@ itemGroup.tabNeoTechPipes=NeoTech: Transport Pipes
 itemGroup.tabNeoTechDecorations=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2e
 
 #######################
+# Blocks
+#######################
+
+# Metals
+tile.neotech:oreCopper.name=Copper Ore
+tile.neotech:oreTin.name=Tin Ore
+tile.neotech:blockCopper.name=Block of Copper
+tile.neotech:blockTin.name=Block of Tin
+tile.neotech:blockBronze.name=Block of Bronze
+
+# Stars
+tile.neotech:blockMiniatureStar_black.name=§8Black §rStar Light
+tile.neotech:blockMiniatureStar_blue.name=§1Blue §rStar Light
+tile.neotech:blockMiniatureStar_brown.name=§6Brown §rStar Light
+tile.neotech:blockMiniatureStar_cyan.name=§bCyan §rStar Light
+tile.neotech:blockMiniatureStar_gray.name=§8Gray §rStar Light
+tile.neotech:blockMiniatureStar_green.name=§2Green §rStar Light
+tile.neotech:blockMiniatureStar_lightBlue.name=§9Light Blue §rStar Light
+tile.neotech:blockMiniatureStar_lime.name=§aLime §rStar Light
+tile.neotech:blockMiniatureStar_magenta.name=§5Magenta §rStar Light
+tile.neotech:blockMiniatureStar_orange.name=§6Orange §rStar Light
+tile.neotech:blockMiniatureStar_pink.name=§dPink §rStar Light
+tile.neotech:blockMiniatureStar_purple.name=§5Purple §rStar Light
+tile.neotech:blockMiniatureStar_red.name=§cRed §rStar Light
+tile.neotech:blockMiniatureStar_silver.name=§7Silver §rStar Light
+tile.neotech:blockMiniatureStar_white.name=White Star Light
+tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
+
+#######################
+# Items
+#######################
+
+# Metals
+item.neotech:dustIron.name=Iron Dust
+item.neotech:dustGold.name=Gold Dust
+item.neotech:dustCopper.name=Copper Dust
+item.neotech:ingotCopper.name=Copper Ingot
+item.neotech:dustBronze.name=Bronze Dust
+item.neotech:ingotBronze.name=Bronze Ingot
+item.neotech:dustTin.name=Tin Dust
+item.neotech:ingotTin.name=Tin Ingot
+
+# Motherboard
+item.neotech:upgradeMBFull.name=Filled Motherboard
+item.neotech:upgradeMBEmpty.name=Empty Motherboard
+item.neotech:upgradeHardDrive.name=HardDrive Upgrade
+item.neotech:upgradeControl.name=Control Upgrade
+item.neotech:upgradeProcessor.name=Processor Upgrade
+item.neotech:upgradeExpansion.name=Expansion Upgrade
+
+# Tools
+item.neotech:wrench.name=Wrench
+item.neotech:trashBag.name=Trash Bag
+
+#######################
 # Tile Entities
 #######################
-tile.neotech:grinder.name=Grinder
 
-tile.neotech:furnaceGenerator.name=Furnace Generator
-tile.neotech:fluidGenerator.name=Fluid Generator
+# Processors
 tile.neotech:electricFurnace.name=Electric Furnace
 tile.neotech:electricCrusher.name=Electric Crusher
 tile.neotech:thermalBinder.name=Thermal Binder
+tile.neotech:grinder.name=Grinder
 
+# Generators
+tile.neotech:furnaceGenerator.name=Furnace Generator
+tile.neotech:fluidGenerator.name=Fluid Generator
+
+# Storage
+tile.neotech:flushableChest.name=Flushable Chest
 tile.neotech:basicRFStorage.name=Basic RF Storage
 tile.neotech:advancedRFStorage.name=Advanced RF Storage
 tile.neotech:eliteRFStorage.name=Elite RF Storage
 tile.neotech:creativeRFStorage.name=Creative RF Storage
+tile.neotech:ironTank.name=Iron Fluid Tank
+tile.neotech:goldTank.name=Gold Fluid Tank
+tile.neotech:diamondTank.name=Diamond Fluid Tank
+tile.neotech:creativeTank.name=Creative Fluid Tank
 
+# Misc
+tile.neotech:blockCrafter.name=Duel Crafter
+tile.neotech:blockMiniatureSun.name=Miniature Sun
+tile.neotech:playerPlate.name=Player Sensitive Pressure Plate
+tile.neotech:chunkLoader.name=Chunk Loader
+tile.neotech:dimStorage.name=Dimensional Crate
+tile.neotech:redstoneClock.name=Redstone Clock
+
+#######################
+# Pipes
+#######################
+
+# Structure
 tile.neotech:pipeStructure_black.name=§8Black §rStructure Pipe
 tile.neotech:pipeStructure_blue.name=§1Blue §rStructure Pipe
 tile.neotech:pipeStructure_brown.name=§6Brown §rStructure Pipe
@@ -38,100 +114,69 @@ tile.neotech:pipeStructure_silver.name=§7Silver §rStructure Pipe
 tile.neotech:pipeStructure_white.name=White Structure Pipe
 tile.neotech:pipeStructure_yellow.name=§eYellow §rStructure Pipe
 
+# Acceleration
 tile.neotech:pipeBasicSpeedStructure.name=Basic Acceleration Pipe
 
+# Interfaces
 tile.neotech:pipeItemBasicInterface.name=Item Interface Pipe
-
 tile.neotech:pipeEnergyBasicInterface.name=Energy Interface Pipe
-
 tile.neotech:pipeFluidBasicInterface.name=Fluid Interface Pipe
 
-tile.neotech:oreCopper.name=Copper Ore
-tile.neotech:oreTin.name=Tin Ore
-tile.neotech:blockCopper.name=Block of Copper
-tile.neotech:blockTin.name=Block of Tin
-tile.neotech:blockBronze.name=Block of Bronze
+#######################
+# GUI
+#######################
 
-tile.neotech:ironTank.name=Iron Fluid Tank
-tile.neotech:goldTank.name=Gold Fluid Tank
-tile.neotech:diamondTank.name=Diamond Fluid Tank
-tile.neotech:creativeTank.name=Creative Fluid Tank
-
-tile.neotech:blockCrafter.name=Duel Crafter
-tile.neotech:blockMiniatureSun.name=Miniature Sun
-tile.neotech:playerPlate.name=Player Sensitive Pressure Plate
-tile.neotech:chunkLoader.name=Chunk Loader
-tile.neotech:flushableChest.name=Flushable Chest
-
-tile.neotech:blockMiniatureStar_black.name=§8Black §rStar Light
-tile.neotech:blockMiniatureStar_blue.name=§1Blue §rStar Light
-tile.neotech:blockMiniatureStar_brown.name=§6Brown §rStar Light
-tile.neotech:blockMiniatureStar_cyan.name=§bCyan §rStar Light
-tile.neotech:blockMiniatureStar_gray.name=§8Gray §rStar Light
-tile.neotech:blockMiniatureStar_green.name=§2Green §rStar Light
-tile.neotech:blockMiniatureStar_lightBlue.name=§9Light Blue §rStar Light
-tile.neotech:blockMiniatureStar_lime.name=§aLime §rStar Light
-tile.neotech:blockMiniatureStar_magenta.name=§5Magenta §rStar Light
-tile.neotech:blockMiniatureStar_orange.name=§6Orange §rStar Light
-tile.neotech:blockMiniatureStar_pink.name=§dPink §rStar Light
-tile.neotech:blockMiniatureStar_purple.name=§5Purple §rStar Light
-tile.neotech:blockMiniatureStar_red.name=§cRed §rStar Light
-tile.neotech:blockMiniatureStar_silver.name=§7Silver §rStar Light
-tile.neotech:blockMiniatureStar_white.name=White Star Light
-tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
-tile.neotech:dimStorage.name=Dimensional Crate
-tile.neotech:redstoneClock.name=Redstone Clock
-
+# Grinder
 neotech.grinder.title=Grinder
 neotech.grinder.input=Input
 neotech.grinder.grinding=Grinding
 neotech.grinder.output=Output
+
+# Furnace
 neotech.furnace.title=Electric Furnace
+
+# Crusher
 neotech.crusher.title=Electric Crusher
-neotech.furnacegenerator.title=Furnace Generator
-neotech.fluidgenerator.title=Fluid Generator
+
+# Thermal Binder
 neotech.thermalbinder.title=Thermal Binder
-neotech.crafter.title=Duel Crafter
-neotech.fertilizer.title=Miniature Sun
+
+# Furnace Generator
+neotech.furnacegenerator.title=Furnace Generator
+
+# Fluid Generator
+neotech.fluidgenerator.title=Fluid Generator
+
+# RF Storage
 neotech.rfstoragebasic.title=Basic RF Storage
 neotech.rfstorageadvanced.title=Advanced RF Storage
 neotech.rfstorageelite.title=Elite RF Storage
 neotech.rfstoragecreative.title=Creative RF Storage
 
-neotech.upgrade.title=Motherboard
+# Interface Pipe
+neotech.interfacePipe.title=Interface Pipe
 
+# Crafter
+neotech.crafter.title=Duel Crafter
+
+# Minature Sun
+neotech.fertilizer.title=Miniature Sun
+
+# Chunk Loader
 neotech.chunkLoader.title=Chunk Loader Range
 
+# Flushable Chest
 neotech.flushchest.title=Flushable Chest
 
-item.neotech:dustIron.name=Iron Dust
-item.neotech:dustGold.name=Gold Dust
-item.neotech:dustCopper.name=Copper Dust
-item.neotech:ingotCopper.name=Copper Ingot
-item.neotech:dustBronze.name=Bronze Dust
-item.neotech:ingotBronze.name=Bronze Ingot
-item.neotech:dustTin.name=Tin Dust
-item.neotech:ingotTin.name=Tin Ingot
-
-item.neotech:upgradeMBFull.name=Filled Motherboard
-item.neotech:upgradeMBEmpty.name=Empty Motherboard
-item.neotech:upgradeHardDrive.name=HardDrive Upgrade
-item.neotech:upgradeControl.name=Control Upgrade
-item.neotech:upgradeProcessor.name=Processor Upgrade
-item.neotech:upgradeExpansion.name=Expansion Upgrade
-
-item.neotech:wrench.name=Wrench
-item.neotech:trashBag.name=Trash Bag
-
+# Trash Bag
 inventory.trashBag.title=Trash Bag
 
-neotech.nei.name=NeoTech
-neotech.nei.furnacerecipes=Electric Furnace
-neotech.nei.crusherrecipes=Electric Crusher
-neotech.nei.ecrusher.outputchance=10% Chance per Upgrade
-
+# Buttons
 neotech.button.disable=Disabled?
 
+#######################
+# Common Text
+#######################
 neotech.text.error=Error
 
 neotech.text.in=In
@@ -139,11 +184,93 @@ neotech.text.out=Out
 neotech.text.upgrade=Upgrades
 neotech.text.start=Start
 
+neotech.text.motherboard=Motherboard
+
+neotech.text.frequency=Frequency
+neotech.text.extractionMode=Extraction Mode
+neotech.text.whitelist=Whitelist
+neotech.text.blacklist=Blacklist
+neotech.text.oredict=Ore Dict
+neotech.text.damage=Damage
+neotech.text.nbt=NBT
+
+neotech.text.redstoneMode=Redstone Mode
 neotech.text.low=Low
 neotech.text.high=High
 neotech.text.disabled=Disabled
+
+neotech.text.ioConfig=I/O Config
+neotech.text.blue=Blue
+neotech.text.orange=Orange
+neotech.text.green=Green
+neotech.text.input=Input
+neotech.text.output=Output
+neotech.text.both=Both
+
+neotech.text.information=Information
+
+neotech.text.upgrades=Upgrades
+neotech.text.processors=Processors
+neotech.text.hardDrives=Hard Drives
+neotech.text.control=Control
+neotech.text.expansion=Expansion
+
+#######################
+# Descriptions
+#######################
+
+# Electric Furnace
+neotech.electricFurnace.desc=The Electric Furnace is simply a furnace that runs on RF. It will smelt anything a vanilla furnace would.
+neotech.electricFurnace.processorUpgrade.desc=Each processor removes 24 ticks (a little over a second) from the cook time.
+neotech.electricFurnace.hardDriveUpgrade.desc=Each hard drive multiplies the max energy stored by 10 multiplied by the number of hard drives.
+neotech.electricFurnace.controlUpgrade.desc=The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals.
+neotech.electricFurnace.expansionUpgrade.desc=The expansion upgrade allows you to configure the automatic input and output of the machine.
+
+# Electric Crusher
+neotech.electricCrusher.desc=The Electric Crusher smashes items put into it. If you put an ore block into the input, you can get two ore dust as an output. It can also crush things like cobblestone into sand. As more ores and mods are added, the crusher will adapt by adding recipes based on ore dict and other factors.
+neotech.electricCrusher.expansionUpgrade.desc=The expansion upgrade will enable the crusher to have a possible secondary output, it also allows you to configure the automatic input and output of the machine.
+
+# Thermal Binder
+neotech.thermalBinder.desc=The Thermal Binder is the machine that allows you to create motherboards with upgrades installed. Put an empty motherboard in the left slot and any combination of the following into the middle slots: processors (up to 8), hard drives (up to 8), control upgrade (up to 1), expansion upgrade (up to 1), and press start to begin building the motherboard. If you run out of power, the process will fail. You can also put a full motherboard into the left slot without upgrades in the center and it will deconstruct the motherboard and give you back the components.
+neotech.thermalBinder.processorUpgrade.desc=Each processor removes roughly 24 ticks scaled to the number of upgrades being installed (this is due to the fact that the time it takes to cook scales with the number of upgrades being installed) from the cook time.
+
+# Furnace Generator
+neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would. By default, the Furnace Generator generates 20 RF/tick
+neotech.furnaceGenerator.processorUpgrade.desc=Each processor adds 10 RF/tick to the amount produced per tick
+
+# Fluid Generator
+neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces Redstone Flux. By default, the Fluid Generator generates 80 RF/tick. You can add more liquid fuels via the config file
+
+# Energy Interface Pipe
+neotech.energyInterfacePipe.name=Energy Interface
+neotech.energyInterfacePipe.desc=The Energy Interface Pipe allows Redstone Flux to be transmitted through your pipe network. This pipe will extract on Round Robin by default. The base extraction is 200 RF per packet with a delay of 20 ticks per extraction and a speed of 0.5 blocks/tick. This pipe can not use a filter.
+neotech.energyInterfacePipe.processorUpgrade.desc=Processors reduce the delay between extraction by the processor count multiplied by 2. They also increase the speed the resource is extracted by 0.5 blocks/tick per processor.
+neotech.energyInterfacePipe.hardDriveUpgrade.desc=Hard drives multiply how much is extracted by the number of processors multiplied by 4.
+neotech.energyInterfacePipe.controlUpgrade.desc=The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals. It also gives you the ability to change what frequency this pipe is set two. Only two pipes with the same frequency will interact.
+neotech.energyInterfacePipe.expansionUpgrade.desc=The expansion upgrade gives you the ability to change the extraction mode. First available will send to the first accepting pipe, last available will send to the last available pipe, and round robin will cycle through all available pipes.
+
+# Fluid Interface Pipe
+neotech.fluidInterfacePipe.name=Fluid Interface
+neotech.fluidInterfacePipe.desc=The Fluid Interface Pipe allows fluids to be transmitted through your pipe network. This pipe will extract on First Available by default. The base extraction is 1000mb per packet with a delay of 20 ticks per extraction and a speed of 0.05 blocks/tick. You can filter fluids accepted and extracted by setting a filter slot with a fluid container (like a bucket).
+neotech.fluidInterfacePipe.processorUpgrade.desc=Processors reduce the delay between extractions by the processor count multiplied by 2. They also increase the speed the resource is extracted by 0.05 blocks/tick per processor
+neotech.fluidInterfacePipe.hardDriveUpgrade.desc=Hard drives change the max extraction to the hard drive count multiplied by 2000mb
+
+# Item Interface Pipe
+neotech.itemInterfacePipe.name=Item Interface
+neotech.itemInterfacePipe.desc=The Item Interface Pipe allows items to be transmitted through your pipe network. This pipe will extract on First Available by default. The base extraction is 1 item per packet with a delay of 20 ticks per extraction and a speed of 0.05 blocks/tick. You can filter items accepted and extracted by putting an item into the filter slots. To match nbt, ore dict, and damage enable the check boxes.
+neotech.itemInterfacePipe.processorUpgrade.desc=Processors reduce the delay between extractions by the processor count multiplied by 2. They also increase the speed the resource is extracted by 0.05 blocks/tick per processor
+neotech.itemInterfacePipe.hardDriveUpgrade.desc=Hard drives change the max extraction by the hard drive count multiplied by 8 items
 
 neotech.grinder.description=The grinder is an early game ore doubling mechanic. To use, place ores in the top three slots. Then, place any vanilla pressure plate on top. The better the plate, the faster it goes. Jump on the pressure plate to make the grinder start grinding ores. The higher you jump, the more it progresses. Ores will move into the center slot once you start the grinding process. You can automate placing items into the inventory, but you can not pull items out of the output slots.
 neotech.flushableChest.description=The flushable chest allows you to put items into the inventory and when a redstone signal is applied, it will destroy all items inside. It will output a redstone signal based on how full the inventory is.
 neotech.playerPlate.description=The Player Sensitive Plate is like any other pressure plate, except it will only activate when a player entity is on the plate
 neotech.trashBag.description=The Trash Bag is an automatic item removal system. Right click with it to open the inventory and place an item in the slot to automatically trash that item on pickup. You can also trash items manually by opening the GUI and placing items on the trash bag icon.
+
+#######################
+# JEI
+#######################
+
+neotech.nei.name=NeoTech
+neotech.nei.furnacerecipes=Electric Furnace
+neotech.nei.crusherrecipes=Electric Crusher
+neotech.nei.ecrusher.outputchance=10% Chance per Upgrade

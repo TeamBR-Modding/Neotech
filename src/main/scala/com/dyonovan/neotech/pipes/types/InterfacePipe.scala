@@ -2,13 +2,10 @@ package com.dyonovan.neotech.pipes.types
 
 import java.util
 
-import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.entities.ResourceEntity
-import com.teambr.bookshelf.common.tiles.traits.{Syncable, RedstoneAware, UpdatingTile}
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{Vec3, AxisAlignedBB, BlockPos, EnumFacing}
+import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, Vec3}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -22,6 +19,11 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @since August 16, 2015
   */
 trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
+
+    /**
+      * Used to get the information to display on the tabs in machines. This can be the unlocalized version
+      */
+    def getDescription : String = getBlockType.getUnlocalizedName + ".description"
 
     /*******************************************************************************************************************
       ************************************** Extraction Methods ********************************************************

@@ -5,7 +5,7 @@ import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
-import net.minecraft.util.EnumParticleTypes
+import net.minecraft.util.{StatCollector, EnumParticleTypes}
 
 /**
   * This file was created for NeoTech
@@ -32,17 +32,17 @@ class TileElectricFurnace extends MachineProcessor {
     override def initialSize: Int = 2
 
     override def getDescription : String = {
-        GuiColor.YELLOW + "Electric Furnace\n" +
-        GuiColor.WHITE + "The electric furnace is simply a furnace that runs on RF. It will smelt anything a vanilla furnace would.\n\n" +
-        GuiColor.GREEN + GuiTextFormat.BOLD  + "Upgrades: \n" + GuiTextFormat.RESET +
-        GuiColor.YELLOW + GuiTextFormat.BOLD + "Processors: \n" +
-        GuiColor.WHITE + "Each processor removes 24 ticks (a little over a second) from the cook time\n\n" +
-        GuiColor.YELLOW + GuiTextFormat.BOLD + "Hard Drives: \n" +
-        GuiColor.WHITE + "Each hard drive multiplies the max energy stored by 10 x the number of hard drives\n\n" +
-        GuiColor.YELLOW + GuiTextFormat.BOLD + "Control:\n" +
-        GuiColor.WHITE + "The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals\n\n" +
-        GuiColor.YELLOW + GuiTextFormat.BOLD + "Expansion:\n" +
-        GuiColor.WHITE + "The expansion upgrade allows you to configure the automatic input and output of the machine"
+        GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:electricFurnace.name") + ":\n" +
+        GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.desc") + "\n\n" +
+        GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+        GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+        GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.processorUpgrade.desc") + "\n\n" +
+        GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+        GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+        GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+        GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+        GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+        GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
     }
 
     /**
