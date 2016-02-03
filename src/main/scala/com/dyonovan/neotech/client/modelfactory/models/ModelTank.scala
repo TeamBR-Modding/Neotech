@@ -2,18 +2,14 @@ package com.dyonovan.neotech.client.modelfactory.models
 
 import java.util
 
-import com.dyonovan.neotech.collections.DummyState
-import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.managers.BlockManager
-import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model._
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.{IBakedModel, ModelRotation}
 import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.util.{EnumFacing, EnumWorldBlockLayer}
-import net.minecraftforge.client.MinecraftForgeClient
-import net.minecraftforge.client.model.{ISmartBlockModel, ISmartItemModel}
+import net.minecraft.util.EnumFacing
+import net.minecraftforge.client.model.ISmartItemModel
 import net.minecraftforge.fluids.{Fluid, FluidContainerRegistry, FluidStack}
 import org.lwjgl.util.vector.Vector3f
 

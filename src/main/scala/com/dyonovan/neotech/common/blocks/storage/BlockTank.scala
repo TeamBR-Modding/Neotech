@@ -1,10 +1,8 @@
 package com.dyonovan.neotech.common.blocks.storage
 
 import com.dyonovan.neotech.NeoTech
-import com.dyonovan.neotech.collections.DummyState
 import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.notification.{Notification, NotificationHelper}
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
@@ -15,8 +13,8 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{StatCollector, BlockPos, EnumFacing, EnumWorldBlockLayer}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
+import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidContainerRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -176,10 +174,6 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
 
             stack.stackSize = 0
         }
-    }
-
-    override def getExtendedState(state: IBlockState,  world: IBlockAccess, pos: BlockPos ): IBlockState = {
-        new DummyState(world, pos, this)
     }
 
     override def getRenderType: Int = 3
