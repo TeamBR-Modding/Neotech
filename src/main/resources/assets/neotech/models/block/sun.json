@@ -1,6 +1,6 @@
 {
     "textures" : {
-        "particle" : "#base",
+        "particle" : "neotech:blocks/sun",
         "base" : "neotech:blocks/sun"
     },
     "elements" : [

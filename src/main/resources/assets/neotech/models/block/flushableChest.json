@@ -1,0 +1,7 @@
+{
+    "textures" : {
+        "particle" : "neotech:blocks/flushableChestIcon",
+        //Flushable Chest
+        "flushable_chest" : "neotech:blocks/flushableChestIcon"
+    }
+}
