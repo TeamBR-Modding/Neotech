@@ -35,6 +35,8 @@ class ItemSpawnerMover extends BaseItem("spawnerMover", 1) {
         7200
     }
 
+    override def hasEffect(stack : ItemStack) = stack.hasTagCompound
+
     override def onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, timeLeft: Int): Unit = {
 
         if (timeLeft <= 7180) {

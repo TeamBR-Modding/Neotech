@@ -2,10 +2,7 @@ package com.dyonovan.neotech.client.modelfactory
 
 import com.dyonovan.neotech.client.modelfactory.models.ModelTank
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.BlockManager
-import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.{IBakedModel, ModelResourceLocation}
-import net.minecraft.item.Item
+import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.{EventPriority, SubscribeEvent}
