@@ -193,7 +193,7 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
 
         //Try and insert the fluid
         for(dir <- EnumFacing.values()) {
-            if (canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation) {
+            if (canConnectSink(dir) && pos.offset(dir).toLong != resource.fromTileLocation.toLong) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case tank: IFluidHandler =>
                         val filledAmount = test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false)

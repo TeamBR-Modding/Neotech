@@ -243,7 +243,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
-            if (u == getPos)
+            if (u == getPos && getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate))
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
 
             while (parent.get(u.toLong) != null) {
@@ -348,7 +348,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
-            if (u == getPos)
+            if (u == getPos && getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate))
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
             while (parent.get(u.toLong) != null) {
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
@@ -467,7 +467,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             resource.pathQueue.clear()
             resource.destination = destination
             var u: BlockPos = destination
-            if (u == getPos)
+            if (u == getPos && getWorld.getTileEntity(u).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate))
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
             while (parent.get(u.toLong) != null) {
                 resource.pathQueue.push(new Vec3(u.getX + 0.5, u.getY + 0.5, u.getZ + 0.5))
