@@ -2,12 +2,12 @@ package com.dyonovan.neotech.client.gui.machines.processors
 
 import java.awt.Color
 
-import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachineHelper
+import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.machines.processors.TileThermalBinder
+import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
-import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText}
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.StatCollector
@@ -25,24 +25,8 @@ import scala.collection.mutable.ArrayBuffer
   * @since August 21, 2015
   */
 class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) extends
-        GuiBase[ContainerThermalBinder](new ContainerThermalBinder(player.inventory, tileEntity), 175, 185,
-            "neotech.thermalbinder.title") {
-
-    var hasUpgrade = tileEntity.getUpgradeBoard != null
-
-    override def drawGuiContainerBackgroundLayer(f: Float, i: Int, j:Int): Unit = {
-        val oldValue = hasUpgrade
-        hasUpgrade = tileEntity.getUpgradeBoard != null
-
-        if(oldValue != hasUpgrade) {
-            val motherBoardTab = rightTabs.getTabs.head
-            rightTabs.getTabs.clear()
-            rightTabs.getTabs += motherBoardTab
-            GuiAbstractMachineHelper.updateRightTabs(rightTabs, tileEntity, inventory)
-        }
-
-        super[GuiBase].drawGuiContainerBackgroundLayer(f, i, j)
-    }
+        GuiAbstractMachine[ContainerThermalBinder](new ContainerThermalBinder(player.inventory, tileEntity), 175, 185,
+            "neotech.thermalbinder.title", player, tileEntity) {
 
     override def addComponents(): Unit = {
         components += new GuiComponentPowerBar(10, 23, 18, 60, new Color(255, 0, 0)) {
@@ -73,10 +57,5 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
         components += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.out"), 123, 63)
         components += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.upgrade"),
             65, 87)
-    }
-
-    override def addRightTabs(tabs : GuiTabCollection) = {
-        if (tileEntity != null)
-            GuiAbstractMachineHelper.addRightTabs(tabs, tileEntity, inventory)
     }
 }

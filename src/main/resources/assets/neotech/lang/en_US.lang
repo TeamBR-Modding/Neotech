@@ -1,7 +1,13 @@
+PARSE_ESCAPES
+
+# Creative Tabs
 itemGroup.tabNeoTech=NeoTech
 itemGroup.tabNeoTechPipes=NeoTech: Transport Pipes
 itemGroup.tabNeoTechDecorations=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2e
 
+#######################
+# Tile Entities
+#######################
 tile.neotech:grinder.name=Grinder
 
 tile.neotech:furnaceGenerator.name=Furnace Generator

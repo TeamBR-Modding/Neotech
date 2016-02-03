@@ -2,11 +2,11 @@ package com.dyonovan.neotech.client.gui.machines.generators
 
 import java.awt.Color
 
-import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachineHelper
+import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFurnaceGenerator
 import com.dyonovan.neotech.common.tiles.machines.generators.TileFurnaceGenerator
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFlame, GuiComponentPowerBar, GuiComponentText, GuiTabCollection}
-import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
+import com.teambr.bookshelf.client.gui.GuiColor
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFlame, GuiComponentPowerBar, GuiComponentText}
 import net.minecraft.entity.player.EntityPlayer
 
 import scala.collection.mutable.ArrayBuffer
@@ -22,24 +22,8 @@ import scala.collection.mutable.ArrayBuffer
  * @since August 14, 2015
  */
 class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator) extends
-        GuiBase[ContainerFurnaceGenerator](new ContainerFurnaceGenerator(player.inventory, tileEntity), 175, 165,
-            "neotech.furnacegenerator.title") {
-
-    var hasUpgrade = tileEntity.getUpgradeBoard != null
-
-    override def drawGuiContainerBackgroundLayer(f: Float, i: Int, j:Int): Unit = {
-        val oldValue = hasUpgrade
-        hasUpgrade = tileEntity.getUpgradeBoard != null
-
-        if(oldValue != hasUpgrade) {
-            val motherBoardTab = rightTabs.getTabs.head
-            rightTabs.getTabs.clear()
-            rightTabs.getTabs += motherBoardTab
-            GuiAbstractMachineHelper.updateRightTabs(rightTabs, tileEntity, inventory)
-        }
-
-        super[GuiBase].drawGuiContainerBackgroundLayer(f, i, j)
-    }
+        GuiAbstractMachine[ContainerFurnaceGenerator](new ContainerFurnaceGenerator(player.inventory, tileEntity), 175, 165,
+            "neotech.furnacegenerator.title", player, tileEntity) {
 
     override def addComponents(): Unit = {
         //Flame for Burning
@@ -68,10 +52,5 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                 super.renderOverlay(i, j, x, y)
             }
         }
-    }
-
-    override def addRightTabs(tabs : GuiTabCollection) = {
-        if (tileEntity != null)
-            GuiAbstractMachineHelper.addRightTabs(tabs, tileEntity, inventory)
     }
 }

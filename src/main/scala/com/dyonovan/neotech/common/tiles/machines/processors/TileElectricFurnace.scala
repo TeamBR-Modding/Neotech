@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.common.tiles.machines.processors
 
 import com.dyonovan.neotech.common.tiles.MachineProcessor
+import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
@@ -29,6 +30,20 @@ class TileElectricFurnace extends MachineProcessor {
       * @return
       */
     override def initialSize: Int = 2
+
+    override def getDescription : String = {
+        GuiColor.YELLOW + "Electric Furnace\n" +
+        GuiColor.WHITE + "The electric furnace is simply a furnace that runs on RF. It will smelt anything a vanilla furnace would.\n\n" +
+        GuiColor.GREEN + GuiTextFormat.BOLD  + "Upgrades: \n" + GuiTextFormat.RESET +
+        GuiColor.YELLOW + GuiTextFormat.BOLD + "Processors: \n" +
+        GuiColor.WHITE + "Each processor removes 24 ticks (a little over a second) from the cook time\n\n" +
+        GuiColor.YELLOW + GuiTextFormat.BOLD + "Hard Drives: \n" +
+        GuiColor.WHITE + "Each hard drive multiplies the max energy stored by 10 x the number of hard drives\n\n" +
+        GuiColor.YELLOW + GuiTextFormat.BOLD + "Control:\n" +
+        GuiColor.WHITE + "The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals\n\n" +
+        GuiColor.YELLOW + GuiTextFormat.BOLD + "Expansion:\n" +
+        GuiColor.WHITE + "The expansion upgrade allows you to configure the automatic input and output of the machine"
+    }
 
     /**
       * Used to get how long it takes to cook things, you should check for upgrades at this point

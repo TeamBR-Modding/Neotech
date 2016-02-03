@@ -1,16 +1,14 @@
 package com.dyonovan.neotech.common.tiles
 
 import cofh.api.energy.{EnergyStorage, IEnergyHandler}
-import com.dyonovan.neotech.collections.{InputOutput, StandardValues}
+import com.dyonovan.neotech.collections.InputOutput
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.bookshelf.common.tiles.traits.{Inventory, InventorySided, RedstoneAware, Syncable}
+import com.teambr.bookshelf.common.tiles.traits.{InventorySided, RedstoneAware, Syncable}
 import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{StatCollector, EnumFacing}
+import net.minecraft.util.{EnumFacing, StatCollector}
 import net.minecraftforge.common.capabilities.Capability
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * This file was created for NeoTech
@@ -85,6 +83,11 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * @return
       */
     override def initialSize: Int
+
+    /**
+      * Used to get the information to display on the tabs in machines. This can be the unlocalized version
+      */
+    def getDescription : String = getBlockType.getUnlocalizedName + ".description"
 
     /** ****************************************************************************************************************
       * *************************************************  Tile Methods  ************************************************

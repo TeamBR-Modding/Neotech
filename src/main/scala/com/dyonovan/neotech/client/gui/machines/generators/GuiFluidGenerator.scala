@@ -2,11 +2,11 @@ package com.dyonovan.neotech.client.gui.machines.generators
 
 import java.awt.Color
 
-import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachineHelper
+import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.dyonovan.neotech.common.tiles.machines.generators.TileFluidGenerator
+import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display._
-import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import net.minecraft.entity.player.EntityPlayer
 
 import scala.collection.mutable.ArrayBuffer
@@ -22,23 +22,7 @@ import scala.collection.mutable.ArrayBuffer
  * @since August 21, 2015
  */
 class GuiFluidGenerator(player: EntityPlayer, tileEntity: TileFluidGenerator) extends
-        GuiBase[ContainerFluidGenerator](new ContainerFluidGenerator(player.inventory, tileEntity), 175, 165, "neotech.fluidgenerator.title") {
-
-    var hasUpgrade = tileEntity.getUpgradeBoard != null
-
-    override def drawGuiContainerBackgroundLayer(f: Float, i: Int, j:Int): Unit = {
-        val oldValue = hasUpgrade
-        hasUpgrade = tileEntity.getUpgradeBoard != null
-
-        if(oldValue != hasUpgrade) {
-            val motherBoardTab = rightTabs.getTabs.head
-            rightTabs.getTabs.clear()
-            rightTabs.getTabs += motherBoardTab
-            GuiAbstractMachineHelper.updateRightTabs(rightTabs, tileEntity, inventory)
-        }
-
-        super[GuiBase].drawGuiContainerBackgroundLayer(f, i, j)
-    }
+        GuiAbstractMachine[ContainerFluidGenerator](new ContainerFluidGenerator(player.inventory, tileEntity), 175, 165, "neotech.fluidgenerator.title", player, tileEntity) {
 
     override def addComponents(): Unit = {
 
@@ -75,10 +59,5 @@ class GuiFluidGenerator(player: EntityPlayer, tileEntity: TileFluidGenerator) ex
                 ArrayBuffer(tileEntity.tank.getFluidAmount + "/" + tileEntity.tank.getCapacity + " mb")
             }
         }
-    }
-
-    override def addRightTabs(tabs : GuiTabCollection) = {
-        if (tileEntity != null)
-            GuiAbstractMachineHelper.addRightTabs(tabs, tileEntity, inventory)
     }
 }

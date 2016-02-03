@@ -3,7 +3,7 @@ package com.dyonovan.neotech.pipes.gui
 import java.awt.Color
 import javax.annotation.Nullable
 
-import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachineHelper
+import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.ContainerAbstractMachine
 import com.dyonovan.neotech.common.tiles.machines.processors.TileElectricCrusher
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
