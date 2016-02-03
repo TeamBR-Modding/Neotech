@@ -231,6 +231,12 @@ public class CraftingRecipeManager {
                 "CLC",
                 "WWW", 'C', Blocks.chest, 'W', "plankWood", 'L', "logWood"));
 
+        //Spawmer Mover Thinggy
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.spawnerMover(),1),
+                "  E",
+                " S ",
+                "S  ", 'E', Items.emerald, 'S', "stickWood"));
+
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);
