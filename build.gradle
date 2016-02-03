@@ -211,7 +211,7 @@ curseforge {
     project {
         id = '228643'
         changelog = 'Changelog: https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog'
-        releaseType = 'beta'
+        releaseType = 'release'
         addGameVersion '1.8.9'
         addArtifact devJar
         relations {
