@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.items.{ItemTrashBag, ItemWrench, BaseItem, BaseUpgradeItem}
+import com.dyonovan.neotech.common.items._
 import net.minecraft.item.Item
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -40,6 +40,7 @@ object ItemManager {
     //Utils
     val wrench = new ItemWrench
     val trashBag = new ItemTrashBag
+    val spawnerMover = new ItemSpawnerMover
 
     def preInit(): Unit = {
         registerItem(dustGold, "dustGold", "dustGold")
@@ -61,6 +62,7 @@ object ItemManager {
 
         registerItem(wrench, "wrench")
         registerItem(trashBag, "trashBag")
+        registerItem(spawnerMover, "spawnerMover")
     }
     /**
      * Helper method to register items

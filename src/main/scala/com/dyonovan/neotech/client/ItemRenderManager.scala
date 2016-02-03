@@ -61,6 +61,7 @@ object ItemRenderManager {
         registerItem(ItemManager.upgradeExpansion)
         registerItem(ItemManager.wrench)
         registerItem(ItemManager.trashBag)
+        registerItem(ItemManager.spawnerMover)
 
         registerPipesAndColored()
     }
