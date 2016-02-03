@@ -1,3 +1,4 @@
+PARSE_ESCAPES
 
 # Creative Tabs
 itemGroup.tabNeoTech=NeoTech
@@ -58,10 +59,12 @@ item.neotech:upgradeExpansion.name=Expansion Upgrade
 # Tools
 item.neotech:wrench.name=Wrench
 item.neotech:trashBag.name=Trash Bag
+item.neotech:spawnerMover.name=Spawner Relocator
 
 #######################
 # Tile Entities
 #######################
+tile.neotech:grinder.name=Grinder
 
 # Processors
 tile.neotech:electricFurnace.name=Electric Furnace
