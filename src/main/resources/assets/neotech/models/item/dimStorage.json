@@ -1,8 +1,5 @@
 {
     "parent": "neotech:block/dimStorage",
-    "textures" : {
-        "front" : "neotech:blocks/StorageCrateFace"
-    },
 	"display": {
 		"thirdperson": {
 			"rotation": [ 10, -45, 170 ],

@@ -122,7 +122,7 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
         state.getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]
     }
 
-    override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState= {
+    override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
         state.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(worldIn.getTileEntity(pos).asInstanceOf[TileStar].color))
     }
 

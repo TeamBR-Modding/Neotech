@@ -32,7 +32,10 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
         super[TileEntity].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
         qty = tag.getInteger("Qty")
+        val lastLock = lock
         if (tag.hasKey("Lock")) lock = tag.getBoolean("Lock")
+        if(worldObj != null && worldObj.isRemote && (lastLock != lock))
+            worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
 
     def isStackEqual(stack: ItemStack): Boolean = {

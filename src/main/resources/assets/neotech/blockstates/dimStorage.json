@@ -1,11 +1,7 @@
 {
     "forge_marker" : 1,
     "defaults" : {
-        "textures" : {
-            "front" : "neotech:blocks/StorageCrateFace"
-        },
-        "model" : "neotech:dimStorage",
-        "uvlock" : true
+        "model" : "neotech:dimStorage"
     },
     "variants" : {
         "facing" : {
@@ -13,6 +9,13 @@
             "south" : { "y" : 180 },
             "west" : { "y" : 270 },
             "east" : { "y" : 90 }
+        },
+        "locked" : {
+            "true" : {
+                "textures" : {
+                    "front": "neotech:blocks/dimStorageFaceLocked"
+                }
+            }, "false" : {}
         }
     }
 }
