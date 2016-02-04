@@ -1,0 +1,12 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "textures" : {
+      "0": "neotech:blocks/machine_side",
+      "1": "neotech:blocks/solartop"
+    }
+  },
+  "variants": {
+    "normal" : { "model" : "neotech:solarPanelT1" }
+  }
+}

@@ -2,7 +2,6 @@ package com.dyonovan.neotech.common.tiles.machines.generators
 
 import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.common.tiles.MachineGenerator
-import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 
@@ -102,4 +101,8 @@ class TileSolarPanel extends MachineGenerator {
     override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = false
 
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = false
+
+    override def tryInput() : Unit = { }
+
+    override def tryOutput() : Unit = { }
 }

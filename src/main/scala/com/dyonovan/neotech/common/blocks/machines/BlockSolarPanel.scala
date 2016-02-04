@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.common.blocks.machines
 
 import com.dyonovan.neotech.NeoTech
-import com.dyonovan.neotech.common.blocks.traits.CoreStates
 import com.dyonovan.neotech.common.tiles.machines.generators.TileSolarPanel
 import com.dyonovan.neotech.lib.Reference
 import net.minecraft.block.BlockContainer
@@ -19,7 +18,7 @@ import net.minecraft.world.World
   * @author Dyonovan
   * @since 2/3/2016
   */
-class BlockSolarPanel(name: String, tier: Int) extends BlockContainer(Material.iron) with CoreStates {
+class BlockSolarPanel(name: String, tier: Int) extends BlockContainer(Material.iron) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
