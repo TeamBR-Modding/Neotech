@@ -3,7 +3,8 @@
   "defaults" : {
     "textures" : {
       "0": "neotech:blocks/machine_side",
-      "1": "neotech:blocks/solartop"
+      "1": "neotech:blocks/solartop",
+      "2": "minecraft:blocks/iron_block"
     }
   },
   "variants": {

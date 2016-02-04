@@ -32,6 +32,7 @@ class TileSolarPanel extends MachineGenerator {
     override def generate(): Unit = {
         val light = worldObj.getSunBrightness(1.0F)
         energy.receiveEnergy((light * getEnergyProduced).toInt, false)
+        println(energy.getEnergyStored)
     }
 
     /**
@@ -102,7 +103,5 @@ class TileSolarPanel extends MachineGenerator {
 
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = false
 
-    override def tryInput() : Unit = { }
-
-    override def tryOutput() : Unit = { }
+    override def shouldHandleIO = false
 }
