@@ -1,13 +1,17 @@
 package com.dyonovan.neotech.common.tiles.machines.generators
 
 import cofh.api.energy.EnergyStorage
+import com.dyonovan.neotech.client.gui.machines.generators.GuiFluidGenerator
+import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.dyonovan.neotech.registries.FluidFuelValues
 import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{StatCollector, EnumFacing}
+import net.minecraft.world.World
 import net.minecraftforge.fluids._
 
 /**
@@ -108,6 +112,34 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
                 GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
     }
+
+    /**
+      * Return the container for this tile
+      *
+      * @param ID Id, probably not needed but could be used for multiple guis
+      * @param player The player that is opening the gui
+      * @param world The world
+      * @param x X Pos
+      * @param y Y Pos
+      * @param z Z Pos
+      * @return The container to open
+      */
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
+        new ContainerFluidGenerator(player.inventory, this)
+
+    /**
+      * Return the gui for this tile
+      *
+      * @param ID Id, probably not needed but could be used for multiple guis
+      * @param player The player that is opening the gui
+      * @param world The world
+      * @param x X Pos
+      * @param y Y Pos
+      * @param z Z Pos
+      * @return The gui to open
+      */
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
+        new GuiFluidGenerator(player, this)
 
     /*******************************************************************************************************************
       **************************************************  Tile Methods  ************************************************

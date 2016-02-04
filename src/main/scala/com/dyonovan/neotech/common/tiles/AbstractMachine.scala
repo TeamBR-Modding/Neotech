@@ -6,8 +6,10 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.tiles.traits.{InventorySided, RedstoneAware, Syncable}
 import com.teambr.bookshelf.util.InventoryUtils
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.world.World
 import net.minecraftforge.common.capabilities.Capability
 
 /**
@@ -38,12 +40,14 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Used to get what slots are allowed to be output
+      *
       * @return The slots to output from
       */
     def getOutputSlots : Array[Int]
 
     /**
       * Used to get what slots are allowed to be input
+      *
       * @return The slots to input from
       */
     def getInputSlots : Array[Int]
@@ -73,6 +77,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Used to check if this tile is active or not
+      *
       * @return True if active state
       */
     def isActive: Boolean
@@ -88,6 +93,32 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * Used to get the information to display on the tabs in machines. This can be the unlocalized version
       */
     def getDescription : String = getBlockType.getUnlocalizedName + ".description"
+
+    /**
+      * Return the container for this tile
+      *
+      * @param ID Id, probably not needed but could be used for multiple guis
+      * @param player The player that is opening the gui
+      * @param world The world
+      * @param x X Pos
+      * @param y Y Pos
+      * @param z Z Pos
+      * @return The container to open
+      */
+    def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = null
+
+    /**
+      * Return the gui for this tile
+      *
+      * @param ID Id, probably not needed but could be used for multiple guis
+      * @param player The player that is opening the gui
+      * @param world The world
+      * @param x X Pos
+      * @param y Y Pos
+      * @param z Z Pos
+      * @return The gui to open
+      */
+    def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = null
 
     /** ****************************************************************************************************************
       * *************************************************  Tile Methods  ************************************************
@@ -157,12 +188,14 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Used to manually disable the IO rendering on tile, true by default
+      *
       * @return False to prevent rendering
       */
     def shouldRenderInputOutputOnTile = shouldHandleIO
 
     /**
       * Used to specify if this tile should handle IO, and render in GUI
+      *
       * @return False to prevent
       */
     def shouldHandleIO = true
@@ -234,6 +267,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Used to change the energy to a new storage with a different size
+      *
       * @param initial How much was in the old storage
       */
     def changeEnergy(initial : Int): Unit = {
@@ -250,6 +284,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Used to determine how much energy should be in this tile
+      *
       * @return How much energy should be available
       */
     def getSupposedEnergy : Int = {
@@ -261,6 +296,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
+      *
       * @param from Orientation the energy is received from.
       * @param maxReceive Maximum amount of energy to receive.
       * @param simulate If TRUE, the charge will only be simulated.
@@ -277,6 +313,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Used to extract energy from this tile. You should return zero if you don't want to be able to extract
+      *
       * @param from The direction pulling from
       * @param maxExtract The maximum amount to extract
       * @param simulate True to just simulate, not actually drain
@@ -286,6 +323,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Get the current energy stored in the energy tank
+      *
       * @param from The side to check (can be used if you have different energy storages)
       * @return
       */
@@ -293,6 +331,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Get the maximum energy this handler can store, not the current
+      *
       * @param from The side to check from (can be used if you have different energy storages)
       * @return The maximum potential energy
       */
@@ -300,6 +339,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Checks if energy can connect to a given side
+      *
       * @param from The face to check
       * @return True if the face allows energy flow
       */
@@ -364,6 +404,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     /**
       * Set the mode manually
+      *
       * @param newMode The new mode to set to
       */
     def setRedstoneMode(newMode : Int) : Unit = {

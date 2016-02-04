@@ -84,34 +84,18 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
-            case block: BlockManager.electricFurnace.type =>
-                new ContainerElectricFurnace(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricFurnace])
-            case block: BlockManager.electricCrusher.type =>
-                new ContainerElectricCrusher(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricCrusher])
-            case block: BlockManager.furnaceGenerator.type =>
-                new ContainerFurnaceGenerator(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
-            case block: BlockManager.fluidGenerator.type =>
-                new ContainerFluidGenerator(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFluidGenerator])
-            case block: BlockManager.thermalBinder.type =>
-                new ContainerThermalBinder(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileThermalBinder])
+        world.getTileEntity(new BlockPos(x, y, z)) match {
+            case abstractMachine : AbstractMachine =>
+                abstractMachine.getServerGuiElement(ID, player, world, x, y, z)
             case _ => null
         }
     }
 
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
-            case block: BlockManager.electricFurnace.type =>
-                new GuiElectricFurnace(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricFurnace])
-            case block: BlockManager.electricCrusher.type =>
-                new GuiElectricCrusher(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileElectricCrusher])
-            case block: BlockManager.furnaceGenerator.type =>
-                new GuiFurnaceGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFurnaceGenerator])
-            case block: BlockManager.fluidGenerator.type =>
-                new GuiFluidGenerator(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileFluidGenerator])
-            case block: BlockManager.thermalBinder.type =>
-                new GuiThermalBinder(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileThermalBinder])
+        world.getTileEntity(new BlockPos(x, y, z)) match {
+            case abstractMachine : AbstractMachine =>
+                abstractMachine.getClientGuiElement(ID, player, world, x, y, z)
             case _ => null
         }
     }

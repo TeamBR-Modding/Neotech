@@ -1,11 +1,15 @@
 package com.dyonovan.neotech.common.tiles.machines.processors
 
+import com.dyonovan.neotech.client.gui.machines.processors.GuiElectricFurnace
+import com.dyonovan.neotech.common.container.machines.processors.ContainerElectricFurnace
 import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.util.InventoryUtils
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.item.crafting.FurnaceRecipes
 import net.minecraft.util.{StatCollector, EnumParticleTypes}
+import net.minecraft.world.World
 
 /**
   * This file was created for NeoTech
@@ -124,6 +128,34 @@ class TileElectricFurnace extends MachineProcessor {
         else
             BASE_ENERGY_TICK
     }
+
+    /**
+      * Return the container for this tile
+      *
+      * @param ID Id, probably not needed but could be used for multiple guis
+      * @param player The player that is opening the gui
+      * @param world The world
+      * @param x X Pos
+      * @param y Y Pos
+      * @param z Z Pos
+      * @return The container to open
+      */
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
+            new ContainerElectricFurnace(player.inventory, this)
+
+    /**
+      * Return the gui for this tile
+      *
+      * @param ID Id, probably not needed but could be used for multiple guis
+      * @param player The player that is opening the gui
+      * @param world The world
+      * @param x X Pos
+      * @param y Y Pos
+      * @param z Z Pos
+      * @return The gui to open
+      */
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
+        new GuiElectricFurnace(player, this)
 
     /*******************************************************************************************************************
       ************************************************ Inventory methods ***********************************************
