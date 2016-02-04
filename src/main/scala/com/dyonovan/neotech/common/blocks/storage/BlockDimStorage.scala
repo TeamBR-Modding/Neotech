@@ -43,6 +43,7 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                     item.setTagCompound(tag)
                 dropItem(world, item, pos)
                 world.setBlockToAir(pos)
+                world.removeTileEntity(pos)
             } else if (player.getHeldItem != null) {
                 var actual = tile.insertItem(0, player.getHeldItem, simulate = true)
                 if (actual != null && actual.stackSize == player.getHeldItem.stackSize) return true

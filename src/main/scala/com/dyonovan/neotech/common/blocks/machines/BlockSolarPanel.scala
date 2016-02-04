@@ -15,6 +15,10 @@ import net.minecraft.world.World
   * @since 2/3/2016
   */
 class BlockSolarPanel(name: String, tier: Int) extends BlockMachine(name, classOf[TileSolarPanel], fourWayRotation = false) {
+    setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.375F, 1.0F)
+    override def isFullCube : Boolean = false
     override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = new TileSolarPanel(tier)
     def getTier: Int = tier
+
+
 }
