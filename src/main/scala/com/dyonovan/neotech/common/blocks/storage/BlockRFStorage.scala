@@ -9,7 +9,6 @@ import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
-import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
@@ -62,9 +61,7 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
         if(stack.hasTagCompound && !world.isRemote) { //If there is a tag and is on the server
             world.getTileEntity(pos).asInstanceOf[TileRFStorage].energy.setEnergyStored(stack.getTagCompound
                     .getInteger("Energy"))
-            //world.getTileEntity(pos).readFromNBT(stack.getTagCompound) //Set the tag
-            //world.getTileEntity(pos).setPos(pos) //Set the saved tag to here
-            world.markBlockForUpdate(pos) //Mark for update to client
+            world.markBlockForUpdate(pos)
         }
     }
 
@@ -95,14 +92,6 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
     }
 
     override def getRenderType: Int = 3
-
-    /*@SideOnly(Side.CLIENT)
-    override def getSubBlocks(itemIn: Item, tab: CreativeTabs, list: java.util.List[ItemStack]): Unit = {
-       /* tier match {
-            case 4 => list.add (new ItemStack (itemIn, 1, 16))
-            case _ => list.add (new ItemStack (itemIn, 1, 0))
-        }*/
-    }*/
 
     def getName: String = name
 

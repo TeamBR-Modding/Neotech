@@ -1,11 +1,11 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.machines.{BlockMachine, BlockGrinder}
+import com.dyonovan.neotech.common.blocks.machines.{BlockSolarPanel, BlockMachine, BlockGrinder}
 import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage._
 import com.dyonovan.neotech.common.tiles.machines._
-import com.dyonovan.neotech.common.tiles.machines.generators.{TileFurnaceGenerator, TileFluidGenerator}
+import com.dyonovan.neotech.common.tiles.machines.generators.{TileSolarPanel, TileFurnaceGenerator, TileFluidGenerator}
 import com.dyonovan.neotech.common.tiles.machines.processors.{TileThermalBinder, TileElectricFurnace, TileElectricCrusher}
 import com.dyonovan.neotech.common.tiles.misc._
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank, TileRFStorage}
@@ -53,11 +53,8 @@ object BlockManager {
     //Pipes
     val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, true, classOf[StructurePipe])
     val pipeBasicSpeedStructure = new BlockPipe("pipeBasicSpeedStructure", Material.rock, false, classOf[StructurePipe])
-
     val pipeItemInterface = new BlockPipeSpecial("pipeItemBasicInterface", Material.rock, classOf[ItemInterfacePipe])
-
     val pipeEnergyInterface = new BlockPipeSpecial("pipeEnergyBasicInterface", Material.rock, classOf[EnergyInterfacePipe])
-
     val pipeFluidInterface = new BlockPipeSpecial("pipeFluidBasicInterface", Material.rock, classOf[FluidInterfacePipe])
 
     //RF Storage
@@ -71,6 +68,9 @@ object BlockManager {
     val goldTank = new BlockTank("goldTank", 2)
     val diamondTank = new BlockTank("diamondTank", 3)
     val creativeTank = new BlockTank("creativeTank", 4)
+
+    //Solar Panels
+    val solarPanelT1 = new BlockSolarPanel("solarPanelT1", 1)
 
     //Misc
     val blockCrafter = new BlockCrafter("blockCrafter", classOf[TileCrafter])
@@ -103,13 +103,9 @@ object BlockManager {
         registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockColored])
         for(color <- EnumDyeColor.values())
             OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
-
         registerBlock(pipeBasicSpeedStructure, "pipeBasicSpeedStructure", classOf[StructurePipe])
-
         registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
-
         registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
-
         registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])
 
         //RF Storage
@@ -123,6 +119,9 @@ object BlockManager {
         registerBlock(goldTank, "goldTank", classOf[TileTank], classOf[ItemBlockTank])
         registerBlock(diamondTank, "diamondTank", classOf[TileTank], classOf[ItemBlockTank])
         registerBlock(creativeTank, "creativeTank", classOf[TileTank], classOf[ItemBlockTank])
+
+        //Solar Panels
+        registerBlock(solarPanelT1, "solarPanelT1", classOf[TileSolarPanel])
 
         //misc
         registerBlock(blockCrafter, "blockCrafter", classOf[TileCrafter])
