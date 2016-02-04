@@ -1,0 +1,12 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "textures" : {
+      "rim": "minecraft:blocks/diamond_block"
+    },
+    "model" : "neotech:solarPanel"
+  },
+  "variants": {
+    "isactive": { "true" : {}, "false" : {}}
+  }
+}

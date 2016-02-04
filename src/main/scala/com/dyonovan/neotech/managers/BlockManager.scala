@@ -71,6 +71,8 @@ object BlockManager {
 
     //Solar Panels
     val solarPanelT1 = new BlockSolarPanel("solarPanelT1", 1)
+    val solarPanelT2 = new BlockSolarPanel("solarPanelT2", 2)
+    val solarPanelT3 = new BlockSolarPanel("solarPanelT3", 3)
 
     //Misc
     val blockCrafter = new BlockCrafter("blockCrafter", classOf[TileCrafter])
@@ -122,6 +124,8 @@ object BlockManager {
 
         //Solar Panels
         registerBlock(solarPanelT1, "solarPanelT1", classOf[TileSolarPanel])
+        registerBlock(solarPanelT2, "solarPanelT2", classOf[TileSolarPanel])
+        registerBlock(solarPanelT3, "solarPanelT3", classOf[TileSolarPanel])
 
         //misc
         registerBlock(blockCrafter, "blockCrafter", classOf[TileCrafter])

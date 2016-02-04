@@ -3,6 +3,7 @@ package com.dyonovan.neotech.common.tiles.machines.generators
 import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 
 /**
@@ -104,5 +105,19 @@ class TileSolarPanel extends MachineGenerator {
 
     override def shouldHandleIO = false
 
+    /**
+      * Write the tag
+      */
+    override def writeToNBT(tag: NBTTagCompound): Unit = {
+        super.writeToNBT(tag)
+        tag.setInteger("Tier", tier)
+    }
 
+    /**
+      * Read the tag
+      */
+    override def readFromNBT(tag: NBTTagCompound): Unit = {
+        super.readFromNBT(tag)
+        tier = tag.getInteger("Tier")
+    }
 }
