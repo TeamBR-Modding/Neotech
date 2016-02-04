@@ -2,19 +2,18 @@ package com.dyonovan.neotech.pipes.tiles.item
 
 import java.util
 
-import com.dyonovan.neotech.pipes.entities.{ResourceEntity, ItemResourceEntity}
+import com.dyonovan.neotech.pipes.entities.{ItemResourceEntity, ResourceEntity}
 import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
-import com.teambr.bookshelf.common.tiles.traits.{InventorySided, Inventory}
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
+import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.{IInventory, ISidedInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{StatCollector, BlockPos, EnumFacing}
-import net.minecraftforge.common.capabilities.Capability
+import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
+import net.minecraftforge.items.wrapper.{InvWrapper, SidedInvWrapper}
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
-import net.minecraftforge.items.wrapper.{SidedInvWrapper, InvWrapper}
 
 /**
   * This file was created for NeoTech
@@ -258,19 +257,8 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
                     iterator.remove()
             }
 
-            otherInv match {
-                case sided: InventorySided =>
-                    tempInventoryTest = new InventorySided() {
-                        override def initialSize: Int = otherInv.getSlots
-                        override def getSlotsForFace(side: EnumFacing): Array[Int] = sided.getSlotsForFace(side)
-                        override def getCapabilityFromTile[T](capability: Capability[T], facing: EnumFacing): T = sided.getCapability(capability, facing)
-                        override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = sided.canExtractItem(index, stack, direction)
-                        override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = sided.canInsertItem(slot, itemStackIn, direction)
-                    }
-                case _ =>
-                    tempInventoryTest = new Inventory() {
-                        override def initialSize: Int = otherInv.getSlots
-                    }
+            tempInventoryTest = new Inventory {
+                override def initialSize: Int = otherInv.getSlots
             }
 
             tempInventoryTest.copyFrom(otherInv)

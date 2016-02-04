@@ -159,7 +159,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * Used to manually disable the IO rendering on tile, true by default
       * @return False to prevent rendering
       */
-    def shouldRenderInputOutputOnTile = true
+    def shouldRenderInputOutputOnTile = shouldHandleIO
 
     /**
       * Used to specify if this tile should handle IO, and render in GUI

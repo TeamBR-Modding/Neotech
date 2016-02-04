@@ -230,7 +230,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var destination = new BlockPos(getPos)
             var shortest = Integer.MAX_VALUE
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, isSending = true)) {
                     val d = BlockPos.fromLong(sinks.get(i))
                     if (distance.get(d.toLong) < shortest) {
                         destination = d
@@ -335,7 +335,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var destination = new BlockPos(getPos)
             var longest = Integer.MIN_VALUE
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, isSending = true)) {
                     val d = BlockPos.fromLong(sinks.get(i))
                     if (distance.get(d.toLong) > longest) {
                         destination = d
@@ -438,7 +438,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             var pickNext: Boolean = lastSink == 0
             val lastLastSink = lastSink
             for (i <- 0 until sinks.size()) {
-                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, !simulate)) {
+                if (getWorld.getTileEntity(BlockPos.fromLong(sinks.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, isSending = true)) {
                     if (pickNext) {
                         destination = BlockPos.fromLong(sinks.get(i))
                         lastSink = sinks.get(i)
