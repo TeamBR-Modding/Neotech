@@ -4,26 +4,10 @@
         "top": "neotech:blocks/machine_side",
         "front": "neotech:blocks/machine_side",
         "side": "neotech:blocks/machine_side",
-        //Since we use this for all machines, make sure to register them all here
 
-        //Electric Furnace
-        "electricFurnaceFront": "neotech:blocks/electricFurnace_front",
-        "electricFurnaceFrontActive": "neotech:blocks/electricFurnaceActive_front",
-        //Electric Crusher
-        "electricCrusherFront": "neotech:blocks/electricCrusher_front",
-        "electricCrusherFrontActive": "neotech:blocks/electricCrusherActive_front",
-        //Furnace Generator
-        "furnaceGeneratorFront": "neotech:blocks/furnaceGenerator_front",
-        "furnaceGeneratorFrontActive": "neotech:blocks/furnaceGeneratorActive_front",
-        //Fluid Generator
-        "fluidGeneratorFront": "neotech:blocks/fluidGenerator_front",
-        "fluidGeneratorFrontActive": "neotech:blocks/fluidGeneratorActive_front",
-        //ThermalBinder
-        "thermalBinderFront": "neotech:blocks/thermalBinder_front",
-        "thermalBinderFrontActive": "neotech:blocks/thermalBinderActive_front",
         //IO
         "input" : "neotech:blocks/inputFace",
         "output" : "neotech:blocks/outputFace",
-        "intputOutputFace" : "neotech:blocks/inputOutputFace"
+        "inputOutputFace" : "neotech:blocks/inputOutputFace"
     }
 }

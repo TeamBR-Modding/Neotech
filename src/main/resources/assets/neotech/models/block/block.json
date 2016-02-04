@@ -7,9 +7,6 @@
         "north": "#all",
         "east": "#all",
         "south": "#all",
-        "west": "#all",
-
-        //Blocks
-        "blockBronze" : "neotech:blocks/blockBronze"
+        "west": "#all"
     }
 }
