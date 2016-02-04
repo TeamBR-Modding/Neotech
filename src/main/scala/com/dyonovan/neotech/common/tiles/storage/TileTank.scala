@@ -7,7 +7,6 @@ import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, UpdatingTile}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.world.EnumSkyBlock
 import net.minecraftforge.fluids._
@@ -118,7 +117,8 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
         tier
     }
 
-    override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)
+    override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack =
+        drain(from, resource.amount, doDrain)
 
     override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = {
         val fluidAmount = tank.drain(maxDrain, false)

@@ -1,16 +1,12 @@
 package com.dyonovan.neotech.client.renderers
 
+import com.dyonovan.neotech.common.blocks.storage.BlockDimStorage
 import com.dyonovan.neotech.common.tiles.storage.TileDimStorage
-import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.util.RenderUtils
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.{RenderHelper, OpenGlHelper, GlStateManager}
-import net.minecraft.client.renderer.entity.RenderManager
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
+import net.minecraft.client.renderer.{GlStateManager, RenderHelper}
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.client.ForgeHooksClient
-import org.lwjgl.opengl.{GL12, GL11}
+import org.lwjgl.opengl.GL11
 
 /**
   * This file was created for NeoTech
@@ -25,7 +21,7 @@ import org.lwjgl.opengl.{GL12, GL11}
 class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
 
     override def renderTileEntityAt(tile: TileDimStorage, x: Double, y: Double, z: Double,  partialTicks: Float, breakPart: Int): Unit = {
-        if (tile.getStackInSlot(0) != null) {
+        if (tile.getWorld.getBlockState(tile.getPos).getBlock.isInstanceOf[BlockDimStorage] && tile.getStackInSlot(0) != null) {
             val savedGLState = modifyGLState(Array(GL11.GL_BLEND, GL11.GL_LIGHTING), null)
             GL11.glEnable(GL11.GL_BLEND)
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)

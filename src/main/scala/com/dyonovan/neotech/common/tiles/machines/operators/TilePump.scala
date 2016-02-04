@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.common.tiles.machines.operators
 
+import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
+
 /**
   * This file was created for NeoTech
   *
@@ -10,6 +12,6 @@ package com.dyonovan.neotech.common.tiles.machines.operators
   * @author Paul Davis <pauljoda>
   * @since 2/4/2016
   */
-class TilePump {
+class TilePump extends UpdatingTile {
 
 }
