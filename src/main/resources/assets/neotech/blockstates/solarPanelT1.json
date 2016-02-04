@@ -2,12 +2,11 @@
   "forge_marker" : 1,
   "defaults" : {
     "textures" : {
-      "0": "neotech:blocks/machine_side",
-      "1": "neotech:blocks/solartop",
-      "2": "minecraft:blocks/iron_block"
-    }
+      "rim": "minecraft:blocks/iron_block"
+    },
+    "model" : "neotech:solarPanel"
   },
   "variants": {
-    "normal" : { "model" : "neotech:solarPanelT1" }
+    "isactive": { "true" : {}, "false" : {}}
   }
 }
