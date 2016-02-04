@@ -2,7 +2,6 @@ package com.dyonovan.neotech.common.blocks.storage
 
 import com.dyonovan.neotech.client.gui.storage.GuiFlushableChest
 import com.dyonovan.neotech.common.blocks.BaseBlock
-import com.dyonovan.neotech.common.blocks.traits.CoreStates
 import com.dyonovan.neotech.common.container.storage.ContainerFlushableChest
 import com.dyonovan.neotech.common.tiles.storage.TileFlushableChest
 import com.dyonovan.neotech.managers.ItemManager

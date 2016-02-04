@@ -1,10 +1,6 @@
 package com.dyonovan.neotech.common.blocks.machines
 
-import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.common.tiles.machines.generators.TileSolarPanel
-import com.dyonovan.neotech.lib.Reference
-import net.minecraft.block.BlockContainer
-import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
 
@@ -18,15 +14,7 @@ import net.minecraft.world.World
   * @author Dyonovan
   * @since 2/3/2016
   */
-class BlockSolarPanel(name: String, tier: Int) extends BlockContainer(Material.iron) {
-
-    setUnlocalizedName(Reference.MOD_ID + ":" + name)
-    setCreativeTab(NeoTech.tabNeoTech)
-    setHardness(2.0F)
-
+class BlockSolarPanel(name: String, tier: Int) extends BlockMachine(name, classOf[TileSolarPanel], fourWayRotation = false) {
     override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = new TileSolarPanel(tier)
-
-    override def getRenderType: Int = 3
-
     def getTier: Int = tier
 }
