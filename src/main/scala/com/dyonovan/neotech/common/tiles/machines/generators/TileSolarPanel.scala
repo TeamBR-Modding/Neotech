@@ -2,6 +2,7 @@ package com.dyonovan.neotech.common.tiles.machines.generators
 
 import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.common.tiles.MachineGenerator
+import com.teambr.bookshelf.api.waila.Waila
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -16,7 +17,7 @@ import net.minecraft.util.EnumFacing
   * @author Dyonovan
   * @since 2/3/2016
   */
-class TileSolarPanel extends MachineGenerator {
+class TileSolarPanel extends MachineGenerator with Waila {
 
     var tier = 0
 
@@ -30,9 +31,13 @@ class TileSolarPanel extends MachineGenerator {
     /**
       * Called to tick generation. This is where you add power to the generator
       */
-    override def generate(): Unit = {
-        val light = worldObj.getSunBrightness(1.0F)
-        energy.receiveEnergy((light * getEnergyProduced).toInt, false)
+    override def generate(): Unit = energy.receiveEnergy(generating(), false)
+
+    private def generating(): Int = {
+        if (worldObj.canSeeSky(pos) && worldObj.getSunBrightness(1.0F) > 0.7F) {
+            val light = worldObj.getSunBrightness(1.0F)
+            (light * getEnergyProduced).toInt
+        } else 0
     }
 
     /**
@@ -42,7 +47,7 @@ class TileSolarPanel extends MachineGenerator {
       * @return True if able to continue generating
       */
     override def manageBurnTime(): Boolean = {
-        if (worldObj.canSeeSky(pos) && worldObj.isDaytime) return true
+        if (worldObj.canSeeSky(pos) && worldObj.getSunBrightness(1.0F) > 0.7F) return true
 
         false
     }
@@ -105,6 +110,8 @@ class TileSolarPanel extends MachineGenerator {
 
     override def shouldHandleIO = false
 
+    override def canConnectEnergy(from: EnumFacing): Boolean = from == EnumFacing.DOWN
+
     /**
       * Write the tag
       */
@@ -119,5 +126,14 @@ class TileSolarPanel extends MachineGenerator {
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super.readFromNBT(tag)
         tier = tag.getInteger("Tier")
+    }
+
+    /**
+      * Waila
+      */
+    override def returnWailaBody(tipList: java.util.List[String]) : java.util.List[String] = {
+        tipList.add("Generating: " + generating() + " (" + (if (generating() == 0) 0 else (worldObj.getSunBrightness(1.0F) * 100).toInt) + "%)")
+        tipList.add("Max: " + getEnergyProduced)
+        tipList
     }
 }
