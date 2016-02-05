@@ -265,7 +265,7 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
         for(dir <- EnumFacing.values()) {
             if (canConnectSink(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case tank: IFluidHandler if !resource.isDead =>
+                    case tank: IFluidHandler if !resource.isDead && pos.offset(dir).toLong != resource.fromTileLocation.toLong =>
                         resource.resource.drain(tank.fill(dir.getOpposite, resource.resource.getFluid, true), true)
                         if (resource.resource.getFluidAmount <= 0) {
                             resource.isDead = true

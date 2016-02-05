@@ -289,7 +289,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
 
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
-            if(canConnectSink(dir) && InventoryUtils.moveItemInto(tempActualInsert, 0, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true)) {
+            if(canConnectSink(dir) && pos.offset(dir).toLong != resource.fromTileLocation.toLong && InventoryUtils.moveItemInto(tempActualInsert, 0, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true)) {
                 resource.resource = tempActualInsert.getStackInSlot(0)
                 if(resource.resource == null || resource.resource.stackSize <= 0) {
                     resource.isDead = true

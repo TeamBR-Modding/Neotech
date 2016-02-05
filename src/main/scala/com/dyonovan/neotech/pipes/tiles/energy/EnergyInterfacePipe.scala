@@ -231,7 +231,7 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
         for(dir <- EnumFacing.values()) {
             if(canConnectSink(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case receiver: IEnergyReceiver if !resource.isDead =>
+                    case receiver: IEnergyReceiver if !resource.isDead && pos.offset(dir).toLong != resource.fromTileLocation.toLong =>
                         receiver.receiveEnergy(dir.getOpposite, resource.resource.extractEnergy(resource.resource.getEnergyStored, false), false)
                         if (resource.resource.getEnergyStored <= 0)
                             resource.isDead = true
