@@ -75,9 +75,9 @@ tile.neotech:grinder.name=Grinder
 # Generators
 tile.neotech:furnaceGenerator.name=Furnace Generator
 tile.neotech:fluidGenerator.name=Fluid Generator
-tile.neotech:solarPanelT1.name=Solar Panel - Tier 1
-tile.neotech:solarPanelT2.name=Solar Panel - Tier 2
-tile.neotech:solarPanelT3.name=Solar Panel - Tier 3
+tile.neotech:solarPanelT1.name=Basic Solar Panel
+tile.neotech:solarPanelT2.name=Advanced Solar Panel
+tile.neotech:solarPanelT3.name=Elite Solar Panel
 
 # Storage
 tile.neotech:flushableChest.name=Flushable Chest

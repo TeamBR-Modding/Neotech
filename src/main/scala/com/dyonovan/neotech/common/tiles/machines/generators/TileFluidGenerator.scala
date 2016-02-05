@@ -68,7 +68,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
 
         //Handle Items
         if(getStackInSlot(INPUT_SLOT) != null && FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)) != null &&
-            getStackInSlot(OUTPUT_SLOT) == null) {
+                getStackInSlot(OUTPUT_SLOT) == null) {
             val fluidStackCopy = FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT))
             if(tank.getFluidAmount + FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)).amount < tank.getCapacity &&
                     FluidContainerRegistry.drainFluidContainer(getStackInSlot(INPUT_SLOT)) != null) {
@@ -231,15 +231,25 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
       * @param itemStackIn The stack to check
       * @return True if you can put this there
       */
-    override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean =
-        slot == INPUT_SLOT
+    override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean = {
+        val inputSlot = slot == INPUT_SLOT
+        var isValidContainer = FluidContainerRegistry.isContainer(itemStackIn) && !FluidContainerRegistry.isEmptyContainer(itemStackIn)
+        if(isValidContainer && FluidFuelValues.getFluidFuelValue(FluidContainerRegistry.getFluidForFilledItem(itemStackIn).getFluid.getName) <= 0)
+            isValidContainer = false
+        inputSlot && isValidContainer
+    }
 
     /**
       * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
       * side
       */
-    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean =
-        slot == INPUT_SLOT && FluidContainerRegistry.isContainer(itemStackIn)
+    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+        val inputSlot = slot == INPUT_SLOT
+        var isValidContainer = FluidContainerRegistry.isContainer(itemStackIn) && !FluidContainerRegistry.isEmptyContainer(itemStackIn)
+        if(isValidContainer && FluidFuelValues.getFluidFuelValue(FluidContainerRegistry.getFluidForFilledItem(itemStackIn).getFluid.getName) <= 0)
+            isValidContainer = false
+        inputSlot && isValidContainer
+    }
 
     /**
       * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,

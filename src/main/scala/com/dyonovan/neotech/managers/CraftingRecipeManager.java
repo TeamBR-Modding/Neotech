@@ -40,7 +40,7 @@ public class CraftingRecipeManager {
                 "DCD",
                 "ABA", 'A', "ingotTin", 'B', Items.flint, 'C', Blocks.piston, 'D', Items.redstone));
 
-        //Coal Generator
+        //Furnace Generator
         GameRegistry.addRecipe(new ItemStack(BlockManager.furnaceGenerator()),
                 "ABA",
                 "CDC",
@@ -51,6 +51,20 @@ public class CraftingRecipeManager {
                 "ABA",
                 "CDC",
                 "ABA", 'A', Items.gold_ingot, 'B', Items.glowstone_dust, 'C', BlockManager.furnaceGenerator(), 'D', BlockManager.ironTank());
+
+        //Solar Panels
+        GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT1()),
+                "   ",
+                "CCC",
+                "ABA", 'A', Items.redstone, 'B', BlockManager.basicRFStorage(), 'C', Blocks.glass);
+        GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT2()),
+                "PPP",
+                "PSP",
+                "PPP", 'P', BlockManager.solarPanelT1(), 'S', BlockManager.advancedRFStorage());
+        GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT3()),
+                "PPP",
+                "PSP",
+                "PPP", 'P', BlockManager.solarPanelT2(), 'S', BlockManager.eliteRFStorage());
 
         //Thermal Binder
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.thermalBinder()),

@@ -32,4 +32,6 @@ class ContainerAbstractMachine(playerInventory: InventoryPlayer, tile: AbstractM
 
     val motherboardSlot = new MotherboardSlot(tile.upgradeInventory, 0, -10000, -1000)
     addSlotToContainer(motherboardSlot)
+
+    override def getInventorySizeNotPlayer : Int = tile.getSizeInventory + 1
 }
