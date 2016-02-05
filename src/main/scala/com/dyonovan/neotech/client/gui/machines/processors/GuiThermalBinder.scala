@@ -2,6 +2,7 @@ package com.dyonovan.neotech.client.gui.machines.processors
 
 import java.awt.Color
 
+import com.dyonovan.neotech.ColorUtils
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.machines.processors.TileThermalBinder
@@ -30,6 +31,15 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
 
     override def addComponents(): Unit = {
         components += new GuiComponentPowerBar(10, 23, 18, 60, new Color(255, 0, 0)) {
+            override  def getDynamicColor() : Color = {
+                val scale = tileEntity.getEnergyStored(null) * 100 / tileEntity.getMaxEnergyStored(null)
+                if(scale >= 66) {
+                    ColorUtils.getColorBetween(new Color(255, 153, 0), new Color(255, 0, 0), (scale - 67) / 33F)
+                } else if(scale >= 33) {
+                    ColorUtils.getColorBetween(new Color(255, 255, 0), new Color(255, 153, 0), (scale - 33) / 33F)
+                } else
+                    ColorUtils.getColorBetween(new Color(0, 0, 0),new Color(255, 255, 0), scale / 33F)
+            }
             override def getEnergyPercent(scale: Int): Int = {
                 tileEntity.getEnergyStored(null) * scale / tileEntity.getMaxEnergyStored(null)
             }
