@@ -134,6 +134,7 @@ class TileSolarPanel extends MachineGenerator with Waila {
     override def returnWailaBody(tipList: java.util.List[String]) : java.util.List[String] = {
         tipList.add("Generating: " + generating() + " (" + (if (generating() == 0) 0 else (worldObj.getSunBrightnessFactor(1.0F) * 100).toInt) + "%)")
         tipList.add("Max: " + getEnergyProduced)
+        tipList.add(energy.getEnergyStored + "/" + energy.getMaxEnergyStored)
         tipList
     }
 }
