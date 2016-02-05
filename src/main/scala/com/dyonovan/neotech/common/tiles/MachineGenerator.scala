@@ -102,7 +102,7 @@ abstract class MachineGenerator extends AbstractMachine {
       * Write the tag
       */
     override def writeToNBT(tag: NBTTagCompound): Unit = {
-        super.writeToNBT(tag)
+        super[AbstractMachine].writeToNBT(tag)
         tag.setInteger("BurnTime", burnTime)
         tag.setInteger("CurrentObjectBurnTime", currentObjectBurnTime)
     }
@@ -111,7 +111,7 @@ abstract class MachineGenerator extends AbstractMachine {
       * Read the tag
       */
     override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
+        super[AbstractMachine].readFromNBT(tag)
         burnTime              = tag.getInteger("BurnTime")
         currentObjectBurnTime = tag.getInteger("CurrentObjectBurnTime")
     }

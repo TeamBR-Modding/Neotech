@@ -3,7 +3,6 @@ package com.dyonovan.neotech.common.tiles
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
-import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -111,7 +110,7 @@ abstract class MachineProcessor extends AbstractMachine {
       * Write the tag
       */
     override def writeToNBT(tag: NBTTagCompound): Unit = {
-        super.writeToNBT(tag)
+        super[AbstractMachine].writeToNBT(tag)
         tag.setInteger("CookTime", cookTime)
     }
 
@@ -119,7 +118,7 @@ abstract class MachineProcessor extends AbstractMachine {
       * Read the tag
       */
     override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
+        super[AbstractMachine].readFromNBT(tag)
         cookTime = tag.getInteger("CookTime")
     }
 

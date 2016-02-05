@@ -102,6 +102,7 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         tag.setDouble("Speed", speed);
         tag.setLong("Destination", destination.toLong());
         tag.setLong("From", from.toLong());
+        tag.setLong("FromTile", fromTileLocation.toLong());
     }
 
     @Override
@@ -115,6 +116,7 @@ public class EnergyResourceEntity extends ResourceEntity<EnergyStorage> {
         nextSpeed = tag.getDouble("Speed");
         destination = BlockPos.fromLong(tag.getLong("Destination"));
         from = BlockPos.fromLong(tag.getLong("From"));
+        fromTileLocation = BlockPos.fromLong(tag.getLong("FromTile"));
         pathQueue = new Stack<>();
     }
 }

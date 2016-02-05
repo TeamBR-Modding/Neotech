@@ -33,6 +33,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.furnaceGenerator))
         registerItem(Item.getItemFromBlock(BlockManager.fluidGenerator))
         registerItem(Item.getItemFromBlock(BlockManager.thermalBinder))
+        registerItem(Item.getItemFromBlock(BlockManager.pump))
         registerItem(Item.getItemFromBlock(BlockManager.solarPanelT1))
         registerItem(Item.getItemFromBlock(BlockManager.solarPanelT2))
         registerItem(Item.getItemFromBlock(BlockManager.solarPanelT3))
