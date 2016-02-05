@@ -34,8 +34,8 @@ class TileSolarPanel extends MachineGenerator with Waila {
     override def generate(): Unit = energy.receiveEnergy(generating(), false)
 
     private def generating(): Int = {
-        if (worldObj.canSeeSky(pos) && worldObj.getSunBrightness(1.0F) > 0.7F) {
-            val light = worldObj.getSunBrightness(1.0F)
+        if (worldObj.canSeeSky(pos) && worldObj.getSunBrightnessFactor(1.0F) > 0.7F) {
+            val light = worldObj.getSunBrightnessFactor(1.0F)
             (light * getEnergyProduced).toInt
         } else 0
     }
@@ -47,7 +47,7 @@ class TileSolarPanel extends MachineGenerator with Waila {
       * @return True if able to continue generating
       */
     override def manageBurnTime(): Boolean = {
-        if (worldObj.canSeeSky(pos) && worldObj.getSunBrightness(1.0F) > 0.7F) return true
+        if (worldObj.canSeeSky(pos) && worldObj.getSunBrightnessFactor(1.0F) > 0.7F) return true
 
         false
     }
@@ -132,7 +132,7 @@ class TileSolarPanel extends MachineGenerator with Waila {
       * Waila
       */
     override def returnWailaBody(tipList: java.util.List[String]) : java.util.List[String] = {
-        tipList.add("Generating: " + generating() + " (" + (if (generating() == 0) 0 else (worldObj.getSunBrightness(1.0F) * 100).toInt) + "%)")
+        tipList.add("Generating: " + generating() + " (" + (if (generating() == 0) 0 else (worldObj.getSunBrightnessFactor(1.0F) * 100).toInt) + "%)")
         tipList.add("Max: " + getEnergyProduced)
         tipList
     }
