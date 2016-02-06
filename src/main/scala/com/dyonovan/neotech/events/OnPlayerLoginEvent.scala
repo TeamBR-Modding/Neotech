@@ -23,9 +23,11 @@ import net.minecraftforge.fml.common.{FMLModContainer, Loader}
   */
 object OnPlayerLoginEvent {
 
+    var firstTime = true
+
     @SubscribeEvent
     def onPlayerLogin(event: EntityJoinWorldEvent): Unit = {
-        if (event.entity.isInstanceOf[EntityPlayer] && event.world.isRemote && ConfigRegistry.versionCheck) {
+        if (event.entity.isInstanceOf[EntityPlayer] && event.world.isRemote && ConfigRegistry.versionCheck && firstTime) {
             val mod = Loader.instance().getModList.toArray()
             var modContainer: FMLModContainer = null
             for (m <- mod) {
@@ -47,8 +49,8 @@ object OnPlayerLoginEvent {
                 val update = new ChatComponentText("Update at " + versionCheck.url)
                 update.setChatStyle(chatStyle)
                 event.entity.addChatMessage(update)
-
             }
+            firstTime = false
         }
     }
 
