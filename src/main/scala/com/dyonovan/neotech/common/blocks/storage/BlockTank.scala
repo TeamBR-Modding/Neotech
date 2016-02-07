@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.common.blocks.storage
 
 import com.dyonovan.neotech.NeoTech
+import com.dyonovan.neotech.common.items.ItemWrench
 import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.lib.Reference
 import com.teambr.bookshelf.notification.{Notification, NotificationHelper}
@@ -34,7 +35,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
-    setHardness(3.0F)
+    setHardness(2.0F)
     setBlockBounds(1F / 16F, 0F, 1F / 16F, 15F / 16F, 1F,  15F/ 16F)
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing,
@@ -75,6 +76,12 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
                     }
                 }
             }
+        } else if (player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
+            if (breakTank(world, pos, state) == true) {
+                world.setBlockToAir(pos)
+                world.removeTileEntity(pos)
+                world.markBlockForUpdate(pos)
+            }
         } else if (world.isRemote && tank != null) {
             var fluidName: String = ""
             var fluidAmount: String = ""
@@ -110,24 +117,31 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
 
     override def onBlockHarvested(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer): Unit = {
         if (!player.capabilities.isCreativeMode) {
-            world.getTileEntity(pos) match {
-                case tile: TileTank =>
-                    val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
-                    val tag = new NBTTagCompound
-                    tile.writeToNBT(tag)
-                    item.setTagCompound(tag)
-                    if (tile.tank.getFluid != null) {
-                        val r = tile.tank.getFluid.amount.toFloat / tile.tank.getCapacity
-                        val res = 16 - (r * 16).toInt
-                        item.setItemDamage(res)
-                    } else
-                        item.setItemDamage(16)
-                    dropItem(world, item, pos) //Drop it
-                case _ =>
-            }
+            breakTank(world, pos, state)
         } else {
             super.breakBlock(world, pos, state)
         }
+    }
+
+    private def breakTank(world: World, pos: BlockPos, state: IBlockState): Boolean = {
+        if (world.isRemote) return false
+        world.getTileEntity(pos) match {
+            case tile: TileTank =>
+                val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
+                val tag = new NBTTagCompound
+                tile.writeToNBT(tag)
+                item.setTagCompound(tag)
+                if (tile.tank.getFluid != null) {
+                    val r = tile.tank.getFluid.amount.toFloat / tile.tank.getCapacity
+                    val res = 16 - (r * 16).toInt
+                    item.setItemDamage(res)
+                } else
+                    item.setItemDamage(16)
+                dropItem(world, item, pos) //Drop it
+                return true
+            case _ =>
+        }
+        false
     }
 
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:
