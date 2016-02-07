@@ -64,7 +64,7 @@ class TileElectricCrusher extends MachineProcessor {
             else if(!getStackInSlot(OUTPUT_SLOT_1).isItemEqual(getOutputForStack(getStackInSlot(INPUT_SLOT))))
                 return false
             else {
-                val minStackSize = getStackInSlot(OUTPUT_SLOT_1).stackSize - getOutputForStack(getStackInSlot(INPUT_SLOT)).stackSize
+                val minStackSize = getStackInSlot(OUTPUT_SLOT_1).stackSize + getOutputForStack(getStackInSlot(INPUT_SLOT)).stackSize
                 return minStackSize <= getInventoryStackLimit && minStackSize <= getOutputForStack(getStackInSlot(INPUT_SLOT)).getMaxStackSize
             }
         }
