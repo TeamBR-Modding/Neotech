@@ -220,7 +220,7 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
                     iterator.remove()
             }
 
-            if(otherTank.getTankInfo(dir)(0).fluid == null)
+            if(otherTank.getTankInfo(dir)(0) == null || otherTank.getTankInfo(dir)(0).fluid == null)
                 return otherTank
 
             tempTank = new IFluidHandler {
