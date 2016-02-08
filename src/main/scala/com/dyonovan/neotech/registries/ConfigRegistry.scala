@@ -32,6 +32,7 @@ object ConfigRegistry {
     var tinPerChunk = 6
     var fertBlacklist: Array[String] = _
     var versionCheck = true
+    var chunkLoaderMax = 3
 
 
     def preInit(): Unit = {
@@ -53,6 +54,9 @@ object ConfigRegistry {
                         Array(""),"Format MODID:BLOCKNAME 1 per Line").getStringList
 
         versionCheck = config.get(Reference.CONFIG_VERSION_CHECK, "Version Check", true).getBoolean()
+
+        chunkLoaderMax = config.get(Reference.CONFIG_CHUNKLOADER, "chunkLoaderMax", 3,
+                            "Max Chunks (squared) to keep loaded per Chunk Loader").getInt
 
         config.save()
 

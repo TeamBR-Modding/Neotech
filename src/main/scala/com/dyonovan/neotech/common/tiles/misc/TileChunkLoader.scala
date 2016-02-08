@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.common.tiles.misc
 
 import com.dyonovan.neotech.NeoTech
+import com.dyonovan.neotech.registries.ConfigRegistry
 import com.teambr.bookshelf.common.tiles.traits.Syncable
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.ChunkCoordIntPair
@@ -66,8 +67,8 @@ class TileChunkLoader extends Syncable {
 
     override def setVariable(id: Int, value: Double): Unit = {
         diameter = value.toInt
-        if(diameter > 3)
-            diameter = 3
+        if(diameter > ConfigRegistry.chunkLoaderMax)
+            diameter = ConfigRegistry.chunkLoaderMax
         else if(diameter < 0)
             diameter = 0
         worldObj.markBlockForUpdate(pos)

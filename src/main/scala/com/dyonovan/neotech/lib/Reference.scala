@@ -20,4 +20,5 @@ object Reference {
     final val CONFIG_WORLD = "World Generation"
     final val CONFIG_FERT_BLACKLIST = "Fertilizer Blacklist"
     final val CONFIG_VERSION_CHECK = "Show if NeoTech is Outdated?"
+    final var CONFIG_CHUNKLOADER = "ChunkLoader"
 }
