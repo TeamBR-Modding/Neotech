@@ -75,7 +75,6 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
     override def insertItem(slot: Int, originalStack: ItemStack, simulate: Boolean): ItemStack = {
         if (originalStack == null) return null
         if (!isItemValidForSlot(slot, originalStack)) return originalStack
-        if (qty == inventoryContents.get(0).getMaxStackSize * maxStacks) return originalStack
 
         if (inventoryContents.get(0) == null) {
             if (!simulate) {
@@ -87,6 +86,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
             }
             null
         } else {
+            if (qty == inventoryContents.get(0).getMaxStackSize * maxStacks) return originalStack
             val returnStack = originalStack.copy()
             returnStack.stackSize = originalStack.stackSize - Math.min(originalStack.stackSize, (inventoryContents.get(0).getMaxStackSize * maxStacks) - qty)
             if (!simulate) {
