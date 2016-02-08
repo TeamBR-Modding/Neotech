@@ -145,7 +145,8 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
                 if(doFill)
                     markForUpdate()
                 return actual
-            } else return fillAbove(from, resource, doFill)
+            } else if (tier == 4) return resource.amount
+            else return fillAbove(from, resource, doFill)
         }
         0
     }
