@@ -6,11 +6,10 @@ import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.items.ItemWrench
 import com.dyonovan.neotech.common.tiles.storage.TileDimStorage
 import com.dyonovan.neotech.managers.BlockManager
-import com.dyonovan.neotech.pipes.blocks.PipeProperties
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.{PropertyBool, IProperty}
+import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
@@ -19,7 +18,6 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing, MathHelper}
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
-import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.util.Random
@@ -31,6 +29,7 @@ import scala.util.control.Breaks._
 class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[TileDimStorage]) {
 
     lazy val LOCKED = PropertyBool.create("locked")
+    var time: Long = 0
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, facing: EnumFacing, f1: Float, f2: Float, f3: Float): Boolean = {
         val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
@@ -50,8 +49,23 @@ class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[Til
                 actual = tile.insertItem(0, player.getHeldItem, simulate = false)
                 if (actual == null) player.getHeldItem.stackSize = 0 else player.getHeldItem.stackSize = actual.stackSize
                 world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
-            } else if (player.getHeldItem == null && player.isSneaking) tile.setLock(!tile.isLocked);
+            } else if (player.getHeldItem == null && player.isSneaking)
+                tile.setLock(!tile.isLocked)
+            else if (world.getTotalWorldTime - time <= 10 && tile.getStackInSlot(0) != null) {
+                val item = tile.getStackInSlot(0)
+                val allowed = (tile.getStackInSlot(0).getMaxStackSize * tile.maxStacks) - tile.getQty
+
+                if (allowed > 0) {
+                    val actual = player.inventory.clearMatchingItems(item.getItem, item.getItemDamage, allowed, item.getTagCompound)
+                    if (actual > 0) {
+                        tile.addQty(actual)
+                        world.updateEntity(player)
+                    }
+                }
+
+            }
             world.markBlockForUpdate(pos)
+            time = world.getTotalWorldTime
         }
         true
     }
