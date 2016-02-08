@@ -1,7 +1,8 @@
 {
     "parent": "neotech:block/machine",
-    "textures" : {
-        "front" : "neotech:blocks/machine_side"
+    "textures": {
+        "front": "neotech:blocks/pump",
+        "side" : "neotech:blocks/pump"
     },
     "display": {
         "thirdperson": {

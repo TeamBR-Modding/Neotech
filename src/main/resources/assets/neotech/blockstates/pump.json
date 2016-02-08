@@ -2,7 +2,8 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "front": "neotech:blocks/machine_side"
+            "front": "neotech:blocks/pump",
+            "side" : "neotech:blocks/pump"
         },
         "model": "neotech:machine",
         "uvlock": true

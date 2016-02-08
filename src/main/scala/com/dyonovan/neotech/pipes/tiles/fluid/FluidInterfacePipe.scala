@@ -220,6 +220,9 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
                     iterator.remove()
             }
 
+            if(otherTank.getTankInfo(dir)(0).fluid == null)
+                return otherTank
+
             tempTank = new IFluidHandler {
                 val tank = new FluidTank(if(otherTank.getTankInfo(dir)(0).fluid != null)otherTank.getTankInfo(dir)(0).fluid.copy() else null, otherTank.getTankInfo(dir)(0).capacity)
                 override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)

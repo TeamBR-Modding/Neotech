@@ -79,6 +79,9 @@ tile.neotech:solarPanelT1.name=Basic Solar Panel
 tile.neotech:solarPanelT2.name=Advanced Solar Panel
 tile.neotech:solarPanelT3.name=Elite Solar Panel
 
+# Operators
+tile.neotech:pump.name=Electric Pump
+
 # Storage
 tile.neotech:flushableChest.name=Flushable Chest
 tile.neotech:basicRFStorage.name=Basic RF Storage
