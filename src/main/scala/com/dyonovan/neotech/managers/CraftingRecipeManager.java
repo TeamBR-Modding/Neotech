@@ -138,7 +138,9 @@ public class CraftingRecipeManager {
                 "CAC",
                 "ABA",
                 "CAC", 'A', "ingotBronze", 'B', BlockManager.pipeBasicStructure(), 'C', Items
-                .glowstone_dust));
+                .redstone));
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.pipeAdvancedSpeedStructure()), BlockManager.pipeBasicSpeedStructure(), BlockManager.pipeBasicSpeedStructure(), Blocks.glowstone);
+        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.pipeEliteSpeedStructure()), BlockManager.pipeAdvancedSpeedStructure(), BlockManager.pipeAdvancedSpeedStructure(), Items.diamond);
 
         //Power
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergyInterface())),

@@ -103,6 +103,7 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
                     itemRenderer.doRender(itemStack, 0, -0.25, 0, 0, 0);
             } catch (NullPointerException ignored) {
                 GlStateManager.popMatrix();
+                GlStateManager.disableRescaleNormal();
                 Minecraft.getMinecraft().renderEngine.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
             }//Sometimes it tries to render after its gone, just to be safe
             finally {

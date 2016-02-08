@@ -63,6 +63,8 @@ class StructurePipe extends SimplePipe {
     def getSpeedApplied : Double = {
         worldObj.getBlockState(pos).getBlock match {
             case BlockManager.pipeBasicSpeedStructure => 0.02
+            case BlockManager.pipeAdvancedSpeedStructure => 0.15
+            case BlockManager.pipeEliteSpeedStructure => 0.5
             case _ => 0.0
         }
     }

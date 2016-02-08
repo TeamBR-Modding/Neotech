@@ -56,6 +56,8 @@ object BlockManager {
     //Pipes
     val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, true, classOf[StructurePipe])
     val pipeBasicSpeedStructure = new BlockPipe("pipeBasicSpeedStructure", Material.rock, false, classOf[StructurePipe])
+    val pipeAdvancedSpeedStructure = new BlockPipe("pipeAdvancedSpeedStructure", Material.rock, false, classOf[StructurePipe])
+    val pipeEliteSpeedStructure = new BlockPipe("pipeEliteSpeedStructure", Material.rock, false, classOf[StructurePipe])
     val pipeItemInterface = new BlockPipeSpecial("pipeItemBasicInterface", Material.rock, classOf[ItemInterfacePipe])
     val pipeEnergyInterface = new BlockPipeSpecial("pipeEnergyBasicInterface", Material.rock, classOf[EnergyInterfacePipe])
     val pipeFluidInterface = new BlockPipeSpecial("pipeFluidBasicInterface", Material.rock, classOf[FluidInterfacePipe])
@@ -111,6 +113,8 @@ object BlockManager {
         for(color <- EnumDyeColor.values())
             OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
         registerBlock(pipeBasicSpeedStructure, "pipeBasicSpeedStructure", classOf[StructurePipe])
+        registerBlock(pipeAdvancedSpeedStructure, "pipeAdvancedSpeedStructure", classOf[StructurePipe])
+        registerBlock(pipeEliteSpeedStructure, "pipeEliteSpeedStructure", classOf[StructurePipe])
         registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
         registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
         registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])

@@ -86,6 +86,8 @@ object ItemRenderManager {
 
         //Speed
         registerItem(Item.getItemFromBlock(BlockManager.pipeBasicSpeedStructure))
+        registerItem(Item.getItemFromBlock(BlockManager.pipeAdvancedSpeedStructure))
+        registerItem(Item.getItemFromBlock(BlockManager.pipeEliteSpeedStructure))
 
         //Item Stuff
         registerItem(Item.getItemFromBlock(BlockManager.pipeItemInterface))
