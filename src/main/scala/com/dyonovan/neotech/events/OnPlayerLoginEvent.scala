@@ -28,30 +28,32 @@ object OnPlayerLoginEvent {
     @SubscribeEvent
     def onPlayerLogin(event: EntityJoinWorldEvent): Unit = {
 
-        if (event.entity.isInstanceOf[EntityPlayer] && event.world.isRemote && ConfigRegistry.versionCheck && firstTime) {
-            val mod = Loader.instance().getModList.toArray()
-            var modContainer: FMLModContainer = null
-            for (m <- mod) {
-                m match {
-                    case container: FMLModContainer =>
-                        if (container.getModId == Reference.MOD_ID) {
-                            modContainer = container
-                        }
-                    case _ =>
+        event.entity match {
+            case player: EntityPlayer if event.world.isRemote && ConfigRegistry.versionCheck && firstTime =>
+                val mod = Loader.instance().getModList.toArray()
+                var modContainer: FMLModContainer = null
+                for (m <- mod) {
+                    m match {
+                        case container: FMLModContainer =>
+                            if (container.getModId == Reference.MOD_ID) {
+                                modContainer = container
+                            }
+                        case _ =>
+                    }
                 }
-            }
-            val versionCheck = ForgeVersion.getResult(modContainer)
-            if (versionCheck.status == ForgeVersion.Status.OUTDATED) {
-                val msg = GuiColor.ORANGE + "NEOTECH" + GuiColor.WHITE + " is outdated. Newset version is " + GuiColor.GREEN +
-                  versionCheck.target + GuiColor.WHITE
-                event.entity.addChatMessage(new ChatComponentText(msg))
-                val clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, versionCheck.url)
-                val chatStyle = new ChatStyle().setChatClickEvent(clickEvent)
-                val update = new ChatComponentText("Update at " + versionCheck.url)
-                update.setChatStyle(chatStyle)
-                event.entity.addChatMessage(update)
-            }
-            firstTime = false
+                val versionCheck = ForgeVersion.getResult(modContainer)
+                if (versionCheck.status == ForgeVersion.Status.OUTDATED) {
+                    val msg = GuiColor.ORANGE + "NEOTECH" + GuiColor.WHITE + " is outdated. Newset version is " + GuiColor.GREEN +
+                      versionCheck.target + GuiColor.WHITE
+                    player.addChatComponentMessage(new ChatComponentText(msg))
+                    val clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, versionCheck.url)
+                    val chatStyle = new ChatStyle().setChatClickEvent(clickEvent)
+                    val update = new ChatComponentText("Update at " + versionCheck.url)
+                    update.setChatStyle(chatStyle)
+                    player.addChatComponentMessage(update)
+                }
+                firstTime = false
+            case _ =>
         }
     }
 
