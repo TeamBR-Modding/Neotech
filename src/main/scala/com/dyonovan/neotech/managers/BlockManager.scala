@@ -87,7 +87,8 @@ object BlockManager {
     val playerPlate = new BlockPlayerPlate
     val chunkLoader = new BlockChunkLoader
     val flushableChest = new BlockFlushableChest
-    val dimStorage = new BlockDimStorage
+    val dimStorage = new BlockDimStorage("dimStorage")
+    val creativeDimStorage = new BlockCreativeDimStorage
     val redstoneClock = new BlockRedstoneClock
 
     def preInit(): Unit = {

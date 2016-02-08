@@ -26,7 +26,7 @@ import scala.util.control.Breaks._
 /**
   * Created by Dyonovan on 1/23/2016.
   */
-class BlockDimStorage extends BaseBlock(Material.iron, "dimStorage", classOf[TileDimStorage]) {
+class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, classOf[TileDimStorage]) {
 
     lazy val LOCKED = PropertyBool.create("locked")
     var time: Long = 0

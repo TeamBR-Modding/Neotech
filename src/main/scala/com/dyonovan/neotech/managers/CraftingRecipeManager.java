@@ -253,6 +253,12 @@ public class CraftingRecipeManager {
                 " S ",
                 "S  ", 'E', Items.emerald, 'S', "stickWood"));
 
+        //Pump
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.pump(),1),
+                "BTB",
+                "PRP",
+                "BTB", 'B', "ingotBronze", 'R', Items.redstone, 'P', BlockManager.pipeFluidInterface(), 'T', BlockManager.ironTank()));
+
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);
