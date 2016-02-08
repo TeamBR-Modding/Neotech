@@ -1,13 +1,12 @@
 package com.dyonovan.neotech.client.gui.machines.generators
 
 import java.awt.Color
-
-import com.dyonovan.neotech.ColorUtils
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.dyonovan.neotech.common.tiles.machines.generators.TileFluidGenerator
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display._
+import com.teambr.bookshelf.util.ColorUtils
 import net.minecraft.entity.player.EntityPlayer
 
 import scala.collection.mutable.ArrayBuffer

@@ -131,7 +131,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
                             if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.extractItem(x, getMaxStackExtract, true),
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                                 pos, pos.offset(dir), pos, worldObj), simulate = true)) {
-                                InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, getMaxStackExtract, dir, doMove = true)
+                                InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, nextResource.resource.stackSize, dir, doMove = true)
                                 if (tempInv.getStackInSlot(0) != null) {
                                     nextResource.resource = tempInv.getStackInSlot(0)
                                     extractOnMode(nextResource, simulate = false)
@@ -204,6 +204,8 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
       * @return
       */
     override def willAcceptResource(resourceEntity: ResourceEntity[_], isSending : Boolean): Boolean = {
+        if(!waitingQueue.isEmpty)
+            return false
         if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, isSending))
             return false
 
@@ -218,9 +220,12 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
             if (canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation) {
-                if (InventoryUtils.moveItemInto(tempInventory, 0, test(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite), -1, 64, dir, doMove = false)) {
+                val movedStack = InventoryUtils.getStackLeftAfterMove(tempInventory, 0, otherObjectToIItemHandler(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite), -1, 64, dir, doMove = false)
+                if (movedStack.isDefined) {
                     if(isSending)
                         waitingQueue.add(resource)
+                    if(movedStack.get != null && isSending)
+                        resource.resource.stackSize = resource.resource.stackSize - movedStack.get.stackSize
                     return true
                 }
             }
@@ -229,7 +234,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
         false
     }
 
-    def test(otherObject : AnyRef, dir : EnumFacing) : AnyRef = {
+    def otherObjectToIItemHandler(otherObject : AnyRef, dir : EnumFacing) : AnyRef = {
         if(waitingQueue.isEmpty)
             otherObject
         else {
@@ -257,26 +262,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
                     iterator.remove()
             }
 
-            tempInventoryTest = new Inventory {
-                override def initialSize: Int = otherInv.getSlots
-            }
-
-            tempInventoryTest.copyFrom(otherInv)
-
-            for(x <- 0 until waitingQueue.size) {
-                val tempInventoryUs = new Inventory() {
-                    override def initialSize: Int = 1
-                }
-
-                val resource = waitingQueue.get(x)
-
-                if(resource == null || resource.resource == null)
-                    return tempInventoryTest
-
-                tempInventoryUs.setInventorySlotContents(0, resource.resource.copy())
-                InventoryUtils.moveItemInto(tempInventoryUs, 0, tempInventoryTest, -1, 64, dir.getOpposite, doMove = true)
-            }
-            tempInventoryTest
+            otherInv
         }
     }
 

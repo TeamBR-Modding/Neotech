@@ -1,12 +1,11 @@
 package com.dyonovan.neotech.client.gui.machines.processors
 
 import java.awt.Color
-
-import com.dyonovan.neotech.ColorUtils
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.processors.ContainerElectricCrusher
 import com.dyonovan.neotech.common.tiles.machines.processors.TileElectricCrusher
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar}
+import com.teambr.bookshelf.util.ColorUtils
 import net.minecraft.entity.player.EntityPlayer
 
 import scala.collection.mutable.ArrayBuffer
