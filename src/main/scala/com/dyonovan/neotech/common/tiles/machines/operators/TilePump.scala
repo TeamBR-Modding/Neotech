@@ -1,10 +1,16 @@
 package com.dyonovan.neotech.common.tiles.machines.operators
 
+import java.util
+import java.util.Comparator
+
+import cofh.api.energy.{EnergyStorage, IEnergyHandler}
+import com.dyonovan.neotech.managers.BlockManager
+import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.common.tiles.traits.{FluidHandler, UpdatingTile}
 import net.minecraft.block.BlockLiquid
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraftforge.fluids._
 
 /**
@@ -17,10 +23,18 @@ import net.minecraftforge.fluids._
   * @author Paul Davis <pauljoda>
   * @since 2/4/2016
   */
-class TilePump extends UpdatingTile with FluidHandler {
+class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
 
     val RANGE = 50
+    def costToOperate = 4000
+    var energy = new EnergyStorage(4000 * 20)
+
     val TANK = 0
+    val cache : util.Queue[Long] = new util.PriorityQueue[Long](new Comparator[Long] {
+        override def compare(o1: Long, o2: Long): Int =
+            -BlockPos.fromLong(o1).distanceSq(pos.getX, pos.getY, pos.getZ)
+                    .compareTo(BlockPos.fromLong(o2).distanceSq(pos.getX, pos.getY, pos.getZ))
+    })
 
     override def setupTanks(): Unit = {
         tanks += new FluidTank(bucketsToMB(10))
@@ -29,33 +43,107 @@ class TilePump extends UpdatingTile with FluidHandler {
     override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
 
     override def onServerTick() : Unit = {
+        if(energy.getEnergyStored >= costToOperate) {
+            energy.extractEnergy(costToOperate, false)
+            buildPipeline()
+        }
+        tryOutput()
+    }
+
+    def buildPipeline() : Unit = {
+        val position = findBlockUnderPipeline()
+        if(worldObj.isAirBlock(position)) {
+            worldObj.setBlockState(position, BlockManager.mechanicalPipe.getDefaultState)
+            return
+        }
+        if(worldObj.getBlockState(position).getBlock != BlockManager.mechanicalPipe) {
+            if(cache.isEmpty)
+                buildCache(position)
+            else
+                pumpNext()
+            return
+        }
+        worldObj.setBlockState(position, BlockManager.mechanicalPipe.getDefaultState)
+    }
+
+    def findBlockUnderPipeline() : BlockPos = {
+        var position = new BlockPos(pos)
+        position = position.offset(EnumFacing.DOWN)
+        if(worldObj.isAirBlock(position)) {
+            return position
+        }
+        while(!worldObj.isAirBlock(position)) {
+            if(worldObj.getBlockState(position).getBlock != BlockManager.mechanicalPipe)
+                return position
+            position = position.offset(EnumFacing.DOWN)
+        }
+        position
+    }
+
+    def isValidSourceBlock(position : BlockPos) : Boolean = {
         if(tanks(TANK).getFluidAmount < tanks(TANK).getCapacity) {
-            worldObj.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock match {
+            val shouldMatch = tanks(TANK).getFluid != null
+            worldObj.getBlockState(position).getBlock match {
                 case fluid: BlockFluidBase =>
-                    val level = fluid.getFilledPercentage(worldObj, pos.offset(EnumFacing.DOWN))
+                    return fluid.getFilledPercentage(worldObj, position) == 1.0F && (if(shouldMatch) tanks(TANK).getFluid.getFluid == fluid.getFluid else true)
+                case water: Blocks.water.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
+                    return if (shouldMatch) tanks(TANK).getFluid.getFluid == FluidRegistry.WATER else true
+                case lava: Blocks.lava.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
+                    return if (shouldMatch) tanks(TANK).getFluid.getFluid == FluidRegistry.LAVA else true
+                case _ =>
+            }
+        }
+        false
+    }
+
+    def buildCache(startPos : BlockPos) : Unit = {
+        val lowerCorner = new Location(startPos.getX - RANGE,             0, startPos.getZ - RANGE)
+        val upperCorner = new Location(startPos.getX + RANGE, startPos.getY, startPos.getZ + RANGE)
+        val blocks = lowerCorner.getAllWithinBounds(upperCorner, includeInner = true, includeOuter = true)
+
+        for(location <- blocks.toArray[Location](new Array[Location](blocks.size()))) {
+            if(isValidSourceBlock(location.asBlockPos) && location.asBlockPos.distanceSq(startPos.getX, startPos.getY, startPos.getZ) <= RANGE * RANGE)
+                cache.add(location.asBlockPos.toLong)
+        }
+    }
+
+    def pumpNext() : Unit = {
+        val fluidPos = BlockPos.fromLong(cache.poll())
+        if(isValidSourceBlock(fluidPos))
+            pumpBlock(fluidPos)
+    }
+
+    def pumpBlock(position : BlockPos) : Boolean = {
+        if(tanks(TANK).getFluidAmount < tanks(TANK).getCapacity) {
+            worldObj.getBlockState(position).getBlock match {
+                case fluid: BlockFluidBase =>
+                    val level = fluid.getFilledPercentage(worldObj, position)
                     if (level == 1.0F) {
                         val fluidStack = new FluidStack(fluid.getFluid, 1000)
                         if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                             fill(EnumFacing.DOWN, fluidStack, doFill = true)
-                            worldObj.setBlockToAir(pos.offset(EnumFacing.DOWN))
+                            worldObj.setBlockState(position, Blocks.stone.getDefaultState)
+                            return true
                         }
                     }
-                case water: Blocks.water.type if worldObj.getBlockState(pos.offset(EnumFacing.DOWN)).getValue(BlockLiquid.LEVEL).intValue == 0 =>
+                case water: Blocks.water.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
                     val fluidStack = new FluidStack(FluidRegistry.WATER, 1000)
                     if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
-                        worldObj.setBlockToAir(pos.offset(EnumFacing.DOWN))
+                        worldObj.setBlockToAir(position)
+                        return true
                     }
-                case lava: Blocks.lava.type if worldObj.getBlockState(pos.offset(EnumFacing.DOWN)).getValue(BlockLiquid.LEVEL).intValue == 0 =>
+                case lava: Blocks.lava.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
                     val fluidStack = new FluidStack(FluidRegistry.LAVA, 1000)
                     if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
-                        worldObj.setBlockToAir(pos.offset(EnumFacing.DOWN))
+                        worldObj.setBlockState(position, Blocks.stone.getDefaultState)
+                        return true
                     }
                 case _ =>
             }
         }
-        tryOutput()
+        false
     }
 
     def tryOutput() : Unit = {
@@ -80,4 +168,59 @@ class TilePump extends UpdatingTile with FluidHandler {
         super[TileEntity].readFromNBT(tag)
         super[FluidHandler].readFromNBT(tag)
     }
+
+    /*******************************************************************************************************************
+      ************************************************ Energy methods **************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
+      *
+      * @param from Orientation the energy is received from.
+      * @param maxReceive Maximum amount of energy to receive.
+      * @param simulate If TRUE, the charge will only be simulated.
+      * @return Amount of energy that was (or would have been, if simulated) received.
+      */
+    override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
+        if (energy != null) {
+            val actual = energy.receiveEnergy(maxReceive, simulate)
+            if (worldObj != null)
+                worldObj.markBlockForUpdate(pos)
+            actual
+        } else 0
+    }
+
+    /**
+      * Used to extract energy from this tile. You should return zero if you don't want to be able to extract
+      *
+      * @param from The direction pulling from
+      * @param maxExtract The maximum amount to extract
+      * @param simulate True to just simulate, not actually drain
+      * @return How much energy was/should be drained
+      */
+    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
+
+    /**
+      * Get the current energy stored in the energy tank
+      *
+      * @param from The side to check (can be used if you have different energy storages)
+      * @return
+      */
+    override def getEnergyStored(from: EnumFacing): Int = energy.getEnergyStored
+
+    /**
+      * Get the maximum energy this handler can store, not the current
+      *
+      * @param from The side to check from (can be used if you have different energy storages)
+      * @return The maximum potential energy
+      */
+    override def getMaxEnergyStored(from: EnumFacing): Int = energy.getMaxEnergyStored
+
+    /**
+      * Checks if energy can connect to a given side
+      *
+      * @param from The face to check
+      * @return True if the face allows energy flow
+      */
+    override def canConnectEnergy(from: EnumFacing): Boolean = true
 }

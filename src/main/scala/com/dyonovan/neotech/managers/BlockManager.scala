@@ -45,6 +45,7 @@ object BlockManager {
     val thermalBinder = new BlockMachine("thermalBinder", classOf[TileThermalBinder])
 
     val pump = new BlockMachine("pump", classOf[TilePump], fourWayRotation = false)
+    val mechanicalPipe = new BlockMechanicalPipe("mechanicalPipe")
 
     //ores
     val oreCopper = new BlockOre("oreCopper", 1)
@@ -100,6 +101,7 @@ object BlockManager {
         registerBlock(thermalBinder, "thermalBinder", classOf[TileThermalBinder])
 
         registerBlock(pump, "pump", classOf[TilePump])
+        registerBlock(mechanicalPipe, "mechanicalPipe", null)
 
         //Ores
         registerBlock(oreCopper, "oreCopper", null, "oreCopper")

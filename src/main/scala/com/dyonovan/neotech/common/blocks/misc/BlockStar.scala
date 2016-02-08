@@ -136,13 +136,6 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
         }
     }
 
-    /**
-      * Get the MapColor for this Block and the given BlockState
-      */
-    override def getMapColor(state: IBlockState): MapColor = {
-        state.getValue(PipeProperties.COLOR).getMapColor
-    }
-
     protected override def createBlockState: BlockState = {
         new BlockState(this, PipeProperties.COLOR, NeoStates.ON_BLOCK)
     }
