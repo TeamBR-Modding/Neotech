@@ -204,7 +204,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
       * @return
       */
     override def willAcceptResource(resourceEntity: ResourceEntity[_], isSending : Boolean): Boolean = {
-        if(!waitingQueue.isEmpty)
+        if(!waitingQueue.isEmpty && isSending)
             return false
         if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, isSending))
             return false

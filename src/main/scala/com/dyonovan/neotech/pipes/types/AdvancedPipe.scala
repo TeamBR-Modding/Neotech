@@ -106,7 +106,6 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
         mode = 0
         redstone = 0
         frequency = 0
-        resetFilter()
         getWorld.markBlockForUpdate(getPos)
     }
 
