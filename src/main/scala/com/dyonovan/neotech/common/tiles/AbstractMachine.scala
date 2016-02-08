@@ -209,6 +209,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         super[InventorySided].writeToNBT(tag)
         super[InputOutput].writeToNBT(tag)
         energy.writeToNBT(tag)
+        tag.setInteger("RedstoneMode", redstone)
         if(updateClient && worldObj != null) {
             tag.setBoolean("UpdateEnergy", true)
             updateClient = false
@@ -225,6 +226,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         super[InputOutput].readFromNBT(tag)
         if(tag.hasKey("UpdateEnergy") && worldObj != null  )
             changeEnergy(tag.getInteger("Energy"))
+        redstone = tag.getInteger("RedstoneMode")
         energy.readFromNBT(tag)
     }
 
