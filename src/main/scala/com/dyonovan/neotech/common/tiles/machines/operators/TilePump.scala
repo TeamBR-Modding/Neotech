@@ -1,11 +1,9 @@
 package com.dyonovan.neotech.common.tiles.machines.operators
 
 import java.util
-import java.util.Comparator
 
 import cofh.api.energy.{EnergyStorage, IEnergyHandler}
 import com.dyonovan.neotech.managers.BlockManager
-import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.common.tiles.traits.{FluidHandler, UpdatingTile}
 import net.minecraft.block.BlockLiquid
 import net.minecraft.init.Blocks
@@ -30,11 +28,8 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
     var energy = new EnergyStorage(4000 * 20)
 
     val TANK = 0
-    val cache : util.Queue[Long] = new util.PriorityQueue[Long](new Comparator[Long] {
-        override def compare(o1: Long, o2: Long): Int =
-            -BlockPos.fromLong(o1).distanceSq(pos.getX, pos.getY, pos.getZ)
-                    .compareTo(BlockPos.fromLong(o2).distanceSq(pos.getX, pos.getY, pos.getZ))
-    })
+    var pumpingFrom = new BlockPos(pos)
+    lazy val cache : util.Queue[Long] = new util.LinkedList[Long]()
 
     override def setupTanks(): Unit = {
         tanks += new FluidTank(bucketsToMB(10))
@@ -82,7 +77,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
 
     def isValidSourceBlock(position : BlockPos) : Boolean = {
         if(tanks(TANK).getFluidAmount < tanks(TANK).getCapacity) {
-            val shouldMatch = tanks(TANK).getFluid != null
+            val shouldMatch = false
             worldObj.getBlockState(position).getBlock match {
                 case fluid: BlockFluidBase =>
                     return fluid.getFilledPercentage(worldObj, position) == 1.0F && (if(shouldMatch) tanks(TANK).getFluid.getFluid == fluid.getFluid else true)
@@ -97,20 +92,35 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
     }
 
     def buildCache(startPos : BlockPos) : Unit = {
-        val lowerCorner = new Location(startPos.getX - RANGE,             0, startPos.getZ - RANGE)
-        val upperCorner = new Location(startPos.getX + RANGE, startPos.getY, startPos.getZ + RANGE)
-        val blocks = lowerCorner.getAllWithinBounds(upperCorner, includeInner = true, includeOuter = true)
+        /* val lowerCorner = new Location(startPos.getX - RANGE,             0, startPos.getZ - RANGE)
+         val upperCorner = new Location(startPos.getX + RANGE, startPos.getY, startPos.getZ + RANGE)
+         val blocks = lowerCorner.getAllWithinBounds(upperCorner, includeInner = true, includeOuter = true)
 
-        for(location <- blocks.toArray[Location](new Array[Location](blocks.size()))) {
-            if(isValidSourceBlock(location.asBlockPos) && location.asBlockPos.distanceSq(startPos.getX, startPos.getY, startPos.getZ) <= RANGE * RANGE)
-                cache.add(location.asBlockPos.toLong)
+         for(location <- blocks.toArray[Location](new Array[Location](blocks.size()))) {
+             if(isValidSourceBlock(location.asBlockPos) && location.asBlockPos.distanceSq(startPos.getX, startPos.getY, startPos.getZ) <= RANGE * RANGE)
+                 cache.add(location.asBlockPos.toLong)
+         }*/
+        val stack : util.Stack[BlockPos] = new util.Stack[BlockPos]()
+        stack.push(startPos)
+        pumpingFrom = findBlockUnderPipeline()
+        while(!stack.isEmpty) {
+            val lookingPosition = stack.pop()
+            if(isValidSourceBlock(lookingPosition)) {
+                for(dir <- EnumFacing.VALUES) {
+                    val attachedPosition = lookingPosition.offset(dir)
+                    if(!cache.contains(attachedPosition.toLong) &&
+                            isValidSourceBlock(attachedPosition) &&
+                            attachedPosition.distanceSq(pumpingFrom.getX, pumpingFrom.getY, pumpingFrom.getZ) <= RANGE * RANGE) {
+                        stack.push(attachedPosition)
+                        cache.add(attachedPosition.toLong)
+                    }
+                }
+            }
         }
     }
 
     def pumpNext() : Unit = {
-        val fluidPos = BlockPos.fromLong(cache.poll())
-        if(isValidSourceBlock(fluidPos))
-            pumpBlock(fluidPos)
+        pumpBlock(BlockPos.fromLong(cache.poll()))
     }
 
     def pumpBlock(position : BlockPos) : Boolean = {
@@ -130,7 +140,6 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
                     val fluidStack = new FluidStack(FluidRegistry.WATER, 1000)
                     if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
-                        worldObj.setBlockToAir(position)
                         return true
                     }
                 case lava: Blocks.lava.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
