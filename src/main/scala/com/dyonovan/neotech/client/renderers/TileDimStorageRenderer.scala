@@ -22,6 +22,8 @@ class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
 
     override def renderTileEntityAt(tile: TileDimStorage, x: Double, y: Double, z: Double,  partialTicks: Float, breakPart: Int): Unit = {
         if (tile.getWorld.getBlockState(tile.getPos).getBlock.isInstanceOf[BlockDimStorage] && tile.getStackInSlot(0) != null) {
+            GlStateManager.pushMatrix()
+            GlStateManager.pushAttrib()
 
             val savedGLState = modifyGLState(Array(GL11.GL_BLEND, GL11.GL_LIGHTING), null)
             GL11.glEnable(GL11.GL_BLEND)
@@ -48,6 +50,8 @@ class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
             RenderUtils.restoreRenderState()
             RenderUtils.restoreColor()
             restoreGlState(savedGLState)
+            GlStateManager.popAttrib()
+            GlStateManager.popMatrix()
         }
     }
 }
