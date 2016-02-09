@@ -62,22 +62,20 @@ class TileFurnaceGenerator extends MachineGenerator {
       */
     override def manageBurnTime(): Boolean = {
         if(burnTime <= 1) {
-            if(getStackInSlot(INPUT_SLOT) != null) {
+            if (getStackInSlot(INPUT_SLOT) != null) {
                 burnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(INPUT_SLOT))
 
                 if (burnTime > 0) {
                     getStackInSlot(INPUT_SLOT).stackSize -= 1
-                    if(getStackInSlot(INPUT_SLOT).stackSize <= 0)
+                    if (getStackInSlot(INPUT_SLOT).stackSize <= 0)
                         setInventorySlotContents(INPUT_SLOT, null)
                     currentObjectBurnTime = burnTime
                     return true
                 }
             }
-        } else {
-            burnTime -= 1
-            return burnTime > 0
         }
-        false
+        burnTime -= 1
+        burnTime > 0
     }
 
     override def getDescription : String = {

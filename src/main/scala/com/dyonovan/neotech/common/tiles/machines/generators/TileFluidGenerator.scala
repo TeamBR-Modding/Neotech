@@ -65,7 +65,6 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
       * @return True if able to continue generating
       */
     override def manageBurnTime(): Boolean = {
-
         //Handle Items
         if(getStackInSlot(INPUT_SLOT) != null && FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)) != null &&
                 getStackInSlot(OUTPUT_SLOT) == null) {
@@ -84,19 +83,17 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
         //Do burntime
         if(burnTime <= 1) {
             val fluidDrained = tank.drain(FluidContainerRegistry.BUCKET_VOLUME / 10, true)
-            if(fluidDrained == null || fluidDrained.getFluid == null || fluidDrained.amount <= 0)
+            if (fluidDrained == null || fluidDrained.getFluid == null || fluidDrained.amount <= 0)
                 return false
 
             burnTime = FluidFuelValues.getFluidFuelValue(fluidDrained.getFluid.getName) / 10
-            if(burnTime > 0) {
+            if (burnTime > 0) {
                 currentObjectBurnTime = burnTime
                 return true
             }
-        } else {
-            burnTime -= 1
-            return burnTime > 0
         }
-        false
+        burnTime -= 1
+        burnTime > 0
     }
 
     override def getDescription : String = {

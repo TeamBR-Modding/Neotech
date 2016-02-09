@@ -54,7 +54,7 @@ abstract class MachineGenerator extends AbstractMachine {
       * generate RF. This is called every tick allowed, provided redstone mode requirements are met
       */
     override def doWork(): Unit = {
-        didWork = false
+        didWork = burnTime == 1
 
         //Transfer
         if (energy.getEnergyStored > 0) {
