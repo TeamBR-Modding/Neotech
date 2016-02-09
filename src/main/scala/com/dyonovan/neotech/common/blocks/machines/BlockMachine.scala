@@ -9,7 +9,7 @@ import com.dyonovan.neotech.common.container.machines.processors.{ContainerElect
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator, TileFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.machines.processors.{TileElectricCrusher, TileElectricFurnace, TileThermalBinder}
-import com.dyonovan.neotech.managers.BlockManager
+import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, OpensGui}
 import com.teambr.bookshelf.util.WorldUtils
@@ -85,7 +85,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getTileEntity(new BlockPos(x, y, z)) match {
-            case abstractMachine : AbstractMachine =>
+            case abstractMachine : AbstractMachine if player.getHeldItem != null && player.getHeldItem.getItem != ItemManager.wrench =>
                 abstractMachine.getServerGuiElement(ID, player, world, x, y, z)
             case _ => null
         }
@@ -94,7 +94,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getTileEntity(new BlockPos(x, y, z)) match {
-            case abstractMachine : AbstractMachine =>
+            case abstractMachine : AbstractMachine if player.getHeldItem != null && player.getHeldItem.getItem != ItemManager.wrench =>
                 abstractMachine.getClientGuiElement(ID, player, world, x, y, z)
             case _ => null
         }

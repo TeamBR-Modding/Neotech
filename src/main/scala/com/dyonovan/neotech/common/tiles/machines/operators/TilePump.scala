@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.common.tiles.machines.operators
 
 import java.util
+import java.util.Comparator
 
 import cofh.api.energy.{EnergyStorage, IEnergyHandler}
 import com.dyonovan.neotech.managers.BlockManager
@@ -29,7 +30,12 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
 
     val TANK = 0
     var pumpingFrom = new BlockPos(pos)
-    lazy val cache : util.Queue[Long] = new util.LinkedList[Long]()
+    var isBuildingCache = false
+    lazy val cache : util.Queue[BlockPos] = new util.PriorityQueue[BlockPos](new Comparator[BlockPos] {
+        override def compare(o1: BlockPos, o2: BlockPos): Int =
+            -o1.distanceSq(pumpingFrom.getX, pumpingFrom.getY, pumpingFrom.getZ)
+                        .compareTo(o2.distanceSq(pumpingFrom.getX, pumpingFrom.getY, pumpingFrom.getZ))
+    })
 
     override def setupTanks(): Unit = {
         tanks += new FluidTank(bucketsToMB(10))
@@ -37,8 +43,13 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
 
     override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
 
+    def operationDelay = 20
+
+    var ticker = operationDelay
     override def onServerTick() : Unit = {
-        if(energy.getEnergyStored >= costToOperate) {
+        ticker -= 1
+        if(!isBuildingCache && ticker <= 0 && energy.getEnergyStored >= costToOperate) {
+            ticker = operationDelay
             energy.extractEnergy(costToOperate, false)
             buildPipeline()
         }
@@ -77,7 +88,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
 
     def isValidSourceBlock(position : BlockPos) : Boolean = {
         if(tanks(TANK).getFluidAmount < tanks(TANK).getCapacity) {
-            val shouldMatch = false
+            val shouldMatch = tanks(TANK).getFluid != null
             worldObj.getBlockState(position).getBlock match {
                 case fluid: BlockFluidBase =>
                     return fluid.getFilledPercentage(worldObj, position) == 1.0F && (if(shouldMatch) tanks(TANK).getFluid.getFluid == fluid.getFluid else true)
@@ -92,14 +103,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
     }
 
     def buildCache(startPos : BlockPos) : Unit = {
-        /* val lowerCorner = new Location(startPos.getX - RANGE,             0, startPos.getZ - RANGE)
-         val upperCorner = new Location(startPos.getX + RANGE, startPos.getY, startPos.getZ + RANGE)
-         val blocks = lowerCorner.getAllWithinBounds(upperCorner, includeInner = true, includeOuter = true)
-
-         for(location <- blocks.toArray[Location](new Array[Location](blocks.size()))) {
-             if(isValidSourceBlock(location.asBlockPos) && location.asBlockPos.distanceSq(startPos.getX, startPos.getY, startPos.getZ) <= RANGE * RANGE)
-                 cache.add(location.asBlockPos.toLong)
-         }*/
+        isBuildingCache = true
         val stack : util.Stack[BlockPos] = new util.Stack[BlockPos]()
         stack.push(startPos)
         pumpingFrom = findBlockUnderPipeline()
@@ -108,19 +112,20 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
             if(isValidSourceBlock(lookingPosition)) {
                 for(dir <- EnumFacing.VALUES) {
                     val attachedPosition = lookingPosition.offset(dir)
-                    if(!cache.contains(attachedPosition.toLong) &&
+                    if(!cache.contains(attachedPosition) &&
                             isValidSourceBlock(attachedPosition) &&
                             attachedPosition.distanceSq(pumpingFrom.getX, pumpingFrom.getY, pumpingFrom.getZ) <= RANGE * RANGE) {
                         stack.push(attachedPosition)
-                        cache.add(attachedPosition.toLong)
+                        cache.add(attachedPosition)
                     }
                 }
             }
         }
+        isBuildingCache = false
     }
 
     def pumpNext() : Unit = {
-        pumpBlock(BlockPos.fromLong(cache.poll()))
+        pumpBlock(cache.poll())
     }
 
     def pumpBlock(position : BlockPos) : Boolean = {

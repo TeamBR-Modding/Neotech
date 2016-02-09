@@ -81,7 +81,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
         }
 
         //Do burntime
-        if(burnTime <= 1) {
+        if(energy.getEnergyStored < energy.getMaxEnergyStored  && burnTime <= 1) {
             val fluidDrained = tank.drain(FluidContainerRegistry.BUCKET_VOLUME / 10, true)
             if (fluidDrained == null || fluidDrained.getFluid == null || fluidDrained.amount <= 0)
                 return false

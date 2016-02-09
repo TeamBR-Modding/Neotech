@@ -61,7 +61,7 @@ class TileFurnaceGenerator extends MachineGenerator {
       * @return True if able to continue generating
       */
     override def manageBurnTime(): Boolean = {
-        if(burnTime <= 1) {
+        if(energy.getEnergyStored < energy.getMaxEnergyStored && burnTime <= 1) {
             if (getStackInSlot(INPUT_SLOT) != null) {
                 burnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(INPUT_SLOT))
 
