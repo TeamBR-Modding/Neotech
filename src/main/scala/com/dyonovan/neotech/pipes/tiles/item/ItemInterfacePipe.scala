@@ -204,8 +204,6 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
       * @return
       */
     override def willAcceptResource(resourceEntity: ResourceEntity[_], isSending : Boolean): Boolean = {
-        if(!waitingQueue.isEmpty && isSending)
-            return false
         if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, isSending))
             return false
 
@@ -215,54 +213,60 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
             override def initialSize: Int = 1
         }
 
-        tempInventory.setInventorySlotContents(0, resource.resource.copy())
-
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
             if (canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation) {
-                val movedStack = InventoryUtils.getStackLeftAfterMove(tempInventory, 0, otherObjectToIItemHandler(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite), -1, 64, dir, doMove = false)
-                if (movedStack.isDefined) {
-                    if(isSending)
-                        waitingQueue.add(resource)
-                    if(movedStack.get != null && isSending)
-                        resource.resource.stackSize = resource.resource.stackSize - movedStack.get.stackSize
-                    return true
+                val otherTile = createTileAndSimulate(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite, pos.offset(dir))
+                if (otherTile != null) {
+                    tempInventory.setInventorySlotContents(0, resource.resource.copy())
+
+                    val movedStack = InventoryUtils.getStackLeftAfterMove(tempInventory, 0, otherTile, -1, 64, dir, doMove = false)
+                    otherTile.invalidate()
+                    if (movedStack.isDefined) {
+                        if (isSending)
+                            waitingQueue.add(resource)
+                        if (movedStack.get != null && isSending)
+                            resource.resource.stackSize = resource.resource.stackSize - movedStack.get.stackSize
+                        return true
+                    }
                 }
             }
         }
-
         false
     }
 
-    def otherObjectToIItemHandler(otherObject : AnyRef, dir : EnumFacing) : AnyRef = {
-        if(waitingQueue.isEmpty)
-            otherObject
-        else {
-            var otherInv : IItemHandler = null
+    def createTileAndSimulate(otherObject : AnyRef, dir : EnumFacing, pos : BlockPos) : TileEntity = {
+        var otherTile : TileEntity = null
 
+        if(worldObj.getTileEntity(pos) != null) {
+            otherTile = worldObj.getBlockState(pos).getBlock.createTileEntity(worldObj, worldObj.getBlockState(pos))
+            val otherTag = new NBTTagCompound
+            worldObj.getTileEntity(pos).writeToNBT(otherTag)
+            otherTile.readFromNBT(otherTag)
+        }
+
+        if(waitingQueue.isEmpty)
+            otherTile
+        else {
             if(!otherObject.isInstanceOf[IItemHandler]) {
                 otherObject match {
-                    case iInventory: IInventory if !iInventory.isInstanceOf[ISidedInventory] => otherInv = new InvWrapper(iInventory)
-                    case iSided: ISidedInventory => otherInv = new SidedInvWrapper(iSided, dir)
+                    case iInventory: IInventory => //Must be an inventory
+                    case itemHandler : IItemHandler => //Or an ItemHandler
                     case _ => return null
                 }
-            } else otherObject match { //If we are a ItemHandler, we want to make sure not to wrap, it can be both IInventory and IItemHandler
-                case itemHandler: IItemHandler => otherInv = itemHandler
-                case _ => return null
             }
 
-            otherObject match { //Check for sidedness
-                case tileEntity: TileEntity if tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir) =>
-                    otherInv = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir)
-                case _ =>
-            }
             val iterator = waitingQueue.iterator() //Remove deads
             while (iterator.hasNext) {
                 if (iterator.next().isDead)
                     iterator.remove()
             }
 
-            otherInv
+            for(x <- 0 until waitingQueue.size) {
+                tempInventory.setStackInSlot(0, waitingQueue.get(x).resource.copy())
+                InventoryUtils.moveItemInto(tempInventory, 0, otherTile, -1, 64, dir, doMove = true)
+            }
+            otherTile
         }
     }
 
