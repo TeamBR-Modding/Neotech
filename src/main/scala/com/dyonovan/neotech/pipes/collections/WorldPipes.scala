@@ -18,7 +18,13 @@ object WorldPipes {
     val pipes = new util.ArrayList[InterfacePipe[_, _]]()
 
     def notifyPipes() = {
-        for(x <- 0 until pipes.size())
-            pipes.get(x).shouldRefreshCache = true
+        val iterator = pipes.iterator()
+        while(iterator.hasNext) {
+            val next = iterator.next()
+            if(next != null && !next.isInvalid)
+                next.shouldRefreshCache = true
+            else
+                iterator.remove()
+        }
     }
 }

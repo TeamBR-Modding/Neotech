@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.pipes.tiles.energy
 
 import java.util
+import java.util.Collections
 
 import cofh.api.energy.{EnergyStorage, IEnergyProvider, IEnergyReceiver}
 import com.dyonovan.neotech.pipes.entities.{EnergyResourceEntity, ResourceEntity}
@@ -228,7 +229,13 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
             return
 
         //Try and insert the energy
+        val faces : util.List[EnumFacing] = new util.ArrayList[EnumFacing]()
         for(dir <- EnumFacing.values()) {
+            faces.add(dir)
+        }
+        Collections.shuffle(faces)
+        for(x <- 0 until faces.size) {
+            val dir = faces.get(x)
             if(canConnectSink(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case receiver: IEnergyReceiver if !resource.isDead && pos.offset(dir).toLong != resource.fromTileLocation.toLong =>

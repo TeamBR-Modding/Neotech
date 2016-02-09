@@ -258,7 +258,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                     return true
                 } else {
                     playerIn.swingItem()
-                    return true
+                    return super.onBlockActivated(world, pos, state, playerIn, side, hitX, hitY, hitZ)
                 }
 
             case _ =>
