@@ -215,7 +215,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
 
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
-            if (canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation) {
+            if (worldObj != null && canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation) {
                 val otherTile = createTileAndSimulate(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite, pos.offset(dir))
                 if (otherTile != null) {
                     tempInventory.setInventorySlotContents(0, resource.resource.copy())
@@ -243,6 +243,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
             val otherTag = new NBTTagCompound
             worldObj.getTileEntity(pos).writeToNBT(otherTag)
             otherTile.readFromNBT(otherTag)
+            otherTile.setWorldObj(worldObj)
         }
 
         if(waitingQueue.isEmpty)
