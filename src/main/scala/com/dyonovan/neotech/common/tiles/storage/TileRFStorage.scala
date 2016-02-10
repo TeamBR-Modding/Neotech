@@ -32,9 +32,9 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile wit
 
     def initEnergy(t: Int): Unit = {
         t match {
-            case 1 => energy = new EnergyStorage(25000, 200, 200)
-            case 2 => energy = new EnergyStorage(1000000, 1000, 1000)
-            case 3 => energy = new EnergyStorage(10000000, 10000, 10000)
+            case 1 => energy = new EnergyStorage(25000, 2000, 2000)
+            case 2 => energy = new EnergyStorage(1000000, 10000, 10000)
+            case 3 => energy = new EnergyStorage(10000000, 100000, 100000)
             case 4 =>
                 energy = new EnergyStorage(100000000, 100000, 100000)
                 energy.setEnergyStored(energy.getMaxEnergyStored)

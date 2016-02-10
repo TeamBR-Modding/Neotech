@@ -255,7 +255,7 @@ neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces R
 
 # Energy Interface Pipe
 neotech.energyInterfacePipe.name=Energy Interface
-neotech.energyInterfacePipe.desc=The Energy Interface Pipe allows Redstone Flux to be transmitted through your pipe network. This pipe will extract on Round Robin by default. The base extraction is 200 RF per packet with a delay of 20 ticks per extraction and a speed of 0.5 blocks/tick. This pipe can not use a filter.
+neotech.energyInterfacePipe.desc=The Energy Interface Pipe allows Redstone Flux to be transmitted through your pipe network. This pipe will extract on Round Robin by default. The base extraction is 2000 RF per packet with a delay of 20 ticks per extraction and a speed of 0.5 blocks/tick. This pipe can not use a filter.
 neotech.energyInterfacePipe.processorUpgrade.desc=Processors reduce the delay between extraction by the processor count multiplied by 2. They also increase the speed the resource is extracted by 0.5 blocks/tick per processor.
 neotech.energyInterfacePipe.hardDriveUpgrade.desc=Hard drives multiply how much is extracted by the number of processors multiplied by 4.
 neotech.energyInterfacePipe.controlUpgrade.desc=The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals. It also gives you the ability to change what frequency this pipe is set two. Only two pipes with the same frequency will interact.
