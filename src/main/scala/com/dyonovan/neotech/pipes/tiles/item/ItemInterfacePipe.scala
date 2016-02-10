@@ -219,15 +219,40 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
                     val movedStack = InventoryUtils.getStackLeftAfterMove(tempInventory, 0, otherTile, -1, 64, dir, doMove = false)
                     otherTile.invalidate()
                     if (movedStack.isDefined) {
-                        waitingQueue.add(resource)
-                        if (movedStack.get != null)
-                            resource.resource.stackSize = resource.resource.stackSize - movedStack.get.stackSize
                         return true
                     }
                 }
             }
         }
         false
+    }
+
+
+    /**
+      * Called when the resource has found its target and is actually sending, change resource size here
+      *
+      * @param resource
+      */
+    override def resourceBeingExtracted(resource: ItemResourceEntity): Unit = {
+        val tilePos = resource.destinationTile
+        for(dir <- EnumFacing.values()) {
+            if (worldObj != null && pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong
+                    && worldObj.getTileEntity(tilePos) != null && !worldObj.getTileEntity(tilePos).isInstanceOf[SimplePipe]) { //Checking simple pipe just to be safe, shouldn't ever be a pipe
+            val otherTile = createTileAndSimulate(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite, pos.offset(dir))
+                if (otherTile != null) {
+                    tempInventory.setInventorySlotContents(0, resource.resource.copy())
+
+                    val movedStack = InventoryUtils.getStackLeftAfterMove(tempInventory, 0, otherTile, -1, 64, dir, doMove = false)
+                    otherTile.invalidate()
+                    if (movedStack.isDefined) {
+                        waitingQueue.add(resource)
+                        if (movedStack.get != null)
+                            resource.resource.stackSize = resource.resource.stackSize - movedStack.get.stackSize
+                        return
+                    }
+                }
+            }
+        }
     }
 
     def createTileAndSimulate(otherObject : AnyRef, dir : EnumFacing, pos : BlockPos) : TileEntity = {

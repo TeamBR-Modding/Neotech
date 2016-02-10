@@ -202,7 +202,6 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
                     case receiver: IEnergyReceiver =>
                         val usedEnergy = receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true)
                         if (usedEnergy > 0) {
-                            resource.resource.setEnergyStored(usedEnergy)
                             return true
                         }
                     case _ =>
@@ -210,6 +209,28 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
             }
         }
         false
+    }
+
+    /**
+      * Called when the resource has found its target and is actually sending, change resource size here
+      *
+      * @param resource
+      */
+    override def resourceBeingExtracted(resource: EnergyResourceEntity): Unit = {
+        val tilePos = resource.destinationTile
+        for(dir <- EnumFacing.values()) {
+            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
+                worldObj.getTileEntity(tilePos) match {
+                    case receiver: IEnergyReceiver =>
+                        val usedEnergy = receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true)
+                        if (usedEnergy > 0) {
+                            resource.resource.setEnergyStored(usedEnergy)
+                            return
+                        }
+                    case _ =>
+                }
+            }
+        }
     }
 
     /**

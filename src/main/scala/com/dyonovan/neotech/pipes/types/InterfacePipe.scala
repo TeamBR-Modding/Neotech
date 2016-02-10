@@ -272,6 +272,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             //If we have a path add it
             if (!simulate) {
                 resources.add(resource)
+                getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 queue.clear()
             } else {
                 nextResource = resource
@@ -393,6 +394,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             //If we have a path add it
             if (!simulate) {
                 resources.add(resource)
+                getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 queue.clear()
             } else {
                 nextResource = resource
@@ -538,6 +540,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             //If we have a path add it
             if (!simulate) {
                 resources.add(resource)
+                getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 queue.clear()
             } else {
                 nextResource = resource
@@ -582,6 +585,12 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
       * @return A list of the tiles that are valid sinks
       */
     def getAttachedSinks: util.List[Long]
+
+    /**
+      * Called when the resource has found its target and is actually sending, change resource size here
+      * @param resource
+      */
+    def resourceBeingExtracted(resource : R) : Unit
 
     /**
       * Used to check if this pipe can accept a resource

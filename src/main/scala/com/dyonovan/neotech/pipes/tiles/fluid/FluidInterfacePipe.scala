@@ -193,8 +193,6 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
                     case tank: IFluidHandler =>
                         val filledAmount = test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false)
                         if (filledAmount > 0) {
-                            resource.resource.getFluid.amount = filledAmount
-                            waitingQueue.add(resource)
                             return true
                         }
                     case _ =>
@@ -202,6 +200,29 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
             }
         }
         false
+    }
+
+    /**
+      * Called when the resource has found its target and is actually sending, change resource size here
+      *
+      * @param resource
+      */
+    override def resourceBeingExtracted(resource: FluidResourceEntity): Unit = {
+        val tilePos = resource.destinationTile
+        for(dir <- EnumFacing.values()) {
+            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
+                worldObj.getTileEntity(tilePos) match {
+                    case tank: IFluidHandler =>
+                        val filledAmount = test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false)
+                        if (filledAmount > 0) {
+                            resource.resource.getFluid.amount = filledAmount
+                            waitingQueue.add(resource)
+                            return
+                        }
+                    case _ =>
+                }
+            }
+        }
     }
 
     def test(otherTank : IFluidHandler, dir : EnumFacing): IFluidHandler = {
