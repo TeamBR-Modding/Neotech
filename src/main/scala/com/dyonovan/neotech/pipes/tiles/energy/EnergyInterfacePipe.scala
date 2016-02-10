@@ -74,11 +74,12 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
         var rate = 2000
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
             rate *= (getUpgradeBoard.getHardDriveCount * 4)
-        if(acceptRF == -1)
+        /*if(acceptRF == -1)
             rate * 10
-        else acceptRF
+        else acceptRF*/
+        rate
     }
-    var acceptRF : Int = -1
+    //var acceptRF : Int = -1
 
     /**
       * Get how many ticks to 'cooldown' between operations.
