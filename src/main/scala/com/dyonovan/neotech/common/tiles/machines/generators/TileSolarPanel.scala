@@ -112,6 +112,15 @@ class TileSolarPanel extends MachineGenerator with Waila {
 
     override def canConnectEnergy(from: EnumFacing): Boolean = from == EnumFacing.DOWN
 
+    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = {
+        if (from == EnumFacing.DOWN) {
+            val actual = energy.extractEnergy(maxExtract, simulate)
+            worldObj.markBlockForUpdate(pos)
+            return actual
+        }
+        0
+    }
+
     /**
       * Write the tag
       */
