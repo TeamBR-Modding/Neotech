@@ -418,6 +418,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
         if (simulate) {
             if(shouldRefreshCache) {
                 sinkPipes.clear()
+                sinkTiles.clear()
                 distance.clear()
                 parent.clear()
                 queue.clear()
@@ -498,13 +499,25 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             }
 
             if(destination == null && pickNext) {
-                destination = BlockPos.fromLong(sinkTiles.get(0))
-                lastSink = sinkTiles.get(0)
-            } else if(destination == null) {
+                for (i <- 0 until sinkTiles.size()) {
+                    if (getWorld != null && getWorld.getTileEntity(BlockPos.fromLong(sinkTiles.get(i))) != null &&
+                            parent.get(sinkTiles.get(i)) != null &&
+                            getWorld.getTileEntity(parent.get(sinkTiles.get(i))) != null &&
+                            getWorld.getTileEntity(parent.get(sinkTiles.get(i))).asInstanceOf[InterfacePipe[T, R]].willAcceptResource(resource, BlockPos.fromLong(sinkTiles.get(i)))) {
+                        if (pickNext) {
+                            destination = BlockPos.fromLong(sinkTiles.get(i))
+                            lastSink = sinkTiles.get(i)
+                            pickNext = false
+                        }
+                        if (sinkTiles.get(i) == lastSink && destination == null)
+                            pickNext = true
+                    }
+                }
+            }
+            if(destination == null) {
                 lastSink = 0
                 return false
             }
-
 
             if(!simulate)
                 lastSink = lastLastSink
