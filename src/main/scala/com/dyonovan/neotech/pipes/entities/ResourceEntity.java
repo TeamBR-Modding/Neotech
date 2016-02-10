@@ -1,7 +1,9 @@
 package com.dyonovan.neotech.pipes.entities;
 
+import com.dyonovan.neotech.pipes.types.InterfacePipe;
 import com.dyonovan.neotech.pipes.types.SimplePipe;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
@@ -51,9 +53,9 @@ abstract public class ResourceEntity<R> {
     //The path and destination
     public Stack<Vec3> pathQueue;
     public Vec3 currentTarget;
-    public BlockPos from;
     public BlockPos fromTileLocation;
-    public BlockPos destination;
+    public BlockPos destinationPipe;
+    public BlockPos destinationTile;
 
     /**
      * Stub used in reading from server
@@ -68,16 +70,16 @@ abstract public class ResourceEntity<R> {
      * @param z The Z Position
      * @param momentum How fast to move
      */
-    public ResourceEntity(R toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos senderTile, BlockPos receiver, World theWorld) {
+    public ResourceEntity(R toMove, double x, double y, double z, double momentum, BlockPos senderTile, BlockPos rPipe, BlockPos rTile, World theWorld) {
         resource = toMove;
         xPos = prevX = x;
         yPos = prevY = y;
         zPos = prevZ = z;
         speed = nextSpeed = momentum;
 
-        from = new BlockPos(sender);
         fromTileLocation = new BlockPos(senderTile);
-        destination = new BlockPos(receiver);
+        destinationPipe = new BlockPos(rPipe);
+        destinationTile = new BlockPos(rTile);
         world = theWorld;
 
         pathQueue = new Stack<>();
@@ -182,6 +184,17 @@ abstract public class ResourceEntity<R> {
             SimplePipe pipe = (SimplePipe) world.getTileEntity(new BlockPos(currentTarget.xCoord, currentTarget.yCoord, currentTarget.zCoord));
             pipe.onResourceEnteredPipe(this);
             return true;
+        } else if(new BlockPos(currentTarget.xCoord, currentTarget.yCoord, currentTarget.zCoord).toLong() == fromTileLocation.toLong()) {
+            return true;
+        } else if(new BlockPos(currentTarget.xCoord, currentTarget.yCoord, currentTarget.zCoord).toLong() == destinationTile.toLong()) {
+            BlockPos tilePos = new BlockPos(currentTarget.xCoord, currentTarget.yCoord, currentTarget.zCoord);
+            for(EnumFacing dir : EnumFacing.values()) {
+                if(tilePos.offset(dir).toLong() == destinationPipe.toLong()) {
+                    //noinspection unchecked
+                    ((InterfacePipe)world.getTileEntity(destinationPipe)).tryInsertResource(this, dir.getOpposite());
+                }
+            }
+            return true;
         } else {
             isDead = true;
             return false;
@@ -209,17 +222,17 @@ abstract public class ResourceEntity<R> {
      * Finds the path to the registered destination
      */
     public boolean findPathToDestination() {
-        if(world != null && destination != null && world.getTileEntity(new BlockPos(xPos, yPos, zPos)) instanceof SimplePipe) {
-            SimplePipe currentPipe = (SimplePipe) world.getTileEntity(new BlockPos(xPos, yPos, zPos));
+        if(world != null && destinationTile != null && isValidBlockToTravel(new BlockPos(xPos, yPos, zPos))) {
+            TileEntity currentTile = world.getTileEntity(new BlockPos(xPos, yPos, zPos));
 
             HashMap<Long, Integer> distance = new HashMap<>();
             HashMap<Long, BlockPos> parent = new HashMap<>();
 
-            distance.put(currentPipe.getPosAsLong(), 0); //Distance from source to source
-            parent.put(currentPipe.getPosAsLong(), null); //Previous pipe in best path
+            distance.put(currentTile.getPos().toLong(), 0); //Distance from source to source
+            parent.put(currentTile.getPos().toLong(), null); //Previous pipe in best path
 
             Queue<BlockPos> queue = new LinkedList<>(); //Build the queue
-            queue.add(BlockPos.fromLong(currentPipe.getPosAsLong())); //Add to the queue
+            queue.add(BlockPos.fromLong(currentTile.getPos().toLong())); //Add to the queue
 
             while(!queue.isEmpty()) {
                 BlockPos thisPos = queue.poll();
@@ -242,9 +255,9 @@ abstract public class ResourceEntity<R> {
                                         parent.put(otherPos.toLong(), thisPos);
                                     }
 
-                                    if (otherPos.toLong() == destination.toLong()) { //Found it!
+                                    if (otherPos.toLong() == destinationTile.toLong()) { //Found it!
                                         pathQueue.clear();
-                                        BlockPos u = destination;
+                                        BlockPos u = destinationTile;
                                         while (parent.get(u.toLong()) != null) {
                                             pathQueue.push(new Vec3(u.getX() + 0.5, u.getY() + 0.5, u.getZ() + 0.5));
                                             u = parent.get(u.toLong());
@@ -255,11 +268,43 @@ abstract public class ResourceEntity<R> {
                             }
                         }
                     }
+                } else {
+                    for (EnumFacing facing : EnumFacing.values()) {
+                        if (thisPos.offset(facing) instanceof SimplePipe) {
+                            BlockPos otherPos = thisPos.offset(facing);
+                            if (distance.get(otherPos.toLong()) == null) {
+                                queue.add(otherPos);
+                                distance.put(otherPos.toLong(), Integer.MAX_VALUE); //Set distance to the max
+                                parent.put(otherPos.toLong(), null); //Set no parent
+
+                                int newDistance = (int) (distance.get(thisPos.toLong()) + thisPos.distanceSq(otherPos));
+                                if (newDistance < distance.get(otherPos.toLong())) {
+                                    distance.put(otherPos.toLong(), newDistance);
+                                    parent.put(otherPos.toLong(), thisPos);
+                                }
+
+                                if (otherPos.toLong() == destinationTile.toLong()) { //Found it!
+                                    pathQueue.clear();
+                                    BlockPos u = destinationTile;
+                                    while (parent.get(u.toLong()) != null) {
+                                        pathQueue.push(new Vec3(u.getX() + 0.5, u.getY() + 0.5, u.getZ() + 0.5));
+                                        u = parent.get(u.toLong());
+                                    }
+                                    return true;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             isDead = true;
         }
         return false;
+    }
+
+    public boolean isValidBlockToTravel(BlockPos pos) {
+        return world.getTileEntity(pos) instanceof SimplePipe ||
+                pos.toLong() == destinationTile.toLong() || pos.toLong() == fromTileLocation.toLong();
     }
 
     /**

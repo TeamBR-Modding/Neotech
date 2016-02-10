@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.pipes.tiles.energy
 
 import java.util
-import java.util.Collections
 
 import cofh.api.energy.{EnergyStorage, IEnergyProvider, IEnergyReceiver}
 import com.dyonovan.neotech.pipes.entities.{EnergyResourceEntity, ResourceEntity}
@@ -116,7 +115,7 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
                             tempStorage.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true))
                             val energyResourceEntity = new EnergyResourceEntity(tempStorage,
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                pos, pos.offset(dir), pos.north(), getWorld)
+                                pos.offset(dir), pos.north(), pos.north(), getWorld)
                             if (extractOnMode(energyResourceEntity, simulate = true)) {
                                 provider.extractEnergy(dir.getOpposite, tempStorage.getEnergyStored, false)
                                 extractOnMode(nextResource, simulate = false)
@@ -136,12 +135,7 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
       * @param resource
       */
     override def returnResource(resource: EnergyResourceEntity): Unit = {
-        if(resource.resource.getEnergyStored <= 0) {
-            resource.isDead = true
-        } else {
-            resource.destination = new BlockPos(resource.from)
-            resource.findPathToDestination()
-        }
+        resource.isDead = true
     }
 
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
@@ -194,16 +188,16 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
       * @param resourceEntity
       * @return
       */
-    override def willAcceptResource(resourceEntity: ResourceEntity[_], isSending : Boolean): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[EnergyResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, isSending))
+    override def willAcceptResource(resourceEntity: ResourceEntity[_], tilePos : BlockPos): Boolean = {
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[EnergyResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, tilePos))
             return false
 
         val resource = resourceEntity.asInstanceOf[EnergyResourceEntity]
 
         //Try and insert the energy
         for(dir <- EnumFacing.values()) {
-            if (canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation) {
-                worldObj.getTileEntity(pos.offset(dir)) match {
+            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
+                worldObj.getTileEntity(tilePos) match {
                     case receiver: IEnergyReceiver =>
                         val usedEnergy = receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true)
                         if (usedEnergy > 0) {
@@ -218,38 +212,48 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
     }
 
     /**
+      * Used to get a list of what tiles are attached that can accept resources. Don't worry about if full or not,
+      * just if this pipe interfaces with the tile add it here
+      *
+      * @return A list of the tiles that are valid sinks
+      */
+    override def getAttachedSinks: util.List[Long] = {
+        val returnList = new util.ArrayList[Long]()
+        for(dir <- EnumFacing.values()) {
+            if (canConnectSink(dir)) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case receiver: IEnergyReceiver => returnList.add(pos.offset(dir).toLong)
+                    case _ =>
+                }
+            }
+        }
+        returnList
+    }
+
+    /**
       * Try and insert the resource into an inventory.
       *
       * It is pretty good practice to send the resource back if you can't remove all of it
       *
       * @param resource
       */
-    override def tryInsertResource(resource: EnergyResourceEntity): Unit = {
-        if(resource == null || resource.resource == null)
+    override def tryInsertResource(resource: EnergyResourceEntity, dir : EnumFacing): Unit = {
+        if (resource == null || resource.resource == null)
             return
 
-        //Try and insert the energy
-        val faces : util.List[EnumFacing] = new util.ArrayList[EnumFacing]()
-        for(dir <- EnumFacing.values()) {
-            faces.add(dir)
-        }
-        Collections.shuffle(faces)
-        for(x <- 0 until faces.size) {
-            val dir = faces.get(x)
-            if(canConnectSink(dir)) {
-                worldObj.getTileEntity(pos.offset(dir)) match {
-                    case receiver: IEnergyReceiver if !resource.isDead && pos.offset(dir).toLong != resource.fromTileLocation.toLong =>
-                        receiver.receiveEnergy(dir.getOpposite, resource.resource.extractEnergy(resource.resource.getEnergyStored, false), false)
-                        if (resource.resource.getEnergyStored <= 0)
-                            resource.isDead = true
-                    case _ =>
-                }
+        if (canConnectSink(dir)) {
+            worldObj.getTileEntity(pos.offset(dir)) match {
+                case receiver: IEnergyReceiver if !resource.isDead =>
+                    receiver.receiveEnergy(dir.getOpposite, resource.resource.extractEnergy(resource.resource.getEnergyStored, false), false)
+                    if (resource.resource.getEnergyStored <= 0)
+                        resource.isDead = true
+                case _ =>
             }
-        }
 
-        //If we couldn't fill, move back to source
-        if(!resource.isDead) {
-            resource.isDead = true
+            //If we couldn't fill, move back to source
+            if (!resource.isDead) {
+                resource.isDead = true
+            }
         }
     }
 }

@@ -130,7 +130,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
                         if (otherInv.extractItem(x, getMaxStackExtract, true) != null) {
                             if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.extractItem(x, getMaxStackExtract, true),
                                 pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                pos, pos.offset(dir), pos, worldObj), simulate = true)) {
+                                pos.offset(dir), pos.north(), pos.north(), worldObj), simulate = true)) {
                                 InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, nextResource.resource.stackSize, dir, doMove = true)
                                 if (tempInv.getStackInSlot(0) != null) {
                                     nextResource.resource = tempInv.getStackInSlot(0)
@@ -151,11 +151,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
       * add it to the world
       */
     override def returnResource(resource: ItemResourceEntity): Unit = {
-        //If we couldn't fill, move back to source
-        if(!resource.isDead) {
-            resource.destination = new BlockPos(resource.from)
-            resource.findPathToDestination()
-        }
+        resource.isDead = true
     }
 
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
@@ -193,7 +189,6 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
 
     val waitingQueue  = new util.ArrayList[ItemResourceEntity]()
     var tempInventory: Inventory = null
-    var tempInventoryTest: Inventory = null
 
     /**
       * Used to check if this pipe can accept a resource
@@ -203,8 +198,8 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
       * @param resourceEntity
       * @return
       */
-    override def willAcceptResource(resourceEntity: ResourceEntity[_], isSending : Boolean): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, isSending))
+    override def willAcceptResource(resourceEntity: ResourceEntity[_], tilePos : BlockPos): Boolean = {
+        if(resourceEntity == null || !resourceEntity.isInstanceOf[ItemResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, tilePos))
             return false
 
         val resource = resourceEntity.asInstanceOf[ItemResourceEntity]
@@ -215,8 +210,8 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
 
         //Try and insert the stack
         for(dir <- EnumFacing.values()) {
-            if (worldObj != null && canConnectSink(dir) && pos.offset(dir) != resource.fromTileLocation
-                    && worldObj.getTileEntity(pos.offset(dir)) != null && !worldObj.getTileEntity(pos.offset(dir)).isInstanceOf[SimplePipe]) {
+            if (worldObj != null && pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong
+                    && worldObj.getTileEntity(tilePos) != null && !worldObj.getTileEntity(tilePos).isInstanceOf[SimplePipe]) { //Checking simple pipe just to be safe, shouldn't ever be a pipe
                 val otherTile = createTileAndSimulate(worldObj.getTileEntity(pos.offset(dir)), dir.getOpposite, pos.offset(dir))
                 if (otherTile != null) {
                     tempInventory.setInventorySlotContents(0, resource.resource.copy())
@@ -224,9 +219,8 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
                     val movedStack = InventoryUtils.getStackLeftAfterMove(tempInventory, 0, otherTile, -1, 64, dir, doMove = false)
                     otherTile.invalidate()
                     if (movedStack.isDefined) {
-                        if (isSending)
-                            waitingQueue.add(resource)
-                        if (movedStack.get != null && isSending)
+                        waitingQueue.add(resource)
+                        if (movedStack.get != null)
                             resource.resource.stackSize = resource.resource.stackSize - movedStack.get.stackSize
                         return true
                     }
@@ -272,7 +266,27 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
         }
     }
 
-    override def tryInsertResource(resource : ItemResourceEntity) : Unit = {
+    /**
+      * Used to get a list of what tiles are attached that can accept resources. Don't worry about if full or not,
+      * just if this pipe interfaces with the tile add it here
+      *
+      * @return A list of the tiles that are valid sinks
+      */
+    override def getAttachedSinks: util.List[Long] = {
+        val returnList = new util.ArrayList[Long]()
+        for(dir <- EnumFacing.values()) {
+            if (canConnectSink(dir)) {
+                worldObj.getTileEntity(pos.offset(dir)) match {
+                    case receiver : IItemHandler  => returnList.add(pos.offset(dir).toLong)
+                    case receiver : IInventory  => returnList.add(pos.offset(dir).toLong)
+                    case _ =>
+                }
+            }
+        }
+        returnList
+    }
+
+    override def tryInsertResource(resource : ItemResourceEntity, dir : EnumFacing) : Unit = {
         val tempActualInsert = new Inventory() {
             override def initialSize: Int = 1
         }
@@ -280,16 +294,15 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
         tempActualInsert.setInventorySlotContents(0, resource.resource)
 
         //Try and insert the stack
-        for(dir <- EnumFacing.values()) {
-            if(canConnectSink(dir) && pos.offset(dir).toLong != resource.fromTileLocation.toLong && InventoryUtils.moveItemInto(tempActualInsert, 0, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true)) {
-                resource.resource = tempActualInsert.getStackInSlot(0)
-                if(resource.resource == null || resource.resource.stackSize <= 0) {
-                    resource.isDead = true
-                    resource.resource = null
-                    waitingQueue.remove(resource)
-                }
+        if(canConnectSink(dir) && InventoryUtils.moveItemInto(tempActualInsert, 0, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true)) {
+            resource.resource = tempActualInsert.getStackInSlot(0)
+            if(resource.resource == null || resource.resource.stackSize <= 0) {
+                resource.isDead = true
+                resource.resource = null
+                waitingQueue.remove(resource)
             }
         }
+
         //If we couldn't fill, move back to source
         if(!resource.isDead) {
             resource.isDead = true

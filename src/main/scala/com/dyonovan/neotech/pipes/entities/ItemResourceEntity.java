@@ -47,12 +47,11 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
      * @param y        The Y Position
      * @param z        The Z Position
      * @param momentum How fast to move
-     * @param sender
-     * @param receiver
+
      * @param theWorld
      */
-    public ItemResourceEntity(ItemStack toMove, double x, double y, double z, double momentum, BlockPos sender, BlockPos senderTile, BlockPos receiver, World theWorld) {
-        super(toMove, x, y, z, momentum, sender, senderTile, receiver, theWorld);
+    public ItemResourceEntity(ItemStack toMove, double x, double y, double z, double momentum, BlockPos senderTile, BlockPos rPipe, BlockPos rTile, World theWorld) {
+        super(toMove, x, y, z, momentum, senderTile, rPipe, rTile, theWorld);
     }
 
     @Override
@@ -121,8 +120,8 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
         tag.setDouble("Y", yPos);
         tag.setDouble("Z", zPos);
         tag.setDouble("Speed", speed);
-        tag.setLong("Destination", destination.toLong());
-        tag.setLong("From", from.toLong());
+        tag.setLong("DestinationPipe", destinationPipe.toLong());
+        tag.setLong("DestinationTile", destinationTile.toLong());
         tag.setLong("FromTile", fromTileLocation.toLong());
     }
 
@@ -135,8 +134,8 @@ public class ItemResourceEntity extends ResourceEntity<ItemStack> {
         yPos = tag.getDouble("Y");
         zPos = tag.getDouble("Z");
         nextSpeed = tag.getDouble("Speed");
-        destination = BlockPos.fromLong(tag.getLong("Destination"));
-        from = BlockPos.fromLong(tag.getLong("From"));
+        destinationPipe = BlockPos.fromLong(tag.getLong("DestinationPipe"));
+        destinationTile = BlockPos.fromLong(tag.getLong("DestinationTile"));
         fromTileLocation = BlockPos.fromLong(tag.getLong("FromTile"));
         pathQueue = new Stack<>();
     }
