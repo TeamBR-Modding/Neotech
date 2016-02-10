@@ -59,6 +59,7 @@ object NeoTech {
         ConfigRegistry.preInit()
         BlockManager.preInit()
         ItemManager.preInit()
+        FluidManager.preInit()
         proxy.preInit()
         GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
         CraftingRecipeManager.preInit()
@@ -66,6 +67,7 @@ object NeoTech {
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
+        TinkersIntegration.postInit()
         FertilizerBlacklistRegistry.init()
         CrusherRecipeRegistry.init()
         FluidFuelValues.init()

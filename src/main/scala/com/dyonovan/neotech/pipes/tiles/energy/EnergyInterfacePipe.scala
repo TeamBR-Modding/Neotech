@@ -71,7 +71,7 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
       * @return
       */
     def getMaxRFDrain : Int = {
-        var rate = 200
+        var rate = 2000
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
             rate *= (getUpgradeBoard.getHardDriveCount * 4)
         if(acceptRF == -1)
