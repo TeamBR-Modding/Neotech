@@ -4,8 +4,9 @@ import com.dyonovan.neotech.client.gui.machines.processors.GuiThermalBinder
 import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.MachineProcessor
-import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.teambr.bookshelf.notification.{NotificationHelper, Notification}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -74,6 +75,51 @@ class TileThermalBinder extends MachineProcessor {
         isRunning = false
         cookTime = 0
         false
+    }
+
+    /**
+      * Used to check if the amount of upgrades do not exceed max allowed
+      *
+      * @return True if valid configuration
+      */
+    def isValid: Boolean = {
+        if (getStackInSlot(MB_INPUT) == null) return false
+
+        val board = getStackInSlot(MB_INPUT)
+        if (board.hasTagCompound) {
+            for (i <- 0 to 3) {
+                if (getStackInSlot(i) != null) {
+                    val notify = new Notification(new ItemStack(BlockManager.thermalBinder), "Slots Occupied",
+                        "Empty Slots", Notification.SHORT_DURATION)
+                    NotificationHelper.addNotification(notify)
+                    return false
+                }}
+            true
+        } else {
+            var pro = 0
+            var hd = 0
+            var cap = 0
+            var exp = 0
+            for (i <- 0 to 3) {
+                if (getStackInSlot(i) != null) {
+                    val item = getStackInSlot(i).getItem
+                    item match {
+                        case _: ItemManager.upgradeControl.type => cap += getStackInSlot(i).stackSize
+                        case _: ItemManager.upgradeExpansion.type => exp += getStackInSlot(i).stackSize
+                        case _: ItemManager.upgradeHardDrive.type => hd += getStackInSlot(i).stackSize
+                        case _: ItemManager.upgradeProcessor.type => pro += getStackInSlot(i).stackSize
+                        case _ =>
+                    }
+                }
+            }
+            if (pro <= 8 && hd <= 8 && cap <= 1 && exp <= 1) true
+            else {
+                val notify = new Notification(new ItemStack(BlockManager.thermalBinder), "Invalid Upgrades",
+                    "To Many Upgrades", Notification.SHORT_DURATION)
+                NotificationHelper.addNotification(notify)
+                false
+            }
+        }
     }
 
     /**

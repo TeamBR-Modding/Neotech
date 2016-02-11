@@ -4,12 +4,15 @@ import java.awt.Color
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.machines.processors.TileThermalBinder
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBar, GuiComponentText}
+import com.teambr.bookshelf.notification.{Notification, NotificationHelper}
 import com.teambr.bookshelf.util.ColorUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.util.StatCollector
 
 import scala.collection.mutable.ArrayBuffer
@@ -49,10 +52,12 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
         components += new GuiComponentButton(120, 75, 40, 20, "neotech.text.start") {
             override def doAction(): Unit = {
                 if (tileEntity.getStackInSlot(tileEntity.MB_INPUT) != null) {
-                    if(!Minecraft.getMinecraft.thePlayer.capabilities.isCreativeMode)
-                        tileEntity.sendValueToServer(tileEntity.RUNNING_VARIABLE_ID, 0)
-                    else
-                        tileEntity.sendValueToServer(tileEntity.BUILD_NOW_ID, 0)
+                    if (tileEntity.isValid) {
+                        if (!Minecraft.getMinecraft.thePlayer.capabilities.isCreativeMode)
+                            tileEntity.sendValueToServer(tileEntity.RUNNING_VARIABLE_ID, 0)
+                        else
+                            tileEntity.sendValueToServer(tileEntity.BUILD_NOW_ID, 0)
+                    }
                 }
             }
         }
