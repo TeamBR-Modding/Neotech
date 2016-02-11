@@ -190,8 +190,9 @@ abstract public class ResourceEntity<R> {
             BlockPos tilePos = new BlockPos(currentTarget.xCoord, currentTarget.yCoord, currentTarget.zCoord);
             for(EnumFacing dir : EnumFacing.values()) {
                 if(tilePos.offset(dir).toLong() == destinationPipe.toLong()) {
-                    //noinspection unchecked
-                    ((InterfacePipe)world.getTileEntity(destinationPipe)).tryInsertResource(this, dir.getOpposite());
+                    if(world.getTileEntity(destinationPipe) != null)
+                        //noinspection unchecked
+                        ((InterfacePipe)world.getTileEntity(destinationPipe)).tryInsertResource(this, dir.getOpposite());
                 }
             }
             return true;
