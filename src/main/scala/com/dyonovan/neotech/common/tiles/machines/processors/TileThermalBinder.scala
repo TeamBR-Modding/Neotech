@@ -74,6 +74,7 @@ class TileThermalBinder extends MachineProcessor {
         }
         isRunning = false
         cookTime = 0
+        failCoolDown = 40
         false
     }
 

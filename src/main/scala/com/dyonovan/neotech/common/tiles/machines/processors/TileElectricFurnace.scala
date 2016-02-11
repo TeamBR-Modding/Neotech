@@ -79,6 +79,7 @@ class TileElectricFurnace extends MachineProcessor {
                 return minStackSize <= getInventoryStackLimit && minStackSize <= getOutputForStack(getStackInSlot(INPUT_SLOT)).getMaxStackSize
             }
         }
+        failCoolDown = 40
         false
     }
 
