@@ -68,11 +68,13 @@ abstract class MachineProcessor extends AbstractMachine with IEnergyReceiver {
       * Used to actually do the processes needed. For processors this should be cooking items and generators should
       * generate RF. This is called every tick allowed, provided redstone mode requirements are met
       */
+    var failCoolDown = 0
     override def doWork() = {
+        failCoolDown -= 1
         didWork = false
 
         //Do Operations
-        if (canProcess) {
+        if (failCoolDown < 0 && canProcess) {
             /** We want to check if we are above the value needed before we actually start checking for cooking, this will ensure
               *  we don't run into issues with going one tick over */
             if(cookTime >= getCookTime) {
@@ -98,7 +100,9 @@ abstract class MachineProcessor extends AbstractMachine with IEnergyReceiver {
     /**
       * Use this to set all variables back to the default values, usually means the operation failed
       */
-    override def reset() = cookTime = 0
+    override def reset() = {
+        cookTime = 0
+    }
 
     /**
       * Used to check if this tile is active or not
