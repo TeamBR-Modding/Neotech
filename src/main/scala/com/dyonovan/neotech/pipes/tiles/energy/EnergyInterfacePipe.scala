@@ -278,4 +278,6 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
             }
         }
     }
+
+    override def getPipeTypeID: Int = 0
 }

@@ -349,4 +349,6 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
             }
         }
     }
+
+    override def getPipeTypeID: Int = 3
 }

@@ -333,4 +333,6 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
             }
         }
     }
+
+    override def getPipeTypeID: Int = 1
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidTank;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.Stack;
 
 /**
@@ -63,8 +64,10 @@ public class FluidResourceEntity extends ResourceEntity<FluidTank> {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GlStateManager.disableLighting();
 
+            RenderUtils.setColor(Color.decode(String.valueOf(resource.getFluid().getFluid().getColor())));
             TextureAtlasSprite fluidIcon =  Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(resource.getFluid().getFluid().getStill(resource.getFluid()).toString());
             RenderUtils.renderCubeWithTexture(-0.2, -0.2, -0.2, 0.2, 0.2, 0.2, fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());
+            RenderUtils.restoreColor();
 
             GlStateManager.enableLighting();
             RenderUtils.bindMinecraftBlockSheet();

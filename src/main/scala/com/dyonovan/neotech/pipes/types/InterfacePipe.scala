@@ -214,7 +214,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                                         getWorld.getTileEntity(otherPos) match {
                                             //Add to sinks
-                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency =>
+                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency && doTypesMatch(pipe) =>
                                                 if(!sinkPipes.contains(pipe.getPosAsLong))
                                                     sinkPipes.add(pipe.getPosAsLong)
                                             case _ =>
@@ -336,7 +336,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                                         getWorld.getTileEntity(otherPos) match {
                                             //Add to sinks
-                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency =>
+                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency && doTypesMatch(pipe) =>
                                                 if(!sinkPipes.contains(pipe.getPosAsLong))
                                                     sinkPipes.add(pipe.getPosAsLong)
                                             case _ =>
@@ -456,7 +456,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
                                         getWorld.getTileEntity(otherPos) match {
                                             //Add to sinks
-                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency =>
+                                            case pipe: InterfacePipe[T, R] if pipe.frequency == frequency && doTypesMatch(pipe) =>
                                                 if(!sinkPipes.contains(pipe.getPosAsLong))
                                                     sinkPipes.add(pipe.getPosAsLong)
                                             case _ =>
@@ -565,6 +565,19 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             super.getRenderBoundingBox
     }
 
+    /**
+      * Used to make sure the other pipe matches our type
+      * @param pipe The other pipe
+      * @return True if matched
+      */
+    def doTypesMatch(pipe : InterfacePipe[_, _]) : Boolean = pipe.getPipeTypeID == getPipeTypeID
+
+    /**
+      * Used to define types, that way only like minded will interact
+      * @return
+      */
+    def getPipeTypeID : Int
+
     /*******************************************************************************************************************
       *************************************** Insertion Methods ********************************************************
       ******************************************************************************************************************/
@@ -588,6 +601,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
 
     /**
       * Called when the resource has found its target and is actually sending, change resource size here
+ *
       * @param resource
       */
     def resourceBeingExtracted(resource : R) : Unit
