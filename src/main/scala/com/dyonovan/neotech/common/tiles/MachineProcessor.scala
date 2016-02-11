@@ -131,7 +131,7 @@ abstract class MachineProcessor extends AbstractMachine with IEnergyReceiver {
       */
     @SideOnly(Side.CLIENT)
     def getCookProgressScaled(scaleVal: Int): Int =
-        ((cookTime * scaleVal) / Math.max(getCookTime, 0.001)).toInt
+        Math.min(((cookTime * scaleVal) / Math.max(getCookTime, 0.001)).toInt, scaleVal)
 
     /*******************************************************************************************************************
       ************************************************ Inventory methods ***********************************************
