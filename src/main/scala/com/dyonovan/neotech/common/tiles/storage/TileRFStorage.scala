@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.tiles.storage
 
-import cofh.api.energy.{EnergyStorage, IEnergyHandler, IEnergyReceiver}
+import cofh.api.energy.{EnergyStorage, IEnergyProvider, IEnergyReceiver}
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.UpdatingTile
@@ -18,7 +18,7 @@ import net.minecraft.util.EnumFacing
  * @author Dyonovan
  * @since August 15, 2015
  */
-class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile with Waila {
+class TileRFStorage extends TileEntity with IEnergyReceiver with IEnergyProvider with UpdatingTile with Waila {
 
     var tier = 0
 
@@ -55,7 +55,7 @@ class TileRFStorage extends TileEntity with IEnergyHandler with UpdatingTile wit
                         case tile: IEnergyReceiver =>
                             val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
                             if (want > 0) {
-                                val actual = extractEnergy(null, want, simulate = false)
+                                val actual = extractEnergy(i.getOpposite, want, simulate = false)
                                 tile.receiveEnergy(i.getOpposite, actual, false)
                                 //worldObj.markBlockForUpdate(pos)
                             }

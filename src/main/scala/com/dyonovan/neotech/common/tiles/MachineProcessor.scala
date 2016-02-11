@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.common.tiles
 
+import cofh.api.energy.IEnergyReceiver
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -15,7 +16,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis <pauljoda>
   * @since 1/31/2016
   */
-abstract class MachineProcessor extends AbstractMachine {
+abstract class MachineProcessor extends AbstractMachine with IEnergyReceiver {
 
     var cookTime = 0
     var didWork  = false
@@ -180,4 +181,21 @@ abstract class MachineProcessor extends AbstractMachine {
       */
     override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean =
         slot == 0 && getOutputForStack(itemStackIn) != null
+
+    /**
+      * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
+      *
+      * @param from Orientation the energy is received from.
+      * @param maxReceive Maximum amount of energy to receive.
+      * @param simulate If TRUE, the charge will only be simulated.
+      * @return Amount of energy that was (or would have been, if simulated) received.
+      */
+    override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
+        if (energy != null) {
+            val actual = energy.receiveEnergy(maxReceive, simulate)
+            if (worldObj != null)
+                worldObj.markBlockForUpdate(pos)
+            actual
+        } else 0
+    }
 }

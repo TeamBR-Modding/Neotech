@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.tiles
 
-import cofh.api.energy.{IEnergyReceiver, EnergyStorage}
+import cofh.api.energy.{IEnergyProvider, IEnergyReceiver, EnergyStorage}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   *
   * Base machine class for all generating blocks
   */
-abstract class MachineGenerator extends AbstractMachine {
+abstract class MachineGenerator extends AbstractMachine with IEnergyProvider {
 
     var burnTime              = 0
     var currentObjectBurnTime = 0
@@ -63,7 +63,7 @@ abstract class MachineGenerator extends AbstractMachine {
                     case tile: IEnergyReceiver =>
                         val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
                         if (want > 0) {
-                            val actual = energy.extractEnergy(want, false)
+                            val actual = extractEnergy(i, want, simulate = false)
                             tile.receiveEnergy(i.getOpposite, actual, false)
                             didWork = true
                         }
@@ -173,22 +173,13 @@ abstract class MachineGenerator extends AbstractMachine {
         actual
     }
 
-    /**
-      * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
-      *
-      * @param from Orientation the energy is received from.
-      * @param maxReceive Maximum amount of energy to receive.
-      * @param simulate If TRUE, the charge will only be simulated.
-      * @return Amount of energy that was (or would have been, if simulated) received.
-      */
-    override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = 0
-
     /*******************************************************************************************************************
       ************************************************ Inventory methods ***********************************************
       ******************************************************************************************************************/
 
     /**
       * Used to get what slots you can use per face
+      *
       * @param side The face to check
       * @return An array of slots to interface with
       */

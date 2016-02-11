@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.tiles
 
-import cofh.api.energy.{EnergyStorage, IEnergyHandler}
+import cofh.api.energy.{IEnergyHandler, EnergyStorage}
 import com.dyonovan.neotech.collections.InputOutput
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
@@ -23,7 +23,7 @@ import net.minecraftforge.common.capabilities.Capability
   * @since August 11, 2015
   */
 abstract class AbstractMachine extends Syncable with Upgradeable with InventorySided
-        with IEnergyHandler with RedstoneAware with InputOutput {
+        with RedstoneAware with InputOutput with IEnergyHandler {
 
     var energy = new EnergyStorage(10000)
     var redstone : Int = 0
@@ -296,7 +296,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             10000
     }
 
-    /**
+    /*/**
       * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
       *
       * @param from Orientation the energy is received from.
@@ -322,7 +322,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * @return How much energy was/should be drained
       */
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
-
+*/
     /**
       * Get the current energy stored in the energy tank
       *

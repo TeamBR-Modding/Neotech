@@ -3,7 +3,7 @@ package com.dyonovan.neotech.common.tiles.machines.operators
 import java.util
 import java.util.Comparator
 
-import cofh.api.energy.{EnergyStorage, IEnergyHandler}
+import cofh.api.energy.{EnergyStorage, IEnergyReceiver}
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.common.tiles.traits.{FluidHandler, UpdatingTile}
 import net.minecraft.block.BlockLiquid
@@ -22,7 +22,7 @@ import net.minecraftforge.fluids._
   * @author Paul Davis <pauljoda>
   * @since 2/4/2016
   */
-class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
+class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
 
     val RANGE = 50
     def costToOperate = 4000
@@ -204,7 +204,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
         } else 0
     }
 
-    /**
+   /* /**
       * Used to extract energy from this tile. You should return zero if you don't want to be able to extract
       *
       * @param from The direction pulling from
@@ -212,7 +212,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyHandler {
       * @param simulate True to just simulate, not actually drain
       * @return How much energy was/should be drained
       */
-    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
+    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0*/
 
     /**
       * Get the current energy stored in the energy tank
