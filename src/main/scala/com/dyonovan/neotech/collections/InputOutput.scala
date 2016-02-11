@@ -93,11 +93,11 @@ trait InputOutput extends NBTSavable {
     }
 
     def canOutputFromSide(dir : EnumFacing, facing : EnumFacing): Boolean = {
-        sideModes.get(getDirFromFacing(dir, facing)) == OUTONLY || sideModes.get(getDirFromFacing(dir, facing)) == BOTH
+        sideModes.get(dir, facing) == OUTONLY || sideModes.get(dir) == BOTH
     }
 
     def canInputFromSide(dir : EnumFacing, facing : EnumFacing): Boolean = {
-        sideModes.get(getDirFromFacing(dir, facing)) == INONLY || sideModes.get(getDirFromFacing(dir, facing)) == BOTH
+        sideModes.get(dir, facing) == INONLY || sideModes.get(dir) == BOTH
     }
 
     def canOutputFromSideNoRotate(dir : EnumFacing): Boolean = {
@@ -110,39 +110,6 @@ trait InputOutput extends NBTSavable {
 
     def isDisabled(dir : EnumFacing) : Boolean = {
         sideModes.get(dir) == DISABLED
-    }
-
-    def getDirFromFacing(dir : EnumFacing, facing : EnumFacing) = {
-        facing match {
-            case EnumFacing.NORTH => dir
-            case EnumFacing.WEST =>
-                dir match {
-                    case EnumFacing.NORTH => EnumFacing.EAST
-                    case EnumFacing.EAST => EnumFacing.SOUTH
-                    case EnumFacing.SOUTH => EnumFacing.WEST
-                    case EnumFacing.WEST => EnumFacing.NORTH
-                    case _ => dir
-
-                }
-            case EnumFacing.SOUTH =>
-                dir match {
-                    case EnumFacing.NORTH => EnumFacing.SOUTH
-                    case EnumFacing.EAST => EnumFacing.WEST
-                    case EnumFacing.SOUTH => EnumFacing.NORTH
-                    case EnumFacing.WEST => EnumFacing.EAST
-                    case _ => dir
-                }
-            case EnumFacing.EAST =>
-                dir match {
-                    case EnumFacing.NORTH => EnumFacing.WEST
-                    case EnumFacing.EAST => EnumFacing.NORTH
-                    case EnumFacing.SOUTH => EnumFacing.EAST
-                    case EnumFacing.WEST => EnumFacing.SOUTH
-                    case _ => dir
-
-                }
-            case _ => dir
-        }
     }
 
     def getModeForSide(dir : EnumFacing) : IOMODE = {
