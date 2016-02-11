@@ -96,7 +96,7 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage())),
                 "ABA",
                 "DCD",
-                "ABA", 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', Items.comparator);
+                "ABA", 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', ItemManager.ingotTin());
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage())),
                 "ABA",
                 "DCD",
