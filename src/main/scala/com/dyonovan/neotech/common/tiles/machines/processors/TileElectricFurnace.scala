@@ -124,7 +124,7 @@ class TileElectricFurnace extends MachineProcessor {
       */
     override def getEnergyCostPerTick: Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK * (getUpgradeBoard.getProcessorCount * 0.4).toInt
+            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
         else
             BASE_ENERGY_TICK
     }
