@@ -268,7 +268,7 @@ public class CraftingRecipeManager {
                 "  I", 'I', Items.iron_ingot);
 
         //Mob Net
-        GameRegistry.addRecipe(new ItemStack(ItemManager.mobGun(), 1),
+        GameRegistry.addRecipe(new ItemStack(ItemManager.mobNet(), 1),
                 "S S",
                 " E ",
                 "S S", 'E', Items.ender_pearl, 'S', Items.string);
