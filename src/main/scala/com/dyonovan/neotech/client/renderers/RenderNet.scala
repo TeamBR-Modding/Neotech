@@ -36,6 +36,11 @@ class RenderNet(renderManager : RenderManager) extends Render[EntityNet](renderM
         GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
         GlStateManager.rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
         this.bindTexture(TextureMap.locationBlocksTexture)
+
+        val size = Math.max(entity.ticksExisted * 10.0F / 20, 1.0F)
+
+        GlStateManager.scale(size, size, 1.0F)
+
         Minecraft.getMinecraft.getRenderItem.renderItem(this.getItemStackFromEntity(entity), ItemCameraTransforms.TransformType.GROUND)
         GlStateManager.disableRescaleNormal()
         GlStateManager.popMatrix()
