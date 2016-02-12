@@ -186,6 +186,10 @@ abstract class MachineProcessor extends AbstractMachine with IEnergyReceiver {
     override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean =
         slot == 0 && getOutputForStack(itemStackIn) != null
 
+    /*******************************************************************************************************************
+      ************************************************** Energy methods ************************************************
+      ******************************************************************************************************************/
+
     /**
       * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
       *
