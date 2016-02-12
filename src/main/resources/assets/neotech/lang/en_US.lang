@@ -60,6 +60,7 @@ item.neotech:upgradeExpansion.name=Expansion Upgrade
 item.neotech:wrench.name=Wrench
 item.neotech:trashBag.name=Trash Bag
 item.neotech:spawnerMover.name=Spawner Relocator
+item.neotech:mobGun.name=Net Launcher
 
 #######################
 # Tile Entities

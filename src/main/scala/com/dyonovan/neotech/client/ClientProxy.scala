@@ -3,17 +3,20 @@ package com.dyonovan.neotech.client
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.client.renderers._
 import com.dyonovan.neotech.common.CommonProxy
+import com.dyonovan.neotech.common.entities.EntityNet
+import com.dyonovan.neotech.common.items.ItemMobNet
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileTank, TileFlushableChest}
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.BlockManager
+import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.entity.RenderSnowball
 import net.minecraft.client.resources.model.ModelBakery
-import net.minecraftforge.fml.client.registry.ClientRegistry
+import net.minecraftforge.fml.client.registry.{RenderingRegistry, ClientRegistry}
 import net.minecraftforge.fml.common.event.FMLInterModComms
 import net.minecraftforge.fml.common.registry.GameRegistry
 
@@ -94,6 +97,9 @@ class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[EnergyInterfacePipe], new EnergyResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[FluidInterfacePipe], new FluidResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileDimStorage], new TileDimStorageRenderer)
+
+        RenderingRegistry.registerEntityRenderingHandler(classOf[EntityNet], new RenderSnowball(Minecraft.getMinecraft.getRenderManager,
+            ItemMobNet.instance, Minecraft.getMinecraft.getRenderItem))
 
     }
 

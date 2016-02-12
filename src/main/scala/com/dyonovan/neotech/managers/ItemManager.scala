@@ -41,6 +41,8 @@ object ItemManager {
     val wrench = new ItemWrench
     val trashBag = new ItemTrashBag
     val spawnerMover = new ItemSpawnerMover
+    val mobGun = new ItemMobGun
+    val mobNet = new ItemMobNet
 
     def preInit(): Unit = {
         registerItem(dustGold, "dustGold", "dustGold")
@@ -63,6 +65,8 @@ object ItemManager {
         registerItem(wrench, "wrench")
         registerItem(trashBag, "trashBag")
         registerItem(spawnerMover, "spawnerMover")
+        registerItem(mobGun, "mobGun")
+        registerItem(mobNet, "mobNet")
     }
     /**
      * Helper method to register items

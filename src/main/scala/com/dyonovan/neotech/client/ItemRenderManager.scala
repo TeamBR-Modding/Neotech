@@ -68,6 +68,8 @@ object ItemRenderManager {
         registerItem(ItemManager.wrench)
         registerItem(ItemManager.trashBag)
         registerItem(ItemManager.spawnerMover)
+        registerItem(ItemManager.mobGun)
+        registerItem(ItemManager.mobNet)
 
         registerPipesAndColored()
     }

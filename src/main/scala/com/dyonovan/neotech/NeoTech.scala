@@ -60,10 +60,12 @@ object NeoTech {
         BlockManager.preInit()
         ItemManager.preInit()
         FluidManager.preInit()
+        EntityManager.preInit()
         proxy.preInit()
         GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
         CraftingRecipeManager.preInit()
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ItemGuiManager)
+
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
