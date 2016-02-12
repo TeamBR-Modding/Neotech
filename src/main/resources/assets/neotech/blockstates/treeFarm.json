@@ -1,0 +1,12 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "front": "neotech:blocks/treeFarm",
+            "side" : "neotech:blocks/treeFarm"
+        },
+        "model": "neotech:machine",
+        "uvlock": true
+    },
+    "variants" : { "isactive" : { "true" : {}, "false" : {} } }
+}

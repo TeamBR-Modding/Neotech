@@ -25,5 +25,4 @@ class ModAchievements extends AchievementList(StatCollector.translateToLocal("ac
     override def initAchievements(): Unit = {
         //TODO: Needs more planning, will do later
     }
-
 }

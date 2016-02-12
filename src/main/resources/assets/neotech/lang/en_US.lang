@@ -81,6 +81,7 @@ tile.neotech:solarPanelT3.name=Elite Solar Panel
 
 # Operators
 tile.neotech:pump.name=Electric Pump
+tile.neotech:treeFarm.name=Electric Logger
 
 # Storage
 tile.neotech:flushableChest.name=Flushable Chest
