@@ -5,7 +5,7 @@ import com.dyonovan.neotech.managers.ItemManager
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
-import net.minecraft.client.renderer.entity.{RenderManager, Render}
+import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.client.renderer.texture.TextureMap
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation

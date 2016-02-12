@@ -1,5 +1,13 @@
 package com.dyonovan.neotech.common.items
 
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
+import net.minecraft.entity.EntityList
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
+import net.minecraft.util.MovingObjectPosition
+import net.minecraft.world.World
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
 /**
   * This file was created for NeoTech
   *
@@ -16,4 +24,29 @@ object ItemMobNet {
 
 class ItemMobNet extends BaseItem("mobNet", 16) {
 
+    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
+        if (stack.hasTagCompound && !world.isRemote) {
+            val mop = getMovingObjectPositionFromPlayer(world, player, false)
+            if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                val pos = mop.getBlockPos.offset(mop.sideHit)
+                val entity = EntityList.createEntityByName(stack.getTagCompound.getString("type"), world)
+                entity.readFromNBT(stack.getTagCompound)
+                entity.setPosition(pos.getX, pos.getY, pos.getZ)
+                world.spawnEntityInWorld(entity)
+                stack.setTagCompound(null)
+                //TODO if mob is aggresive, attack player
+            }
+        }
+        stack
+    }
+
+    @SideOnly(Side.CLIENT)
+    override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
+        if (stack.hasTagCompound){
+            list.add(GuiColor.GREEN + stack.getTagCompound.getString("type"))
+        } else {
+            list.add(GuiTextFormat.ITALICS + GuiColor.RED.toString + "Empty")
+        }
+
+    }
 }

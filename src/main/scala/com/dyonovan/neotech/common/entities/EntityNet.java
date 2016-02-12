@@ -1,8 +1,13 @@
 package com.dyonovan.neotech.common.entities;
 
+import com.dyonovan.neotech.managers.ItemManager;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
@@ -18,27 +23,38 @@ import net.minecraft.world.World;
  */
 public class EntityNet extends EntityThrowable {
 
+    @SuppressWarnings("unused")
     public EntityNet(World world) {
         super(world);
         renderDistanceWeight = 10.0D;
-        dataWatcher.addObjectByDataType(13, 5);
     }
 
-    public EntityNet(World world, double x, double y, double z, ItemStack stack) {
+    @SuppressWarnings("unused")
+    public EntityNet(World world, double x, double y, double z) {
         super(world, x, y, z);
         renderDistanceWeight = 10.0D;
-        dataWatcher.addObject(13, stack);
     }
 
-    public EntityNet(World world, EntityLivingBase shooter, ItemStack stack) {
+    public EntityNet(World world, EntityLivingBase shooter) {
         super(world, shooter);
         renderDistanceWeight = 10.0D;
-        dataWatcher.addObject(13, stack);
-
     }
 
     @Override
-    protected void onImpact(MovingObjectPosition p_70184_1_) {
-
+    protected void onImpact(MovingObjectPosition mop) {
+        ItemStack stack = new ItemStack(ItemManager.mobNet(), 1);
+        if (mop != null && !worldObj.isRemote) {
+            if (mop.entityHit instanceof EntityCreature) {
+                //TODO BlackList, Slimes, Wither Skels
+                NBTTagCompound tag = new NBTTagCompound();
+                mop.entityHit.writeToNBT(tag);
+                tag.setString("type", EntityList.getEntityString(mop.entityHit));
+                mop.entityHit.setDead();
+                stack.setTagCompound(tag);
+            }
+            EntityItem item = new EntityItem(worldObj, mop.hitVec.xCoord, mop.hitVec.yCoord + 1, mop.hitVec.zCoord, stack);
+            worldObj.spawnEntityInWorld(item);
+        }
+        this.setDead();
     }
 }

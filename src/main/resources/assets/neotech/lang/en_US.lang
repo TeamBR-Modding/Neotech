@@ -61,6 +61,7 @@ item.neotech:wrench.name=Wrench
 item.neotech:trashBag.name=Trash Bag
 item.neotech:spawnerMover.name=Spawner Relocator
 item.neotech:mobGun.name=Net Launcher
+item.neotech:mobNet.name=Mob Net
 
 #######################
 # Tile Entities

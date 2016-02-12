@@ -261,6 +261,18 @@ public class CraftingRecipeManager {
                 "PRP",
                 "BTB", 'B', "ingotBronze", 'R', Items.redstone, 'P', BlockManager.pipeFluidInterface(), 'T', BlockManager.ironTank()));
 
+        //Mob Gun
+        GameRegistry.addRecipe(new ItemStack(ItemManager.mobGun(), 1),
+                "   ",
+                "III",
+                "  I", 'I', Items.iron_ingot);
+
+        //Mob Net
+        GameRegistry.addRecipe(new ItemStack(ItemManager.mobGun(), 1),
+                "S S",
+                " E ",
+                "S S", 'E', Items.ender_pearl, 'S', Items.string);
+
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);
