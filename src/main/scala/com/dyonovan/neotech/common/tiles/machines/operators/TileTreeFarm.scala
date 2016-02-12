@@ -102,7 +102,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             stack.push(logPosition)
             while(!stack.isEmpty) {
                 val lookingPosition = stack.pop()
-                if (!cache.contains(lookingPosition) && worldObj.getBlockState(lookingPosition).getBlock.isWood(worldObj, lookingPosition) ||
+                if (worldObj.getBlockState(lookingPosition).getBlock.isWood(worldObj, lookingPosition) ||
                         worldObj.getBlockState(lookingPosition).getBlock.isInstanceOf[BlockLeaves]) {
                     val blocksAround = new Location(lookingPosition.getX - 1, lookingPosition.getY - 1, lookingPosition.getZ - 1)
                             .getAllWithinBounds(new Location(lookingPosition.getX + 1, lookingPosition.getY + 1, lookingPosition.getZ + 1), includeInner = true, includeOuter = true)
