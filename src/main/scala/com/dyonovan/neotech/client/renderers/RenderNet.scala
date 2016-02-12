@@ -37,7 +37,7 @@ class RenderNet(renderManager : RenderManager) extends Render[EntityNet](renderM
         GlStateManager.rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
         this.bindTexture(TextureMap.locationBlocksTexture)
 
-        val size = Math.max(entity.ticksExisted * 10.0F / 20, 1.0F)
+        val size = Math.min(Math.max(entity.ticksExisted * 10.0F / 20, 0.3F), 10.0F)
 
         GlStateManager.scale(size, size, 1.0F)
 
