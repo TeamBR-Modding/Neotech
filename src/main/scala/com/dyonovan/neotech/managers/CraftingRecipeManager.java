@@ -72,6 +72,12 @@ public class CraftingRecipeManager {
                 "BDB",
                 "ACA", 'A', "ingotGold", 'B', Items.slime_ball, 'C', Blocks.furnace, 'D', Blocks.redstone_block));
 
+        //Electric Logger
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.treeFarm()),
+                "ACA",
+                "BDB",
+                "ACA", 'A', "ingotBronze", 'B', Items.iron_axe, 'C', Items.shears, 'D', Blocks.redstone_block));
+
         //Ore Blocks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockCopper()),
                 "AAA",
