@@ -260,8 +260,7 @@ neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces R
 
 # Tree Farm
 neotech.treeFarm.desc=The Electric Logger is an automated tree farm. By default, the range is 3 blocks around the farm and a cost of 200 RF/block. The logger will chop trees that start on the same Y plane as the logger. Provide an axe to chop the wood, and you can optionally add shears to shear leaves. If you add shears, the leaves will not drop saplings. Saplings will be placed in the top right three slots. These are the ones that will be planted. Excess saplings will go to the main inventory. Automation and pipes will not pull from the sapling slots so you don't have to worry about those being emptied.
-neotech.treeFarm.processorUpgrade.desc=Processors will increase the range and reduce the delay between operations. By default, the cooldown is 20 ticks, however upon adding a processor the base delay becomes 17 ticks minus the processor count. 8 processors will reduce the cooldown to a single tick
-
+neotech.treeFarm.processorUpgrade.desc=Processors will increase the range and reduce the delay between operations. By default, the cooldown is 40 ticks and each processor removes 2 ticks
 
 # Energy Interface Pipe
 neotech.energyInterfacePipe.name=Energy Interface

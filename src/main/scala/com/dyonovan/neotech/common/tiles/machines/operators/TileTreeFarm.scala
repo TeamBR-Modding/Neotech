@@ -46,9 +46,9 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
 
     def operationDelay : Int = {
         if(processorCount > 0)
-            17 - (processorCount * 2)
+            40 - (processorCount * 2)
         else
-            20
+            40
     }
 
     energy = new EnergyStorage(10000)
