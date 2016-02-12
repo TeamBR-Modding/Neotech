@@ -92,11 +92,11 @@ trait InputOutput extends NBTSavable {
         sideModes.put(dir, getNextMode(sideModes.get(dir)))
     }
 
-    def canOutputFromSide(dir : EnumFacing, facing : EnumFacing): Boolean = {
+    def canOutputFromSide(dir : EnumFacing): Boolean = {
         sideModes.get(dir) == OUTONLY || sideModes.get(dir) == BOTH
     }
 
-    def canInputFromSide(dir : EnumFacing, facing : EnumFacing): Boolean = {
+    def canInputFromSide(dir : EnumFacing): Boolean = {
         sideModes.get(dir) == INONLY || sideModes.get(dir) == BOTH
     }
 

@@ -5,12 +5,11 @@ import com.dyonovan.neotech.client.gui.machines.generators.GuiFluidGenerator
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.dyonovan.neotech.registries.FluidFuelValues
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{StatCollector, EnumFacing}
+import net.minecraft.util.{EnumFacing, StatCollector}
 import net.minecraft.world.World
 import net.minecraftforge.fluids._
 
@@ -148,7 +147,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
     override def tryInput() : Unit = {
         super.tryInput()
         for(dir <- EnumFacing.values) {
-            if(canInputFromSide(dir, worldObj.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))) {
+            if(canInputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case otherTank : IFluidHandler =>
                         if(otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid))

@@ -4,7 +4,6 @@ import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.common.container.InventoryCallback
 import com.teambr.bookshelf.common.tiles.traits.Inventory
-import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.items.IItemHandler
@@ -66,5 +65,17 @@ trait Upgradeable {
             UpgradeBoard.getBoardFromStack(upgradeInventory.getStackInSlot(0))
         else
             null
+    }
+
+    def processorCount : Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            return getUpgradeBoard.getProcessorCount
+        0
+    }
+
+    def hardDriveCount : Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
+            return getUpgradeBoard.getProcessorCount
+        0
     }
 }

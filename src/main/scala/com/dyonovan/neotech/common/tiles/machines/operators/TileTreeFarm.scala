@@ -3,15 +3,18 @@ package com.dyonovan.neotech.common.tiles.machines.operators
 import java.util
 import java.util.Comparator
 
-import cofh.api.energy.{IEnergyReceiver, EnergyStorage}
+import cofh.api.energy.{EnergyStorage, IEnergyReceiver}
 import com.dyonovan.neotech.client.gui.machines.operators.GuiTreeFarm
 import com.dyonovan.neotech.common.container.machines.operators.ContainerTreeFarm
 import com.dyonovan.neotech.common.tiles.AbstractMachine
+import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.collections.Location
-import net.minecraft.block.{BlockSapling, Block, BlockLeavesBase}
+import net.minecraft.block.state.IBlockState
+import net.minecraft.block.{Block, BlockLeaves, BlockSapling}
+import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{ItemAxe, ItemShears, ItemStack}
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.item.{Item, ItemAxe, ItemShears, ItemStack}
+import net.minecraft.util.{StatCollector, AxisAlignedBB, BlockPos, EnumFacing}
 import net.minecraft.world.World
 
 import scala.util.control.Breaks._
@@ -27,8 +30,26 @@ import scala.util.control.Breaks._
   * @since 2/11/2016
   */
 class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
-    val RANGE = 10
-    def costToOperate = 200
+
+    def RANGE : Int = {
+        if(processorCount > 0)
+            return 3 + processorCount
+        3
+    }
+
+    def costToOperate : Int = {
+        if(processorCount > 0)
+            return 200 * processorCount
+        200
+    }
+
+    def operationDelay : Int = {
+        if(processorCount > 0)
+            17 - (processorCount * 2)
+        else
+            20
+    }
+
     energy = new EnergyStorage(10000)
     override def initialSize: Int = 18
 
@@ -43,18 +64,18 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                     .compareTo(o2.distanceSq(pos.getX, pos.getY, pos.getZ))
     })
 
-    def operationDelay = 1
-
     var time = operationDelay
     override def doWork() : Unit = {
         time -= 1
-        if (!isBuildingCache && time <= 0) {
+        if (!isBuildingCache && time <= 0 && energy.getEnergyStored > costToOperate) {
             ticker = operationDelay
             energy.extractEnergy(costToOperate, false)
             if(cache.isEmpty)
                 findNextTree()
             else
                 chopTree()
+            pullInSaplings()
+            plantSaplings()
         }
     }
 
@@ -82,7 +103,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             while(!stack.isEmpty) {
                 val lookingPosition = stack.pop()
                 if (worldObj.getBlockState(lookingPosition).getBlock.isWood(worldObj, lookingPosition) ||
-                        worldObj.getBlockState(lookingPosition).getBlock.isInstanceOf[BlockLeavesBase]) {
+                        worldObj.getBlockState(lookingPosition).getBlock.isInstanceOf[BlockLeaves]) {
                     val blocksAround = new Location(lookingPosition.getX - 1, lookingPosition.getY - 1, lookingPosition.getZ - 1)
                             .getAllWithinBounds(new Location(lookingPosition.getX + 1, lookingPosition.getY + 1, lookingPosition.getZ + 1), includeInner = true, includeOuter = true)
                     for(x <- 0 until blocksAround.size()) {
@@ -90,7 +111,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                         if(!cache.contains(attachedPosition) &&
                                 attachedPosition.distanceSq(pos.getX, pos.getY, pos.getZ) <= 1000 &&
                                 (worldObj.getBlockState(attachedPosition).getBlock.isWood(worldObj, attachedPosition) ||
-                                        worldObj.getBlockState(attachedPosition).getBlock.isInstanceOf[BlockLeavesBase])) {
+                                        worldObj.getBlockState(attachedPosition).getBlock.isInstanceOf[BlockLeaves])) {
                             stack.push(attachedPosition)
                             cache.add(attachedPosition)
                         }
@@ -103,10 +124,151 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     }
 
     def chopTree() : Unit = {
-        val logPosition = cache.poll()
-        if(worldObj.getBlockState(logPosition).getBlock != null)
-            worldObj.playAuxSFX(2001, logPosition, Block.getIdFromBlock(worldObj.getBlockState(logPosition).getBlock))
-        worldObj.setBlockToAir(logPosition)
+        val logPosition = cache.peek()
+        if(worldObj.getBlockState(logPosition).getBlock != null) {
+            worldObj.getBlockState(logPosition).getBlock match {
+                case log : Block if log.isWood(worldObj, logPosition) =>
+                    if(chopLog(logPosition))
+                        cache.poll()
+                case leave : BlockLeaves =>
+                    if(chopLeave(logPosition))
+                        cache.poll()
+                case _ => cache.poll()
+            }
+        } else
+            cache.poll()
+    }
+
+    def chopLog(logPosition : BlockPos) : Boolean = {
+        if(getStackInSlot(AXE_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(logPosition).getBlock, 1, worldObj.getBlockState(logPosition).getBlock.damageDropped(worldObj.getBlockState(logPosition))), sapling = false)) {
+            if(worldObj.getBlockState(logPosition).getBlock != null)
+                worldObj.playAuxSFX(2001, logPosition, Block.getIdFromBlock(worldObj.getBlockState(logPosition).getBlock))
+            worldObj.setBlockToAir(logPosition)
+            if(getStackInSlot(AXE_SLOT).attemptDamageItem(1, worldObj.rand))
+                setStackInSlot(AXE_SLOT, null)
+            energy.extractEnergy(costToOperate, false)
+            worldObj.markBlockForUpdate(pos)
+            return true
+        }
+        false
+    }
+
+    def chopLeave(leavePosition : BlockPos) : Boolean = {
+        if(getStackInSlot(SHEARS_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(leavePosition).getBlock, 1, worldObj.getBlockState(leavePosition).getBlock.damageDropped(worldObj.getBlockState(leavePosition))), sapling = false)) {
+            if(worldObj.getBlockState(leavePosition).getBlock != null)
+                worldObj.playAuxSFX(2001, leavePosition, Block.getIdFromBlock(worldObj.getBlockState(leavePosition).getBlock))
+            worldObj.setBlockToAir(leavePosition)
+            if(getStackInSlot(SHEARS_SLOT).attemptDamageItem(1, worldObj.rand))
+                setStackInSlot(SHEARS_SLOT, null)
+            energy.extractEnergy(costToOperate, false)
+            worldObj.markBlockForUpdate(pos)
+            return true
+        } else {
+            if(worldObj.rand.nextInt(20) == 0) {
+                addHarvestToInventory(
+                    new ItemStack(worldObj.getBlockState(leavePosition).getBlock.asInstanceOf[BlockLeaves]
+                            .getItemDropped(worldObj.getBlockState(leavePosition), worldObj.rand, 0), 1,
+                        worldObj.getBlockState(leavePosition).getBlock.asInstanceOf[BlockLeaves]
+                                .damageDropped(worldObj.getBlockState(leavePosition))), sapling = true)
+            }
+            worldObj.setBlockToAir(leavePosition)
+            return true
+        }
+        false
+    }
+
+    def pullInSaplings() : Unit = {
+        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], AxisAlignedBB.fromBounds(pos.getX - RANGE, pos.getY, pos.getZ - RANGE, pos.getX + RANGE, pos.getY + 1, pos.getZ + RANGE))
+        for(x <- 0 until items.size()) {
+            val item = items.get(x)
+            item.getEntityItem.getItem match {
+                case sapling : Item if Block.getBlockFromItem(sapling).isInstanceOf[BlockSapling] =>
+                    if(addHarvestToInventory(item.getEntityItem, sapling = true)) {
+                        item.setDead()
+                    }
+                case _ =>
+            }
+        }
+    }
+
+    def plantSaplings() : Unit = {
+        if(hasSaplings) {
+            for (x <- pos.getX - RANGE until pos.getX + RANGE) {
+                for (z <- pos.getZ - RANGE until pos.getZ + RANGE) {
+                    val blockPos = new BlockPos(x, pos.getY, z)
+                    if(worldObj.isAirBlock(blockPos)) {
+                        val blockState = getNextSaplingAndReduce
+                        if(blockState != null) {
+                            worldObj.setBlockState(blockPos, blockState)
+                        }
+                        else
+                            return
+                    }
+                }
+            }
+        }
+    }
+
+    def hasSaplings: Boolean = {
+        for(x <- SAPLING_SLOTS) {
+            if(getStackInSlot(x) != null)
+                return true
+        }
+        false
+    }
+
+    def getNextSaplingAndReduce:  IBlockState = {
+        for(x <- SAPLING_SLOTS) {
+            if (getStackInSlot(x) != null) {
+                val block = Block.getBlockFromItem(getStackInSlot(x).getItem)
+                val damage = getStackInSlot(x).getItemDamage
+                getStackInSlot(x).stackSize -= 1
+                if(getStackInSlot(x).stackSize <= 0)
+                    setStackInSlot(x, null)
+                return block.getStateFromMeta(damage)
+            }
+        }
+        null
+    }
+
+    def addHarvestToInventory(stack : ItemStack, sapling : Boolean): Boolean = {
+        if(sapling) {
+            for(x <- SAPLING_SLOTS) {
+                if(getStackInSlot(x) == null) {
+                    setStackInSlot(x, stack)
+                    return true
+                } else if(getStackInSlot(x).getItem == stack.getItem && getStackInSlot(x).getItemDamage == stack.getItemDamage && getStackInSlot(x).stackSize + stack.stackSize <= stack.getMaxStackSize) {
+                    getStackInSlot(x).stackSize += stack.stackSize
+                    return true
+                }
+            }
+        }
+
+        for(x <- 3 until getSizeInventory - 3) {
+            if(getStackInSlot(x) == null) {
+                setStackInSlot(x, stack)
+                return true
+            } else if(getStackInSlot(x).getItem == stack.getItem && getStackInSlot(x).getItemDamage == stack.getItemDamage && getStackInSlot(x).stackSize + stack.stackSize <= stack.getMaxStackSize) {
+                getStackInSlot(x).stackSize += stack.stackSize
+                return true
+            }
+        }
+
+        false
+    }
+
+    override def getDescription : String = {
+        GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:treeFarm.name") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
     }
 
     /**
@@ -150,7 +312,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       *
       * @return The slots to input from
       */
-    override def getInputSlots: Array[Int] = Array(AXE_SLOT, SHEARS_SLOT) ++ SAPLING_SLOTS
+    override def getInputSlots: Array[Int] = Array(AXE_SLOT, SHEARS_SLOT)
 
     override def getSlotsForFace(side: EnumFacing): Array[Int] = 0 until getSizeInventory toArray
 
