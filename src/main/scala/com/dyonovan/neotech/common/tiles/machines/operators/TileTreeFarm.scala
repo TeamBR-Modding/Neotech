@@ -13,6 +13,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.block.{Block, BlockLeaves, BlockSapling}
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.Items
 import net.minecraft.item.{Item, ItemAxe, ItemShears, ItemStack}
 import net.minecraft.util.{StatCollector, AxisAlignedBB, BlockPos, EnumFacing}
 import net.minecraft.world.World
@@ -83,7 +84,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         isBuildingCache = true
 
         val corner1 = new Location(pos.getX - RANGE, pos.getY, pos.getZ - RANGE)
-        val corner2 = new Location(pos.getX + RANGE, pos.getY, pos.getZ + RANGE)
+        val corner2 = new Location(pos.getX + RANGE - 1, pos.getY, pos.getZ + RANGE - 1)
 
         var logPosition : BlockPos = null
 
@@ -178,12 +179,16 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     }
 
     def pullInSaplings() : Unit = {
-        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], AxisAlignedBB.fromBounds(pos.getX - RANGE, pos.getY, pos.getZ - RANGE, pos.getX + RANGE, pos.getY + 1, pos.getZ + RANGE))
+        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], AxisAlignedBB.fromBounds(pos.getX - RANGE - 5, pos.getY, pos.getZ - RANGE - 5, pos.getX + RANGE + 4, pos.getY + 1, pos.getZ + RANGE + 4))
         for(x <- 0 until items.size()) {
             val item = items.get(x)
             item.getEntityItem.getItem match {
                 case sapling : Item if Block.getBlockFromItem(sapling).isInstanceOf[BlockSapling] =>
                     if(addHarvestToInventory(item.getEntityItem, sapling = true)) {
+                        item.setDead()
+                    }
+                case sapling : Items.apple.type =>
+                    if(addHarvestToInventory(item.getEntityItem, sapling = false)) {
                         item.setDead()
                     }
                 case _ =>
@@ -194,7 +199,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     def plantSaplings() : Unit = {
         if(hasSaplings) {
             for (x <- pos.getX - RANGE until pos.getX + RANGE) {
-                for (z <- pos.getZ - RANGE until pos.getZ + RANGE) {
+                for (z <- pos.getZ - RANGE - 1 until pos.getZ + RANGE - 1) {
                     val blockPos = new BlockPos(x, pos.getY, z)
                     if(worldObj.isAirBlock(blockPos)) {
                         val blockState = getNextSaplingAndReduce
