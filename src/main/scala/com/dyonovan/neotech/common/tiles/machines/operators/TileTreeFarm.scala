@@ -34,8 +34,8 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
 
     def RANGE : Int = {
         if(processorCount > 0)
-            return 3 + processorCount
-        3
+            return 4 + processorCount
+        4
     }
 
     def costToOperate : Int = {
@@ -46,9 +46,9 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
 
     def operationDelay : Int = {
         if(processorCount > 0)
-            40 - (processorCount * 2)
+            20 - (processorCount * 2)
         else
-            40
+            20
     }
 
     energy = new EnergyStorage(10000)
@@ -69,8 +69,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     override def doWork() : Unit = {
         time -= 1
         if (!isBuildingCache && time <= 0 && energy.getEnergyStored > costToOperate) {
-            ticker = operationDelay
-            energy.extractEnergy(costToOperate, false)
+            time = operationDelay
             if(cache.isEmpty)
                 findNextTree()
             else
@@ -83,8 +82,8 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     def findNextTree() : Unit = {
         isBuildingCache = true
 
-        val corner1 = new Location(pos.getX - RANGE, pos.getY, pos.getZ - RANGE)
-        val corner2 = new Location(pos.getX + RANGE - 1, pos.getY, pos.getZ + RANGE - 1)
+        val corner1 = new Location(pos.getX - RANGE + 1, pos.getY, pos.getZ - RANGE + 1)
+        val corner2 = new Location(pos.getX + RANGE, pos.getY, pos.getZ + RANGE)
 
         var logPosition : BlockPos = null
 
@@ -103,7 +102,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             stack.push(logPosition)
             while(!stack.isEmpty) {
                 val lookingPosition = stack.pop()
-                if (worldObj.getBlockState(lookingPosition).getBlock.isWood(worldObj, lookingPosition) ||
+                if (!cache.contains(lookingPosition) && worldObj.getBlockState(lookingPosition).getBlock.isWood(worldObj, lookingPosition) ||
                         worldObj.getBlockState(lookingPosition).getBlock.isInstanceOf[BlockLeaves]) {
                     val blocksAround = new Location(lookingPosition.getX - 1, lookingPosition.getY - 1, lookingPosition.getZ - 1)
                             .getAllWithinBounds(new Location(lookingPosition.getX + 1, lookingPosition.getY + 1, lookingPosition.getZ + 1), includeInner = true, includeOuter = true)
@@ -179,7 +178,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     }
 
     def pullInSaplings() : Unit = {
-        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], AxisAlignedBB.fromBounds(pos.getX - RANGE - 5, pos.getY, pos.getZ - RANGE - 5, pos.getX + RANGE + 4, pos.getY + 1, pos.getZ + RANGE + 4))
+        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], AxisAlignedBB.fromBounds(pos.getX - RANGE - 4, pos.getY, pos.getZ - RANGE - 4, pos.getX + RANGE + 5, pos.getY + 1, pos.getZ + RANGE + 5))
         for(x <- 0 until items.size()) {
             val item = items.get(x)
             item.getEntityItem.getItem match {
@@ -198,8 +197,8 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
 
     def plantSaplings() : Unit = {
         if(hasSaplings) {
-            for (x <- pos.getX - RANGE until pos.getX + RANGE) {
-                for (z <- pos.getZ - RANGE - 1 until pos.getZ + RANGE - 1) {
+            for (x <- pos.getX - RANGE + 1 until pos.getX + RANGE) {
+                for (z <- pos.getZ - RANGE + 1 until pos.getZ + RANGE) {
                     val blockPos = new BlockPos(x, pos.getY, z)
                     if(worldObj.isAirBlock(blockPos)) {
                         val blockState = getNextSaplingAndReduce
