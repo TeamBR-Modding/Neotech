@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
@@ -45,7 +46,7 @@ public class EntityNet extends EntityThrowable {
     protected void onImpact(MovingObjectPosition mop) {
         ItemStack stack = new ItemStack(ItemManager.mobNet(), 1);
         if (mop != null && !worldObj.isRemote) {
-            if (mop.entityHit instanceof EntityCreature || mop.entityHit instanceof EntitySlime) {
+            if (mop.entityHit instanceof EntityCreature || mop.entityHit instanceof EntitySlime || mop.entityHit instanceof EntityGhast) {
                 //TODO BlackList, Slimes, Wither Skels
                 NBTTagCompound tag = new NBTTagCompound();
                 mop.entityHit.writeToNBT(tag);
