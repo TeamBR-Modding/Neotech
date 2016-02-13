@@ -5,6 +5,8 @@ import java.util.Comparator
 
 import cofh.api.energy.{EnergyStorage, IEnergyReceiver}
 import com.dyonovan.neotech.managers.BlockManager
+import com.teambr.bookshelf.api.waila.Waila
+import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{FluidHandler, UpdatingTile}
 import net.minecraft.block.BlockLiquid
 import net.minecraft.init.Blocks
@@ -22,10 +24,10 @@ import net.minecraftforge.fluids._
   * @author Paul Davis <pauljoda>
   * @since 2/4/2016
   */
-class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
+class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver with Waila {
 
     val RANGE = 50
-    def costToOperate = 4000
+    def costToOperate = 1000
     var energy = new EnergyStorage(4000 * 20)
 
     val TANK = 0
@@ -50,7 +52,6 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
         ticker -= 1
         if(!isBuildingCache && ticker <= 0 && energy.getEnergyStored >= costToOperate) {
             ticker = operationDelay
-            energy.extractEnergy(costToOperate, false)
             buildPipeline()
         }
         tryOutput()
@@ -60,6 +61,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
         val position = findBlockUnderPipeline()
         if(worldObj.isAirBlock(position)) {
             worldObj.setBlockState(position, BlockManager.mechanicalPipe.getDefaultState)
+            energy.extractEnergy(costToOperate, false)
             return
         }
         if(worldObj.getBlockState(position).getBlock != BlockManager.mechanicalPipe) {
@@ -138,6 +140,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
                         if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                             fill(EnumFacing.DOWN, fluidStack, doFill = true)
                             worldObj.setBlockState(position, Blocks.stone.getDefaultState)
+                            energy.extractEnergy(costToOperate, false)
                             return true
                         }
                     }
@@ -145,6 +148,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
                     val fluidStack = new FluidStack(FluidRegistry.WATER, 1000)
                     if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
+                        energy.extractEnergy(costToOperate / 4, false)
                         return true
                     }
                 case lava: Blocks.lava.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
@@ -152,6 +156,7 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
                     if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
                         worldObj.setBlockState(position, Blocks.stone.getDefaultState)
+                        energy.extractEnergy(costToOperate, false)
                         return true
                     }
                 case _ =>
@@ -176,11 +181,13 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].writeToNBT(tag)
         super[FluidHandler].writeToNBT(tag)
+        energy.writeToNBT(tag)
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super[TileEntity].readFromNBT(tag)
         super[FluidHandler].readFromNBT(tag)
+        energy.readFromNBT(tag)
     }
 
     /*******************************************************************************************************************
@@ -237,4 +244,14 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver {
       * @return True if the face allows energy flow
       */
     override def canConnectEnergy(from: EnumFacing): Boolean = true
+
+    override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
+        var color = ""
+        if (getEnergyStored(null) > 0)
+            color = GuiColor.GREEN.toString
+        else
+            color = GuiColor.RED.toString
+        tipList.add(color + getEnergyStored(null) + "/" + getMaxEnergyStored(null) + " RF")
+        tipList
+    }
 }
