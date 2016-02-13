@@ -13,7 +13,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.block.{Block, BlockLeaves, BlockSapling}
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Items
+import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemAxe, ItemShears, ItemStack}
 import net.minecraft.util.{StatCollector, AxisAlignedBB, BlockPos, EnumFacing}
 import net.minecraft.world.World
@@ -200,7 +200,8 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             for (x <- pos.getX - RANGE + 1 until pos.getX + RANGE) {
                 for (z <- pos.getZ - RANGE + 1 until pos.getZ + RANGE) {
                     val blockPos = new BlockPos(x, pos.getY, z)
-                    if(worldObj.isAirBlock(blockPos)) {
+                    if(worldObj.isAirBlock(blockPos) && worldObj.getBlockState(blockPos.down()) != null &&
+                            (worldObj.getBlockState(blockPos.down()).getBlock == Blocks.dirt || worldObj.getBlockState(blockPos.down()).getBlock == Blocks.grass)) {
                         val blockState = getNextSaplingAndReduce
                         if(blockState != null) {
                             worldObj.setBlockState(blockPos, blockState)
