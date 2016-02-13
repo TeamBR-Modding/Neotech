@@ -44,11 +44,11 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         200
     }
 
-    def operationDelay : Int = {
+    def getChopCount : Int = {
         if(processorCount > 0)
-            17 - (processorCount * 2)
+            processorCount * 16
         else
-            20
+            2
     }
 
     energy = new EnergyStorage(10000)
@@ -65,11 +65,11 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                     .compareTo(o2.distanceSq(pos.getX, pos.getY, pos.getZ))
     })
 
-    var time = operationDelay
+    var time = 40
     override def doWork() : Unit = {
         time -= 1
         if (!isBuildingCache && time <= 0 && energy.getEnergyStored > costToOperate) {
-            time = operationDelay
+            time = 40
             if(cache.isEmpty)
                 findNextTree()
             else
@@ -124,26 +124,36 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     }
 
     def chopTree() : Unit = {
-        val logPosition = cache.peek()
-        if(worldObj.getBlockState(logPosition).getBlock != null) {
-            worldObj.getBlockState(logPosition).getBlock match {
-                case log : Block if log.isWood(worldObj, logPosition) =>
-                    if(chopLog(logPosition))
-                        cache.poll()
-                case leave : BlockLeaves =>
-                    if(chopLeave(logPosition))
-                        cache.poll()
-                case _ => cache.poll()
+        breakable {
+            for (x <- 0 until getChopCount) {
+                if(cache.isEmpty)
+                    break
+                val logPosition = cache.peek()
+                if (worldObj.getBlockState(logPosition).getBlock != null) {
+                    worldObj.getBlockState(logPosition).getBlock match {
+                        case log: Block if log.isWood(worldObj, logPosition) =>
+                            if (chopLog(logPosition))
+                                cache.poll()
+                            else
+                                break
+                        case leave: BlockLeaves =>
+                            if (chopLeave(logPosition))
+                                cache.poll()
+                            else
+                                break
+                        case _ => cache.poll()
+                    }
+                } else
+                    cache.poll()
             }
-        } else
-            cache.poll()
+        }
     }
 
     def chopLog(logPosition : BlockPos) : Boolean = {
         if(getStackInSlot(AXE_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(logPosition).getBlock, 1, worldObj.getBlockState(logPosition).getBlock.damageDropped(worldObj.getBlockState(logPosition))), sapling = false)) {
-            if(worldObj.getBlockState(logPosition).getBlock != null)
-                worldObj.playAuxSFX(2001, logPosition, Block.getIdFromBlock(worldObj.getBlockState(logPosition).getBlock))
-            worldObj.setBlockState(logPosition, Blocks.air.getDefaultState, 2)
+            /*if(worldObj.getBlockState(logPosition).getBlock != null)
+                worldObj.playAuxSFX(2001, logPosition, Block.getIdFromBlock(worldObj.getBlockState(logPosition).getBlock))*/
+            worldObj.setBlockToAir(logPosition)
             if(getStackInSlot(AXE_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(AXE_SLOT, null)
             energy.extractEnergy(costToOperate, false)
@@ -171,7 +181,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                         worldObj.getBlockState(leavePosition).getBlock.asInstanceOf[BlockLeaves]
                                 .damageDropped(worldObj.getBlockState(leavePosition))), sapling = true)
             }
-            worldObj.setBlockState(leavePosition, Blocks.air.getDefaultState, 2)
+            worldObj.setBlockToAir(leavePosition)
             return true
         }
         false
