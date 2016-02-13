@@ -143,7 +143,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         if(getStackInSlot(AXE_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(logPosition).getBlock, 1, worldObj.getBlockState(logPosition).getBlock.damageDropped(worldObj.getBlockState(logPosition))), sapling = false)) {
             if(worldObj.getBlockState(logPosition).getBlock != null)
                 worldObj.playAuxSFX(2001, logPosition, Block.getIdFromBlock(worldObj.getBlockState(logPosition).getBlock))
-            worldObj.setBlockToAir(logPosition)
+            worldObj.setBlockState(logPosition, Blocks.air.getDefaultState, 2)
             if(getStackInSlot(AXE_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(AXE_SLOT, null)
             energy.extractEnergy(costToOperate, false)
@@ -171,7 +171,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                         worldObj.getBlockState(leavePosition).getBlock.asInstanceOf[BlockLeaves]
                                 .damageDropped(worldObj.getBlockState(leavePosition))), sapling = true)
             }
-            worldObj.setBlockToAir(leavePosition)
+            worldObj.setBlockState(leavePosition, Blocks.air.getDefaultState, 2)
             return true
         }
         false
