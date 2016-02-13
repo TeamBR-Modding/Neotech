@@ -46,7 +46,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
 
     def operationDelay : Int = {
         if(processorCount > 0)
-            20 - (processorCount * 2)
+            17 - (processorCount * 2)
         else
             20
     }
@@ -147,7 +147,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             if(getStackInSlot(AXE_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(AXE_SLOT, null)
             energy.extractEnergy(costToOperate, false)
-            worldObj.markBlockForUpdate(pos)
+            sendValueToClient(ENERGY_UPDATE, energy.getEnergyStored)
             return true
         }
         false
@@ -161,7 +161,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             if(getStackInSlot(SHEARS_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(SHEARS_SLOT, null)
             energy.extractEnergy(costToOperate, false)
-            worldObj.markBlockForUpdate(pos)
+            sendValueToClient(ENERGY_UPDATE, energy.getEnergyStored)
             return true
         } else {
             if(worldObj.rand.nextInt(20) == 0) {

@@ -29,6 +29,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     val REDSTONE_FIELD_ID = 0
     val IO_FIELD_ID = 1
     val UPDATE_CLIENT = 2
+    val ENERGY_UPDATE = 3
 
     var working  = false
 
@@ -363,6 +364,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             case REDSTONE_FIELD_ID => redstone = value.toInt
             case IO_FIELD_ID       => toggleMode(EnumFacing.getFront(value.toInt))
             case UPDATE_CLIENT     => updateClient = true
+            case ENERGY_UPDATE     => energy.setEnergyStored(value.toInt)
             case _ => //No Operation, not defined ID
         }
     }
