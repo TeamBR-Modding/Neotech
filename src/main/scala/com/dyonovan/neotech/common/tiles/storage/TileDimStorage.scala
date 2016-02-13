@@ -3,11 +3,8 @@ package com.dyonovan.neotech.common.tiles.storage
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
-import net.minecraft.block.state.IBlockState
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.BlockPos
-import net.minecraft.world.World
 
 /**
   * Created by Dyonovan on 1/23/2016.
@@ -40,9 +37,6 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
         if(worldObj != null && worldObj.isRemote && (lastLock != lock))
             worldObj.markBlockRangeForRenderUpdate(pos, pos)
     }
-
-    override def shouldRefresh(world: World, pos: BlockPos, oldState: IBlockState, newSate: IBlockState) =
-        oldState.getBlock ne newSate.getBlock
 
     def isStackEqual(stack: ItemStack): Boolean = {
         if (getStackInSlot(0) == null) true
