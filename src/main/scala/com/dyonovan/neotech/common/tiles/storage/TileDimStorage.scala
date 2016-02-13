@@ -74,7 +74,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
 
     override def insertItem(slot: Int, originalStack: ItemStack, simulate: Boolean): ItemStack = {
         if (originalStack == null) return null
-        if (!isItemValidForSlot(slot, originalStack) || !worldObj.isRemote) return originalStack
+        if (!isItemValidForSlot(slot, originalStack)) return originalStack
 
         if (inventoryContents.get(0) == null) {
             if (!simulate) {
@@ -98,7 +98,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
     }
 
     override def extractItem(extractSlot: Int, amount: Int, simulate: Boolean): ItemStack = {
-        if (amount == 0 || inventoryContents.get(0) == null || qty == 0 || !worldObj.isRemote) return null
+        if (amount == 0 || inventoryContents.get(0) == null || qty == 0) return null
 
         val actual = Math.min(amount, qty)
         val returnStack = inventoryContents.get(0).copy()
