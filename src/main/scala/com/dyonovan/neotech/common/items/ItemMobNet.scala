@@ -2,6 +2,7 @@ package com.dyonovan.neotech.common.items
 
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import net.minecraft.entity.EntityList
+import net.minecraft.entity.monster.EntityMob
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.MovingObjectPosition
@@ -34,7 +35,11 @@ class ItemMobNet extends BaseItem("mobNet", 16) {
                 entity.setPosition(pos.getX, pos.getY, pos.getZ)
                 world.spawnEntityInWorld(entity)
                 stack.setTagCompound(null)
-                //TODO if mob is aggresive, attack player
+                entity match {
+                    case mob: EntityMob =>
+                        mob.setAttackTarget(player)
+                    case _ =>
+                }
             }
         }
         stack
