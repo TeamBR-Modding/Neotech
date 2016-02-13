@@ -66,8 +66,10 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     })
 
     var time = 40
+    var saplingTimer = 600
     override def doWork() : Unit = {
         time -= 1
+        saplingTimer -= 1
         if (!isBuildingCache && time <= 0 && energy.getEnergyStored > costToOperate) {
             time = 40
             if(cache.isEmpty)
@@ -75,7 +77,11 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             else
                 chopTree()
             pullInSaplings()
+        }
+
+        if(saplingTimer <= 0) {
             plantSaplings()
+            saplingTimer = 600
         }
     }
 
