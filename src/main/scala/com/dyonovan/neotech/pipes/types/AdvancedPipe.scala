@@ -36,7 +36,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
 
     override def resetIO() : Unit = {
         for(dir <- EnumFacing.values()) {
-            sideModes.put(dir, BOTH)
+            sideModes.put(dir, INONLY)
         }
     }
 
