@@ -28,6 +28,7 @@ class ModelTank(baseModel: IBakedModel) extends ISmartItemModel {
     val faceBakery = new FaceBakery
     var fluidHeight: Float = 0.0F
     var renderFluid: Fluid = null
+    var isVoid = false
 
     override def handleItemState(stack: ItemStack): IBakedModel = {
         fluidHeight = 2.01F
@@ -51,6 +52,10 @@ class ModelTank(baseModel: IBakedModel) extends ISmartItemModel {
                         fluidHeight = 16
                 }
             }
+        }
+        if (ItemStack.areItemsEqual(stack, new ItemStack(Item.getItemFromBlock(BlockManager.voidTank)))) {
+            isVoid = true
+            fluidHeight = 15
         }
         this
     }
@@ -80,6 +85,14 @@ class ModelTank(baseModel: IBakedModel) extends ISmartItemModel {
             list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 13.99F), new Vector3f(13.99F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.SOUTH, modelRot, null, scale, true))
             list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 2.01F), new Vector3f(2.01F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.WEST, modelRot, null, scale, true))
             list.add(faceBakery.makeBakedQuad(new Vector3f(13.99F, 2.01F, 2.01F), new Vector3f(13.99F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(renderFluid.getStill.toString), EnumFacing.EAST, modelRot, null, scale, true))
+        } else if (isVoid) {
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, fluidHeight, 2.01F), new Vector3f(13.99F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/portal"), EnumFacing.UP, modelRot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 0.001F, 2.01F), new Vector3f(13.999F, 0.001F, 13.999F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/portal"), EnumFacing.DOWN, modelRot, null, scale, true))
+
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 2.01F), new Vector3f(13.99F, fluidHeight, 2.01F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/portal"), EnumFacing.NORTH, modelRot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 13.99F), new Vector3f(13.99F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/portal"), EnumFacing.SOUTH, modelRot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 2.01F), new Vector3f(2.01F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/portal"), EnumFacing.WEST, modelRot, null, scale, true))
+            list.add(faceBakery.makeBakedQuad(new Vector3f(13.99F, 2.01F, 2.01F), new Vector3f(13.99F, fluidHeight, 13.99F), face, Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/portal"), EnumFacing.EAST, modelRot, null, scale, true))
         }
         list
     }

@@ -38,5 +38,7 @@ class ModelFactory {
             new ModelTank(event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "diamondTank", "inventory"))))
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "creativeTank", "inventory"),
             new ModelTank(event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "creativeTank", "inventory"))))
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "voidTank", "inventory"),
+            new ModelTank(event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "voidTank", "inventory"))))
     }
 }

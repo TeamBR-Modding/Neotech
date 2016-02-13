@@ -3,9 +3,8 @@ package com.dyonovan.neotech.common.blocks.storage
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.client.gui.GuiColor
 import net.minecraft.block.Block
-import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemStack, ItemBlock}
+import net.minecraft.item.{Item, ItemBlock, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.{FluidContainerRegistry, FluidStack, IFluidContainerItem}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -27,15 +26,9 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
     setMaxDamage(16)
     setHasSubtypes(true)
 
-    /*@SideOnly(Side.CLIENT)
-    override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[ItemStack]): Unit = {
-        val is = new ItemStack(this)
-        is.setItemDamage(16)
-        subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
-    }*/
-
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
+        if (ItemStack.areItemsEqual(stack, new ItemStack(Item.getItemFromBlock(BlockManager.voidTank)))) return
         if (getFluid(stack) != null) {
             list.asInstanceOf[java.util.List[String]].add(GuiColor.WHITE + getFluid(stack).getLocalizedName)
             list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + getFluid(stack).amount.toString + "/" +
@@ -57,6 +50,7 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
 
     override def drain(container: ItemStack, maxDrain: Int, doDrain: Boolean): FluidStack = {
         if (!container.hasTagCompound || !container.getTagCompound.hasKey("Fluid")) return null
+        if (container.getTagCompound.hasKey("Tier") && container.getTagCompound.getInteger("Tier") == 5) return null
 
         val stack: FluidStack = FluidStack.loadFluidStackFromNBT(container.getTagCompound.getCompoundTag("Fluid"))
         if (stack == null) return null

@@ -44,7 +44,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
     }
 
     override def onServerTick() : Unit = {
-        if(!isPowered && tank != null && tank.getFluid != null && worldObj.getWorldTime % 20 == 0) {
+        if(!isPowered && tank != null && tank.getFluid != null && worldObj.getWorldTime % 20 == 0 && tier != 5) {
             worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
                 case otherTank: IFluidHandler =>
                     if (otherTank.canFill(EnumFacing.UP, tank.getFluid.getFluid)) {
@@ -62,7 +62,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
 
 
     override def onClientTick(): Unit = {
-        if(tank.getFluid != null) {
+        if(tank.getFluid != null && tier != 5) {
             offset += dir
             if (offset >= 0.3 || offset <= -0.3)
                 dir = -dir
@@ -92,6 +92,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
             case 2 => Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/gold_block")
             case 3 => Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/diamond_block")
             case 4 => Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/emerald_block")
+            case 5 => Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/obsidian")
             case _ => Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/iron_block")
         }
     }
@@ -131,15 +132,15 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
     }
 
     override def canFill(from: EnumFacing, fluid: Fluid): Boolean = {
-        tank.getFluid == null || tank.getFluid.getFluid == fluid
+        tank.getFluid == null || tank.getFluid.getFluid == fluid || tier == 5
     }
 
     override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = {
-        tank.getFluid != null || tank.getFluid.getFluid == fluid
+        tank.getFluid != null || tank.getFluid.getFluid == fluid || tier != 5
     }
 
     override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
-        if (canFill(from, resource.getFluid)) {
+        if (canFill(from, resource.getFluid) && tier != 5) {
             if (tank.fill(resource, false) > 0) {
                 val actual = tank.fill(resource, doFill)
                 if(doFill)
@@ -147,7 +148,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
                 return actual
             } else if (tier == 4) return resource.amount
             else return fillAbove(from, resource, doFill)
-        }
+        } else if (tier == 5) return resource.amount
         0
     }
 
@@ -194,8 +195,10 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
             fluidName = GuiColor.GRAY + "Empty"
             fluidAmount = GuiColor.RED + "0 / " + tank.getCapacity + " mb"
         }
-        tipList.add(GuiColor.WHITE + "Fluid: " + fluidName)
-        tipList.add(fluidAmount)
+        if (tier != 5) {
+            tipList.add(GuiColor.WHITE + "Fluid: " + fluidName)
+            tipList.add(fluidAmount)
+        }
         tipList
     }
 }

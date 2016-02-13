@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11
   */
 class TileTankFluidRenderer extends TileEntitySpecialRenderer[TileTank] {
     override def renderTileEntityAt(te: TileTank, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int): Unit = {
-        if(te.getCurrentFluid != null) {
+        if(te.getCurrentFluid != null || te.getTier == 5) {
             GlStateManager.pushMatrix()
             GlStateManager.pushAttrib()
 
@@ -33,10 +33,16 @@ class TileTankFluidRenderer extends TileEntitySpecialRenderer[TileTank] {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
             GlStateManager.disableLighting()
 
-            val fluidIcon: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(te.getCurrentFluid.getStill(te.tank.getFluid).toString)
-            RenderUtils.setColor(Color.decode(te.tank.getFluid.getFluid.getColor.toString))
-            RenderUtils.renderCubeWithTexture(2.01 / 16.0, 1.01 / 16, 2.01 / 16.0, 13.99 / 16.0, te.getFluidLevelScaled / 16, 13.99 / 16.0,
-                fluidIcon.getMinU, fluidIcon.getMinV, fluidIcon.getMaxU, fluidIcon.getMaxV)
+            if (te.getTier < 5) {
+                val fluidIcon: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(te.getCurrentFluid.getStill(te.tank.getFluid).toString)
+                RenderUtils.setColor(Color.decode(te.tank.getFluid.getFluid.getColor.toString))
+                RenderUtils.renderCubeWithTexture(2.01 / 16.0, 1.01 / 16, 2.01 / 16.0, 13.99 / 16.0, te.getFluidLevelScaled / 16, 13.99 / 16.0,
+                    fluidIcon.getMinU, fluidIcon.getMinV, fluidIcon.getMaxU, fluidIcon.getMaxV)
+            } else if (te.getTier == 5) {
+                val voidIcon: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:blocks/portal")
+                RenderUtils.renderCubeWithTexture(2.01 / 16.0, 1.01 / 16, 2.01 / 16.0, 13.99 / 16.0, 13.99 / 16, 13.99 / 16.0,
+                    voidIcon.getMinU, voidIcon.getMinV, voidIcon.getMaxU, voidIcon.getMaxV)
+            }
             RenderUtils.restoreColor()
             GlStateManager.enableLighting()
             RenderUtils.bindMinecraftBlockSheet

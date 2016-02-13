@@ -125,6 +125,10 @@ public class CraftingRecipeManager {
                 "ABA",
                 "BCB",
                 "ABA", 'A', Items.diamond, 'B', "blockGlass", 'C', BlockManager.goldTank()));
+        GameRegistry.addRecipe(new ShapedOreRecipe(Item.getItemFromBlock(BlockManager.voidTank()),
+                "ABA",
+                "BCB",
+                "ABA", 'A', Blocks.obsidian, 'B', "blockGlass", 'C', Items.ender_pearl));
 
         //Pipes
         //Basic

@@ -75,6 +75,7 @@ object BlockManager {
     val goldTank = new BlockTank("goldTank", 2)
     val diamondTank = new BlockTank("diamondTank", 3)
     val creativeTank = new BlockTank("creativeTank", 4)
+    val voidTank = new BlockTank("voidTank", 5)
 
     //Solar Panels
     val solarPanelT1 = new BlockSolarPanel("solarPanelT1", 1)
@@ -135,6 +136,7 @@ object BlockManager {
         registerBlock(goldTank, "goldTank", classOf[TileTank], classOf[ItemBlockTank])
         registerBlock(diamondTank, "diamondTank", classOf[TileTank], classOf[ItemBlockTank])
         registerBlock(creativeTank, "creativeTank", classOf[TileTank], classOf[ItemBlockTank])
+        registerBlock(voidTank, "voidTank", classOf[TileTank], classOf[ItemBlockTank])
 
         //Solar Panels
         registerBlock(solarPanelT1, "solarPanelT1", classOf[TileSolarPanel])

@@ -52,6 +52,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.goldTank))
         registerItem(Item.getItemFromBlock(BlockManager.diamondTank))
         registerItem(Item.getItemFromBlock(BlockManager.creativeTank))
+        registerItem(Item.getItemFromBlock(BlockManager.voidTank))
         registerItem(Item.getItemFromBlock(BlockManager.blockCrafter))
         registerItem(Item.getItemFromBlock(BlockManager.blockMiniatureSun))
         registerItem(Item.getItemFromBlock(BlockManager.playerPlate))

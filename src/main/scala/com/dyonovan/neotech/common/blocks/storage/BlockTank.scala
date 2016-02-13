@@ -49,7 +49,8 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
                 if (amount == fluid.amount) {
                     if (getTier == 4)
                         fluid.amount = tank.getTierInfo(getTier)._2
-                    tank.fill(EnumFacing.UP, fluid, doFill = true)
+                    if (getTier != 5)
+                        tank.fill(EnumFacing.UP, fluid, doFill = true)
                     if (!player.capabilities.isCreativeMode)
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, consumeItem(heldItem))
                     world.markBlockForUpdate(pos)

@@ -95,6 +95,7 @@ tile.neotech:ironTank.name=Iron Fluid Tank
 tile.neotech:goldTank.name=Gold Fluid Tank
 tile.neotech:diamondTank.name=Diamond Fluid Tank
 tile.neotech:creativeTank.name=Creative Fluid Tank
+tile.neotech:voidTank.name=Void Tank
 
 # Misc
 tile.neotech:blockCrafter.name=Duel Crafter
