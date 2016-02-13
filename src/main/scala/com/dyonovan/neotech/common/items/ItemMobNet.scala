@@ -1,11 +1,11 @@
 package com.dyonovan.neotech.common.items
 
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
-import net.minecraft.entity.EntityList
 import net.minecraft.entity.monster.EntityMob
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.{Entity, EntityList}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.MovingObjectPosition
+import net.minecraft.util.{EnumFacing, MovingObjectPosition}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -29,10 +29,10 @@ class ItemMobNet extends BaseItem("mobNet", 16) {
         if (stack.hasTagCompound && !world.isRemote) {
             val mop = getMovingObjectPositionFromPlayer(world, player, false)
             if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                val pos = mop.getBlockPos.offset(mop.sideHit)
                 val entity = EntityList.createEntityByName(stack.getTagCompound.getString("type"), world)
                 entity.readFromNBT(stack.getTagCompound)
-                entity.setPosition(pos.getX, pos.getY, pos.getZ)
+                offsetInDir(entity, mop.sideHit)
+                entity.setPosition(mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord)
                 world.spawnEntityInWorld(entity)
                 stack.setTagCompound(null)
                 entity match {
@@ -43,6 +43,17 @@ class ItemMobNet extends BaseItem("mobNet", 16) {
             }
         }
         stack
+    }
+
+    def offsetInDir(entity : Entity, dir : EnumFacing) = {
+        dir match {
+            case EnumFacing.DOWN => entity.posY -= 1
+            case EnumFacing.NORTH => entity.posZ += 1
+            case EnumFacing.SOUTH => entity.posZ -= 1
+            case EnumFacing.EAST => entity.posX -= 1
+            case EnumFacing.WEST => entity.posX += 1
+            case _ =>
+        }
     }
 
     override def hasEffect(stack : ItemStack) = stack.hasTagCompound
