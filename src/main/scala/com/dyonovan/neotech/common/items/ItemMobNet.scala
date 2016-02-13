@@ -45,6 +45,8 @@ class ItemMobNet extends BaseItem("mobNet", 16) {
         stack
     }
 
+    override def hasEffect(stack : ItemStack) = stack.hasTagCompound
+
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if (stack.hasTagCompound){

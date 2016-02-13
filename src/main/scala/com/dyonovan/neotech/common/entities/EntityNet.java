@@ -1,12 +1,14 @@
 package com.dyonovan.neotech.common.entities;
 
 import com.dyonovan.neotech.managers.ItemManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,8 +48,8 @@ public class EntityNet extends EntityThrowable {
     protected void onImpact(MovingObjectPosition mop) {
         ItemStack stack = new ItemStack(ItemManager.mobNet(), 1);
         if (mop != null && !worldObj.isRemote) {
-            if (mop.entityHit instanceof EntityCreature || mop.entityHit instanceof EntitySlime || mop.entityHit instanceof EntityGhast) {
-                //TODO BlackList, Slimes, Wither Skels
+            if (isValidEntity(mop.entityHit)) {
+                //TODO BlackList
                 NBTTagCompound tag = new NBTTagCompound();
                 mop.entityHit.writeToNBT(tag);
                 tag.setString("type", EntityList.getEntityString(mop.entityHit));
@@ -58,5 +60,12 @@ public class EntityNet extends EntityThrowable {
             worldObj.spawnEntityInWorld(item);
         }
         this.setDead();
+    }
+
+    private boolean isValidEntity(Entity entity) {
+        return entity instanceof EntityCreature ||
+                entity instanceof EntitySlime ||
+                entity instanceof EntityGhast ||
+                entity instanceof EntityBat;
     }
 }
