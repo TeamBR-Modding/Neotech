@@ -24,9 +24,30 @@ class TileSolarPanel extends MachineGenerator with Waila {
     def this(t: Int) {
         this()
         tier = t
+        initEnergy(t)
     }
 
-    energy = new EnergyStorage(BASE_ENERGY)
+    def initEnergy(t: Int): Unit = {
+        t match {
+            case 1 => energy = new EnergyStorage(amountEnergy(t), 2000, 2000)
+            case 2 => energy = new EnergyStorage(amountEnergy(t), 10000, 10000)
+            case 3 => energy = new EnergyStorage(amountEnergy(t), 100000, 100000)
+            case _ =>
+        }
+        if (worldObj != null)
+            worldObj.markBlockForUpdate(pos)
+    }
+
+    def amountEnergy(t: Int): Int = {
+        t match {
+            case 1 => 25000
+            case 2 => 1000000
+            case 3 => 10000000
+            case _ => 0
+        }
+    }
+
+    override def getSupposedEnergy : Int = { amountEnergy(tier) }
 
     /**
       * Called to tick generation. This is where you add power to the generator
@@ -126,6 +147,8 @@ class TileSolarPanel extends MachineGenerator with Waila {
       */
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super.writeToNBT(tag)
+        if (energy != null)
+            energy.writeToNBT(tag)
         tag.setInteger("Tier", tier)
     }
 
@@ -134,6 +157,11 @@ class TileSolarPanel extends MachineGenerator with Waila {
       */
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super.readFromNBT(tag)
+        if (tag.hasKey("Tier")) {
+            if (tier == 0) initEnergy(tag.getInteger("Tier"))
+            tier = tag.getInteger("Tier")
+            if (energy != null) energy.readFromNBT(tag)
+        }
         tier = tag.getInteger("Tier")
     }
 
