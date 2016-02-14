@@ -92,6 +92,7 @@ object BlockManager {
     val dimStorage = new BlockDimStorage("dimStorage")
     val creativeDimStorage = new BlockCreativeDimStorage
     val redstoneClock = new BlockRedstoneClock
+    val mobStand = new BlockMobStand
 
     def preInit(): Unit = {
         //Machines
@@ -154,6 +155,7 @@ object BlockManager {
         registerBlock(flushableChest, "flushableChest", classOf[TileFlushableChest])
         registerBlock(dimStorage, "dimStorage", classOf[TileDimStorage], classOf[ItemBlockDimStorage])
         registerBlock(redstoneClock, "redstoneClock", classOf[TileRedstoneClock])
+        registerBlock(mobStand, "mobStand", classOf[TileMobStand])
     }
 
     /**
