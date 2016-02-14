@@ -9,6 +9,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.passive.EntityBat;
+import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -66,6 +67,7 @@ public class EntityNet extends EntityThrowable {
         return entity instanceof EntityCreature ||
                 entity instanceof EntitySlime ||
                 entity instanceof EntityGhast ||
-                entity instanceof EntityBat;
+                entity instanceof EntityBat ||
+                entity instanceof EntitySquid;
     }
 }
