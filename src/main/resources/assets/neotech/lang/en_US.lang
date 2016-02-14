@@ -105,6 +105,7 @@ tile.neotech:chunkLoader.name=Chunk Loader
 tile.neotech:dimStorage.name=Dimensional Crate
 tile.neotech:redstoneClock.name=Redstone Clock
 tile.neotech:mechanicalPipe.name=Mechanical Pipe
+tile.neotech:mobStand.name=Mob Stand
 
 #######################
 # Pipes
@@ -193,6 +194,9 @@ inventory.trashBag.title=Trash Bag
 # Buttons
 neotech.button.disable=Disabled?
 
+# Mob Stand
+neotech.mobStand.title=Mob Stand
+
 #######################
 # Common Text
 #######################
@@ -233,6 +237,9 @@ neotech.text.processors=Processors
 neotech.text.hardDrives=Hard Drives
 neotech.text.control=Control
 neotech.text.expansion=Expansion
+
+neotech.text.size=Size
+neotech.text.facing=Facing
 
 #######################
 # Descriptions

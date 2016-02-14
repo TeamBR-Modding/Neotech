@@ -297,33 +297,6 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             10000
     }
 
-    /*/**
-      * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
-      *
-      * @param from Orientation the energy is received from.
-      * @param maxReceive Maximum amount of energy to receive.
-      * @param simulate If TRUE, the charge will only be simulated.
-      * @return Amount of energy that was (or would have been, if simulated) received.
-      */
-    override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
-        if (energy != null) {
-            val actual = energy.receiveEnergy(maxReceive, simulate)
-            if (worldObj != null)
-                worldObj.markBlockForUpdate(pos)
-            actual
-        } else 0
-    }
-
-    /**
-      * Used to extract energy from this tile. You should return zero if you don't want to be able to extract
-      *
-      * @param from The direction pulling from
-      * @param maxExtract The maximum amount to extract
-      * @param simulate True to just simulate, not actually drain
-      * @return How much energy was/should be drained
-      */
-    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = 0
-*/
     /**
       * Get the current energy stored in the energy tank
       *
