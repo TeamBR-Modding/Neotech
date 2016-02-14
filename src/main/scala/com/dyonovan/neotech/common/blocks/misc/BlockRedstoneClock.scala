@@ -38,7 +38,7 @@ class BlockRedstoneClock extends BaseBlock(Material.rock, "redstoneClock", class
     def updateState (worldIn: World, pos: BlockPos, state: IBlockState, toMax : Boolean) : Unit = {
         val i: Int = if(toMax) 15 else 0
         val flag: Boolean = i > 0
-        worldIn.setBlockState(pos, this.setRedstoneStrength(state, i), 2)
+        worldIn.setBlockState(pos, this.setRedstoneStrength(state, i), 4)
         this.updateNeighbors(worldIn, pos)
     }
 
