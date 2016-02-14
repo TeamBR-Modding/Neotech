@@ -23,7 +23,7 @@ class TileMobStand extends TileEntity with Inventory with Syncable {
     final val DIRECTION = 1
 
     var entity: Entity = _
-    var scale: Float = 1.0F
+    var scale: Float = 0.0F
     var rotation: Float = 0.0F
 
     override def initialSize: Int = 1
