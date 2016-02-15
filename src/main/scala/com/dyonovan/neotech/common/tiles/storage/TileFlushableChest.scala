@@ -90,9 +90,10 @@ class TileFlushableChest extends Syncable with Inventory {
 
     override def clear() = {
         super.clear()
-        worldObj.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.fizz", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F)
-        if(worldObj != null && !worldObj.isRemote)
+        if(worldObj != null && !worldObj.isRemote) {
+            worldObj.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.fizz", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F)
             sendValueToClient(0, 0)
+        }
     }
 
     override def setVariable(id: Int, value: Double): Unit = {
