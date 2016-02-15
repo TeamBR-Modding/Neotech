@@ -46,13 +46,13 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
       ******************************************************************************************************************/
 
     override def canConnect(facing: EnumFacing): Boolean =
-        if(super.canConnect(facing))
+        if(super.canConnect(facing)) {
             getWorld.getTileEntity(pos.offset(facing)) match {
-                case inventory : IInventory => true
-                case itemHandler : IItemHandler => true
-                case pipe : SimplePipe => true
+                case tile : TileEntity if tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite) => true
+                case pipe: SimplePipe => true
                 case _ => false
             }
+        }
         else
             super.canConnect(facing)
 
