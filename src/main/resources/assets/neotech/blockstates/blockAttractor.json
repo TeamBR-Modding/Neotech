@@ -5,9 +5,21 @@
       "0": "blocks/bedrock",
       "1": "blocks/obsidian",
       "2": "blocks/beacon"
-    }
+    },
+    "model" : "neotech:blockAttractor"
   },
   "variants": {
-    "normal" : { "model" : "neotech:blockAttractor" }
+    "attached_side": {
+      "north" : { "x" : 90 },
+      "south" : { "x" : 270 },
+      "west" : {
+        "x" : 90,
+        "y" : 270 },
+      "east" : {
+        "x" : 90,
+        "y" : 90 },
+      "up" : { "x" : 0},
+      "down" : { "x" : 180}
+    }
   }
 }
