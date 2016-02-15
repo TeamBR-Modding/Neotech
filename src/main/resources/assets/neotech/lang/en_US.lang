@@ -239,7 +239,11 @@ neotech.text.control=Control
 neotech.text.expansion=Expansion
 
 neotech.text.size=Size
-neotech.text.facing=Facing
+neotech.text.facing=Rotation
+neotech.text.fitToBlock=Fit
+neotech.text.fitToBlockInfo=Fit the mob render to one block
+neotech.text.lookAtPlayer=Follow
+neotech.text.lookAtPlayerInfo=Have the mob look at the player
 
 #######################
 # Descriptions
