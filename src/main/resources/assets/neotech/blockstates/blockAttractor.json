@@ -1,0 +1,13 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "textures": {
+      "0": "blocks/bedrock",
+      "1": "blocks/obsidian",
+      "2": "blocks/beacon"
+    }
+  },
+  "variants": {
+    "normal" : { "model" : "neotech:blockAttractor" }
+  }
+}

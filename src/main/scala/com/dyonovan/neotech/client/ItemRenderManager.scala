@@ -61,6 +61,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.dimStorage))
         registerItem(Item.getItemFromBlock(BlockManager.redstoneClock))
         registerItem(Item.getItemFromBlock(BlockManager.mobStand))
+        registerItem(Item.getItemFromBlock(BlockManager.blockAttractor))
         registerItem(ItemManager.upgradeMBFull)
         registerItem(ItemManager.upgradeMBEmpty)
         registerItem(ItemManager.upgradeHardDrive)
