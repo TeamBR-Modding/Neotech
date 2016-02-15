@@ -106,6 +106,7 @@ tile.neotech:dimStorage.name=Dimensional Crate
 tile.neotech:redstoneClock.name=Redstone Clock
 tile.neotech:mechanicalPipe.name=Mechanical Pipe
 tile.neotech:mobStand.name=Mob Stand
+tile.neotech:blockAttractor.name=Attractor (WIP)
 
 #######################
 # Pipes

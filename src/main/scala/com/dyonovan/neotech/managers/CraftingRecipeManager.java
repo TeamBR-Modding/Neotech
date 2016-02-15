@@ -277,6 +277,12 @@ public class CraftingRecipeManager {
                 " E ",
                 "S S", 'E', Items.ender_pearl, 'S', Items.string);
 
+        //Mob Stand
+        GameRegistry.addRecipe(new ItemStack(BlockManager.mobStand(), 4),
+                "QQQ",
+                "Q Q",
+                "Q Q", 'Q', Items.quartz);
+
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);

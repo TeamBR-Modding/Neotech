@@ -78,10 +78,22 @@ class TileMobStand extends Syncable with Inventory {
 
     override def setVariable(id: Int, value: Double): Unit = {
         id match {
-            case SIZE => scale = value.toFloat
-            case DIRECTION => rotation = value.toFloat
-            case FIT => fitToBlock = if (value != 0) true else false
-            case LOOK => lookAtPlayer = if (value != 0) true else false
+            case SIZE =>
+                scale = value.toFloat
+                if (!worldObj.isRemote)
+                    sendValueToClient(SIZE, value)
+            case DIRECTION =>
+                rotation = value.toFloat
+                if (!worldObj.isRemote)
+                    sendValueToClient(DIRECTION, value)
+            case FIT =>
+                fitToBlock = if (value != 0) true else false
+                if (!worldObj.isRemote)
+                    sendValueToClient(FIT, value)
+            case LOOK =>
+                lookAtPlayer = if (value != 0) true else false
+                if (!worldObj.isRemote)
+                    sendValueToClient(LOOK, value)
             case _ =>
         }
     }
