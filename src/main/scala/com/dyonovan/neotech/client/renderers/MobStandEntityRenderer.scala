@@ -36,12 +36,10 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
             GlStateManager.scale(1.0F - te.scale, 1.0F - te.scale, 1.0F - te.scale)
 
         if(te.lookAtPlayer) {
-            val headRotation = 0.0F
             val player = Minecraft.getMinecraft.thePlayer
             var angle = Math.toDegrees(Math.atan2(te.getPos.getZ + 0.5 - player.posZ, te.getPos.getX + 0.5 - player.posX))
             if(angle < 0)
                 angle += 360
-            //ent.setRotationYawHead(angle.toFloat / 360.toFloat)
             GlStateManager.rotate(-angle.toFloat - 90, 0.0F, 1.0F, 0.0F)
         } else
             GlStateManager.rotate(te.rotation * 360, 0.0F, 1.0F, 0.0F)
