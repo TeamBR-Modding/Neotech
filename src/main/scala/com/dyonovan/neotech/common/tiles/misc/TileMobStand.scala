@@ -5,6 +5,8 @@ import com.teambr.bookshelf.common.tiles.traits.{Inventory, Syncable}
 import net.minecraft.entity.{Entity, EntityList}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.AxisAlignedBB
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * This file was created for NeoTech
@@ -105,5 +107,11 @@ class TileMobStand extends Syncable with Inventory {
             case FIT => if (fitToBlock) 1.0 else 0.0
             case LOOK => if (lookAtPlayer) 1.0 else 0.0
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    override def getRenderBoundingBox: AxisAlignedBB = {
+        val box = super.getRenderBoundingBox
+        box.expand(0.0, 1.0, 0.0)
     }
 }

@@ -4,7 +4,7 @@ import com.dyonovan.neotech.common.tiles.misc.TileMobStand
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
-import net.minecraft.client.renderer.{GlStateManager, OpenGlHelper, RenderHelper}
+import net.minecraft.client.renderer.{GlStateManager, RenderHelper}
 
 /**
   * This file was created for NeoTech
@@ -56,10 +56,5 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
         renderManager.setRenderShadow(true)
 
         GlStateManager.popMatrix()
-        RenderHelper.disableStandardItemLighting()
-        GlStateManager.disableRescaleNormal()
-        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit)
-        GlStateManager.disableTexture2D()
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit)
     }
 }
