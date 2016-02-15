@@ -1,11 +1,10 @@
 package com.dyonovan.neotech.common.tiles.misc
 
 import com.dyonovan.neotech.managers.ItemManager
-import com.teambr.bookshelf.common.tiles.traits.{Syncable, Inventory}
+import com.teambr.bookshelf.common.tiles.traits.{Inventory, Syncable}
 import net.minecraft.entity.{Entity, EntityList}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
 
 /**
   * This file was created for NeoTech
@@ -17,7 +16,7 @@ import net.minecraft.tileentity.TileEntity
   * @author Dyonovan
   * @since 2/13/2016
   */
-class TileMobStand extends TileEntity with Inventory with Syncable {
+class TileMobStand extends Syncable with Inventory {
 
     final val SIZE = 0
     final val DIRECTION = 1
@@ -25,6 +24,7 @@ class TileMobStand extends TileEntity with Inventory with Syncable {
     final val LOOK = 3
 
     var entity: Entity = _
+    var entityType: String = _
     var scale: Float = 0.0F
     var rotation: Float = 0.0F
     var fitToBlock = true
@@ -32,11 +32,19 @@ class TileMobStand extends TileEntity with Inventory with Syncable {
 
     override def initialSize: Int = 1
 
-    override def onInventoryChanged(slot : Int) = {
+    override def onServerTick(): Unit = {
+        if (entityType != null && entity == null) entity = EntityList.createEntityByName(entityType, worldObj)
+    }
+
+    override def onInventoryChanged(slot: Int) = {
         super.onInventoryChanged(slot)
         if (getStackInSlot(0) != null && getStackInSlot(0).hasTagCompound) {
-            entity = EntityList.createEntityByName(getStackInSlot(0).getTagCompound.getString("type"), worldObj)
-        } else entity = null
+            entityType = getStackInSlot(0).getTagCompound.getString("type")
+            entity = EntityList.createEntityByName(entityType, worldObj)
+        } else {
+            entity = null
+            entityType = null
+        }
         worldObj.markBlockForUpdate(pos)
     }
 
@@ -45,7 +53,7 @@ class TileMobStand extends TileEntity with Inventory with Syncable {
     }
 
     override def writeToNBT(tag: NBTTagCompound): Unit = {
-        super[TileEntity].writeToNBT(tag)
+        super[Syncable].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         if (entity != null)
             tag.setString("Type", EntityList.getEntityString(entity))
@@ -56,10 +64,12 @@ class TileMobStand extends TileEntity with Inventory with Syncable {
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super[TileEntity].readFromNBT(tag)
+        super[Syncable].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
-        if (tag.hasKey("Type") && worldObj != null)
-            entity = EntityList.createEntityByName(tag.getString("Type"), worldObj)
+        if (tag.hasKey("Type"))
+            entityType = tag.getString("Type")
+        if (worldObj != null && entityType != null)
+            entity = EntityList.createEntityByName(entityType, worldObj)
         rotation = tag.getFloat("Rotation")
         scale = tag.getFloat("Scale")
         fitToBlock = tag.getBoolean("Fit")
@@ -70,8 +80,8 @@ class TileMobStand extends TileEntity with Inventory with Syncable {
         id match {
             case SIZE => scale = value.toFloat
             case DIRECTION => rotation = value.toFloat
-            case FIT => fitToBlock = if(value != 0) true else false
-            case LOOK => lookAtPlayer = if(value != 0) true else false
+            case FIT => fitToBlock = if (value != 0) true else false
+            case LOOK => lookAtPlayer = if (value != 0) true else false
             case _ =>
         }
     }
@@ -80,8 +90,8 @@ class TileMobStand extends TileEntity with Inventory with Syncable {
         id match {
             case SIZE => scale
             case DIRECTION => rotation
-            case FIT => if(fitToBlock) 1.0 else 0.0
-            case LOOK => if(lookAtPlayer) 1.0 else 0.0
+            case FIT => if (fitToBlock) 1.0 else 0.0
+            case LOOK => if (lookAtPlayer) 1.0 else 0.0
         }
     }
 }

@@ -4,7 +4,8 @@
         "0": "blocks/quartz_block_bottom",
         "1": "blocks/quartz_block_top",
         "2": "blocks/quartz_block_chiseled_top",
-        "3": "blocks/quartz_block_lines"
+        "3": "blocks/quartz_block_lines",
+        "particle" : "blocks/quartz_block_bottom"
     },
     "elements": [
         {

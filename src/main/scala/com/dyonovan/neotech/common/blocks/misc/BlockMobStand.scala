@@ -4,6 +4,7 @@ import com.dyonovan.neotech.client.gui.misc.GuiMobStand
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.container.misc.ContainerMobStand
 import com.dyonovan.neotech.common.tiles.misc.TileMobStand
+import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
@@ -21,7 +22,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 2/13/2016
   */
-class BlockMobStand extends BaseBlock(Material.iron, "mobStand", classOf[TileMobStand]) with OpensGui {
+class BlockMobStand extends BaseBlock(Material.iron, "mobStand", classOf[TileMobStand]) with OpensGui with DropsItems {
 
     override def getRenderType: Int = 3
 
