@@ -5,7 +5,7 @@ import com.dyonovan.neotech.client.renderers._
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.entities.EntityNet
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.common.tiles.misc.TileMobStand
+import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.BlockManager
@@ -100,6 +100,7 @@ class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[FluidInterfacePipe], new FluidResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileDimStorage], new TileDimStorageRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileMobStand], new MobStandEntityRenderer[TileMobStand])
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileAttractor], new AttractorEnderEyeRenderer)
     }
 
     /**
