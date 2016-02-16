@@ -6,6 +6,7 @@ import com.dyonovan.neotech.pipes.entities.{FluidResourceEntity, ResourceEntity}
 import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
 import net.minecraftforge.fluids._
 
@@ -110,7 +111,7 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
                         if (extractOnMode(new FluidResourceEntity(tempTank,
                             pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
                             pos.offset(dir), pos.north(), pos.north(), worldObj), simulate = true)) {
-                            tank.drain(dir.getOpposite, tempTank.getFluidAmount, true)
+                            tank.drain(dir.getOpposite, nextResource.resource.getFluid.amount, true)
                             nextResource.resource = tempTank
                             extractOnMode(nextResource, simulate = false)
                             return
@@ -191,7 +192,9 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
             if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
                 worldObj.getTileEntity(tilePos) match {
                     case tank: IFluidHandler =>
-                        val filledAmount = test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false)
+                        val otherTile = createTileAndSimulate(tank, dir, tilePos)
+                        val filledAmount = otherTile.asInstanceOf[IFluidHandler].fill(dir.getOpposite, resource.resource.getFluid, false)
+                        otherTile.invalidate()
                         if (filledAmount > 0) {
                             return true
                         }
@@ -213,7 +216,9 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
             if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
                 worldObj.getTileEntity(tilePos) match {
                     case tank: IFluidHandler =>
-                        val filledAmount = test(tank, dir).fill(dir.getOpposite, resource.resource.getFluid, false)
+                        val otherTile = createTileAndSimulate(tank, dir, tilePos)
+                        val filledAmount = otherTile.asInstanceOf[IFluidHandler].fill(dir.getOpposite, resource.resource.getFluid, false)
+                        otherTile.invalidate()
                         if (filledAmount > 0) {
                             resource.resource.getFluid.amount = filledAmount
                             waitingQueue.add(resource)
@@ -225,9 +230,19 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
         }
     }
 
-    def test(otherTank : IFluidHandler, dir : EnumFacing): IFluidHandler = {
+    def createTileAndSimulate(otherTank : IFluidHandler, dir : EnumFacing, position : BlockPos): TileEntity = {
+        var otherTile : TileEntity = null
+
+        if(worldObj.getTileEntity(position) != null) {
+            otherTile = worldObj.getBlockState(position).getBlock.createTileEntity(worldObj, worldObj.getBlockState(position))
+            val otherTag = new NBTTagCompound
+            worldObj.getTileEntity(position).writeToNBT(otherTag)
+            otherTile.readFromNBT(otherTag)
+            otherTile.setWorldObj(worldObj)
+        }
+
         if (waitingQueue.isEmpty)
-            otherTank
+            otherTile
         else {
             val iterator = waitingQueue.iterator() //Remove deads
             while (iterator.hasNext) {
@@ -235,36 +250,10 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
                     iterator.remove()
             }
 
-            if(otherTank.getTankInfo(dir)(0) == null || otherTank.getTankInfo(dir)(0).fluid == null)
-                return otherTank
-
-            tempTank = new IFluidHandler {
-                val tank = new FluidTank(if(otherTank.getTankInfo(dir)(0).fluid != null)otherTank.getTankInfo(dir)(0).fluid.copy() else null, otherTank.getTankInfo(dir)(0).capacity)
-                override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)
-                override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = {
-                    val fluidAmount = tank.drain(maxDrain, false)
-                    if (fluidAmount != null && doDrain)
-                        tank.drain(maxDrain, true)
-                    fluidAmount
-                }
-                override def canFill(from: EnumFacing, fluid: Fluid): Boolean = otherTank.canFill(from, fluid)
-                override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = otherTank.canDrain(from, fluid)
-                override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
-                    if (canFill(from, resource.getFluid)) {
-                        if (tank.fill(resource, false) > 0) {
-                            val actual = tank.fill(resource, doFill)
-                            return actual
-                        }
-                    }
-                    0
-                }
-                override def getTankInfo(from: EnumFacing): Array[FluidTankInfo] = getTankInfo(from)
-            }
-
             for(x <- 0 until waitingQueue.size) {
-                tempTank.fill(dir, waitingQueue.get(x).resource.getFluid, true)
+                otherTile.asInstanceOf[IFluidHandler].fill(dir, waitingQueue.get(x).resource.getFluid, true)
             }
-            tempTank
+            otherTile
         }
     }
 

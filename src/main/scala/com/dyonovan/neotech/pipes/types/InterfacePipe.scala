@@ -272,9 +272,9 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             //If we have a path add it
             if (!simulate) {
                 resources.add(resource)
-                getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 queue.clear()
             } else {
+                getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 nextResource = resource
             }
             true
@@ -394,9 +394,9 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
             //If we have a path add it
             if (!simulate) {
                 resources.add(resource)
-                getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 queue.clear()
             } else {
+                getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 nextResource = resource
             }
             true
@@ -543,6 +543,7 @@ trait InterfacePipe[T, R <: ResourceEntity[T]] extends AdvancedPipe {
                 getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 queue.clear()
             } else {
+                getWorld.getTileEntity(resource.destinationPipe).asInstanceOf[InterfacePipe[T, R]].resourceBeingExtracted(resource)
                 nextResource = resource
             }
             true
