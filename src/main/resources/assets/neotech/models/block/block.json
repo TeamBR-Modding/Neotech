@@ -7,6 +7,10 @@
         "north": "#all",
         "east": "#all",
         "south": "#all",
-        "west": "#all"
+        "west": "#all",
+
+        //We need to add these here since they don't use our models
+        "fluidCopperStill" : "neotech:blocks/fluidCopper_still",
+        "fluidCopperFlow" : "neotech:blocks/fluidCopper_flow"
     }
 }

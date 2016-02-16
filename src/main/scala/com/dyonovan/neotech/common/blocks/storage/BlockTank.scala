@@ -16,21 +16,21 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.World
-import net.minecraftforge.fluids.FluidContainerRegistry
+import net.minecraftforge.fluids.{IFluidContainerItem, FluidContainerRegistry}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.util.Random
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 16, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 16, 2015
+  */
 class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
@@ -42,6 +42,8 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
                                   hitX: Float, hitY: Float, hitZ: Float): Boolean = {
         val heldItem = player.getHeldItem
         val tank = world.getTileEntity(pos).asInstanceOf[TileTank]
+
+        //Registered Fluid Container
         if (heldItem != null && FluidContainerRegistry.isContainer(heldItem)) {
             val fluid = FluidContainerRegistry.getFluidForFilledItem(heldItem)
             if (fluid != null) {
@@ -77,8 +79,33 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
                     }
                 }
             }
-        } else if (player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
-            if (breakTank(world, pos, state) == true) {
+        }
+
+        //IFluidContainerItems
+        else if(heldItem != null && heldItem.getItem.isInstanceOf[IFluidContainerItem]) {
+            val containerItem = heldItem.getItem.asInstanceOf[IFluidContainerItem]
+            val fluid = containerItem.getFluid(heldItem)
+            if(fluid != null) { //There is fluid in the container
+                val amount = tank.fill(EnumFacing.UP, containerItem.drain(heldItem, fluid.amount, false), doFill = false)
+                if(amount > 0) {
+                    tank.fill(EnumFacing.UP, containerItem.drain(heldItem, amount, !player.capabilities.isCreativeMode), doFill = true)
+                    world.markBlockForUpdate(pos)
+                    return true
+                }
+                return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
+            } else { //There is no fluid in the container
+                val amount = tank.drain(EnumFacing.DOWN, containerItem.getCapacity(heldItem), doDrain = false)
+                if(amount != null) {
+                    containerItem.fill(heldItem, tank.drain(EnumFacing.DOWN, containerItem.getCapacity(heldItem), doDrain = true), true)
+                    return true
+                }
+                return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
+            }
+        }
+
+        //Wrench
+        else if (player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
+            if (breakTank(world, pos, state)) {
                 world.setBlockToAir(pos)
                 world.removeTileEntity(pos)
                 world.markBlockForUpdate(pos)

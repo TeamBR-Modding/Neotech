@@ -12,6 +12,7 @@ import com.dyonovan.neotech.world.{ChunkLoaderManager, NeotechWorldGenerator}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
 import net.minecraftforge.common.ForgeChunkManager
+import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fml.common.Mod.EventHandler
 import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.network.NetworkRegistry
@@ -32,6 +33,9 @@ import org.apache.logging.log4j.LogManager
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION,
     dependencies = Reference.DEPENDENCIES, modLanguage = "scala", updateJSON = Reference.UPDATE_JSON)
 object NeoTech {
+
+    //Lets us make some buckets
+    FluidRegistry.enableUniversalBucket()
 
     //The logger. For logging
     final val logger = LogManager.getLogger(Reference.MOD_NAME)
@@ -59,13 +63,12 @@ object NeoTech {
         ConfigRegistry.preInit()
         BlockManager.preInit()
         ItemManager.preInit()
-        //FluidManager.preInit()
+        FluidManager.preInit()
         EntityManager.preInit()
         proxy.preInit()
         GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
         CraftingRecipeManager.preInit()
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ItemGuiManager)
-
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
