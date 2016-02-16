@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.common.tiles.machines.generators
 
-import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.client.gui.machines.generators.GuiFluidGenerator
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.dyonovan.neotech.common.tiles.MachineGenerator
@@ -29,7 +28,6 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
     final val INPUT_SLOT       = 0
     final val OUTPUT_SLOT      = 1
 
-    energy   = new EnergyStorage(BASE_ENERGY)
     val tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10)
 
     /**
@@ -55,7 +53,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
       * Called to tick generation. This is where you add power to the generator
       */
     override def generate(): Unit =
-        energy.receiveEnergy(getEnergyProduced, false)
+        energyStorage.receiveEnergy(getEnergyProduced, false)
 
     /**
       * Called per tick to manage burn time. You can do nothing here if there is nothing to generate. You should decrease burn time here
@@ -80,7 +78,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
         }
 
         //Do burntime
-        if(energy.getEnergyStored < energy.getMaxEnergyStored  && burnTime <= 1) {
+        if(energyStorage.getEnergyStored < energyStorage.getMaxEnergyStored  && burnTime <= 1) {
             val fluidDrained = tank.drain(FluidContainerRegistry.BUCKET_VOLUME / 10, true)
             if (fluidDrained == null || fluidDrained.getFluid == null || fluidDrained.amount <= 0)
                 return false
@@ -267,7 +265,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
       *
       * @return int range 0 - 16
       */
-    override def getRedstoneOutput: Int = (energy.getEnergyStored * 16) / energy.getMaxEnergyStored
+    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
 
     /**
       * Used to get what particles to spawn. This will be called when the tile is active

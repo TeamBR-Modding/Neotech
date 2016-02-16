@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.common.tiles
 
-import cofh.api.energy.IEnergyReceiver
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -16,7 +15,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis <pauljoda>
   * @since 1/31/2016
   */
-abstract class MachineProcessor extends AbstractMachine with IEnergyReceiver {
+abstract class MachineProcessor extends AbstractMachine {
 
     var cookTime = 0
     var didWork  = false
@@ -83,7 +82,7 @@ abstract class MachineProcessor extends AbstractMachine with IEnergyReceiver {
             }
             if(canProcess) { //For those moments where we completeCook and then are reset, can change this result
                 cook()
-                energy.extractEnergy(getEnergyCostPerTick, false)
+                energyStorage.extractEnergy(getEnergyCostPerTick, false)
             }
             didWork = true
         } else {
@@ -187,23 +186,18 @@ abstract class MachineProcessor extends AbstractMachine with IEnergyReceiver {
         slot == 0 && getOutputForStack(itemStackIn) != null
 
     /*******************************************************************************************************************
-      ************************************************** Energy methods ************************************************
+      ************************************************ Energy methods **************************************************
       ******************************************************************************************************************/
 
     /**
-      * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
-      *
-      * @param from Orientation the energy is received from.
-      * @param maxReceive Maximum amount of energy to receive.
-      * @param simulate If TRUE, the charge will only be simulated.
-      * @return Amount of energy that was (or would have been, if simulated) received.
+      * Return true if you want this to be able to provide energy
+      * @return
       */
-    override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
-        if (energy != null) {
-            val actual = energy.receiveEnergy(maxReceive, simulate)
-            if (worldObj != null)
-                worldObj.markBlockForUpdate(pos)
-            actual
-        } else 0
-    }
+    def isProvider : Boolean = false
+
+    /**
+      * Return true if you want this to be able to receive energy
+      * @return
+      */
+    def isReceiver : Boolean = true
 }

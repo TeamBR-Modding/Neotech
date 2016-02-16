@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.tiles
 
-import cofh.api.energy.{IEnergyProvider, IEnergyReceiver, EnergyStorage}
+import cofh.api.energy.IEnergyReceiver
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -17,13 +17,13 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   *
   * Base machine class for all generating blocks
   */
-abstract class MachineGenerator extends AbstractMachine with IEnergyProvider {
+abstract class MachineGenerator extends AbstractMachine {
 
     var burnTime              = 0
     var currentObjectBurnTime = 0
     var didWork               = false
 
-    final val BASE_ENERGY     = 32000
+    override def BASE_ENERGY  = 32000
 
     /**
       * Called to tick generation. This is where you add power to the generator
@@ -57,11 +57,11 @@ abstract class MachineGenerator extends AbstractMachine with IEnergyProvider {
         didWork = burnTime == 1
 
         //Transfer
-        if (energy.getEnergyStored > 0) {
+        if (energyStorage.getEnergyStored > 0) {
             for (i <- EnumFacing.values()) {
                 worldObj.getTileEntity(pos.offset(i)) match {
                     case tile: IEnergyReceiver =>
-                        val want = tile.receiveEnergy(i.getOpposite, energy.getEnergyStored, true)
+                        val want = tile.receiveEnergy(i.getOpposite, energyStorage.getEnergyStored, true)
                         if (want > 0) {
                             val actual = extractEnergy(i, want, simulate = false)
                             tile.receiveEnergy(i.getOpposite, actual, false)
@@ -131,47 +131,16 @@ abstract class MachineGenerator extends AbstractMachine with IEnergyProvider {
       ******************************************************************************************************************/
 
     /**
-      * Used to change the energy to a new storage with a different size
-      *
-      * @param initial How much was in the old storage
+      * Return true if you want this to be able to provide energy
+      * @return
       */
-    override def changeEnergy(initial : Int): Unit = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
-            energy = new EnergyStorage(BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10))
-        }
-        else {
-            energy = new EnergyStorage(BASE_ENERGY)
-        }
-        energy.setEnergyStored(initial)
-        updateClient = true
-        worldObj.markBlockForUpdate(pos)
-    }
+    def isProvider : Boolean = true
 
     /**
-      * Used to determine how much energy should be in this tile
-      *
-      * @return How much energy should be available
+      * Return true if you want this to be able to receive energy
+      * @return
       */
-    override def getSupposedEnergy : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
-            BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10)
-        else
-            BASE_ENERGY
-    }
-
-    /**
-      * Used to extract energy from this tile. You should return zero if you don't want to be able to extract
-      *
-      * @param from The direction pulling from
-      * @param maxExtract The maximum amount to extract
-      * @param simulate True to just simulate, not actually drain
-      * @return How much energy was/should be drained
-      */
-    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = {
-        val actual = energy.extractEnergy(maxExtract, simulate)
-        worldObj.markBlockForUpdate(pos)
-        actual
-    }
+    def isReceiver : Boolean = false
 
     /*******************************************************************************************************************
       ************************************************ Inventory methods ***********************************************

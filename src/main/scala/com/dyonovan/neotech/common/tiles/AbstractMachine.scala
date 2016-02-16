@@ -1,9 +1,8 @@
 package com.dyonovan.neotech.common.tiles
 
-import cofh.api.energy.{EnergyStorage, IEnergyHandler}
 import com.dyonovan.neotech.collections.InputOutput
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.teambr.bookshelf.common.tiles.traits.{InventorySided, RedstoneAware, Syncable}
+import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, InventorySided, RedstoneAware, Syncable}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
@@ -22,16 +21,24 @@ import net.minecraftforge.common.capabilities.Capability
   * @since August 11, 2015
   */
 abstract class AbstractMachine extends Syncable with Upgradeable with InventorySided
-        with RedstoneAware with InputOutput with IEnergyHandler {
+        with RedstoneAware with InputOutput with EnergyHandler {
 
-    var energy = new EnergyStorage(10000)
-    var redstone : Int = 0
-    val REDSTONE_FIELD_ID = 0
-    val IO_FIELD_ID = 1
-    val UPDATE_CLIENT = 2
-    val ENERGY_UPDATE = 3
+    var redstone : Int      = 0
+    val REDSTONE_FIELD_ID   = 0
+    val IO_FIELD_ID         = 1
+    val UPDATE_CLIENT       = 2
+    val ENERGY_UPDATE       = 3
 
-    var working  = false
+    def BASE_ENERGY         = 10000
+
+    var working             = false
+
+    /**
+      * Used to define the default energy storage for this energy handler
+      *
+      * @return
+      */
+    def defaultEnergyStorageSize : Int = BASE_ENERGY
 
     /**
       * Used to get what particles to spawn. This will be called when the tile is active
@@ -128,7 +135,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * We want to make sure the client knows what to render
       */
     override def onClientTick() : Unit = {
-        if(getSupposedEnergy != energy.getMaxEnergyStored)
+        super[EnergyHandler].onClientTick()
+        if(getSupposedEnergy != energyStorage.getMaxEnergyStored)
             sendValueToServer(UPDATE_CLIENT, 0)
         //Mark for render update if needed
         if(working != isActive)
@@ -139,8 +147,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     var ticker = 0
     override def onServerTick(): Unit = {
         //Make sure our energy storage is correct
-        if(getSupposedEnergy != energy.getMaxEnergyStored)
-            changeEnergy(energy.getEnergyStored)
+        if(getSupposedEnergy != energyStorage.getMaxEnergyStored)
+            changeEnergy(energyStorage.getEnergyStored)
 
         //If redstone mode is not matched, break out of the method
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
@@ -209,7 +217,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         super[TileEntity].writeToNBT(tag)
         super[InventorySided].writeToNBT(tag)
         super[InputOutput].writeToNBT(tag)
-        energy.writeToNBT(tag)
+        super[EnergyHandler].writeToNBT(tag)
         tag.setInteger("RedstoneMode", redstone)
         if(updateClient && worldObj != null) {
             tag.setBoolean("UpdateEnergy", true)
@@ -225,10 +233,10 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         super[TileEntity].readFromNBT(tag)
         super[InventorySided].readFromNBT(tag)
         super[InputOutput].readFromNBT(tag)
+        super[EnergyHandler].readFromNBT(tag)
         if(tag.hasKey("UpdateEnergy") && worldObj != null  )
             changeEnergy(tag.getInteger("Energy"))
         redstone = tag.getInteger("RedstoneMode")
-        energy.readFromNBT(tag)
     }
 
     /**
@@ -275,12 +283,11 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       */
     def changeEnergy(initial : Int): Unit = {
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
-            energy = new EnergyStorage(10000 * (getUpgradeBoard.getHardDriveCount * 10))
+            setMaxEnergyStored(BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10))
         }
         else {
-            energy = new EnergyStorage(10000)
+            setMaxEnergyStored(BASE_ENERGY)
         }
-        energy.setEnergyStored(initial)
         updateClient = true
         worldObj.markBlockForUpdate(pos)
     }
@@ -292,35 +299,10 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       */
     def getSupposedEnergy : Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
-            10000 * (getUpgradeBoard.getHardDriveCount * 10)
+            BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10)
         else
-            10000
+            BASE_ENERGY
     }
-
-    /**
-      * Get the current energy stored in the energy tank
-      *
-      * @param from The side to check (can be used if you have different energy storages)
-      * @return
-      */
-    override def getEnergyStored(from: EnumFacing): Int = energy.getEnergyStored
-
-    /**
-      * Get the maximum energy this handler can store, not the current
-      *
-      * @param from The side to check from (can be used if you have different energy storages)
-      * @return The maximum potential energy
-      */
-    override def getMaxEnergyStored(from: EnumFacing): Int = energy.getMaxEnergyStored
-
-    /**
-      * Checks if energy can connect to a given side
-      *
-      * @param from The face to check
-      * @return True if the face allows energy flow
-      */
-    override def canConnectEnergy(from: EnumFacing): Boolean = true
-
 
     /*******************************************************************************************************************
       ********************************************** Syncable methods **************************************************
@@ -337,7 +319,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             case REDSTONE_FIELD_ID => redstone = value.toInt
             case IO_FIELD_ID       => toggleMode(EnumFacing.getFront(value.toInt))
             case UPDATE_CLIENT     => updateClient = true
-            case ENERGY_UPDATE     => energy.setEnergyStored(value.toInt)
+            case ENERGY_UPDATE     => energyStorage.setEnergyStored(value.toInt)
             case _ => //No Operation, not defined ID
         }
     }

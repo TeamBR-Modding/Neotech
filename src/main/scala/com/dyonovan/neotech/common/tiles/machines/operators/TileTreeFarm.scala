@@ -3,11 +3,11 @@ package com.dyonovan.neotech.common.tiles.machines.operators
 import java.util
 import java.util.Comparator
 
-import cofh.api.energy.{EnergyStorage, IEnergyReceiver}
+import cofh.api.energy.IEnergyReceiver
 import com.dyonovan.neotech.client.gui.machines.operators.GuiTreeFarm
 import com.dyonovan.neotech.common.container.machines.operators.ContainerTreeFarm
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.collections.Location
 import net.minecraft.block.state.IBlockState
 import net.minecraft.block.{Block, BlockLeaves, BlockSapling}
@@ -15,7 +15,7 @@ import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemAxe, ItemShears, ItemStack}
-import net.minecraft.util.{StatCollector, AxisAlignedBB, BlockPos, EnumFacing}
+import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, StatCollector}
 import net.minecraft.world.World
 
 import scala.util.control.Breaks._
@@ -51,7 +51,6 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             2
     }
 
-    energy = new EnergyStorage(10000)
     override def initialSize: Int = 18
 
     lazy val AXE_SLOT = 0
@@ -70,7 +69,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     override def doWork() : Unit = {
         time -= 1
         saplingTimer -= 1
-        if (!isBuildingCache && time <= 0 && energy.getEnergyStored > costToOperate) {
+        if (!isBuildingCache && time <= 0 && energyStorage.getEnergyStored > costToOperate) {
             time = 40
             if(cache.isEmpty)
                 findNextTree()
@@ -162,8 +161,8 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             worldObj.setBlockToAir(logPosition)
             if(getStackInSlot(AXE_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(AXE_SLOT, null)
-            energy.extractEnergy(costToOperate, false)
-            sendValueToClient(ENERGY_UPDATE, energy.getEnergyStored)
+            energyStorage.extractEnergy(costToOperate, false)
+            sendValueToClient(ENERGY_UPDATE, energyStorage.getEnergyStored)
             return true
         }
         false
@@ -176,8 +175,8 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             worldObj.setBlockToAir(leavePosition)
             if(getStackInSlot(SHEARS_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(SHEARS_SLOT, null)
-            energy.extractEnergy(costToOperate, false)
-            sendValueToClient(ENERGY_UPDATE, energy.getEnergyStored)
+            energyStorage.extractEnergy(costToOperate, false)
+            sendValueToClient(ENERGY_UPDATE, energyStorage.getEnergyStored)
             return true
         } else {
             if(worldObj.rand.nextInt(20) == 0) {
@@ -389,23 +388,18 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         new GuiTreeFarm(player, this)
 
     /*******************************************************************************************************************
-      ************************************************** Energy methods ************************************************
+      ************************************************ Energy methods **************************************************
       ******************************************************************************************************************/
 
     /**
-      * Add energy to an IEnergyReceiver, internal distribution is left entirely to the IEnergyReceiver.
-      *
-      * @param from Orientation the energy is received from.
-      * @param maxReceive Maximum amount of energy to receive.
-      * @param simulate If TRUE, the charge will only be simulated.
-      * @return Amount of energy that was (or would have been, if simulated) received.
+      * Return true if you want this to be able to provide energy
+      * @return
       */
-    override def receiveEnergy(from: EnumFacing, maxReceive: Int, simulate: Boolean): Int = {
-        if (energy != null) {
-            val actual = energy.receiveEnergy(maxReceive, simulate)
-            if (worldObj != null)
-                worldObj.markBlockForUpdate(pos)
-            actual
-        } else 0
-    }
+    def isProvider : Boolean = false
+
+    /**
+      * Return true if you want this to be able to receive energy
+      * @return
+      */
+    def isReceiver : Boolean = true
 }

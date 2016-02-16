@@ -27,8 +27,6 @@ class TileFurnaceGenerator extends MachineGenerator {
     final val BASE_ENERGY_TICK = 20
     final val INPUT_SLOT       = 0
 
-    energy = new EnergyStorage(BASE_ENERGY)
-
     /**
       * The initial size of the inventory
       *
@@ -52,7 +50,7 @@ class TileFurnaceGenerator extends MachineGenerator {
       * Called to tick generation. This is where you add power to the generator
       */
     override def generate(): Unit =
-        energy.receiveEnergy(getEnergyProduced, false)
+        energyStorage.receiveEnergy(getEnergyProduced, false)
 
     /**
       * Called per tick to manage burn time. You can do nothing here if there is nothing to generate. You should decrease burn time here
@@ -61,7 +59,7 @@ class TileFurnaceGenerator extends MachineGenerator {
       * @return True if able to continue generating
       */
     override def manageBurnTime(): Boolean = {
-        if(energy.getEnergyStored < energy.getMaxEnergyStored && burnTime <= 1) {
+        if(energyStorage.getEnergyStored < energyStorage.getMaxEnergyStored && burnTime <= 1) {
             if (getStackInSlot(INPUT_SLOT) != null) {
                 burnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(INPUT_SLOT))
 
@@ -175,7 +173,7 @@ class TileFurnaceGenerator extends MachineGenerator {
       *
       * @return int range 0 - 16
       */
-    override def getRedstoneOutput: Int = (energy.getEnergyStored * 16) / energy.getMaxEnergyStored
+    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
 
     /**
       * Used to get what particles to spawn. This will be called when the tile is active

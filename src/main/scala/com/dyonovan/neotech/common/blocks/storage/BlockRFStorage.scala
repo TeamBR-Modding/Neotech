@@ -2,9 +2,10 @@ package com.dyonovan.neotech.common.blocks.storage
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.client.gui.storage.GuiRFStorage
+import com.dyonovan.neotech.common.container.storage.ContainerRFStorage
 import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
 import com.dyonovan.neotech.lib.Reference
-import com.teambr.bookshelf.common.container.ContainerGeneric
+import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
@@ -31,7 +32,7 @@ import scala.util.Random
  * @author Dyonovan
  * @since August 15, 2015
  */
-class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.iron) with OpensGui {
+class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.iron) with OpensGui with DropsItems {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
@@ -59,7 +60,7 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:
     ItemStack): Unit = {
         if(stack.hasTagCompound && !world.isRemote) { //If there is a tag and is on the server
-            world.getTileEntity(pos).asInstanceOf[TileRFStorage].energy.setEnergyStored(stack.getTagCompound
+            world.getTileEntity(pos).asInstanceOf[TileRFStorage].energyStorage.setEnergyStored(stack.getTagCompound
                     .getInteger("Energy"))
             world.markBlockForUpdate(pos)
         }
@@ -74,7 +75,7 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        new ContainerGeneric
+        new ContainerRFStorage(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileRFStorage])
     }
 
     @SideOnly(Side.CLIENT)

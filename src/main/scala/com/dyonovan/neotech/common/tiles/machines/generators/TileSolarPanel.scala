@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.common.tiles.machines.generators
 
-import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.teambr.bookshelf.api.waila.Waila
 import net.minecraft.item.ItemStack
@@ -29,9 +28,18 @@ class TileSolarPanel extends MachineGenerator with Waila {
 
     def initEnergy(t: Int): Unit = {
         t match {
-            case 1 => energy = new EnergyStorage(amountEnergy(t), 2000, 2000)
-            case 2 => energy = new EnergyStorage(amountEnergy(t), 10000, 10000)
-            case 3 => energy = new EnergyStorage(amountEnergy(t), 100000, 100000)
+            case 1 =>
+                setMaxEnergyStored(amountEnergy(t))
+                setMaxExtract(2000)
+                setMaxReceive(2000)
+            case 2 =>
+                setMaxEnergyStored(amountEnergy(t))
+                setMaxExtract(10000)
+                setMaxReceive(10000)
+            case 3 =>
+                setMaxEnergyStored(amountEnergy(t))
+                setMaxExtract(100000)
+                setMaxReceive(100000)
             case _ =>
         }
         if (worldObj != null)
@@ -52,7 +60,7 @@ class TileSolarPanel extends MachineGenerator with Waila {
     /**
       * Called to tick generation. This is where you add power to the generator
       */
-    override def generate(): Unit = energy.receiveEnergy(generating(), false)
+    override def generate(): Unit = energyStorage.receiveEnergy(generating(), false)
 
     private def generating(): Int = {
         if (worldObj.canSeeSky(pos) && worldObj.getSunBrightnessFactor(1.0F) > 0.7F) {
@@ -133,22 +141,11 @@ class TileSolarPanel extends MachineGenerator with Waila {
 
     override def canConnectEnergy(from: EnumFacing): Boolean = from == EnumFacing.DOWN
 
-    override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int = {
-        if (from == EnumFacing.DOWN) {
-            val actual = energy.extractEnergy(maxExtract, simulate)
-            worldObj.markBlockForUpdate(pos)
-            return actual
-        }
-        0
-    }
-
     /**
       * Write the tag
       */
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super.writeToNBT(tag)
-        if (energy != null)
-            energy.writeToNBT(tag)
         tag.setInteger("Tier", tier)
     }
 
@@ -160,7 +157,6 @@ class TileSolarPanel extends MachineGenerator with Waila {
         if (tag.hasKey("Tier")) {
             if (tier == 0) initEnergy(tag.getInteger("Tier"))
             tier = tag.getInteger("Tier")
-            if (energy != null) energy.readFromNBT(tag)
         }
         tier = tag.getInteger("Tier")
     }
@@ -171,7 +167,7 @@ class TileSolarPanel extends MachineGenerator with Waila {
     override def returnWailaBody(tipList: java.util.List[String]) : java.util.List[String] = {
         tipList.add("Generating: " + generating() + " (" + (if (generating() == 0) 0 else (worldObj.getSunBrightnessFactor(1.0F) * 100).toInt) + "%)")
         tipList.add("Max: " + getEnergyProduced)
-        tipList.add(energy.getEnergyStored + "/" + energy.getMaxEnergyStored)
+        tipList.add(energyStorage.getEnergyStored + "/" + energyStorage.getMaxEnergyStored)
         tipList
     }
 }

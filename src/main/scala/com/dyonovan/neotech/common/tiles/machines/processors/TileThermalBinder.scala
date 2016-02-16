@@ -68,7 +68,7 @@ class TileThermalBinder extends MachineProcessor {
       * @return True if you are able to process
       */
     override def canProcess : Boolean = {
-        if(isRunning && energy.getEnergyStored >= getEnergyCostPerTick) {
+        if(isRunning && energyStorage.getEnergyStored >= getEnergyCostPerTick) {
             if(getStackInSlot(MB_OUTPUT) == null && getStackInSlot(MB_INPUT) != null && lastCount != 0 && getCount == lastCount)
                 return true
         }

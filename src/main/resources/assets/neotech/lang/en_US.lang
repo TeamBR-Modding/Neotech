@@ -239,6 +239,9 @@ neotech.text.hardDrives=Hard Drives
 neotech.text.control=Control
 neotech.text.expansion=Expansion
 
+neotech.text.rfIn=Current RF In
+neotech.text.rfOut=Current RF Out
+
 neotech.text.size=Size
 neotech.text.facing=Rotation
 neotech.text.fitToBlock=Fit

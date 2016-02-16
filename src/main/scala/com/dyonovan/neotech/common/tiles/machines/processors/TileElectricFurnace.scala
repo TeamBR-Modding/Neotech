@@ -67,7 +67,7 @@ class TileElectricFurnace extends MachineProcessor {
       * @return True if you are able to process
       */
     override def canProcess : Boolean = {
-        if(energy.getEnergyStored >= getEnergyCostPerTick) {
+        if(energyStorage.getEnergyStored >= getEnergyCostPerTick) {
             if(getStackInSlot(INPUT_SLOT) == null || getOutputForStack(getStackInSlot(INPUT_SLOT)) == null)
                 return false
             else if(getStackInSlot(OUTPUT_SLOT) == null)
