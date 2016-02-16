@@ -76,7 +76,7 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                 else
                     new Color(0, 0, 0)
             }
-            components += new GuiComponentText("   ~" + inputRate.toString + " RF/tick", 55, 30, colorIn) {
+            components += new GuiComponentText("   " + inputRate.toString + " RF/tick", 55, 30, colorIn) {
 
                 /**
                   * Called after base render, is already translated to guiLeft and guiTop, just move offset
@@ -91,7 +91,7 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                         else
                             new Color(0, 0, 0)
                     }
-                    setText("   ~" + inputRate.toString + " RF/tick")
+                    setText("   " + inputRate.toString + " RF/tick")
                     color = colorIn
                     super.renderOverlay(guiLeft, guiTop, mouseX, mouseY)
                 }
@@ -107,7 +107,7 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                 else
                     new Color(0, 0, 0)
             }
-            components += new GuiComponentText("   ~" + inputRate.toString + " RF/tick", 55, 60, colorOut) {
+            components += new GuiComponentText("   " + inputRate.toString + " RF/tick", 55, 60, colorOut) {
                 /**
                   * Called after base render, is already translated to guiLeft and guiTop, just move offset
                   */
@@ -121,12 +121,11 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                         else
                             new Color(0, 0, 0)
                     }
-                    setText("   ~" + outputRate.toString + " RF/tick")
+                    setText("   " + outputRate.toString + " RF/tick")
                     color = colorOut
                     super.renderOverlay(guiLeft, guiTop, mouseX, mouseY)
                 }
             }
-
         }
     }
 }

@@ -21,6 +21,8 @@ import net.minecraft.util.EnumFacing
 class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with Waila {
 
     var tier = 0
+    lazy final val DRAIN_SLOT = 0
+    lazy final val FILL_SLOT  = 1
 
     def this(t: Int) {
         this()

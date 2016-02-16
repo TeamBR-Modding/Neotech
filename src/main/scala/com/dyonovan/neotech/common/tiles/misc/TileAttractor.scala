@@ -26,10 +26,6 @@ class TileAttractor extends TileEntity with InventorySided {
         facing == worldObj.getBlockState(pos).getValue(BlockAttractor.DIR).getOpposite
     }
 
-    override def getCapabilityFromTile[T](capability: Capability[T], facing: EnumFacing): T = {
-        super[TileEntity].getCapability[T](capability, facing)
-    }
-
     override def getCapability[T](capability: Capability[T], facing: EnumFacing) : T = {
         if (facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == worldObj.getBlockState(pos).getValue(BlockAttractor.DIR).getOpposite) {
@@ -44,7 +40,7 @@ class TileAttractor extends TileEntity with InventorySided {
                 }
             }
         }
-        getCapabilityFromTile[T](capability, facing)
+        super.getCapability[T](capability, facing)
     }
 
 

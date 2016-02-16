@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{EnumFacing, StatCollector}
 import net.minecraft.world.World
-import net.minecraftforge.common.capabilities.Capability
 
 /**
   * This file was created for NeoTech
@@ -144,7 +143,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         working = isActive
     }
 
-    var ticker = 0
+    var timeTicker = 0
     override def onServerTick(): Unit = {
         //Make sure our energy storage is correct
         if(getSupposedEnergy != energyStorage.getMaxEnergyStored)
@@ -159,12 +158,12 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         }
 
         //We want to try automatic IO if we are able to once a tick
-        if(shouldHandleIO && ticker <= 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
-            ticker = 20
+        if(shouldHandleIO && timeTicker <= 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
+            timeTicker = 20
             tryInput()
             tryOutput()
         }
-        ticker -= 1
+        timeTicker -= 1
 
         //Do what we are programed to do
         doWork()
@@ -246,28 +245,6 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         resetIO()
         redstone = 0
     }
-
-    /**
-      * Flag to let use know we are sided
-      */
-    override def hasCapability(capability: Capability[_], facing : EnumFacing) = true
-
-    /**
-      * Used to get the capability from the tile, since the InventorySide can't access these methods
-      */
-    override def getCapabilityFromTile[T](capability: Capability[T], facing: EnumFacing) : T =
-        super[TileEntity].getCapability[T](capability, facing)
-
-    /**
-      * Gets the IItemHandler for the face, allows ISided interactions without needing to implement ISided
-      *
-      * @param capability What kind of capability
-      * @param facing What side
-      * @tparam T The type
-      * @return The IItemHandler for that side
-      */
-    override def getCapability[T](capability: Capability[T], facing: EnumFacing) : T =
-        super[InventorySided].getCapability[T](capability, facing)
 
     /*******************************************************************************************************************
       ************************************************ Energy methods **************************************************
