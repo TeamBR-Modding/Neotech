@@ -2,7 +2,7 @@ package com.dyonovan.neotech.common.tiles.misc
 
 import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, Syncable}
-import net.minecraft.entity.{Entity, EntityList}
+import net.minecraft.entity.{Entity, EntityList, EntityLivingBase}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.AxisAlignedBB
@@ -24,6 +24,7 @@ class TileMobStand extends Syncable with Inventory {
     final val DIRECTION = 1
     final val FIT = 2
     final val LOOK = 3
+    final val NAME = 4
 
     var entity: Entity = _
     var entityType: String = _
@@ -31,23 +32,51 @@ class TileMobStand extends Syncable with Inventory {
     var rotation: Float = 0.0F
     var fitToBlock = true
     var lookAtPlayer = false
+    var renderName = true
 
     override def initialSize: Int = 1
 
     override def onServerTick(): Unit = {
-        if (entityType != null && entity == null) entity = EntityList.createEntityByName(entityType, worldObj)
+        if (entityType != null && entity == null) {
+            //entity = EntityList.createEntityByName(entityType, worldObj)
+            if (getStackInSlot(0) != null && getStackInSlot(0).hasTagCompound) {
+                val stack = getStackInSlot(0)
+                entityType = stack.getTagCompound.getString("type")
+                entity = EntityList.createEntityByName(entityType, worldObj)
+                entity.readFromNBT(stack.getTagCompound)
+                entity.posX = 0
+                entity.posY = 0
+                entity.posZ = 0
+                entity.setRotationYawHead(0.0F)
+                entity.asInstanceOf[EntityLivingBase].renderYawOffset = 0.0F
+                if (stack.hasDisplayName)
+                    entity.setCustomNameTag(stack.getDisplayName)
+                worldObj.markBlockForUpdate(getPos)
+            }
+        }
     }
 
-    override def onInventoryChanged(slot: Int) = {
-        super.onInventoryChanged(slot)
+    override def onInventoryChanged(slot: Int): Unit = {
+        super.onInventoryChanged(0)
+        if (!worldObj.isRemote) return
         if (getStackInSlot(0) != null && getStackInSlot(0).hasTagCompound) {
-            entityType = getStackInSlot(0).getTagCompound.getString("type")
+            val stack = getStackInSlot(0)
+            entityType = stack.getTagCompound.getString("type")
             entity = EntityList.createEntityByName(entityType, worldObj)
+            entity.readFromNBT(stack.getTagCompound)
+            entity.posX = 0
+            entity.posY = 0
+            entity.posZ = 0
+            entity.setRotationYawHead(0.0F)
+            entity.asInstanceOf[EntityLivingBase].renderYawOffset = 0.0F
+            if (stack.hasDisplayName)
+                entity.setCustomNameTag(stack.getDisplayName)
+            worldObj.markBlockForUpdate(getPos)
         } else {
             entity = null
             entityType = null
+            worldObj.markBlockForUpdate(getPos)
         }
-        worldObj.markBlockForUpdate(pos)
     }
 
     override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
@@ -63,6 +92,7 @@ class TileMobStand extends Syncable with Inventory {
         tag.setFloat("Scale", scale)
         tag.setBoolean("Fit", fitToBlock)
         tag.setBoolean("Look", lookAtPlayer)
+        tag.setBoolean("Name", renderName)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
@@ -70,12 +100,14 @@ class TileMobStand extends Syncable with Inventory {
         super[Inventory].readFromNBT(tag)
         if (tag.hasKey("Type"))
             entityType = tag.getString("Type")
-        if (worldObj != null && entityType != null)
-            entity = EntityList.createEntityByName(entityType, worldObj)
+        /*if (worldObj != null && entityType != null)
+            if (!worldObj.isRemote) createEntity()*/
         rotation = tag.getFloat("Rotation")
         scale = tag.getFloat("Scale")
         fitToBlock = tag.getBoolean("Fit")
         lookAtPlayer = tag.getBoolean("Look")
+        if (tag.hasKey("Name"))
+            renderName = tag.getBoolean("Name")
     }
 
     override def setVariable(id: Int, value: Double): Unit = {
@@ -96,6 +128,10 @@ class TileMobStand extends Syncable with Inventory {
                 lookAtPlayer = if (value != 0) true else false
                 if (!worldObj.isRemote)
                     sendValueToClient(LOOK, value)
+            case NAME =>
+                renderName = if (value != 0) true else false
+                if (!worldObj.isRemote)
+                    sendValueToClient(NAME, value)
             case _ =>
         }
     }
@@ -106,6 +142,7 @@ class TileMobStand extends Syncable with Inventory {
             case DIRECTION => rotation
             case FIT => if (fitToBlock) 1.0 else 0.0
             case LOOK => if (lookAtPlayer) 1.0 else 0.0
+            case NAME => if(renderName) 1.0 else 0.0
         }
     }
 

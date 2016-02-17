@@ -266,6 +266,8 @@ neotech.text.fitToBlock=Fit
 neotech.text.fitToBlockInfo=Fit the mob render to one block
 neotech.text.lookAtPlayer=Follow
 neotech.text.lookAtPlayerInfo=Have the mob look at the player
+neotech.text.renderName=Name
+neotech.text.renderNameInfo=Display Mob Name (Nametag Mob / Anvil Net)
 
 #######################
 # Descriptions

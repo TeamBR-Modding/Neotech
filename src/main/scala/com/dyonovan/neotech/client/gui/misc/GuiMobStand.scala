@@ -53,6 +53,16 @@ class GuiMobStand(playerInv: InventoryPlayer, tile: TileMobStand) extends
                 ArrayBuffer(StatCollector.translateToLocal("neotech.text.lookAtPlayerInfo"))
             }
         }
+        components += new GuiComponentCheckBox(55, 45, "neotech.text.renderName", tile.renderName) {
+            override def setValue(bool: Boolean): Unit = {
+                val value = if(bool) 1.0 else 0.0
+                tile.renderName = bool
+                tile.sendValueToServer(tile.NAME, value)
+            }
+            override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
+                ArrayBuffer(StatCollector.translateToLocal("neotech.text.renderNameInfo"))
+            }
+        }
         components += new GuiComponentText(StatCollector.translateToLocal("neotech.text.facing"), 28, 70)
         components += new GuiComponentText(StatCollector.translateToLocal("neotech.text.size"), 147, 73)
     }

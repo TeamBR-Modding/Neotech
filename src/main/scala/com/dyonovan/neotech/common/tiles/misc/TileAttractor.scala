@@ -49,6 +49,12 @@ class TileAttractor extends UpdatingTile with InventorySided {
         coolDown = COOL_DOWN_NUM
     }
 
+    /**
+      * Tries to insert the ItemStack into the inventory
+      *
+      * @param stack ItemStack to try and insert
+      * @return None if Full Stack inserted else Some(Items) that are leftover
+      */
     private def tryInsert(stack: ItemStack): Option[Int] = {
         if (stack.stackSize > 0) {
             for (i <- 0 until getSizeInventory) {
