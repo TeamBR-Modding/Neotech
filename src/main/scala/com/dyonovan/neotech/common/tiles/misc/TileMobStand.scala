@@ -36,29 +36,15 @@ class TileMobStand extends Syncable with Inventory {
 
     override def initialSize: Int = 1
 
-    override def onServerTick(): Unit = {
+    override def update(): Unit = {
+        super.update()
         if (entityType != null && entity == null) {
-            //entity = EntityList.createEntityByName(entityType, worldObj)
-            if (getStackInSlot(0) != null && getStackInSlot(0).hasTagCompound) {
-                val stack = getStackInSlot(0)
-                entityType = stack.getTagCompound.getString("type")
-                entity = EntityList.createEntityByName(entityType, worldObj)
-                entity.readFromNBT(stack.getTagCompound)
-                entity.posX = 0
-                entity.posY = 0
-                entity.posZ = 0
-                entity.setRotationYawHead(0.0F)
-                entity.asInstanceOf[EntityLivingBase].renderYawOffset = 0.0F
-                if (stack.hasDisplayName)
-                    entity.setCustomNameTag(stack.getDisplayName)
-                worldObj.markBlockForUpdate(getPos)
-            }
+            onInventoryChanged(0)
         }
     }
 
     override def onInventoryChanged(slot: Int): Unit = {
         super.onInventoryChanged(0)
-        if (!worldObj.isRemote) return
         if (getStackInSlot(0) != null && getStackInSlot(0).hasTagCompound) {
             val stack = getStackInSlot(0)
             entityType = stack.getTagCompound.getString("type")
@@ -71,11 +57,11 @@ class TileMobStand extends Syncable with Inventory {
             entity.asInstanceOf[EntityLivingBase].renderYawOffset = 0.0F
             if (stack.hasDisplayName)
                 entity.setCustomNameTag(stack.getDisplayName)
-            worldObj.markBlockForUpdate(getPos)
+            worldObj.markBlockForUpdate(pos)
         } else {
             entity = null
             entityType = null
-            worldObj.markBlockForUpdate(getPos)
+            worldObj.markBlockForUpdate(pos)
         }
     }
 
@@ -100,8 +86,6 @@ class TileMobStand extends Syncable with Inventory {
         super[Inventory].readFromNBT(tag)
         if (tag.hasKey("Type"))
             entityType = tag.getString("Type")
-        /*if (worldObj != null && entityType != null)
-            if (!worldObj.isRemote) createEntity()*/
         rotation = tag.getFloat("Rotation")
         scale = tag.getFloat("Scale")
         fitToBlock = tag.getBoolean("Fit")
