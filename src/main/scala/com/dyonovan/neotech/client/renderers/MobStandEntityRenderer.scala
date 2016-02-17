@@ -22,7 +22,6 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
         if (te.entity == null) return
         val ent = te.entity
 
-        GlStateManager.enableColorMaterial()
         GlStateManager.pushMatrix()
         GlStateManager.translate(x + 0.5, y + 1.0D, z + 0.5)
         if(te.fitToBlock){
