@@ -54,7 +54,8 @@ class TileAttractor extends UpdatingTile with InventorySided {
             for (i <- 0 until getSizeInventory) {
                 val done = insertItem(i, stack, simulate = false)
                 if (done == null) return None
-                stack.stackSize -= done.stackSize
+                if (stack.stackSize != done.stackSize)
+                    stack.stackSize -= done.stackSize
             }
         }
         Some(stack.stackSize)
