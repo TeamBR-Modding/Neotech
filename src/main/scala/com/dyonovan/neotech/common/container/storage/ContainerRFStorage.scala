@@ -17,8 +17,12 @@ import net.minecraft.entity.player.InventoryPlayer
 class ContainerRFStorage(playerInventory: InventoryPlayer, tile: TileRFStorage) extends
         BaseContainer(playerInventory, tile) {
 
-    addSlotToContainer(new RestrictedSlot(tile, 0, 30, 20))
-    addSlotToContainer(new RestrictedSlot(tile, 1, 30, 60))
+    addSlotToContainer(new RestrictedSlot(tile, 0, 30, 20) {
+        override def getSlotTexture = "neotech:gui/in"
+    })
+    addSlotToContainer(new RestrictedSlot(tile, 1, 30, 60) {
+        override def getSlotTexture = "neotech:gui/out"
+    })
 
     addPlayerInventorySlots(8, 84)
 }

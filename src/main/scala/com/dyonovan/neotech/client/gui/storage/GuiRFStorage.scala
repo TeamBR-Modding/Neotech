@@ -7,6 +7,7 @@ import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiComponentPowerBar}
 import com.teambr.bookshelf.util.ColorUtils
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.StatCollector
 
@@ -35,6 +36,7 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                   * @return The color of the bar
                   */
                 override  def getDynamicColor() : Color = {
+                    GlStateManager.enableBlend()
                     val scale = tileEntity.getEnergyStored(null) * 100 / tileEntity.getMaxEnergyStored(null)
                     if(scale >= 66) {
                         ColorUtils.getColorBetween(new Color(255, 153, 0), new Color(255, 0, 0), (scale - 67) / 33F)

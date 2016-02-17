@@ -11,6 +11,9 @@
 
         //We need to add these here since they don't use our models
         "fluidCopperStill" : "neotech:blocks/metal_still",
-        "fluidCopperFlow" : "neotech:blocks/metal_flow"
+        "fluidCopperFlow" : "neotech:blocks/metal_flow",
+
+        "in" : "neotech:gui/in",
+        "out" : "neotech:gui/out"
     }
 }
