@@ -44,12 +44,18 @@ class ItemMobGun extends BaseItem("mobGun", 1) {
         EnumAction.BOW
     }
 
-    override def getMaxItemUseDuration(stack: ItemStack): Int = 7200
+    override def getMaxItemUseDuration(stack: ItemStack): Int = 72000
 
     override def onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, timeLeft: Int): Unit = {
         if (!world.isRemote) {
             hasAmmo(player, remove = true)
-            val net = new EntityNet(world, player)
+            val heldTime = this.getMaxItemUseDuration(stack) - timeLeft
+            var f: Float = heldTime.toFloat / 20.0F
+            f = (f * f + f * 2.0F) / 3.0F
+            if (f < 0.1D) return
+            else if (f > 1.0F) f = 1.0F
+
+            val net = new EntityNet(world, player, f * 2.0F)
             world.spawnEntityInWorld(net)
             world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
         }
