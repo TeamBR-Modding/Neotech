@@ -4,9 +4,8 @@ import com.dyonovan.neotech.common.tiles.misc.TileAttractor
 import com.teambr.bookshelf.util.RenderUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
-import net.minecraft.client.renderer.{RenderHelper, GlStateManager}
-import net.minecraft.client.renderer.entity.{RenderEntityItem, RenderManager}
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
+import net.minecraft.client.renderer.{GlStateManager, RenderHelper}
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack

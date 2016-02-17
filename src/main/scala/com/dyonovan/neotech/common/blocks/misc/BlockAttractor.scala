@@ -1,6 +1,8 @@
 package com.dyonovan.neotech.common.blocks.misc
 
+import com.dyonovan.neotech.client.gui.misc.GuiAttractor
 import com.dyonovan.neotech.common.blocks.BaseBlock
+import com.dyonovan.neotech.common.container.misc.ContainerAttractor
 import com.dyonovan.neotech.common.tiles.misc.TileAttractor
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
@@ -50,10 +52,10 @@ class BlockAttractor extends BaseBlock(Material.portal, "blockAttractor", classO
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        null
+        new ContainerAttractor(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileAttractor])
     }
 
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        null
+        new GuiAttractor(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileAttractor])
     }
 }
