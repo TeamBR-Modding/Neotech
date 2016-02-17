@@ -252,11 +252,5 @@ object CrusherRecipeRegistry {
         list
     }
 
-    class CrusherRecipesStack(i: ItemStack, o: ItemStack, s: ItemStack, p: Int) {
-        var input = i
-        var output = o
-        var secondary = s
-        var secPercent = p
-    }
-
+    class CrusherRecipesStack(val input: ItemStack, val output: ItemStack, val secondary: ItemStack, val secPercent: Int) {}
 }

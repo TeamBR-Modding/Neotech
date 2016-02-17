@@ -7,12 +7,11 @@ import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.bookshelf.util.InventoryUtils
-import net.minecraft.inventory.{IInventory, ISidedInventory}
+import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
-import net.minecraftforge.items.wrapper.{InvWrapper, SidedInvWrapper}
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
 
 /**
@@ -106,24 +105,10 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
         for(dir <- EnumFacing.values()) {
             if (canConnectExtract(dir)) {
                 val otherObject = worldObj.getTileEntity(pos.offset(dir))
-                var otherInv: IItemHandler = null
-
-                if (!otherObject.isInstanceOf[IItemHandler]) {
-                    otherObject match {
-                        case iInventory: IInventory if !iInventory.isInstanceOf[ISidedInventory] => otherInv = new InvWrapper(iInventory)
-                        case iSided: ISidedInventory => otherInv = new SidedInvWrapper(iSided, dir.getOpposite)
-                        case _ =>
-                    }
-                } else otherObject match { //If we are a ItemHandler, we want to make sure not to wrap, it can be both IInventory and IItemHandler
-                    case itemHandler: IItemHandler => otherInv = itemHandler
-                    case _ =>
-                }
-
-                otherObject match { //Check for sidedness
-                    case tileEntity: TileEntity if tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite) =>
-                        otherInv = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
-                    case _ =>
-                }
+                val otherInv =
+                    if(otherObject.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite))
+                        otherObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
+                    else null
 
                 if (otherInv != null) {
                     for (x <- 0 until otherInv.getSlots) {
