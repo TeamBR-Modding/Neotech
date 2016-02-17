@@ -78,7 +78,7 @@ public class CraftingRecipeManager {
                 "BDB",
                 "ACA", 'A', "ingotBronze", 'B', Items.iron_axe, 'C', Items.shears, 'D', Blocks.redstone_block));
 
-        //Ore Blocks
+      /*  //Ore Blocks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockCopper()),
                 "AAA",
                 "AAA",
@@ -96,13 +96,13 @@ public class CraftingRecipeManager {
                 "AAA",
                 "AAA",
                 'A', "ingotBronze"));
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotBronze(), 9), new ItemStack(BlockManager.blockBronze()));
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotBronze(), 9), new ItemStack(BlockManager.blockBronze()));*/
 
         //RF Storage
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage())),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage())),
                 "ABA",
                 "DCD",
-                "ABA", 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', ItemManager.ingotTin());
+                "ABA", 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', "ingotTin"));
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage())),
                 "ABA",
                 "DCD",
@@ -171,10 +171,6 @@ public class CraftingRecipeManager {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockCrafter()),
                 new ItemStack(Blocks.crafting_table), new ItemStack(Blocks.chest), new ItemStack(Blocks.crafting_table));
 
-        //Bronze Dust
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.dustBronze(), 4),
-                "AA",
-                "AB", 'A', "dustCopper", 'B', "dustTin"));
 
         //Miniature Sun
         GameRegistry.addRecipe(new ItemStack(BlockManager.blockMiniatureSun()),
@@ -286,10 +282,10 @@ public class CraftingRecipeManager {
         //Smelting Recipes
         GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);
-        GameRegistry.addSmelting(ItemManager.dustCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
-        GameRegistry.addSmelting(ItemManager.dustTin(), new ItemStack(ItemManager.ingotTin()), 2.0F);
-        GameRegistry.addSmelting(BlockManager.oreCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
-        GameRegistry.addSmelting(BlockManager.oreTin(), new ItemStack(ItemManager.ingotTin()), 1.0F);
-        GameRegistry.addSmelting(ItemManager.dustBronze(), new ItemStack(ItemManager.ingotBronze()), 2.0F);
+       // GameRegistry.addSmelting(ItemManager.dustCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
+      //  GameRegistry.addSmelting(ItemManager.dustTin(), new ItemStack(ItemManager.ingotTin()), 2.0F);
+       // GameRegistry.addSmelting(BlockManager.oreCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
+      //  GameRegistry.addSmelting(BlockManager.oreTin(), new ItemStack(ItemManager.ingotTin()), 1.0F);
+       // GameRegistry.addSmelting(ItemManager.dustBronze(), new ItemStack(ItemManager.ingotBronze()), 2.0F);
     }
 }

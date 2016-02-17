@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.common.fluids
+package com.dyonovan.neotech.common.metals.fluids
 
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fluids.Fluid

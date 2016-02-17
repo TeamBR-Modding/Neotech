@@ -1,23 +1,22 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.machines.{BlockSolarPanel, BlockMachine, BlockGrinder}
+import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine, BlockSolarPanel}
 import com.dyonovan.neotech.common.blocks.misc._
-import com.dyonovan.neotech.common.blocks.ore.BlockOre
 import com.dyonovan.neotech.common.blocks.storage._
 import com.dyonovan.neotech.common.tiles.machines._
-import com.dyonovan.neotech.common.tiles.machines.generators.{TileSolarPanel, TileFurnaceGenerator, TileFluidGenerator}
-import com.dyonovan.neotech.common.tiles.machines.operators.{TileTreeFarm, TilePump}
-import com.dyonovan.neotech.common.tiles.machines.processors.{TileThermalBinder, TileElectricFurnace, TileElectricCrusher}
+import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator, TileFurnaceGenerator, TileSolarPanel}
+import com.dyonovan.neotech.common.tiles.machines.operators.{TilePump, TileTreeFarm}
+import com.dyonovan.neotech.common.tiles.machines.processors.{TileElectricCrusher, TileElectricFurnace, TileThermalBinder}
 import com.dyonovan.neotech.common.tiles.misc._
-import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank, TileRFStorage}
-import com.dyonovan.neotech.pipes.blocks.{ItemBlockColored, BlockPipeSpecial, BlockPipe}
+import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileRFStorage, TileTank}
+import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockColored}
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.item.{ItemBlock, ItemStack, EnumDyeColor}
+import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -47,13 +46,6 @@ object BlockManager {
     val pump = new BlockMachine("pump", classOf[TilePump], fourWayRotation = false)
     val treeFarm = new BlockMachine("treeFarm", classOf[TileTreeFarm], fourWayRotation = false)
     val mechanicalPipe = new BlockMechanicalPipe("mechanicalPipe")
-
-    //ores
-    val oreCopper = new BlockOre("oreCopper", 1)
-    val blockCopper = new BlockOre("blockCopper", 1)
-    val oreTin = new BlockOre("oreTin", 1)
-    val blockTin = new BlockOre("blockTin", 1)
-    val blockBronze = new BlockOre("blockBronze", 1)
 
     //Pipes
     val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, true, classOf[StructurePipe])
@@ -108,13 +100,6 @@ object BlockManager {
         registerBlock(treeFarm, "treeFarm", classOf[TileTreeFarm])
         registerBlock(mechanicalPipe, "mechanicalPipe", null)
 
-        //Ores
-        registerBlock(oreCopper, "oreCopper", null, "oreCopper")
-        registerBlock(oreTin, "oreTin", null, "oreTin")
-        registerBlock(blockCopper, "blockCopper", null, "blockCopper")
-        registerBlock(blockTin, "blockTin", null, "blockTin")
-        registerBlock(blockBronze, "blockBronze", null, "blockBronze")
-
         //Pipes
         registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockColored])
         for(color <- EnumDyeColor.values())
@@ -167,18 +152,20 @@ object BlockManager {
      * @param tileEntity The tile entity, null if none
      * @param oreDict    The ore dict tag, should it be needed
      */
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String) : Unit = {
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String) : Block = {
         GameRegistry.registerBlock(block, name)
         if (tileEntity != null)
             GameRegistry.registerTileEntity(tileEntity, name)
         if (oreDict != null)
             OreDictionary.registerOre(oreDict, block)
+        block
     }
 
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], itemBlock: Class[_ <: ItemBlock]) : Unit = {
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], itemBlock: Class[_ <: ItemBlock]) : Block = {
         GameRegistry.registerBlock(block, itemBlock, name)
         if (tileEntity != null)
             GameRegistry.registerTileEntity(tileEntity, name)
+        block
     }
 
     /**
@@ -188,7 +175,7 @@ object BlockManager {
      * @param name       The name
      * @param tileEntity The tile
      */
-    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity]) : Unit = {
+    def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity]) : Block = {
         val oreDict: String = null
         registerBlock(block, name, tileEntity, oreDict)
     }

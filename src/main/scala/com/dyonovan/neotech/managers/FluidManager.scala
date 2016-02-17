@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.fluid.BlockFluidMetal
-import com.dyonovan.neotech.common.fluids.FluidMetal
+import com.dyonovan.neotech.common.metals.fluids.FluidMetal
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fluids._
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -11,27 +10,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry
   */
 object FluidManager {
 
-    var fluidCopper: Fluid = _
-    var blockFluidCopper: BlockFluidClassic = _
+    def preInit() = {}
 
-    var fluidTin : Fluid = _
-    var blockFluidTin : BlockFluidClassic = _
+    def registerModels() : Unit = {
 
-    var fluidBronze : Fluid = _
-    var blockFluidBronze : BlockFluidClassic = _
-
-    def preInit() = {
-        // Copper
-        fluidCopper = createFluidMetal(0xFFc27646, "copper", "blocks/metal")
-        blockFluidCopper = registerFluidBlock(fluidCopper, new BlockFluidMetal(fluidCopper))
-
-        // Tin
-        fluidTin = createFluidMetal(0xFFebeced, "tin", "blocks/metal")
-        blockFluidTin = registerFluidBlock(fluidTin, new BlockFluidMetal(fluidTin))
-
-        // Bronze
-        fluidBronze = createFluidMetal(0xFFdfa62b, "bronze", "blocks/metal")
-        blockFluidBronze = registerFluidBlock(fluidBronze, new BlockFluidMetal(fluidBronze))
     }
 
     def createFluidMetal(color : Int, name: String, texture: String): Fluid = {

@@ -122,12 +122,6 @@ object CrusherRecipeRegistry {
         }
         for (i <- crusherRecipes) {
             i.input match {
-                case "oreGold" =>
-                    i.outputSecondary = getItemStackString(new ItemStack(ItemManager.dustCopper, 1))
-                    i.percentChance = 15
-                case "oreIron" =>
-                    i.outputSecondary = getItemStackString(new ItemStack(ItemManager.dustTin, 1))
-                    i.percentChance = 15
                 case "oreCopper" =>
                     i.outputSecondary = getItemStackString(new ItemStack(ItemManager.dustGold, 1))
                     i.percentChance = 15

@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.common.blocks.fluid
+package com.dyonovan.neotech.common.metals.blocks
 
 import net.minecraft.block.material.Material
 import net.minecraftforge.fluids.{BlockFluidClassic, Fluid}

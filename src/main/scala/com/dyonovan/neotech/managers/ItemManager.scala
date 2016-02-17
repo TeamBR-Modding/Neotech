@@ -20,14 +20,6 @@ object ItemManager {
     //Dusts
     val dustGold = new BaseItem("dustGold", 64)
     val dustIron = new BaseItem("dustIron", 64)
-    val dustCopper = new BaseItem("dustCopper", 64)
-    val dustTin = new BaseItem("dustTin", 64)
-    val dustBronze = new BaseItem("dustBronze", 64)
-
-    //Ingots
-    val ingotCopper = new BaseItem("ingotCopper", 64)
-    val ingotTin = new BaseItem("ingotTin", 64)
-    val ingotBronze = new BaseItem("ingotBronze", 64)
 
     //Upgrade System
     val upgradeMBEmpty = new BaseUpgradeItem("upgradeMBEmpty", 1, true)
@@ -47,13 +39,6 @@ object ItemManager {
     def preInit(): Unit = {
         registerItem(dustGold, "dustGold", "dustGold")
         registerItem(dustIron, "dustIron", "dustIron")
-        registerItem(dustCopper, "dustCopper", "dustCopper")
-        registerItem(dustTin, "dustTin", "dustTin")
-        registerItem(dustBronze, "dustBronze", "dustBronze")
-
-        registerItem(ingotCopper, "ingotCopper", "ingotCopper")
-        registerItem(ingotTin, "ingotTin", "ingotTin")
-        registerItem(ingotBronze, "ingotBronze", "ingotBronze")
 
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
         registerItem(upgradeMBFull, "upgradeMBFull")
@@ -75,12 +60,13 @@ object ItemManager {
      * @param name The name of the item
      * @param oreDict The ore dict tag
      */
-    private def registerItem(item: Item, name: String, oreDict: String) {
+    def registerItem(item: Item, name: String, oreDict: String) : Item = {
         GameRegistry.registerItem(item, name)
         if (oreDict != null) OreDictionary.registerOre(oreDict, item)
+        item
     }
 
-    private def registerItem(item: Item, name: String) {
+    def registerItem(item: Item, name: String) : Item = {
         registerItem(item, name, null)
     }
 }

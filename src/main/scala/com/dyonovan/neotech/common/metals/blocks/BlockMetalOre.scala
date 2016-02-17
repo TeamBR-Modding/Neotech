@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.common.blocks.ore
+package com.dyonovan.neotech.common.metals.blocks
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
@@ -15,7 +15,7 @@ import net.minecraft.block.material.Material
  * @author Dyonovan
  * @since August 13, 2015
  */
-class BlockOre(name: String, miningLevel: Int) extends Block(Material.rock) {
+class BlockMetalOre(name: String, color : Int, miningLevel: Int) extends Block(Material.rock) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
@@ -23,4 +23,6 @@ class BlockOre(name: String, miningLevel: Int) extends Block(Material.rock) {
     setHarvestLevel("pickaxe", miningLevel)
 
     def getName: String = name
+
+    override def getBlockColor : Int = color
 }

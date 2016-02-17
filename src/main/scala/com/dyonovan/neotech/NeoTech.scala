@@ -63,6 +63,7 @@ object NeoTech {
         ConfigRegistry.preInit()
         BlockManager.preInit()
         ItemManager.preInit()
+        MetalManager.registerDefaultMetals()
         FluidManager.preInit()
         EntityManager.preInit()
         proxy.preInit()
@@ -72,7 +73,6 @@ object NeoTech {
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
-        //TinkersIntegration.postInit()
         FertilizerBlacklistRegistry.init()
         CrusherRecipeRegistry.init()
         FluidFuelValues.init()

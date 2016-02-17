@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{FluidManager, BlockManager, ItemManager}
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.item.{EnumDyeColor, Item}
@@ -21,12 +21,6 @@ object ItemRenderManager {
     def registerItemRenderer(): Unit = {
         registerItem(ItemManager.dustGold)
         registerItem(ItemManager.dustIron)
-        registerItem(ItemManager.dustCopper)
-        registerItem(ItemManager.dustTin)
-        registerItem(ItemManager.dustBronze)
-        registerItem(ItemManager.ingotCopper)
-        registerItem(ItemManager.ingotTin)
-        registerItem(ItemManager.ingotBronze)
         registerItem(Item.getItemFromBlock(BlockManager.grinder))
         registerItem(Item.getItemFromBlock(BlockManager.electricFurnace))
         registerItem(Item.getItemFromBlock(BlockManager.electricCrusher))
@@ -39,11 +33,6 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.solarPanelT1))
         registerItem(Item.getItemFromBlock(BlockManager.solarPanelT2))
         registerItem(Item.getItemFromBlock(BlockManager.solarPanelT3))
-        registerItem(Item.getItemFromBlock(BlockManager.blockCopper))
-        registerItem(Item.getItemFromBlock(BlockManager.blockTin))
-        registerItem(Item.getItemFromBlock(BlockManager.blockBronze))
-        registerItem(Item.getItemFromBlock(BlockManager.oreCopper))
-        registerItem(Item.getItemFromBlock(BlockManager.oreTin))
         registerItem(Item.getItemFromBlock(BlockManager.basicRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.advancedRFStorage))
         registerItem(Item.getItemFromBlock(BlockManager.eliteRFStorage))
@@ -73,8 +62,6 @@ object ItemRenderManager {
         registerItem(ItemManager.spawnerMover)
         registerItem(ItemManager.mobGun)
         registerItem(ItemManager.mobNet)
-
-        registerItem(Item.getItemFromBlock(FluidManager.blockFluidCopper))
 
         registerPipesAndColored()
     }

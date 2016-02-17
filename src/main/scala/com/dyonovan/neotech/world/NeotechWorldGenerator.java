@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.world;
 
 import com.dyonovan.neotech.managers.BlockManager;
+import com.dyonovan.neotech.managers.MetalManager;
 import com.dyonovan.neotech.registries.ConfigRegistry;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -31,26 +32,28 @@ public class NeotechWorldGenerator implements IWorldGenerator {
     }
 
     private void generateOre(World world, Random random, int chunkX, int chunkZ) {
-        if (ConfigRegistry.genCopper()) {
+        if (ConfigRegistry.genCopper() && MetalManager.getMetal("copper").isDefined() &&
+                MetalManager.getMetal("copper").get().oreBlock().isDefined()) {
             for (int i = 0; i < ConfigRegistry.copperPerChunk(); i++) {
                 int x = chunkX + random.nextInt(16);
                 int y = random.nextInt(ConfigRegistry.copperMax() - ConfigRegistry.copperMin()) + ConfigRegistry.copperMin();
                 int z = chunkZ + random.nextInt(16);
                 BlockPos pos = new BlockPos(x, y, z);
 
-                new WorldGenMinable(BlockManager.oreCopper().getDefaultState(), ConfigRegistry.copperSize()).generate(world,
+                new WorldGenMinable(MetalManager.getMetal("copper").get().oreBlock().get().getDefaultState(), ConfigRegistry.copperSize()).generate(world,
                         random, pos);
             }
         }
 
-        if (ConfigRegistry.genTin()) {
+        if (ConfigRegistry.genTin() && MetalManager.getMetal("tin").isDefined() &&
+                MetalManager.getMetal("tin").get().oreBlock().isDefined()) {
             for (int i = 0; i < ConfigRegistry.tinPerChunk(); i++) {
                 int x = chunkX + random.nextInt(16);
                 int y = random.nextInt(ConfigRegistry.tinMax() - ConfigRegistry.tinMin()) + ConfigRegistry.tinMin();
                 int z = chunkZ + random.nextInt(16);
                 BlockPos pos = new BlockPos(x, y, z);
 
-                new WorldGenMinable(BlockManager.oreTin().getDefaultState(), ConfigRegistry.tinSize()).generate(world,
+                new WorldGenMinable(MetalManager.getMetal("tin").get().oreBlock().get().getDefaultState(), ConfigRegistry.tinSize()).generate(world,
                         random, pos);
             }
         }

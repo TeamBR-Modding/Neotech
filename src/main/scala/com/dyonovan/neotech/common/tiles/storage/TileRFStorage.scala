@@ -31,7 +31,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
     }
 
     /**
-      * Sets the energy based on teir
+      * Sets the energy based on tier
       * @param t The tier
       */
     def initEnergy(t: Int): Unit = {
@@ -195,5 +195,4 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
         tipList.add(color + getEnergyStored(null) + "/" + getMaxEnergyStored(null) + " RF")
         tipList
     }
-
 }
