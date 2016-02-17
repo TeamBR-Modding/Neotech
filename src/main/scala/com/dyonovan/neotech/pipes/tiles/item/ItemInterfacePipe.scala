@@ -251,6 +251,7 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
             worldObj.getTileEntity(pos).writeToNBT(otherTag)
             otherTile.readFromNBT(otherTag)
             otherTile.setWorldObj(worldObj)
+            otherTile.setPos(pos.down(1000))
         }
 
         if(waitingQueue.isEmpty)
