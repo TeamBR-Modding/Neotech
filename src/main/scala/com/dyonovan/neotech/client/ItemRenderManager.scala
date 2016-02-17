@@ -19,8 +19,6 @@ import net.minecraft.item.{EnumDyeColor, Item}
 object ItemRenderManager {
 
     def registerItemRenderer(): Unit = {
-        registerItem(ItemManager.dustGold)
-        registerItem(ItemManager.dustIron)
         registerItem(Item.getItemFromBlock(BlockManager.grinder))
         registerItem(Item.getItemFromBlock(BlockManager.electricFurnace))
         registerItem(Item.getItemFromBlock(BlockManager.electricCrusher))

@@ -17,10 +17,6 @@ import net.minecraftforge.oredict.OreDictionary
  */
 object ItemManager {
 
-    //Dusts
-    val dustGold = new BaseItem("dustGold", 64)
-    val dustIron = new BaseItem("dustIron", 64)
-
     //Upgrade System
     val upgradeMBEmpty = new BaseUpgradeItem("upgradeMBEmpty", 1, true)
     val upgradeMBFull = new BaseUpgradeItem("upgradeMBFull", 1, false)
@@ -37,9 +33,6 @@ object ItemManager {
     val mobNet = new ItemMobNet
 
     def preInit(): Unit = {
-        registerItem(dustGold, "dustGold", "dustGold")
-        registerItem(dustIron, "dustIron", "dustIron")
-
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
         registerItem(upgradeMBFull, "upgradeMBFull")
         registerItem(upgradeHardDrive, "upgradeHardDrive")

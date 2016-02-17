@@ -66,8 +66,10 @@ object MetalManager {
 
     def registerDefaultMetals() : Unit = {
         registerMetal("copper", 1, 0xFFc27646)
-        registerMetal("tin",    1, 0xFFebeced)
+        registerMetal("tin",    1, 0xFFf4f5e3)
         registerMetal("bronze", 1, 0xFFdfa62b, hasOre = false)
+        registerMetal("gold",   1, 0xFFdede00, hasOre = false, hasSolidBlock = false, hasIngot = false, hasNugget = false)
+        registerMetal("iron",   1, 0xFFd8d8d8, hasOre = false, hasSolidBlock = false, hasIngot = false)
     }
 
     /**
@@ -78,7 +80,10 @@ object MetalManager {
       * @param color The color of the metal, set for rendering
       * @return
       */
-    def registerMetal(metalName : String, miningLevel : Int, color : Int, hasOre : Boolean = true) : Metal = {
+    def registerMetal(metalName : String, miningLevel : Int, color : Int,
+                      hasFluid : Boolean = true, hasFluidBlock : Boolean = true,
+                      hasOre : Boolean = true, hasSolidBlock : Boolean = true,
+                      hasIngot : Boolean = true, hasDust : Boolean = true, hasNugget : Boolean = true) : Metal = {
         val metalNameBase = metalName.toLowerCase
 
         /***************************************************************************************************************
@@ -86,10 +91,14 @@ object MetalManager {
           **************************************************************************************************************/
 
         // Create the Fluid
-        val fluid = createFluidMetal(color, metalNameBase, "neotech:blocks/metal")
+        var fluid : FluidMetal = null
+        if(hasFluid)
+            fluid = createFluidMetal(color, metalNameBase, "neotech:blocks/metal")
 
         //Create the Fluid Block
-        val fluidBlock = registerFluidBlock(fluid, new BlockFluidMetal(fluid))
+        var fluidBlock : BlockFluidMetal = null
+        if(hasFluidBlock)
+            fluidBlock = registerFluidBlock(fluid, new BlockFluidMetal(fluid))
 
         /***************************************************************************************************************
           ********************************************* Blocks *********************************************************
@@ -105,8 +114,10 @@ object MetalManager {
 
         val blockName = "block" + metalName.charAt(0).toUpper + metalName.substring(1)
 
-        val solidBlock = BlockManager.registerBlock(new BlockMetalOre(blockName, color, 1),
-            blockName, null, blockName).asInstanceOf[BlockMetalOre]
+        var solidBlock : BlockMetalOre = null
+        if(hasSolidBlock)
+            solidBlock = BlockManager.registerBlock(new BlockMetalOre(blockName, color, 1),
+                blockName, null, blockName).asInstanceOf[BlockMetalOre]
 
         /***************************************************************************************************************
           ********************************************** Items *********************************************************
@@ -114,18 +125,24 @@ object MetalManager {
 
         val ingotName = "ingot" + metalName.charAt(0).toUpper + metalName.substring(1)
 
-        val ingot = ItemManager.registerItem(new ItemMetal(ingotName, color, 64),
-            ingotName, ingotName).asInstanceOf[ItemMetal]
+        var ingot : ItemMetal = null
+        if(hasIngot)
+            ingot = ItemManager.registerItem(new ItemMetal(ingotName, color, 64),
+                ingotName, ingotName).asInstanceOf[ItemMetal]
 
         val dustName = "dust" + metalName.charAt(0).toUpper + metalName.substring(1)
 
-        val dust = ItemManager.registerItem(new ItemMetal(dustName, color, 64),
-            dustName, dustName).asInstanceOf[ItemMetal]
+        var dust : ItemMetal = null
+        if(hasDust)
+            dust = ItemManager.registerItem(new ItemMetal(dustName, color, 64),
+                dustName, dustName).asInstanceOf[ItemMetal]
 
         val nuggetName = "nugget" + metalName.charAt(0).toUpper + metalName.substring(1)
 
-        val nugget = ItemManager.registerItem(new ItemMetal(nuggetName, color, 64),
-            nuggetName, nuggetName).asInstanceOf[ItemMetal]
+        var nugget : ItemMetal = null
+        if(hasNugget)
+            nugget = ItemManager.registerItem(new ItemMetal(nuggetName, color, 64),
+                nuggetName, nuggetName).asInstanceOf[ItemMetal]
 
         /***************************************************************************************************************
           ********************************************** Metal *********************************************************

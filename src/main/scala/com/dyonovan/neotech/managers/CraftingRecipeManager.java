@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.managers;
 
+import com.sun.swing.internal.plaf.metal.resources.metal;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -77,26 +78,6 @@ public class CraftingRecipeManager {
                 "ACA",
                 "BDB",
                 "ACA", 'A', "ingotBronze", 'B', Items.iron_axe, 'C', Items.shears, 'D', Blocks.redstone_block));
-
-      /*  //Ore Blocks
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockCopper()),
-                "AAA",
-                "AAA",
-                "AAA", 'A', "ingotCopper"));
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotCopper(), 9), new ItemStack(BlockManager.blockCopper()));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockTin()),
-                "AAA",
-                "AAA",
-                "AAA", 'A', "ingotTin"));
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotTin(), 9), new ItemStack(BlockManager.blockTin()));
-
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.blockBronze()),
-                "AAA",
-                "AAA",
-                "AAA",
-                'A', "ingotBronze"));
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.ingotBronze(), 9), new ItemStack(BlockManager.blockBronze()));*/
 
         //RF Storage
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage())),
@@ -190,7 +171,7 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BlockManager.playerPlate()),
                 "ingotCopper", "ingotCopper"));
 
-       //Chunk Loader
+        //Chunk Loader
         GameRegistry.addRecipe(new ItemStack(BlockManager.chunkLoader()),
                 "GIG",
                 "IRI",
@@ -279,13 +260,16 @@ public class CraftingRecipeManager {
                 "Q Q",
                 "Q Q", 'Q', Items.quartz);
 
+        //Add in Iron nugget - ingot
+        MetalManager.Metal metal = MetalManager.getMetal("iron").get();
+        GameRegistry.addShapelessRecipe(new ItemStack(metal.nugget().get(), 9), Items.iron_ingot);
+        GameRegistry.addRecipe(new ItemStack(Items.iron_ingot, 1),
+                "III",
+                "III",
+                "III", 'I', metal.nugget().get());
+
         //Smelting Recipes
-        GameRegistry.addSmelting(ItemManager.dustGold(), new ItemStack(Items.gold_ingot), 2.0F);
-        GameRegistry.addSmelting(ItemManager.dustIron(), new ItemStack(Items.iron_ingot), 1.0F);
-       // GameRegistry.addSmelting(ItemManager.dustCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
-      //  GameRegistry.addSmelting(ItemManager.dustTin(), new ItemStack(ItemManager.ingotTin()), 2.0F);
-       // GameRegistry.addSmelting(BlockManager.oreCopper(), new ItemStack(ItemManager.ingotCopper()), 1.0F);
-      //  GameRegistry.addSmelting(BlockManager.oreTin(), new ItemStack(ItemManager.ingotTin()), 1.0F);
-       // GameRegistry.addSmelting(ItemManager.dustBronze(), new ItemStack(ItemManager.ingotBronze()), 2.0F);
+        GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
+        GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.iron_ingot), 1.0F);
     }
 }

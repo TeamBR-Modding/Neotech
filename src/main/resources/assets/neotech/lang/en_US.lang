@@ -53,6 +53,16 @@ fluid.bronze=Molten Bronze
 fluid.bronze.name=Molten Bronze
 tile.fluid.bronze.name=Molten Bronze
 
+# Gold
+fluid.gold=Molten Gold
+fluid.gold.name=Molten Gold
+tile.fluid.gold.name=Molten Gold
+
+# Iron
+fluid.iron=Molten Iron
+fluid.iron.name=Molten Iron
+tile.fluid.iron.name=Molten Iron
+
 #######################
 # Items
 #######################
@@ -69,6 +79,7 @@ item.neotech:nuggetBronze.name=Bronze Nugget
 item.neotech:dustTin.name=Tin Dust
 item.neotech:ingotTin.name=Tin Ingot
 item.neotech:nuggetTin.name=Tin Nugget
+item.neotech:nuggetIron.name=Iron Nugget
 
 # Motherboard
 item.neotech:upgradeMBFull.name=Filled Motherboard

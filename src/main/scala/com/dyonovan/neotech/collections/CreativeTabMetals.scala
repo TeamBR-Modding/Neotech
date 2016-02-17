@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.collections
 
-import com.dyonovan.neotech.managers.{ItemManager, MetalManager}
+import com.dyonovan.neotech.managers.MetalManager
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.common.ForgeModContainer
@@ -18,7 +18,17 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @since 2/17/2016
   */
 class CreativeTabMetals extends CreativeTabs("tabNeoTechMetals") {
-    override def getTabIconItem: Item = ItemManager.dustIron
+
+    override def getTabIconItem: Item = {
+        ForgeModContainer.getInstance().universalBucket
+    }
+
+    override def getIconItemStack : ItemStack = {
+        val universalBucket = ForgeModContainer.getInstance().universalBucket
+        val stack = new ItemStack(universalBucket)
+        universalBucket.asInstanceOf[UniversalBucket].fill(stack, new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 1000), true)
+        stack
+    }
 
     @SideOnly(Side.CLIENT)
     override def displayAllReleventItems(list : java.util.List[ItemStack]) : Unit = {

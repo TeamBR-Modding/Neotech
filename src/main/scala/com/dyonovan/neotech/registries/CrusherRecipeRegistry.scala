@@ -5,7 +5,6 @@ import java.util
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.collections.CrusherRecipes
-import com.dyonovan.neotech.managers.ItemManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.bookshelf.util.JsonUtils
@@ -118,17 +117,6 @@ object CrusherRecipeRegistry {
                             new ItemStack(itemList.get(0).getItem, 1, itemList.get(0).getItemDamage)), 1, "", 0))
                     }
                 }
-            }
-        }
-        for (i <- crusherRecipes) {
-            i.input match {
-                case "oreCopper" =>
-                    i.outputSecondary = getItemStackString(new ItemStack(ItemManager.dustGold, 1))
-                    i.percentChance = 15
-                case "oreTin" =>
-                    i.outputSecondary = getItemStackString(new ItemStack(ItemManager.dustIron, 1))
-                    i.percentChance = 15
-                case _ =>
             }
         }
 
