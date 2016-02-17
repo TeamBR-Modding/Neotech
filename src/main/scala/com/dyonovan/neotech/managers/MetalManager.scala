@@ -65,9 +65,9 @@ object MetalManager {
     }
 
     def registerDefaultMetals() : Unit = {
-        registerMetal("copper", 1, 0xFFc27646, 0xFF4676c2)
-        registerMetal("tin",    1, 0xFFebeced, 0xFFedeceb)
-        registerMetal("bronze", 1, 0xFFdfa62b, 0xFF2ba6df, hasOre = false)
+        registerMetal("copper", 1, 0xFFc27646)
+        registerMetal("tin",    1, 0xFFebeced)
+        registerMetal("bronze", 1, 0xFFdfa62b, hasOre = false)
     }
 
     /**
@@ -78,7 +78,7 @@ object MetalManager {
       * @param color The color of the metal, set for rendering
       * @return
       */
-    def registerMetal(metalName : String, miningLevel : Int, color : Int, colorBlock : Int, hasOre : Boolean = true) : Metal = {
+    def registerMetal(metalName : String, miningLevel : Int, color : Int, hasOre : Boolean = true) : Metal = {
         val metalNameBase = metalName.toLowerCase
 
         /***************************************************************************************************************
@@ -99,13 +99,13 @@ object MetalManager {
 
         var oreBlock : BlockMetalOre = null
         if(hasOre) {
-            oreBlock = BlockManager.registerBlock(new BlockMetalOre(oreName, colorBlock, miningLevel),
+            oreBlock = BlockManager.registerBlock(new BlockMetalOre(oreName, color, miningLevel),
                 oreName, null, oreName).asInstanceOf[BlockMetalOre]
         }
 
         val blockName = "block" + metalName.charAt(0).toUpper + metalName.substring(1)
 
-        val solidBlock = BlockManager.registerBlock(new BlockMetalOre(blockName, colorBlock, 1),
+        val solidBlock = BlockManager.registerBlock(new BlockMetalOre(blockName, color, 1),
             blockName, null, blockName).asInstanceOf[BlockMetalOre]
 
         /***************************************************************************************************************

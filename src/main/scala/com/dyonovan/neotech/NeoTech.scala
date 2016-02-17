@@ -2,6 +2,7 @@ package com.dyonovan.neotech
 
 import java.io.File
 
+import com.dyonovan.neotech.collections.CreativeTabMetals
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.events.EventManager
 import com.dyonovan.neotech.lib.Reference
@@ -58,9 +59,7 @@ object NeoTech {
         override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.blockMiniatureStar)
     }
 
-    val tabMetals = new CreativeTabs("tabNeoTechMetals") {
-        override def getTabIconItem : Item = ItemManager.dustIron
-    }
+    val tabMetals = new CreativeTabMetals
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
         configFolderLocation = event.getModConfigurationDirectory.getAbsolutePath + File.separator + "NeoTech"

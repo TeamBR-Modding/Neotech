@@ -39,6 +39,10 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
         } else
             GlStateManager.scale(1.0F - te.scale, 1.0F - te.scale, 1.0F - te.scale)
 
+        if (ent.hasCustomName && te.renderName) {
+            renderName(ent, ent.getDisplayName.getFormattedText, x + 0.5, y + 1.0D, z + 0.5, 32, te.getPos)
+        }
+
         if(te.lookAtPlayer) {
             val player = Minecraft.getMinecraft.thePlayer
             var angle = Math.toDegrees(Math.atan2(te.getPos.getZ + 0.5 - player.posZ, te.getPos.getX + 0.5 - player.posX))
@@ -53,10 +57,6 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
         renderManager.setRenderShadow(false)
         renderManager.renderEntityWithPosYaw(ent, 0.0, 0.0, 0.0, 0.0F, partialTicks)
         renderManager.setRenderShadow(true)
-
-        if (ent.hasCustomName && te.renderName) {
-            renderName(ent, ent.getDisplayName.getFormattedText, x + 0.5, y + 1.0D, z + 0.5, 32, te.getPos)
-        }
 
         GlStateManager.popMatrix()
     }
