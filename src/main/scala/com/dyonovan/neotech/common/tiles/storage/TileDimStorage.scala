@@ -100,7 +100,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
     override def extractItem(extractSlot: Int, amount: Int, simulate: Boolean): ItemStack = {
         if (amount == 0 || inventoryContents.get(0) == null || qty == 0) return null
 
-        val actual = Math.min(amount, qty)
+        val actual = Math.min(Math.min(amount, qty), inventoryContents.get(0).getMaxStackSize)
         val returnStack = inventoryContents.get(0).copy()
         returnStack.stackSize = actual
         if (!simulate) {
