@@ -30,10 +30,14 @@ class ItemMobNet extends BaseItem("mobNet", 16) {
             val mop = getMovingObjectPositionFromPlayer(world, player, false)
             if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 val entity = EntityList.createEntityByName(stack.getTagCompound.getString("type"), world)
-                entity.readFromNBT(stack.getTagCompound)
-                offsetInDir(entity, mop.sideHit)
-                entity.setPosition(mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord)
-                world.spawnEntityInWorld(entity)
+                if (entity != null) {
+                    entity.readFromNBT(stack.getTagCompound)
+                    offsetInDir(entity, mop.sideHit)
+                    entity.setPosition(mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord)
+                    if (stack.hasDisplayName)
+                        entity.setCustomNameTag(stack.getDisplayName)
+                    world.spawnEntityInWorld(entity)
+                }
                 stack.setTagCompound(null)
                 entity match {
                     case mob: EntityMob =>

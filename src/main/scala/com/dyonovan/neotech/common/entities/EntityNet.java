@@ -50,12 +50,13 @@ public class EntityNet extends EntityThrowable {
         ItemStack stack = new ItemStack(ItemManager.mobNet(), 1);
         if (mop != null && !worldObj.isRemote) {
             if (isValidEntity(mop.entityHit)) {
-                //TODO BlackList
                 NBTTagCompound tag = new NBTTagCompound();
                 mop.entityHit.writeToNBT(tag);
                 tag.setString("type", EntityList.getEntityString(mop.entityHit));
                 mop.entityHit.setDead();
                 stack.setTagCompound(tag);
+                if (mop.entityHit.hasCustomName())
+                    stack.setStackDisplayName(mop.entityHit.getCustomNameTag());
             }
             EntityItem item = new EntityItem(worldObj, mop.hitVec.xCoord, mop.hitVec.yCoord + 1, mop.hitVec.zCoord, stack);
             worldObj.spawnEntityInWorld(item);

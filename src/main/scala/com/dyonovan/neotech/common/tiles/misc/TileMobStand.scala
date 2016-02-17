@@ -49,6 +49,11 @@ class TileMobStand extends Syncable with Inventory {
             val stack = getStackInSlot(0)
             entityType = stack.getTagCompound.getString("type")
             entity = EntityList.createEntityByName(entityType, worldObj)
+            if (entity == null) {
+                entityType = null
+                worldObj.markBlockForUpdate(pos)
+                return
+            }
             entity.readFromNBT(stack.getTagCompound)
             entity.posX = 0
             entity.posY = 0
