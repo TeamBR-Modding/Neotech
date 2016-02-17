@@ -8,7 +8,7 @@ import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{FluidManager, BlockManager}
+import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
@@ -87,7 +87,6 @@ class ClientProxy extends CommonProxy {
     override def init() = {
         ModelFactory.register()
         ItemRenderManager.registerItemRenderer()
-        FluidManager.registerItemRendering()
 
         Minecraft.getMinecraft.getRenderItem.getItemModelMesher.getModelManager.getBlockModelShapes.registerBuiltInBlocks(BlockManager.flushableChest)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileFlushableChest], new TileFlushableChestRenderer[TileFlushableChest])

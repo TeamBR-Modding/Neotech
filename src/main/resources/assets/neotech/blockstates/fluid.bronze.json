@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "model": "forge:fluid",
-        "custom": { "fluid": "fluidcopper" }
+        "custom": { "fluid": "bronze" }
     },
     "variants": {
         "level":{

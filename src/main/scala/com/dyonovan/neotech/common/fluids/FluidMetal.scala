@@ -13,9 +13,11 @@ import net.minecraftforge.fluids.Fluid
   * @author Paul Davis <pauljoda>
   * @since 2/16/2016
   */
-class FluidMetal(name : String, still : ResourceLocation, flow : ResourceLocation) extends Fluid(name, still, flow) {
+class FluidMetal(color : Int, name : String, still : ResourceLocation, flow : ResourceLocation) extends Fluid(name, still, flow) {
     this.setLuminosity(10)
     this.setDensity(3000)
     this.setViscosity(6000)
     this.setTemperature(600)
+
+    override def getColor : Int = color
 }

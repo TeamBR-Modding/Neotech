@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.managers.{FluidManager, BlockManager, ItemManager}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.item.{EnumDyeColor, Item}
@@ -73,6 +73,8 @@ object ItemRenderManager {
         registerItem(ItemManager.spawnerMover)
         registerItem(ItemManager.mobGun)
         registerItem(ItemManager.mobNet)
+
+        registerItem(Item.getItemFromBlock(FluidManager.blockFluidCopper))
 
         registerPipesAndColored()
     }

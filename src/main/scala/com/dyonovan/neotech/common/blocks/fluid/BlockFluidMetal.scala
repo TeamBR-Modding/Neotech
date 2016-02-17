@@ -1,8 +1,7 @@
 package com.dyonovan.neotech.common.blocks.fluid
 
-import com.dyonovan.neotech.NeoTech
 import net.minecraft.block.material.Material
-import net.minecraftforge.fluids.{Fluid, BlockFluidClassic}
+import net.minecraftforge.fluids.{BlockFluidClassic, Fluid}
 
 /**
   * This file was created for NeoTech
@@ -15,6 +14,7 @@ import net.minecraftforge.fluids.{Fluid, BlockFluidClassic}
   * @since 2/16/2016
   */
 class BlockFluidMetal(fluidMetal: Fluid) extends BlockFluidClassic(fluidMetal, Material.lava) {
-    setCreativeTab(NeoTech.tabNeoTech)
     setUnlocalizedName(fluidMetal.getName)
+
+    override def getBlockColor : Int = fluidMetal.getColor
 }

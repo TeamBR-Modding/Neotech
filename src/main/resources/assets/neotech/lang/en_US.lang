@@ -37,9 +37,20 @@ tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
 #######################
 # Fluids
 #######################
-fluid.fluidCopper=Molten Copper
-fluid.fluidCopper.name=Molten Copper
-tile.fluid.fluidCopper.name=Molten Copper
+# Copper
+fluid.copper=Molten Copper
+fluid.copper.name=Molten Copper
+tile.fluid.copper.name=Molten Copper
+
+# Tin
+fluid.tin=Molten Tin
+fluid.tin.name=Molten Tin
+tile.fluid.tin.name=Molten Tin
+
+# Bronze
+fluid.bronze=Molten Bronze
+fluid.bronze.name=Molten Bronze
+tile.fluid.bronze.name=Molten Bronze
 
 #######################
 # Items
