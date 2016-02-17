@@ -1,0 +1,20 @@
+{
+    "textures" : {
+        "particle" : "#neotech:blocks/metal_ore",
+        "base" : "neotech:blocks/metal_ore"
+    },
+    "elements" : [
+        {
+            "from" : [ -0.001, -0.001, -0.001 ],
+            "to" : [ 16.001, 16.001, 16.001 ],
+            "faces" : {
+                "down"  : {"texture" : "#base"},
+                "up"    : {"texture" : "#base"},
+                "north" : {"texture" : "#base"},
+                "south" : {"texture" : "#base"},
+                "east"  : {"texture" : "#base"},
+                "west"  : {"texture" : "#base"}
+            }
+        }
+    ]
+}

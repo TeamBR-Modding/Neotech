@@ -15,8 +15,7 @@ import net.minecraft.item.{ItemStack, Item}
   * @since 2/17/2016
   */
 class ItemMetal(name: String, color : Int, maxStackSize: Int) extends Item {
-
-    setCreativeTab(NeoTech.tabNeoTech)
+    setCreativeTab(NeoTech.tabMetals)
     setMaxStackSize(maxStackSize)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 

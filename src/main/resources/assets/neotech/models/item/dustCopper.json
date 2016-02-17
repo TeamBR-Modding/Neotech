@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "neotech:items/dustCopper"
+        "layer0": "neotech:items/metal_dust"
     },
     "display": {
         "thirdperson": {

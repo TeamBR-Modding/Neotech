@@ -3,10 +3,16 @@ package com.dyonovan.neotech.managers
 import java.util
 import javax.annotation.Nullable
 
+import com.dyonovan.neotech.client.ItemRenderManager
 import com.dyonovan.neotech.common.metals.blocks.{BlockFluidMetal, BlockMetalOre}
 import com.dyonovan.neotech.common.metals.fluids.FluidMetal
 import com.dyonovan.neotech.common.metals.items.ItemMetal
+import com.dyonovan.neotech.lib.Reference
+import net.minecraft.client.renderer.ItemMeshDefinition
+import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fluids.{Fluid, FluidRegistry}
 import net.minecraftforge.fml.common.registry.GameRegistry
 
@@ -27,12 +33,41 @@ object MetalManager {
     //Stores all registered metals
     lazy val metalRegistry = new util.HashMap[String, Metal]()
 
-    def registerModels() : Unit = {}
+    def registerModels() : Unit = {
+        MinecraftForge.EVENT_BUS.register(this)
+        val iterator = metalRegistry.keySet().iterator()
+        while(iterator.hasNext) {
+            val metal = metalRegistry.get(iterator.next())
+            //Blocks
+            if(metal.block.isDefined)
+                ItemRenderManager.registerItem(Item.getItemFromBlock(metal.block.get))
+
+            //Ore
+            if(metal.oreBlock.isDefined)
+                ItemRenderManager.registerItem(Item.getItemFromBlock(metal.oreBlock.get))
+
+            //Ingots
+            if(metal.ingot.isDefined)
+                ItemRenderManager.registerItem(metal.ingot.get)
+
+            //Dust
+            if(metal.dust.isDefined)
+                ItemRenderManager.registerItem(metal.dust.get)
+
+            //Nugget
+            if(metal.nugget.isDefined)
+                ItemRenderManager.registerItem(metal.nugget.get)
+
+            // Fluids
+            if(metal.fluidBlock.isDefined)
+                ItemRenderManager.registerItem(Item.getItemFromBlock(metal.fluidBlock.get))
+        }
+    }
 
     def registerDefaultMetals() : Unit = {
-        registerMetal("copper", 1, 0xFFc27646)
-        registerMetal("tin",    1, 0xFFebeced)
-        registerMetal("bronze", 1, 0xFFdfa62b, hasOre = false)
+        registerMetal("copper", 1, 0xFFc27646, 0xFF4676c2)
+        registerMetal("tin",    1, 0xFFebeced, 0xFFedeceb)
+        registerMetal("bronze", 1, 0xFFdfa62b, 0xFF2ba6df, hasOre = false)
     }
 
     /**
@@ -43,7 +78,7 @@ object MetalManager {
       * @param color The color of the metal, set for rendering
       * @return
       */
-    def registerMetal(metalName : String, miningLevel : Int, color : Int, hasOre : Boolean = true) : Metal = {
+    def registerMetal(metalName : String, miningLevel : Int, color : Int, colorBlock : Int, hasOre : Boolean = true) : Metal = {
         val metalNameBase = metalName.toLowerCase
 
         /***************************************************************************************************************
@@ -64,13 +99,13 @@ object MetalManager {
 
         var oreBlock : BlockMetalOre = null
         if(hasOre) {
-            oreBlock = BlockManager.registerBlock(new BlockMetalOre(oreName, color, miningLevel),
+            oreBlock = BlockManager.registerBlock(new BlockMetalOre(oreName, colorBlock, miningLevel),
                 oreName, null, oreName).asInstanceOf[BlockMetalOre]
         }
 
         val blockName = "block" + metalName.charAt(0).toUpper + metalName.substring(1)
 
-        val solidBlock = BlockManager.registerBlock(new BlockMetalOre(blockName, color, 1),
+        val solidBlock = BlockManager.registerBlock(new BlockMetalOre(blockName, colorBlock, 1),
             blockName, null, blockName).asInstanceOf[BlockMetalOre]
 
         /***************************************************************************************************************
@@ -101,6 +136,38 @@ object MetalManager {
             Option(ingot), Option(dust), Option(nugget))
 
         metalRegistry.put(metalName.toLowerCase, metal)
+
+        /***************************************************************************************************************
+          ******************************************* Crafting *********************************************************
+          **************************************************************************************************************/
+
+        //Ore to ingot
+        if(metal.oreBlock.isDefined && metal.ingot.isDefined) {
+            GameRegistry.addSmelting(metal.oreBlock.get, new ItemStack(metal.ingot.get, 1), 0.5F)
+        }
+
+        //Dust to ingot
+        if(metal.ingot.isDefined && metal.dust.isDefined) {
+            GameRegistry.addSmelting(metal.dust.get, new ItemStack(metal.ingot.get, 1), 0.5F)
+        }
+
+        // Nugget - Ingot
+        if(metal.ingot.isDefined && metal.nugget.isDefined) {
+            GameRegistry.addShapelessRecipe(new ItemStack(metal.nugget.get, 9), metal.ingot.get)
+            GameRegistry.addRecipe(new ItemStack(metal.ingot.get, 1),
+                "III",
+                "III",
+                "III", 'I'.asInstanceOf[java.lang.Character], metal.nugget.get)
+        }
+
+        // Ingot - Block
+        if(metal.ingot.isDefined && metal.block.isDefined) {
+            GameRegistry.addShapelessRecipe(new ItemStack(metal.ingot.get, 9), metal.block.get)
+            GameRegistry.addRecipe(new ItemStack(metal.block.get, 1),
+                "III",
+                "III",
+                "III", 'I'.asInstanceOf[java.lang.Character], metal.ingot.get)
+        }
 
         metal
     }
@@ -171,4 +238,9 @@ object MetalManager {
     class Metal(val oreDict : String, val fluid : Option[FluidMetal], val fluidBlock : Option[BlockFluidMetal],
                 val oreBlock : Option[BlockMetalOre], val block : Option[BlockMetalOre], val ingot : Option[ItemMetal],
                 val dust : Option[ItemMetal], val nugget : Option[ItemMetal])
+
+    class MoltenMetalItemMesh(name : String) extends ItemMeshDefinition {
+        val model = new ModelResourceLocation(Reference.MOD_ID + ":" + name)
+        override def getModelLocation(stack : ItemStack) = model
+    }
 }

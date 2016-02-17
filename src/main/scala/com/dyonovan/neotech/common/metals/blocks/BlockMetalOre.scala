@@ -4,6 +4,7 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.util.EnumWorldBlockLayer
 
 /**
  * This file was created for NeoTech
@@ -18,11 +19,13 @@ import net.minecraft.block.material.Material
 class BlockMetalOre(name: String, color : Int, miningLevel: Int) extends Block(Material.rock) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
-    setCreativeTab(NeoTech.tabNeoTech)
+    setCreativeTab(NeoTech.tabMetals)
     setHardness(3.0F)
     setHarvestLevel("pickaxe", miningLevel)
 
     def getName: String = name
 
     override def getBlockColor : Int = color
+
+    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
 }

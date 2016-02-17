@@ -10,8 +10,9 @@
         "west": "#all",
 
         //We need to add these here since they don't use our models
-        "fluidCopperStill" : "neotech:blocks/metal_still",
-        "fluidCopperFlow" : "neotech:blocks/metal_flow",
+        "fluidmetalStill" : "neotech:blocks/metal_still",
+        "fluidmetalFlow" : "neotech:blocks/metal_flow",
+        "metalIngot" : "neotech:items/metal_ingot",
 
         "in" : "neotech:gui/in",
         "out" : "neotech:gui/out"

@@ -58,6 +58,10 @@ object NeoTech {
         override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.blockMiniatureStar)
     }
 
+    val tabMetals = new CreativeTabs("tabNeoTechMetals") {
+        override def getTabIconItem : Item = ItemManager.dustIron
+    }
+
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
         configFolderLocation = event.getModConfigurationDirectory.getAbsolutePath + File.separator + "NeoTech"
         ConfigRegistry.preInit()

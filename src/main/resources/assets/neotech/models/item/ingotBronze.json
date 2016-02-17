@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "neotech:items/ingotBronze"
+        "layer0": "neotech:items/metal_ingot"
     },
     "display": {
         "thirdperson": {

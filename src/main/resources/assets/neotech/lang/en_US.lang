@@ -3,6 +3,7 @@ PARSE_ESCAPES
 # Creative Tabs
 itemGroup.tabNeoTech=NeoTech
 itemGroup.tabNeoTechPipes=NeoTech: Transport Pipes
+itemGroup.tabNeoTechMetals=NeoTech: Metals
 itemGroup.tabNeoTechDecorations=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2e
 
 #######################
@@ -61,10 +62,13 @@ item.neotech:dustIron.name=Iron Dust
 item.neotech:dustGold.name=Gold Dust
 item.neotech:dustCopper.name=Copper Dust
 item.neotech:ingotCopper.name=Copper Ingot
+item.neotech:nuggetCopper.name=Copper Nugget
 item.neotech:dustBronze.name=Bronze Dust
 item.neotech:ingotBronze.name=Bronze Ingot
+item.neotech:nuggetBronze.name=Bronze Nugget
 item.neotech:dustTin.name=Tin Dust
 item.neotech:ingotTin.name=Tin Ingot
+item.neotech:nuggetTin.name=Tin Nugget
 
 # Motherboard
 item.neotech:upgradeMBFull.name=Filled Motherboard
