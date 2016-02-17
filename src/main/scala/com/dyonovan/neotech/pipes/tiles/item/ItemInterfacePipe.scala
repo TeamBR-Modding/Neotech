@@ -105,22 +105,24 @@ class ItemInterfacePipe extends InterfacePipe[ItemStack, ItemResourceEntity] {
         for(dir <- EnumFacing.values()) {
             if (canConnectExtract(dir)) {
                 val otherObject = worldObj.getTileEntity(pos.offset(dir))
-                val otherInv =
-                    if(otherObject.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite))
-                        otherObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
-                    else null
+                if (otherObject != null) {
+                    val otherInv =
+                        if (otherObject.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite))
+                            otherObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
+                        else null
 
-                if (otherInv != null) {
-                    for (x <- 0 until otherInv.getSlots) {
-                        if (otherInv.extractItem(x, getMaxStackExtract, true) != null) {
-                            if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.extractItem(x, getMaxStackExtract, true),
-                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                pos.offset(dir), pos.north(), pos.north(), worldObj), simulate = true)) {
-                                InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, nextResource.resource.stackSize, dir, doMove = true)
-                                if (tempInv.getStackInSlot(0) != null) {
-                                    nextResource.resource = tempInv.getStackInSlot(0)
-                                    extractOnMode(nextResource, simulate = false)
-                                    return
+                    if (otherInv != null) {
+                        for (x <- 0 until otherInv.getSlots) {
+                            if (otherInv.extractItem(x, getMaxStackExtract, true) != null) {
+                                if (otherInv.getStackInSlot(x) != null && extractOnMode(new ItemResourceEntity(otherInv.extractItem(x, getMaxStackExtract, true),
+                                    pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
+                                    pos.offset(dir), pos.north(), pos.north(), worldObj), simulate = true)) {
+                                    InventoryUtils.moveItemInto(otherInv, x, tempInv, 0, nextResource.resource.stackSize, dir, doMove = true)
+                                    if (tempInv.getStackInSlot(0) != null) {
+                                        nextResource.resource = tempInv.getStackInSlot(0)
+                                        extractOnMode(nextResource, simulate = false)
+                                        return
+                                    }
                                 }
                             }
                         }
