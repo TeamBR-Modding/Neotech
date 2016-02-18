@@ -141,6 +141,7 @@ tile.neotech:electricCrusher.name=Electric Crusher
 tile.neotech:thermalBinder.name=Thermal Binder
 tile.neotech:grinder.name=Grinder
 tile.neotech:electricCrucible.name=Electric Crucible
+tile.neotech:electricSolidifier.name=Electric Solidifier
 
 # Generators
 tile.neotech:furnaceGenerator.name=Furnace Generator
@@ -229,6 +230,9 @@ neotech.thermalbinder.title=Thermal Binder
 
 # Crucible
 neotech.crucible.title=Electric Crucible
+
+# Solidifier
+neotech.electricSolidifier.title=Electric Solidifier
 
 # Furnace Generator
 neotech.furnacegenerator.title=Furnace Generator
@@ -345,8 +349,11 @@ neotech.thermalBinder.desc=The Thermal Binder is the machine that allows you to 
 neotech.thermalBinder.processorUpgrade.desc=Each processor removes roughly 24 ticks scaled to the number of upgrades being installed (this is due to the fact that the time it takes to cook scales with the number of upgrades being installed) from the cook time.
 
 # Electric Crucible
-neotech.electricCrucible.desc=The Electric Crucible allows you to melt down metals into their molten form. Simply put a metal (block, ingot, etc) into the input slot and it will begin to melt the item. By default, the operation takes 1000 ticks. The Electric Crucible can also melt stone into lava and ice into water
+neotech.electricCrucible.desc=The Electric Crucible allows you to melt down metals into their molten form. Simply put a metal (block, ingot, etc) into the input slot and it will begin to melt the item. By default, the operation takes 1000 ticks. The Electric Crucible can also melt stone into lava and ice into water.
 neotech.electricCrucible.processorUpgrade.desc=Each processor removes 112 ticks from the cook time.
+
+# Solidifier
+neotech.electricSolidifier.desc=The Electric Solidifier will tank a fluid input and try to solidify it into the selected item. Solidifier modes will attempt to cool the fluid to the shape selected.
 
 # Furnace Generator
 neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would. By default, the Furnace Generator generates 20 RF/tick

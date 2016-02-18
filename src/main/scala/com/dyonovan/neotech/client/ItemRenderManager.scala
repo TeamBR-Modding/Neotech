@@ -26,6 +26,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.fluidGenerator))
         registerItem(Item.getItemFromBlock(BlockManager.thermalBinder))
         registerItem(Item.getItemFromBlock(BlockManager.electricCrucible))
+        registerItem(Item.getItemFromBlock(BlockManager.electricSolidifier))
         registerItem(Item.getItemFromBlock(BlockManager.pump))
         registerItem(Item.getItemFromBlock(BlockManager.treeFarm))
         registerItem(Item.getItemFromBlock(BlockManager.mechanicalPipe))
