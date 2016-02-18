@@ -16,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.World
-import net.minecraftforge.fluids.{IFluidContainerItem, FluidContainerRegistry}
+import net.minecraftforge.fluids.FluidContainerRegistry
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.util.Random
@@ -78,28 +78,6 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
                         return true
                     }
                 }
-            }
-        }
-
-        //IFluidContainerItems
-        else if(heldItem != null && heldItem.getItem.isInstanceOf[IFluidContainerItem]) {
-            val containerItem = heldItem.getItem.asInstanceOf[IFluidContainerItem]
-            val fluid = containerItem.getFluid(heldItem)
-            if(fluid != null) { //There is fluid in the container
-                val amount = tank.fill(EnumFacing.UP, containerItem.drain(heldItem, fluid.amount, false), doFill = false)
-                if(amount > 0) {
-                    tank.fill(EnumFacing.UP, containerItem.drain(heldItem, amount, !player.capabilities.isCreativeMode), doFill = true)
-                    world.markBlockForUpdate(pos)
-                    return true
-                }
-                return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
-            } else { //There is no fluid in the container
-                val amount = tank.drain(EnumFacing.DOWN, containerItem.getCapacity(heldItem), doDrain = false)
-                if(amount != null) {
-                    containerItem.fill(heldItem, tank.drain(EnumFacing.DOWN, containerItem.getCapacity(heldItem), doDrain = true), true)
-                    return true
-                }
-                return super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
             }
         }
 

@@ -7,11 +7,10 @@ import com.dyonovan.neotech.client.ItemRenderManager
 import com.dyonovan.neotech.common.metals.blocks.{BlockFluidMetal, BlockMetalOre}
 import com.dyonovan.neotech.common.metals.fluids.FluidMetal
 import com.dyonovan.neotech.common.metals.items.ItemMetal
-import com.dyonovan.neotech.registries.CrucibleRecipeRegistry
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fluids.{FluidStack, Fluid, FluidRegistry}
+import net.minecraftforge.fluids.{Fluid, FluidRegistry}
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 /**
@@ -28,8 +27,15 @@ import net.minecraftforge.fml.common.registry.GameRegistry
   */
 object MetalManager {
 
-    //Stores all registered metals
+    // Stores all registered metals
     lazy val metalRegistry = new util.HashMap[String, Metal]()
+
+    // Fluid Output Values
+    lazy val BLOCK_MB  = 1296
+    lazy val ORE_MB    = 288
+    lazy val INGOT_MB  = 144
+    lazy val DUST_MB   = 72
+    lazy val NUGGET_MB = 16
 
     def registerModels() : Unit = {
         MinecraftForge.EVENT_BUS.register(this)
@@ -185,25 +191,6 @@ object MetalManager {
                 "III",
                 "III",
                 "III", 'I'.asInstanceOf[java.lang.Character], metal.ingot.get)
-        }
-
-        // Crucible Recipes
-        if(metal.fluid.isDefined) {
-            //Block - 1296mb
-            if (metal.block.isDefined)
-                CrucibleRecipeRegistry.addCrucibleRecipe(null, blockName, new FluidStack(fluid, 1296))
-
-            //Ore - 288mb
-            if (metal.oreBlock.isDefined)
-                CrucibleRecipeRegistry.addCrucibleRecipe(null, oreName, new FluidStack(fluid, 288))
-
-            //Ingot - 144mb
-            if (metal.ingot.isDefined)
-                CrucibleRecipeRegistry.addCrucibleRecipe(null, ingotName, new FluidStack(fluid, 144))
-
-            //Nugget - 16mb
-            if(metal.nugget.isDefined)
-                CrucibleRecipeRegistry.addCrucibleRecipe(null, nuggetName, new FluidStack(fluid, 16))
         }
 
         metal

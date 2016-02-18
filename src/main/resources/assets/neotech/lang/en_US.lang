@@ -341,6 +341,10 @@ neotech.electricCrusher.expansionUpgrade.desc=The expansion upgrade will enable 
 neotech.thermalBinder.desc=The Thermal Binder is the machine that allows you to create motherboards with upgrades installed. Put an empty motherboard in the left slot and any combination of the following into the middle slots: processors (up to 8), hard drives (up to 8), control upgrade (up to 1), expansion upgrade (up to 1), and press start to begin building the motherboard. If you run out of power, the process will fail. You can also put a full motherboard into the left slot without upgrades in the center and it will deconstruct the motherboard and give you back the components.
 neotech.thermalBinder.processorUpgrade.desc=Each processor removes roughly 24 ticks scaled to the number of upgrades being installed (this is due to the fact that the time it takes to cook scales with the number of upgrades being installed) from the cook time.
 
+# Electric Crucible
+neotech.electricCrucible.desc=The Electric Crucible allows you to melt down metals into their molten form. Simply put a metal (block, ingot, etc) into the input slot and it will begin to melt the item. By default, the operation takes 1000 ticks. The Electric Crucible can also melt stone into lava and ice into water
+neotech.electricCrucible.processorUpgrade.desc=Each processor removes 112 ticks from the cook time.
+
 # Furnace Generator
 neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would. By default, the Furnace Generator generates 20 RF/tick
 neotech.furnaceGenerator.processorUpgrade.desc=Each processor adds 10 RF/tick to the amount produced per tick

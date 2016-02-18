@@ -140,7 +140,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
     }
 
     override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
-        if (canFill(from, resource.getFluid) && tier != 5) {
+        if (canFill(from, if(resource == null) null else resource.getFluid) && tier != 5) {
             if (tank.fill(resource, false) > 0) {
                 val actual = tank.fill(resource, doFill)
                 if(doFill)

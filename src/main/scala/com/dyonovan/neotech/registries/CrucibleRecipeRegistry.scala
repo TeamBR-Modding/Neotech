@@ -4,9 +4,11 @@ import java.io.File
 import java.util
 
 import com.dyonovan.neotech.NeoTech
+import com.dyonovan.neotech.managers.MetalManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.bookshelf.util.JsonUtils
+import net.minecraft.init.{Items, Blocks}
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -64,6 +66,54 @@ object CrucibleRecipeRegistry {
     def generateDefaults(): Unit = {
         LogHelper.info("Json not found. Creating Dynamic Crucible Recipe List...")
 
+        // Metals
+        val iterator = MetalManager.metalRegistry.keySet().iterator()
+        while(iterator.hasNext) {
+            val metal = MetalManager.metalRegistry.get(iterator.next())
+            // Crucible Recipes
+            if (metal.fluid.isDefined) {
+                //Block - 1296mb
+                if (metal.block.isDefined)
+                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.block.get.getName, new FluidStack(metal.fluid.get, MetalManager.BLOCK_MB))
+
+                //Ore - 288mb
+                if (metal.oreBlock.isDefined)
+                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.oreBlock.get.getName, new FluidStack(metal.fluid.get, MetalManager.ORE_MB))
+
+                //Ingot - 144mb
+                if (metal.ingot.isDefined)
+                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.ingot.get.getName, new FluidStack(metal.fluid.get, MetalManager.INGOT_MB))
+
+                //Dust - 76mb
+                if(metal.dust.isDefined)
+                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.dust.get.getName, new FluidStack(metal.fluid.get, MetalManager.DUST_MB))
+
+                //Nugget - 16mb
+                if (metal.nugget.isDefined)
+                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.nugget.get.getName, new FluidStack(metal.fluid.get, MetalManager.NUGGET_MB))
+            }
+        }
+
+        // Iron
+        addCrucibleRecipe(null, "ingotIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, 144))
+        addCrucibleRecipe(null, "oreIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, 288))
+        addCrucibleRecipe(null, "blockIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, 1296))
+
+        // Gold
+        addCrucibleRecipe(null, "nuggetGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 16))
+        addCrucibleRecipe(null, "ingotGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 144))
+        addCrucibleRecipe(null, "oreGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 288))
+        addCrucibleRecipe(null, "blockGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 1296))
+
+        // Ice/Snowball to Water
+        addCrucibleRecipe(new ItemStack(Items.snowball), "", new FluidStack(FluidRegistry.WATER, 144))
+        addCrucibleRecipe(new ItemStack(Blocks.ice), "", new FluidStack(FluidRegistry.WATER, 1296))
+        addCrucibleRecipe(new ItemStack(Blocks.packed_ice), "", new FluidStack(FluidRegistry.WATER, 1296))
+
+        // Stones to lava
+        addCrucibleRecipe(null, "cobblestone", new FluidStack(FluidRegistry.LAVA, 20))
+        addCrucibleRecipe(null, "stone", new FluidStack(FluidRegistry.LAVA, 40))
+
         saveToFile()
         LogHelper.info("Finished adding " + crucibleRecipes.size + " Crucible Recipes")
     }
@@ -76,7 +126,7 @@ object CrucibleRecipeRegistry {
       */
     def addCrucibleRecipe(input : ItemStack, ore : String, fluidStack: FluidStack) : Unit = {
         var stack : ItemStack = input
-        if(input == null && ore != null) {
+        if(input == null && !ore.isEmpty) {
             val stackList = OreDictionary.getOres(ore)
             if(!stackList.isEmpty) {
                 stack = stackList.get(0)
@@ -87,7 +137,6 @@ object CrucibleRecipeRegistry {
         }
         val recipe = new CrucibleRecipe(getItemStackString(stack), ore, getFluidString(fluidStack))
         crucibleRecipes.add(recipe)
-        saveToFile()
     }
 
     /**
@@ -104,7 +153,8 @@ object CrucibleRecipeRegistry {
         for(x <- 0 until crucibleRecipes.size()) {
             val recipe = crucibleRecipes.get(x)
             if(getItemStackFromString(recipe.input) != null &&
-                    getItemStackFromString(recipe.input).getIsItemStackEqual(input) || (
+                    (getItemStackFromString(recipe.input).isItemEqual(input) &&
+                            getItemStackFromString(recipe.input).getItemDamage == input.getItemDamage) || (
                     if(recipe.ore != null && OreDictionary.getOreIDs(input) != null)
                         OreDictionary.getOreIDs(input).toList.contains(OreDictionary.getOreID(recipe.ore))
                     else

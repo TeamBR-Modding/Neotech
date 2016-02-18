@@ -29,7 +29,7 @@ class GuiCrucible(player: EntityPlayer, tileEntity: TileCrucible) extends
     override def addComponents(): Unit = {
 
         //Arrow
-        components += new GuiComponentArrow(104, 41) {
+        components += new GuiComponentArrow(81, 35) {
             override def getCurrentProgress: Int = tileEntity.getCookProgressScaled(24)
         }
 
@@ -52,7 +52,7 @@ class GuiCrucible(player: EntityPlayer, tileEntity: TileCrucible) extends
         }
 
         //Stored Fluid
-        components += new GuiComponentFluidTank(150, 18, 18, 60, tileEntity.tanks(tileEntity.OUTPUT_TANK)) {
+        components += new GuiComponentFluidTank(115, 18, 50, 60, tileEntity.tanks(tileEntity.OUTPUT_TANK)) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
                 buffer += (if(tileEntity.tanks(tileEntity.OUTPUT_TANK).getFluid != null)

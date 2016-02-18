@@ -17,13 +17,7 @@ import net.minecraft.entity.player.InventoryPlayer
 class ContainerCrucible(playerInventory: InventoryPlayer, tileEntity: TileCrucible) extends
         ContainerAbstractMachine(playerInventory, tileEntity) {
 
-    addSlotToContainer(new RestrictedSlot(tileEntity, tileEntity.ITEM_INPUT_SLOT, 80, 41))
-    addSlotToContainer(new RestrictedSlot(tileEntity, tileEntity.INPUT_SLOT, 130, 20) {
-        override def getSlotTexture = "neotech:gui/in"
-    })
-    addSlotToContainer(new RestrictedSlot(tileEntity, tileEntity.OUTPUT_SLOT, 130, 60) {
-        override def getSlotTexture = "neotech:gui/out"
-    })
+    addSlotToContainer(new RestrictedSlot(tileEntity, tileEntity.ITEM_INPUT_SLOT, 56, 35))
 
     addPlayerInventorySlots(84)
 }

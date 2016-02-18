@@ -3,15 +3,16 @@ package com.dyonovan.neotech.common.tiles.machines.processors
 import com.dyonovan.neotech.client.gui.machines.processors.GuiCrucible
 import com.dyonovan.neotech.common.container.machines.processors.ContainerCrucible
 import com.dyonovan.neotech.common.tiles.MachineProcessor
+import com.dyonovan.neotech.managers.MetalManager
 import com.dyonovan.neotech.registries.CrucibleRecipeRegistry
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.util.{EnumParticleTypes, EnumFacing, StatCollector}
 import net.minecraft.world.World
-import net.minecraftforge.fluids.{FluidContainerRegistry, FluidStack, FluidTank, IFluidHandler}
+import net.minecraftforge.fluids.{FluidStack, FluidTank, IFluidHandler}
 
 /**
   * This file was created for NeoTech
@@ -26,8 +27,6 @@ import net.minecraftforge.fluids.{FluidContainerRegistry, FluidStack, FluidTank,
 class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHandler {
 
     lazy val ITEM_INPUT_SLOT   = 0
-    final val INPUT_SLOT       = 1
-    final val OUTPUT_SLOT      = 2
     lazy val OUTPUT_TANK       = 0
 
     val BASE_ENERGY_TICK = 100
@@ -37,11 +36,11 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       *
       * @return
       */
-    override def initialSize: Int = 3
+    override def initialSize: Int = 1
 
 
     override def setupTanks(): Unit = {
-        tanks += new FluidTank(bucketsToMB(10))
+        tanks += new FluidTank(MetalManager.BLOCK_MB * 10)
     }
 
     override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
@@ -64,21 +63,6 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * @return True if you are able to process
       */
     override def canProcess: Boolean = {
-        //Handle Drain and fill
-        if(getStackInSlot(INPUT_SLOT) != null && FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)) != null &&
-                getStackInSlot(OUTPUT_SLOT) == null) {
-            val fluidStackCopy = FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT))
-            if(tanks(OUTPUT_TANK).getFluidAmount + FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)).amount < tanks(OUTPUT_TANK).getCapacity &&
-                    FluidContainerRegistry.drainFluidContainer(getStackInSlot(INPUT_SLOT)) != null) {
-                tanks(OUTPUT_TANK).fill(fluidStackCopy, true)
-
-                if(getStackInSlot(OUTPUT_SLOT) == null) {
-                    setInventorySlotContents(OUTPUT_SLOT, FluidContainerRegistry.drainFluidContainer(getStackInSlot(INPUT_SLOT)))
-                    setInventorySlotContents(INPUT_SLOT, null)
-                }
-            }
-        }
-
         if(energyStorage.getEnergyStored >= getEnergyCostPerTick) {
             if(getStackInSlot(ITEM_INPUT_SLOT) == null)
                 return false
@@ -152,14 +136,14 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       *
       * @return The slots to input from
       */
-    override def getInputSlots: Array[Int] = Array(ITEM_INPUT_SLOT, INPUT_SLOT)
+    override def getInputSlots: Array[Int] = Array(ITEM_INPUT_SLOT)
 
     /**
       * Used to get what slots are allowed to be output
       *
       * @return The slots to output from
       */
-    override def getOutputSlots: Array[Int] = Array(OUTPUT_SLOT)
+    override def getOutputSlots: Array[Int] = Array()
 
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[MachineProcessor].writeToNBT(tag)
@@ -193,19 +177,18 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
         }
     }
 
-    //TODO : Fix this
     override def getDescription : String = {
-        GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:electricCrusher.name") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrusher.desc") + "\n\n" +
+        GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:electricCrucible.name") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrucible.desc") + "\n\n" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.processorUpgrade.desc") + "\n\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrucible.processorUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricCrusher.expansionUpgrade.desc")
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
     }
 
     /**
@@ -255,7 +238,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
       * side
       */
-    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == OUTPUT_SLOT
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = false
 
     /**
       * Used to define if an item is valid for a slot
@@ -265,7 +248,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * @return True if you can put this there
       */
     override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean =
-        (slot == ITEM_INPUT_SLOT && getOutput(itemStackIn) != null) || (slot != ITEM_INPUT_SLOT && FluidContainerRegistry.isContainer(itemStackIn))
+        slot == ITEM_INPUT_SLOT && getOutput(itemStackIn) != null
 
     /**
       * Used to output the redstone single from this structure
@@ -282,5 +265,9 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
     /**
       * Used to get what particles to spawn. This will be called when the tile is active
       */
-    override def spawnActiveParticles(xPos: Double, yPos: Double, zPos: Double): Unit = {}
+    override def spawnActiveParticles(x: Double, y: Double, z: Double): Unit = {
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0)
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0)
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0)
+    }
 }
