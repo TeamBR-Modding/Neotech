@@ -4,11 +4,13 @@ import java.io.File
 import java.util
 
 import com.dyonovan.neotech.NeoTech
+import com.dyonovan.neotech.managers.MetalManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.bookshelf.util.JsonUtils
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
+import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -32,7 +34,7 @@ object CrucibleRecipeRegistry {
         if (!loadFromFile)
             generateDefaults()
         else
-            LogHelper.info("Heater Recipes loaded successfully")
+            LogHelper.info("Crucible Recipes loaded successfully")
     }
 
     /**
@@ -41,7 +43,7 @@ object CrucibleRecipeRegistry {
       * @return True if successful
       */
     def loadFromFile(): Boolean = {
-        LogHelper.info("Loading Heater Recipes...")
+        LogHelper.info("Loading Crucible Recipes...")
         crucibleRecipes = JsonUtils.readFromJson[util.ArrayList[CrucibleRecipe]](new TypeToken[util.ArrayList[CrucibleRecipe]]() {
         }, NeoTech.configFolderLocation + File.separator + "Registries" + File.separator + "crucibleRecipes.json")
         if (crucibleRecipes == null)
@@ -61,23 +63,56 @@ object CrucibleRecipeRegistry {
       * Used to generate the default values
       */
     def generateDefaults(): Unit = {
-        LogHelper.info("Json not found. Creating Dynamic Heater Recipe List...")
+        LogHelper.info("Json not found. Creating Dynamic Crucible Recipe List...")
+
+        //Iron
+        addCrucibleRecipe(null, "ingotIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, 1000))
+
+        saveToFile()
+        LogHelper.info("Finished adding " + crucibleRecipes.size + " Crucible Recipes")
+    }
+
+    /**
+      * Adds the recipe
+      *
+      * @param input If you set null for the itemstack, it will attempt to create one from ore dict
+      * @param fluidStack
+      */
+    def addCrucibleRecipe(input : ItemStack, ore : String, fluidStack: FluidStack) : Unit = {
+        var stack : ItemStack = input
+        if(input == null && ore != null) {
+            val stackList = OreDictionary.getOres(ore)
+            if(!stackList.isEmpty) {
+                stack = stackList.get(0)
+            } else {
+                LogHelper.severe("Could not add ore dict crucible recipe for " + ore + " as it does not exist in the OreDictionary")
+                return
+            }
+        }
+        val recipe = new CrucibleRecipe(getItemStackString(stack), ore, getFluidString(fluidStack))
+        crucibleRecipes.add(recipe)
     }
 
     /**
       * Get the output of this itemstack
+      *
       * @param input The Input
       * @return The FluidStack returned, None if non existent
       */
     def getOutput(input : ItemStack) : Option[FluidStack] = {
+        if(input == null) //Safety Check
+            return None
+
         //Check registered
-        for(recipe : CrucibleRecipe <- crucibleRecipes.toArray.asInstanceOf[Array[CrucibleRecipe]]) {
-            if(recipe.input._1.getIsItemStackEqual(input) || (
-                    if(recipe.input._2 != null && OreDictionary.getOreIDs(input) != null)
-                        OreDictionary.getOreIDs(input).toList.contains(OreDictionary.getOreID(recipe.input._2))
+        for(x <- 0 until crucibleRecipes.size()) {
+            val recipe = crucibleRecipes.get(x)
+            if(getItemStackFromString(recipe.input) != null &&
+                    getItemStackFromString(recipe.input).getIsItemStackEqual(input) || (
+                    if(recipe.ore != null && OreDictionary.getOreIDs(input) != null)
+                        OreDictionary.getOreIDs(input).toList.contains(OreDictionary.getOreID(recipe.ore))
                     else
                         false))
-                return Some(recipe.output)
+                return Option(getFluidFromString(recipe.output))
         }
 
         None
@@ -85,8 +120,32 @@ object CrucibleRecipeRegistry {
 
     /**
       * Helper class for holding recipes
-      * @param input The input tuple, first is stack in second is or dict tag (can be null)
-      * @param output The Fluidstack returned
+      *
       */
-    class CrucibleRecipe(val input : (ItemStack, String), val output : FluidStack)
+    class CrucibleRecipe(val input : String, val ore : String, val output : String) {}
+
+    def getItemStackString(itemStack: ItemStack): String = {
+        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
+        id.modId + ":" + id.name + ":" + itemStack.getItemDamage
+    }
+
+    def getItemStackFromString(item: String): ItemStack = {
+        val name: Array[String] = item.split(":")
+        name.length match {
+            case 3 =>
+                if (item == "")
+                    null
+                else
+                    new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
+            case _ => null
+        }
+    }
+
+    def getFluidString(fluidStack: FluidStack) : String = {
+         FluidRegistry.getFluidName(fluidStack) + ":" + fluidStack.amount
+    }
+
+    def getFluidFromString(string : String) : FluidStack = {
+        FluidRegistry.getFluidStack(string.split(":")(0), string.split(":")(1).toInt)
+    }
 }

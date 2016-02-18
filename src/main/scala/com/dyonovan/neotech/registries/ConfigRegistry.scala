@@ -33,8 +33,13 @@ object ConfigRegistry {
     var tinPerChunk = 6
     var leadMin = 20
     var leadMax = 30
-    var leadSize = 12
-    var leadPerChunk = 6
+    var leadSize = 10
+    var leadPerChunk = 4
+    var genSilver = true
+    var silverMin = 0
+    var silverMax = 20
+    var silverSize = 8
+    var silverPerChunk = 3
     var fertBlacklist: Array[String] = _
     var versionCheck = true
     var chunkLoaderMax = 3
@@ -60,6 +65,12 @@ object ConfigRegistry {
         leadMax       = config.get(Reference.CONFIG_WORLD, "leadMax", 50, "Lead Max Level").getInt
         leadSize      = config.get(Reference.CONFIG_WORLD, "leadVeinSize", 12, "Lead Vein Size").getInt
         leadPerChunk  = config.get(Reference.CONFIG_WORLD, "leadVeinsPerChunk", 6, "Lead Veins per Chunk").getInt
+
+        genSilver       = config.get(Reference.CONFIG_WORLD, "silverEnable", true, "Generate Silver").getBoolean
+        silverMin       = config.get(Reference.CONFIG_WORLD, "silverMin", 20, "Silver Min Level").getInt
+        silverMax       = config.get(Reference.CONFIG_WORLD, "silverMax", 50, "Silver Max Level").getInt
+        silverSize      = config.get(Reference.CONFIG_WORLD, "silverVeinSize", 12, "Silver Vein Size").getInt
+        silverPerChunk  = config.get(Reference.CONFIG_WORLD, "silverVeinsPerChunk", 6, "Silver Veins per Chunk").getInt
 
         fertBlacklist= config.get(Reference.CONFIG_FERT_BLACKLIST, "Blocks to Blacklist from Being Fertilized",
                         Array(""),"Format MODID:BLOCKNAME 1 per Line").getStringList

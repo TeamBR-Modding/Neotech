@@ -70,5 +70,18 @@ public class NeotechWorldGenerator implements IWorldGenerator {
                         random, pos);
             }
         }
+
+        if (ConfigRegistry.genSilver() && MetalManager.getMetal("silver").isDefined() &&
+                MetalManager.getMetal("silver").get().oreBlock().isDefined()) {
+            for (int i = 0; i < ConfigRegistry.silverPerChunk(); i++) {
+                int x = chunkX + random.nextInt(16);
+                int y = random.nextInt(ConfigRegistry.silverMax() - ConfigRegistry.silverMin()) + ConfigRegistry.silverMin();
+                int z = chunkZ + random.nextInt(16);
+                BlockPos pos = new BlockPos(x, y, z);
+
+                new WorldGenMinable(MetalManager.getMetal("silver").get().oreBlock().get().getDefaultState(), ConfigRegistry.silverSize()).generate(world,
+                        random, pos);
+            }
+        }
     }
 }

@@ -66,8 +66,8 @@ object NeoTech {
         ConfigRegistry.preInit()
         BlockManager.preInit()
         ItemManager.preInit()
-        MetalManager.registerDefaultMetals()
         FluidManager.preInit()
+        MetalManager.registerDefaultMetals()
         EntityManager.preInit()
         proxy.preInit()
         GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
@@ -78,6 +78,7 @@ object NeoTech {
     @EventHandler def init(event : FMLInitializationEvent) =  {
         FertilizerBlacklistRegistry.init()
         CrusherRecipeRegistry.init()
+        CrucibleRecipeRegistry.init()
         FluidFuelValues.init()
         PacketDispatcher.initPackets()
         EventManager.init()

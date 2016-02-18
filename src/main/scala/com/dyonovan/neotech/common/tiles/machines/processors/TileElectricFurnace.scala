@@ -21,7 +21,7 @@ import net.minecraft.world.World
   * @author Paul Davis <pauljoda>
   * @since August 11, 2015
   */
-class TileElectricFurnace extends MachineProcessor {
+class TileElectricFurnace extends MachineProcessor[ItemStack, ItemStack] {
 
     val INPUT_SLOT = 0
     val OUTPUT_SLOT = 1
@@ -68,15 +68,15 @@ class TileElectricFurnace extends MachineProcessor {
       */
     override def canProcess : Boolean = {
         if(energyStorage.getEnergyStored >= getEnergyCostPerTick) {
-            if(getStackInSlot(INPUT_SLOT) == null || getOutputForStack(getStackInSlot(INPUT_SLOT)) == null)
+            if(getStackInSlot(INPUT_SLOT) == null || getOutput(getStackInSlot(INPUT_SLOT)) == null)
                 return false
             else if(getStackInSlot(OUTPUT_SLOT) == null)
                 return true
-            else if(!getStackInSlot(OUTPUT_SLOT).isItemEqual(getOutputForStack(getStackInSlot(INPUT_SLOT))))
+            else if(!getStackInSlot(OUTPUT_SLOT).isItemEqual(getOutput(getStackInSlot(INPUT_SLOT))))
                 return false
             else {
-                val minStackSize = getStackInSlot(OUTPUT_SLOT).stackSize - getOutputForStack(getStackInSlot(INPUT_SLOT)).stackSize
-                return minStackSize <= getInventoryStackLimit && minStackSize <= getOutputForStack(getStackInSlot(INPUT_SLOT)).getMaxStackSize
+                val minStackSize = getStackInSlot(OUTPUT_SLOT).stackSize - getOutput(getStackInSlot(INPUT_SLOT)).stackSize
+                return minStackSize <= getInventoryStackLimit && minStackSize <= getOutput(getStackInSlot(INPUT_SLOT)).getMaxStackSize
             }
         }
         failCoolDown = 40
@@ -97,6 +97,14 @@ class TileElectricFurnace extends MachineProcessor {
     }
 
     /**
+      * Get the output of the recipe
+      *
+      * @param input The input
+      * @return The output
+      */
+    override def getOutput(input: ItemStack): ItemStack = getOutputForStack(input)
+
+    /**
       * Used to actually cook the item. You should reset values here if need be
       */
     override def cook(): Unit = cookTime += 1
@@ -105,7 +113,7 @@ class TileElectricFurnace extends MachineProcessor {
       * Called when the tile has completed the cook process
       */
     override def completeCook(): Unit = {
-        var recipeResult = getOutputForStack(getStackInSlot(0))
+        var recipeResult = getOutput(getStackInSlot(0))
         decrStackSize(INPUT_SLOT, 1)
         if (getStackInSlot(OUTPUT_SLOT) == null) {
             recipeResult = recipeResult.copy

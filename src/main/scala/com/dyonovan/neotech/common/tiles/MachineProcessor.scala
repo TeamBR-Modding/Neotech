@@ -12,10 +12,14 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
+  * The base for all processors.
+  * I - Input
+  * O - Output
+  *
   * @author Paul Davis <pauljoda>
   * @since 1/31/2016
   */
-abstract class MachineProcessor extends AbstractMachine {
+abstract class MachineProcessor[I, O] extends AbstractMachine {
 
     var cookTime = 0
     var didWork  = false
@@ -23,10 +27,18 @@ abstract class MachineProcessor extends AbstractMachine {
     /**
       * Get the output of the recipe
       *
-      * @param stack The input
+      * @param input The input
       * @return The output
       */
-    def getOutputForStack(stack: ItemStack): ItemStack
+    def getOutput(input: I): O
+
+    /**
+      * Get the output of the recipe (used in insert options)
+      *
+      * @param input The input
+      * @return The output
+      */
+    def getOutputForStack(input: ItemStack) : ItemStack
 
     /**
       * Used to actually cook the item

@@ -24,7 +24,7 @@ import net.minecraft.world.World
  * @author Dyonovan, Paul Davis <pauljoda>
  * @since August 21, 2015
  */
-class TileThermalBinder extends MachineProcessor {
+class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] {
 
     final val RUNNING_VARIABLE_ID = 10
     final val BUILD_NOW_ID        = 11
@@ -135,6 +135,14 @@ class TileThermalBinder extends MachineProcessor {
         else
             null
     }
+
+    /**
+      * Get the output of the recipe
+      *
+      * @param input The input
+      * @return The output
+      */
+    override def getOutput(input: ItemStack): ItemStack = getOutputForStack(input)
 
     /**
       * Used to actually cook the item. You should reset values here if need be

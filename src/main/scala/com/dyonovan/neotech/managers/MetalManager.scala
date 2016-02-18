@@ -65,7 +65,9 @@ object MetalManager {
         registerMetal("copper", 1, 0xFFc27a49)
         registerMetal("tin",    1, 0xFFe7eadd)
         registerMetal("lead",   1, 0xFF796a78)
+        registerMetal("silver", 1, 0xFFeef0f1)
         registerMetal("bronze", 1, 0xFFcd9520, hasOre = false)
+        registerMetal("steel",  1, 0xFF646464, hasOre = false)
         registerMetal("gold",   1, 0xFFdede00, hasOre = false, hasSolidBlock = false, hasIngot = false, hasNugget = false)
         registerMetal("iron",   1, 0xFFd8d8d8, hasOre = false, hasSolidBlock = false, hasIngot = false)
     }
@@ -89,7 +91,7 @@ object MetalManager {
           **************************************************************************************************************/
 
         // Create the Fluid
-        var fluid : FluidMetal = null
+        var fluid : Fluid = null
         if(hasFluid)
             fluid = createFluidMetal(color, metalNameBase, "neotech:blocks/metal")
 
@@ -209,7 +211,7 @@ object MetalManager {
       * @return The fluid created, null if not registered
       */
     @Nullable
-    def createFluidMetal(color : Int, name: String, texture: String): FluidMetal = {
+    def createFluidMetal(color : Int, name: String, texture: String): Fluid = {
         val still = new ResourceLocation(texture + "_still")
         val flowing = new ResourceLocation(texture + "_flow")
 
@@ -218,7 +220,7 @@ object MetalManager {
             FluidRegistry.registerFluid(fluid)
             FluidRegistry.addBucketForFluid(fluid)
             fluid
-        } else null
+        } else FluidRegistry.getFluid(fluid.getName)
     }
 
     /**
@@ -250,7 +252,7 @@ object MetalManager {
       * @param dust The dust of the metal
       * @param nugget The nugget of the metal
       */
-    class Metal(val oreDict : String, val fluid : Option[FluidMetal], val fluidBlock : Option[BlockFluidMetal],
+    class Metal(val oreDict : String, val fluid : Option[Fluid], val fluidBlock : Option[BlockFluidMetal],
                 val oreBlock : Option[BlockMetalOre], val block : Option[BlockMetalOre], val ingot : Option[ItemMetal],
                 val dust : Option[ItemMetal], val nugget : Option[ItemMetal])
 }

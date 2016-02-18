@@ -23,7 +23,7 @@ import scala.util.Random
   * @author Paul Davis <pauljoda>
   * @since August 12, 2015
   */
-class TileElectricCrusher extends MachineProcessor {
+class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
 
     val INPUT_SLOT = 0
     val OUTPUT_SLOT_1 : Int = 1
@@ -57,15 +57,15 @@ class TileElectricCrusher extends MachineProcessor {
       */
     override def canProcess : Boolean = {
         if(energyStorage.getEnergyStored >= getEnergyCostPerTick) {
-            if(getStackInSlot(INPUT_SLOT) == null || getOutputForStack(getStackInSlot(INPUT_SLOT)) == null)
+            if(getStackInSlot(INPUT_SLOT) == null || getOutput(getStackInSlot(INPUT_SLOT)) == null)
                 return false
             else if(getStackInSlot(OUTPUT_SLOT_1) == null)
                 return true
-            else if(!getStackInSlot(OUTPUT_SLOT_1).isItemEqual(getOutputForStack(getStackInSlot(INPUT_SLOT))))
+            else if(!getStackInSlot(OUTPUT_SLOT_1).isItemEqual(getOutput(getStackInSlot(INPUT_SLOT))))
                 return false
             else {
-                val minStackSize = getStackInSlot(OUTPUT_SLOT_1).stackSize + getOutputForStack(getStackInSlot(INPUT_SLOT)).stackSize
-                return minStackSize <= getInventoryStackLimit && minStackSize <= getOutputForStack(getStackInSlot(INPUT_SLOT)).getMaxStackSize
+                val minStackSize = getStackInSlot(OUTPUT_SLOT_1).stackSize + getOutput(getStackInSlot(INPUT_SLOT)).stackSize
+                return minStackSize <= getInventoryStackLimit && minStackSize <= getOutput(getStackInSlot(INPUT_SLOT)).getMaxStackSize
             }
         }
         failCoolDown = 40
@@ -86,13 +86,24 @@ class TileElectricCrusher extends MachineProcessor {
     }
 
     /**
+      * Get the output of the recipe
+      *
+      * @param input The input
+      * @return The output
+      */
+    override def getOutput(input: ItemStack): ItemStack = getOutputForStack(input)
+
+    /**
       * Used to actually cook the item. You should reset values here if need be
       */
     override def cook(): Unit = cookTime += 1
 
+    /**
+      * Called when the tile has completed the cook process
+      */
     override def completeCook() {
         val input = getStackInSlot(INPUT_SLOT)
-        var recipeResult: ItemStack = getOutputForStack(getStackInSlot(INPUT_SLOT))
+        var recipeResult: ItemStack = getOutput(getStackInSlot(INPUT_SLOT))
         decrStackSize(INPUT_SLOT, 1)
         if (getStackInSlot(OUTPUT_SLOT_1) == null) {
             recipeResult = recipeResult.copy
@@ -220,7 +231,7 @@ class TileElectricCrusher extends MachineProcessor {
       * side
       */
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
-        if (slot == INPUT_SLOT && getOutputForStack(itemStackIn) != null) {
+        if (slot == INPUT_SLOT && getOutput(itemStackIn) != null) {
             if (getStackInSlot(INPUT_SLOT) == null) return true
             if (getStackInSlot(INPUT_SLOT).isItemEqual(itemStackIn)) {
                 if (getStackInSlot(INPUT_SLOT).getMaxStackSize >= getStackInSlot(INPUT_SLOT).stackSize + itemStackIn.stackSize)

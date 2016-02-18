@@ -14,10 +14,13 @@ itemGroup.tabNeoTechDecorations=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2
 tile.neotech:oreCopper.name=Copper Ore
 tile.neotech:oreTin.name=Tin Ore
 tile.neotech:oreLead.name=Lead Ore
+tile.neotech:oreSilver.name=Silver Ore
 tile.neotech:blockCopper.name=Block of Copper
 tile.neotech:blockTin.name=Block of Tin
 tile.neotech:blockLead.name=Block of Lead
 tile.neotech:blockBronze.name=Block of Bronze
+tile.neotech:blockSteel.name=Block of Steel
+tile.neotech:blockSilver.name=Block of Silver
 
 # Stars
 tile.neotech:blockMiniatureStar_black.name=§8Black §rStar Light
@@ -60,6 +63,16 @@ fluid.bronze=Molten Bronze
 fluid.bronze.name=Molten Bronze
 tile.fluid.bronze.name=Molten Bronze
 
+# Steel
+fluid.steel=Molten Steel
+fluid.steel.name=Molten Steel
+tile.fluid.steel.name=Molten Steel
+
+# Silver
+fluid.silver=Molten Silver
+fluid.silver.name=Molten Silver
+tile.fluid.silver.name=Molten Silver
+
 # Gold
 fluid.gold=Molten Gold
 fluid.gold.name=Molten Gold
@@ -90,6 +103,12 @@ item.neotech:nuggetTin.name=Tin Nugget
 item.neotech:dustLead.name=Lead Dust
 item.neotech:ingotLead.name=Lead Ingot
 item.neotech:nuggetLead.name=Lead Nugget
+item.neotech:dustSteel.name=Steel Dust
+item.neotech:ingotSteel.name=Steel Ingot
+item.neotech:nuggetSteel.name=Steel Nugget
+item.neotech:dustSilver.name=Silver Dust
+item.neotech:ingotSilver.name=Silver Ingot
+item.neotech:nuggetSilver.name=Silver Nugget
 
 # Motherboard
 item.neotech:upgradeMBFull.name=Filled Motherboard
@@ -121,6 +140,7 @@ tile.neotech:electricFurnace.name=Electric Furnace
 tile.neotech:electricCrusher.name=Electric Crusher
 tile.neotech:thermalBinder.name=Thermal Binder
 tile.neotech:grinder.name=Grinder
+tile.neotech:electricCrucible.name=Electric Crucible
 
 # Generators
 tile.neotech:furnaceGenerator.name=Furnace Generator
@@ -206,6 +226,9 @@ neotech.crusher.title=Electric Crusher
 
 # Thermal Binder
 neotech.thermalbinder.title=Thermal Binder
+
+# Crucible
+neotech.crucible.title=Electric Crucible
 
 # Furnace Generator
 neotech.furnacegenerator.title=Furnace Generator
