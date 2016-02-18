@@ -13,8 +13,10 @@ itemGroup.tabNeoTechDecorations=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2
 # Metals
 tile.neotech:oreCopper.name=Copper Ore
 tile.neotech:oreTin.name=Tin Ore
+tile.neotech:oreLead.name=Lead Ore
 tile.neotech:blockCopper.name=Block of Copper
 tile.neotech:blockTin.name=Block of Tin
+tile.neotech:blockLead.name=Block of Lead
 tile.neotech:blockBronze.name=Block of Bronze
 
 # Stars
@@ -48,6 +50,11 @@ fluid.tin=Molten Tin
 fluid.tin.name=Molten Tin
 tile.fluid.tin.name=Molten Tin
 
+# Lead
+fluid.lead=Molten Lead
+fluid.lead.name=Molten Lead
+tile.fluid.lead.name=Molten Lead
+
 # Bronze
 fluid.bronze=Molten Bronze
 fluid.bronze.name=Molten Bronze
@@ -69,6 +76,7 @@ tile.fluid.iron.name=Molten Iron
 
 # Metals
 item.neotech:dustIron.name=Iron Dust
+item.neotech:nuggetIron.name=Iron Nugget
 item.neotech:dustGold.name=Gold Dust
 item.neotech:dustCopper.name=Copper Dust
 item.neotech:ingotCopper.name=Copper Ingot
@@ -79,7 +87,9 @@ item.neotech:nuggetBronze.name=Bronze Nugget
 item.neotech:dustTin.name=Tin Dust
 item.neotech:ingotTin.name=Tin Ingot
 item.neotech:nuggetTin.name=Tin Nugget
-item.neotech:nuggetIron.name=Iron Nugget
+item.neotech:dustLead.name=Lead Dust
+item.neotech:ingotLead.name=Lead Ingot
+item.neotech:nuggetLead.name=Lead Nugget
 
 # Motherboard
 item.neotech:upgradeMBFull.name=Filled Motherboard

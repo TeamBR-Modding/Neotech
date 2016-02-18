@@ -7,9 +7,6 @@ import com.dyonovan.neotech.client.ItemRenderManager
 import com.dyonovan.neotech.common.metals.blocks.{BlockFluidMetal, BlockMetalOre}
 import com.dyonovan.neotech.common.metals.fluids.FluidMetal
 import com.dyonovan.neotech.common.metals.items.ItemMetal
-import com.dyonovan.neotech.lib.Reference
-import net.minecraft.client.renderer.ItemMeshDefinition
-import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.MinecraftForge
@@ -65,9 +62,10 @@ object MetalManager {
     }
 
     def registerDefaultMetals() : Unit = {
-        registerMetal("copper", 1, 0xFFc27646)
-        registerMetal("tin",    1, 0xFFf4f5e3)
-        registerMetal("bronze", 1, 0xFFdfa62b, hasOre = false)
+        registerMetal("copper", 1, 0xFFc27a49)
+        registerMetal("tin",    1, 0xFFe7eadd)
+        registerMetal("lead",   1, 0xFF796a78)
+        registerMetal("bronze", 1, 0xFFcd9520, hasOre = false)
         registerMetal("gold",   1, 0xFFdede00, hasOre = false, hasSolidBlock = false, hasIngot = false, hasNugget = false)
         registerMetal("iron",   1, 0xFFd8d8d8, hasOre = false, hasSolidBlock = false, hasIngot = false)
     }
@@ -255,9 +253,4 @@ object MetalManager {
     class Metal(val oreDict : String, val fluid : Option[FluidMetal], val fluidBlock : Option[BlockFluidMetal],
                 val oreBlock : Option[BlockMetalOre], val block : Option[BlockMetalOre], val ingot : Option[ItemMetal],
                 val dust : Option[ItemMetal], val nugget : Option[ItemMetal])
-
-    class MoltenMetalItemMesh(name : String) extends ItemMeshDefinition {
-        val model = new ModelResourceLocation(Reference.MOD_ID + ":" + name)
-        override def getModelLocation(stack : ItemStack) = model
-    }
 }

@@ -22,6 +22,7 @@ object ConfigRegistry {
 
     var genTin = true
     var genCopper = true
+    var genLead = true
     var copperMin = 40
     var copperMax = 70
     var copperSize = 12
@@ -30,6 +31,10 @@ object ConfigRegistry {
     var tinMax = 70
     var tinSize = 12
     var tinPerChunk = 6
+    var leadMin = 20
+    var leadMax = 30
+    var leadSize = 12
+    var leadPerChunk = 6
     var fertBlacklist: Array[String] = _
     var versionCheck = true
     var chunkLoaderMax = 3
@@ -49,6 +54,12 @@ object ConfigRegistry {
         tinMax       = config.get(Reference.CONFIG_WORLD, "tinMax", 50, "Tin Max Level").getInt
         tinSize      = config.get(Reference.CONFIG_WORLD, "tinVeinSize", 12, "Tin Vein Size").getInt
         tinPerChunk  = config.get(Reference.CONFIG_WORLD, "tinVeinsPerChunk", 6, "Tin Veins per Chunk").getInt
+
+        genLead       = config.get(Reference.CONFIG_WORLD, "leadEnable", true, "Generate Lead").getBoolean
+        leadMin       = config.get(Reference.CONFIG_WORLD, "leadMin", 20, "Lead Min Level").getInt
+        leadMax       = config.get(Reference.CONFIG_WORLD, "leadMax", 50, "Lead Max Level").getInt
+        leadSize      = config.get(Reference.CONFIG_WORLD, "leadVeinSize", 12, "Lead Vein Size").getInt
+        leadPerChunk  = config.get(Reference.CONFIG_WORLD, "leadVeinsPerChunk", 6, "Lead Veins per Chunk").getInt
 
         fertBlacklist= config.get(Reference.CONFIG_FERT_BLACKLIST, "Blocks to Blacklist from Being Fertilized",
                         Array(""),"Format MODID:BLOCKNAME 1 per Line").getStringList
