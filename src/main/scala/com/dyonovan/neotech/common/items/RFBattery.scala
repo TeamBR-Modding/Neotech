@@ -1,12 +1,10 @@
 package com.dyonovan.neotech.common.items
 
 import com.dyonovan.neotech.NeoTech
-import com.dyonovan.neotech.common.items.traits.ItemBattery
 import com.dyonovan.neotech.lib.Reference
-import net.minecraft.entity.Entity
+import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -30,10 +28,6 @@ class RFBattery(name: String, tier: Int) extends ItemBattery {
     capacity = tierPower._1
     maxReceive = tierPower._2
     maxExtract = tierPower._2
-
-    override def onUpdate(stack: ItemStack, worldIn: World, entity: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
-
-    }
 
     /**
       * Defines amount of power each tier holds

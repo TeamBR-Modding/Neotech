@@ -5,7 +5,7 @@ import java.util
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.items.ItemWrench
 import com.dyonovan.neotech.common.tiles.storage.TileDimStorage
-import com.dyonovan.neotech.managers.BlockManager
+import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.material.Material
@@ -43,6 +43,8 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
                 dropItem(world, item, pos)
                 world.setBlockToAir(pos)
                 world.removeTileEntity(pos)
+            } else if (player.getHeldItem != null && player.getHeldItem.isItemEqual(new ItemStack(ItemManager.upgradeMBFull))) {
+
             } else if (player.getHeldItem != null) {
                 var actual = tile.insertItem(0, player.getHeldItem, simulate = true)
                 if (actual != null && actual.stackSize == player.getHeldItem.stackSize) return true

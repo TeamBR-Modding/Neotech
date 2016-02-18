@@ -269,6 +269,9 @@ neotech.button.disable=Disabled?
 # Mob Stand
 neotech.mobStand.title=Mob Stand
 
+# Dim Storage
+neotech.dimStorage.title=Dimensional Crate
+
 #######################
 # Common Text
 #######################

@@ -49,6 +49,7 @@ class NeoTechPlugin extends IModPlugin {
 
         //Blacklists
         NeoTechPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(ItemManager.upgradeMBFull))
+        NeoTechPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(BlockManager.mechanicalPipe))
     }
 
     override def onItemRegistryAvailable(itemRegistry: IItemRegistry): Unit = { }

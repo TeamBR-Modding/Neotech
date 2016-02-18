@@ -25,7 +25,7 @@ import net.minecraft.world.World
 class BlockMechanicalPipe(name: String) extends Block(Material.rock) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
-    setCreativeTab(NeoTech.tabNeoTech)
+    //setCreativeTab(NeoTech.tabNeoTech)
     setHardness(3.0F)
 
     def getName: String = name

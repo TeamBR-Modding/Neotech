@@ -1,8 +1,8 @@
 package com.dyonovan.neotech.common.items
 
 import com.dyonovan.neotech.common.entities.EntityNet
-import com.dyonovan.neotech.common.items.traits.ItemBattery
 import com.dyonovan.neotech.managers.ItemManager
+import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{EnumAction, ItemStack}
 import net.minecraft.world.World

@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.common.tiles.storage
 
+import com.dyonovan.neotech.common.blocks.traits.Upgradeable
+import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
@@ -9,13 +11,13 @@ import net.minecraft.nbt.NBTTagCompound
 /**
   * Created by Dyonovan on 1/23/2016.
   */
-class TileDimStorage extends UpdatingTile with Inventory with Waila {
+class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgradeable {
 
     var qty = 0
     var lock = false
     final val maxStacks = 64
 
-    override def initialSize: Int = 1
+    override def initialSize: Int = 2
 
     override def markDirty(): Unit = {
         super[TileEntity].markDirty()
@@ -66,49 +68,59 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
         lock = l
         checkQty()
     }
+
     /*
      * Inventory Methods
      */
 
-    override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = index == 0 && isStackEqual(stack)
+    override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
+        (slot == 0 && isStackEqual(stack) && !stack.isItemEqual(new ItemStack(ItemManager.upgradeMBFull))) ||
+          (slot == 1 && stack.isItemEqual(new ItemStack(ItemManager.upgradeMBFull)))
+    }
 
     override def insertItem(slot: Int, originalStack: ItemStack, simulate: Boolean): ItemStack = {
-        if (originalStack == null) return null
-        if (!isItemValidForSlot(slot, originalStack)) return originalStack
+        if (slot == 0) {
+            if (originalStack == null) return null
+            if (!isItemValidForSlot(slot, originalStack)) return originalStack
 
-        if (inventoryContents.get(0) == null) {
-            if (!simulate) {
-                val newStack = originalStack.copy()
-                newStack.stackSize = 1
-                inventoryContents.set(0, newStack)
-                qty = originalStack.stackSize
-                worldObj.markBlockForUpdate(pos)
+            if (inventoryContents.get(0) == null) {
+                if (!simulate) {
+                    val newStack = originalStack.copy()
+                    newStack.stackSize = 1
+                    inventoryContents.set(0, newStack)
+                    qty = originalStack.stackSize
+                    worldObj.markBlockForUpdate(pos)
+                }
+                return null
+            } else {
+                if (qty == inventoryContents.get(0).getMaxStackSize * maxStacks) return originalStack
+                val returnStack = originalStack.copy()
+                returnStack.stackSize = originalStack.stackSize - Math.min(originalStack.stackSize, (inventoryContents.get(0).getMaxStackSize * maxStacks) - qty)
+                if (!simulate) {
+                    qty += originalStack.stackSize - returnStack.stackSize
+                    worldObj.markBlockForUpdate(pos)
+                }
+                if (returnStack.stackSize > 0) return returnStack else return null
             }
-            null
-        } else {
-            if (qty == inventoryContents.get(0).getMaxStackSize * maxStacks) return originalStack
-            val returnStack = originalStack.copy()
-            returnStack.stackSize = originalStack.stackSize - Math.min(originalStack.stackSize, (inventoryContents.get(0).getMaxStackSize * maxStacks) - qty)
-            if (!simulate) {
-                qty += originalStack.stackSize - returnStack.stackSize
-                worldObj.markBlockForUpdate(pos)
-            }
-            if (returnStack.stackSize > 0) returnStack else null
         }
+        originalStack
     }
 
     override def extractItem(extractSlot: Int, amount: Int, simulate: Boolean): ItemStack = {
-        if (amount == 0 || inventoryContents.get(0) == null || qty == 0) return null
+        if (extractSlot == 0) {
+            if (amount == 0 || inventoryContents.get(0) == null || qty == 0) return null
 
-        val actual = Math.min(Math.min(amount, qty), inventoryContents.get(0).getMaxStackSize)
-        val returnStack = inventoryContents.get(0).copy()
-        returnStack.stackSize = actual
-        if (!simulate) {
-            qty -= actual
-            checkQty()
-            worldObj.markBlockForUpdate(pos)
+            val actual = Math.min(Math.min(amount, qty), inventoryContents.get(0).getMaxStackSize)
+            val returnStack = inventoryContents.get(0).copy()
+            returnStack.stackSize = actual
+            if (!simulate) {
+                qty -= actual
+                checkQty()
+                worldObj.markBlockForUpdate(pos)
+            }
+            return returnStack
         }
-        returnStack
+        null
     }
 
     /*
@@ -123,4 +135,9 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila {
         }
         tipList
     }
+
+    /**
+      * Called when the board is removed, reset to default values
+      */
+    override def resetValues(): Unit = {}
 }
