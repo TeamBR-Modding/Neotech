@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.managers;
 
-import com.sun.swing.internal.plaf.metal.resources.metal;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;

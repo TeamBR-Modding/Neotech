@@ -22,6 +22,16 @@ trait ItemBattery extends Item with IEnergyContainerItem {
     protected var maxReceive: Int = 0
     protected var maxExtract: Int = 0
 
+    /**
+      * Adds energy to a container item. Returns the quantity of energy that was accepted.
+      * This should always return 0 if the item cannot be externally charged.
+      *
+      * @param stack ItemStack to be charged.
+      * @param maxReceive Maximum amount of energy to be sent into the item.
+      * @param simulate If TRUE, the charge will only be simulated.
+      *
+      * @return Amount of energy that was (or would have been, if simulated) received by the item.
+      */
     override def receiveEnergy(stack: ItemStack, maxReceive: Int, simulate: Boolean): Int = {
         if (!stack.hasTagCompound) {
             stack.setTagCompound(new NBTTagCompound)
@@ -36,6 +46,16 @@ trait ItemBattery extends Item with IEnergyContainerItem {
         energyReceived
     }
 
+    /**
+      * Removes energy from a container item. Returns the quantity of energy that was removed.
+      * This should always return 0 if the item cannot be externally discharged.
+      *
+      * @param stack ItemStack to be discharged.
+      * @param maxExtract Maximum amount of energy to be extracted from the item.
+      * @param simulate If TRUE, the discharge will only be simulated.
+      *
+      * @return Amount of energy that was (or would have been, if simulated) extracted from the item.
+      */
     override def extractEnergy(stack: ItemStack, maxExtract: Int, simulate: Boolean): Int = {
         if (stack.getTagCompound == null || !stack.getTagCompound.hasKey("Energy")) {
             return 0
@@ -51,14 +71,23 @@ trait ItemBattery extends Item with IEnergyContainerItem {
         energyExtracted
     }
 
+    /**
+      * Get the amount of energy currently stored in the container item.
+      */
     override def getEnergyStored(stack: ItemStack): Int = {
         if (stack.getTagCompound == null || !stack.getTagCompound.hasKey("Energy"))
             return 0
         stack.getTagCompound.getInteger("Energy")
     }
 
+    /**
+      * Get the max amount of energy that can be stored in the container item.
+      */
     override def getMaxEnergyStored(stack: ItemStack): Int = capacity
 
+    /**
+      * Sets the Damage Bar on the item to correspond to amount of energy stored
+      */
     def updateDamage(stack: ItemStack): Unit = {
         val r = getEnergyStored(stack).toFloat / getMaxEnergyStored(stack)
         val res = 16 - Math.round(r * 16)
