@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.events
 
-import com.dyonovan.neotech.managers.BlockManager
+import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
 import net.minecraft.item.Item
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent
 
@@ -28,6 +29,19 @@ object OnCraftedEvent {
                 tag.setInteger("Tier", tag.getInteger("Tier") + 1)
                 event.crafting.setTagCompound(tag)
             }
+        }
+        if (event.crafting.getItem == ItemManager.mobGun) {
+            val tag = new NBTTagCompound
+            var tier = 1
+            event.craftMatrix.getStackInSlot(8).getItem match {
+                case ItemManager.basicRFBattery => tier = 1
+                case ItemManager.advancedRFBattery => tier = 2
+                case ItemManager.eliteRFBattery => tier = 3
+            }
+            if (event.craftMatrix.getStackInSlot(8).hasTagCompound && event.craftMatrix.getStackInSlot(8).getTagCompound.hasKey("Energy"))
+                tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
+            tag.setInteger("Tier", tier)
+            event.crafting.setTagCompound(tag)
         }
     }
 }

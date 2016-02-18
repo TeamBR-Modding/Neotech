@@ -59,7 +59,7 @@ trait ItemBattery extends Item with IEnergyContainerItem {
 
     override def getMaxEnergyStored(stack: ItemStack): Int = capacity
 
-    private def updateDamage(stack: ItemStack): Unit = {
+    def updateDamage(stack: ItemStack): Unit = {
         val r = getEnergyStored(stack).toFloat / getMaxEnergyStored(stack)
         val res = 16 - Math.round(r * 16)
         stack.setItemDamage(res)

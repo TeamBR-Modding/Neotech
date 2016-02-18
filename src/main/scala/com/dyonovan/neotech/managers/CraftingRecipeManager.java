@@ -243,10 +243,10 @@ public class CraftingRecipeManager {
                 "BTB", 'B', "ingotBronze", 'R', Items.redstone, 'P', BlockManager.pipeFluidInterface(), 'T', BlockManager.ironTank()));
 
         //Mob Gun
-        GameRegistry.addRecipe(new ItemStack(ItemManager.mobGun(), 1),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.mobGun(), 1),
                 "   ",
                 "III",
-                "  I", 'I', Items.iron_ingot);
+                "  B", 'I', "ingotSteel", 'B', "rfBattery"));
 
         //Mob Net
         GameRegistry.addRecipe(new ItemStack(ItemManager.mobNet(), 1),
@@ -271,5 +271,7 @@ public class CraftingRecipeManager {
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.iron_ingot), 1.0F);
+        //Temp Recipe TODO REMOVE
+        GameRegistry.addSmelting(Items.iron_ingot, new ItemStack(MetalManager.getMetal("steel").get().ingot().get()), 0.0F);
     }
 }

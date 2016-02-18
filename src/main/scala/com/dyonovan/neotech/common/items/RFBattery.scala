@@ -43,9 +43,9 @@ class RFBattery(name: String, tier: Int) extends ItemBattery {
       */
     def getTierPower(t: Int): (Int, Int) = {
         t match {
-            case 1 => (25000, 2500)
-            case 2 => (100000, 10000)
-            case 3 => (1000000, 100000)
+            case 1 => (25000, 200)
+            case 2 => (100000, 1000)
+            case 3 => (1000000, 10000)
             case _ => (0, 0)
         }
     }

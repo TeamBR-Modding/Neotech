@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.items._
-import net.minecraft.item.Item
+import net.minecraft.item.{ItemStack, Item}
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -50,9 +50,9 @@ object ItemManager {
         registerItem(mobGun, "mobGun")
         registerItem(mobNet, "mobNet")
 
-        registerItem(basicRFBattery, "basicRFBattery")
-        registerItem(advancedRFBattery, "advancedRFBattery")
-        registerItem(eliteRFBattery, "eliteRFBattery")
+        registerItem(basicRFBattery, "basicRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
+        registerItem(advancedRFBattery, "advancedRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
+        registerItem(eliteRFBattery, "eliteRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
     }
     /**
      * Helper method to register items
@@ -69,5 +69,11 @@ object ItemManager {
 
     def registerItem(item: Item, name: String) : Item = {
         registerItem(item, name, null)
+    }
+
+    def registerItem(item: Item, name: String, oreDict: String, itemDamage: Int) : Item = {
+        GameRegistry.registerItem(item, name)
+        if (oreDict != null) OreDictionary.registerOre(oreDict, new ItemStack(item, 1, itemDamage))
+        item
     }
 }
