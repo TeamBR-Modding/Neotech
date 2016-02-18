@@ -93,13 +93,13 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
                 }
 
                 if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
-                    val drainItem = getStackInSlot(DRAIN_SLOT).asInstanceOf[IEnergyContainerItem]
+                    val drainItem = getStackInSlot(DRAIN_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
                     receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxReceive, false), simulate = false)
                 }
 
                 if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
-                    val drainItem = getStackInSlot(FILL_SLOT).asInstanceOf[IEnergyContainerItem]
-                    extractEnergy(EnumFacing.UP, drainItem.receiveEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxExtract, false), simulate = false)
+                    val fillItem = getStackInSlot(FILL_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
+                    extractEnergy(EnumFacing.UP, fillItem.receiveEnergy(getStackInSlot(FILL_SLOT), energyStorage.getMaxExtract, false), simulate = false)
                 }
             }
         }

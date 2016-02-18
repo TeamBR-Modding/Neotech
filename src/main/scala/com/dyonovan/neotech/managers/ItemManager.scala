@@ -32,6 +32,10 @@ object ItemManager {
     val mobGun = new ItemMobGun
     val mobNet = new ItemMobNet
 
+    val basicRFBattery = new RFBattery("basicRFBattery", 1)
+    val advancedRFBattery = new RFBattery("advancedRFBattery", 2)
+    val eliteRFBattery = new RFBattery("eliteRFBattery", 3)
+
     def preInit(): Unit = {
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
         registerItem(upgradeMBFull, "upgradeMBFull")
@@ -45,6 +49,10 @@ object ItemManager {
         registerItem(spawnerMover, "spawnerMover")
         registerItem(mobGun, "mobGun")
         registerItem(mobNet, "mobNet")
+
+        registerItem(basicRFBattery, "basicRFBattery")
+        registerItem(advancedRFBattery, "advancedRFBattery")
+        registerItem(eliteRFBattery, "eliteRFBattery")
     }
     /**
      * Helper method to register items
