@@ -5,7 +5,8 @@ import java.awt.Color
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.processors.ContainerCrucible
 import com.dyonovan.neotech.common.tiles.machines.processors.TileCrucible
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentPowerBar, GuiComponentFluidTank, GuiComponentArrow}
+import com.teambr.bookshelf.client.gui.GuiColor
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentFluidTank, GuiComponentPowerBar}
 import com.teambr.bookshelf.util.ColorUtils
 import net.minecraft.entity.player.EntityPlayer
 
@@ -53,7 +54,13 @@ class GuiCrucible(player: EntityPlayer, tileEntity: TileCrucible) extends
         //Stored Fluid
         components += new GuiComponentFluidTank(150, 18, 18, 60, tileEntity.tanks(tileEntity.OUTPUT_TANK)) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
-                ArrayBuffer(tileEntity.tanks(tileEntity.OUTPUT_TANK).getFluidAmount + "/" + tileEntity.tanks(tileEntity.OUTPUT_TANK).getCapacity + " mb")
+                val buffer = new ArrayBuffer[String]()
+                buffer += (if(tileEntity.tanks(tileEntity.OUTPUT_TANK).getFluid != null)
+                    GuiColor.ORANGE + tileEntity.tanks(tileEntity.OUTPUT_TANK).getFluid.getLocalizedName
+                else
+                    GuiColor.RED + "Empty")
+                buffer += tileEntity.tanks(tileEntity.OUTPUT_TANK).getFluidAmount + "/" + tileEntity.tanks(tileEntity.OUTPUT_TANK).getCapacity + " mb"
+                buffer
             }
         }
     }

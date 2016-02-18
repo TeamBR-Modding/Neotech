@@ -4,7 +4,6 @@ import java.io.File
 import java.util
 
 import com.dyonovan.neotech.NeoTech
-import com.dyonovan.neotech.managers.MetalManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.bookshelf.util.JsonUtils
@@ -65,9 +64,6 @@ object CrucibleRecipeRegistry {
     def generateDefaults(): Unit = {
         LogHelper.info("Json not found. Creating Dynamic Crucible Recipe List...")
 
-        //Iron
-        addCrucibleRecipe(null, "ingotIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, 1000))
-
         saveToFile()
         LogHelper.info("Finished adding " + crucibleRecipes.size + " Crucible Recipes")
     }
@@ -91,6 +87,7 @@ object CrucibleRecipeRegistry {
         }
         val recipe = new CrucibleRecipe(getItemStackString(stack), ore, getFluidString(fluidStack))
         crucibleRecipes.add(recipe)
+        saveToFile()
     }
 
     /**

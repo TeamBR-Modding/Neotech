@@ -177,14 +177,15 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
     override def tryOutput() : Unit = {
         super.tryOutput()
         for(dir <- EnumFacing.values) {
-            if(canInputFromSide(dir)) {
+            if(canOutputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case otherTank : IFluidHandler =>
-                        if((if(otherTank.getTankInfo(dir.getOpposite)(0).fluid == null) true else
+                        val fluid = otherTank.getTankInfo(dir.getOpposite)(0).fluid
+                        if((if(fluid == null) true else
                         if (tanks(OUTPUT_TANK).getFluid != null)
                             otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK).getFluid.getFluid
                         else false)
-                                && canDrain(dir.getOpposite, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid))
+                                && canDrain(dir.getOpposite, if(fluid != null) fluid.getFluid else null))
                             otherTank.fill(dir.getOpposite, drain(dir, 1000, doDrain = true), true)
                     case _ =>
                 }
@@ -192,6 +193,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
         }
     }
 
+    //TODO : Fix this
     override def getDescription : String = {
         GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:electricCrusher.name") + ":\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrusher.desc") + "\n\n" +
