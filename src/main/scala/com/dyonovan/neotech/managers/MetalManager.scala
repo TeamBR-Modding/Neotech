@@ -69,14 +69,14 @@ object MetalManager {
     }
 
     def registerDefaultMetals() : Unit = {
-        registerMetal("copper", 1, 0xFFc27a49)
-        registerMetal("tin",    1, 0xFFe7eadd)
-        registerMetal("lead",   1, 0xFF796a78)
-        registerMetal("silver", 1, 0xFFeef0f1)
-        registerMetal("bronze", 1, 0xFFcd9520, hasOre = false)
-        registerMetal("steel",  1, 0xFF646464, hasOre = false)
-        registerMetal("gold",   1, 0xFFdede00, hasOre = false, hasSolidBlock = false, hasIngot = false, hasNugget = false)
-        registerMetal("iron",   1, 0xFFd8d8d8, hasOre = false, hasSolidBlock = false, hasIngot = false)
+        registerMetal("copper", 1, 0xFFc27a49, 0xFFc27a49)
+        registerMetal("tin",    1, 0xFFe7eadd, 0xFFe7eadd)
+        registerMetal("lead",   1, 0xFF796a78, 0xFF796a78)
+        registerMetal("silver", 1, 0xFFeef0f1, 0xFFeef0f1)
+        registerMetal("bronze", 1, 0xFFcd9520, 0xFFcd9520, hasOre = false)
+        registerMetal("steel",  1, 0xFF646464, 0xFF646464, hasOre = false)
+        registerMetal("gold",   1, 0xFFdede00, 0xFFdede00, hasOre = false, hasSolidBlock = false, hasIngot = false, hasNugget = false)
+        registerMetal("iron",   1, 0xFFd8d8d8, 0xFFb71b1b, hasOre = false, hasSolidBlock = false, hasIngot = false)
     }
 
     /**
@@ -87,7 +87,7 @@ object MetalManager {
       * @param color The color of the metal, set for rendering
       * @return
       */
-    def registerMetal(metalName : String, miningLevel : Int, color : Int,
+    def registerMetal(metalName : String, miningLevel : Int, color : Int, fluidColor : Int,
                       hasFluid : Boolean = true, hasFluidBlock : Boolean = true,
                       hasOre : Boolean = true, hasSolidBlock : Boolean = true,
                       hasIngot : Boolean = true, hasDust : Boolean = true, hasNugget : Boolean = true) : Metal = {
@@ -100,7 +100,7 @@ object MetalManager {
         // Create the Fluid
         var fluid : Fluid = null
         if(hasFluid)
-            fluid = createFluidMetal(color, metalNameBase, "neotech:blocks/metal")
+            fluid = createFluidMetal(fluidColor, metalNameBase, "neotech:blocks/metal")
 
         //Create the Fluid Block
         var fluidBlock : BlockFluidMetal = null

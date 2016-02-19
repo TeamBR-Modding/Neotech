@@ -26,7 +26,7 @@ class CreativeTabMetals extends CreativeTabs("tabNeoTechMetals") {
     override def getIconItemStack : ItemStack = {
         val universalBucket = ForgeModContainer.getInstance().universalBucket
         val stack = new ItemStack(universalBucket)
-        universalBucket.asInstanceOf[UniversalBucket].fill(stack, new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 1000), true)
+        universalBucket.asInstanceOf[UniversalBucket].fill(stack, new FluidStack(MetalManager.getMetal("copper").get.fluid.get, 1000), true)
         stack
     }
 
