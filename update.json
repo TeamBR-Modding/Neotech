@@ -1,10 +1,10 @@
 {
   "homepage": "http://minecraft.curseforge.com/projects/neotech/files",
   "promos": {
-    "1.8.9-latest": "2.3.6",
-    "1.8.9-recommended": "2.3.6",
-    "latest": "2.3.6",
-    "recommended": "2.3.6"
+    "1.8.9-latest": "2.3.7",
+    "1.8.9-recommended": "2.3.7",
+    "latest": "2.3.7",
+    "recommended": "2.3.7"
   },
   "1.8.9": {
     "2.2.3": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
@@ -15,6 +15,7 @@
     "2.3.3": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
     "2.3.4": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
     "2.3.5": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.6": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog"
+    "2.3.6": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
+    "2.3.7": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog"
   }
 }
