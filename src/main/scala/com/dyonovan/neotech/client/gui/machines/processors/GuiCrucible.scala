@@ -54,7 +54,7 @@ class GuiCrucible(player: EntityPlayer, tileEntity: TileCrucible) extends
         }
 
         //Stored Fluid
-        components += new GuiComponentFluidTank(35, 18, 50, 60, tileEntity.tanks(tileEntity.OUTPUT_TANK)) {
+        components += new GuiComponentFluidTank(115, 18, 50, 60, tileEntity.tanks(tileEntity.OUTPUT_TANK)) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
                 buffer += (if(tileEntity.tanks(tileEntity.OUTPUT_TANK).getFluid != null)
