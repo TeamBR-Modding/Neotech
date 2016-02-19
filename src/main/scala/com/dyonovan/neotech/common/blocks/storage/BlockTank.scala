@@ -16,7 +16,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.World
-import net.minecraftforge.fluids.FluidContainerRegistry
+import net.minecraftforge.fluids.{IFluidContainerItem, FluidUtil, IFluidHandler, FluidContainerRegistry}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.util.Random
@@ -43,46 +43,13 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
         val heldItem = player.getHeldItem
         val tank = world.getTileEntity(pos).asInstanceOf[TileTank]
 
-        //Registered Fluid Container
-        if (heldItem != null && FluidContainerRegistry.isContainer(heldItem)) {
-            val fluid = FluidContainerRegistry.getFluidForFilledItem(heldItem)
-            if (fluid != null) {
-                val amount = tank.fill(EnumFacing.UP, fluid, doFill = false)
-                if (amount == fluid.amount) {
-                    if (getTier == 4)
-                        fluid.amount = tank.getTierInfo(getTier)._2
-                    if (getTier != 5)
-                        tank.fill(EnumFacing.UP, fluid, doFill = true)
-                    if (!player.capabilities.isCreativeMode)
-                        player.inventory.setInventorySlotContents(player.inventory.currentItem, consumeItem(heldItem))
-                    world.markBlockForUpdate(pos)
-                    return true
-                }
-            } else if (FluidContainerRegistry.isEmptyContainer(heldItem)) {
-                val fillStack = FluidContainerRegistry.fillFluidContainer(tank.tank.getFluid, heldItem)
-                if (fillStack != null) {
-                    val actual = tank.drain(EnumFacing.DOWN, FluidContainerRegistry.getFluidForFilledItem(fillStack).amount, doDrain = false)
-                    if (actual.amount == FluidContainerRegistry.getFluidForFilledItem(fillStack).amount) {
-                        if (tank.getTier != 4)
-                            tank.drain(EnumFacing.DOWN, FluidContainerRegistry.getFluidForFilledItem(fillStack).amount, doDrain = true)
-                        if (!player.capabilities.isCreativeMode) {
-                            if (heldItem.stackSize == 1) {
-                                player.inventory.setInventorySlotContents(player.inventory.currentItem, fillStack)
-                            } else {
-                                player.inventory.setInventorySlotContents(player.inventory.currentItem, consumeItem(heldItem))
-                                if (!player.inventory.addItemStackToInventory(fillStack)) {
-                                    player.dropPlayerItemWithRandomChoice(fillStack, false)
-                                }
-                            }
-                        }
-                        return true
-                    }
-                }
-            }
+        if(heldItem != null && tank.isInstanceOf[IFluidHandler]) {
+            if(FluidUtil.interactWithTank(heldItem, player, tank, side.getOpposite))
+                return true
         }
 
         //Wrench
-        else if (player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
+        if (player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
             if (breakTank(world, pos, state)) {
                 world.setBlockToAir(pos)
                 world.removeTileEntity(pos)
@@ -106,8 +73,9 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
             val notify = new Notification(item, fluidName, fluidAmount)
             NotificationHelper.addNotification(notify)
         }
-        super.onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
-        true
+        if(heldItem == null)
+            return false
+        FluidContainerRegistry.isFilledContainer(heldItem) || heldItem.getItem.isInstanceOf[IFluidContainerItem]
     }
 
     def consumeItem(stack: ItemStack): ItemStack = {
@@ -135,7 +103,9 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
             case tile: TileTank =>
                 val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
                 val tag = new NBTTagCompound
-                tile.writeToNBT(tag)
+                val tileTag = new NBTTagCompound
+                tile.writeToNBT(tileTag)
+                tag.setTag("Fluid", tileTag)
                 item.setTagCompound(tag)
                 if (tile.tank.getFluid != null) {
                     val r = tile.tank.getFluid.amount.toFloat / tile.tank.getCapacity
@@ -153,7 +123,7 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:
     ItemStack): Unit = {
         if(stack.hasTagCompound && !world.isRemote) { //If there is a tag and is on the server
-            world.getTileEntity(pos).readFromNBT(stack.getTagCompound) //Set the tag
+            world.getTileEntity(pos).readFromNBT(stack.getTagCompound.getCompoundTag("Fluid")) //Set the tag
             world.getTileEntity(pos).setPos(pos) //Set the saved tag to here
             world.markBlockForUpdate(pos) //Mark for update to client
         }

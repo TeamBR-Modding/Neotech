@@ -254,4 +254,8 @@ class TilePump extends UpdatingTile with FluidHandler with IEnergyReceiver with 
         tipList.add(color + getEnergyStored(null) + "/" + getMaxEnergyStored(null) + " RF")
         tipList
     }
+
+    override def getInputTanks: Array[Int] = Array(TANK)
+
+    override def getOutputTanks: Array[Int] = Array(TANK)
 }

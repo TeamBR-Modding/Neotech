@@ -34,10 +34,10 @@ class ModelTank(baseModel: IBakedModel) extends ISmartItemModel {
         fluidHeight = 2.01F
         renderFluid = null
         if (stack.hasTagCompound) {
-            val liquidTag = stack.getTagCompound.getString("FluidName")
+            val tag = stack.getTagCompound.getCompoundTag("Fluid")
 
-            if (liquidTag != null) {
-                val liquid = FluidStack.loadFluidStackFromNBT(stack.getTagCompound)
+            if (tag != null) {
+                val liquid = FluidStack.loadFluidStackFromNBT(tag)
                 if (liquid != null && liquid.getFluid != null) {
                     renderFluid = liquid.getFluid
                     if (stack.getItem == Item.getItemFromBlock(BlockManager.ironTank))

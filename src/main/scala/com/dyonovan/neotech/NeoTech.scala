@@ -79,6 +79,7 @@ object NeoTech {
         FertilizerBlacklistRegistry.init()
         CrusherRecipeRegistry.init()
         CrucibleRecipeRegistry.init()
+        SolidifierRegistry.init()
         FluidFuelValues.init()
         PacketDispatcher.initPackets()
         EventManager.init()

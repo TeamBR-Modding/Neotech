@@ -149,7 +149,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case otherTank : IFluidHandler =>
                         if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
-                                otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid))
+                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid))
                             fill(dir, otherTank.drain(dir.getOpposite, 1000, true), doFill = true)
                     case _ =>
                 }

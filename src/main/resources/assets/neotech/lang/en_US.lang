@@ -320,6 +320,11 @@ neotech.text.expansion=Expansion
 neotech.text.rfIn=Current RF In
 neotech.text.rfOut=Current RF Out
 
+neotech.text.processMode=Solidify Mode
+neotech.text.blockMode=Block Mode
+neotech.text.ingotMode=Ingot Mode
+neotech.text.nuggetMode=Nugget Mode
+
 neotech.text.size=Size
 neotech.text.facing=Rotation
 neotech.text.fitToBlock=Fit

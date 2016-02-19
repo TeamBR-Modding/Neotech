@@ -145,6 +145,10 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       */
     override def getOutputSlots: Array[Int] = Array()
 
+    override def getInputTanks: Array[Int] = Array()
+
+    override def getOutputTanks: Array[Int] = Array(OUTPUT_TANK)
+
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super[MachineProcessor].writeToNBT(tag)
         super[FluidHandler].writeToNBT(tag)
