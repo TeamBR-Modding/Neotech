@@ -1,27 +1,21 @@
 package com.dyonovan.neotech.common.blocks.storage
 
-import java.util
-
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.items.ItemWrench
 import com.dyonovan.neotech.common.tiles.storage.TileDimStorage
-import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyBool
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing, MathHelper}
-import net.minecraft.world.{IBlockAccess, World, WorldServer}
+import net.minecraft.world.{WorldServer, IBlockAccess, World}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-
-import scala.util.Random
-import scala.util.control.Breaks._
 
 /**
   * Created by Dyonovan on 1/23/2016.
@@ -38,13 +32,16 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
                 val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
                 val tag = new NBTTagCompound
                 tile.writeToNBT(tag)
-                if (tile.getQty > 0)
+                if (tag.getInteger("Qty") > 0 || tile.getUpgradeBoard != null)
                     item.setTagCompound(tag)
-                dropItem(world, item, pos)
+                tile.dropItem(world, item, pos)
                 world.setBlockToAir(pos)
                 world.removeTileEntity(pos)
             } else if (player.getHeldItem != null && player.getHeldItem.isItemEqual(new ItemStack(ItemManager.upgradeMBFull))) {
-
+                if (tile.upgradeInventory.getStackInSlot(0) == null) {
+                    tile.upgradeInventory.setStackInSlot(0, player.getHeldItem.copy())
+                    player.getHeldItem.stackSize = 0
+                }
             } else if (player.getHeldItem != null) {
                 var actual = tile.insertItem(0, player.getHeldItem, simulate = true)
                 if (actual != null && actual.stackSize == player.getHeldItem.stackSize) return true
@@ -76,23 +73,29 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
     ItemStack): Unit = {
         if (stack.hasTagCompound && !world.isRemote) {
             //If there is a tag and is on the server
-            world.getTileEntity(pos).readFromNBT(stack.getTagCompound) //Set the tag
-            world.getTileEntity(pos).setPos(pos) //Set the saved tag to here
+            val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
+            tile.readFromNBT(stack.getTagCompound) //Set the tag
+            tile.setPos(pos) //Set the saved tag to here
             world.markBlockForUpdate(pos) //Mark for update to client
+            tile.upgradeInventoryChanged(0)
         }
     }
 
     override def onBlockClicked(world: World, pos: BlockPos, player: EntityPlayer): Unit = {
         if (!world.isRemote) {
             val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
-
-            if (tile.getStackInSlot(0) != null) {
+            if (tile.getUpgradeBoard != null && player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[ItemWrench]) {
+                val status = player.inventory.addItemStackToInventory(tile.upgradeInventory.getStackInSlot(0).copy())
+                if (!status) tile.dropItem(world, tile.upgradeInventory.getStackInSlot(0).copy(), pos)
+                world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
+                tile.upgradeInventory.setStackInSlot(0, null)
+            } else if (tile.getStackInSlot(0) != null) {
                 val amt = if (!player.isSneaking) 1 else tile.getStackInSlot(0).getMaxStackSize
                 var actual = tile.extractItem(0, amt, simulate = true)
                 if (actual != null) {
                     actual = tile.extractItem(0, amt, simulate = false)
                     val status = player.inventory.addItemStackToInventory(actual)
-                    if (!status) dropItem(world, actual, pos)
+                    if (!status) tile.dropItem(world, actual, pos)
                     world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
                 }
             }
@@ -103,35 +106,14 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
         world match {
             case _: WorldServer =>
                 val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
-                if (tile.getQty > 0 && tile.getStackInSlot(0) != null) {
-                    val stacks = new util.ArrayList[ItemStack]()
-                    val returnStack = tile.getStackInSlot(0).copy()
-                    breakable {
-                        while (true) {
-                            if (tile.getQty == 0) break
-                            else if (tile.getQty > tile.getStackInSlot(0).getMaxStackSize) {
-                                tile.addQty(-tile.getStackInSlot(0).getMaxStackSize)
-                                val addStack = returnStack.copy()
-                                addStack.stackSize = tile.getStackInSlot(0).getMaxStackSize
-                                stacks.add(addStack)
-                            } else {
-                                val addStack = returnStack.copy()
-                                addStack.stackSize = tile.getQty
-                                stacks.add(addStack)
-                                tile.addQty(-tile.getQty)
-                            }
-                        }
-                    }
-                    for (stack <- stacks.toArray()) {
-                        val itemStack = stack.asInstanceOf[ItemStack]
-                        dropItem(world, itemStack, pos)
-                    }
-                }
-            case _ =>
+                if (tile.getQty > 0 && tile.getStackInSlot(0) != null)
+                    tile.dropStacks(tile.getQty, tile.getStackInSlot(0))
+                if (tile.getUpgradeBoard != null)
+                    tile.dropItem(world, tile.upgradeInventory.getStackInSlot(0).copy(), pos)
+                tile.dropItem(world, new ItemStack(BlockManager.dimStorage), pos)
+                world.removeTileEntity(pos)
+                world.markBlockForUpdate(pos)
         }
-        dropItem(world, new ItemStack(BlockManager.dimStorage), pos)
-        world.removeTileEntity(pos)
-        world.markBlockForUpdate(pos)
     }
 
     override def getItemDropped(state: IBlockState, rand: java.util.Random, fortune: Int): Item = {
@@ -166,8 +148,8 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
         new BlockState(this, PropertyRotation.FOUR_WAY, LOCKED)
     }
 
-    override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
-        state.withProperty(LOCKED, (worldIn.getTileEntity(pos) == null|| worldIn.getTileEntity(pos).asInstanceOf[TileDimStorage].isLocked).asInstanceOf[java.lang.Boolean])
+    override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): IBlockState = {
+        state.withProperty(LOCKED, (worldIn.getTileEntity(pos) == null || worldIn.getTileEntity(pos).asInstanceOf[TileDimStorage].isLocked).asInstanceOf[java.lang.Boolean])
     }
 
     /**
@@ -193,28 +175,5 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
 
     override def isFullCube = false
 
-    private def dropItem(world: World, stack: ItemStack, pos: BlockPos): Unit = {
-        val random = new Random
-        if (stack != null && stack.stackSize > 0) {
-            val rx = random.nextFloat * 0.8F + 0.1F
-            val ry = random.nextFloat * 0.8F + 0.1F
-            val rz = random.nextFloat * 0.8F + 0.1F
 
-            val itemEntity = new EntityItem(world,
-                pos.getX + rx, pos.getY + ry, pos.getZ + rz,
-                new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
-
-            if (stack.hasTagCompound)
-                itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
-
-            val factor = 0.05F
-
-            itemEntity.motionX = random.nextGaussian * factor
-            itemEntity.motionY = random.nextGaussian * factor + 0.2F
-            itemEntity.motionZ = random.nextGaussian * factor
-            world.spawnEntityInWorld(itemEntity)
-
-            stack.stackSize = 0
-        }
-    }
 }

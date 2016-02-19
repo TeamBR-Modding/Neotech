@@ -26,19 +26,6 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with IEnergyCont
     setMaxDamage(16)
     setHasSubtypes(true)
 
-    /*@SideOnly(Side.CLIENT)
-    override def getSubItems(item: Item, tab: CreativeTabs, subItems: java.util.List[ItemStack]): Unit = {
-        var is = new ItemStack(this)
-        setEnergy(is, getEnergyInfo._2)
-        subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
-
-        if (getEnergyInfo._1 != 4) {
-            is = new ItemStack(this)
-            setEnergy(is, 0)
-            subItems.asInstanceOf[java.util.List[ItemStack]].add(is)
-        }
-    }*/
-
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if (getEnergyInfo._1 != 4) {

@@ -35,14 +35,20 @@ trait Upgradeable {
             override def onInventoryChanged(inventory: IItemHandler, slotNumber: Int): Unit = {
                 if(inventory.getStackInSlot(slotNumber) == null)
                     resetValues()
+                upgradeInventoryChanged(slotNumber)
             }
         })
     }
 
     /**
+      * Called when upgrade inventory is changed
+      */
+    def upgradeInventoryChanged(slot: Int) = { }
+
+    /**
       * Called when the board is removed, reset to default values
       */
-    def resetValues()
+    def resetValues(): Unit = { }
 
     //NBT, must overwrite
     def readFromNBT(tag: NBTTagCompound): Unit = {
@@ -75,7 +81,7 @@ trait Upgradeable {
 
     def hardDriveCount : Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
-            return getUpgradeBoard.getProcessorCount
+            return getUpgradeBoard.getHardDriveCount
         0
     }
 }
