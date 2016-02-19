@@ -195,7 +195,7 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
                         val otherTile = createTileAndSimulate(tank, dir, tilePos)
                         val filledAmount = otherTile.asInstanceOf[IFluidHandler].fill(dir.getOpposite, resource.resource.getFluid, false)
                         otherTile.invalidate()
-                        if (filledAmount > 0) {
+                        if (filledAmount >= 100) {
                             return true
                         }
                     case _ =>

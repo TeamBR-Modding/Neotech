@@ -1,13 +1,17 @@
 package com.dyonovan.neotech.client.gui.machines.generators
 
 import java.awt.Color
+import java.text.NumberFormat
+import java.util.Locale
+
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFurnaceGenerator
 import com.dyonovan.neotech.common.tiles.machines.generators.TileFurnaceGenerator
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFlame, GuiComponentPowerBar, GuiComponentText}
-import com.teambr.bookshelf.util.ColorUtils
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFlame, GuiComponentPowerBarGradient, GuiComponentText}
+import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.StatCollector
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -31,33 +35,35 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
             override def getCurrentBurn: Int = if (tileEntity.isActive) tileEntity.getBurnProgressScaled(14) else 0
 
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
-                ArrayBuffer(tileEntity.burnTime + " ticks left.")
+                ArrayBuffer(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                        .format(tileEntity.burnTime) + " ticks left.")
             }
         }
 
         //Energy Stored
-        components += new GuiComponentPowerBar(7, 18, 18, 60, new Color(255, 0, 0)) {
-            override  def getDynamicColor() : Color = {
-                val scale = tileEntity.getEnergyStored(null) * 100 / tileEntity.getMaxEnergyStored(null)
-                if(scale >= 66) {
-                    ColorUtils.getColorBetween(new Color(255, 153, 0), new Color(255, 0, 0), (scale - 67) / 33F)
-                } else if(scale >= 33) {
-                    ColorUtils.getColorBetween(new Color(255, 255, 0), new Color(255, 153, 0), (scale - 33) / 33F)
-                } else
-                    ColorUtils.getColorBetween(new Color(0, 0, 0),new Color(255, 255, 0), scale / 33F)
-            }
+        components += new GuiComponentPowerBarGradient(14, 18, 18, 60, new Color(255, 0, 0)) {
+            addColor(new Color(255, 150, 0))
+            addColor(new Color(255, 255, 0))
+
+
             override def getEnergyPercent(scale: Int): Int = {
                 tileEntity.getEnergyStored(null) * scale / tileEntity.getMaxEnergyStored(null)
             }
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
-                ArrayBuffer(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null))
+                val buffer = new ArrayBuffer[String]()
+                buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
+                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getEnergyStored(null)) + " / " +
+                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getMaxEnergyStored(null)) + " RF"
+                buffer
             }
         }
 
         //Current Production
         components += new GuiComponentText(GuiColor.RED + "RF/t = " + tileEntity.getEnergyProduced, 64, 18) {
             override def renderOverlay(i : Int, j : Int, x : Int, y : Int) = {
-                setText(GuiColor.RED + "RF/t = " + tileEntity.getEnergyProduced)
+                setText(GuiColor.RED + "RF/t = " +
+                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                                .format(tileEntity.getEnergyProduced))
                 super.renderOverlay(i, j, x, y)
             }
         }

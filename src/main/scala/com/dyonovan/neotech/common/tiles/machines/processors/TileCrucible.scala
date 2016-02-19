@@ -173,8 +173,11 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
                         if (tanks(OUTPUT_TANK).getFluid != null)
                             otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK).getFluid.getFluid
                         else false)
-                                && canDrain(dir.getOpposite, if(fluid != null) fluid.getFluid else null))
-                            otherTank.fill(dir.getOpposite, drain(dir, 1000, doDrain = true), true)
+                                && canDrain(dir.getOpposite, if(fluid != null) fluid.getFluid else null)) {
+                            val amount = otherTank.fill(dir.getOpposite, drain(dir, 1000, doDrain = false), false)
+                            if (amount > 0)
+                                otherTank.fill(dir, drain(dir.getOpposite, amount, doDrain = true),  true)
+                        }
                     case _ =>
                 }
             }

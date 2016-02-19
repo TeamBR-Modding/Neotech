@@ -205,8 +205,11 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case otherTank : IFluidHandler =>
                         if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
-                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid))
-                            fill(dir, otherTank.drain(dir.getOpposite, 1000, true), doFill = true)
+                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
+                            val amount = fill(dir, otherTank.drain(dir.getOpposite, 1000, false), doFill = false)
+                            if (amount > 0)
+                                fill(dir, otherTank.drain(dir.getOpposite, amount, true), doFill = true)
+                        }
                     case _ =>
                 }
             }

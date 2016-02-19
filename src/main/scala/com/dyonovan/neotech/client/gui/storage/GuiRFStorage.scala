@@ -1,12 +1,14 @@
 package com.dyonovan.neotech.client.gui.storage
 
 import java.awt.Color
+import java.text.NumberFormat
+import java.util.Locale
 
 import com.dyonovan.neotech.common.container.storage.ContainerRFStorage
 import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
-import com.teambr.bookshelf.client.gui.GuiBase
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentText, GuiComponentPowerBar}
-import com.teambr.bookshelf.util.ColorUtils
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentPowerBarGradient, GuiComponentText}
+import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.StatCollector
@@ -29,42 +31,21 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
     override def addComponents(): Unit = {
         if (tileEntity != null) {
             //Stored Energy
-            components += new GuiComponentPowerBar(7, 18, 18, 60, new Color(255, 0, 0)) {
-                /**
-                  * Used to get the color at a position
-                  *
-                  * @return The color of the bar
-                  */
-                override  def getDynamicColor() : Color = {
-                    GlStateManager.enableBlend()
-                    val scale = tileEntity.getEnergyStored(null) * 100 / tileEntity.getMaxEnergyStored(null)
-                    if(scale >= 66) {
-                        ColorUtils.getColorBetween(new Color(255, 153, 0), new Color(255, 0, 0), (scale - 67) / 33F)
-                    } else if(scale >= 33) {
-                        ColorUtils.getColorBetween(new Color(255, 255, 0), new Color(255, 153, 0), (scale - 33) / 33F)
-                    } else
-                        ColorUtils.getColorBetween(new Color(0, 0, 0),new Color(255, 255, 0), scale / 33F)
-                }
+            components += new GuiComponentPowerBarGradient(8, 18, 18, 60, new Color(255, 0, 0)) {
+                addColor(new Color(255, 150, 0))
+                addColor(new Color(255, 255, 0))
 
-                /**
-                  * Used to scale the energy bar to fit
-                  *
-                  * @param scale Scale of bar
-                  * @return Where in new scale current energy is
-                  */
+
                 override def getEnergyPercent(scale: Int): Int = {
-                    (tileEntity.getEnergyStored(null).toLong * scale / tileEntity.getMaxEnergyStored(null)).toInt
+                    GlStateManager.enableBlend()
+                    tileEntity.getEnergyStored(null) * scale / tileEntity.getMaxEnergyStored(null)
                 }
-
-                /**
-                  * Used to set a tooltip
-                  *
-                  * @param x Mouse X
-                  * @param y Mouse Y
-                  * @return A list of strings to display
-                  */
-                override def getDynamicToolTip(x: Int, y: Int) : ArrayBuffer[String] = {
-                    ArrayBuffer(tileEntity.getEnergyStored(null) + " / " + tileEntity.getMaxEnergyStored(null))
+                override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
+                    val buffer = new ArrayBuffer[String]()
+                    buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
+                    buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getEnergyStored(null)) + " / " +
+                            NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getMaxEnergyStored(null)) + " RF"
+                    buffer
                 }
             }
 
