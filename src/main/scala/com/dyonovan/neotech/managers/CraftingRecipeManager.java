@@ -6,6 +6,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -266,6 +267,32 @@ public class CraftingRecipeManager {
                 "III",
                 "III",
                 "III", 'I', metal.nugget().get());
+
+        //RF Batteries
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.basicRFBattery()),
+                "S S",
+                "ILI",
+                "ILI", 'S', "ingotSilver", 'L', "ingotLead", 'I', "ingotIron"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.advancedRFBattery()),
+                "S S",
+                "GBG",
+                "GLG", 'S', "ingotSilver", 'L', "ingotLead", 'G', Items.gold_ingot, 'B', new ItemStack(ItemManager.basicRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.eliteRFBattery()),
+                "S S",
+                "DBD",
+                "DLD", 'S', "ingotSilver", 'L', "ingotLead", 'D', Items.diamond, 'B', new ItemStack(ItemManager.advancedRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
+
+        //Electric Solidifier
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricSolidifier()),
+                "SRS",
+                "BTB",
+                "SRS", 'T', BlockManager.ironTank(), 'S', "ingotSteel", 'B', Items.snowball, 'R', Items.redstone));
+
+        //Electric Crucible
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricSolidifier()),
+                "SRS",
+                "BCB",
+                "SRS", 'C', Blocks.cauldron, 'S', "ingotSteel", 'B', Items.bucket, 'R', Items.redstone));
 
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);

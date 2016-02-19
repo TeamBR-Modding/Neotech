@@ -360,7 +360,7 @@ neotech.electricCrucible.desc=The Electric Crucible allows you to melt down meta
 neotech.electricCrucible.processorUpgrade.desc=Each processor removes 112 ticks from the cook time.
 
 # Solidifier
-neotech.electricSolidifier.desc=The Electric Solidifier will tank a fluid input and try to solidify it into the selected item. Solidifier modes will attempt to cool the fluid to the shape selected.
+neotech.electricSolidifier.desc=The Electric Solidifier will take a fluid input and try to solidify it into the selected item. Solidifier modes will attempt to cool the fluid to the shape selected.
 
 # Furnace Generator
 neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would. By default, the Furnace Generator generates 20 RF/tick

@@ -5,6 +5,7 @@ import com.dyonovan.neotech.lib.Reference
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -28,6 +29,11 @@ class RFBattery(name: String, tier: Int) extends ItemBattery {
     capacity = tierPower._1
     maxReceive = tierPower._2
     maxExtract = tierPower._2
+
+    override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
+            updateDamage(stack)
+    }
 
     /**
       * Defines amount of power each tier holds
