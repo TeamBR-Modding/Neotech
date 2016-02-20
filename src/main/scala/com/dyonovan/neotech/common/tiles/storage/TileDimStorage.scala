@@ -12,6 +12,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
+import net.minecraftforge.oredict.OreDictionary
 
 import scala.util.control.Breaks._
 
@@ -113,7 +114,9 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgrade
      */
 
     override def isItemValidForSlot(slot: Int, stack: ItemStack): Boolean = {
-        slot == 0 && isStackEqual(stack) && !stack.isItemEqual(new ItemStack(ItemManager.upgradeMBFull))
+        slot == 0 &&
+          (isStackEqual(stack) || (hasControl && compareOreDict(stack))) &&
+          !stack.isItemEqual(new ItemStack(ItemManager.upgradeMBFull))
     }
 
     override def insertItem(slot: Int, originalStack: ItemStack, simulate: Boolean): ItemStack = {
@@ -207,5 +210,15 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgrade
             qty = maxStacks * getStackInSlot(0).getMaxStackSize
         }
         worldObj.markBlockForUpdate(pos)
+    }
+
+    def compareOreDict(stack: ItemStack): Boolean = {
+        if (getStackInSlot(0) == null) return true
+        val list1: Array[Int] = OreDictionary.getOreIDs(getStackInSlot(0))
+        val list2: Array[Int] = OreDictionary.getOreIDs(stack)
+        for (item <- list1) {
+            if (list2.contains(item)) return true
+        }
+        false
     }
 }

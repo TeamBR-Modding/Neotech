@@ -56,6 +56,8 @@ class ItemBlockDimStorage(block: Block) extends ItemBlock(block) {
             list.add(GuiColor.GREEN + "Expansion Upgrade (Max 1)")
             list.add(GuiColor.WHITE + "      Turns the Storage Crate into a Cobblegen")
             list.add(GuiColor.WHITE + "      Requires a Lava Block and Water Block Beside It")
+            list.add(GuiColor.GREEN + "Control Upgrade (Max 1)")
+            list.add(GuiColor.WHITE + "      Allows OreDict Matching")
         }
     }
 }

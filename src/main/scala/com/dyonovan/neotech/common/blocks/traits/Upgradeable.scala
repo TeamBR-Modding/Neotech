@@ -86,4 +86,6 @@ trait Upgradeable {
     }
 
     def hasExpansion: Boolean = getUpgradeBoard != null && getUpgradeBoard.hasExpansion
+
+    def hasControl: Boolean = getUpgradeBoard != null && getUpgradeBoard.hasControl
 }
