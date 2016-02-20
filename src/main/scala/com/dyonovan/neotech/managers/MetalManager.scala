@@ -70,13 +70,25 @@ object MetalManager {
 
     def registerDefaultMetals() : Unit = {
         registerMetal("copper", 1, 0xFFc27a49, 0xFFc27a49)
+        registerMetal("dirtycopper", 1, 0xFFc27a49, 0xFFc27a49,
+            hasDust = false, dirtyFluid = true, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
         registerMetal("tin",    1, 0xFFe7eadd, 0xFFe7eadd)
+        registerMetal("dirtytin", 1, 0xFFe7eadd, 0xFFe7eadd,
+            hasDust = false, dirtyFluid = true, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
         registerMetal("lead",   1, 0xFF796a78, 0xFF796a78)
-        registerMetal("silver", 1, 0xFFeef0f1, 0xFFeef0f1)
+        registerMetal("dirtylead", 1, 0xFF796a78, 0xFF796a78,
+            hasDust = false, dirtyFluid = true, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
+        registerMetal("silver", 1, 0xFFc5d8de, 0xFFc5d8de)
+        registerMetal("dirtysilver", 1, 0xFFc5d8de, 0xFFc5d8de,
+            hasDust = false, dirtyFluid = true, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
         registerMetal("bronze", 1, 0xFFcd9520, 0xFFcd9520, hasOre = false)
         registerMetal("steel",  1, 0xFF646464, 0xFF646464, hasOre = false)
         registerMetal("gold",   1, 0xFFdede00, 0xFFdede00, hasOre = false, hasSolidBlock = false, hasIngot = false, hasNugget = false)
+        registerMetal("dirtygold", 1, 0xFFdede00, 0xFFdede00,
+            hasDust = false, dirtyFluid = true, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
         registerMetal("iron",   1, 0xFFd8d8d8, 0xFFb71b1b, hasOre = false, hasSolidBlock = false, hasIngot = false)
+        registerMetal("dirtyiron", 1, 0xFFd8d8d8, 0xFFb71b1b,
+            hasDust = false, dirtyFluid = true, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
     }
 
     /**
@@ -88,7 +100,7 @@ object MetalManager {
       * @return
       */
     def registerMetal(metalName : String, miningLevel : Int, color : Int, fluidColor : Int,
-                      hasFluid : Boolean = true, hasFluidBlock : Boolean = true,
+                      hasFluid : Boolean = true, dirtyFluid : Boolean = false, hasFluidBlock : Boolean = true,
                       hasOre : Boolean = true, hasSolidBlock : Boolean = true,
                       hasIngot : Boolean = true, hasDust : Boolean = true, hasNugget : Boolean = true) : Metal = {
         val metalNameBase = metalName.toLowerCase
@@ -100,7 +112,7 @@ object MetalManager {
         // Create the Fluid
         var fluid : Fluid = null
         if(hasFluid)
-            fluid = createFluidMetal(fluidColor, metalNameBase, "neotech:blocks/metal")
+            fluid = createFluidMetal(fluidColor, dirtyFluid, metalNameBase, "neotech:blocks/metal")
 
         //Create the Fluid Block
         var fluidBlock : BlockFluidMetal = null
@@ -214,11 +226,14 @@ object MetalManager {
       *
       * @param color The color of the fluid, format 0xAARRGGBB
       * @param name The name of the fluid eg. copper
-      * @param texture The texture base eg. neotech:blocks/metal
+      * @param iconLoc The texture base eg. neotech:blocks/metal
       * @return The fluid created, null if not registered
       */
     @Nullable
-    def createFluidMetal(color : Int, name: String, texture: String): Fluid = {
+    def createFluidMetal(color : Int, dirtyMetal : Boolean, name: String, iconLoc: String): Fluid = {
+        var texture = iconLoc
+        if(dirtyMetal)
+            texture += "_dirty"
         val still = new ResourceLocation(texture + "_still")
         val flowing = new ResourceLocation(texture + "_flow")
 

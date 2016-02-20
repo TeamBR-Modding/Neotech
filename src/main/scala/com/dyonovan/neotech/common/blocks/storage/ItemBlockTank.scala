@@ -51,12 +51,14 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
     }
 
     def updateDamage(stack: ItemStack): Unit = {
-        if (getFluid(stack) != null) {
-            val r = getFluid(stack).amount.toFloat / getCapacity(stack)
-            val res = 16 - (r * 16).toInt
-            stack.setItemDamage(res)
-        } else
-            stack.setItemDamage(16)
+        if(block != BlockManager.voidTank) {
+            if (getFluid(stack) != null) {
+                val r = getFluid(stack).amount.toFloat / getCapacity(stack)
+                val res = 16 - (r * 16).toInt
+                stack.setItemDamage(res)
+            } else
+                stack.setItemDamage(16)
+        }
     }
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
@@ -156,7 +158,7 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
             case BlockManager.goldTank => (2, FluidContainerRegistry.BUCKET_VOLUME * 16)
             case BlockManager.diamondTank => (3, FluidContainerRegistry.BUCKET_VOLUME * 64)
             case BlockManager.creativeTank => (4, FluidContainerRegistry.BUCKET_VOLUME * 8)
-            case _ => (1, FluidContainerRegistry.BUCKET_VOLUME * 8)
+            case _ => (1, FluidContainerRegistry.BUCKET_VOLUME * 1)
         }
     }
 }
