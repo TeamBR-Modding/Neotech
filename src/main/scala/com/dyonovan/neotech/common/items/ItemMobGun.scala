@@ -30,9 +30,9 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
 
     final val RF_PER_USE = 2500
 
-    capacity = 25000
-    maxReceive = 2500
-    maxExtract = 2500
+    override var capacity: Int = 25000
+    override var maxExtract: Int = 2500
+    override var maxReceive: Int = 2500
 
     override def onCreated(stack: ItemStack, worldIn: World, playerIn: EntityPlayer): Unit = {
         if (stack.hasTagCompound) {

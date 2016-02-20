@@ -26,9 +26,10 @@ class RFBattery(name: String, tier: Int) extends ItemBattery {
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 
     val tierPower = getTierPower(tier)
-    capacity = tierPower._1
-    maxReceive = tierPower._2
-    maxExtract = tierPower._2
+
+    override var capacity: Int = tierPower._1
+    override var maxExtract: Int = tierPower._2
+    override var maxReceive: Int = tierPower._2
 
     override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
         if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))

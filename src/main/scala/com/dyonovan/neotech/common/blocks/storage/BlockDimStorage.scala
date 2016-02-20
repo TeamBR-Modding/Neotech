@@ -34,7 +34,7 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
                 tile.writeToNBT(tag)
                 if (tag.getInteger("Qty") > 0 || tile.getUpgradeBoard != null)
                     item.setTagCompound(tag)
-                tile.dropItem(world, item, pos)
+                WorldUtils.dropStack(world, item, pos)
                 world.setBlockToAir(pos)
                 world.removeTileEntity(pos)
             } else if (player.getHeldItem != null && player.getHeldItem.isItemEqual(new ItemStack(ItemManager.upgradeMBFull))) {
@@ -86,7 +86,7 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
             val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
             if (tile.getUpgradeBoard != null && player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[ItemWrench]) {
                 val status = player.inventory.addItemStackToInventory(tile.upgradeInventory.getStackInSlot(0).copy())
-                if (!status) tile.dropItem(world, tile.upgradeInventory.getStackInSlot(0).copy(), pos)
+                if (!status) WorldUtils.dropStack(world, tile.upgradeInventory.getStackInSlot(0).copy(), pos)
                 world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
                 tile.upgradeInventory.setStackInSlot(0, null)
             } else if (tile.getStackInSlot(0) != null) {
@@ -95,7 +95,7 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
                 if (actual != null) {
                     actual = tile.extractItem(0, amt, simulate = false)
                     val status = player.inventory.addItemStackToInventory(actual)
-                    if (!status) tile.dropItem(world, actual, pos)
+                    if (!status) WorldUtils.dropStack(world, actual, pos)
                     world.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.pop", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F)
                 }
             }
@@ -109,8 +109,8 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
                 if (tile.getQty > 0 && tile.getStackInSlot(0) != null)
                     tile.dropStacks(tile.getQty, tile.getStackInSlot(0))
                 if (tile.getUpgradeBoard != null)
-                    tile.dropItem(world, tile.upgradeInventory.getStackInSlot(0).copy(), pos)
-                tile.dropItem(world, new ItemStack(BlockManager.dimStorage), pos)
+                    WorldUtils.dropStack(world, tile.upgradeInventory.getStackInSlot(0).copy(), pos)
+                WorldUtils.dropStack(world, new ItemStack(BlockManager.dimStorage), pos)
                 world.removeTileEntity(pos)
                 world.markBlockForUpdate(pos)
         }

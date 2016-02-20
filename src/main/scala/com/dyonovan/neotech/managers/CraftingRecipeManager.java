@@ -295,7 +295,7 @@ public class CraftingRecipeManager {
                 "SRS", 'T', BlockManager.ironTank(), 'S', "ingotSteel", 'B', Items.snowball, 'R', Items.redstone));
 
         //Electric Crucible
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricSolidifier()),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCrucible()),
                 "SRS",
                 "BCB",
                 "SRS", 'C', Blocks.cauldron, 'S', "ingotSteel", 'B', Items.bucket, 'R', Items.redstone));

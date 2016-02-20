@@ -7,13 +7,10 @@ import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
-import net.minecraft.entity.item.EntityItem
+import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.BlockPos
-import net.minecraft.world.World
 
-import scala.util.Random
 import scala.util.control.Breaks._
 
 /**
@@ -170,35 +167,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgrade
             }
         }
         //Drop ItemStack
-        for (stack <- stacks.toArray()) {
-            val itemStack = stack.asInstanceOf[ItemStack]
-            dropItem(worldObj, itemStack, pos)
-        }
-    }
-
-    def dropItem(world: World, stack: ItemStack, pos: BlockPos): Unit = {
-        val random = new Random
-        if (stack != null && stack.stackSize > 0) {
-            val rx = random.nextFloat * 0.8F + 0.1F
-            val ry = random.nextFloat * 0.8F + 0.1F
-            val rz = random.nextFloat * 0.8F + 0.1F
-
-            val itemEntity = new EntityItem(world,
-                pos.getX + rx, pos.getY + ry, pos.getZ + rz,
-                new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
-
-            if (stack.hasTagCompound)
-                itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
-
-            val factor = 0.05F
-
-            itemEntity.motionX = random.nextGaussian * factor
-            itemEntity.motionY = random.nextGaussian * factor + 0.2F
-            itemEntity.motionZ = random.nextGaussian * factor
-            world.spawnEntityInWorld(itemEntity)
-
-            stack.stackSize = 0
-        }
+        WorldUtils.dropStack(worldObj, stacks, pos)
     }
 
     override def upgradeInventoryChanged(slot: Int) = {
