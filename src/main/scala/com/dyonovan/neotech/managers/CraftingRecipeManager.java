@@ -298,7 +298,7 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCrucible()),
                 "SRS",
                 "BCB",
-                "SRS", 'C', Blocks.cauldron, 'S', "ingotSteel", 'B', Items.bucket, 'R', Items.redstone));
+                "SRS", 'C', Item.getItemFromBlock(Blocks.cauldron), 'S', "ingotSteel", 'B', Items.bucket, 'R', Items.redstone));
 
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
