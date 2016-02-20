@@ -13,27 +13,27 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 15, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 15, 2015
+  */
 class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with Waila {
 
     var tier = 0
-    lazy final val DRAIN_SLOT = 0
-    lazy final val FILL_SLOT  = 1
+    lazy final val DRAIN_SLOT = 1
+    lazy final val FILL_SLOT  = 0
 
     def this(t: Int) {
         this()
         tier = t
         initEnergy(t)
     }
-
+    
     /**
       * Sets the energy based on tier
       *
@@ -97,18 +97,18 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
                         case _ =>
                     }
                 }
+            }
 
-                if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
-                    val drainItem = getStackInSlot(DRAIN_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
-                    val amount = receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxReceive, true), simulate = true)
-                    if(amount > 0)
-                        receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), amount, false), simulate = false)
-                }
+            if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
+                val drainItem = getStackInSlot(DRAIN_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
+                val amount = receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxReceive, true), simulate = true)
+                if(amount > 0)
+                    receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), amount, false), simulate = false)
+            }
 
-                if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
-                    val fillItem = getStackInSlot(FILL_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
-                    extractEnergy(EnumFacing.UP, fillItem.receiveEnergy(getStackInSlot(FILL_SLOT), energyStorage.getMaxExtract, false), simulate = false)
-                }
+            if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
+                val fillItem = getStackInSlot(FILL_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
+                extractEnergy(EnumFacing.UP, fillItem.receiveEnergy(getStackInSlot(FILL_SLOT), energyStorage.getMaxExtract, false), simulate = false)
             }
         }
     }
@@ -188,7 +188,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
       * @return How much energy was/should be drained
       */
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int =
-           super.extractEnergy(from, maxExtract, if(tier == 4) true else simulate)
+        super.extractEnergy(from, maxExtract, if(tier == 4) true else simulate)
 
     /** *****************************************************************************************************************
       * ************************************************ Waila methods **************************************************
