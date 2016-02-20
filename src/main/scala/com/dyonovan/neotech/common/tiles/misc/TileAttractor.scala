@@ -5,7 +5,7 @@ import com.teambr.bookshelf.common.tiles.traits.{InventorySided, UpdatingTile}
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{AxisAlignedBB, EnumFacing}
+import net.minecraft.util.{AxisAlignedBB, EnumFacing, EnumParticleTypes}
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.CapabilityItemHandler
 
@@ -26,6 +26,13 @@ class TileAttractor extends UpdatingTile with InventorySided {
     override def onServerTick(): Unit = {
         if (coolDown > 0) {
             coolDown -= 1
+            if (itemList != null && !itemList.isEmpty) {
+                val offsetX = pos.getX - itemList.get(0).getPosition.getX
+                val offsetY = pos.getY - itemList.get(0).getPosition.getY
+                val offsetZ = pos.getZ - itemList.get(0).getPosition.getZ
+                worldObj.spawnParticle(EnumParticleTypes.PORTAL, pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5,
+                    offsetX, offsetY, offsetZ)
+            }
             return
         }
 
