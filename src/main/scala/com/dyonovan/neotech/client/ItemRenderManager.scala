@@ -62,6 +62,7 @@ object ItemRenderManager {
         registerItem(ItemManager.spawnerMover)
         registerItem(ItemManager.mobGun)
         registerItem(ItemManager.mobNet)
+        registerItem(ItemManager.electroMagnet)
         registerItem(ItemManager.basicRFBattery)
         registerItem(ItemManager.advancedRFBattery)
         registerItem(ItemManager.eliteRFBattery)

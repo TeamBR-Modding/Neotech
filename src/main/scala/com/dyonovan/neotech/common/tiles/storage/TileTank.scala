@@ -1,5 +1,8 @@
 package com.dyonovan.neotech.common.tiles.storage
 
+import java.text.NumberFormat
+import java.util.Locale
+
 import com.dyonovan.neotech.common.blocks.storage.BlockTank
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
@@ -190,10 +193,16 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
         var fluidAmount = ""
         if (tank.getFluid != null) {
             fluidName = GuiColor.WHITE + tank.getFluid.getLocalizedName
-            fluidAmount = GuiColor.ORANGE + tank.getFluidAmount.toString + " / " + tank.getCapacity + " mb"
+            fluidAmount = GuiColor.ORANGE +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(tank.getFluidAmount) + " / " +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(tank.getCapacity) + " mb"
         } else {
             fluidName = GuiColor.GRAY + "Empty"
-            fluidAmount = GuiColor.RED + "0 / " + tank.getCapacity + " mb"
+            fluidAmount = GuiColor.RED + "0 / " +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                    .format(tank.getCapacity) + " mb"
         }
         if (tier != 5) {
             tipList.add(GuiColor.WHITE + "Fluid: " + fluidName)

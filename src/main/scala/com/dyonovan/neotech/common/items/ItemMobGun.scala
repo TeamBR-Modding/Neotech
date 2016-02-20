@@ -1,10 +1,16 @@
 package com.dyonovan.neotech.common.items
 
+import java.text.NumberFormat
+import java.util.Locale
+
 import com.dyonovan.neotech.common.entities.EntityNet
 import com.dyonovan.neotech.managers.ItemManager
+import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.items.traits.ItemBattery
+import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{EnumAction, ItemStack}
+import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -54,17 +60,17 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
     }
 
     override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
-            if (hasAmmo(player, remove = false) && extractEnergy(stack, RF_PER_USE, simulate = true) == RF_PER_USE) {
-                player.setItemInUse(stack, getMaxItemUseDuration(stack))
-            }
-            else world.playSoundAtEntity(player, "fire.ignite", 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
+        if (hasAmmo(player, remove = false) && extractEnergy(stack, RF_PER_USE, simulate = true) == RF_PER_USE) {
+            player.setItemInUse(stack, getMaxItemUseDuration(stack))
+        }
+        else world.playSoundAtEntity(player, "fire.ignite", 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
         stack
     }
 
     private def hasAmmo(player: EntityPlayer, remove: Boolean): Boolean = {
         for (i <- 0 until player.inventory.getSizeInventory) {
             if (player.inventory.getStackInSlot(i) != null && !player.inventory.getStackInSlot(i).hasTagCompound &&
-              player.inventory.getStackInSlot(i).getItem.isInstanceOf[ItemManager.mobNet.type]) {
+                    player.inventory.getStackInSlot(i).getItem.isInstanceOf[ItemManager.mobNet.type]) {
                 if (remove) player.inventory.decrStackSize(i, 1)
                 return true
             }
@@ -96,6 +102,11 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
-        list.add(getEnergyStored(stack) + "/" + getMaxEnergyStored(stack) + " RF")
+        list.add(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux"))
+        list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                .format(getEnergyStored(stack)) +
+                " / " +
+                NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                        .format(getMaxEnergyStored(stack)) + " RF")
     }
 }

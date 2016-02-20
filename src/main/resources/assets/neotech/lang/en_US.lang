@@ -124,6 +124,7 @@ item.neotech:trashBag.name=Trash Bag
 item.neotech:spawnerMover.name=Spawner Relocator
 item.neotech:mobGun.name=Net Launcher
 item.neotech:mobNet.name=Mob Net
+item.neotech:electroMagnet.name=Electromagnet
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery
@@ -312,6 +313,10 @@ neotech.text.both=Both
 neotech.text.information=Information
 
 neotech.text.redstoneFlux=Redstone Flux
+
+neotech.text.magnetism=Magnetism
+neotech.text.active=Active
+neotech.text.disabled=Disabled
 
 neotech.text.upgrades=Upgrades
 neotech.text.processors=Processors

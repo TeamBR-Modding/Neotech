@@ -224,6 +224,12 @@ public class CraftingRecipeManager {
                 "L L",
                 "LLL", 'L', Items.leather, 'S', Items.string);
 
+        //Magnet
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electroMagnet()),
+                "I I",
+                "L L",
+                " L ", 'I', "ingotIron", 'L', "ingotLead"));
+
         //Dim Storage
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.dimStorage(), 1),
                 "WWW",

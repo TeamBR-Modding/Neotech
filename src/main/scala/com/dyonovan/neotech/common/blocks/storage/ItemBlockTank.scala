@@ -1,8 +1,12 @@
 package com.dyonovan.neotech.common.blocks.storage
 
+import java.text.NumberFormat
+import java.util.Locale
+
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.client.gui.GuiColor
 import net.minecraft.block.Block
+import net.minecraft.client.Minecraft
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemBlock, ItemStack}
@@ -33,11 +37,16 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
         if (ItemStack.areItemsEqual(stack, new ItemStack(Item.getItemFromBlock(BlockManager.voidTank)))) return
         if (getFluid(stack) != null) {
             list.asInstanceOf[java.util.List[String]].add(GuiColor.WHITE + getFluid(stack).getLocalizedName)
-            list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + getFluid(stack).amount.toString + "/" +
-                    getTankInfo._2 + " mb")
+            list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(getFluid(stack).amount) + " / " +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(getTankInfo._2) + " mb")
         } else {
             list.asInstanceOf[java.util.List[String]].add(GuiColor.GRAY + "Empty")
-            list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0/" + getTankInfo._2 + " mb")
+            list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0 / " +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(getTankInfo._2) + " mb")
         }
     }
 

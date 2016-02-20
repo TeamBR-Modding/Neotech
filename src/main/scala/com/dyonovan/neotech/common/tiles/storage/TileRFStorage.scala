@@ -1,9 +1,13 @@
 package com.dyonovan.neotech.common.tiles.storage
 
+import java.text.NumberFormat
+import java.util.Locale
+
 import cofh.api.energy.{IEnergyContainerItem, IEnergyReceiver}
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, Inventory, UpdatingTile}
+import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -32,6 +36,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
 
     /**
       * Sets the energy based on tier
+      *
       * @param t The tier
       */
     def initEnergy(t: Int): Unit = {
@@ -61,6 +66,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
 
     /**
       * Gets default energy for tier
+      *
       * @param t Tier
       * @return
       */
@@ -94,7 +100,9 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
 
                 if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
                     val drainItem = getStackInSlot(DRAIN_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
-                    receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxReceive, false), simulate = false)
+                    val amount = receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxReceive, true), simulate = true)
+                    if(amount > 0)
+                        receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), amount, false), simulate = false)
                 }
 
                 if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
@@ -192,7 +200,11 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
             color = GuiColor.GREEN.toString
         else
             color = GuiColor.RED.toString
-        tipList.add(color + getEnergyStored(null) + "/" + getMaxEnergyStored(null) + " RF")
+        tipList.add(color +
+                NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                        .format(getEnergyStored(null)) + " / " +
+                NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                        .format(getMaxEnergyStored(null)) + " RF")
         tipList
     }
 }
