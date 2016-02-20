@@ -33,6 +33,7 @@ trait SimplePipe extends TileEntity {
       * @return
       */
     def canConnect(facing: EnumFacing): Boolean = {
+        if (getWorld.getTileEntity(getPos) == null) return false
         getWorld.getTileEntity(getPos) match {
             case advanced : AdvancedPipe if advanced.isDisabled(facing) => return false
             case _ =>
