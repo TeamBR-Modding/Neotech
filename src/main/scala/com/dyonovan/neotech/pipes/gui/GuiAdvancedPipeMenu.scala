@@ -122,8 +122,8 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
                     }
                 }
             }
-            selectorTab += new GuiComponentText(GuiColor.BLUE + StatCollector.translateToLocal("neotech.text.blue") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.input"), 10, 90)
-            selectorTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.orange") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.output"), 10, 100)
+            selectorTab += new GuiComponentText(GuiColor.BLUE + StatCollector.translateToLocal("neotech.text.blue") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.output"), 10, 90)
+            selectorTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.orange") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.input"), 10, 100)
             selectorTab += new GuiComponentText(GuiColor.GREEN + StatCollector.translateToLocal("neotech.text.green") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.both"), 10, 110)
             tabs.addTab(selectorTab.toList, 100, 125, new Color(150, 150, 150), new ItemStack(Blocks.piston))
         }
