@@ -84,4 +84,6 @@ trait Upgradeable {
             return getUpgradeBoard.getHardDriveCount
         0
     }
+
+    def hasExpansion: Boolean = getUpgradeBoard != null && getUpgradeBoard.hasExpansion
 }

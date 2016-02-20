@@ -33,9 +33,9 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 class ItemElectromagnet extends ItemBattery {
     lazy val RANGE = 10D
 
-    capacity   = 8000
-    maxReceive = 100
-    maxExtract = 100
+    override var capacity: Int = 8000
+    override var maxExtract: Int = 100
+    override var maxReceive: Int = 100
 
     setMaxStackSize(1)
     setCreativeTab(NeoTech.tabNeoTech)

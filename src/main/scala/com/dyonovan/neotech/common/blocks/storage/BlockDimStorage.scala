@@ -61,7 +61,6 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
                         world.updateEntity(player)
                     }
                 }
-
             }
             world.markBlockForUpdate(pos)
             time = world.getTotalWorldTime

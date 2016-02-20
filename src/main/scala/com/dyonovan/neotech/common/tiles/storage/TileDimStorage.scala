@@ -8,8 +8,10 @@ import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import com.teambr.bookshelf.util.WorldUtils
+import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumFacing
 
 import scala.util.control.Breaks._
 
@@ -22,12 +24,39 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgrade
 
     //Syncable
     final val MAX_STACK_SIZE = 0
+    final val DEFAULT_COOLDOWN = 40
 
     var qty = 0
     var lock = false
     var maxStacks = BASE_STACKS
+    var cooldown = 40
 
     override def initialSize: Int = 1
+
+    override def onServerTick(): Unit = {
+        if (!hasExpansion) return
+
+        if (cooldown > 0) {
+            cooldown -= 1
+            return
+        }
+        var hasWater = false
+        var hasLava = false
+
+        for (dir <- EnumFacing.HORIZONTALS) {
+            val block = worldObj.getBlockState(pos.offset(dir)).getBlock
+            block match {
+                case Blocks.lava => hasLava = true
+                case Blocks.water => hasWater = true
+                case _ =>
+            }
+        }
+        if (hasWater && hasLava) {
+            val stack = new ItemStack(Blocks.cobblestone, 1)
+            insertItem(0, stack, simulate = false)
+        }
+        cooldown = DEFAULT_COOLDOWN
+    }
 
     override def writeToNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].writeToNBT(tag)

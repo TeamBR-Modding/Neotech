@@ -53,6 +53,9 @@ class ItemBlockDimStorage(block: Block) extends ItemBlock(block) {
         else {
             list.add(GuiColor.GREEN + "Hard Drives (Max 8)")
             list.add(GuiColor.WHITE + "      Increases storage by 64 Stacks per Upgrade")
+            list.add(GuiColor.GREEN + "Expansion Upgrade (Max 1)")
+            list.add(GuiColor.WHITE + "      Turns the Storage Crate into a Cobblegen")
+            list.add(GuiColor.WHITE + "      Requires a Lava Block and Water Block Beside It")
         }
     }
 }
