@@ -3,7 +3,7 @@ package com.dyonovan.neotech.api.jei.crusher
 import java.util
 
 import com.dyonovan.neotech.managers.RecipeManager
-import com.dyonovan.neotech.registries.CrusherRecipes
+import com.dyonovan.neotech.registries.{CrusherRecipeHandler, CrusherRecipes}
 
 
 /**
@@ -13,11 +13,10 @@ object CrusherRecipeMaker {
 
     def getRecipes: java.util.List[CrusherRecipeJEI] = {
         val recipes = new util.ArrayList[CrusherRecipeJEI]()
-        val crusher = RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).
-            val j = i.asInstanceOf[CrusherRecipes]
-            j.
-            recipes.add(new CrusherRecipeJEI(crusher.get(i).input, crusher.get(i).output, crusher.get(i).secondary,
-                crusher.get(i).secPercent))
+        val crusher = RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).getCrusherRecipes
+        for (i <- 0 until crusher.size()) {
+            val recipe = crusher.get(i)
+            //recipe.
         }
 
         recipes

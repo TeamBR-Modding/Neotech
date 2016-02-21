@@ -3,7 +3,7 @@ package com.dyonovan.neotech.api.jei
 import java.awt.Rectangle
 import java.util
 
-import com.dyonovan.neotech.api.jei.crusher.{CrusherRecipeCategory, CrusherRecipeHandler, CrusherRecipeMaker}
+import com.dyonovan.neotech.api.jei.crusher.{CrusherRecipeCategory, CrusherRecipeHandlerJEI, CrusherRecipeMaker}
 import com.dyonovan.neotech.api.jei.grinder.{GrinderRecipeMaker, GrinderRecipeHandler, GrinderRecipeCategory}
 import com.dyonovan.neotech.common.container.misc.ContainerCrafter
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
@@ -30,7 +30,7 @@ class NeoTechPlugin extends IModPlugin {
         registry.getRecipeTransferRegistry.addRecipeTransferHandler(classOf[ContainerCrafter], VanillaRecipeCategoryUid.CRAFTING,  2, 9, 20, 36)
 
         registry.addRecipeCategories(new CrusherRecipeCategory, new GrinderRecipeCategory)
-        registry.addRecipeHandlers(new CrusherRecipeHandler, new GrinderRecipeHandler)
+        registry.addRecipeHandlers(new CrusherRecipeHandlerJEI, new GrinderRecipeHandler)
 
         registry.addRecipes(CrusherRecipeMaker.getRecipes)
         registry.addRecipes(GrinderRecipeMaker.getRecipes)

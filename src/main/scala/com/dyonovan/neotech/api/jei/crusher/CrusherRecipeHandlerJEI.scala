@@ -6,7 +6,7 @@ import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeHandler}
 /**
   * Created by Dyonovan on 1/13/2016.
   */
-class CrusherRecipeHandler extends IRecipeHandler[CrusherRecipeJEI]{
+class CrusherRecipeHandlerJEI extends IRecipeHandler[CrusherRecipeJEI]{
 
     override def getRecipeWrapper(recipe: CrusherRecipeJEI): IRecipeWrapper = recipe
 
