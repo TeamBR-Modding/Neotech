@@ -69,18 +69,15 @@ object NeoTech {
         FluidManager.preInit()
         MetalManager.registerDefaultMetals()
         EntityManager.preInit()
+        RecipeManager.preInit()
         proxy.preInit()
         GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
-        CraftingRecipeManager.preInit()
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ItemGuiManager)
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
         FertilizerBlacklistRegistry.init()
-        CrusherRecipeRegistry.init()
-        CrucibleRecipeRegistry.init()
-        SolidifierRegistry.init()
-        FluidFuelValues.init()
+        RecipeManager.init()
         PacketDispatcher.initPackets()
         EventManager.init()
         proxy.init()

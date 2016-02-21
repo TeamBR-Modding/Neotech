@@ -95,11 +95,11 @@ tile.fluid.dirtygold.name=Dirty Molten Gold
 
 # Iron
 fluid.iron=Dirty Molten Iron
-fluid.dirtyiron=Molten Iron
-fluid.iron.name=Dirty Molten Iron
-fluid.dirtyiron.name=Molten Iron
-tile.fluid.iron.name=Dirty Molten Iron
-tile.fluid.dirtyiron.name=Molten Iron
+fluid.dirtyiron=Dirty Molten Iron
+fluid.iron.name=Molten Iron
+fluid.dirtyiron.name=Dirty Molten Iron
+tile.fluid.iron.name=Molten Iron
+tile.fluid.dirtyiron.name=Dirty Molten Iron
 
 #######################
 # Items

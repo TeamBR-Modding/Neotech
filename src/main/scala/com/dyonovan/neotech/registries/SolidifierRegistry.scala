@@ -1,17 +1,14 @@
 package com.dyonovan.neotech.registries
 
-import java.io.File
 import java.util
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.managers.MetalManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
-import com.teambr.bookshelf.util.JsonUtils
-import net.minecraft.init.{Items, Blocks}
+import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.{Fluid, FluidRegistry, FluidStack}
-import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -24,46 +21,41 @@ import net.minecraftforge.oredict.OreDictionary
   * @author Paul Davis <pauljoda>
   * @since 2/18/2016
   */
-object SolidifierRegistry {
-
-    var solidifierRecipes = new util.ArrayList[SolidifierRecipe]()
+class SolidifierRegistry extends AbstractRecipeHandler[SolidifierRecipe, FluidStack, ItemStack] {
 
     /**
-      * Add the values
-      */
-    def init(): Unit = {
-        if (!loadFromFile)
-            generateDefaults()
-        else
-            LogHelper.info("Solidifier Recipes loaded successfully")
-    }
-
-    /**
-      * Load the values from the file
+      * Used to get the base name of the files
       *
-      * @return True if successful
+      * @return
       */
-    def loadFromFile(): Boolean = {
-        LogHelper.info("Loading Solidifier Recipes...")
-        solidifierRecipes = JsonUtils.readFromJson[util.ArrayList[SolidifierRecipe]](new TypeToken[util.ArrayList[SolidifierRecipe]]() {
-        }, NeoTech.configFolderLocation + File.separator + "Registries" + File.separator + "solidifierRecipes.json")
-        if (solidifierRecipes == null)
-            solidifierRecipes = new util.ArrayList[SolidifierRecipe]()
-        !solidifierRecipes.isEmpty
-    }
+    override def getBaseName: String = "solidifier"
 
     /**
-      * Save the current registry to a file
+      * This is the current version of the registry, if you update this it will cause the registry to be redone
+      *
+      * @return
       */
-    def saveToFile(): Unit = {
-        if (!solidifierRecipes.isEmpty) JsonUtils.writeToJson(solidifierRecipes, NeoTech.configFolderLocation +
-                File.separator + "Registries" + File.separator + "solidifierRecipes.json")
-    }
+    override def getVersion: Int = 1
+
+    /**
+      * Used to get the default folder location
+      *
+      * @return
+      */
+    override def getBaseFolderLocation: String = NeoTech.configFolderLocation
+
+    /**
+      * Used to get what type token to read from file (Generics don't handle well)
+      *
+      * @return
+      */
+    override def getTypeToken: TypeToken[util.ArrayList[SolidifierRecipe]] =
+        new TypeToken[util.ArrayList[SolidifierRecipe]]() {}
 
     /**
       * Used to generate the default values
       */
-    def generateDefaults(): Unit = {
+    override def generateDefaultRecipes(): Unit = {
         LogHelper.info("Json not found. Creating Dynamic Solidifier Recipe List...")
 
         // Metals
@@ -102,7 +94,7 @@ object SolidifierRegistry {
             new ItemStack(Items.gold_nugget), "nuggetGold")
 
         saveToFile()
-        LogHelper.info("Finished adding " + solidifierRecipes.size + " Solidifier Recipes")
+        LogHelper.info("Finished adding " + recipes.size + " Solidifier Recipes")
     }
 
     /**
@@ -123,71 +115,40 @@ object SolidifierRegistry {
             }
         }
         val recipe = new SolidifierRecipe(getFluidString(fluidStack), ore, getItemStackString(stack))
-        solidifierRecipes.add(recipe)
+        addRecipe(recipe)
     }
+}
 
+
+/**
+  * Helper class for holding recipes
+  *
+  */
+class SolidifierRecipe(val input : String, val ore : String, val output : String)
+    extends AbstractRecipe[FluidStack, ItemStack] {
     /**
-      * Get the output of this itemstack
+      * Used to get the output of this recipe
       *
-      * @param input The Input
-      * @return The FluidStack returned, None if non existent
+      * @param fluidIn The input object
+      * @return The output object
       */
-    def getOutput(input : FluidStack) : Option[ItemStack] = {
-        if(input == null) //Safety Check
+    override def getOutput(fluidIn: FluidStack): Option[ItemStack] = {
+        if(fluidIn == null)
             return None
-
-        //Check registered
-        for(x <- 0 until solidifierRecipes.size()) {
-            val recipe = solidifierRecipes.get(x)
-            if(getFluidFromString(recipe.input).isFluidEqual(input) && getFluidFromString(recipe.input).amount == input.amount)
-                return Option(getItemStackFromString(recipe.output))
-        }
-
+        if(getFluidFromString(input).isFluidEqual(fluidIn) && getFluidFromString(input).amount == fluidIn.amount)
+            return Option(getItemStackFromString(output))
         None
     }
 
-    def isFluidValid(fluid : Fluid) : Boolean = {
-        if(fluid == null) //Safety Check
-            return false
-
-        //Check registered
-        for(x <- 0 until solidifierRecipes.size()) {
-            val recipe = solidifierRecipes.get(x)
-            if(getFluidFromString(recipe.input).getFluid == fluid)
-                return true
-        }
-
-        false
-    }
-
     /**
-      * Helper class for holding recipes
+      * Is the input valid for an output
       *
+      * @param fluidIn The input object
+      * @return True if there is an output
       */
-    class SolidifierRecipe(val input : String, val ore : String, val output : String) {}
-
-    def getItemStackString(itemStack: ItemStack): String = {
-        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
-        id.modId + ":" + id.name + ":" + itemStack.getItemDamage
-    }
-
-    def getItemStackFromString(item: String): ItemStack = {
-        val name: Array[String] = item.split(":")
-        name.length match {
-            case 3 =>
-                if (item == "")
-                    null
-                else
-                    new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
-            case _ => null
-        }
-    }
-
-    def getFluidString(fluidStack: FluidStack) : String = {
-        FluidRegistry.getFluidName(fluidStack) + ":" + fluidStack.amount
-    }
-
-    def getFluidFromString(string : String) : FluidStack = {
-        FluidRegistry.getFluidStack(string.split(":")(0), string.split(":")(1).toInt)
+    override def isValidInput(fluidIn: FluidStack): Boolean = {
+        if(fluidIn == null || fluidIn.getFluid == null)
+            return false
+        getFluidFromString(input).getFluid == fluidIn.getFluid
     }
 }

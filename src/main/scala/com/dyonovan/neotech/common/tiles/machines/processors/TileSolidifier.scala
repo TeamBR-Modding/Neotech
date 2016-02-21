@@ -3,7 +3,7 @@ package com.dyonovan.neotech.common.tiles.machines.processors
 import com.dyonovan.neotech.client.gui.machines.processors.GuiSolidifier
 import com.dyonovan.neotech.common.container.machines.processors.ContainerSolidifier
 import com.dyonovan.neotech.common.tiles.MachineProcessor
-import com.dyonovan.neotech.managers.MetalManager
+import com.dyonovan.neotech.managers.{RecipeManager, MetalManager}
 import com.dyonovan.neotech.registries.SolidifierRegistry
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
@@ -30,11 +30,11 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
     lazy val OUTPUT_SLOT      = 0
     lazy val INPUT_TANK       = 0
 
-    val BASE_ENERGY_TICK = 100
+    val BASE_ENERGY_TICK      = 100
+
+    lazy val UPDATE_MODE      = 4
 
     var currentMode : SOLIDIFY_MODE = BLOCK_MODE
-
-    lazy val UPDATE_MODE = 4
 
     /**
       * The initial size of the inventory
@@ -74,7 +74,7 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
                 if (tanks(INPUT_TANK).getFluidAmount >= requiredMB)
                     return true
             } else {
-                val output = SolidifierRegistry.getOutput(new FluidStack(tanks(INPUT_TANK).getFluid, getRequiredMB(currentMode)))
+                val output = RecipeManager.getHandler[SolidifierRegistry](RecipeManager.Solidifier).getOutput(new FluidStack(tanks(INPUT_TANK).getFluid, getRequiredMB(currentMode)))
                 if(output.isDefined && tanks(INPUT_TANK).getFluidAmount >= requiredMB) {
                     val stackOut = output.get
                     val ourStack = getStackInSlot(OUTPUT_SLOT)
@@ -95,8 +95,8 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
       * @return The output
       */
     override def getOutput(stack: FluidStack): ItemStack = {
-        if(SolidifierRegistry.getOutput(stack).isDefined)
-            SolidifierRegistry.getOutput(stack).get
+        if(RecipeManager.getHandler[SolidifierRegistry](RecipeManager.Solidifier).getOutput(stack).isDefined)
+            RecipeManager.getHandler[SolidifierRegistry](RecipeManager.Solidifier).getOutput(stack).get
         else
             null
     }
@@ -112,7 +112,7 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
     override def completeCook(): Unit = {
         if (tanks(INPUT_TANK).getFluid != null) {
             val amount = drain(EnumFacing.UP, getRequiredMB(currentMode), doDrain = false)
-            val output = SolidifierRegistry.getOutput(new FluidStack(tanks(INPUT_TANK).getFluid, getRequiredMB(currentMode)))
+            val output = RecipeManager.getHandler[SolidifierRegistry](RecipeManager.Solidifier).getOutput(new FluidStack(tanks(INPUT_TANK).getFluid, getRequiredMB(currentMode)))
             // In case the user changed while going and there now isn't enough, fail
             if(amount != null && amount.amount == getRequiredMB(currentMode) &&
                     output.isDefined &&
@@ -185,7 +185,7 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
     override def canFill(from: EnumFacing, fluid: Fluid): Boolean = {
         if(fluid == null) return false
         if(tanks(INPUT_TANK).getFluid == null)
-            return SolidifierRegistry.isFluidValid(fluid)
+            return RecipeManager.getHandler[SolidifierRegistry](RecipeManager.Solidifier).isValidInput(new FluidStack(fluid, 1000))
         else {
             if(fluid == tanks(INPUT_TANK).getFluid.getFluid)
                 return true

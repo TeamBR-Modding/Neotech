@@ -3,7 +3,7 @@ package com.dyonovan.neotech.common.tiles.machines.processors
 import com.dyonovan.neotech.client.gui.machines.processors.GuiCrucible
 import com.dyonovan.neotech.common.container.machines.processors.ContainerCrucible
 import com.dyonovan.neotech.common.tiles.MachineProcessor
-import com.dyonovan.neotech.managers.MetalManager
+import com.dyonovan.neotech.managers.{RecipeManager, MetalManager}
 import com.dyonovan.neotech.registries.CrucibleRecipeRegistry
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
@@ -91,8 +91,8 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * @return The output
       */
     override def getOutput(stack: ItemStack): FluidStack = {
-        if(CrucibleRecipeRegistry.getOutput(stack).isDefined)
-            CrucibleRecipeRegistry.getOutput(stack).get
+        if(RecipeManager.getHandler[CrucibleRecipeRegistry](RecipeManager.Crucible).getOutput(stack).isDefined)
+            RecipeManager.getHandler[CrucibleRecipeRegistry](RecipeManager.Crucible).getOutput(stack).get
         else
             null
     }

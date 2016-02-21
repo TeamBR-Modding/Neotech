@@ -1,17 +1,14 @@
 package com.dyonovan.neotech.registries
 
-import java.io.File
 import java.util
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.managers.MetalManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
-import com.teambr.bookshelf.util.JsonUtils
-import net.minecraft.init.{Items, Blocks}
+import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
-import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -24,46 +21,41 @@ import net.minecraftforge.oredict.OreDictionary
   * @author Paul Davis <pauljoda>
   * @since 2/16/2016
   */
-object CrucibleRecipeRegistry {
-
-    var crucibleRecipes = new util.ArrayList[CrucibleRecipe]()
+class CrucibleRecipeRegistry extends AbstractRecipeHandler[CrucibleRecipe, ItemStack, FluidStack] {
 
     /**
-      * Add the values
-      */
-    def init(): Unit = {
-        if (!loadFromFile)
-            generateDefaults()
-        else
-            LogHelper.info("Crucible Recipes loaded successfully")
-    }
-
-    /**
-      * Load the values from the file
+      * Used to get the base name of the files
       *
-      * @return True if successful
+      * @return
       */
-    def loadFromFile(): Boolean = {
-        LogHelper.info("Loading Crucible Recipes...")
-        crucibleRecipes = JsonUtils.readFromJson[util.ArrayList[CrucibleRecipe]](new TypeToken[util.ArrayList[CrucibleRecipe]]() {
-        }, NeoTech.configFolderLocation + File.separator + "Registries" + File.separator + "crucibleRecipes.json")
-        if (crucibleRecipes == null)
-            crucibleRecipes = new util.ArrayList[CrucibleRecipe]()
-        !crucibleRecipes.isEmpty
-    }
+    override def getBaseName: String = "crucible"
 
     /**
-      * Save the current registry to a file
+      * This is the current version of the registry, if you update this it will cause the registry to be redone
+      *
+      * @return
       */
-    def saveToFile(): Unit = {
-        if (!crucibleRecipes.isEmpty) JsonUtils.writeToJson(crucibleRecipes, NeoTech.configFolderLocation +
-                File.separator + "Registries" + File.separator + "crucibleRecipes.json")
-    }
+    override def getVersion: Int = 1
+
+    /**
+      * Used to get the default folder location
+      *
+      * @return
+      */
+    override def getBaseFolderLocation: String = NeoTech.configFolderLocation
+
+    /**
+      * Used to get what type token to read from file (Generics don't handle well)
+      *
+      * @return
+      */
+    override def getTypeToken: TypeToken[util.ArrayList[CrucibleRecipe]] =
+        new TypeToken[util.ArrayList[CrucibleRecipe]]() {}
 
     /**
       * Used to generate the default values
       */
-    def generateDefaults(): Unit = {
+    def generateDefaultRecipes(): Unit = {
         LogHelper.info("Json not found. Creating Dynamic Crucible Recipe List...")
 
         // Metals
@@ -74,36 +66,36 @@ object CrucibleRecipeRegistry {
             if (metal.fluid.isDefined) {
                 //Block - 1296mb
                 if (metal.block.isDefined)
-                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.block.get.getName, new FluidStack(metal.fluid.get, MetalManager.BLOCK_MB))
+                    addCrucibleRecipe(null, metal.block.get.getName, new FluidStack(metal.fluid.get, MetalManager.BLOCK_MB))
 
-                //Ore - 288mb
+                //Ore - 432mb
                 if (metal.oreBlock.isDefined)
-                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.oreBlock.get.getName, new FluidStack(metal.fluid.get, MetalManager.ORE_MB))
+                    addCrucibleRecipe(null, metal.oreBlock.get.getName, new FluidStack(MetalManager.getMetal("dirty" + metal.oreDict).get.fluid.get, MetalManager.ORE_MB))
 
                 //Ingot - 144mb
                 if (metal.ingot.isDefined)
-                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.ingot.get.getName, new FluidStack(metal.fluid.get, MetalManager.INGOT_MB))
+                    addCrucibleRecipe(null, metal.ingot.get.getName, new FluidStack(metal.fluid.get, MetalManager.INGOT_MB))
 
                 //Dust - 76mb
                 if(metal.dust.isDefined)
-                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.dust.get.getName, new FluidStack(metal.fluid.get, MetalManager.DUST_MB))
+                    addCrucibleRecipe(null, metal.dust.get.getName, new FluidStack(metal.fluid.get, MetalManager.DUST_MB))
 
                 //Nugget - 16mb
                 if (metal.nugget.isDefined)
-                    CrucibleRecipeRegistry.addCrucibleRecipe(null, metal.nugget.get.getName, new FluidStack(metal.fluid.get, MetalManager.NUGGET_MB))
+                    addCrucibleRecipe(null, metal.nugget.get.getName, new FluidStack(metal.fluid.get, MetalManager.NUGGET_MB))
             }
         }
 
         // Iron
-        addCrucibleRecipe(null, "ingotIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, 144))
-        addCrucibleRecipe(null, "oreIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, 288))
-        addCrucibleRecipe(null, "blockIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, 1296))
+        addCrucibleRecipe(null, "ingotIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, MetalManager.INGOT_MB))
+        addCrucibleRecipe(null, "oreIron", new FluidStack(MetalManager.getMetal("dirtyiron").get.fluid.get, MetalManager.ORE_MB))
+        addCrucibleRecipe(null, "blockIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, MetalManager.BLOCK_MB))
 
         // Gold
-        addCrucibleRecipe(null, "nuggetGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 16))
-        addCrucibleRecipe(null, "ingotGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 144))
-        addCrucibleRecipe(null, "oreGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 288))
-        addCrucibleRecipe(null, "blockGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, 1296))
+        addCrucibleRecipe(null, "nuggetGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.NUGGET_MB))
+        addCrucibleRecipe(null, "ingotGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.INGOT_MB))
+        addCrucibleRecipe(null, "oreGold", new FluidStack(MetalManager.getMetal("dirtygold").get.fluid.get, MetalManager.ORE_MB))
+        addCrucibleRecipe(null, "blockGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.BLOCK_MB))
 
         // Ice/Snowball to Water
         addCrucibleRecipe(new ItemStack(Items.snowball), "", new FluidStack(FluidRegistry.WATER, 144))
@@ -115,7 +107,7 @@ object CrucibleRecipeRegistry {
         addCrucibleRecipe(null, "stone", new FluidStack(FluidRegistry.LAVA, 40))
 
         saveToFile()
-        LogHelper.info("Finished adding " + crucibleRecipes.size + " Crucible Recipes")
+        LogHelper.info("Finished adding " + recipes.size + " Crucible Recipes")
     }
 
     /**
@@ -136,63 +128,51 @@ object CrucibleRecipeRegistry {
             }
         }
         val recipe = new CrucibleRecipe(getItemStackString(stack), ore, getFluidString(fluidStack))
-        crucibleRecipes.add(recipe)
+        addRecipe(recipe)
     }
+}
+
+
+/**
+  * Helper class for holding recipes
+  *
+  */
+class CrucibleRecipe(val input : String, val ore : String, val output : String) extends
+        AbstractRecipe[ItemStack, FluidStack] {
 
     /**
-      * Get the output of this itemstack
+      * Used to get the output of this recipe
       *
-      * @param input The Input
-      * @return The FluidStack returned, None if non existent
+      * @param itemIn The input object
+      * @return The output object
       */
-    def getOutput(input : ItemStack) : Option[FluidStack] = {
+    override def getOutput(itemIn: ItemStack): Option[FluidStack] = {
         if(input == null) //Safety Check
             return None
 
-        //Check registered
-        for(x <- 0 until crucibleRecipes.size()) {
-            val recipe = crucibleRecipes.get(x)
-            if(getItemStackFromString(recipe.input) != null &&
-                    (getItemStackFromString(recipe.input).isItemEqual(input) &&
-                            getItemStackFromString(recipe.input).getItemDamage == input.getItemDamage) || (
-                    if(recipe.ore != null && OreDictionary.getOreIDs(input) != null)
-                        OreDictionary.getOreIDs(input).toList.contains(OreDictionary.getOreID(recipe.ore))
-                    else
-                        false))
-                return Option(getFluidFromString(recipe.output))
-        }
+        if(getItemStackFromString(input) != null &&
+                (getItemStackFromString(input).isItemEqual(itemIn) &&
+                        getItemStackFromString(input).getItemDamage == itemIn.getItemDamage) || (
+                if(ore != null && OreDictionary.getOreIDs(itemIn) != null)
+                    OreDictionary.getOreIDs(itemIn).toList.contains(OreDictionary.getOreID(ore))
+                else
+                    false))
+            return Option(getFluidFromString(output))
 
         None
     }
 
     /**
-      * Helper class for holding recipes
+      * Is the input valid for an output
       *
+      * @param itemIn The input object
+      * @return True if there is an output
       */
-    class CrucibleRecipe(val input : String, val ore : String, val output : String) {}
+    override def isValidInput(itemIn: ItemStack): Boolean = {
+        if(itemIn == null) //Safety Check
+            return false
 
-    def getItemStackString(itemStack: ItemStack): String = {
-        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
-        id.modId + ":" + id.name + ":" + itemStack.getItemDamage
-    }
-
-    def getItemStackFromString(item: String): ItemStack = {
-        val name: Array[String] = item.split(":")
-        name.length match {
-            case 3 =>
-                if (item == "")
-                    null
-                else
-                    new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
-            case _ => null
-        }
-    }
-
-    def getFluidString(fluidStack: FluidStack) : String = {
-         FluidRegistry.getFluidName(fluidStack) + ":" + fluidStack.amount
-    }
-
-    def getFluidFromString(string : String) : FluidStack = {
-        FluidRegistry.getFluidStack(string.split(":")(0), string.split(":")(1).toInt)
+        val ourInput = getItemStackFromString(input)
+        ourInput.isItemEqual(itemIn) && ourInput.getItemDamage == itemIn.getItemDamage && !itemIn.hasTagCompound
     }
 }

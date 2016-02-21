@@ -32,7 +32,7 @@ object MetalManager {
 
     // Fluid Output Values
     lazy val BLOCK_MB  = 1296
-    lazy val ORE_MB    = 288
+    lazy val ORE_MB    = 432
     lazy val INGOT_MB  = 144
     lazy val DUST_MB   = 72
     lazy val NUGGET_MB = 16
