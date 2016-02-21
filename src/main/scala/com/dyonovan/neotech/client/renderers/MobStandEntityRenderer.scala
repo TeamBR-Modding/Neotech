@@ -44,8 +44,8 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
         }
 
         if(te.lookAtPlayer) {
-            val player = Minecraft.getMinecraft.thePlayer
-            var angle = Math.toDegrees(Math.atan2(te.getPos.getZ + 0.5 - player.posZ, te.getPos.getX + 0.5 - player.posX))
+            val manager = Minecraft.getMinecraft.getRenderManager
+            var angle = Math.toDegrees(Math.atan2(te.getPos.getZ + 0.5 - manager.viewerPosZ, te.getPos.getX + 0.5 - manager.viewerPosX))
             if(angle < 0)
                 angle += 360
             GlStateManager.rotate(-angle.toFloat - 90, 0.0F, 1.0F, 0.0F)
