@@ -3,7 +3,7 @@ package com.dyonovan.neotech.api.jei.crusher
 import java.util
 
 import com.dyonovan.neotech.managers.RecipeManager
-import com.dyonovan.neotech.registries.{CrusherRecipeHandler, CrusherRecipes}
+import com.dyonovan.neotech.registries.CrusherRecipeHandler
 
 
 /**

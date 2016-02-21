@@ -144,7 +144,7 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
 
 }
 
-class CrusherRecipes(input: String, output: String, qty: Int, outputSecondary: String, percentChance: Int)
+class CrusherRecipes(val input: String, val output: String, val qty: Int, val outputSecondary: String, val percentChance: Int)
         extends AbstractRecipe[ItemStack, (ItemStack, ItemStack, Int)] {
     
     /**
