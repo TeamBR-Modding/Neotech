@@ -29,8 +29,8 @@ object RecipeManager {
     }
 
     def init() : Unit = {
-        recipeHandlers.put(Crucible,   new CrucibleRecipeManager().loadHandler())
-        recipeHandlers.put(Solidifier, new SolidifierRecipeManager().loadHandler())
+        recipeHandlers.put(Crucible,   new CrucibleRecipeHandler().loadHandler())
+        recipeHandlers.put(Solidifier, new SolidifierRecipeHandler().loadHandler())
         recipeHandlers.put(FluidFuels, new FluidFuelRecipeHandler().loadHandler())
         recipeHandlers.put(Alloyer,    new AlloyerRecipeHandler().loadHandler())
         CrusherRecipeRegistry.init()

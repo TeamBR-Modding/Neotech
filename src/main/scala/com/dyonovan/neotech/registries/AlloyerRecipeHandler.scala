@@ -5,7 +5,8 @@ import java.util
 import com.dyonovan.neotech.NeoTech
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
-import net.minecraft.command.CommandBase
+import net.minecraft.command.{ICommandSender, CommandBase}
+import net.minecraft.util.{StatCollector, ChatComponentText}
 import net.minecraftforge.fluids.FluidStack
 
 /**
@@ -39,14 +40,23 @@ class AlloyerRecipeHandler extends AbstractRecipeHandler[AlloyerRecipe, (FluidSt
       *
       * @return
       */
-    override def getVersion: Int = 0
+    override def getVersion: Int = 1
 
     /**
       * Called when the file is not found, add all default recipes here
       */
     override def generateDefaultRecipes(): Unit = {
         LogHelper.info("Loading Default Alloyer Recipes...")
-        addRecipe(new AlloyerRecipe("lava:1000", "water:1000", "iron:1000"))
+
+        // Obsidian
+        addRecipe(new AlloyerRecipe("water:1000", "lava:1000", "obsidian:1296"))
+
+        // Steel
+        addRecipe(new AlloyerRecipe("iron:144", "carbon:144", "steel:144"))
+
+        // Bronze
+        addRecipe(new AlloyerRecipe("copper:432", "tin:144", "bronze:576"))
+
         saveToFile()
     }
 
@@ -55,7 +65,32 @@ class AlloyerRecipeHandler extends AbstractRecipeHandler[AlloyerRecipe, (FluidSt
       *
       * @return A new command
       */
-    override def getCommand: CommandBase = null
+    override def getCommand: CommandBase = {
+        new CommandBase {
+            override def getCommandName: String = "addAlloyRecipe"
+
+            override def getRequiredPermissionLevel : Int = 3
+
+            override def getCommandUsage(sender: ICommandSender): String = "commands.addAlloyRecipe.usage"
+
+            override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
+                if(args.length < 3)
+                    sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addAlloyRecipe.usage")))
+                else {
+                    val input  = args(0)
+                    val input2 = args(1)
+                    val output = args(2)
+
+                    if(getFluidFromString(input) != null && getFluidFromString(input2) != null && getFluidFromString(output) != null) {
+                        addRecipe(new AlloyerRecipe(input, input2, output))
+                        sender.addChatMessage(new ChatComponentText(input + " " + input2 + " -> " + output + " Added Successfully"))
+                        saveToFile()
+                    } else
+                        sender.addChatMessage(new ChatComponentText(input + " " + input2 + " -> " + output  + " Failed Adding"))
+                }
+            }
+        }
+    }
 
     /**
       * Used to get what type token to read from file (Generics don't handle well)
@@ -64,10 +99,28 @@ class AlloyerRecipeHandler extends AbstractRecipeHandler[AlloyerRecipe, (FluidSt
       */
     override def getTypeToken: TypeToken[util.ArrayList[AlloyerRecipe]] =
         new TypeToken[util.ArrayList[AlloyerRecipe]]() {}
+
+    /**
+      * Used to check if a single fluid is valid for the recipes
+      *
+      * @param input
+      * @return
+      */
+    def isValidSingle(input : FluidStack) : Boolean = {
+        if(input == null)
+            return false
+        else {
+            for(x <- recipes.toArray) {
+                if(x.asInstanceOf[AlloyerRecipe].isValidSingle(input))
+                    return true
+            }
+        }
+        false
+    }
 }
 
 class AlloyerRecipe(val fluidOne : String, val fluidTwo : String, val fluidOut : String)
-    extends AbstractRecipe[(FluidStack, FluidStack), FluidStack] {
+        extends AbstractRecipe[(FluidStack, FluidStack), FluidStack] {
     /**
       * Used to get the output of this recipe
       *
@@ -76,7 +129,7 @@ class AlloyerRecipe(val fluidOne : String, val fluidTwo : String, val fluidOut :
       */
     override def getOutput(input: (FluidStack, FluidStack)): Option[FluidStack] = {
         if(isValidInput(input)) {
-            Option(getFluidFromString(fluidOut))
+            return Option(getFluidFromString(fluidOut))
         }
 
         None
@@ -89,11 +142,26 @@ class AlloyerRecipe(val fluidOne : String, val fluidTwo : String, val fluidOut :
       * @return True if there is an output
       */
     override def isValidInput(input: (FluidStack, FluidStack)): Boolean = {
-        if(input._1.getFluid == null || input._2.getFluid == null)
+        if(input._1 == null || input._2 == null || input._1.getFluid == null || input._2.getFluid == null)
             return false
-        (fluidOne.equalsIgnoreCase(input._1.getFluid.getName) && fluidTwo.equalsIgnoreCase(input._2.getFluid.getName) &&
-                getFluidFromString(fluidOne).amount >= input._1.amount && getFluidFromString(fluidTwo).amount >= input._2.amount) ||
-                (fluidOne.equalsIgnoreCase(input._2.getFluid.getName) && fluidTwo.equalsIgnoreCase(input._1.getFluid.getName) &&
-                        getFluidFromString(fluidOne).amount >= input._2.amount && getFluidFromString(fluidTwo).amount >= input._1.amount)
+        (getFluidFromString(fluidOne).getFluid.getName.equalsIgnoreCase(input._1.getFluid.getName) && getFluidFromString(fluidTwo).getFluid.getName.equalsIgnoreCase(input._2.getFluid.getName) &&
+                getFluidFromString(fluidOne).amount <= input._1.amount && getFluidFromString(fluidTwo).amount <= input._2.amount) ||
+                (getFluidFromString(fluidOne).getFluid.getName.equalsIgnoreCase(input._2.getFluid.getName) && getFluidFromString(fluidTwo).getFluid.getName.equalsIgnoreCase(input._1.getFluid.getName) &&
+                        getFluidFromString(fluidOne).amount <= input._2.amount && getFluidFromString(fluidTwo).amount <= input._1.amount)
+    }
+
+    /**
+      * Used to check if a single fluid is valid for the recipes
+      *
+      * @param input
+      * @return
+      */
+    def isValidSingle(input : FluidStack) : Boolean = {
+        if(input == null)
+            false
+        else {
+            (getFluidFromString(fluidOne).getFluid.getName.equalsIgnoreCase(input.getFluid.getName) || getFluidFromString(fluidTwo).getFluid.getName.equalsIgnoreCase(input.getFluid.getName)) &&
+                    (getFluidFromString(fluidOne).amount <= input.amount || getFluidFromString(fluidTwo).amount <= input.amount)
+        }
     }
 }

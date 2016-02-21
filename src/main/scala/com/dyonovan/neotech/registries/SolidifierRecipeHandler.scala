@@ -23,7 +23,7 @@ import net.minecraftforge.oredict.OreDictionary
   * @author Paul Davis <pauljoda>
   * @since 2/18/2016
   */
-class SolidifierRecipeManager extends AbstractRecipeHandler[SolidifierRecipe, FluidStack, ItemStack] {
+class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, FluidStack, ItemStack] {
 
     /**
       * Used to get the base name of the files
@@ -94,6 +94,16 @@ class SolidifierRecipeManager extends AbstractRecipeHandler[SolidifierRecipe, Fl
             new ItemStack(Items.gold_ingot), "ingotGold")
         addSolidifierRecipe(new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.NUGGET_MB),
             new ItemStack(Items.gold_nugget), "nuggetGold")
+
+        // Carbon
+        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.INGOT_MB),
+            new ItemStack(Items.coal), "")
+        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.BLOCK_MB),
+            new ItemStack(Blocks.coal_block), "")
+
+        // Obsidian
+        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("obsidian").get.fluid.get, MetalManager.BLOCK_MB),
+            new ItemStack(Blocks.obsidian), "")
 
         saveToFile()
         LogHelper.info("Finished adding " + recipes.size + " Solidifier Recipes")

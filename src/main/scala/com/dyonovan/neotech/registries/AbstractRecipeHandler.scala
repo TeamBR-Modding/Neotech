@@ -63,6 +63,7 @@ abstract class AbstractRecipeHandler[R <: AbstractRecipe[I, O], I, O] {
 
     /**
       * Get the command to add values to the registry
+      *
       * @return A new command
       */
     def getCommand : CommandBase
@@ -128,6 +129,24 @@ abstract class AbstractRecipeHandler[R <: AbstractRecipe[I, O], I, O] {
             val recipe = recipes.get(x)
             if(recipe.getOutput(input).isDefined)
                 return Option(recipe.getOutput(input).get)
+        }
+
+        None
+    }
+
+    /**
+      * Used to get the recipe object for an input
+      * @param input The input
+      * @return The recipe object
+      */
+    def getRecipe(input : I) : Option[R] = {
+        if(input == null)
+            return None
+
+        for(x <- 0 until recipes.size()) {
+            val recipe = recipes.get(x)
+            if(recipe.getOutput(input).isDefined)
+                return Option(recipe)
         }
 
         None

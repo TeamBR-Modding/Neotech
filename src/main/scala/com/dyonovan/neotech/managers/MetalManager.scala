@@ -89,6 +89,10 @@ object MetalManager {
         registerMetal("iron",   1, 0xFFd8d8d8, 0xFFb71b1b, hasOre = false, hasSolidBlock = false, hasIngot = false)
         registerMetal("dirtyiron", 1, 0xFFd8d8d8, 0xFFb71b1b,
             hasDust = false, dirtyFluid = true, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
+        registerMetal("carbon", 1, 0xFF202020, 0xFF202020,
+            hasDust = false, dirtyFluid = true, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
+        registerMetal("obsidian", 1, 0xFF583962, 0xFF583962,
+            hasDust = false, hasIngot = false, hasNugget = false, hasOre = false, hasSolidBlock = false)
     }
 
     /**

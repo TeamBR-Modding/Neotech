@@ -23,7 +23,7 @@ import net.minecraftforge.oredict.OreDictionary
   * @author Paul Davis <pauljoda>
   * @since 2/16/2016
   */
-class CrucibleRecipeManager extends AbstractRecipeHandler[CrucibleRecipe, ItemStack, FluidStack] {
+class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemStack, FluidStack] {
 
     /**
       * Used to get the base name of the files
@@ -98,6 +98,14 @@ class CrucibleRecipeManager extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
         addCrucibleRecipe(null, "ingotGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.INGOT_MB))
         addCrucibleRecipe(null, "oreGold", new FluidStack(MetalManager.getMetal("dirtygold").get.fluid.get, MetalManager.ORE_MB))
         addCrucibleRecipe(null, "blockGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.BLOCK_MB))
+
+        // Carbon
+        addCrucibleRecipe(new ItemStack(Items.coal, 1, 1),  "", new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.INGOT_MB * 2))
+        addCrucibleRecipe(new ItemStack(Items.coal),        "", new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.INGOT_MB))
+        addCrucibleRecipe(new ItemStack(Blocks.coal_block), "", new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.BLOCK_MB))
+
+        // Obsidian
+        addCrucibleRecipe(new ItemStack(Blocks.obsidian),  "", new FluidStack(MetalManager.getMetal("obsidian").get.fluid.get, MetalManager.BLOCK_MB))
 
         // Ice/Snowball to Water
         addCrucibleRecipe(new ItemStack(Items.snowball), "", new FluidStack(FluidRegistry.WATER, 144))

@@ -94,12 +94,22 @@ tile.fluid.gold.name=Molten Gold
 tile.fluid.dirtygold.name=Dirty Molten Gold
 
 # Iron
-fluid.iron=Dirty Molten Iron
+fluid.iron=Molten Iron
 fluid.dirtyiron=Dirty Molten Iron
 fluid.iron.name=Molten Iron
 fluid.dirtyiron.name=Dirty Molten Iron
 tile.fluid.iron.name=Molten Iron
 tile.fluid.dirtyiron.name=Dirty Molten Iron
+
+# Carbon
+fluid.carbon=Liquid Carbon
+fluid.carbon.name=Liquid Carbon
+tile.fluid.carbon.name=Liquid Carbon
+
+# Obsidian
+fluid.obsidian=Molten Obsidian
+fluid.obsidian.name=Molten Obsidian
+tile.fluid.obsidian.name=Molten Obsidian
 
 #######################
 # Items
@@ -161,6 +171,7 @@ tile.neotech:thermalBinder.name=Thermal Binder
 tile.neotech:grinder.name=Grinder
 tile.neotech:electricCrucible.name=Electric Crucible
 tile.neotech:electricSolidifier.name=Electric Solidifier
+tile.neotech:alloyer.name=Electric Alloyer
 
 # Generators
 tile.neotech:furnaceGenerator.name=Furnace Generator
@@ -252,6 +263,9 @@ neotech.crucible.title=Electric Crucible
 
 # Solidifier
 neotech.electricSolidifier.title=Electric Solidifier
+
+# Alloyer
+neotech.alloyer.title=Electric Alloyer
 
 # Furnace Generator
 neotech.furnacegenerator.title=Furnace Generator
@@ -362,9 +376,10 @@ neotech.text.renderNameInfo=Display Mob Name (Nametag Mob / Anvil Net)
 #######################
 # Commands
 #######################
-commands.addCrucibleRecipe.usage=Usage: input<ItemStack (format : MODID:ITEMID:META or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)>
-commands.addSolidifierRecipe.usage=Usage: input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MODID:ITEMID:META or oreDictTag)>
-commands.addFluidFuelValue.usage=Usage: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
+commands.addCrucibleRecipe.usage=§cUsage: input<ItemStack (format : MODID:ITEMID:META or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)>
+commands.addSolidifierRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MODID:ITEMID:META or oreDictTag)>
+commands.addFluidFuelValue.usage=§cUsage: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
+commands.addAlloyRecipe.usage=§cUsage: input1<FluidStack (format : FLUID:AMOUNT)> input2<FluidStack (format : FLUID:AMOUNT)> output<FluidStack (format : FLUID:AMOUNT)>
 
 #######################
 # Descriptions
@@ -391,6 +406,9 @@ neotech.electricCrucible.processorUpgrade.desc=Each processor removes 112 ticks 
 
 # Solidifier
 neotech.electricSolidifier.desc=The Electric Solidifier will take a fluid input and try to solidify it into the selected item. Solidifier modes will attempt to cool the fluid to the shape selected.
+
+# Alloyer
+neotech.alloyer.desc=The Electric Alloyer will take two input fluids and combine them into an output fluid.
 
 # Furnace Generator
 neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would. By default, the Furnace Generator generates 20 RF/tick
