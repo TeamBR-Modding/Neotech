@@ -1,0 +1,438 @@
+﻿PARSE_ESCAPES
+
+# Creative Tabs
+itemGroup.tabNeoTech=NeoTech
+itemGroup.tabNeoTechPipes=NeoTech: Transport Pipes
+itemGroup.tabNeoTechMetals=NeoTech: Metals
+itemGroup.tabNeoTechDecorations=NeoTech: В§4DВ§6eВ§ecВ§2oВ§9rВ§5aВ§4tВ§6iВ§evВ§2e
+
+#######################
+# Blocks
+#######################
+
+# Metals
+tile.neotech:oreCopper.name=Медная руда
+tile.neotech:oreTin.name=Оловянная руда
+tile.neotech:oreLead.name=Свинцовая руда
+tile.neotech:oreSilver.name=Серебряная руда
+tile.neotech:blockCopper.name=Блок меди
+tile.neotech:blockTin.name=Блок олова
+tile.neotech:blockLead.name=Блок свинца
+tile.neotech:blockBronze.name=Блок бронзы
+tile.neotech:blockSteel.name=Блок стали
+tile.neotech:blockSilver.name=Блок серебра
+
+# Stars
+tile.neotech:blockMiniatureStar_black.name=§8Чёрная §rМини звезда
+tile.neotech:blockMiniatureStar_blue.name=§1Голубая §rМини звезда
+tile.neotech:blockMiniatureStar_brown.name=§6Коричневая §rМини звезда
+tile.neotech:blockMiniatureStar_cyan.name=§bБирюзовая §rМини звезда
+tile.neotech:blockMiniatureStar_gray.name=§8Серая §rМини звезда
+tile.neotech:blockMiniatureStar_green.name=§2Зелёная §rМини звезда
+tile.neotech:blockMiniatureStar_lightBlue.name=§9Светло голубая §rМини звезда
+tile.neotech:blockMiniatureStar_lime.name=§aЛаймовая §rМини звезда
+tile.neotech:blockMiniatureStar_magenta.name=§5Пурпурная §rМини звезда
+tile.neotech:blockMiniatureStar_orange.name=§6Оранжевая §rМини звезда
+tile.neotech:blockMiniatureStar_pink.name=§dРозовая §rМини звезда
+tile.neotech:blockMiniatureStar_purple.name=§5Фиолетовая §rМини звезда
+tile.neotech:blockMiniatureStar_red.name=§cКрасная §rМини звезда
+tile.neotech:blockMiniatureStar_silver.name=§7Серебристая §rМини звезда
+tile.neotech:blockMiniatureStar_white.name=Белая Мини звезда
+tile.neotech:blockMiniatureStar_yellow.name=§eЖёлтая §rМини звезда
+
+#######################
+# Fluids
+#######################
+# Copper
+fluid.copper=Расплавленная медь
+fluid.dirtycopper=Грязная расплавленная медь
+fluid.copper.name=Расплавленная медь
+fluid.dirtycopper.name=Грязная расплавленная медь
+tile.fluid.copper.name=Расплавленная медь
+tile.fluid.dirtycopper.name=Грязная расплавленная медь
+
+# Tin
+fluid.tin=Расплавленное олово
+fluid.dirtytin=Грязное расплавленное олово
+fluid.tin.name=Расплавленное олово
+fluid.dirtytin.name=Грязное расплавленное олово
+tile.fluid.tin.name=Расплавленное олово
+tile.fluid.dirtytin.name=Грязное расплавленное олово
+
+# Lead
+fluid.lead=Расплавленный свинец
+fluid.dirtylead=Грязный расплавленный свинец
+fluid.lead.name=Расплавленный свинец
+fluid.dirtylead.name=Грязный расплавленный свинец
+tile.fluid.lead.name=Расплавленный свинец
+tile.fluid.dirtylead.name=Грязный расплавленный свинец
+
+# Bronze
+fluid.bronze=Расплавленная бронза
+fluid.bronze.name=Расплавленная бронза
+tile.fluid.bronze.name=Расплавленная бронза
+
+# Steel
+fluid.steel=Расплавленная сталь
+fluid.steel.name=Расплавленная сталь
+tile.fluid.steel.name=Расплавленная сталь
+
+# Silver
+fluid.silver=Расплавленное серебро
+fluid.dirtysilver=Грязное расплавленное серебро
+fluid.silver.name=Расплавленное серебро
+fluid.dirtysilver.name=Грязное расплавленное серебро
+tile.fluid.silver.name=Расплавленное серебро
+tile.fluid.dirtysilver.name=Грязное расплавленное серебро
+
+# Gold
+fluid.gold=Расплавленное золото
+fluid.dirtygold=Грязное расплавленное золото
+fluid.gold.name=Расплавленное золото
+fluid.dirtygold.name=Грязное расплавленное золото
+tile.fluid.gold.name=Расплавленное золото
+tile.fluid.dirtygold.name=Грязное расплавленное золото
+
+# Iron
+fluid.iron=Расплавленное железо
+fluid.dirtyiron=Грязное расплавленное железо
+fluid.iron.name=Расплавленное железо
+fluid.dirtyiron.name=Грязное расплавленное железо
+tile.fluid.iron.name=Расплавленное железо
+tile.fluid.dirtyiron.name=Грязное расплавленное железо
+
+#######################
+# Items
+#######################
+
+# Metals
+item.neotech:dustIron.name=Железная пыль
+item.neotech:nuggetIron.name=Железный самородок
+item.neotech:dustGold.name=Золотая пыль
+item.neotech:dustCopper.name=Медная пыль
+item.neotech:ingotCopper.name=Медный слиток
+item.neotech:nuggetCopper.name=Медный самородок
+item.neotech:dustBronze.name=Бронзовая пыль
+item.neotech:ingotBronze.name=Бронзовый слиток
+item.neotech:nuggetBronze.name=Бронзовый самородок
+item.neotech:dustTin.name=Оловянная пыль
+item.neotech:ingotTin.name=Оловянный слиток
+item.neotech:nuggetTin.name=Оловянный самородок
+item.neotech:dustLead.name=Свинцовая пыль
+item.neotech:ingotLead.name=Свинцовый слиток
+item.neotech:nuggetLead.name=Свинцовый самородок
+item.neotech:dustSteel.name=Стальная пыль
+item.neotech:ingotSteel.name=Стальной слиток
+item.neotech:nuggetSteel.name=Стальной самородок
+item.neotech:dustSilver.name=Серебряная пыль
+item.neotech:ingotSilver.name=Серебряный слиток
+item.neotech:nuggetSilver.name=Серебряный самородок
+
+# Motherboard
+item.neotech:upgradeMBFull.name=Заполненная плата
+item.neotech:upgradeMBEmpty.name=Пустая плата
+item.neotech:upgradeHardDrive.name=Жесткий диск
+item.neotech:upgradeControl.name=Контроллер
+item.neotech:upgradeProcessor.name=Процессор
+item.neotech:upgradeExpansion.name=Плата расширения
+
+# Tools
+item.neotech:wrench.name=Ключ
+item.neotech:trashBag.name=Мусорный пакет
+item.neotech:spawnerMover.name=Переноска спаунеров
+item.neotech:mobGun.name=Метатель сети
+item.neotech:mobNet.name=Ловчая сеть
+item.neotech:electroMagnet.name=Электромагнит
+
+# Batteries
+item.neotech:basicRFBattery.name=Простая батарея RF
+item.neotech:advancedRFBattery.name=Продвинутая батарея RF
+item.neotech:eliteRFBattery.name=Элитная батарея RF
+
+#######################
+# Tile Entities
+#######################
+tile.neotech:grinder.name=Дробилка
+
+# Processors
+tile.neotech:electricFurnace.name=Электро печь
+tile.neotech:electricCrusher.name=Электро дробилка
+tile.neotech:thermalBinder.name=Паяльная станция
+tile.neotech:grinder.name=Дробилка
+tile.neotech:electricCrucible.name=Электро тигель
+tile.neotech:electricSolidifier.name=Электро отвердитель
+
+# Generators
+tile.neotech:furnaceGenerator.name=Генератор
+tile.neotech:fluidGenerator.name=Топливный генератор
+tile.neotech:solarPanelT1.name=Простая солнечная панель
+tile.neotech:solarPanelT2.name=Продвинутая солнечная панель
+tile.neotech:solarPanelT3.name=Элитная солнечная панель
+
+# Operators
+tile.neotech:pump.name=Электро насос
+tile.neotech:treeFarm.name=Электро лесоруб
+
+# Storage
+tile.neotech:flushableChest.name=Очистной сундук
+tile.neotech:basicRFStorage.name=Простое хранилище RF
+tile.neotech:advancedRFStorage.name=Продвинутое хранилище RF
+tile.neotech:eliteRFStorage.name=Элитное хранилище RF
+tile.neotech:creativeRFStorage.name=Креативное хранилище RF
+tile.neotech:ironTank.name=Железный резервуар
+tile.neotech:goldTank.name=Золотой резервуар
+tile.neotech:diamondTank.name=Алмазный резервуар
+tile.neotech:creativeTank.name=Креативный резервуар
+tile.neotech:voidTank.name=Пустотный резервуар
+
+# Misc
+tile.neotech:blockCrafter.name=Двойной верстак
+tile.neotech:blockMiniatureSun.name=Мини звезда
+tile.neotech:playerPlate.name=Нажимная плита (Игрок)
+tile.neotech:chunkLoader.name=Загрузчик чанков
+tile.neotech:dimStorage.name=Подпространственный сундук
+tile.neotech:redstoneClock.name=Таймер
+tile.neotech:mechanicalPipe.name=Механическая труба
+tile.neotech:mobStand.name=Стойка
+tile.neotech:blockAttractor.name=Аттрактор (WIP)
+
+#######################
+# Pipes
+#######################
+
+# Structure
+tile.neotech:pipeStructure_black.name=§8Чёрная §rСтруктурная труба
+tile.neotech:pipeStructure_blue.name=§1Голубая §rСтруктурная труба
+tile.neotech:pipeStructure_brown.name=§6Коричневая §rСтруктурная труба
+tile.neotech:pipeStructure_cyan.name=§bБирюзовая §rСтруктурная труба
+tile.neotech:pipeStructure_gray.name=§8Серая §rСтруктурная труба
+tile.neotech:pipeStructure_green.name=§2Зелёная §rСтруктурная труба
+tile.neotech:pipeStructure_lightBlue.name=§9Светло голубая §rСтруктурная труба
+tile.neotech:pipeStructure_lime.name=§aЛаймовая §rСтруктурная труба
+tile.neotech:pipeStructure_magenta.name=§5Пурпурная §rСтруктурная труба
+tile.neotech:pipeStructure_orange.name=§6Оранжевая §rСтруктурная труба
+tile.neotech:pipeStructure_pink.name=§dРозовая §rСтруктурная труба
+tile.neotech:pipeStructure_purple.name=§5Фиолетова §rСтруктурная труба
+tile.neotech:pipeStructure_red.name=§cКрасная §rСтруктурная труба
+tile.neotech:pipeStructure_silver.name=§7Серебристая §rСтруктурная труба
+tile.neotech:pipeStructure_white.name=Белая Структурная труба
+tile.neotech:pipeStructure_yellow.name=§eЖёлтая §rСтруктурная труба
+
+# Acceleration
+tile.neotech:pipeBasicSpeedStructure.name=Простая ускоряющая труба
+tile.neotech:pipeAdvancedSpeedStructure.name=Продвинутая ускоряющая труба
+tile.neotech:pipeEliteSpeedStructure.name=Элитная ускоряющая труба
+
+# Interfaces
+tile.neotech:pipeItemBasicInterface.name=Предметный коннектор
+tile.neotech:pipeEnergyBasicInterface.name=Энергетический коннектор
+tile.neotech:pipeFluidBasicInterface.name=Жидкостный коннектор
+
+#######################
+# GUI
+#######################
+
+# Grinder
+neotech.grinder.title=Дробилка
+neotech.grinder.input=Вход
+neotech.grinder.grinding=Дробление
+neotech.grinder.output=Выход
+
+# Furnace
+neotech.furnace.title=Электро печь
+
+# Crusher
+neotech.crusher.title=Электро дробилка
+
+# Thermal Binder
+neotech.thermalbinder.title=Паяльная станция
+
+# Crucible
+neotech.crucible.title=Электро тигель
+
+# Solidifier
+neotech.electricSolidifier.title=Электро отвердитель
+
+# Furnace Generator
+neotech.furnacegenerator.title=Генератор
+
+# Fluid Generator
+neotech.fluidgenerator.title=Топливный генератор
+
+# RF Storage
+neotech.rfstoragebasic.title=Простое хранилище RF
+neotech.rfstorageadvanced.title=Продвинутое хранилище RF
+neotech.rfstorageelite.title=Элитное хранилище RF
+neotech.rfstoragecreative.title=Креативное хранилище RF
+
+# Tree Farm
+neotech.treeFarm.title=Электро лесоруб
+
+# Interface Pipe
+neotech.interfacePipe.title=Коннектор
+
+# Crafter
+neotech.crafter.title=Двойной верстак
+
+# Minature Sun
+neotech.fertilizer.title=Мини звезда
+
+# Chunk Loader
+neotech.chunkLoader.title=Радиус загрузчика чанков
+
+# Flushable Chest
+neotech.flushchest.title=Очистной сундук
+
+# Trash Bag
+inventory.trashBag.title=Мусорный пакет
+
+# Buttons
+neotech.button.disable=Запрещено?
+
+# Mob Stand
+neotech.mobStand.title=Стойка
+
+# Dim Storage
+neotech.dimStorage.title=Подпространственный сундук
+
+#######################
+# Common Text
+#######################
+neotech.text.error=Ошибка
+
+neotech.text.in=Вход
+neotech.text.out=Выход
+neotech.text.upgrade=Улучшения
+neotech.text.start=Пуск
+
+neotech.text.motherboard=Плата
+
+neotech.text.frequency=Частота
+neotech.text.extractionMode=Режим извлечения
+neotech.text.whitelist=Белый список
+neotech.text.blacklist=Черный список
+neotech.text.oredict=Ore Dict
+neotech.text.damage=Износ
+neotech.text.nbt=NBT
+
+neotech.text.redstoneMode=Режим редстона
+neotech.text.low=Низкий
+neotech.text.high=Высокий
+neotech.text.disabled=Запрещен
+
+neotech.text.ioConfig=Настройка I/O
+neotech.text.blue=Голубой
+neotech.text.orange=Оранжевый
+neotech.text.green=Зеленый
+neotech.text.input=Вход
+neotech.text.output=Выход
+neotech.text.both=Вход/Выход
+
+neotech.text.information=Информация
+
+neotech.text.redstoneFlux=Redstone Flux
+
+neotech.text.magnetism=Магнетизм
+neotech.text.active=Активен
+neotech.text.disabled=Выключен
+
+neotech.text.upgrades=Улучшения
+neotech.text.processors=Процессоры
+neotech.text.hardDrives=Жесткие диски
+neotech.text.control=Контроллеры
+neotech.text.expansion=Платы расширения
+
+neotech.text.rfIn=Приход RF
+neotech.text.rfOut=Расход RF
+
+neotech.text.processMode=Режим отвердителя
+neotech.text.blockMode=Блоки
+neotech.text.ingotMode=Слитки
+neotech.text.nuggetMode=Самородки
+
+neotech.text.size=Размер
+neotech.text.facing=Поворот
+neotech.text.fitToBlock=Уместить
+neotech.text.fitToBlockInfo=Уместить моба в один блок
+neotech.text.lookAtPlayer=Следовать
+neotech.text.lookAtPlayerInfo=Заставить моба смотреть на игрока
+neotech.text.renderName=Имя
+neotech.text.renderNameInfo=Показывать имя (Nametag Mob / Anvil Net)
+
+#######################
+# Commands
+#######################
+commands.addCrucibleRecipe.usage=Usage: input<ItemStack (format : MODID:ITEMID:META or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)>
+commands.addSolidifierRecipe.usage=Usage: input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MODID:ITEMID:META or oreDictTag)>
+commands.addFluidFuelValue.usage=Usage: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
+
+#######################
+# Descriptions
+#######################
+
+# Electric Furnace
+neotech.electricFurnace.desc=Электро печь - это обычная печь, но использующая RF. Делает все то же, что и обычная печь.
+neotech.electricFurnace.processorUpgrade.desc=Каждый процессор уменьшает время работы на 24 тика (около секунды).
+neotech.electricFurnace.hardDriveUpgrade.desc=Каждый жёсткий диск увеличивает максимум энергии.
+neotech.electricFurnace.controlUpgrade.desc=Контроллер дает возможность управления сигналом редстона.
+neotech.electricFurnace.expansionUpgrade.desc=Платы расширения позволяют настраивать автоматический вход/выход машин.
+
+# Electric Crusher
+neotech.electricCrusher.desc=Электро дробилка измельчает предметы. Например блок руды будет переработан в две пыли. Также может перерабатывать булыжник в песок.
+neotech.electricCrusher.expansionUpgrade.desc=Плата расширения позволяет настраивать автоматический вход/выход, а также дает возможность отделять примеси.
+
+# Thermal Binder
+neotech.thermalBinder.desc=Паяльная станция позволяет устанавливать разоичные компоненты на пустую плату. Поместите пустую плату слева, компонеты (до 8 процессров, до 8 жестких дисков, контроллер, плату расширения) в средние слоты и нажмите Пуск. Также станция может работать в обратную сторону - поместите заполненную плату слева и вы получите пустую плату и компоненты, которые были установлены.
+neotech.thermalBinder.processorUpgrade.desc=Каждый процессор укорачивает общее время производства примерно на 24 тика (общее время зависит от количества компонентов).
+
+# Electric Crucible
+neotech.electricCrucible.desc=Электро тигель может плавить металлы. Просто поместите металл (руду, слитки) во входной слот. Без улучшений процесс длится около 1000 тиков. Также электро тигель способен плавить камни в лаву или лед в воду.
+neotech.electricCrucible.processorUpgrade.desc=Каждый процессор укорачивает время производства примерно на 112 тиков.
+
+# Solidifier
+neotech.electricSolidifier.desc=Электро отвердитель принимает жидкости и пытается перевести их в твердую форму. Настрока режима позволяет выбирать прдпочтительную форму.
+
+# Furnace Generator
+neotech.furnaceGenerator.desc=Генератор производит RF за счет сжигания твердого топлива. Без улучшений производит 20 RF/тик
+neotech.furnaceGenerator.processorUpgrade.desc=Каждый процессор увеличивает скорость производства энергии на 10 RF/тик
+
+# Fluid Generator
+neotech.fluidGenerator.desc=Топливный генератор производит RF сжигая жидкое топливо. Без улучшений производит 80 RF/тик.
+
+# Tree Farm
+neotech.treeFarm.desc=Электро лесоруб позволяет автоматизировать производство древесины. Без улучшений радиус работы 3 блока и потребление 200 RF на блок. Лесоруб будет рубить деревья, которые растут на той же высоте. Лесорубу нужен топор для работы. Также он может использовать ножницы, что бы срезать листья, однако в этом случае саженцев не будет. Саженцы будут помещены в верхний-правый слот и будут использоваться для высадки. Излишек саженцев будет помещен в основной инвнтарь.
+neotech.treeFarm.processorUpgrade.desc=Процессры увеличивают радиус и скорость работы. Без улучшений лесоруб рубит два блока каждые две секунды. Каждый процессор добавляет 16 блоков на две секунды.
+
+# Energy Interface Pipe
+neotech.energyInterfacePipe.name=Энергетический коннектор
+neotech.energyInterfacePipe.desc=Энергетические коннекторы позволяют передавать RF через сеть труб. Эти коннекторы используют алгоритм Round Robin. Коннекторы пересылают 2000 RF на пакет с паузой в 20 тиков и со скоростью 0.5 блоков/тик. Нельзя использовать фильтры.
+neotech.energyInterfacePipe.processorUpgrade.desc=Каждый процессор уменьшает паузу на (кол-во процессров)*2, а также скорость на 0.5 блоков/тик.
+neotech.energyInterfacePipe.hardDriveUpgrade.desc=Жесткие диски увеличивают размер пакета на (кол-во процессоров)*4.
+neotech.energyInterfacePipe.controlUpgrade.desc=Контроллер позвляет использовать сигнал редстона для управления, а также задавать частоту. Только трубы, настроенные на одну чатоту будут взаимодействовать.
+neotech.energyInterfacePipe.expansionUpgrade.desc=Плата расширения позволяет выбирать алгоритм работы.
+
+# Fluid Interface Pipe
+neotech.fluidInterfacePipe.name=Жидкостный коннектор
+neotech.fluidInterfacePipe.desc=Жидкостные коннекторы позволяют перемещать по сети труб жидкости. Эти коннекторы пересылают 1000mb на пакет с паузой в 20 тиков и скоростью 0.05 блоков/тик. Вы можете указать с какой жидкостью должен работать коннектор, поместив эту жидкость в слот фильтра (например в ведре).
+neotech.fluidInterfacePipe.processorUpgrade.desc=Каждый процессор уменьшает паузу на (кол-во процессров)*2, а также скорость на 0.05 блоков/тик.
+neotech.fluidInterfacePipe.hardDriveUpgrade.desc=Жесткие диски увеличивают размер пакета на (кол-во дисков)*2000mb
+
+# Item Interface Pipe
+neotech.itemInterfacePipe.name=Предметный коннектор
+neotech.itemInterfacePipe.desc=Предметные коннекторы позволяют перемещать по сети труб предметы. Эти коннекторы перемещают 1 предмет на пакет с паузой в 20 тиков и скоростью 0.05 блоков/тик. Вы можете использовать нужные фильтры, что бы указать с какими предметами должен работать коннектор.
+neotech.itemInterfacePipe.processorUpgrade.desc=Каждый процессор уменьшает паузу на (кол-во процессров)*2, а также скорость на 0.05 блоков/тик.
+neotech.itemInterfacePipe.hardDriveUpgrade.desc=Жесткие диски увеличивают размер пакета на (кол-во дисков)*8 предметов
+
+neotech.grinder.description=Дробилка предназначена для начальных этапов игры. Чтобы использовать, поставьте на дробилку нажимную плиту (лучше плита - выше скорость) и начинайте прыгать. Чем больше высота, тем больше будет переработано.
+neotech.flushableChest.description=Очистной сундук позволяет уничтожать находящиеся в нем предметы по сигналу редстона.
+neotech.playerPlate.description=Нажимная плита работает как и любая другая, но срабатывает только на игроков
+neotech.trashBag.description=Мусорный пакет - это автоматическая система уничтожения предметов. Правый клик что бы открыть инвентарь и поместите предмет, который вы бы хотели уничтожать автоматически, после подбирания. Также можно просто бросать ненужные предметы на мусорный пакет.
+
+#######################
+# JEI
+#######################
+
+neotech.nei.name=NeoTech
+neotech.nei.furnacerecipes=Электро печь
+neotech.nei.crusherrecipes=Электро дробилка
+neotech.nei.ecrusher.outputchance=10% шанс с каждым улучшением
