@@ -360,6 +360,13 @@ neotech.text.renderName=Name
 neotech.text.renderNameInfo=Display Mob Name (Nametag Mob / Anvil Net)
 
 #######################
+# Commands
+#######################
+commands.addCrucibleRecipe.usage=Usage: input<ItemStack (format : MODID:ITEMID:META or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)>
+commands.addSolidifierRecipe.usage=Usage: input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MODID:ITEMID:META or oreDictTag)>
+commands.addFluidFuelValue.usage=Usage: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
+
+#######################
 # Descriptions
 #######################
 

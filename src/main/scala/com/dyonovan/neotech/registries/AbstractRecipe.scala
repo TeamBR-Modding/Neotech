@@ -59,13 +59,12 @@ abstract class AbstractRecipe[I, O] {
       * @return The stack for the string
       */
     def getItemStackFromString(item: String): ItemStack = {
+        if(item == null || item == "")
+            return null
         val name: Array[String] = item.split(":")
         name.length match {
             case 3 =>
-                if (item == "")
-                    null
-                else
-                    new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
+                new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
             case _ => null
         }
     }

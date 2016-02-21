@@ -3,7 +3,8 @@ package com.dyonovan.neotech.common.tiles.machines.generators
 import com.dyonovan.neotech.client.gui.machines.generators.GuiFluidGenerator
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.dyonovan.neotech.common.tiles.MachineGenerator
-import com.dyonovan.neotech.registries.FluidFuelValues
+import com.dyonovan.neotech.managers.RecipeManager
+import com.dyonovan.neotech.registries.FluidFuelRecipeHandler
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -83,7 +84,10 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
             if (fluidDrained == null || fluidDrained.getFluid == null || fluidDrained.amount <= 0)
                 return false
 
-            burnTime = FluidFuelValues.getFluidFuelValue(fluidDrained.getFluid.getName) / 10
+            burnTime =
+                    if(RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).getOutput(fluidDrained.getFluid).isDefined)
+                        RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).getOutput(fluidDrained.getFluid).get / 10
+                    else 0
             if (burnTime > 0) {
                 currentObjectBurnTime = burnTime
                 return true
@@ -186,7 +190,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
     }
 
     override def canFill(from: EnumFacing, fluid: Fluid): Boolean =
-        (tank.getFluid == null || tank.getFluid.getFluid == fluid) && FluidFuelValues.isFluidFuel(fluid.getName)
+        (tank.getFluid == null || tank.getFluid.getFluid == fluid) && RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).isValidInput(fluid)
 
 
     override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = false
@@ -232,7 +236,9 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
     override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean = {
         val inputSlot = slot == INPUT_SLOT
         var isValidContainer = FluidContainerRegistry.isContainer(itemStackIn) && !FluidContainerRegistry.isEmptyContainer(itemStackIn)
-        if(isValidContainer && FluidFuelValues.getFluidFuelValue(FluidContainerRegistry.getFluidForFilledItem(itemStackIn).getFluid.getName) <= 0)
+        if(isValidContainer &&
+                RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).getOutput(FluidContainerRegistry.getFluidForFilledItem(itemStackIn).getFluid).isDefined &&
+                RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).getOutput(FluidContainerRegistry.getFluidForFilledItem(itemStackIn).getFluid).get <= 0)
             isValidContainer = false
         inputSlot && isValidContainer
     }
@@ -244,7 +250,9 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
         val inputSlot = slot == INPUT_SLOT
         var isValidContainer = FluidContainerRegistry.isContainer(itemStackIn) && !FluidContainerRegistry.isEmptyContainer(itemStackIn)
-        if(isValidContainer && FluidFuelValues.getFluidFuelValue(FluidContainerRegistry.getFluidForFilledItem(itemStackIn).getFluid.getName) <= 0)
+        if(isValidContainer &&
+                RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).getOutput(FluidContainerRegistry.getFluidForFilledItem(itemStackIn).getFluid).isDefined &&
+                RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).getOutput(FluidContainerRegistry.getFluidForFilledItem(itemStackIn).getFluid).get <= 0)
             isValidContainer = false
         inputSlot && isValidContainer
     }

@@ -6,8 +6,10 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.managers.MetalManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
+import net.minecraft.command.{ICommandSender, CommandBase}
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
+import net.minecraft.util.{StatCollector, ChatComponentText}
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.oredict.OreDictionary
 
@@ -21,7 +23,7 @@ import net.minecraftforge.oredict.OreDictionary
   * @author Paul Davis <pauljoda>
   * @since 2/16/2016
   */
-class CrucibleRecipeRegistry extends AbstractRecipeHandler[CrucibleRecipe, ItemStack, FluidStack] {
+class CrucibleRecipeManager extends AbstractRecipeHandler[CrucibleRecipe, ItemStack, FluidStack] {
 
     /**
       * Used to get the base name of the files
@@ -130,6 +132,45 @@ class CrucibleRecipeRegistry extends AbstractRecipeHandler[CrucibleRecipe, ItemS
         val recipe = new CrucibleRecipe(getItemStackString(stack), ore, getFluidString(fluidStack))
         addRecipe(recipe)
     }
+
+    /**
+      * Get the command to add values to the registry
+      *
+      * @return A new command
+      */
+    override def getCommand: CommandBase = {
+        new CommandBase {
+            override def getCommandName: String = "addCrucibleRecipe"
+
+            override def getRequiredPermissionLevel : Int = 3
+
+            override def getCommandUsage(sender: ICommandSender): String = "commands.addCrucibleRecipe.usage"
+
+            override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
+                if(args.length < 2)
+                    sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addCrucibleRecipe.usage")))
+                else {
+                    var inputStack : String = null
+                    if(args(0).split(":").nonEmpty) {
+                        inputStack = args(0)
+                        if(getItemStackFromString(inputStack) != null && getFluidFromString(args(1)) != null) {
+                            addRecipe(new CrucibleRecipe(inputStack, "", args(1)))
+                            sender.addChatMessage(new ChatComponentText(inputStack + " -> " + args(1) + " Added Successfully"))
+                            saveToFile()
+                        } else
+                            sender.addChatMessage(new ChatComponentText(inputStack + " -> " + args(1) + " Failed Adding"))
+                    } else {
+                        if(!OreDictionary.getOres(args(0)).isEmpty) {
+                            addRecipe(new CrucibleRecipe(null, args(0), args(1)))
+                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + args(1) + " Added Successfully"))
+                            saveToFile()
+                        } else
+                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + args(1) + " Failed Adding"))
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -150,9 +191,9 @@ class CrucibleRecipe(val input : String, val ore : String, val output : String) 
         if(input == null) //Safety Check
             return None
 
-        if(getItemStackFromString(input) != null &&
+        if((getItemStackFromString(input) != null &&
                 (getItemStackFromString(input).isItemEqual(itemIn) &&
-                        getItemStackFromString(input).getItemDamage == itemIn.getItemDamage) || (
+                        getItemStackFromString(input).getItemDamage == itemIn.getItemDamage)) || (
                 if(ore != null && OreDictionary.getOreIDs(itemIn) != null)
                     OreDictionary.getOreIDs(itemIn).toList.contains(OreDictionary.getOreID(ore))
                 else

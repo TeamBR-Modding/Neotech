@@ -6,8 +6,10 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.managers.MetalManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
+import net.minecraft.command.{ICommandSender, CommandBase}
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
+import net.minecraft.util.{StatCollector, ChatComponentText}
 import net.minecraftforge.fluids.FluidStack
 import net.minecraftforge.oredict.OreDictionary
 
@@ -21,7 +23,7 @@ import net.minecraftforge.oredict.OreDictionary
   * @author Paul Davis <pauljoda>
   * @since 2/18/2016
   */
-class SolidifierRegistry extends AbstractRecipeHandler[SolidifierRecipe, FluidStack, ItemStack] {
+class SolidifierRecipeManager extends AbstractRecipeHandler[SolidifierRecipe, FluidStack, ItemStack] {
 
     /**
       * Used to get the base name of the files
@@ -117,6 +119,45 @@ class SolidifierRegistry extends AbstractRecipeHandler[SolidifierRecipe, FluidSt
         val recipe = new SolidifierRecipe(getFluidString(fluidStack), ore, getItemStackString(stack))
         addRecipe(recipe)
     }
+
+    /**
+      * Get the command to add values to the registry
+      *
+      * @return A new command
+      */
+    override def getCommand: CommandBase = {
+        new CommandBase {
+            override def getCommandName: String = "addSolidifierRecipe"
+
+            override def getRequiredPermissionLevel : Int = 3
+
+            override def getCommandUsage(sender: ICommandSender): String = "commands.addSolidifierRecipe.usage"
+
+            override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
+                if(args.length < 2)
+                    sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addSolidifierRecipe.usage")))
+                else {
+                    var outputStack : String = null
+                    if(args(1).split(":").nonEmpty) {
+                        outputStack = args(1)
+                        if(getItemStackFromString(outputStack) != null && getFluidFromString(args(0)) != null) {
+                            addRecipe(new SolidifierRecipe(args(0), "", outputStack))
+                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + outputStack + " Added Successfully"))
+                            saveToFile()
+                        } else
+                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + outputStack + " Failed to be added"))
+                    } else {
+                        if(!OreDictionary.getOres(args(1)).isEmpty && getFluidFromString(args(0)) != null) {
+                            addRecipe(new SolidifierRecipe(args(0), args(1), ""))
+                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + args(1) + " Added Successfully"))
+                            saveToFile()
+                        } else
+                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + outputStack + " Failed to be added"))
+                    }
+                }
+            }
+        }
+    }
 }
 
 
@@ -125,7 +166,7 @@ class SolidifierRegistry extends AbstractRecipeHandler[SolidifierRecipe, FluidSt
   *
   */
 class SolidifierRecipe(val input : String, val ore : String, val output : String)
-    extends AbstractRecipe[FluidStack, ItemStack] {
+        extends AbstractRecipe[FluidStack, ItemStack] {
     /**
       * Used to get the output of this recipe
       *
@@ -135,8 +176,15 @@ class SolidifierRecipe(val input : String, val ore : String, val output : String
     override def getOutput(fluidIn: FluidStack): Option[ItemStack] = {
         if(fluidIn == null)
             return None
-        if(getFluidFromString(input).isFluidEqual(fluidIn) && getFluidFromString(input).amount == fluidIn.amount)
-            return Option(getItemStackFromString(output))
+        if(getFluidFromString(input).isFluidEqual(fluidIn) && getFluidFromString(input).amount == fluidIn.amount) {
+            if(getItemStackFromString(output) != null)
+                return Option(getItemStackFromString(output))
+            else {
+                if(ore != null && !OreDictionary.getOres(ore).isEmpty) {
+                    return Option(OreDictionary.getOres(ore).get(0))
+                }
+            }
+        }
         None
     }
 

@@ -3,6 +3,7 @@ package com.dyonovan.neotech.managers
 import java.util
 
 import com.dyonovan.neotech.registries._
+import net.minecraft.command.ServerCommandManager
 
 /**
   * This file was created for NeoTech
@@ -16,6 +17,7 @@ import com.dyonovan.neotech.registries._
   */
 object RecipeManager {
     sealed trait RecipeType { def name : String }
+    case object FluidFuels extends RecipeType { val name = "fluidfuels" }
     case object Crucible extends RecipeType { val name = "crucible" }
     case object Solidifier extends RecipeType { val name = "solidifier" }
 
@@ -26,10 +28,18 @@ object RecipeManager {
     }
 
     def init() : Unit = {
-        recipeHandlers.put(Crucible,   new CrucibleRecipeRegistry().loadHandler())
-        recipeHandlers.put(Solidifier, new SolidifierRegistry().loadHandler())
+        recipeHandlers.put(Crucible,   new CrucibleRecipeManager().loadHandler())
+        recipeHandlers.put(Solidifier, new SolidifierRecipeManager().loadHandler())
+        recipeHandlers.put(FluidFuels, new FluidFuelRecipeHandler().loadHandler())
         CrusherRecipeRegistry.init()
-        FluidFuelValues.init()
+    }
+
+    def initCommands(manager : ServerCommandManager) : Unit = {
+        for(handlerType <- recipeHandlers.keySet().toArray) {
+            val command = recipeHandlers.get(handlerType.asInstanceOf[RecipeType]).getCommand
+            if(command != null)
+                manager.registerCommand(command)
+        }
     }
 
     /**
@@ -51,7 +61,7 @@ object RecipeManager {
       */
     def getHandler[H <: AbstractRecipeHandler[_, _, _]](name : String)  : Option[H] = {
         for(x <- recipeHandlers.keySet().toArray) {
-            val handler = recipeHandlers.get(x).asInstanceOf[RecipeType]
+            val handler = x.asInstanceOf[RecipeType]
             if(handler.name.equalsIgnoreCase(name))
                 return Option(recipeHandlers.get(handler).asInstanceOf[H])
         }

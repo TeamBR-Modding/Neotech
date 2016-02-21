@@ -6,6 +6,7 @@ import java.util
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import com.teambr.bookshelf.util.JsonUtils
+import net.minecraft.command.CommandBase
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
@@ -59,6 +60,12 @@ abstract class AbstractRecipeHandler[R <: AbstractRecipe[I, O], I, O] {
       * @return
       */
     def getTypeToken : TypeToken[util.ArrayList[R]]
+
+    /**
+      * Get the command to add values to the registry
+      * @return A new command
+      */
+    def getCommand : CommandBase
 
     /**
       * Called when the file is not found, add all default recipes here

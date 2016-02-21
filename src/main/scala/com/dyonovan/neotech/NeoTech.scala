@@ -10,12 +10,14 @@ import com.dyonovan.neotech.managers._
 import com.dyonovan.neotech.network.PacketDispatcher
 import com.dyonovan.neotech.registries._
 import com.dyonovan.neotech.world.{ChunkLoaderManager, NeotechWorldGenerator}
+import net.minecraft.command.ServerCommandManager
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
+import net.minecraft.server.MinecraftServer
 import net.minecraftforge.common.ForgeChunkManager
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fml.common.Mod.EventHandler
-import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.event.{FMLServerStartingEvent, FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent}
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.common.{Mod, SidedProxy}
@@ -86,5 +88,9 @@ object NeoTech {
     @EventHandler def postInit(event : FMLPostInitializationEvent) = {
         proxy.postInit()
         ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoaderManager)
+    }
+
+    @EventHandler def serverLoad(event : FMLServerStartingEvent): Unit = {
+        RecipeManager.initCommands(MinecraftServer.getServer.getCommandManager.asInstanceOf[ServerCommandManager])
     }
  }
