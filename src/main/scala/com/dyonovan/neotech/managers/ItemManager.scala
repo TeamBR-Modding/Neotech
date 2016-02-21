@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.items._
+import com.dyonovan.neotech.common.items.tools.ElectricPickaxe
 import net.minecraft.item.{ItemStack, Item}
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -37,6 +38,9 @@ object ItemManager {
     val advancedRFBattery = new RFBattery("advancedRFBattery", 2)
     val eliteRFBattery = new RFBattery("eliteRFBattery", 3)
 
+    //Electric Tools
+    val electricPickaxe = new ElectricPickaxe
+
     def preInit(): Unit = {
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
         registerItem(upgradeMBFull, "upgradeMBFull")
@@ -55,10 +59,12 @@ object ItemManager {
         registerItem(basicRFBattery, "basicRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
         registerItem(advancedRFBattery, "advancedRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
         registerItem(eliteRFBattery, "eliteRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
+
+        registerItem(electricPickaxe, "electricPickaxe")
     }
     /**
      * Helper method to register items
- *
+     *
      * @param item The item to register
      * @param name The name of the item
      * @param oreDict The ore dict tag
