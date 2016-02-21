@@ -3,6 +3,7 @@ package com.dyonovan.neotech.registries
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.oredict.OreDictionary
 
 /**
   * This file was created for NeoTech
@@ -88,4 +89,6 @@ abstract class AbstractRecipe[I, O] {
     def getFluidFromString(string : String) : FluidStack = {
         FluidRegistry.getFluidStack(string.split(":")(0), string.split(":")(1).toInt)
     }
+
+
 }
