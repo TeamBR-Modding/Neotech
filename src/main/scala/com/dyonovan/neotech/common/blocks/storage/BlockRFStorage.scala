@@ -7,20 +7,18 @@ import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
 import com.dyonovan.neotech.lib.Reference
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
+import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
-import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.BlockPos
+import net.minecraft.util.{BlockPos, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-
-import scala.util.Random
 
 /**
  * This file was created for NeoTech
@@ -45,11 +43,12 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
                     val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
                     val tag = new NBTTagCompound
                     tile.writeToNBT(tag)
+                    tag.setInteger("Energy", tile.getEnergyStored(EnumFacing.UP))
                     item.setTagCompound(tag)
                     val r = tile.getEnergyStored(null).toFloat / tile.getMaxEnergyStored(null)
                     val res = 16 - (r * 16).toInt
                     item.setItemDamage(res)
-                    dropItem(world, item, pos) //Drop it
+                    WorldUtils.dropStack(world, item, pos) //Drop it
                 case _ =>
             }
         } else {
@@ -60,8 +59,10 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:
     ItemStack): Unit = {
         if(stack.hasTagCompound && !world.isRemote) { //If there is a tag and is on the server
-            world.getTileEntity(pos).asInstanceOf[TileRFStorage].energyStorage.setEnergyStored(stack.getTagCompound
-                    .getInteger("Energy"))
+            val tile = world.getTileEntity(pos).asInstanceOf[TileRFStorage]
+            tile.writeToNBT(stack.getTagCompound)
+            if (stack.getTagCompound.hasKey("Energy"))
+                tile.energyStorage.setEnergyStored(stack.getTagCompound.getInteger("Energy"))
             world.markBlockForUpdate(pos)
         }
     }
@@ -97,29 +98,4 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
     def getName: String = name
 
     def getTier: Int = tier
-
-    private def dropItem(world: World, stack: ItemStack, pos: BlockPos): Unit = {
-        val random = new Random
-        if (stack != null && stack.stackSize > 0) {
-            val rx = random.nextFloat * 0.8F + 0.1F
-            val ry = random.nextFloat * 0.8F + 0.1F
-            val rz = random.nextFloat * 0.8F + 0.1F
-
-            val itemEntity = new EntityItem(world,
-                pos.getX + rx, pos.getY + ry, pos.getZ + rz,
-                new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
-
-            if (stack.hasTagCompound)
-                itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
-
-            val factor = 0.05F
-
-            itemEntity.motionX = random.nextGaussian * factor
-            itemEntity.motionY = random.nextGaussian * factor + 0.2F
-            itemEntity.motionZ = random.nextGaussian * factor
-            world.spawnEntityInWorld(itemEntity)
-
-            stack.stackSize = 0
-        }
-    }
 }

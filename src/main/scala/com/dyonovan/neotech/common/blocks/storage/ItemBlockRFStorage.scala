@@ -1,8 +1,8 @@
 package com.dyonovan.neotech.common.blocks.storage
 
-import cofh.api.energy.IEnergyContainerItem
 import com.dyonovan.neotech.managers.BlockManager
 import com.teambr.bookshelf.client.gui.GuiColor
+import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemBlock, ItemStack}
@@ -19,12 +19,16 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 16, 2015
  */
-class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with IEnergyContainerItem {
+class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with ItemBattery {
 
     setNoRepair()
     setMaxStackSize(1)
-    setMaxDamage(16)
     setHasSubtypes(true)
+
+    val info = getEnergyInfo
+    override var capacity: Int = info._2
+    override var maxExtract: Int = info._2
+    override var maxReceive: Int = info._2
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
@@ -37,48 +41,6 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with IEnergyCont
         }
     }
 
-    private def setEnergy(container: ItemStack, energy: Int): Unit = {
-        var tag = new NBTTagCompound
-        if (container.getTagCompound != null)
-            tag = container.getTagCompound
-        tag.setInteger("Energy", energy)
-
-        container.setTagCompound(tag)
-        updateDamage(container)
-    }
-
-    private def updateDamage(stack: ItemStack): Unit = {
-        val r = getEnergyStored(stack).toFloat / getMaxEnergyStored(stack)
-        val res = 16 - (r * 16).toInt
-        stack.setItemDamage(res)
-    }
-
-    override def extractEnergy(container: ItemStack, maxExtract: Int, simulate: Boolean): Int = {
-        var energy = container.getTagCompound.getInteger("Energy")
-        val energyExtracted = Math.min(energy, Math.min(getEnergyInfo._3, maxExtract))
-
-        if (!simulate) {
-            energy -= energyExtracted
-            setEnergy(container, energy)
-        }
-        energyExtracted
-    }
-
-    override def getEnergyStored(container: ItemStack): Int = container.getTagCompound.getInteger("Energy")
-
-    override def getMaxEnergyStored(container: ItemStack): Int = getEnergyInfo._2
-
-    override def receiveEnergy(container: ItemStack, maxReceive: Int, simulate: Boolean): Int = {
-        var energy = container.getTagCompound.getInteger("Energy")
-        val energyReceived = Math.min(getEnergyInfo._2 - energy, Math.min(getEnergyInfo._3, maxReceive))
-
-        if (!simulate) {
-            energy += energyReceived
-            setEnergy(container, energy)
-        }
-        energyReceived
-    }
-
     private def getEnergyInfo: (Int, Int, Int) = {
         block match {
             case BlockManager.basicRFStorage => (1, 25000, 200)
@@ -89,3 +51,4 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with IEnergyCont
         }
     }
 }
+
