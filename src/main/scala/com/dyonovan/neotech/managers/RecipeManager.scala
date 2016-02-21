@@ -20,6 +20,7 @@ object RecipeManager {
     case object FluidFuels extends RecipeType { val name = "fluidfuels" }
     case object Crucible extends RecipeType { val name = "crucible" }
     case object Solidifier extends RecipeType { val name = "solidifier" }
+    case object Alloyer extends RecipeType { val name = "alloyer" }
 
     lazy val recipeHandlers = new util.HashMap[RecipeType, AbstractRecipeHandler[_, _, _]]()
 
@@ -31,6 +32,7 @@ object RecipeManager {
         recipeHandlers.put(Crucible,   new CrucibleRecipeManager().loadHandler())
         recipeHandlers.put(Solidifier, new SolidifierRecipeManager().loadHandler())
         recipeHandlers.put(FluidFuels, new FluidFuelRecipeHandler().loadHandler())
+        recipeHandlers.put(Alloyer,    new AlloyerRecipeHandler().loadHandler())
         CrusherRecipeRegistry.init()
     }
 
