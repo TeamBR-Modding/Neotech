@@ -3,12 +3,13 @@ package com.dyonovan.neotech.common.tiles.machines.processors
 import com.dyonovan.neotech.client.gui.machines.processors.GuiElectricCrusher
 import com.dyonovan.neotech.common.container.machines.processors.ContainerElectricCrusher
 import com.dyonovan.neotech.common.tiles.MachineProcessor
-import com.dyonovan.neotech.registries.CrusherRecipeRegistry
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.dyonovan.neotech.managers.RecipeManager
+import com.dyonovan.neotech.registries.CrusherRecipeHandler
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{StatCollector, EnumFacing, EnumParticleTypes}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes, StatCollector}
 import net.minecraft.world.World
 
 import scala.util.Random
@@ -143,7 +144,7 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
       * Used to get the recipe for the crusher
       */
     def recipeCrusher(stack: ItemStack): (ItemStack, ItemStack, Int) = {
-        CrusherRecipeRegistry.getOutput(stack).orNull
+        RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).getOutput(stack).orNull
     }
 
     /**

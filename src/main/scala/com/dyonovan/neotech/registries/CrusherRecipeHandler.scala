@@ -9,6 +9,7 @@ import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.command.CommandBase
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
+import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -21,7 +22,7 @@ import net.minecraftforge.oredict.OreDictionary
   * @author Dyonovan
   * @since 2/21/2016
   */
-class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemStack, ItemStack] {
+class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemStack, (ItemStack, ItemStack, Int)] {
     /**
       * Used to get the base name of the files
       *
@@ -71,14 +72,14 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
                 val oreList = OreDictionary.getOres(i.replaceFirst("dust", "ore"))
                 if (!oreList.isEmpty) {
                     val itemList = OreDictionary.getOres(i)
-                    if (itemList.size() > 0 && !RecipeManager.getHandler[CrusherRecipes](RecipeManager.Crusher).doesExist(i.replaceFirst("dust", "ore")))
+                    if (itemList.size() > 0 && !doesExist(i.replaceFirst("dust", "ore")))
                         addCrusherRecipes(i.replaceFirst("dust", "ore"),
                             getItemStackString(new ItemStack(itemList.get(0).getItem, 1,
                                 itemList.get(0).getItemDamage)), 2, "", 0)
                 }
             } else if (i.startsWith("ingot")) {
                 val oreList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
-                if (!oreList.isEmpty && !RecipeManager.getHandler[CrusherRecipes](RecipeManager.Crusher).doesExist(i.replaceFirst("ingot", "dust"))) {
+                if (!oreList.isEmpty && !doesExist(i.replaceFirst("ingot", "dust"))) {
                     val itemList = OreDictionary.getOres(i.replaceFirst("ingot", "dust"))
                     if (itemList.size() > 0) {
                         addCrusherRecipes(i, getItemStackString(
@@ -88,7 +89,7 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
             }
         }
         saveToFile()
-        LogHelper.info("Finished adding " + RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).recipes.size() + " Crusher Recipes")
+        LogHelper.info("Finished adding " + recipes.size() + " Crusher Recipes")
     }
 
     def addCrusherRecipes(s1: String, s2: String, i1: Int, s3: String, i2: Int) : Unit = {
@@ -138,10 +139,13 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
         }
     }
 
-    def getCrusherRecipes: java.util.ArrayList[CrusherRecipes] = {
-        recipes
+    def doesExist(stack: String): Boolean = {
+        for (i <- recipes.toArray()) {
+            val recipe = i.asInstanceOf[CrusherRecipes]
+            if (stack.equalsIgnoreCase(recipe.input)) return true
+        }
+        false
     }
-
 }
 
 class CrusherRecipes(val input: String, val output: String, val qty: Int, val outputSecondary: String, val percentChance: Int)
@@ -187,14 +191,6 @@ class CrusherRecipes(val input: String, val output: String, val qty: Int, val ou
       */
     override def isValidInput(input: ItemStack): Boolean = getOutput(input).isDefined
 
-    def doesExist(stack: String): Boolean = {
-        for (i <- RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).recipes.toArray()) {
-            val recipe = i.asInstanceOf[CrusherRecipes]
-            if (stack.equalsIgnoreCase(recipe.input)) return true
-        }
-        false
-    }
-
     /**
       * Get the oreDict tag for an item
       *
@@ -213,5 +209,19 @@ class CrusherRecipes(val input: String, val output: String, val qty: Int, val ou
             }
         }
         false
+    }
+
+    override def getItemStackFromString(item: String): ItemStack = {
+        if(item == null || item == "")
+            return null
+        val name: Array[String] = item.split(":")
+        name.length match {
+            case 3 =>
+                new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
+            case 1 =>
+                val itemList = OreDictionary.getOres(name(0), false)
+                itemList.get(0)
+            case _ => null
+        }
     }
 }

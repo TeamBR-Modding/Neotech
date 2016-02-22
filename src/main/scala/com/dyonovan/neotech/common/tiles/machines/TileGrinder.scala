@@ -1,9 +1,8 @@
 package com.dyonovan.neotech.common.tiles.machines
 
-import com.dyonovan.neotech.registries.CrusherRecipeRegistry
+import com.dyonovan.neotech.managers.RecipeManager
+import com.dyonovan.neotech.registries.CrusherRecipeHandler
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
-import com.teambr.bookshelf.network.PacketManager
-import mezz.jei.network.PacketHandler
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -67,7 +66,7 @@ class TileGrinder extends UpdatingTile with Inventory {
     }
 
     def hasOutputAvailable : Boolean = {
-        val output = CrusherRecipeRegistry.getOutput(getStackInSlot(3)).get._1
+        val output = RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).getOutput(getStackInSlot(3)).get._1
         for(x <- 4 until 7) {
             if(getStackInSlot(x) != null && getStackInSlot(x).stackSize <= getStackInSlot(x).getMaxStackSize &&
                     getStackInSlot(x).getItem == output.getItem &&
@@ -75,7 +74,7 @@ class TileGrinder extends UpdatingTile with Inventory {
                     getStackInSlot(x).stackSize + output.stackSize <= getStackInSlot(x).getMaxStackSize) {
                 return true
             }
-
+            RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher)
         }
         for(x <- 4 until 7) { //We only want to do this is we have to, merge first if you can
             if (getStackInSlot(x) == null)
@@ -85,7 +84,7 @@ class TileGrinder extends UpdatingTile with Inventory {
     }
 
     def grindItem() : Unit = {
-        val output = CrusherRecipeRegistry.getOutput(getStackInSlot(3)).get._1
+        val output = RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).getOutput(getStackInSlot(3)).get._1
         for(x <- 4 until 7) {
             if(getStackInSlot(x) != null && getStackInSlot(x).stackSize <= getStackInSlot(x).getMaxStackSize &&
                     getStackInSlot(x).getItem == output.getItem &&
@@ -111,7 +110,7 @@ class TileGrinder extends UpdatingTile with Inventory {
 
     override def isItemValidForSlot(index : Int, stack : ItemStack) : Boolean = {
         if(index < 3)
-            CrusherRecipeRegistry.isItemValid(stack)
+            RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).isValidInput(stack)
         else
             false
     }
