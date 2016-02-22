@@ -16,7 +16,7 @@ import java.util.Collections
   * @author Dyonovan
   * @since 2/20/2016
   */
-class SolidiferRecipeJEI(fluid: FluidStack, amount: Int, output: ItemStack) extends BlankRecipeWrapper {
+class JEISolidifierRecipe(fluid: FluidStack, ore: String, output: ItemStack) extends BlankRecipeWrapper {
 
 
 
@@ -24,6 +24,6 @@ class SolidiferRecipeJEI(fluid: FluidStack, amount: Int, output: ItemStack) exte
 
     override def getOutputs: java.util.List[ItemStack] = Collections.singletonList(output)
 
-    def getMode: Int = amount
+    def getAmount: String = ore
 
 }

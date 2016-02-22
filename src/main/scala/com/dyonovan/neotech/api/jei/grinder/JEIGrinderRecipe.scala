@@ -11,7 +11,7 @@ import net.minecraft.util.StatCollector
 /**
   * Created by Dyonovan on 1/16/2016.
   */
-class GrinderRecipeJEI(in: ItemStack, out: ItemStack) extends BlankRecipeWrapper {
+class JEIGrinderRecipe(in: ItemStack, out: ItemStack) extends BlankRecipeWrapper {
 
     var input: ItemStack = in
     var output: ItemStack = out

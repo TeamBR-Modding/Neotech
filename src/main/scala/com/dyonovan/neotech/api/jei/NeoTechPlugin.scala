@@ -3,8 +3,9 @@ package com.dyonovan.neotech.api.jei
 import java.awt.Rectangle
 import java.util
 
-import com.dyonovan.neotech.api.jei.crusher.{CrusherRecipeCategory, CrusherRecipeHandlerJEI, CrusherRecipeMaker}
-import com.dyonovan.neotech.api.jei.grinder.{GrinderRecipeMaker, GrinderRecipeHandler, GrinderRecipeCategory}
+import com.dyonovan.neotech.api.jei.crusher.{JEICrusherRecipeCategory, JEICrusherRecipeHandler, JEICrusherRecipeMaker}
+import com.dyonovan.neotech.api.jei.grinder.{JEIGrinderRecipeMaker, JEIGrinderRecipeHandler, JEIGrinderRecipeCategory}
+import com.dyonovan.neotech.api.jei.solidifier.{JEISolidifierRecipeMaker, JEISolidifierRecipeHandler, JEISolidifierRecipeCategory}
 import com.dyonovan.neotech.common.container.misc.ContainerCrafter
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.teambr.bookshelf.client.gui.GuiBase
@@ -29,11 +30,12 @@ class NeoTechPlugin extends IModPlugin {
         //Crafter Shift Right Click
         registry.getRecipeTransferRegistry.addRecipeTransferHandler(classOf[ContainerCrafter], VanillaRecipeCategoryUid.CRAFTING,  2, 9, 20, 36)
 
-        registry.addRecipeCategories(new CrusherRecipeCategory, new GrinderRecipeCategory)
-        registry.addRecipeHandlers(new CrusherRecipeHandlerJEI, new GrinderRecipeHandler)
+        registry.addRecipeCategories(new JEICrusherRecipeCategory, new JEIGrinderRecipeCategory, new JEISolidifierRecipeCategory)
+        registry.addRecipeHandlers(new JEICrusherRecipeHandler, new JEIGrinderRecipeHandler, new JEISolidifierRecipeHandler)
 
-        registry.addRecipes(CrusherRecipeMaker.getRecipes)
-        registry.addRecipes(GrinderRecipeMaker.getRecipes)
+        registry.addRecipes(JEICrusherRecipeMaker.getRecipes)
+        registry.addRecipes(JEIGrinderRecipeMaker.getRecipes)
+        registry.addRecipes(JEISolidifierRecipeMaker.getRecipes)
 
         registry.addAdvancedGuiHandlers(new IAdvancedGuiHandler[GuiBase[_]] {
             override def getGuiContainerClass: Class[GuiBase[_]] = classOf[GuiBase[_]]

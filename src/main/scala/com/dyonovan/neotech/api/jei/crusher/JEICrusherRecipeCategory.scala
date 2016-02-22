@@ -11,9 +11,9 @@ import net.minecraft.util.{ResourceLocation, StatCollector}
 /**
   * Created by Dyonovan on 1/13/2016.
   */
-class CrusherRecipeCategory extends IRecipeCategory {
+class JEICrusherRecipeCategory extends IRecipeCategory {
 
-    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/nei/crusher.png")
+    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/crusher.png")
     val arrow = NeoTechPlugin.jeiHelpers.getGuiHelper.createAnimatedDrawable(
         NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 176, 14, 24, 17), 75, IDrawableAnimated.StartDirection.LEFT, false)
     val power = NeoTechPlugin.jeiHelpers.getGuiHelper.createAnimatedDrawable(
@@ -29,7 +29,7 @@ class CrusherRecipeCategory extends IRecipeCategory {
         stacks.init(2, false, 125, 20)
 
         recipeWrapper match {
-            case crusherRecipeWrapper: CrusherRecipeJEI =>
+            case crusherRecipeWrapper: JEICrusherRecipe =>
                 recipeLayout.getItemStacks.set(0, crusherRecipeWrapper.getInputs)
                 recipeLayout.getItemStacks.set(1, crusherRecipeWrapper.getOutputs.get(0))
                 recipeLayout.getItemStacks.set(2, crusherRecipeWrapper.getOutputs.get(1))

@@ -10,9 +10,9 @@ import net.minecraft.util.{ResourceLocation, StatCollector}
 /**
   * Created by Dyonovan on 1/16/2016.
   */
-class GrinderRecipeCategory extends IRecipeCategory {
+class JEIGrinderRecipeCategory extends IRecipeCategory {
 
-    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/nei/grinder.png")
+    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/grinder.png")
 
     override def getBackground: IDrawable = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 0, 0, 170, 60)
 
@@ -23,7 +23,7 @@ class GrinderRecipeCategory extends IRecipeCategory {
         stacks.init(1, false, 66, 30)
 
         recipeWrapper match {
-            case grinderRecipeWrapper: GrinderRecipeJEI =>
+            case grinderRecipeWrapper: JEIGrinderRecipe =>
                 recipeLayout.getItemStacks.set(0, grinderRecipeWrapper.getInputs)
                 recipeLayout.getItemStacks.set(1, grinderRecipeWrapper.getOutputs)
             case _ =>
