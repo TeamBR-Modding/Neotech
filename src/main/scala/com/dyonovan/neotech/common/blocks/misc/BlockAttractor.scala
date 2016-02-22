@@ -10,8 +10,8 @@ import net.minecraft.block.properties.PropertyDirection
 import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{BlockPos, EnumFacing}
-import net.minecraft.world.World
+import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing}
+import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -24,7 +24,7 @@ object BlockAttractor {
 class BlockAttractor extends BaseBlock(Material.portal, "blockAttractor", classOf[TileAttractor]) with OpensGui {
 
     setDefaultState(this.blockState.getBaseState
-          .withProperty(BlockAttractor.DIR, EnumFacing.UP))
+            .withProperty(BlockAttractor.DIR, EnumFacing.UP))
 
     override def getRenderType: Int = 3
 
@@ -49,6 +49,30 @@ class BlockAttractor extends BaseBlock(Material.portal, "blockAttractor", classO
 
     override def getMetaFromState(state: IBlockState): Int = {
         state.getValue(BlockAttractor.DIR).ordinal()
+    }
+
+    override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos): Unit = {
+        var minX = 5 / 16F
+        var minY = 5 / 16F
+        var minZ = 5 / 16F
+        var maxX = 11 / 16F
+        var maxY = 11 / 16F
+        var maxZ = 11 / 16F
+
+        val state = worldIn.getBlockState(pos)
+        val side = state.getValue(BlockAttractor.DIR)
+
+        side match {
+            case EnumFacing.UP      => minY = 0F
+            case EnumFacing.DOWN    => maxY = 1F
+            case EnumFacing.EAST    => minX = 0F
+            case EnumFacing.WEST    => maxX = 1F
+            case EnumFacing.NORTH   => maxZ = 1F
+            case EnumFacing.SOUTH   => minZ = 0F
+            case _ =>
+        }
+
+        setBlockBounds(minX, minY, minZ, maxX, maxY, maxZ)
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {

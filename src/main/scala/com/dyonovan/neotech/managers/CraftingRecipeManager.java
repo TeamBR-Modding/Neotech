@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.managers;
 
+import com.dyonovan.neotech.common.tiles.machines.processors.TileSolidifier;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -40,6 +41,30 @@ public class CraftingRecipeManager {
                 "ABA",
                 "DCD",
                 "ABA", 'A', "ingotTin", 'B', Items.flint, 'C', Blocks.piston, 'D', Items.redstone));
+
+        //Electric Solidifier
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricSolidifier()),
+                "SRS",
+                "BTB",
+                "SRS", 'T', BlockManager.ironTank(), 'S', "ingotLead", 'B', Items.snowball, 'R', Items.redstone));
+
+        //Electric Crucible
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCrucible()),
+                "SRS",
+                "BCB",
+                "SRS", 'C', Items.cauldron, 'S', "ingotCopper", 'B', Items.bucket, 'R', Items.redstone));
+
+        //Electric Alloyer
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricAlloyer()),
+                "BLB",
+                "TRT",
+                "BLB", 'B', "ingotBronze", 'L', "ingotSilver", 'T', BlockManager.ironTank(), 'R', Blocks.redstone_block));
+
+        //Electric Centrifuge
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCentrifuge()),
+                "SRS",
+                "TIT",
+                "SRS", 'S', "ingotSteel", 'R', Blocks.redstone_block, 'T', BlockManager.ironTank(), 'I', Blocks.iron_block));
 
         //Furnace Generator
         GameRegistry.addRecipe(new ItemStack(BlockManager.furnaceGenerator()),
@@ -288,17 +313,7 @@ public class CraftingRecipeManager {
                 "DBD",
                 "DLD", 'S', "ingotSilver", 'L', "ingotLead", 'D', Items.diamond, 'B', new ItemStack(ItemManager.advancedRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
 
-        //Electric Solidifier
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricSolidifier()),
-                "SRS",
-                "BTB",
-                "SRS", 'T', BlockManager.ironTank(), 'S', "ingotSteel", 'B', Items.snowball, 'R', Items.redstone));
 
-        //Electric Crucible
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCrucible()),
-                "SRS",
-                "BCB",
-                "SRS", 'C', Items.cauldron, 'S', "ingotSteel", 'B', Items.bucket, 'R', Items.redstone));
 
         GameRegistry.addRecipe(new ShapelessOreRecipe(MetalManager.getMetal("bronze").get().dust().get(),
                 "dustCopper", "dustCopper", "dustCopper", "dustTin"));
@@ -306,7 +321,5 @@ public class CraftingRecipeManager {
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.iron_ingot), 1.0F);
-        //Temp Recipe TODO REMOVE
-        GameRegistry.addSmelting(Items.iron_ingot, new ItemStack(MetalManager.getMetal("steel").get().ingot().get()), 0.0F);
     }
 }
