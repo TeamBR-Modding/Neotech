@@ -68,6 +68,7 @@ object ItemRenderManager {
         registerItem(ItemManager.basicRFBattery)
         registerItem(ItemManager.advancedRFBattery)
         registerItem(ItemManager.eliteRFBattery)
+        registerItem(ItemManager.electricPickaxe)
 
         registerPipesAndColored()
     }

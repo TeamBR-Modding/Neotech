@@ -153,6 +153,7 @@ item.neotech:spawnerMover.name=Spawner Relocator
 item.neotech:mobGun.name=Net Launcher
 item.neotech:mobNet.name=Mob Net
 item.neotech:electroMagnet.name=Electromagnet
+item.neotech:electricPickaxe.name=Electric Pickaxe
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery

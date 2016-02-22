@@ -318,6 +318,12 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapelessOreRecipe(MetalManager.getMetal("bronze").get().dust().get(),
                 "dustCopper", "dustCopper", "dustCopper", "dustTin"));
 
+        //RF Tools
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricPickaxe()),
+                "CCC",
+                " S ",
+                " B ", 'C', "ingotCopper", 'S', "stickWood", 'B', "rfBattery"));
+
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.iron_ingot), 1.0F);

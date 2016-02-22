@@ -20,18 +20,7 @@ object OnCraftedEvent {
 
     @SubscribeEvent
     def onCrafted(event: PlayerEvent.ItemCraftedEvent): Unit = {
-        if (event.craftMatrix.getStackInSlot(4) != null && event.craftMatrix.getStackInSlot(4).hasTagCompound) {
-            if (event.crafting.getItem == Item.getItemFromBlock(BlockManager.advancedRFStorage) ||
-              event.crafting.getItem == Item.getItemFromBlock(BlockManager.eliteRFStorage) ||
-              event.crafting.getItem == Item.getItemFromBlock(BlockManager.goldTank) ||
-              event.crafting.getItem == Item.getItemFromBlock(BlockManager.diamondTank) ||
-              event.crafting.getItem == ItemManager.advancedRFBattery ||
-              event.crafting.getItem == ItemManager.eliteRFBattery) {
-                val tag = event.craftMatrix.getStackInSlot(4).getTagCompound
-                tag.setInteger("Tier", tag.getInteger("Tier") + 1)
-                event.crafting.setTagCompound(tag)
-            }
-        }
+        // Mob Gun
         if (event.crafting.getItem == ItemManager.mobGun) {
             val tag = new NBTTagCompound
             var tier = 1
@@ -44,6 +33,34 @@ object OnCraftedEvent {
                 tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
             tag.setInteger("Tier", tier)
             event.crafting.setTagCompound(tag)
+            return
+        }
+        //Electric Tools
+        if (event.crafting.getItem == ItemManager.electricPickaxe) {
+            val tag = new NBTTagCompound
+            var tier = 1
+            event.craftMatrix.getStackInSlot(4).getItem match {
+                case ItemManager.basicRFBattery => tier = 1
+                case ItemManager.advancedRFBattery => tier = 2
+                case ItemManager.eliteRFBattery => tier = 3
+            }
+            if (event.craftMatrix.getStackInSlot(4).hasTagCompound && event.craftMatrix.getStackInSlot(4).getTagCompound.hasKey("Energy"))
+                tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
+            tag.setInteger("Tier", tier)
+            event.crafting.setTagCompound(tag)
+            return
+        }
+        if (event.craftMatrix.getStackInSlot(4) != null && event.craftMatrix.getStackInSlot(4).hasTagCompound) {
+            if (event.crafting.getItem == Item.getItemFromBlock(BlockManager.advancedRFStorage) ||
+              event.crafting.getItem == Item.getItemFromBlock(BlockManager.eliteRFStorage) ||
+              event.crafting.getItem == Item.getItemFromBlock(BlockManager.goldTank) ||
+              event.crafting.getItem == Item.getItemFromBlock(BlockManager.diamondTank) ||
+              event.crafting.getItem == ItemManager.advancedRFBattery ||
+              event.crafting.getItem == ItemManager.eliteRFBattery) {
+                val tag = event.craftMatrix.getStackInSlot(4).getTagCompound
+                tag.setInteger("Tier", tag.getInteger("Tier") + 1)
+                event.crafting.setTagCompound(tag)
+            }
         }
     }
 }
