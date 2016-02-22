@@ -1,12 +1,12 @@
-package com.dyonovan.neotech.api.jei.solidifier
+package com.dyonovan.neotech.api.jei.crucible
 
 import java.awt.Color
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
-import com.dyonovan.neotech.api.jei.drawables._
+import com.dyonovan.neotech.api.jei.drawables.{GuiComponentBox, GuiComponentPowerBarJEI, GuiComponentArrowJEI, SlotDrawable}
 import com.dyonovan.neotech.lib.Reference
-import mezz.jei.api.gui._
-import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
+import mezz.jei.api.gui.{IDrawable, IRecipeLayout}
+import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeCategory}
 import net.minecraft.client.Minecraft
 import net.minecraft.util.{ResourceLocation, StatCollector}
 
@@ -18,32 +18,31 @@ import net.minecraft.util.{ResourceLocation, StatCollector}
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
   * @author Dyonovan
-  * @since 2/21/2016
+  * @since 2/22/2016u
   */
-class JEISolidifierRecipeCategory extends IRecipeCategory {
+class JEICrucibleRecipeCategory extends IRecipeCategory {
 
     val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png")
-    val arrow = new GuiComponentArrowJEI(97, 17)
+    val input = new SlotDrawable(56, 17)
+    val arrow = new GuiComponentArrowJEI(81, 17)
     val power = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0)) {
         addColor(new Color(255, 150, 0))
         addColor(new Color(255, 255, 0))
     }
-    val slotOutput = new SlotDrawable(133, 17)
-    val tank = new GuiComponentBox(35, 0, 50, 60)
+    val tank = new GuiComponentBox(115, 0, 50, 60)
 
     override def getBackground: IDrawable = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 0, 0, 170, 60)
 
     override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper): Unit = {
-
-        val fluidStack: IGuiFluidStackGroup = recipeLayout.getFluidStacks
-        val itemStack: IGuiItemStackGroup = recipeLayout.getItemStacks
-        fluidStack.init(0, true, 36, 0, 48, 59, 2000, false, null)
-        itemStack.init(0, false, 133, 17)
+        val fluidStack = recipeLayout.getFluidStacks
+        val itemStack = recipeLayout.getItemStacks
+        fluidStack.init(0, false, 116, 0, 48, 59, 2000, false, null)
+        itemStack.init(0, true, 56, 17)
 
         recipeWrapper match {
-            case solidifierRecipeWrapper: JEISolidifierRecipe =>
-                recipeLayout.getFluidStacks.set(0, solidifierRecipeWrapper.getFluidInputs)
-                recipeLayout.getItemStacks.set(0, solidifierRecipeWrapper.getOutputs)
+            case crucible: JEICrucibleRecipe =>
+                recipeLayout.getFluidStacks.set(0, crucible.getFluidOutputs)
+                recipeLayout.getItemStacks.set(0, crucible.getInputs)
             case _ =>
         }
     }
@@ -54,11 +53,11 @@ class JEISolidifierRecipeCategory extends IRecipeCategory {
     }
 
     override def drawExtras(minecraft: Minecraft): Unit = {
-        slotOutput.draw(minecraft)
+        input.draw(minecraft)
         tank.draw(minecraft)
     }
 
-    override def getTitle: String = StatCollector.translateToLocal("tile.neotech:electricSolidifier.name")
+    override def getTitle: String = StatCollector.translateToLocal("tile.neotech:electricCrucible.name")
 
-    override def getUid: String = Reference.MOD_ID + ":solidifier"
+    override def getUid: String = Reference.MOD_ID + ":crucible"
 }

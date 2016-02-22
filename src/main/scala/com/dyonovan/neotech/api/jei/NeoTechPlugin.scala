@@ -3,6 +3,7 @@ package com.dyonovan.neotech.api.jei
 import java.awt.Rectangle
 import java.util
 
+import com.dyonovan.neotech.api.jei.crucible.{JEICrucibleRecipeMaker, JEICrucibleRecipeHandler, JEICrucibleRecipeCategory}
 import com.dyonovan.neotech.api.jei.crusher.{JEICrusherRecipeCategory, JEICrusherRecipeHandler, JEICrusherRecipeMaker}
 import com.dyonovan.neotech.api.jei.grinder.{JEIGrinderRecipeMaker, JEIGrinderRecipeHandler, JEIGrinderRecipeCategory}
 import com.dyonovan.neotech.api.jei.solidifier.{JEISolidifierRecipeMaker, JEISolidifierRecipeHandler, JEISolidifierRecipeCategory}
@@ -29,12 +30,21 @@ class NeoTechPlugin extends IModPlugin {
     override def register(registry: IModRegistry): Unit = {
         //Crafter Shift Right Click
         registry.getRecipeTransferRegistry.addRecipeTransferHandler(classOf[ContainerCrafter], VanillaRecipeCategoryUid.CRAFTING,  2, 9, 20, 36)
-        registry.addRecipeCategories(new JEICrusherRecipeCategory, new JEIGrinderRecipeCategory, new JEISolidifierRecipeCategory)
-        registry.addRecipeHandlers(new JEICrusherRecipeHandler, new JEIGrinderRecipeHandler, new JEISolidifierRecipeHandler)
+        registry.addRecipeCategories(
+            new JEICrusherRecipeCategory,
+            new JEIGrinderRecipeCategory,
+            new JEISolidifierRecipeCategory,
+            new JEICrucibleRecipeCategory)
+        registry.addRecipeHandlers(
+            new JEICrusherRecipeHandler,
+            new JEIGrinderRecipeHandler,
+            new JEISolidifierRecipeHandler,
+            new JEICrucibleRecipeHandler)
 
         registry.addRecipes(JEICrusherRecipeMaker.getRecipes)
         registry.addRecipes(JEIGrinderRecipeMaker.getRecipes)
         registry.addRecipes(JEISolidifierRecipeMaker.getRecipes)
+        registry.addRecipes(JEICrucibleRecipeMaker.getRecipes)
 
         registry.addAdvancedGuiHandlers(new IAdvancedGuiHandler[GuiBase[_]] {
             override def getGuiContainerClass: Class[GuiBase[_]] = classOf[GuiBase[_]]
