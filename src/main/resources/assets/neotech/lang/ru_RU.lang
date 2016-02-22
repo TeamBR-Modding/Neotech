@@ -101,6 +101,16 @@ fluid.dirtyiron.name=Грязное расплавленное железо
 tile.fluid.iron.name=Расплавленное железо
 tile.fluid.dirtyiron.name=Грязное расплавленное железо
 
+# Carbon
+fluid.carbon=Расплавленный углерод
+fluid.carbon.name=Расплавленный углерод
+tile.fluid.carbon.name=Расплавленный углерод
+
+# Obsidian
+fluid.obsidian=Расплавленный обсидиан
+fluid.obsidian.name=Расплавленный обсидиан
+tile.fluid.obsidian.name=Расплавленный обсидиан
+
 #######################
 # Items
 #######################
@@ -161,6 +171,8 @@ tile.neotech:thermalBinder.name=Паяльная станция
 tile.neotech:grinder.name=Дробилка
 tile.neotech:electricCrucible.name=Электро тигель
 tile.neotech:electricSolidifier.name=Электро отвердитель
+tile.neotech:alloyer.name=Электро смеситель
+tile.neotech:centrifuge.name=Электро центрифуга
 
 # Generators
 tile.neotech:furnaceGenerator.name=Генератор
@@ -252,6 +264,12 @@ neotech.crucible.title=Электро тигель
 
 # Solidifier
 neotech.electricSolidifier.title=Электро отвердитель
+
+# Alloyer
+neotech.alloyer.title=Электро смеситель
+
+# Centrifuge
+neotech.centrifuge.title=Электро центрифуга
 
 # Furnace Generator
 neotech.furnacegenerator.title=Генератор
@@ -362,9 +380,11 @@ neotech.text.renderNameInfo=Показывать имя (Nametag Mob / Anvil Net
 #######################
 # Commands
 #######################
-commands.addCrucibleRecipe.usage=Usage: input<ItemStack (format : MODID:ITEMID:META or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)>
-commands.addSolidifierRecipe.usage=Usage: input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MODID:ITEMID:META or oreDictTag)>
-commands.addFluidFuelValue.usage=Usage: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
+commands.addCrucibleRecipe.usage=Использование: input<ItemStack (format : MODID:ITEMID:META or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)>
+commands.addSolidifierRecipe.usage=Использование: input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MODID:ITEMID:META or oreDictTag)>
+commands.addFluidFuelValue.usage=Использование: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
+commands.addAlloyRecipe.usage=§cИспользование: input1<FluidStack (format : FLUID:AMOUNT)> input2<FluidStack (format : FLUID:AMOUNT)> output<FluidStack (format : FLUID:AMOUNT)>
+commands.addCentrifugeRecipe.usage=§cИспользование: input<FluidStack (format : FLUID:AMOUNT)> output1<FluidStack (format : FLUID:AMOUNT)> output2<FluidStack (format : FLUID:AMOUNT)>
 
 #######################
 # Descriptions
@@ -383,14 +403,20 @@ neotech.electricCrusher.expansionUpgrade.desc=Плата расширения п
 
 # Thermal Binder
 neotech.thermalBinder.desc=Паяльная станция позволяет устанавливать разоичные компоненты на пустую плату. Поместите пустую плату слева, компонеты (до 8 процессров, до 8 жестких дисков, контроллер, плату расширения) в средние слоты и нажмите Пуск. Также станция может работать в обратную сторону - поместите заполненную плату слева и вы получите пустую плату и компоненты, которые были установлены.
-neotech.thermalBinder.processorUpgrade.desc=Каждый процессор укорачивает общее время производства примерно на 24 тика (общее время зависит от количества компонентов).
+neotech.thermalBinder.processorUpgrade.desc=Каждый процессор сокращает общее время производства примерно на 24 тика (общее время зависит от количества компонентов).
 
 # Electric Crucible
 neotech.electricCrucible.desc=Электро тигель может плавить металлы. Просто поместите металл (руду, слитки) во входной слот. Без улучшений процесс длится около 1000 тиков. Также электро тигель способен плавить камни в лаву или лед в воду.
-neotech.electricCrucible.processorUpgrade.desc=Каждый процессор укорачивает время производства примерно на 112 тиков.
+neotech.electricCrucible.processorUpgrade.desc=Каждый процессор сокращает время производства примерно на 112 тиков.
 
 # Solidifier
 neotech.electricSolidifier.desc=Электро отвердитель принимает жидкости и пытается перевести их в твердую форму. Настрока режима позволяет выбирать прдпочтительную форму.
+
+# Alloyer
+neotech.alloyer.desc=Электро смеситель смешивает жидкости для получения смесей (например сплавов).
+
+# Centrifuge
+neotech.centrifuge.desc=Электро центрифуга способна разделять жидкости на составляющие компоненты, например для отделения камня от расплавленного металла.
 
 # Furnace Generator
 neotech.furnaceGenerator.desc=Генератор производит RF за счет сжигания твердого топлива. Без улучшений производит 20 RF/тик
