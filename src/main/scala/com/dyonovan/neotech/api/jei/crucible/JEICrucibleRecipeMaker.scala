@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.api.jei.crucible
 
 import java.util
+import java.util.Collections
 
 import com.dyonovan.neotech.managers.RecipeManager
 import com.dyonovan.neotech.registries.{CrucibleRecipe, CrucibleRecipeHandler}
+import net.minecraft.item.ItemStack
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -24,7 +26,12 @@ object JEICrucibleRecipeMaker {
         for (i <- crucible) {
             val recipe = i.asInstanceOf[CrucibleRecipe]
             val inputList = OreDictionary.getOres(recipe.ore)
-            recipes.add(new JEICrucibleRecipe(inputList, recipe.getFluidFromString(recipe.output)))
+            if (!inputList.isEmpty)
+                recipes.add(new JEICrucibleRecipe(inputList, recipe.getFluidFromString(recipe.output)))
+            else {
+                val list: util.List[ItemStack] = Collections.singletonList(recipe.getItemStackFromString(recipe.input))
+                recipes.add(new JEICrucibleRecipe(list, recipe.getFluidFromString(recipe.output)))
+            }
         }
         recipes
     }
