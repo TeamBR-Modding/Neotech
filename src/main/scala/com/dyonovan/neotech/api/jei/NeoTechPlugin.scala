@@ -3,7 +3,8 @@ package com.dyonovan.neotech.api.jei
 import java.awt.Rectangle
 import java.util
 
-import com.dyonovan.neotech.api.jei.alloyer.{JEIAlloyerRecipeMaker, JEIAlloyerRecipeHandler, JEIAlloyerRecipeCatagory}
+import com.dyonovan.neotech.api.jei.alloyer.{JEIAlloyerRecipeMaker, JEIAlloyerRecipeHandler, JEIAlloyerRecipeCategory}
+import com.dyonovan.neotech.api.jei.centrifuge.{JEICentrifugeRecipeMaker, JEICentrifugeRecipeHandler, JEICentrifugeRecipeCategory}
 import com.dyonovan.neotech.api.jei.crucible.{JEICrucibleRecipeMaker, JEICrucibleRecipeHandler, JEICrucibleRecipeCategory}
 import com.dyonovan.neotech.api.jei.crusher.{JEICrusherRecipeCategory, JEICrusherRecipeHandler, JEICrusherRecipeMaker}
 import com.dyonovan.neotech.api.jei.grinder.{JEIGrinderRecipeMaker, JEIGrinderRecipeHandler, JEIGrinderRecipeCategory}
@@ -36,19 +37,22 @@ class NeoTechPlugin extends IModPlugin {
             new JEIGrinderRecipeCategory,
             new JEISolidifierRecipeCategory,
             new JEICrucibleRecipeCategory,
-            new JEIAlloyerRecipeCatagory)
+            new JEIAlloyerRecipeCategory,
+            new JEICentrifugeRecipeCategory)
         registry.addRecipeHandlers(
             new JEICrusherRecipeHandler,
             new JEIGrinderRecipeHandler,
             new JEISolidifierRecipeHandler,
             new JEICrucibleRecipeHandler,
-            new JEIAlloyerRecipeHandler)
+            new JEIAlloyerRecipeHandler,
+            new JEICentrifugeRecipeHandler)
 
         registry.addRecipes(JEICrusherRecipeMaker.getRecipes)
         registry.addRecipes(JEIGrinderRecipeMaker.getRecipes)
         registry.addRecipes(JEISolidifierRecipeMaker.getRecipes)
         registry.addRecipes(JEICrucibleRecipeMaker.getRecipes)
         registry.addRecipes(JEIAlloyerRecipeMaker.getRecipes)
+        registry.addRecipes(JEICentrifugeRecipeMaker.getRecipes)
 
         registry.addAdvancedGuiHandlers(new IAdvancedGuiHandler[GuiBase[_]] {
             override def getGuiContainerClass: Class[GuiBase[_]] = classOf[GuiBase[_]]
