@@ -1,6 +1,9 @@
 package com.dyonovan.neotech.api.jei.crusher
 
+import java.awt.Color
+
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
+import com.dyonovan.neotech.api.jei.drawables.{GuiComponentArrowJEI, SlotDrawable, GuiComponentPowerBarJEI}
 import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui._
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
@@ -13,11 +16,16 @@ import net.minecraft.util.{ResourceLocation, StatCollector}
   */
 class JEICrusherRecipeCategory extends IRecipeCategory {
 
-    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/crusher.png")
-    val arrow = NeoTechPlugin.jeiHelpers.getGuiHelper.createAnimatedDrawable(
-        NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 176, 14, 24, 17), 75, IDrawableAnimated.StartDirection.LEFT, false)
-    val power = NeoTechPlugin.jeiHelpers.getGuiHelper.createAnimatedDrawable(
-        NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 175, 31, 12, 45), 75, IDrawableAnimated.StartDirection.TOP, true)
+    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png")
+    val arrow = new GuiComponentArrowJEI(59, 21)
+    val power = new GuiComponentPowerBarJEI(3, 0, 18, 55, new Color(255, 0, 0)) {
+        addColor(new Color(255, 150, 0))
+        addColor(new Color(255, 255, 0))
+    }
+    val slotInput = new SlotDrawable(31, 20)
+    val slotOutput = new SlotDrawable(96, 20, isLarge = true)
+    val slotOutput2 = new SlotDrawable(125, 20, isLarge = true)
+
     val background = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 10, 15, 150, 50)
 
     override def getBackground: IDrawable = background
@@ -46,12 +54,15 @@ class JEICrusherRecipeCategory extends IRecipeCategory {
     }
 
     override def drawAnimations(minecraft: Minecraft): Unit = {
-        arrow.draw(minecraft, 59, 21)
-        power.draw(minecraft, 5, 4)
-
+        arrow.draw(minecraft, 0, 0)
+        power.draw(minecraft, 0, 0)
     }
 
-    override def drawExtras(minecraft: Minecraft): Unit = { }
+    override def drawExtras(minecraft: Minecraft): Unit = {
+        slotInput.draw(minecraft)
+        slotOutput.draw(minecraft)
+        slotOutput2.draw(minecraft)
+    }
 
     override def getTitle: String = StatCollector.translateToLocal("tile.neotech:electricCrusher.name")
 
