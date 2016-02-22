@@ -172,6 +172,7 @@ tile.neotech:grinder.name=Grinder
 tile.neotech:electricCrucible.name=Electric Crucible
 tile.neotech:electricSolidifier.name=Electric Solidifier
 tile.neotech:alloyer.name=Electric Alloyer
+tile.neotech:centrifuge.name=Electric Centrifuge
 
 # Generators
 tile.neotech:furnaceGenerator.name=Furnace Generator
@@ -266,6 +267,9 @@ neotech.electricSolidifier.title=Electric Solidifier
 
 # Alloyer
 neotech.alloyer.title=Electric Alloyer
+
+# Centrifuge
+neotech.centrifuge.title=Electric Centrifuge
 
 # Furnace Generator
 neotech.furnacegenerator.title=Furnace Generator
@@ -380,6 +384,7 @@ commands.addCrucibleRecipe.usage=§cUsage: input<ItemStack (format : MODID:ITEMI
 commands.addSolidifierRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MODID:ITEMID:META or oreDictTag)>
 commands.addFluidFuelValue.usage=§cUsage: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
 commands.addAlloyRecipe.usage=§cUsage: input1<FluidStack (format : FLUID:AMOUNT)> input2<FluidStack (format : FLUID:AMOUNT)> output<FluidStack (format : FLUID:AMOUNT)>
+commands.addCentrifugeRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output1<FluidStack (format : FLUID:AMOUNT)> output2<FluidStack (format : FLUID:AMOUNT)>
 
 #######################
 # Descriptions
@@ -409,6 +414,9 @@ neotech.electricSolidifier.desc=The Electric Solidifier will take a fluid input 
 
 # Alloyer
 neotech.alloyer.desc=The Electric Alloyer will take two input fluids and combine them into an output fluid.
+
+# Centrifuge
+neotech.centrifuge.desc=The Electric Centrifuge will separate a fluid into the two components it is made of. Useful for separating the stone from molten metal.
 
 # Furnace Generator
 neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would. By default, the Furnace Generator generates 20 RF/tick

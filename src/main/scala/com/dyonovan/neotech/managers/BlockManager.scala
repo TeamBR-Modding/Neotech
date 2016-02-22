@@ -45,6 +45,7 @@ object BlockManager {
     val electricCrucible = new BlockMachine("electricCrucible", classOf[TileCrucible])
     val electricSolidifier = new BlockMachine("electricSolidifier", classOf[TileSolidifier])
     val electricAlloyer = new BlockMachine("alloyer", classOf[TileAlloyer])
+    val electricCentrifuge = new BlockMachine("centrifuge", classOf[TileCentrifuge])
 
     val pump = new BlockMachine("pump", classOf[TilePump], fourWayRotation = false)
     val treeFarm = new BlockMachine("treeFarm", classOf[TileTreeFarm], fourWayRotation = false)
@@ -101,6 +102,7 @@ object BlockManager {
         registerBlock(electricCrucible, "electricCrucible", classOf[TileCrucible])
         registerBlock(electricSolidifier, "electricSolidifier", classOf[TileSolidifier])
         registerBlock(electricAlloyer, "alloyer", classOf[TileAlloyer])
+        registerBlock(electricCentrifuge, "centrifuge", classOf[TileCentrifuge])
 
         registerBlock(pump, "pump", classOf[TilePump])
         registerBlock(treeFarm, "treeFarm", classOf[TileTreeFarm])

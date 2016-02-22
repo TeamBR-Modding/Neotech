@@ -28,6 +28,7 @@ object ItemRenderManager {
         registerItem(Item.getItemFromBlock(BlockManager.electricCrucible))
         registerItem(Item.getItemFromBlock(BlockManager.electricSolidifier))
         registerItem(Item.getItemFromBlock(BlockManager.electricAlloyer))
+        registerItem(Item.getItemFromBlock(BlockManager.electricCentrifuge))
         registerItem(Item.getItemFromBlock(BlockManager.pump))
         registerItem(Item.getItemFromBlock(BlockManager.treeFarm))
         registerItem(Item.getItemFromBlock(BlockManager.mechanicalPipe))

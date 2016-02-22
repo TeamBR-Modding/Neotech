@@ -17,11 +17,12 @@ import net.minecraft.command.ServerCommandManager
   */
 object RecipeManager {
     sealed trait RecipeType { def name : String }
-    case object FluidFuels extends RecipeType { val name = "fluidfuels" }
-    case object Crucible extends RecipeType { val name = "crucible" }
-    case object Solidifier extends RecipeType { val name = "solidifier" }
-    case object Alloyer extends RecipeType { val name = "alloyer" }
-    case object Crusher extends RecipeType { val name = "crusher" }
+    case object FluidFuels  extends RecipeType { val name = "fluidfuels" }
+    case object Crusher     extends RecipeType { val name = "crusher" }
+    case object Crucible    extends RecipeType { val name = "crucible" }
+    case object Solidifier  extends RecipeType { val name = "solidifier" }
+    case object Alloyer     extends RecipeType { val name = "alloyer" }
+    case object Centrifuge  extends RecipeType { val name = "centrifuge" }
 
     lazy val recipeHandlers = new util.HashMap[RecipeType, AbstractRecipeHandler[_, _, _]]()
 
@@ -35,7 +36,7 @@ object RecipeManager {
         recipeHandlers.put(FluidFuels, new FluidFuelRecipeHandler().loadHandler())
         recipeHandlers.put(Alloyer,    new AlloyerRecipeHandler().loadHandler())
         recipeHandlers.put(Crusher,    new CrusherRecipeHandler().loadHandler())
-        //CrusherRecipeRegistry.init()
+        recipeHandlers.put(Centrifuge, new CentrifugeRecipeHandler().loadHandler())
     }
 
     def initCommands(manager : ServerCommandManager) : Unit = {
@@ -47,7 +48,8 @@ object RecipeManager {
     }
 
     /**
-      * Used to get a handler Type
+      * Used to get a handler Type, this way we know only defined handlers are cast and sent back, ensures
+      * no bad casting (if done correctly)
       *
       * @param handlerType The handler Type
       * @tparam H The Handler Object
