@@ -25,7 +25,7 @@ class JEIGrinderRecipe(in: ItemStack, out: ItemStack) extends BlankRecipeWrapper
         val grinding = StatCollector.translateToLocal("neotech.grinder.grinding")
         val output = StatCollector.translateToLocal("neotech.grinder.output")
 
-        fr.drawString(grinding, 33 - fr.getStringWidth(grinding) / 2, 9, Color.gray.getRGB)
-        fr.drawString(output, 33 - fr.getStringWidth(output) / 2, 35, Color.gray.getRGB)
+        fr.drawString(grinding, 33 - fr.getStringWidth(grinding) / 2, 4, Color.gray.getRGB)
+        fr.drawString(output, 33 - fr.getStringWidth(output) / 2, 26, Color.gray.getRGB)
     }
 }

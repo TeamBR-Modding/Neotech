@@ -3,7 +3,9 @@ package com.dyonovan.neotech.api.jei.solidifier
 import java.util
 
 import com.dyonovan.neotech.managers.RecipeManager
-import com.dyonovan.neotech.registries.{SolidifierRecipeHandler, SolidifierRecipe}
+import com.dyonovan.neotech.registries.{SolidifierRecipe, SolidifierRecipeHandler}
+import net.minecraft.init.Blocks
+import net.minecraft.item.ItemStack
 
 
 /**
@@ -23,7 +25,8 @@ object JEISolidifierRecipeMaker {
         val solidifier = RecipeManager.getHandler[SolidifierRecipeHandler](RecipeManager.Solidifier).recipes.toArray()
         for (i <- solidifier) {
             val recipe = i.asInstanceOf[SolidifierRecipe]
-            recipes.add(new JEISolidifierRecipe(recipe.getFluidFromString(recipe.input), recipe.ore, recipe.getItemStackFromString(recipe.output)))
+            var stack = new ItemStack(Blocks.iron_block)
+            recipes.add(new JEISolidifierRecipe(recipe.getFluidFromString(recipe.input), recipe.getItemStackFromString(recipe.output)))
         }
         recipes
     }

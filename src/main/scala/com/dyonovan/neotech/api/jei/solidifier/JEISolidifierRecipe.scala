@@ -1,10 +1,15 @@
 package com.dyonovan.neotech.api.jei.solidifier
 
-import mezz.jei.api.recipe.BlankRecipeWrapper
-import net.minecraft.item.ItemStack
-import net.minecraftforge.fluids.FluidStack
-
+import java.util
 import java.util.Collections
+
+import com.dyonovan.neotech.api.jei.drawables.GuiComponentItemStackButtonJEI
+import com.dyonovan.neotech.managers.MetalManager
+import mezz.jei.api.recipe.BlankRecipeWrapper
+import net.minecraft.client.Minecraft
+import net.minecraft.init.{Blocks, Items}
+import net.minecraft.item.{Item, ItemStack}
+import net.minecraftforge.fluids.FluidStack
 
 /**
   * This file was created for NeoTech
@@ -16,14 +21,21 @@ import java.util.Collections
   * @author Dyonovan
   * @since 2/20/2016
   */
-class JEISolidifierRecipe(fluid: FluidStack, ore: String, output: ItemStack) extends BlankRecipeWrapper {
+class JEISolidifierRecipe(fluid: FluidStack, output: ItemStack) extends BlankRecipeWrapper {
 
+    override def getFluidInputs: util.List[FluidStack] = Collections.singletonList(fluid)
 
+    override def getOutputs: util.List[ItemStack] = Collections.singletonList(output)
 
-    override def getFluidInputs: java.util.List[FluidStack] = Collections.singletonList(fluid)
-
-    override def getOutputs: java.util.List[ItemStack] = Collections.singletonList(output)
-
-    def getAmount: String = ore
+    override def drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int): Unit = {
+        var item: Item = Item.getItemFromBlock(Blocks.iron_block)
+        fluid.amount match {
+            case 1296 => item = Item.getItemFromBlock(Blocks.iron_block)
+            case 144 => item = Items.iron_ingot
+            case 16 => item = MetalManager.getMetal("iron").get.nugget.get
+            case _ =>
+        }
+        new GuiComponentItemStackButtonJEI(97, 37, new ItemStack(item)).draw(minecraft)
+    }
 
 }

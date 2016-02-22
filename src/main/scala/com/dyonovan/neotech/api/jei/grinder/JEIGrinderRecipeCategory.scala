@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.api.jei.grinder
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
+import com.dyonovan.neotech.api.jei.drawables.SlotDrawable
 import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui.{IDrawable, IGuiItemStackGroup, IRecipeLayout}
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
@@ -12,15 +13,19 @@ import net.minecraft.util.{ResourceLocation, StatCollector}
   */
 class JEIGrinderRecipeCategory extends IRecipeCategory {
 
-    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/grinder.png")
+    val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png")
+    val inputSlot = new SlotDrawable(80, 0)
+    val outputSlot1 = new SlotDrawable(62, 22)
+    val outputSlot2 = new SlotDrawable(80, 22)
+    val outputSlot3 = new SlotDrawable(98, 22)
 
     override def getBackground: IDrawable = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 0, 0, 170, 60)
 
     override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper): Unit = {
 
         val stacks: IGuiItemStackGroup = recipeLayout.getItemStacks
-        stacks.init(0, true, 87, 5)
-        stacks.init(1, false, 66, 30)
+        stacks.init(0, true, 80, 0)
+        stacks.init(1, false, 62, 22)
 
         recipeWrapper match {
             case grinderRecipeWrapper: JEIGrinderRecipe =>
@@ -32,7 +37,12 @@ class JEIGrinderRecipeCategory extends IRecipeCategory {
 
     override def drawAnimations(minecraft: Minecraft): Unit = {}
 
-    override def drawExtras(minecraft: Minecraft): Unit = {}
+    override def drawExtras(minecraft: Minecraft): Unit = {
+        inputSlot.draw(minecraft)
+        outputSlot1.draw(minecraft)
+        outputSlot2.draw(minecraft)
+        outputSlot3.draw(minecraft)
+    }
 
     override def getTitle: String = StatCollector.translateToLocal("tile.neotech:grinder.name")
 
