@@ -2,6 +2,7 @@ package com.dyonovan.neotech.api.jei.drawables
 
 import java.awt.Color
 
+import com.dyonovan.neotech.api.jei.NeoTechPlugin
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBarGradient
 import mezz.jei.api.gui.IDrawableAnimated
 import net.minecraft.client.Minecraft
@@ -20,19 +21,14 @@ import org.lwjgl.input.Mouse
 class GuiComponentPowerBarJEI(x: Int, y: Int, width: Int, height: Int, colorFull: Color)
         extends GuiComponentPowerBarGradient(x, y, width, height, colorFull) with IDrawableAnimated {
 
-    var ticker = maxTick
-    def maxTick = 20
+    var ticker = NeoTechPlugin.jeiHelpers.getGuiHelper.createTickTimer(50, 50, true)
 
     override def draw(minecraft: Minecraft): Unit = {}
 
     override def draw(minecraft: Minecraft, xOffset: Int, yOffset: Int): Unit = {
         super.render(xOffset, yOffset, Mouse.getX, Mouse.getY)
         super.renderOverlay(xOffset, yOffset, Mouse.getX, Mouse.getY)
-        if(System.currentTimeMillis() % 100 == 0)
-            ticker -= 1
-        if(ticker < 0)
-            ticker = maxTick
     }
 
-    override def getEnergyPercent(scale: Int): Int = (ticker * scale) / maxTick
+    override def getEnergyPercent(scale: Int): Int = (ticker.getValue * scale) / ticker.getMaxValue
 }

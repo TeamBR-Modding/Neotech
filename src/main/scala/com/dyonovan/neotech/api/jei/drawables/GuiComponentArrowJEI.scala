@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.api.jei.drawables
 
+import com.dyonovan.neotech.api.jei.NeoTechPlugin
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentArrow
 import mezz.jei.api.gui.IDrawableAnimated
 import net.minecraft.client.Minecraft
@@ -16,10 +17,10 @@ import org.lwjgl.input.Mouse
   * @since 2/21/2016
   */
 class GuiComponentArrowJEI(x: Int, y: Int) extends GuiComponentArrow(x, y) with IDrawableAnimated {
-    var ticker = 0
-    def maxTick = 20
+    var ticker = NeoTechPlugin.jeiHelpers.getGuiHelper.createTickTimer(50, 50, false)
 
-    override def getCurrentProgress: Int = Math.min(((ticker * 24) / Math.max(maxTick, 0.001)).toInt, 24)
+    override def getCurrentProgress: Int =
+        Math.min(((ticker.getValue * 24) / Math.max(ticker.getMaxValue, 0.001)).toInt, 24)
 
     override def draw(minecraft: Minecraft): Unit = {
         draw(minecraft, x, y)
@@ -27,9 +28,5 @@ class GuiComponentArrowJEI(x: Int, y: Int) extends GuiComponentArrow(x, y) with 
 
     override def draw(minecraft: Minecraft, xOffset: Int, yOffset: Int): Unit = {
         render(xOffset, yOffset, Mouse.getX, Mouse.getY)
-        if(System.currentTimeMillis() % 100 == 0)
-            ticker += 1
-        if(ticker > maxTick)
-            ticker = 0
     }
 }
