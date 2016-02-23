@@ -1,13 +1,16 @@
-package com.dyonovan.neotech.common.items.tools
+package com.dyonovan.neotech.tools.tools
 
 import com.dyonovan.neotech.NeoTech
+import com.dyonovan.neotech.tools.ToolHelper
+import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiTextFormat
 import com.teambr.bookshelf.common.items.traits.ItemBattery
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
 import net.minecraft.world.World
-import net.minecraftforge.common.util.EnumHelper
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -20,20 +23,6 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 2/21/2016
   */
-object BaseElectricTool {
-    val NEOTECH = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 1.0F, 0)
-    def getModifierTag(stack : ItemStack) : NBTTagList = {
-        if(stack.hasTagCompound && stack.getTagCompound.hasKey("ModifierTagList"))
-            stack.getTagCompound.getTagList("ModifierTagList", 10)
-        else {
-            val tagList = new NBTTagList
-            val tagCompound = new NBTTagCompound
-
-            tagList
-        }
-    }
-
-}
 trait BaseElectricTool extends ItemBattery {
 
     setCreativeTab(NeoTech.tabNeoTech)
@@ -42,6 +31,20 @@ trait BaseElectricTool extends ItemBattery {
     override var capacity: Int = 25000
     override var maxExtract: Int = 250
     override var maxReceive: Int = 250
+
+    def getToolName   : String
+
+    def getBaseTexture : String
+
+    override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
+        if(!stack.hasTagCompound) {
+            val tagCompound = new NBTTagCompound
+            val tagList = new NBTTagList
+            tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 3))
+            tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
+            stack.setTagCompound(tagCompound)
+        }
+    }
 
     override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
         if (stack.hasTagCompound) {
@@ -53,9 +56,17 @@ trait BaseElectricTool extends ItemBattery {
                 maxExtract = power._2
                 maxReceive = power._2
             }
-            val tag = stack.getTagCompound
-            tag.setInteger("Harvest", 1)
-            stack.setTagCompound(tag)
+            val tag = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10) // Load the modifier list
+            if(tag != null && ModifierMiningLevel.getModifierTagFromStack(stack) == null) // Does not already exist
+                tag.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1)) // Put mining level one in
+            stack.getTagCompound.setTag(ToolHelper.ModifierListTag, tag) // Send back the tag
+        } else {
+            // Set empty modifier list
+            val tagCompound = new NBTTagCompound
+            val tagList = new NBTTagList
+            tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1))
+            tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
+            stack.setTagCompound(tagCompound)
         }
     }
 
@@ -63,7 +74,7 @@ trait BaseElectricTool extends ItemBattery {
       * Defines amount of power each tier holds
       *
       * @param t Battery Tier
-      * @return Touple2(capacity, maxReceive)
+      * @return Tuple2(capacity, maxReceive)
       */
     def getTierPower(t: Int): (Int, Int) = {
         t match {
@@ -74,14 +85,12 @@ trait BaseElectricTool extends ItemBattery {
         }
     }
 
-    def getName: String = { getUnlocalizedName }
-
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
-        list.add(getEnergyStored(stack) + "/" + getMaxEnergyStored(stack) + " RF")
+        list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(getMaxEnergyStored(stack)) + " RF")
         var harvestLevel = 1
-        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Harvest"))
-            harvestLevel = stack.getTagCompound.getInteger("Harvest")
+        if (stack.hasTagCompound)
+            harvestLevel = ModifierMiningLevel.getMiningLevel(stack)
         var strLevel = ""
         harvestLevel match {
             case 3 => strLevel = "Obsidian"

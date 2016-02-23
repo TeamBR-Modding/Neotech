@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.client.modelfactory
 
-import com.dyonovan.neotech.client.modelfactory.models.{ModelHelper, BakedModifierModel, ModelTank}
+import com.dyonovan.neotech.client.modelfactory.models.{ModelHelper, ToolModel, ModelTank}
 import com.dyonovan.neotech.lib.Reference
 import com.google.common.collect.{ImmutableMap, Maps}
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType
@@ -48,7 +48,7 @@ class ModelFactory {
         builder.putAll(IPerspectiveAwareModel.MapWrapper.getTransforms(ModelHelper.DEFAULT_TOOL_STATE))
 
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricPickaxe", "inventory"),
-            new BakedModifierModel(
+            new ToolModel(
                 event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricPickaxe", "inventory")).asInstanceOf[IFlexibleBakedModel],
                     ImmutableMap.copyOf(builder)))
     }

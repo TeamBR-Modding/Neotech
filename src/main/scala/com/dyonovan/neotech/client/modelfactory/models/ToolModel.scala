@@ -2,6 +2,8 @@ package com.dyonovan.neotech.client.modelfactory.models
 
 import javax.vecmath.Matrix4f
 
+import com.dyonovan.neotech.tools.ToolHelper
+import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.google.common.base.Function
 import com.google.common.collect.{ImmutableList, ImmutableMap}
 import net.minecraft.client.Minecraft
@@ -25,24 +27,34 @@ import org.apache.commons.lang3.tuple.Pair
   * @author Paul Davis <pauljoda>
   * @since 2/22/2016
   */
-class BakedModifierModel(parent : IFlexibleBakedModel, transform : ImmutableMap[TransformType, TRSRTransformation]) extends
+class ToolModel(parent : IFlexibleBakedModel, transform : ImmutableMap[TransformType, TRSRTransformation]) extends
         ItemLayerModel.BakedModel(parent.getGeneralQuads.asInstanceOf[ImmutableList[BakedQuad]],
             parent.getParticleTexture, parent.getFormat) with ISmartItemModel with IPerspectiveAwareModel {
 
     override def handleItemState(stack: ItemStack): IBakedModel = {
-        if(!stack.hasTagCompound)
-            return parent
+        if(stack == null || !stack.hasTagCompound)
+            parent
         else {
             val function = new Function[ResourceLocation, TextureAtlasSprite] {
                 override def apply(input: ResourceLocation): TextureAtlasSprite =
                     Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(input.toString)
             }
             val textureBuilder = ImmutableMap.builder[String, String]()
-            textureBuilder.put("layer0", "neotech:items/electric_pickaxe")
-            textureBuilder.put("layer1", "neotech:items/electric_pickaxe_mod_diamond")
+            textureBuilder.put("layer0", stack.getItem.asInstanceOf[BaseElectricTool].getBaseTexture)
+
+            val modifierList = ToolHelper.getModifierTag(stack)
+            var i = 1
+            if(modifierList != null) {
+                for(x <- 0 until modifierList.tagCount()) {
+                    val tagCompound = modifierList.getCompoundTagAt(x)
+                    textureBuilder.put("layer" + i.toString, tagCompound.getString("TextureLocation"))
+                    i += 1
+                }
+            }
+
             val model = ItemLayerModel.instance.retexture(textureBuilder.build())
             val bakedModel = model.bake(ModelHelper.DEFAULT_TOOL_STATE, parent.getFormat, function)
-            return bakedModel
+            bakedModel
         }
     }
 

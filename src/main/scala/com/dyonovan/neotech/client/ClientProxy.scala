@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
-import com.dyonovan.neotech.client.modelfactory.models.loaders.{ToolModifierModelLoader, ToolModelLoader}
 import com.dyonovan.neotech.client.renderers._
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.entities.EntityNet

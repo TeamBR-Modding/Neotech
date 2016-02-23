@@ -1,6 +1,9 @@
-package com.dyonovan.neotech.common.items.tools
+package com.dyonovan.neotech.tools.tools
 
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.tools.ToolHelper
+import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
+import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
@@ -19,7 +22,7 @@ import net.minecraft.world.World
   * @author Dyonovan
   * @since 2/21/2016
   */
-class ElectricPickaxe extends ItemPickaxe(BaseElectricTool.NEOTECH) with BaseElectricTool {
+class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricTool {
 
     lazy val RF_PER_BLOCK = 250
 
@@ -36,13 +39,14 @@ class ElectricPickaxe extends ItemPickaxe(BaseElectricTool.NEOTECH) with BaseEle
     }
 
     override def getHarvestLevel(stack: ItemStack, toolClass: String): Int = {
-        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Harvest"))
-            return stack.getTagCompound.getInteger("Harvest")
-        1
+       ModifierMiningLevel.getMiningLevel(stack)
     }
 
     override def getDigSpeed(stack: ItemStack, state: IBlockState): Float = {
         4.0F
     }
 
+    override def getToolName: String = "pickaxe"
+
+    override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/pickaxe/electricPickaxe", doLowerCase = false)
 }

@@ -1,6 +1,9 @@
 package com.dyonovan.neotech.tools.modifier
 
-import com.teambr.bookshelf.traits.NBTSavable
+import com.dyonovan.neotech.tools.ToolHelper
+import com.dyonovan.neotech.tools.tools.BaseElectricTool
+import com.dyonovan.neotech.utils.ClientUtils
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
 /**
@@ -13,20 +16,52 @@ import net.minecraft.nbt.NBTTagCompound
   * @author Paul Davis <pauljoda>
   * @since 2/22/2016
   */
-class Modifier(var name : String) extends NBTSavable {
+abstract class Modifier(var name : String) {
 
+    /**
+      * The name of this modifier. This should be standardized to be the name for everything, id, texture mod, etc
+      *
+      * @return The name of the modifier eg. "fortify"
+      */
     def getIdentifier = name
 
-    def textureLocation = "electric_pickaxe_mod_diamond"
+    /**
+      * Allows you to specify a specific texture based on the stack, this probably won't be used often but its there
+      *
+      * @return The texture location, defaulted to the identifier (this should be the standard)
+      */
+    def textureLocation(stack : ItemStack, tag : NBTTagCompound) = ClientUtils.prefixResource("items/tools/"
+            + stack.getItem.asInstanceOf[BaseElectricTool].getToolName + "/" + getIdentifier, doLowerCase = false)
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
-        val modifierList = new NBTTagCompound
-        modifierList.setString("ModifierID", name)
-        tag.setTag("ModifierTag", modifierList)
+    /**
+      * Used to get the modifier tag compound from the stack
+      *
+      * @param stack The stack in
+      * @return The tag that modifier has written
+      */
+    def getModifierTagFromStack(stack : ItemStack) : NBTTagCompound = {
+        if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
+            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10) // Grab the tag list
+            for(x <- 0 until tagList.tagCount()) { // Iterate the list
+            val tag = tagList.get(x) // Get tag at location
+                tag match { // Check it matches
+                    case compound: NBTTagCompound if compound.getString("ModifierID").equalsIgnoreCase(name) =>
+                        return compound // Return tag, we found it
+                    case _ =>
+                }
+            }
+        }
+        null // Found nothing
     }
 
-    override def readFromNBT(tag: NBTTagCompound): Unit = {
-        val modifierList = tag.getCompoundTag("ModifierTag")
-        name = modifierList.getString("ModifierID")
+    /**
+      * Writes the info to the tag, store things you need here
+      *
+      * @param tag The incoming tag compound
+      */
+    def writeToNBT(tag: NBTTagCompound, stack : ItemStack): NBTTagCompound = {
+        tag.setString("ModifierID", name)
+        tag.setString("TextureLocation", textureLocation(stack, tag))
+        tag
     }
 }

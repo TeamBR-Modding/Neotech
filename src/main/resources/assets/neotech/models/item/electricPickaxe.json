@@ -1,18 +1,9 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "neotech:items/electric_pickaxe"
-    },
-    "display": {
-        "thirdperson": {
-            "rotation": [ 0, 90, -60 ],
-            "translation": [ 0, 3.5, -2 ],
-            "scale": [ 0.85, 0.85, 0.85 ]
-        },
-        "firstperson": {
-            "rotation": [ 0, -135, 25 ],
-            "translation": [ 0, 4, 2 ],
-            "scale": [ 1.7, 1.7, 1.7 ]
-        }
+        "layer0"       : "neotech:items/tools/pickaxe/electricPickaxe",
+        "layer1"       : "neotech:items/tools/pickaxe/miningLevel1",
+        "miningLevel2" : "neotech:items/tools/pickaxe/miningLevel2",
+        "miningLevel3" : "neotech:items/tools/pickaxe/miningLevel3"
     }
 }

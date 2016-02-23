@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.common.items._
-import com.dyonovan.neotech.common.items.tools.ElectricPickaxe
+import com.dyonovan.neotech.tools.tools.ElectricPickaxe
 import net.minecraft.item.{ItemStack, Item}
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
