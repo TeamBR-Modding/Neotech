@@ -1,21 +1,13 @@
 package com.dyonovan.neotech.client.modelfactory.models
 
-import java.io.InputStreamReader
-import java.lang.reflect.Type
-import java.util
 import javax.vecmath.Vector3f
 
-import com.google.common.base.Charsets
-import com.google.common.collect.{ImmutableList, ImmutableMap}
-import com.google.gson._
-import com.google.gson.reflect.TypeToken
-import com.teambr.bookshelf.helper.LogHelper
+import com.google.common.collect.ImmutableMap
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.block.model.{ItemTransformVec3f, ModelBlock, BakedQuad, ItemCameraTransforms}
+import net.minecraft.client.renderer.block.model.{BakedQuad, ItemCameraTransforms}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.IColoredBakedQuad.ColoredBakedQuad
 import net.minecraftforge.client.model.{IModelState, SimpleModelState, TRSRTransformation}
 
@@ -32,13 +24,6 @@ import net.minecraftforge.client.model.{IModelState, SimpleModelState, TRSRTrans
   * @since 2/22/2016
   */
 object ModelHelper {
-
-    lazy val mapType = new TypeToken[java.util.Map[java.lang.String, java.lang.String]]() {}.getType
-    lazy val offsetType = new TypeToken[Offset]() {}.getType
-    lazy val GSON : Gson = new GsonBuilder().registerTypeAdapter(mapType, ModelTextureDeserializerInstance).registerTypeAdapter(offsetType, OffsetDeserializerInstance).create()
-
-    var ModelTextureDeserializerInstance : ModelTextureDeserializer = null
-    var OffsetDeserializerInstance       : OffsetDeserializer = null
 
     lazy val DEFAULT_ITEM_STATE : IModelState = { //Normal items (not held as a tool)
         val thirdPerson = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
@@ -120,87 +105,4 @@ object ModelHelper {
         // Create the new quad
         new ColoredBakedQuad(data, -1, quad.getFace)
     }
-
-    /*******************************************************************************************************************
-      *********************************************** Loading **********************************************************
-      ******************************************************************************************************************/
-
-    def loadTexturesFromJson(location : ResourceLocation) : util.Map[String, String] = {
-        // Load the Json
-        val resource = Minecraft.getMinecraft.getResourceManager
-                                .getResource(new ResourceLocation(location.getResourceDomain, location.getResourcePath + ".json"))
-        val reader = new InputStreamReader(resource.getInputStream, Charsets.UTF_8)
-        GSON.fromJson(reader, mapType)
-    }
-
-    def loadOffsetFromJson(location : ResourceLocation) : Offset = {
-        // Load the Json
-        val resource = Minecraft.getMinecraft.getResourceManager
-                .getResource(new ResourceLocation(location.getResourceDomain, location.getResourcePath + ".json"))
-        val reader = new InputStreamReader(resource.getInputStream, Charsets.UTF_8)
-        GSON.fromJson(reader, offsetType)
-    }
-
-    def loadTransformFromJson(location : ResourceLocation) : ImmutableMap[ItemCameraTransforms.TransformType, TRSRTransformation] = {
-        // Load the Json
-        val resource = Minecraft.getMinecraft.getResourceManager
-                .getResource(new ResourceLocation(location.getResourceDomain, location.getResourcePath + ".json"))
-        val reader = new InputStreamReader(resource.getInputStream, Charsets.UTF_8)
-
-        val modelBlock = ModelBlock.deserialize(reader)
-        val itemCameraTransforms = modelBlock.func_181682_g()
-        val builder = ImmutableMap.builder[ItemCameraTransforms.TransformType, TRSRTransformation]()
-        for(typeTransform <- ItemCameraTransforms.TransformType.values()) {
-            if(itemCameraTransforms.getTransform(typeTransform) != ItemTransformVec3f.DEFAULT)
-                builder.put(typeTransform, new TRSRTransformation(itemCameraTransforms.getTransform(typeTransform)))
-        }
-        builder.build()
-    }
-
-    def loadTextureListFromJson(location : ResourceLocation) : ImmutableList[ResourceLocation] = {
-        val builder = ImmutableList.builder[ResourceLocation]()
-        for(string <- loadTexturesFromJson(location).values().toArray)
-            builder.add(new ResourceLocation(string.asInstanceOf[String]))
-        builder.build()
-    }
-
-    def getModelLocation(location : ResourceLocation) =
-        new ResourceLocation(location.getResourceDomain, "models/" + location.getResourcePath + ".json")
-
-    /*******************************************************************************************************************
-      ******************************************* Deserializers ********************************************************
-      ******************************************************************************************************************/
-
-    final class ModelTextureDeserializer extends JsonDeserializer[java.util.Map[java.lang.String, java.lang.String]] {
-        ModelTextureDeserializerInstance = new ModelTextureDeserializer
-        private val GSONOURS = new Gson()
-        override def deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): util.Map[String, String] = {
-            val jsonObject = json.getAsJsonObject
-            val texElem = jsonObject.get("textures")
-
-            if (texElem == null) {
-                LogHelper.severe("Missing texture entries in json")
-                return null
-            }
-
-            GSONOURS.fromJson(texElem, mapType)
-        }
-    }
-
-    final class OffsetDeserializer extends JsonDeserializer[Offset] {
-        OffsetDeserializerInstance = new OffsetDeserializer
-        private val GSONOURS = new Gson()
-        override def deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Offset = {
-            val jsonObject = json.getAsJsonObject
-            val texElem = jsonObject.get("offset")
-
-            if (texElem == null) {
-                new Offset(0, 0)
-            }
-
-            GSONOURS.fromJson(texElem, offsetType)
-        }
-    }
-
-    class Offset(var x: Int, var y: Int)
 }
