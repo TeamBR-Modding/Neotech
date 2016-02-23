@@ -1,21 +1,26 @@
 package com.dyonovan.neotech.client
 
+import com.dyonovan.neotech.client.modelfactory.models.loaders.ToolModelLoader
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.ModelResourceLocation
-import net.minecraft.item.{EnumDyeColor, Item}
+import net.minecraft.client.renderer.ItemMeshDefinition
+import net.minecraft.client.resources.model.{ModelBakery, ModelResourceLocation}
+import net.minecraft.item.{ItemStack, EnumDyeColor, Item}
+import net.minecraft.util.ResourceLocation
+import net.minecraftforge.client.model.ModelLoader
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 12, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 12, 2015
+  */
 object ItemRenderManager {
 
     def registerItemRenderer(): Unit = {

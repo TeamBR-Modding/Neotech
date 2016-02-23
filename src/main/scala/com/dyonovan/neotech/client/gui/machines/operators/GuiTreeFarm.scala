@@ -1,15 +1,13 @@
 package com.dyonovan.neotech.client.gui.machines.operators
 
 import java.awt.Color
-import java.text.NumberFormat
-import java.util.Locale
 
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.operators.ContainerTreeFarm
 import com.dyonovan.neotech.common.tiles.machines.operators.TileTreeFarm
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentPowerBarGradient
-import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.StatCollector
 
@@ -40,8 +38,8 @@ class GuiTreeFarm(player: EntityPlayer, tileEntity: TileTreeFarm) extends
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
                 buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
-                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getEnergyStored(null)) + " / " +
-                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getMaxEnergyStored(null)) + " RF"
+                buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
+                        ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                 buffer
             }
         }

@@ -1,15 +1,13 @@
 package com.dyonovan.neotech.client.gui.machines.processors
 
 import java.awt.Color
-import java.text.NumberFormat
-import java.util.Locale
 
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.processors.ContainerElectricFurnace
 import com.dyonovan.neotech.common.tiles.machines.processors.TileElectricFurnace
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBarGradient}
-import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.StatCollector
 
@@ -43,8 +41,8 @@ class GuiElectricFurnace(player: EntityPlayer, tileEntity: TileElectricFurnace) 
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
                 buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
-                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tile.getEnergyStored(null)) + " / " +
-                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tile.getMaxEnergyStored(null)) + " RF"
+                buffer += ClientUtils.formatNumber(tile.getEnergyStored(null)) + " / " +
+                        ClientUtils.formatNumber(tile.getMaxEnergyStored(null)) + " RF"
                 buffer
             }
         }

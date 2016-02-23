@@ -7,6 +7,7 @@ import java.util.Locale
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.machines.processors.TileThermalBinder
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentPowerBarGradient, GuiComponentText}
@@ -42,8 +43,8 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
                 buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
-                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getEnergyStored(null)) + " / " +
-                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getMaxEnergyStored(null)) + " RF"
+                buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
+                        ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                 buffer
             }
         }

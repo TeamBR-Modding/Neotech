@@ -7,6 +7,7 @@ import java.util.Locale
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFurnaceGenerator
 import com.dyonovan.neotech.common.tiles.machines.generators.TileFurnaceGenerator
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFlame, GuiComponentPowerBarGradient, GuiComponentText}
 import net.minecraft.client.Minecraft
@@ -52,8 +53,8 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
                 buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
-                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getEnergyStored(null)) + " / " +
-                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getMaxEnergyStored(null)) + " RF"
+                buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
+                        ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                 buffer
             }
         }

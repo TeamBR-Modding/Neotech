@@ -1,15 +1,13 @@
 package com.dyonovan.neotech.client.gui.machines.processors
 
 import java.awt.Color
-import java.text.NumberFormat
-import java.util.Locale
 
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
 import com.dyonovan.neotech.common.container.machines.processors.ContainerCentrifuge
 import com.dyonovan.neotech.common.tiles.machines.processors.TileCentrifuge
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFluidTank, GuiComponentPowerBarGradient, GuiComponentArrow}
-import net.minecraft.client.Minecraft
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentFluidTank, GuiComponentPowerBarGradient}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.StatCollector
 
@@ -45,8 +43,8 @@ class GuiCentrifuge(player: EntityPlayer, tileEntity: TileCentrifuge) extends
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
                 buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
-                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getEnergyStored(null)) + " / " +
-                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.getMaxEnergyStored(null)) + " RF"
+                buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
+                        ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                 buffer
             }
         }
@@ -58,8 +56,8 @@ class GuiCentrifuge(player: EntityPlayer, tileEntity: TileCentrifuge) extends
                     GuiColor.ORANGE + tileEntity.tanks(tileEntity.INPUT_TANK).getFluid.getLocalizedName
                 else
                     GuiColor.RED + "Empty")
-                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.tanks(tileEntity.INPUT_TANK).getFluidAmount) + " / " +
-                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.tanks(tileEntity.INPUT_TANK).getCapacity) + " mb"
+                buffer += ClientUtils.formatNumber(tileEntity.tanks(tileEntity.INPUT_TANK).getFluidAmount) + " / " +
+                        ClientUtils.formatNumber(tileEntity.tanks(tileEntity.INPUT_TANK).getCapacity) + " mb"
                 buffer
             }
         }
@@ -71,8 +69,8 @@ class GuiCentrifuge(player: EntityPlayer, tileEntity: TileCentrifuge) extends
                     GuiColor.ORANGE + tileEntity.tanks(tileEntity.OUTPUT_TANK_1).getFluid.getLocalizedName
                 else
                     GuiColor.RED + "Empty")
-                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.tanks(tileEntity.OUTPUT_TANK_1).getFluidAmount) + " / " +
-                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.tanks(tileEntity.OUTPUT_TANK_1).getCapacity) + " mb"
+                buffer += ClientUtils.formatNumber(tileEntity.tanks(tileEntity.OUTPUT_TANK_1).getFluidAmount) + " / " +
+                        ClientUtils.formatNumber(tileEntity.tanks(tileEntity.OUTPUT_TANK_1).getCapacity) + " mb"
                 buffer
             }
         }
@@ -84,8 +82,8 @@ class GuiCentrifuge(player: EntityPlayer, tileEntity: TileCentrifuge) extends
                     GuiColor.ORANGE + tileEntity.tanks(tileEntity.OUTPUT_TANK_2).getFluid.getLocalizedName
                 else
                     GuiColor.RED + "Empty")
-                buffer += NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.tanks(tileEntity.OUTPUT_TANK_2).getFluidAmount) + " / " +
-                        NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language)).format(tileEntity.tanks(tileEntity.OUTPUT_TANK_2).getCapacity) + " mb"
+                buffer += ClientUtils.formatNumber(tileEntity.tanks(tileEntity.OUTPUT_TANK_2).getFluidAmount) + " / " +
+                        ClientUtils.formatNumber(tileEntity.tanks(tileEntity.OUTPUT_TANK_2).getCapacity) + " mb"
                 buffer
             }
         }

@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
+import com.dyonovan.neotech.client.modelfactory.models.loaders.{ToolModifierModelLoader, ToolModelLoader}
 import com.dyonovan.neotech.client.renderers._
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.entities.EntityNet
@@ -15,6 +16,7 @@ import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.client.resources.model.ModelBakery
+import net.minecraftforge.client.model.ModelLoaderRegistry
 import net.minecraftforge.fml.client.registry.{ClientRegistry, IRenderFactory, RenderingRegistry}
 import net.minecraftforge.fml.common.registry.GameRegistry
 
@@ -29,6 +31,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry
  * @since August 07, 2015
  */
 class ClientProxy extends CommonProxy {
+
     /**
      * Called during the preInit phase of the mod loading
      *

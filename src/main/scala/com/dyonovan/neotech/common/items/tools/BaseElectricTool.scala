@@ -5,6 +5,7 @@ import com.teambr.bookshelf.client.gui.GuiTextFormat
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.world.World
 import net.minecraftforge.common.util.EnumHelper
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -21,6 +22,17 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   */
 object BaseElectricTool {
     val NEOTECH = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 1.0F, 0)
+    def getModifierTag(stack : ItemStack) : NBTTagList = {
+        if(stack.hasTagCompound && stack.getTagCompound.hasKey("ModifierTagList"))
+            stack.getTagCompound.getTagList("ModifierTagList", 10)
+        else {
+            val tagList = new NBTTagList
+            val tagCompound = new NBTTagCompound
+
+            tagList
+        }
+    }
+
 }
 trait BaseElectricTool extends ItemBattery {
 

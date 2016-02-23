@@ -14,6 +14,8 @@
         "fluidmetalFlow" : "neotech:blocks/metal_flow",
         "metalIngot" : "neotech:items/metal_ingot",
 
+        "pickaxe_mod_diamond" : "neotech:items/electric_pickaxe_mod_diamond",
+
         "in" : "neotech:gui/in",
         "out" : "neotech:gui/out"
     }
