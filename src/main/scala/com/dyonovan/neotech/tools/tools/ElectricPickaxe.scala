@@ -10,6 +10,7 @@ import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed}
 import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.utils.ClientUtils
+import com.google.common.collect.Lists
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
@@ -34,36 +35,56 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     setUnlocalizedName(Reference.MOD_ID + ":electricPickaxe")
 
-    def getBlockList(level: Int, mop: MovingObjectPosition, pos: BlockPos): java.lang.Iterable[BlockPos] = {
+    def getBlockList(level: Int, mop: MovingObjectPosition, pos: BlockPos): java.util.List[BlockPos] = {
         var pos1: BlockPos = null
         var pos2: BlockPos = null
         if (mop.sideHit.getAxis.isHorizontal) {
+            pos1 = pos.offset(EnumFacing.UP).offset(mop.sideHit)
+            pos2 = pos.offset(EnumFacing.DOWN).offset(mop.sideHit)
+        } else {
             pos1 = pos.offset(EnumFacing.NORTH).offset(EnumFacing.WEST)
             pos2 = pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST)
-        } else {
-            pos1 = pos.offset(EnumFacing.UP).offset(mop.sideHit)
-            pos1 = pos.offset(EnumFacing.DOWN).offset(mop.sideHit)
         }
-        BlockPos.getAllInBox(pos1, pos2)
+        val list: java.util.List[BlockPos] = Lists.newArrayList(BlockPos.getAllInBox(pos1, pos2).iterator())
+        list
     }
 
     override def onBlockDestroyed(stack: ItemStack, world: World, block: Block, pos: BlockPos, player: EntityLivingBase): Boolean = {
-        extractEnergy(stack, RF_PER_BLOCK, simulate = false)
-        updateDamage(stack)
         if (ModifierAOE.getAOELevel(stack) > 0 && player.isInstanceOf[EntityPlayer]) {
-            val mop = stack.getItem.asInstanceOf[BaseElectricTool].getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
-            val blockList = getBlockList(ModifierAOE.getAOELevel(stack), mop, pos)
-            val test = 1
-        }
+            val mop = stack.getItem.asInstanceOf[BaseElectricTool].getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], useLiquids = false)
+            if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                val blockList = getBlockList(ModifierAOE.getAOELevel(stack), mop, pos)
+                for (b <- 0 until blockList.size) {
+                    val newPos = blockList.get(b)
+                    val block = world.getBlockState(newPos).getBlock
+                    if (!block.isAir(world, newPos)) {
+                        if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer])) {
+                            block.harvestBlock(world, player.asInstanceOf[EntityPlayer], newPos, block.getDefaultState, world.getTileEntity(newPos))
+                            world.setBlockToAir(newPos)
+                            rfCost(player.asInstanceOf[EntityPlayer], stack)
+                        }
+                    }
+                }
+            }
+        } else rfCost(player.asInstanceOf[EntityPlayer], stack)
         true
     }
 
+    def rfCost(player: EntityPlayer, stack: ItemStack): Unit = {
+        if (!player.capabilities.isCreativeMode) {
+            extractEnergy(stack, RF_PER_BLOCK, simulate = false)
+            updateDamage(stack)
+        }
+    }
+
     override def onBlockStartBreak(stack: ItemStack, pos: BlockPos, player: EntityPlayer): Boolean = {
-        getEnergyStored(stack) < RF_PER_BLOCK
+        if (!player.capabilities.isCreativeMode)
+            getEnergyStored(stack) < RF_PER_BLOCK
+        else true
     }
 
     override def getHarvestLevel(stack: ItemStack, toolClass: String): Int = {
-       ModifierMiningLevel.getMiningLevel(stack)
+        ModifierMiningLevel.getMiningLevel(stack)
     }
 
     override def getDigSpeed(stack: ItemStack, state: IBlockState): Float = {
@@ -71,6 +92,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     }
 
     override def getToolName: String = "pickaxe"
+
     override def getToolType: ToolType = ToolType.Pickaxe
 
     override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/pickaxe/electricPickaxe", doLowerCase = false)
@@ -88,10 +110,10 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
       * @return
       */
     override def getUpgradeCount(stack: ItemStack): Int = {
-        if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
             val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
             var count = 0
-            for(x <- 0 until tagList.tagCount())
+            for (x <- 0 until tagList.tagCount())
                 count += tagList.getCompoundTagAt(x).getInteger("ModifierLevel")
             return count
         }
