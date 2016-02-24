@@ -15,14 +15,16 @@ import com.dyonovan.neotech.tools.modifier.{ItemModifierMiningSpeed, ItemModifie
   */
 object UpgradeItemManager {
     val upgradeSilkTouch   = new ItemModifierSilkTouch
-    val upgradeFortune     =  new ItemModifierFortune
+    val upgradeFortune     = new ItemModifierFortune
     val upgradeMiningLevel = new ItemModifierMiningLevel
     val upgradeMiningSpeed = new ItemModifierMiningSpeed
+    val upgradeAOE         = new ItemModifierAOE
 
     def preInit(): Unit = {
         ItemManager.registerItem(upgradeSilkTouch, upgradeSilkTouch.getUpgradeName)
         ItemManager.registerItem(upgradeFortune, upgradeFortune.getUpgradeName)
         ItemManager.registerItem(upgradeMiningLevel, upgradeMiningLevel.getUpgradeName)
         ItemManager.registerItem(upgradeMiningSpeed, upgradeMiningSpeed.getUpgradeName)
+        ItemManager.registerItem(upgradeAOE, upgradeAOE.getUpgradeName)
     }
 }

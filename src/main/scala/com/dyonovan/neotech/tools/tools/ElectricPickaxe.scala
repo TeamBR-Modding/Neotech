@@ -15,7 +15,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemPickaxe, ItemStack}
-import net.minecraft.util.BlockPos
+import net.minecraft.util.{BlockPos, EnumFacing, MovingObjectPosition}
 import net.minecraft.world.World
 
 /**
@@ -34,15 +34,26 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     setUnlocalizedName(Reference.MOD_ID + ":electricPickaxe")
 
-    def getBlockList(level: Int) = {
-
+    def getBlockList(level: Int, mop: MovingObjectPosition, pos: BlockPos): java.lang.Iterable[BlockPos] = {
+        var pos1: BlockPos = null
+        var pos2: BlockPos = null
+        if (mop.sideHit.getAxis.isHorizontal) {
+            pos1 = pos.offset(EnumFacing.NORTH).offset(EnumFacing.WEST)
+            pos2 = pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST)
+        } else {
+            pos1 = pos.offset(EnumFacing.UP).offset(mop.sideHit)
+            pos1 = pos.offset(EnumFacing.DOWN).offset(mop.sideHit)
+        }
+        BlockPos.getAllInBox(pos1, pos2)
     }
 
     override def onBlockDestroyed(stack: ItemStack, world: World, block: Block, pos: BlockPos, player: EntityLivingBase): Boolean = {
         extractEnergy(stack, RF_PER_BLOCK, simulate = false)
         updateDamage(stack)
-        if (ModifierAOE.getAOELevel(stack) > 0) {
-            val blockList = getBlockList(ModifierAOE.getAOELevel(stack))
+        if (ModifierAOE.getAOELevel(stack) > 0 && player.isInstanceOf[EntityPlayer]) {
+            val mop = stack.getItem.asInstanceOf[BaseElectricTool].getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
+            val blockList = getBlockList(ModifierAOE.getAOELevel(stack), mop, pos)
+            val test = 1
         }
         true
     }
@@ -67,13 +78,13 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
         UpgradeItemManager.upgradeMiningLevel.getUpgradeName, UpgradeItemManager.upgradeSilkTouch.getUpgradeName,
         UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeMiningSpeed.getUpgradeName,
-        ItemManager.basicRFBattery.getUpgradeName
+        UpgradeItemManager.upgradeAOE.getUpgradeName, ItemManager.basicRFBattery.getUpgradeName
     ))
 
     /**
       * Used to get the upgrade count on this item, mainly used in the motherboard to determine how long to cook
       *
-      * @param stack
+      * @param stack ItemStack
       * @return
       */
     override def getUpgradeCount(stack: ItemStack): Int = {
