@@ -3,13 +3,14 @@ package com.dyonovan.neotech.tools.tools
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
+import com.dyonovan.neotech.tools.tools.ToolType.ToolType
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiTextFormat
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
+import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -23,6 +24,11 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 2/21/2016
   */
+object ToolType extends Enumeration {
+    type ToolType = Value
+    val Pickaxe, Axe, Shovel, Hoe, Sword, Empty_MB, Filled_MB = Value
+}
+
 trait BaseElectricTool extends ItemBattery {
 
     setCreativeTab(NeoTech.tabNeoTech)
@@ -33,6 +39,8 @@ trait BaseElectricTool extends ItemBattery {
     override var maxReceive: Int = 250
 
     def getToolName   : String
+
+    def getToolType   : ToolType
 
     def getBaseTexture : String
 
@@ -84,6 +92,12 @@ trait BaseElectricTool extends ItemBattery {
             case _ => (0, 0)
         }
     }
+
+    /**
+      * Turn off default enchantment look for our tools as we will be using the MC Enchantment NBT Data tag
+      */
+    @SideOnly(Side.CLIENT)
+    override def hasEffect(stack: ItemStack): Boolean = false
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {

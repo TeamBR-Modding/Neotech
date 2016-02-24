@@ -2,7 +2,8 @@ package com.dyonovan.neotech.tools.tools
 
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.ToolHelper
-import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
+import com.dyonovan.neotech.tools.modifier.{ModifierMiningSpeed, ModifierMiningLevel}
+import com.dyonovan.neotech.tools.tools.ToolType.ToolType
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
@@ -43,10 +44,11 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     }
 
     override def getDigSpeed(stack: ItemStack, state: IBlockState): Float = {
-        4.0F
+        ModifierMiningSpeed.getMiningSpeed(stack)
     }
 
     override def getToolName: String = "pickaxe"
+    override def getToolType: ToolType = ToolType.Pickaxe
 
     override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/pickaxe/electricPickaxe", doLowerCase = false)
 }
