@@ -175,6 +175,8 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[MachineProcessor].readFromNBT(tag)
         super[FluidHandler].readFromNBT(tag)
+        if(tanks == null || tanks.isEmpty)
+            setupTanks()
         count = tag.getInteger("Count")
     }
 

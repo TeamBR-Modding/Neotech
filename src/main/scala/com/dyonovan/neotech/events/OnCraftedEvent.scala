@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.events
 
-import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import net.minecraft.item.Item
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -38,15 +38,15 @@ object OnCraftedEvent {
         //Electric Tools
         if (event.crafting.getItem == ItemManager.electricPickaxe) {
             val tag = new NBTTagCompound
-            var tier = 1
-            event.craftMatrix.getStackInSlot(4).getItem match {
-                case ItemManager.basicRFBattery => tier = 1
-                case ItemManager.advancedRFBattery => tier = 2
-                case ItemManager.eliteRFBattery => tier = 3
+            var capacity = 25000
+            event.craftMatrix.getStackInSlot(7).getItem match {
+                case ItemManager.advancedRFBattery => capacity = ItemManager.advancedRFBattery.capacity
+                case ItemManager.eliteRFBattery => capacity = ItemManager.eliteRFBattery.capacity
+                case _ =>
             }
             if (event.craftMatrix.getStackInSlot(4).hasTagCompound && event.craftMatrix.getStackInSlot(4).getTagCompound.hasKey("Energy"))
                 tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
-            tag.setInteger("Tier", tier)
+            tag.setInteger("EnergyCapacity", capacity)
             event.crafting.setTagCompound(tag)
             return
         }

@@ -3,6 +3,7 @@ package com.dyonovan.neotech.tools.tools
 import java.util
 
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
@@ -65,7 +66,8 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
         UpgradeItemManager.upgradeMiningLevel.getUpgradeName, UpgradeItemManager.upgradeSilkTouch.getUpgradeName,
-        UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeMiningSpeed.getUpgradeName
+        UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeMiningSpeed.getUpgradeName,
+        ItemManager.basicRFBattery.getUpgradeName
     ))
 
     /**
