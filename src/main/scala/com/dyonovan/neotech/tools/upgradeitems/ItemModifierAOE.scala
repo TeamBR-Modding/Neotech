@@ -15,7 +15,7 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
   * @author Dyonovan
   * @since 2/24/2016
   */
-class ItemModifierAOE extends BaseUpgradeItem("aoe", 1) {
+class ItemModifierAOE extends BaseUpgradeItem("aoe", 3) {
     /**
       * Can this upgrade item allow more to be applied to the item
       *

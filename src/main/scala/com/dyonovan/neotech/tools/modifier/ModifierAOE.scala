@@ -18,6 +18,7 @@ import scala.collection.mutable.ArrayBuffer
 object ModifierAOE extends Modifier("aoe") {
 
     lazy val AOE = "AOE"
+    lazy val ACTIVE = "Active"
 
     def getAOELevel(stack: ItemStack): Int = {
         val tag = getModifierTagFromStack(stack)
@@ -26,8 +27,19 @@ object ModifierAOE extends Modifier("aoe") {
         0
     }
 
+    def getAOEActive(stack: ItemStack): Boolean = {
+        val tag = getModifierTagFromStack(stack)
+        if (tag != null && tag.hasKey(ACTIVE))
+            tag.getBoolean(ACTIVE)
+        else
+            false
+    }
+
+    override def getLevel(tag : NBTTagCompound) = tag.getInteger(AOE)
+
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, levelAOE: Int): NBTTagCompound = {
         tag.setInteger(AOE, levelAOE)
+        tag.setBoolean(ACTIVE, false)
         super.writeToNBT(tag, stack)
         tag
     }
@@ -38,5 +50,15 @@ object ModifierAOE extends Modifier("aoe") {
       * @param stack The stack in
       * @return A list of tips
       */
-    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = new ArrayBuffer[String]()
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = {
+        var size: String = ""
+        tag.getInteger(AOE) match {
+            case 1 => size = "3x3"
+            case 2 => size = "5x5"
+            case 3 => size = "7x7"
+            case _ => size = "1x1"
+
+        }
+        ArrayBuffer("AOE: " + size)
+    }
 }

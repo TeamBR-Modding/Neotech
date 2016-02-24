@@ -46,7 +46,7 @@ object RenderingEvents extends IResourceManagerReloadListener {
             val movingObjectPosition = player.rayTrace(controllerMP.getBlockReachDistance, event.partialTicks)
             if(movingObjectPosition != null) {
                 val level = ModifierAOE.getAOELevel(player.getCurrentEquippedItem)
-                blockList = ToolHelper.getBlockList(level, movingObjectPosition, movingObjectPosition.getBlockPos, player)
+                blockList = ToolHelper.getBlockList(level, movingObjectPosition, player, world, player.getHeldItem)
                 for(x <- blockList.toArray)
                     event.context.drawSelectionBox(player,
                         new MovingObjectPosition(new Vec3(0, 0, 0), null, x.asInstanceOf[BlockPos]), 0, event.partialTicks)

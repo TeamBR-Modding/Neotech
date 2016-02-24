@@ -2,11 +2,13 @@ package com.dyonovan.neotech.tools
 
 import java.util
 
+import com.dyonovan.neotech.tools.modifier.ModifierAOE
 import com.google.common.collect.Lists
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagList
 import net.minecraft.util.{EnumFacing, BlockPos, MovingObjectPosition}
+import net.minecraft.world.World
 import net.minecraftforge.common.util.EnumHelper
 
 import scala.collection.mutable.ArrayBuffer
@@ -51,19 +53,32 @@ object ToolHelper {
         count
     }
 
-    def getBlockList(level: Int, mop: MovingObjectPosition, pos: BlockPos, player : EntityPlayer): java.util.List[BlockPos] = {
-        if(!player.isSneaking) {
+    def getBlockList(level: Int, mop: MovingObjectPosition, player : EntityPlayer, world: World, stack: ItemStack): java.util.List[BlockPos] = {
+        if(!player.isSneaking && world.getBlockState(mop.getBlockPos).getBlock.canHarvestBlock(world, mop.getBlockPos, player) && ModifierAOE.getAOEActive(stack)) {
             var pos1: BlockPos = null
             var pos2: BlockPos = null
             if (mop.sideHit.getAxis.isHorizontal) {
-                pos1 = pos.offset(EnumFacing.UP).offset(mop.sideHit)
-                pos2 = pos.offset(EnumFacing.DOWN).offset(mop.sideHit)
+                if (mop.sideHit == EnumFacing.NORTH || mop.sideHit == EnumFacing.SOUTH) {
+                    pos1 = mop.getBlockPos.offset(EnumFacing.UP, level).offset(EnumFacing.EAST, level)
+                    pos2 = mop.getBlockPos.offset(EnumFacing.DOWN, level).offset(EnumFacing.WEST, level)
+                } else {
+                    pos1 = mop.getBlockPos.offset(EnumFacing.UP, level).offset(EnumFacing.SOUTH, level)
+                    pos2 = mop.getBlockPos.offset(EnumFacing.DOWN, level).offset(EnumFacing.NORTH, level)
+                }
             } else {
-                pos1 = pos.offset(EnumFacing.NORTH).offset(EnumFacing.WEST)
-                pos2 = pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST)
+                pos1 = mop.getBlockPos.offset(EnumFacing.NORTH, level).offset(EnumFacing.WEST, level)
+                pos2 = mop.getBlockPos.offset(EnumFacing.SOUTH, level).offset(EnumFacing.EAST, level)
             }
             val list: java.util.List[BlockPos] = Lists.newArrayList(BlockPos.getAllInBox(pos1, pos2).iterator())
-            list
+            val actualList = new java.util.ArrayList[BlockPos]()
+            for (l <- list.toArray()) {
+                val pos = l.asInstanceOf[BlockPos]
+                val block = world.getBlockState(pos).getBlock
+                if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player)) {
+                    actualList.add(pos)
+                }
+            }
+            actualList
         } else util.Arrays.asList(mop.getBlockPos)
     }
 
