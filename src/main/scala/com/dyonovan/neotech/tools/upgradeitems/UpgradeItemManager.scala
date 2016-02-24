@@ -14,9 +14,10 @@ import com.dyonovan.neotech.managers.ItemManager
   */
 object UpgradeItemManager {
     val upgradeSilkTouch   = new ItemModifierSilkTouch
-    val upgradeFortune     =  new ItemModifierFortune
+    val upgradeFortune     = new ItemModifierFortune
     val upgradeMiningLevel = new ItemModifierMiningLevel
     val upgradeMiningSpeed = new ItemModifierMiningSpeed
+    val upgradeAOE         = new ItemModifierAOE
 
     val upgradeSharpness   = new ItemModifierSharpness
     val upgradeSmite       = new ItemModifierSmite
@@ -28,5 +29,6 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeMiningSpeed, upgradeMiningSpeed.getUpgradeName)
         ItemManager.registerItem(upgradeSharpness, upgradeSharpness.getUpgradeName)
         ItemManager.registerItem(upgradeSmite, upgradeSmite.getUpgradeName)
+        ItemManager.registerItem(upgradeAOE, upgradeAOE.getUpgradeName)
     }
 }

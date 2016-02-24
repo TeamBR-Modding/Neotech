@@ -8,8 +8,9 @@ import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -24,7 +25,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @since 2/21/2016
   */
 
-trait BaseElectricTool extends ItemBattery with ThermalBinderItem {
+trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
 
     setCreativeTab(NeoTech.tabTools)
     setMaxStackSize(1)
@@ -36,6 +37,11 @@ trait BaseElectricTool extends ItemBattery with ThermalBinderItem {
     def getToolName   : String
 
     def getBaseTexture : String
+
+
+    override def getMovingObjectPositionFromPlayer(world: World, player: EntityPlayer, useLiquids: Boolean): MovingObjectPosition = {
+        super.getMovingObjectPositionFromPlayer(world, player, useLiquids)
+    }
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
         if(!stack.hasTagCompound) {
