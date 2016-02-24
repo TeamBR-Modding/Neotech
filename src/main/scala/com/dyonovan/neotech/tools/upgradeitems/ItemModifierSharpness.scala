@@ -36,7 +36,7 @@ class ItemModifierSharpness extends BaseUpgradeItem("sharpness", 10) {
         var localTag = ModifierSharpness.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierSharpness.writeToNBT(localTag, stack, ModifierSharpness.getSharpnessLevel(stack) + count)
+        ModifierSharpness.writeToNBT(localTag, stack, count)
         ModifierSharpness.overrideModifierTag(stack, localTag)
     }
 }

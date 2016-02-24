@@ -36,7 +36,7 @@ class ItemModifierSmite extends BaseUpgradeItem("smite", 5) {
         var localTag = ModifierSmite.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierSmite.writeToNBT(localTag, stack, ModifierSmite.getSmiteLevel(stack) + count)
+        ModifierSmite.writeToNBT(localTag, stack, count)
         ModifierSmite.overrideModifierTag(stack, localTag)
     }
 }

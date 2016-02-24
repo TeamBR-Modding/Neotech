@@ -36,7 +36,7 @@ object ModifierSharpness extends Modifier("sharpness") {
 
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
         val list = EnchantmentHelper.getEnchantments(stack)
-        list.put(Enchantment.sharpness.effectId, count)
+        list.put(Enchantment.sharpness.effectId, getSharpnessLevel(stack) + count)
         EnchantmentHelper.setEnchantments(list, stack)
         tag.setInteger(SHARPNESS, getSharpnessLevel(stack) + count)
         super.writeToNBT(tag, stack)

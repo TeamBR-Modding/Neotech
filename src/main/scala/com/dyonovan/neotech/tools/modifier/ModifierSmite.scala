@@ -36,7 +36,7 @@ object ModifierSmite extends Modifier("smite") {
 
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
         val list = EnchantmentHelper.getEnchantments(stack)
-        list.put(Enchantment.smite.effectId, count)
+        list.put(Enchantment.smite.effectId, getSmiteLevel(stack) + count)
         EnchantmentHelper.setEnchantments(list, stack)
         tag.setInteger(SMITE, getSmiteLevel(stack) + count)
         super.writeToNBT(tag, stack)

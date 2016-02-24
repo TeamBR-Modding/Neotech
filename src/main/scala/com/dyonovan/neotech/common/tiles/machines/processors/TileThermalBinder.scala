@@ -54,7 +54,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       */
     override def getCookTime : Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            (200 * getCount) - ((200 * getCount) / getUpgradeBoard.getProcessorCount)
+            (200 * getCount) - (getCount * (getUpgradeBoard.getProcessorCount * 20))
         else
             200 * getCount
     }

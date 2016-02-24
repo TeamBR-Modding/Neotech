@@ -414,8 +414,8 @@ neotech.electricCrusher.desc=The Electric Crusher smashes items put into it. If 
 neotech.electricCrusher.expansionUpgrade.desc=The expansion upgrade will enable the crusher to have a possible secondary output, it also allows you to configure the automatic input and output of the machine.
 
 # Thermal Binder
-neotech.thermalBinder.desc=The Thermal Binder is the machine that allows you to create motherboards with upgrades installed. Put an empty motherboard in the left slot and any combination of the following into the middle slots: processors (up to 8), hard drives (up to 8), control upgrade (up to 1), expansion upgrade (up to 1), and press start to begin building the motherboard. If you run out of power, the process will fail. You can also put a full motherboard into the left slot without upgrades in the center and it will deconstruct the motherboard and give you back the components.
-neotech.thermalBinder.processorUpgrade.desc=Each processor removes roughly 24 ticks scaled to the number of upgrades being installed (this is due to the fact that the time it takes to cook scales with the number of upgrades being installed) from the cook time.
+neotech.thermalBinder.desc=The Thermal Binder is the machine that allows you to install upgrades to tools and motherboard components to motherboards. Once upgrades are installed, they can not be removed. The binding process requires 20mb of Molten Tin
+neotech.thermalBinder.processorUpgrade.desc=The equation used during the calculation of cook time is the following with COUNT being the amount of upgrades you want to install and PROCESSORS being the processor count: (200 * COUNT) - (COUNT * (PROCESSORS * 20))
 
 # Electric Crucible
 neotech.electricCrucible.desc=The Electric Crucible allows you to melt down metals into their molten form. Simply put a metal (block, ingot, etc) into the input slot and it will begin to melt the item. By default, the operation takes 1000 ticks. The Electric Crucible can also melt stone into lava and ice into water.

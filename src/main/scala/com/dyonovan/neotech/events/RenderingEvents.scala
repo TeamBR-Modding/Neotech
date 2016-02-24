@@ -44,7 +44,7 @@ object RenderingEvents extends IResourceManagerReloadListener {
         // Add Boxes
         if(player.getCurrentEquippedItem != null && ModifierAOE.getAOELevel(player.getCurrentEquippedItem) > 0) {
             val movingObjectPosition = player.rayTrace(controllerMP.getBlockReachDistance, event.partialTicks)
-            if(movingObjectPosition != null) {
+            if(movingObjectPosition != null && world.getBlockState(movingObjectPosition.getBlockPos).getBlock.getMaterial != Material.air) {
                 val level = ModifierAOE.getAOELevel(player.getCurrentEquippedItem)
                 blockList = ToolHelper.getBlockList(level, movingObjectPosition, player, world, player.getHeldItem)
                 for(x <- blockList.toArray)
@@ -57,13 +57,14 @@ object RenderingEvents extends IResourceManagerReloadListener {
         if(blockList != null && !blockList.isEmpty && controllerMP.isHittingBlock) {
             if(controllerMP.currentItemHittingBlock != null && ModifierAOE.getAOELevel(controllerMP.currentItemHittingBlock) > 0) {
                 drawDamageOnBlocks(Tessellator.getInstance(), Tessellator.getInstance().getWorldRenderer,
-                    player, event.partialTicks, world, blockList)
+                    player, event.partialTicks, world, controllerMP.currentBlock, blockList)
             }
         }
     }
 
     def drawDamageOnBlocks(tessellatorIn : Tessellator, worldRendererIn : WorldRenderer,
-                           entityIn : Entity, partialTicks : Float, world : World, blocks : java.util.List[BlockPos]) : Unit = {
+                           entityIn : Entity, partialTicks : Float, world : World, blockIn : BlockPos,
+                           blocks : java.util.List[BlockPos]) : Unit = {
         // Interpolate to player movement
         val d0 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * partialTicks.toDouble
         val d1 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * partialTicks.toDouble
@@ -95,7 +96,7 @@ object RenderingEvents extends IResourceManagerReloadListener {
             var breaksSelf = block.isInstanceOf[BlockChest] || block.isInstanceOf[BlockEnderChest] ||
                                 block.isInstanceOf[BlockSign] || block.isInstanceOf[BlockSkull]
             if(!breaksSelf) breaksSelf = tile != null && tile.canRenderBreaking
-            if(!breaksSelf) {
+            if(!breaksSelf && blockPosition != blockIn) {
                 val state = world.getBlockState(blockPosition)
                 if(state.getBlock.getMaterial != Material.air)
                     Minecraft.getMinecraft.getBlockRendererDispatcher
