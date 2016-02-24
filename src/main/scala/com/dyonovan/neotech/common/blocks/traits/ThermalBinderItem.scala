@@ -38,7 +38,7 @@ trait ThermalBinderItem {
       * @param stack The stack in
       * @return How many this can hold, check for modifiers here
       */
-    def getMaximumUpgradeCount(stack : ItemStack) : Int = 8
+    def getMaximumUpgradeCount(stack : ItemStack) : Int = 10
 
     /**
       * Used to specify if the stack can accept more

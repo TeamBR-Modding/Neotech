@@ -65,8 +65,10 @@ class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
             val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
             var added = false
             for(x <- 0 until tagList.tagCount())
-                if(tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierMiningLevel.name))
-                    tagList.set(x, localTag); added = true
+                if(tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierMiningLevel.name)) {
+                    tagList.set(x, localTag)
+                    added = true
+                }
             if(!added)
                 tagList.appendTag(localTag)
         }

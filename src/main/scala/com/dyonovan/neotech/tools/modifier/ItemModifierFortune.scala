@@ -48,9 +48,10 @@ class ItemModifierFortune extends BaseUpgradeItem("fortune", 5) {
             val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
             var added = false
             for(x <- 0 until tagList.tagCount()) {
-                val localname = tagList.getCompoundTagAt(x).getString("ModifierID")
-                if (tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierFortune.name))
-                    tagList.set(x, localTag); added = true
+                if (tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierFortune.name)) {
+                    tagList.set(x, localTag)
+                    added = true
+                }
             }
             if(!added)
                 tagList.appendTag(localTag)
