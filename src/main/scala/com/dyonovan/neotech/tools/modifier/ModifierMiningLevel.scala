@@ -42,6 +42,8 @@ object ModifierMiningLevel extends Modifier("miningLevel") {
         1
     }
 
+    override def getLevel(tag : NBTTagCompound) : Int = tag.getInteger(LEVEL)
+
     /**
       * Writes the info to the tag, store things you need here
       *

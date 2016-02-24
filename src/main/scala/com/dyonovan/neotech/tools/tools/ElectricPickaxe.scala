@@ -57,7 +57,24 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/pickaxe/electricPickaxe", doLowerCase = false)
 
-    override val acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
-        UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeSilkTouch.getUpgradeName
+    override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
+        UpgradeItemManager.upgradeMiningLevel.getUpgradeName
     ))
+
+    /**
+      * Used to get the upgrade count on this item, mainly used in the motherboard to determine how long to cook
+      *
+      * @param stack
+      * @return
+      */
+    override def getUpgradeCount(stack: ItemStack): Int = {
+        if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
+            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
+            var count = 0
+            for(x <- 0 until tagList.tagCount())
+                count += tagList.getCompoundTagAt(x).getInteger("ModifierLevel")
+            return count
+        }
+        0
+    }
 }

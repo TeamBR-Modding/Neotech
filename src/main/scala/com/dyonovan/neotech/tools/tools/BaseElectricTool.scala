@@ -2,7 +2,6 @@ package com.dyonovan.neotech.tools.tools
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.tools.ToolHelper
-import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiTextFormat
@@ -42,7 +41,7 @@ trait BaseElectricTool extends ItemBattery {
         if(!stack.hasTagCompound) {
             val tagCompound = new NBTTagCompound
             val tagList = new NBTTagList
-            tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 0))
+            tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1))
             tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
             stack.setTagCompound(tagCompound)
         }

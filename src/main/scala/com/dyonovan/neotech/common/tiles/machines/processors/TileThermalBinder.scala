@@ -1,22 +1,22 @@
 package com.dyonovan.neotech.common.tiles.machines.processors
 
 import com.dyonovan.neotech.client.gui.machines.processors.GuiThermalBinder
-import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.common.blocks.traits.ThermalBinderItem
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.MachineProcessor
-import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
-import com.teambr.bookshelf.notification.{NotificationHelper, Notification}
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{StatCollector, EnumFacing, EnumParticleTypes}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes, StatCollector}
 import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidTank
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -66,58 +66,13 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * @return True if you are able to process
       */
     override def canProcess : Boolean = {
-        if(isRunning && energyStorage.getEnergyStored >= getEnergyCostPerTick) {
-            if(getStackInSlot(OBJECT_OUTPUT) == null && getStackInSlot(OBJECT_INPUT) != null && lastCount != 0 && getCount == lastCount)
-                return true
-        }
-        isRunning = false
-        cookTime = 0
-        failCoolDown = 40
-        false
-    }
-
-    /**
-      * Used to check if the amount of upgrades do not exceed max allowed
-      *
-      * @return True if valid configuration
-      */
-    def isValid: Boolean = {
-        if (getStackInSlot(OBJECT_INPUT) == null) return false
-
-        val board = getStackInSlot(OBJECT_INPUT)
-        if (board.hasTagCompound) {
-            for (i <- 0 to 3) {
-                if (getStackInSlot(i) != null) {
-                    val notify = new Notification(new ItemStack(BlockManager.thermalBinder), "Slots Occupied",
-                        "Empty Slots", Notification.SHORT_DURATION)
-                    NotificationHelper.addNotification(notify)
-                    return false
-                }}
+        if(hasValidInput && isRunning)
             true
-        } else {
-            var pro = 0
-            var hd = 0
-            var cap = 0
-            var exp = 0
-            for (i <- 0 to 3) {
-                if (getStackInSlot(i) != null) {
-                    val item = getStackInSlot(i).getItem
-                    item match {
-                        case _: ItemManager.upgradeControl.type => cap += getStackInSlot(i).stackSize
-                        case _: ItemManager.upgradeExpansion.type => exp += getStackInSlot(i).stackSize
-                        case _: ItemManager.upgradeHardDrive.type => hd += getStackInSlot(i).stackSize
-                        case _: ItemManager.upgradeProcessor.type => pro += getStackInSlot(i).stackSize
-                        case _ =>
-                    }
-                }
-            }
-            if (pro <= 8 && hd <= 8 && cap <= 1 && exp <= 1) true
-            else {
-                val notify = new Notification(new ItemStack(BlockManager.thermalBinder), "Invalid Upgrades",
-                    "To Many Upgrades", Notification.SHORT_DURATION)
-                NotificationHelper.addNotification(notify)
-                false
-            }
+        else {
+            isRunning = false
+            cookTime = 0
+            failCoolDown = 40
+            false
         }
     }
 
@@ -128,7 +83,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * @return The output
       */
     override def getOutputForStack(stack: ItemStack): ItemStack = {
-        if (stack != null && (stack.getItem == ItemManager.upgradeMBEmpty || stack.getItem == ItemManager.upgradeMBFull))
+        if (stack != null && stack.getItem.isInstanceOf[ThermalBinderItem])
             new ItemStack(ItemManager.upgradeMBFull) //Just used to tell the Sided inventory that we have something, not actual output
         else
             null
@@ -207,37 +162,117 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
         new GuiThermalBinder(player, this)
 
     /**
+      * Write the tag
+      */
+    override def writeToNBT(tag: NBTTagCompound): Unit = {
+        super[MachineProcessor].writeToNBT(tag)
+        super[FluidHandler].writeToNBT(tag)
+        tag.setInteger("Count", count)
+    }
+
+    /**
+      * Read the tag
+      */
+    override def readFromNBT(tag: NBTTagCompound): Unit = {
+        super[MachineProcessor].readFromNBT(tag)
+        super[FluidHandler].readFromNBT(tag)
+        count = tag.getInteger("Count")
+    }
+
+    /*******************************************************************************************************************
+      ************************************************* Recipe methods *************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Checks if we can process
+      *
+      * @return True if all is good
+      */
+    def hasValidInput : Boolean = {
+        if(energyStorage.getEnergyStored <= 0 || getStackInSlot(OBJECT_OUTPUT) != null || getStackInSlot(OBJECT_INPUT) == null || tanks(TIN_TANK).getFluid == null
+                || tanks(TIN_TANK).getFluidAmount <= REQUIRED_MB)
+            return false
+        else if(isRunning) {
+            //Check if the input is a valid item (should always be but just to be safe, that way old machines won't break)
+            getStackInSlot(OBJECT_INPUT).getItem match {
+                case inputItem : ThermalBinderItem =>
+
+                    //Check we have something at all
+                    var hasInput = false
+                    for(x <- INPUT_SLOTS)
+                        if(getStackInSlot(x) != null) hasInput = true
+
+                    //Break if nothing found, or if we need to have empty (ie no upgrades installed)
+                    if(!hasInput)
+                        return false
+
+                    // Check that the inputs are valid for the item
+                    for(x <- INPUT_SLOTS) {
+                        if (getStackInSlot(x) != null &&
+                                !inputItem.isAcceptableUpgrade(getStackInSlot(x).getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName))
+                            return false // The stack was not valid
+                        if(getStackInSlot(x) != null &&
+                                !getStackInSlot(x).getItem.asInstanceOf[BaseUpgradeItem].canAcceptLevel(getStackInSlot(OBJECT_INPUT),
+                                    getStackInSlot(x).stackSize, getStackInSlot(x).getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName))
+                            return false
+                    }
+
+                    // Check for no duplicates
+                    // Build the set
+                    val listOfItems = ArrayBuffer[String]()
+                    for(x <- INPUT_SLOTS)
+                        if(getStackInSlot(x) != null) listOfItems += getStackInSlot(x).getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName
+
+                    // Check that there are no duplicates
+                    if(listOfItems.size != listOfItems.toSet.size) // Sets contain no duplicates, so if that size is different return
+                        return false
+
+                    // Check count
+                    if(!inputItem.canAcceptCount(getStackInSlot(OBJECT_INPUT),
+                        (getStackInSlot(INPUT1), getStackInSlot(INPUT2), getStackInSlot(INPUT3), getStackInSlot(INPUT4))))
+                        return false
+
+                    // Everything looks good, return true
+                    return true
+                case _ => return false
+            }
+        }
+        false
+    }
+
+    /**
       * Creates the Motherboard or removes the upgrades from it
       */
     def build(): Unit = {
         getStackInSlot(OBJECT_INPUT).getItem match {
-            case ItemManager.upgradeMBEmpty if hasSlotUpgrades =>
-                val tag = writeToMB()
-                val newMB = new ItemStack(ItemManager.upgradeMBFull)
-                newMB.setTagCompound(tag)
-                setInventorySlotContents(OBJECT_OUTPUT, newMB)
-                setInventorySlotContents(OBJECT_INPUT, null)
-            case ItemManager.upgradeMBFull if !hasSlotUpgrades =>
-                val mb = UpgradeBoard.getBoardFromStack(getStackInSlot(OBJECT_INPUT))
-                var slot = 0
-                if (mb.hasControl) {
-                    setInventorySlotContents(slot, new ItemStack(ItemManager.upgradeControl, 1))
-                    slot += 1
+            case binderItem : ThermalBinderItem =>
+                val tag = if (getStackInSlot(OBJECT_INPUT).hasTagCompound) getStackInSlot(OBJECT_INPUT).getTagCompound else new NBTTagCompound
+
+                // Write upgrade information
+                for(x <- INPUT_SLOTS)
+                    if (getStackInSlot(x) != null)
+                        getStackInSlot(x).getItem.asInstanceOf[BaseUpgradeItem]
+                                .writeInfoToNBT(getStackInSlot(OBJECT_INPUT), tag, getStackInSlot(x).stackSize)
+
+                // Write tag to Input
+                getStackInSlot(OBJECT_INPUT).setTagCompound(tag)
+
+                // Moves stacks
+                if(getStackInSlot(OBJECT_INPUT).getItem != ItemManager.upgradeMBEmpty)
+                    setStackInSlot(OBJECT_OUTPUT, getStackInSlot(OBJECT_INPUT).copy())
+                else {
+                    val stack = new ItemStack(ItemManager.upgradeMBFull)
+                    stack.setTagCompound(tag)
+                    setStackInSlot(OBJECT_OUTPUT, stack)
                 }
-                if (mb.hasExpansion) {
-                    setInventorySlotContents(slot, new ItemStack(ItemManager.upgradeExpansion, 1))
-                    slot += 1
-                }
-                if (mb.getHardDriveCount > 0) {
-                    setInventorySlotContents(slot, new ItemStack(ItemManager.upgradeHardDrive, mb.getHardDriveCount))
-                    slot += 1
-                }
-                if (mb.getProcessorCount > 0) {
-                    setInventorySlotContents(slot, new ItemStack(ItemManager.upgradeProcessor, mb.getProcessorCount))
-                    slot += 1
-                }
-                setInventorySlotContents(OBJECT_INPUT, null)
-                setInventorySlotContents(OBJECT_OUTPUT, new ItemStack(ItemManager.upgradeMBEmpty, 1))
+                setStackInSlot(OBJECT_INPUT, null)
+                for(x <- INPUT_SLOTS)
+                    setStackInSlot(x, null)
+
+                // Drain input
+                tanks(TIN_TANK).drain(REQUIRED_MB, true)
+                isRunning = false
+                sendValueToClient(RUNNING_VARIABLE_ID, 0)
             case _ =>
         }
     }
@@ -248,116 +283,34 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * @return How many upgrades are present
       */
     def getCount: Int = {
+        count = 0
         if (getStackInSlot(OBJECT_INPUT) != null) {
             getStackInSlot(OBJECT_INPUT).getItem match {
-                case ItemManager.upgradeMBEmpty if hasSlotUpgrades =>
-                    var count = 0
-                    for (i <- 0 to 3) {
-                        if (getStackInSlot(i) != null)
-                            count += getStackInSlot(i).stackSize
-                    }
-                    return count
-                case ItemManager.upgradeMBFull if !hasSlotUpgrades =>
-                    val mb = UpgradeBoard.getBoardFromStack(getStackInSlot(OBJECT_INPUT))
-                    if (mb != null) {
-                        var count = mb.getHardDriveCount + mb.getProcessorCount
-                        if (mb.hasControl) count += 1
-                        if (mb.hasExpansion) count += 1
+                case binderItem : ThermalBinderItem =>
+                    if(hasEmptyInput && getStackInSlot(OBJECT_INPUT).hasTagCompound) {
+                        count = binderItem.getUpgradeCount(getStackInSlot(OBJECT_INPUT))
                         return count
+                    }
+                    else {
+                        for(x <- INPUT_SLOTS)
+                            if(getStackInSlot(x) != null)
+                                count += getStackInSlot(x).stackSize
                     }
                 case _ =>
             }
         }
-        0
+        count
     }
 
     /**
-      * Used to write the tag needed to the ItemStack to hold the upgrade info
+      * Used to check if the input is empty, usually used to tell if we are taking things out or putting in
       *
-      * @return The tag to write to the ItemStack
+      * @return
       */
-    private def writeToMB(): NBTTagCompound = {
-        val tag = new NBTTagCompound
-        for (i <- 0 to 3) {
-            if (getStackInSlot(i) != null) {
-                getStackInSlot(i).getItem match {
-                    case item: ItemManager.upgradeControl.type =>
-                        if (!tag.getBoolean("Control")) {
-                            tag.setBoolean("Control", true)
-                            setInventorySlotContents(i, null)
-                        }
-                    case item: ItemManager.upgradeExpansion.type =>
-                        if (!tag.getBoolean("Expansion")) {
-                            tag.setBoolean("Expansion", true)
-                            setInventorySlotContents(i, null)
-                        }
-                    case item: ItemManager.upgradeHardDrive.type =>
-                        val countTag = tag.getInteger("HardDrive")
-                        if (countTag + getStackInSlot(i).stackSize <= 8) {
-                            tag.setInteger("HardDrive", countTag + getStackInSlot(i).stackSize)
-                            setInventorySlotContents(i, null)
-                        } else if (countTag + getStackInSlot(i).stackSize > 8) {
-                            tag.setInteger("HardDrive", 8)
-                            getStackInSlot(i).stackSize -= 8 - countTag
-                        }
-                    case item: ItemManager.upgradeProcessor.type =>
-                        val countTag = tag.getInteger("Processor")
-                        if (countTag + getStackInSlot(i).stackSize <= 8) {
-                            tag.setInteger("Processor", countTag + getStackInSlot(i).stackSize)
-                            setInventorySlotContents(i, null)
-                        } else if (countTag + getStackInSlot(i).stackSize > 8) {
-                            tag.setInteger("Processor", 8)
-                            getStackInSlot(i).stackSize -= 8 - countTag
-                        }
-                }
-            }
-        }
-        tag
-    }
-
-    /**
-      * Used to tell if the upgrades are in the slots
-      *
-      * @return True if upgrades are present
-      */
-    def hasSlotUpgrades: Boolean = {
-        for (i <- 0 to 3) {
-            if (getStackInSlot(i) != null) return true
-        }
-        false
-    }
-
-    /**
-      * Write the tag
-      */
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
-        super.writeToNBT(tag)
-        super[FluidHandler].writeToNBT(tag)
-        tag.setInteger("Count", count)
-    }
-
-    /**
-      * Read the tag
-      */
-    override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
-        super[FluidHandler].readFromNBT(tag)
-        count = tag.getInteger("Count")
-    }
-
-    /*******************************************************************************************************************
-      ************************************************* Recipe methods *************************************************
-      ******************************************************************************************************************/
-
-    def hasValidInput : Boolean = {
-        if(energyStorage.getEnergyStored <= 0 || getStackInSlot(OBJECT_OUTPUT) != null || getStackInSlot(OBJECT_INPUT) == null || tanks(TIN_TANK).getFluid == null
-                || tanks(TIN_TANK).getFluidAmount <= REQUIRED_MB)
-            return false
-        else {
-
-        }
-
-        false
+    def hasEmptyInput: Boolean = {
+        for(x <- INPUT_SLOTS)
+            if(getStackInSlot(x) != null) return false
+        true
     }
 
     /*******************************************************************************************************************
@@ -387,9 +340,9 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       */
     override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
 
-    /*******************************************************************************************************************
-      ************************************************ Inventory methods ***********************************************
-      ******************************************************************************************************************/
+/*******************************************************************************************************************
+  ************************************************ Inventory methods ***********************************************
+  ******************************************************************************************************************/
 
     /**
       * The initial size of the inventory

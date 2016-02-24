@@ -26,6 +26,13 @@ abstract class Modifier(var name : String) {
     def getIdentifier = name
 
     /**
+      * Used to get the level for this modifier
+      * @param tag The tag that the level is stored on
+      * @return The level
+      */
+    def getLevel(tag : NBTTagCompound) = 1
+
+    /**
       * Allows you to specify a specific texture based on the stack, this probably won't be used often but its there
       *
       * @return The texture location, defaulted to the identifier (this should be the standard)
@@ -62,6 +69,7 @@ abstract class Modifier(var name : String) {
     def writeToNBT(tag: NBTTagCompound, stack : ItemStack): NBTTagCompound = {
         tag.setString("ModifierID", name)
         tag.setString("TextureLocation", textureLocation(stack, tag))
+        tag.setInteger("ModifierLevel", getLevel(tag))
         tag
     }
 }

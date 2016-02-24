@@ -45,15 +45,40 @@ class MotherBoardItem(name: String, maxStackSize: Int, creative: Boolean) extend
         }
     }
 
-    override val acceptableUpgrades: util.ArrayList[String] =
+    override def acceptableUpgrades: util.ArrayList[String] =
         new util.ArrayList[String](util.Arrays.asList(ItemManager.upgradeControl.getUpgradeName,
             ItemManager.upgradeExpansion.getUpgradeName, ItemManager.upgradeHardDrive.getUpgradeName,
             ItemManager.upgradeProcessor.getUpgradeName))
 
     override def getToolType: ToolType = {
         getName match {
-            case ItemManager.upgradeMBEmpty.getName => ToolType.Empty_MB
-            case ItemManager.upgradeMBFull.getName => ToolType.Filled_MB
+            case "upgradeMBEmpty" => ToolType.Empty_MB
+            case "upgradeMBFull" => ToolType.Filled_MB
         }
     }
+
+    /**
+      * Used to get the upgrade count on this item, mainly used in the motherboard to determine how long to cook
+      *
+      * @param stack
+      * @return
+      */
+    override def getUpgradeCount(stack: ItemStack): Int = {
+        if(stack.hasTagCompound) {
+            val processorCount = stack.getTagCompound.getInteger("Processor")
+            val hardDriveCount = stack.getTagCompound.getInteger("HardDrive")
+            val controlCount   = if(stack.getTagCompound.getBoolean("Control")) 1 else 0
+            val expansionCount = if(stack.getTagCompound.getBoolean("Expansion")) 1 else 0
+            return processorCount + hardDriveCount + controlCount + expansionCount
+        }
+        0
+    }
+
+    /**
+      * Used to specify if the stack can accept more
+      *
+      * @return True if all items can be put on
+      */
+    override def canAcceptCount(stack: ItemStack, stacksIn: (ItemStack, ItemStack, ItemStack, ItemStack)): Boolean =
+        getUpgradeCount(stack) == 0 // We only let things in when not there
 }
