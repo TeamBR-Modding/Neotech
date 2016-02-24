@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.common.blocks.traits
+package com.dyonovan.neotech.tools.upgradeitems
 
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import net.minecraft.item.ItemStack

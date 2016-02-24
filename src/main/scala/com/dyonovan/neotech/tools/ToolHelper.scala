@@ -4,6 +4,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagList
 import net.minecraftforge.common.util.EnumHelper
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
   * This file was created for NeoTech
   *
@@ -31,5 +33,38 @@ object ToolHelper {
             stack.getTagCompound.getTagList(ModifierListTag, 10)
         else
             null
+    }
+
+    def getCurrentUpgradeCount(stack : ItemStack) : Int = {
+        var count = 0
+        val tag = getModifierTag(stack)
+        if(tag != null) {
+            for(x <- 0 until tag.tagCount()) {
+                count += tag.getCompoundTagAt(x).getInteger("ModifierLevel")
+            }
+        }
+        count
+    }
+
+    /**
+      * Used to get the tool tip for this modifier, you should read from the tag here
+      *
+      * @param stack The stack in
+      * @return A list of tips
+      */
+    def getToolTipForDisplay(stack : ItemStack) : ArrayBuffer[String] = {
+        val buffer = new ArrayBuffer[String]()
+        val tagList = getModifierTag(stack)
+        if(tagList != null) {
+            for (x <- 0 until tagList.tagCount()) {
+                if (stack.hasTagCompound && tagList.getCompoundTagAt(x) != null) {
+                    val ourTag = tagList.getCompoundTagAt(x)
+                    val tipList = ourTag.getTagList("ModifierTipList", 8)
+                    for (x <- 0 until tipList.tagCount())
+                        buffer += tipList.getStringTagAt(x)
+                }
+            }
+        }
+        buffer
     }
 }

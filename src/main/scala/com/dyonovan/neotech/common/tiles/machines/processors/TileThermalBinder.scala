@@ -1,11 +1,10 @@
 package com.dyonovan.neotech.common.tiles.machines.processors
 
 import com.dyonovan.neotech.client.gui.machines.processors.GuiThermalBinder
-import com.dyonovan.neotech.common.blocks.traits.ThermalBinderItem
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
+import com.dyonovan.neotech.tools.upgradeitems.{ThermalBinderItem, BaseUpgradeItem}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambr.bookshelf.util.InventoryUtils
@@ -55,7 +54,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       */
     override def getCookTime : Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            (200 * getCount) - (getUpgradeBoard.getProcessorCount * ((200 * getCount) / 8.33).toInt)
+            (200 * getCount) - ((200 * getCount) / getUpgradeBoard.getProcessorCount)
         else
             200 * getCount
     }

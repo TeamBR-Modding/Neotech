@@ -3,7 +3,7 @@ package com.dyonovan.neotech.tools.modifier
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.nbt.NBTTagCompound
 
 /**
   * This file was created for NeoTech
@@ -49,28 +49,10 @@ class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
       * @return The tag passed
       */
     override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
-        var localTag = new NBTTagCompound
-        if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
-            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
-            for(x <- 0 until tagList.tagCount())
-                if(tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierMiningLevel.name))
-                    localTag = tagList.getCompoundTagAt(x)
-        }
+        var localTag = ModifierMiningLevel.getModifierTagFromStack(stack)
+        if(localTag == null)
+            localTag = new NBTTagCompound
         ModifierMiningLevel.writeToNBT(localTag, stack, ModifierMiningLevel.getLevel(localTag) + count)
-        if(!stack.hasTagCompound || !stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) { // Write the new list
-        val tagList = new NBTTagList
-            tagList.appendTag(localTag)
-            stack.getTagCompound.setTag(ToolHelper.ModifierListTag, tagList)
-        } else {
-            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
-            var added = false
-            for(x <- 0 until tagList.tagCount())
-                if(tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierMiningLevel.name)) {
-                    tagList.set(x, localTag)
-                    added = true
-                }
-            if(!added)
-                tagList.appendTag(localTag)
-        }
+        ModifierMiningLevel.overrideModifierTag(stack, localTag)
     }
 }

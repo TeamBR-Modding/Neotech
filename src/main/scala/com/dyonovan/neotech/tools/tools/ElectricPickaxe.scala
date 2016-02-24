@@ -2,7 +2,6 @@ package com.dyonovan.neotech.tools.tools
 
 import java.util
 
-import com.dyonovan.neotech.common.blocks.traits.ThermalBinderItem
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
@@ -28,7 +27,7 @@ import net.minecraft.world.World
   * @author Dyonovan
   * @since 2/21/2016
   */
-class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricTool with ThermalBinderItem {
+class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricTool {
 
     lazy val RF_PER_BLOCK = 250
 
@@ -66,7 +65,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
         UpgradeItemManager.upgradeMiningLevel.getUpgradeName, UpgradeItemManager.upgradeSilkTouch.getUpgradeName,
-        UpgradeItemManager.upgradeFortune.getUpgradeName
+        UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeMiningSpeed.getUpgradeName
     ))
 
     /**

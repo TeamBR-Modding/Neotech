@@ -3,8 +3,8 @@ package com.dyonovan.neotech.tools.tools
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
+import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
 import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.client.gui.GuiTextFormat
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @since 2/21/2016
   */
 
-trait BaseElectricTool extends ItemBattery {
+trait BaseElectricTool extends ItemBattery with ThermalBinderItem {
 
     setCreativeTab(NeoTech.tabTools)
     setMaxStackSize(1)
@@ -97,16 +97,9 @@ trait BaseElectricTool extends ItemBattery {
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(getMaxEnergyStored(stack)) + " RF")
-        var harvestLevel = 1
-        if (stack.hasTagCompound)
-            harvestLevel = ModifierMiningLevel.getMiningLevel(stack)
-        var strLevel = ""
-        harvestLevel match {
-            case 3 => strLevel = "Obsidian"
-            case 2 => strLevel = "Redstone"
-            case 1 => strLevel = "Stone"
-            case _ =>
-        }
-        list.add("Mining Level: " + GuiTextFormat.ITALICS + strLevel)
+        list.add("")
+        list.add("Upgrades: " + ToolHelper.getCurrentUpgradeCount(stack) + " / " + getMaximumUpgradeCount(stack))
+        for(string <- ToolHelper.getToolTipForDisplay(stack))
+            list.add(string)
     }
 }

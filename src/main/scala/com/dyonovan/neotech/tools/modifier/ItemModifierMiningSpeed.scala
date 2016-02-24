@@ -1,9 +1,8 @@
 package com.dyonovan.neotech.tools.modifier
 
-import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
+import net.minecraft.nbt.NBTTagCompound
 
 /**
   * This file was created for NeoTech
@@ -15,7 +14,7 @@ import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
   * @author Paul Davis <pauljoda>
   * @since 2/24/2016
   */
-class ItemModifierFortune extends BaseUpgradeItem("fortune", 5) {
+class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 4) {
     /**
       * Can this upgrade item allow more to be applied to the item
       *
@@ -24,9 +23,8 @@ class ItemModifierFortune extends BaseUpgradeItem("fortune", 5) {
       * @return True if there is space for the entire count
       */
     override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean = {
-        if(count > getMaximumLevel)
-            return false
-        ModifierFortune.getFortuneLevel(stack) + count <= getMaximumLevel
+        val speed = ModifierMiningSpeed.getMiningSpeed(stack)
+        speed + (count * 4.0F) <= 20.0F
     }
 
     /**
@@ -36,16 +34,10 @@ class ItemModifierFortune extends BaseUpgradeItem("fortune", 5) {
       * @return The tag passed
       */
     override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
-        var localTag = ModifierFortune.getModifierTagFromStack(stack)
+        var localTag = ModifierMiningSpeed.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierFortune.writeToNBT(localTag, stack, ModifierFortune.getFortuneLevel(stack) + count)
-        if(!stack.hasTagCompound || !stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) { // Write the new list
-        val tagList = new NBTTagList
-            tagList.appendTag(localTag)
-            stack.getTagCompound.setTag(ToolHelper.ModifierListTag, tagList)
-        } else {
-            ModifierFortune.overrideModifierTag(stack, localTag)
-        }
+        ModifierMiningSpeed.writeToNBT(localTag, stack, ModifierMiningSpeed.getMiningSpeed(stack) + (count * 4.0F))
+        ModifierMiningSpeed.overrideModifierTag(stack, localTag)
     }
 }

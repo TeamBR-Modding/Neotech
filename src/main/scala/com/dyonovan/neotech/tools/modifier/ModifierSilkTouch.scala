@@ -4,6 +4,8 @@ import net.minecraft.enchantment.{Enchantment, EnchantmentHelper}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
   * This file was created for NeoTech
   *
@@ -33,4 +35,12 @@ object ModifierSilkTouch extends Modifier("silkTouch") {
         super.writeToNBT(tag, stack)
         tag
     }
+
+    /**
+      * Used to get the tool tip for this modifier
+      *
+      * @param stack The stack in
+      * @return A list of tips
+      */
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = new ArrayBuffer[String]() //Vanilla handles this
 }

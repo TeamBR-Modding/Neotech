@@ -4,11 +4,11 @@ import java.util
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.collections.UpgradeBoard
-import com.dyonovan.neotech.common.blocks.traits.ThermalBinderItem
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
+import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -34,6 +34,7 @@ class MotherBoardItem(name: String, maxStackSize: Int, creative: Boolean) extend
 
     /**
       * Gets the maximum count for upgrades, default 8
+ *
       * @param stack The stack in
       * @return How many this can hold, check for modifiers here
       */

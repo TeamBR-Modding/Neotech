@@ -74,6 +74,7 @@ object ItemRenderManager {
         registerItem(UpgradeItemManager.upgradeMiningLevel)
         registerItem(UpgradeItemManager.upgradeSilkTouch)
         registerItem(UpgradeItemManager.upgradeFortune)
+        registerItem(UpgradeItemManager.upgradeMiningSpeed)
 
         registerPipesAndColored()
     }

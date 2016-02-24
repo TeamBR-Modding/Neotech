@@ -3,6 +3,8 @@ package com.dyonovan.neotech.tools.modifier
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
   * This file was created for NeoTech
   *
@@ -29,4 +31,12 @@ object ModifierAOE extends Modifier("aoe") {
         super.writeToNBT(tag, stack)
         tag
     }
+
+    /**
+      * Used to get the tool tip for this modifier
+      *
+      * @param stack The stack in
+      * @return A list of tips
+      */
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = new ArrayBuffer[String]()
 }

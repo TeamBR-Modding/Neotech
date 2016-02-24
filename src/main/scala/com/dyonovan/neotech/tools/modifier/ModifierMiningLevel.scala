@@ -1,7 +1,10 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.teambr.bookshelf.client.gui.GuiTextFormat
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -31,12 +34,13 @@ object ModifierMiningLevel extends Modifier("miningLevel") {
 
     /**
       * Used to get the mining level for the stack
+      *
       * @param stack
       * @return
       */
     def getMiningLevel(stack : ItemStack) : Int = {
         val tag = getModifierTagFromStack(stack)
-        if(tag ne null) {
+        if(tag != null) {
             return tag.getInteger(LEVEL)
         }
         1
@@ -53,5 +57,23 @@ object ModifierMiningLevel extends Modifier("miningLevel") {
         tag.setInteger(LEVEL, miningLevel)
         super.writeToNBT(tag, stack)
         tag
+    }
+
+    /**
+      * Used to get the tool tip for this modifier
+      *
+      * @param stack The stack in
+      * @return A list of tips
+      */
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = {
+        val  harvestLevel = tag.getInteger(LEVEL)
+        var strLevel = ""
+        harvestLevel match {
+            case 3 => strLevel = "Obsidian"
+            case 2 => strLevel = "Redstone"
+            case 1 => strLevel = "Stone"
+            case _ =>
+        }
+        ArrayBuffer("Mining Level: " + GuiTextFormat.ITALICS + strLevel)
     }
 }

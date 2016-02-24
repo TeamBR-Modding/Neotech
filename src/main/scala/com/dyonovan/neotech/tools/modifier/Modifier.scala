@@ -4,7 +4,9 @@ import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.nbt.{NBTTagString, NBTTagList, NBTTagCompound}
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -27,10 +29,19 @@ abstract class Modifier(var name : String) {
 
     /**
       * Used to get the level for this modifier
+      *
       * @param tag The tag that the level is stored on
       * @return The level
       */
     def getLevel(tag : NBTTagCompound) = 1
+
+    /**
+      * Used to get the tool tip for this modifier
+      *
+      * @param stack The stack in
+      * @return A list of tips
+      */
+    def getToolTipForWriting(stack : ItemStack, tag : NBTTagCompound) : ArrayBuffer[String]
 
     /**
       * Allows you to specify a specific texture based on the stack, this probably won't be used often but its there
@@ -62,6 +73,30 @@ abstract class Modifier(var name : String) {
     }
 
     /**
+      * Used to override the existing tag with a new tag
+      *
+      * @param stack The stack with the list
+      * @param localTag The tag to set
+      */
+    def overrideModifierTag(stack : ItemStack, localTag : NBTTagCompound) : Unit = {
+        if(!stack.hasTagCompound || !stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) { // Write the new list
+            val tagList = new NBTTagList
+            tagList.appendTag(localTag)
+            stack.getTagCompound.setTag(ToolHelper.ModifierListTag, tagList)
+        } else {
+            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
+            var added = false
+            for (x <- 0 until tagList.tagCount())
+                if (tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(name)) {
+                    tagList.set(x, localTag)
+                    added = true
+                }
+            if (!added)
+                tagList.appendTag(localTag)
+        }
+    }
+
+    /**
       * Writes the info to the tag, store things you need here
       *
       * @param tag The incoming tag compound
@@ -70,6 +105,10 @@ abstract class Modifier(var name : String) {
         tag.setString("ModifierID", name)
         tag.setString("TextureLocation", textureLocation(stack, tag))
         tag.setInteger("ModifierLevel", getLevel(tag))
+        val tipList = new NBTTagList
+        for(string <- getToolTipForWriting(stack, tag))
+            tipList.appendTag(new NBTTagString(string))
+        tag.setTag("ModifierTipList", tipList)
         tag
     }
 }
