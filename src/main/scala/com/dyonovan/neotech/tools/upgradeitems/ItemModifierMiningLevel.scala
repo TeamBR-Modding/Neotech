@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound
   * @since 2/23/2016
   */
 class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
-
     /**
       * Can this upgrade item allow more to be applied to the item
       *

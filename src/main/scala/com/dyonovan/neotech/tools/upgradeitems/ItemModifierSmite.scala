@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound
   * @since 2/24/2016
   */
 class ItemModifierSmite extends BaseUpgradeItem("smite", 5) {
-
     /**
       * Can this upgrade item allow more to be applied to the item
       *

@@ -2,6 +2,7 @@ package com.dyonovan.neotech.managers;
 
 import com.dyonovan.neotech.common.metals.items.ItemMetal;
 import com.dyonovan.neotech.common.tiles.machines.processors.TileSolidifier;
+import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -332,5 +333,7 @@ public class CraftingRecipeManager {
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.iron_ingot), 1.0F);
+
+        UpgradeItemManager.registerRecipes();
     }
 }

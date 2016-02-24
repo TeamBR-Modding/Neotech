@@ -50,9 +50,10 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
             tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1))
             tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
             tagCompound.setInteger("EnergyCapacity", 25000)
+            tagCompound.setInteger("MaxExtract", 200)
+            tagCompound.setInteger("MaxReceive", 200)
             stack.setTagCompound(tagCompound)
         }
-        capacity = stack.getTagCompound.getInteger("EnergyCapacity")
     }
 
     override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
@@ -87,7 +88,8 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
             stack.setTagCompound(new NBTTagCompound)
         }
         var energy: Int = stack.getTagCompound.getInteger("Energy")
-        val energyReceived: Int = Math.min(stack.getTagCompound.getInteger("EnergyCapacity") - energy, Math.min(this.maxReceive, maxReceive))
+        val energyReceived: Int = Math.min(stack.getTagCompound.getInteger("EnergyCapacity") - energy,
+            Math.min(stack.getTagCompound.getInteger("MaxReceive"), maxReceive))
         if (!simulate) {
             energy += energyReceived
             stack.getTagCompound.setInteger("Energy", energy)

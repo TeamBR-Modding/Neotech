@@ -1,9 +1,8 @@
 package com.dyonovan.neotech.tools.upgradeitems
 
-import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.modifier.ModifierFortune
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.nbt.NBTTagCompound
 
 /**
   * This file was created for NeoTech
@@ -16,6 +15,7 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
   * @since 2/24/2016
   */
 class ItemModifierFortune extends BaseUpgradeItem("fortune", 5) {
+
     /**
       * Can this upgrade item allow more to be applied to the item
       *
@@ -40,12 +40,6 @@ class ItemModifierFortune extends BaseUpgradeItem("fortune", 5) {
         if(localTag == null)
             localTag = new NBTTagCompound
         ModifierFortune.writeToNBT(localTag, stack, ModifierFortune.getFortuneLevel(stack) + count)
-        if(!stack.hasTagCompound || !stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) { // Write the new list
-        val tagList = new NBTTagList
-            tagList.appendTag(localTag)
-            stack.getTagCompound.setTag(ToolHelper.ModifierListTag, tagList)
-        } else {
-            ModifierFortune.overrideModifierTag(stack, localTag)
-        }
+        ModifierFortune.overrideModifierTag(stack, localTag)
     }
 }

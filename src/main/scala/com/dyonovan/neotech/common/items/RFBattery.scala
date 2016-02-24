@@ -76,5 +76,7 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
       */
     override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
         stack.getTagCompound.setInteger("EnergyCapacity", capacity)
+        stack.getTagCompound.setInteger("MaxReceive", maxReceive)
+        stack.getTagCompound.setInteger("MaxExtract", maxExtract)
     }
 }

@@ -38,7 +38,7 @@ object ModifierMiningSpeed extends Modifier("miningSpeed") {
       * @param tag The tag that the level is stored on
       * @return The level
       */
-    override def getLevel(tag : NBTTagCompound) = (tag.getFloat(SPEED) / 4).toInt
+    override def getLevel(tag : NBTTagCompound) = (tag.getFloat(SPEED) / 4).toInt - 1
 
     /**
       * Used to get the tool tip for this modifier

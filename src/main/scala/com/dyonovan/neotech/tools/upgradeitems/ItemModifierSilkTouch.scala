@@ -16,6 +16,7 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
   * @since 2/24/2016
   */
 class ItemModifierSilkTouch extends BaseUpgradeItem("silkTouch", 1) {
+
     /**
       * Can this upgrade item allow more to be applied to the item
       *
