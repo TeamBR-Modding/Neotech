@@ -36,8 +36,6 @@ trait BaseElectricTool extends ItemBattery {
 
     def getToolName   : String
 
-    def getToolType   : ToolType
-
     def getBaseTexture : String
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {

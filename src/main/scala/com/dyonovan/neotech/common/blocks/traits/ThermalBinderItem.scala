@@ -16,6 +16,8 @@ trait ThermalBinderItem {
 
     val acceptableUpgrades: java.util.ArrayList[String]
 
+    def getToolType   : ToolType
+
     def isAcceptableUpgrade(toolType: ToolType, upgradeName: String): Boolean = {
         acceptableUpgrades.contains(upgradeName)
     }

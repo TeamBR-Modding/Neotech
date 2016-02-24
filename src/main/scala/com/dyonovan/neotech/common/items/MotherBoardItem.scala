@@ -7,8 +7,10 @@ import com.dyonovan.neotech.collections.UpgradeBoard
 import com.dyonovan.neotech.common.blocks.traits.ThermalBinderItem
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.tools.ToolHelper.ToolType
+import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{ItemStack, Item}
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -47,4 +49,11 @@ class MotherBoardItem(name: String, maxStackSize: Int, creative: Boolean) extend
         new util.ArrayList[String](util.Arrays.asList(ItemManager.upgradeControl.getUpgradeName,
             ItemManager.upgradeExpansion.getUpgradeName, ItemManager.upgradeHardDrive.getUpgradeName,
             ItemManager.upgradeProcessor.getUpgradeName))
+
+    override def getToolType: ToolType = {
+        getName match {
+            case ItemManager.upgradeMBEmpty.getName => ToolType.Empty_MB
+            case ItemManager.upgradeMBFull.getName => ToolType.Filled_MB
+        }
+    }
 }
