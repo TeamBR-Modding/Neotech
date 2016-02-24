@@ -1,7 +1,12 @@
 package com.dyonovan.neotech.tools
 
+import java.util
+
+import com.google.common.collect.Lists
+import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagList
+import net.minecraft.util.{EnumFacing, BlockPos, MovingObjectPosition}
 import net.minecraftforge.common.util.EnumHelper
 
 import scala.collection.mutable.ArrayBuffer
@@ -44,6 +49,22 @@ object ToolHelper {
             }
         }
         count
+    }
+
+    def getBlockList(level: Int, mop: MovingObjectPosition, pos: BlockPos, player : EntityPlayer): java.util.List[BlockPos] = {
+        if(!player.isSneaking) {
+            var pos1: BlockPos = null
+            var pos2: BlockPos = null
+            if (mop.sideHit.getAxis.isHorizontal) {
+                pos1 = pos.offset(EnumFacing.UP).offset(mop.sideHit)
+                pos2 = pos.offset(EnumFacing.DOWN).offset(mop.sideHit)
+            } else {
+                pos1 = pos.offset(EnumFacing.NORTH).offset(EnumFacing.WEST)
+                pos2 = pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST)
+            }
+            val list: java.util.List[BlockPos] = Lists.newArrayList(BlockPos.getAllInBox(pos1, pos2).iterator())
+            list
+        } else util.Arrays.asList(mop.getBlockPos)
     }
 
     /**

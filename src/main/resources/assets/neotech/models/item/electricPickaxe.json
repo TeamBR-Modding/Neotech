@@ -7,6 +7,7 @@
         "miningLevel3" : "neotech:items/tools/pickaxe/miningLevel3",
         "miningSpeed"  : "neotech:items/tools/pickaxe/miningSpeed",
         "silkTouch"    : "neotech:items/tools/pickaxe/silkTouch",
-        "fortune"      : "neotech:items/tools/pickaxe/fortune"
+        "fortune"      : "neotech:items/tools/pickaxe/fortune",
+        "aoe"          : "neotech:items/tools/pickaxe/aoe"
     }
 }

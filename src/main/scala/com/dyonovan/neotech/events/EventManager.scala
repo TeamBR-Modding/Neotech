@@ -10,6 +10,7 @@ object EventManager {
         MinecraftForge.EVENT_BUS.register(OnCraftedEvent)
         MinecraftForge.EVENT_BUS.register(OnPlayerLoginEvent)
         MinecraftForge.EVENT_BUS.register(AttackEvent)
+        MinecraftForge.EVENT_BUS.register(RenderingEvents)
         MinecraftForge.EVENT_BUS.register(ItemTrashBag)
     }
 }

@@ -7,15 +7,16 @@ import com.dyonovan.neotech.common.entities.EntityNet
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
+import com.dyonovan.neotech.events.RenderingEvents
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{MetalManager, BlockManager}
+import com.dyonovan.neotech.managers.{BlockManager, MetalManager}
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
+import net.minecraft.client.resources.IReloadableResourceManager
 import net.minecraft.client.resources.model.ModelBakery
-import net.minecraftforge.client.model.ModelLoaderRegistry
 import net.minecraftforge.fml.client.registry.{ClientRegistry, IRenderFactory, RenderingRegistry}
 import net.minecraftforge.fml.common.registry.GameRegistry
 
@@ -111,6 +112,7 @@ class ClientProxy extends CommonProxy {
      *
      * Usually used to close things opened to load and check for conditions
      */
-    override def postInit() = {}
-
+    override def postInit() = {
+        Minecraft.getMinecraft.getResourceManager.asInstanceOf[IReloadableResourceManager].registerReloadListener(RenderingEvents)
+    }
 }

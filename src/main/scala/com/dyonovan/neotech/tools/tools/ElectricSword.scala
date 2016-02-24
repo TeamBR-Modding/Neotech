@@ -9,10 +9,12 @@ import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.utils.ClientUtils
+import net.minecraft.block.Block
 import net.minecraft.entity.{EntityLivingBase, Entity}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemStack, ItemSword}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -36,6 +38,9 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
     override def hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase) : Boolean = {
         extractEnergy(stack, 250, simulate = false) > 0
     }
+
+    override def onBlockDestroyed(stack: ItemStack, worldIn: World, blockIn: Block,
+                                  pos: BlockPos, playerIn: EntityLivingBase) : Boolean = true
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
         if(!stack.hasTagCompound) {

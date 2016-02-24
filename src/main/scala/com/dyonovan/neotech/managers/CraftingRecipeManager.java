@@ -139,7 +139,7 @@ public class CraftingRecipeManager {
 
         //Pipes
         //Basic
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 4),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 8),
                 "AAA",
                 "BBB",
                 "AAA", 'A', Items.iron_ingot, 'B', "blockGlass"));

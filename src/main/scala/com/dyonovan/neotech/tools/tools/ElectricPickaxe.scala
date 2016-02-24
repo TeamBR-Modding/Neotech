@@ -10,13 +10,12 @@ import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed}
 import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.utils.ClientUtils
-import com.google.common.collect.Lists
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemPickaxe, ItemStack}
-import net.minecraft.util.{BlockPos, EnumFacing, MovingObjectPosition}
+import net.minecraft.util.{BlockPos, MovingObjectPosition}
 import net.minecraft.world.World
 
 /**
@@ -35,25 +34,11 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     setUnlocalizedName(Reference.MOD_ID + ":electricPickaxe")
 
-    def getBlockList(level: Int, mop: MovingObjectPosition, pos: BlockPos): java.util.List[BlockPos] = {
-        var pos1: BlockPos = null
-        var pos2: BlockPos = null
-        if (mop.sideHit.getAxis.isHorizontal) {
-            pos1 = pos.offset(EnumFacing.UP).offset(mop.sideHit)
-            pos2 = pos.offset(EnumFacing.DOWN).offset(mop.sideHit)
-        } else {
-            pos1 = pos.offset(EnumFacing.NORTH).offset(EnumFacing.WEST)
-            pos2 = pos.offset(EnumFacing.SOUTH).offset(EnumFacing.EAST)
-        }
-        val list: java.util.List[BlockPos] = Lists.newArrayList(BlockPos.getAllInBox(pos1, pos2).iterator())
-        list
-    }
-
     override def onBlockDestroyed(stack: ItemStack, world: World, block: Block, pos: BlockPos, player: EntityLivingBase): Boolean = {
         if (ModifierAOE.getAOELevel(stack) > 0 && player.isInstanceOf[EntityPlayer]) {
             val mop = stack.getItem.asInstanceOf[BaseElectricTool].getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], useLiquids = false)
             if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                val blockList = getBlockList(ModifierAOE.getAOELevel(stack), mop, pos)
+                val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack), mop, pos, player.asInstanceOf[EntityPlayer])
                 for (b <- 0 until blockList.size) {
                     val newPos = blockList.get(b)
                     val block = world.getBlockState(newPos).getBlock

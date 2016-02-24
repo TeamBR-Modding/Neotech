@@ -75,6 +75,7 @@ object ItemRenderManager {
         registerItem(UpgradeItemManager.upgradeSilkTouch)
         registerItem(UpgradeItemManager.upgradeFortune)
         registerItem(UpgradeItemManager.upgradeMiningSpeed)
+        registerItem(UpgradeItemManager.upgradeAOE)
 
         registerItem(ItemManager.electricSword)
         registerItem(UpgradeItemManager.upgradeSharpness)
