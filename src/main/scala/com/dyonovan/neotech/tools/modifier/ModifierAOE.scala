@@ -38,7 +38,7 @@ object ModifierAOE extends Modifier("aoe") {
     override def getLevel(tag : NBTTagCompound) = tag.getInteger(AOE)
 
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, levelAOE: Int): NBTTagCompound = {
-        tag.setInteger(AOE, levelAOE)
+        tag.setInteger(AOE, getAOELevel(stack) + levelAOE)
         tag.setBoolean(ACTIVE, false)
         super.writeToNBT(tag, stack)
         tag

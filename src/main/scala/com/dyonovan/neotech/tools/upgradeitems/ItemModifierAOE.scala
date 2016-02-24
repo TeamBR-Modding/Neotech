@@ -37,7 +37,7 @@ class ItemModifierAOE extends BaseUpgradeItem("aoe", 3) {
     override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
         var localTag = ModifierAOE.getModifierTagFromStack(stack)
         if (localTag == null) localTag = new NBTTagCompound
-        ModifierAOE.writeToNBT(localTag, stack, ModifierAOE.getAOELevel(stack) + count)
+        ModifierAOE.writeToNBT(localTag, stack, count)
         ModifierAOE.overrideModifierTag(stack, localTag)
     }
 }

@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.client.resources.IReloadableResourceManager
 import net.minecraft.client.resources.model.ModelBakery
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.{ClientRegistry, IRenderFactory, RenderingRegistry}
 import net.minecraftforge.fml.common.registry.GameRegistry
 
@@ -113,6 +114,7 @@ class ClientProxy extends CommonProxy {
      * Usually used to close things opened to load and check for conditions
      */
     override def postInit() = {
+        MinecraftForge.EVENT_BUS.register(RenderingEvents)
         Minecraft.getMinecraft.getResourceManager.asInstanceOf[IReloadableResourceManager].registerReloadListener(RenderingEvents)
     }
 }
