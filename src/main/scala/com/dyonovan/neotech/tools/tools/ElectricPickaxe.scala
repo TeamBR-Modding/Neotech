@@ -58,7 +58,8 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/pickaxe/electricPickaxe", doLowerCase = false)
 
     override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
-        UpgradeItemManager.upgradeMiningLevel.getUpgradeName
+        UpgradeItemManager.upgradeMiningLevel.getUpgradeName, UpgradeItemManager.upgradeFortune.getUpgradeName,
+        UpgradeItemManager.upgradeFortune.getUpgradeName
     ))
 
     /**

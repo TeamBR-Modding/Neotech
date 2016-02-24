@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.tools.upgradeitems
 
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.tools.modifier.ItemModifierMiningLevel
+import com.dyonovan.neotech.tools.modifier.{ItemModifierFortune, ItemModifierSilkTouch, ItemModifierMiningLevel}
 
 /**
   * This file was created for NeoTech
@@ -14,14 +14,13 @@ import com.dyonovan.neotech.tools.modifier.ItemModifierMiningLevel
   * @since 2/23/2016
   */
 object UpgradeItemManager {
-
-   // val upgradeSilkTouch = new BaseUpgradeItem(ModifierSilkTouch.SILK, 1)
-   // val upgradeFortune = new BaseUpgradeItem(ModifierFortune.FORTUNE, 5)
+    val upgradeSilkTouch   = new ItemModifierSilkTouch
+    val upgradeFortune     =  new ItemModifierFortune
     val upgradeMiningLevel = new ItemModifierMiningLevel
 
     def preInit(): Unit = {
-       // ItemManager.registerItem(upgradeSilkTouch, upgradeSilkTouch.getUpgradeName)
-       // ItemManager.registerItem(upgradeFortune, upgradeFortune.getUpgradeName)
+        ItemManager.registerItem(upgradeSilkTouch, upgradeSilkTouch.getUpgradeName)
+        ItemManager.registerItem(upgradeFortune, upgradeFortune.getUpgradeName)
         ItemManager.registerItem(upgradeMiningLevel, upgradeMiningLevel.getUpgradeName)
     }
 }

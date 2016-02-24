@@ -72,6 +72,8 @@ object ItemRenderManager {
 
         registerItem(ItemManager.electricPickaxe)
         registerItem(UpgradeItemManager.upgradeMiningLevel)
+        registerItem(UpgradeItemManager.upgradeSilkTouch)
+        registerItem(UpgradeItemManager.upgradeFortune)
 
         registerPipesAndColored()
     }

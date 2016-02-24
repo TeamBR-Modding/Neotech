@@ -157,6 +157,8 @@ item.neotech:electroMagnet.name=Electromagnet
 
 item.neotech:electricPickaxe.name=Electric Pickaxe
 item.neotech:miningLevel.name=Mining Level Upgrade
+item.neotech:silkTouch.name=Silk Touch Upgrade
+item.neotech:fortune.name=Fortune Upgrade
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery

@@ -3,7 +3,7 @@ package com.dyonovan.neotech.tools.modifier
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
 
 /**
   * This file was created for NeoTech
@@ -13,10 +13,9 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
   * @author Paul Davis <pauljoda>
-  * @since 2/23/2016
+  * @since 2/24/2016
   */
-class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
-
+class ItemModifierFortune extends BaseUpgradeItem("fortune", 5) {
     /**
       * Can this upgrade item allow more to be applied to the item
       *
@@ -24,22 +23,10 @@ class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
       * @param count The stack size of the input
       * @return True if there is space for the entire count
       */
-    override def canAcceptLevel(stack: ItemStack, count: Int, name : String): Boolean = {
+    override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean = {
         if(count > getMaximumLevel)
             return false
-
-        var currentLevelOnStack : NBTTagCompound = null
-
-        if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
-            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
-            for(x <- 0 until tagList.tagCount())
-                if(tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierMiningLevel.name))
-                    currentLevelOnStack = tagList.getCompoundTagAt(x)
-        }
-
-        if(currentLevelOnStack.getInteger(ModifierMiningLevel.LEVEL) + count <= getMaximumLevel + 1)
-            return true // The count is correct
-        false
+        ModifierFortune.getFortuneLevel(stack) + count <= getMaximumLevel
     }
 
     /**
@@ -49,14 +36,10 @@ class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
       * @return The tag passed
       */
     override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
-        var localTag = new NBTTagCompound
-        if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
-            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
-            for(x <- 0 until tagList.tagCount())
-                if(tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierMiningLevel.name))
-                    localTag = tagList.getCompoundTagAt(x)
-        }
-        ModifierMiningLevel.writeToNBT(localTag, stack, ModifierMiningLevel.getLevel(localTag) + count)
+        var localTag = ModifierFortune.getModifierTagFromStack(stack)
+        if(localTag == null)
+            localTag = new NBTTagCompound
+        ModifierFortune.writeToNBT(localTag, stack, ModifierFortune.getFortuneLevel(stack) + count)
         if(!stack.hasTagCompound || !stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) { // Write the new list
         val tagList = new NBTTagList
             tagList.appendTag(localTag)
@@ -64,9 +47,11 @@ class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
         } else {
             val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
             var added = false
-            for(x <- 0 until tagList.tagCount())
-                if(tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierMiningLevel.name))
+            for(x <- 0 until tagList.tagCount()) {
+                val localname = tagList.getCompoundTagAt(x).getString("ModifierID")
+                if (tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierFortune.name))
                     tagList.set(x, localTag); added = true
+            }
             if(!added)
                 tagList.appendTag(localTag)
         }
