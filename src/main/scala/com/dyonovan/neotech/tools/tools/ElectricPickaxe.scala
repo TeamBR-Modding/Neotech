@@ -2,11 +2,12 @@ package com.dyonovan.neotech.tools.tools
 
 import java.util
 
-import com.dyonovan.neotech.common.blocks.traits.ThermalBinderTools
+import com.dyonovan.neotech.common.blocks.traits.ThermalBinderItem
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.ToolHelper
+import com.dyonovan.neotech.tools.ToolHelper.ToolType
+import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.{ModifierMiningLevel, ModifierMiningSpeed}
-import com.dyonovan.neotech.tools.tools.ToolType.ToolType
 import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.Block
@@ -27,7 +28,7 @@ import net.minecraft.world.World
   * @author Dyonovan
   * @since 2/21/2016
   */
-class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricTool with ThermalBinderTools{
+class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricTool with ThermalBinderItem {
 
     lazy val RF_PER_BLOCK = 250
 

@@ -2,8 +2,8 @@ package com.dyonovan.neotech.tools.tools
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.tools.ToolHelper
+import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
-import com.dyonovan.neotech.tools.tools.ToolType.ToolType
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiTextFormat
 import com.teambr.bookshelf.common.items.traits.ItemBattery
@@ -24,14 +24,10 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 2/21/2016
   */
-object ToolType extends Enumeration {
-    type ToolType = Value
-    val Pickaxe, Axe, Shovel, Hoe, Sword, Empty_MB, Filled_MB = Value
-}
 
 trait BaseElectricTool extends ItemBattery {
 
-    setCreativeTab(NeoTech.tabNeoTech)
+    setCreativeTab(NeoTech.tabTools)
     setMaxStackSize(1)
 
     override var capacity: Int = 25000
@@ -48,7 +44,7 @@ trait BaseElectricTool extends ItemBattery {
         if(!stack.hasTagCompound) {
             val tagCompound = new NBTTagCompound
             val tagList = new NBTTagList
-            tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 3))
+            tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 0))
             tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
             stack.setTagCompound(tagCompound)
         }

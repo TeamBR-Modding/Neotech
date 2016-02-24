@@ -15,6 +15,13 @@ import net.minecraftforge.common.util.EnumHelper
   * @since 2/23/2016
   */
 object ToolHelper {
+
+    // The enumeration for tool types
+    object ToolType extends Enumeration {
+        type ToolType = Value
+        val Pickaxe, Axe, Shovel, Hoe, Sword, Empty_MB, Filled_MB = Value
+    }
+
     lazy val NEOTECH         = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 1.0F, 0)
     lazy val ModifierListTag = "ModifierList"
 

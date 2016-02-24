@@ -2,6 +2,7 @@ package com.dyonovan.neotech.tools.upgradeitems
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
+import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
 
 /**
@@ -14,12 +15,13 @@ import net.minecraft.item.Item
   * @author Dyonovan
   * @since 2/23/2016
   */
-class BaseUpgradeItem(name: String, stackSize: Int) extends Item {
+class BaseUpgradeItem(name: String, stackSize: Int,
+                      tab : CreativeTabs = NeoTech.tabTools) extends Item {
 
     setMaxStackSize(stackSize)
-    setCreativeTab(NeoTech.tabNeoTech)
+    if(tab != null)
+        setCreativeTab(tab)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 
     def getUpgradeName: String = name
-
 }

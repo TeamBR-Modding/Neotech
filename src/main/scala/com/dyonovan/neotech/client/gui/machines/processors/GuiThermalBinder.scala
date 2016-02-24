@@ -51,7 +51,7 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
 
         components += new GuiComponentButton(120, 75, 40, 20, "neotech.text.start") {
             override def doAction(): Unit = {
-                if (tileEntity.getStackInSlot(tileEntity.MB_INPUT) != null) {
+                if (tileEntity.getStackInSlot(tileEntity.OBJECT_INPUT) != null) {
                     if (tileEntity.isValid) {
                         if (!Minecraft.getMinecraft.thePlayer.capabilities.isCreativeMode)
                             tileEntity.sendValueToServer(tileEntity.RUNNING_VARIABLE_ID, 0)

@@ -1,8 +1,9 @@
 package com.dyonovan.neotech.managers
 
+import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.common.items._
 import com.dyonovan.neotech.tools.tools.ElectricPickaxe
-import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
+import com.dyonovan.neotech.tools.upgradeitems.{BaseUpgradeItem, UpgradeItemManager}
 import net.minecraft.item.{ItemStack, Item}
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -20,12 +21,12 @@ import net.minecraftforge.oredict.OreDictionary
 object ItemManager {
 
     //Upgrade System
-    val upgradeMBEmpty = new BaseUpgradeItem("upgradeMBEmpty", 1, true)
-    val upgradeMBFull = new BaseUpgradeItem("upgradeMBFull", 1, false)
-    val upgradeHardDrive = new BaseUpgradeItem("upgradeHardDrive", 8, true)
-    val upgradeControl = new BaseUpgradeItem("upgradeControl", 1, true)
-    val upgradeProcessor = new BaseUpgradeItem("upgradeProcessor", 8, true)
-    val upgradeExpansion = new BaseUpgradeItem("upgradeExpansion", 1, true)
+    val upgradeMBEmpty = new MotherBoardItem("upgradeMBEmpty", 1, true)
+    val upgradeMBFull = new MotherBoardItem("upgradeMBFull", 1, false)
+    val upgradeHardDrive = new BaseUpgradeItem("upgradeHardDrive", 8, NeoTech.tabNeoTech)
+    val upgradeControl = new BaseUpgradeItem("upgradeControl", 1, NeoTech.tabNeoTech)
+    val upgradeProcessor = new BaseUpgradeItem("upgradeProcessor", 8, NeoTech.tabNeoTech)
+    val upgradeExpansion = new BaseUpgradeItem("upgradeExpansion", 1, NeoTech.tabNeoTech)
 
     //Utils
     val wrench = new ItemWrench

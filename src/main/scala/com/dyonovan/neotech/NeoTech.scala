@@ -61,6 +61,10 @@ object NeoTech {
         override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.blockMiniatureStar)
     }
 
+    val tabTools = new CreativeTabs("tabNeoTechTools") {
+        override def getTabIconItem: Item = ItemManager.electricPickaxe
+    }
+
     val tabMetals = new CreativeTabMetals
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {

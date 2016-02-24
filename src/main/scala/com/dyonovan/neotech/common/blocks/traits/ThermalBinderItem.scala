@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.blocks.traits
 
-import com.dyonovan.neotech.tools.tools.ToolType.ToolType
+import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 
 /**
   * This file was created for NeoTech
@@ -12,7 +12,7 @@ import com.dyonovan.neotech.tools.tools.ToolType.ToolType
   * @author Dyonovan
   * @since 2/23/2016
   */
-trait ThermalBinderTools {
+trait ThermalBinderItem {
 
     val acceptableUpgrades: java.util.ArrayList[String]
 
