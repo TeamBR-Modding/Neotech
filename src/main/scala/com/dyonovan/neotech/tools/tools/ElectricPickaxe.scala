@@ -1,9 +1,13 @@
 package com.dyonovan.neotech.tools.tools
 
+import java.util
+
+import com.dyonovan.neotech.common.blocks.traits.ThermalBinderTools
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.ToolHelper
-import com.dyonovan.neotech.tools.modifier.{ModifierMiningSpeed, ModifierMiningLevel}
+import com.dyonovan.neotech.tools.modifier.{ModifierMiningLevel, ModifierMiningSpeed}
 import com.dyonovan.neotech.tools.tools.ToolType.ToolType
+import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
@@ -23,7 +27,7 @@ import net.minecraft.world.World
   * @author Dyonovan
   * @since 2/21/2016
   */
-class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricTool {
+class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricTool with ThermalBinderTools{
 
     lazy val RF_PER_BLOCK = 250
 
@@ -51,4 +55,8 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     override def getToolType: ToolType = ToolType.Pickaxe
 
     override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/pickaxe/electricPickaxe", doLowerCase = false)
+
+    override val acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
+        UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeSilkTouch.getUpgradeName
+    ))
 }

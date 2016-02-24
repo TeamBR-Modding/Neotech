@@ -1,13 +1,6 @@
 package com.dyonovan.neotech.common.blocks.traits
 
-import java.util
-
 import com.dyonovan.neotech.tools.tools.ToolType.ToolType
-import com.dyonovan.neotech.tools.upgradeitems.ToolType
-import com.dyonovan.neotech.tools.upgradeitems.ToolType.ToolType
-import com.dyonovan.neotech.tools.upgradeitems.ToolType.ToolType
-import net.minecraft.init.Items
-import net.minecraft.item.Item
 
 /**
   * This file was created for NeoTech
@@ -19,11 +12,11 @@ import net.minecraft.item.Item
   * @author Dyonovan
   * @since 2/23/2016
   */
-trait ThermalBinderItems {
+trait ThermalBinderTools {
 
-    val acceptableTools: java.util.ArrayList[String]
+    val acceptableUpgrades: java.util.ArrayList[String]
 
     def isAcceptableUpgrade(toolType: ToolType, upgradeName: String): Boolean = {
-        acceptableTools.contains(upgradeName)
+        acceptableUpgrades.contains(upgradeName)
     }
 }
