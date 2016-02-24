@@ -1,6 +1,6 @@
-package com.dyonovan.neotech.tools.modifier
+package com.dyonovan.neotech.tools.upgradeitems
 
-import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
+import com.dyonovan.neotech.tools.modifier.ModifierSmite
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -14,7 +14,8 @@ import net.minecraft.nbt.NBTTagCompound
   * @author Paul Davis <pauljoda>
   * @since 2/24/2016
   */
-class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 4) {
+class ItemModifierSmite extends BaseUpgradeItem("smite", 5) {
+
     /**
       * Can this upgrade item allow more to be applied to the item
       *
@@ -22,10 +23,8 @@ class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 4) {
       * @param count The stack size of the input
       * @return True if there is space for the entire count
       */
-    override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean = {
-        val speed = ModifierMiningSpeed.getMiningSpeed(stack)
-        speed + (count * 4.0F) <= 20.0F
-    }
+    override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean =
+        ModifierSmite.getSmiteLevel(stack) + count <= maxStackSize
 
     /**
       * Use this to put information onto the stack, called when put onto the stack
@@ -34,10 +33,10 @@ class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 4) {
       * @return The tag passed
       */
     override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
-        var localTag = ModifierMiningSpeed.getModifierTagFromStack(stack)
+        var localTag = ModifierSmite.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierMiningSpeed.writeToNBT(localTag, stack, ModifierMiningSpeed.getMiningSpeed(stack) + (count * 4.0F))
-        ModifierMiningSpeed.overrideModifierTag(stack, localTag)
+        ModifierSmite.writeToNBT(localTag, stack, ModifierSmite.getSmiteLevel(stack) + count)
+        ModifierSmite.overrideModifierTag(stack, localTag)
     }
 }

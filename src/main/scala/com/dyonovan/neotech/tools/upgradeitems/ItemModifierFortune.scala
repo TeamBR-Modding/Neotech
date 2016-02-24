@@ -1,9 +1,9 @@
-package com.dyonovan.neotech.tools.modifier
+package com.dyonovan.neotech.tools.upgradeitems
 
 import com.dyonovan.neotech.tools.ToolHelper
-import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
+import com.dyonovan.neotech.tools.modifier.ModifierFortune
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
+import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 
 /**
   * This file was created for NeoTech

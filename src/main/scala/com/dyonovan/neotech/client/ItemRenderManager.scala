@@ -76,6 +76,10 @@ object ItemRenderManager {
         registerItem(UpgradeItemManager.upgradeFortune)
         registerItem(UpgradeItemManager.upgradeMiningSpeed)
 
+        registerItem(ItemManager.electricSword)
+        registerItem(UpgradeItemManager.upgradeSharpness)
+        registerItem(UpgradeItemManager.upgradeSmite)
+
         registerPipesAndColored()
     }
 

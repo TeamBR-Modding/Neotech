@@ -51,5 +51,10 @@ class ModelFactory {
             new ToolModel(
                 event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricPickaxe", "inventory")).asInstanceOf[IFlexibleBakedModel],
                     ImmutableMap.copyOf(builder)))
+
+        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricSword", "inventory"),
+            new ToolModel(
+                event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricSword", "inventory")).asInstanceOf[IFlexibleBakedModel],
+                ImmutableMap.copyOf(builder)))
     }
 }

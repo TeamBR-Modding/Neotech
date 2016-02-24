@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.events
 
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import net.minecraft.item.Item
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -36,7 +37,7 @@ object OnCraftedEvent {
             return
         }
         //Electric Tools
-        if (event.crafting.getItem == ItemManager.electricPickaxe) {
+        if (event.crafting.getItem.isInstanceOf[BaseElectricTool]) {
             val tag = new NBTTagCompound
             var capacity = 25000
             event.craftMatrix.getStackInSlot(7).getItem match {

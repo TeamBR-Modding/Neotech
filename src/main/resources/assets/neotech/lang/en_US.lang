@@ -161,6 +161,10 @@ item.neotech:silkTouch.name=Silk Touch Upgrade
 item.neotech:fortune.name=Fortune Upgrade
 item.neotech:miningSpeed.name=Mining Speed Upgrade
 
+item.neotech:electricSword.name=Electric Sword
+item.neotech:sharpness.name=Sharpness Upgrade
+item.neotech:smite.name=Smite Upgrade
+
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery
 item.neotech:advancedRFBattery.name=Advanced RF Battery

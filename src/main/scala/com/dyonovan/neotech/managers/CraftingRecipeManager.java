@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.managers;
 
+import com.dyonovan.neotech.common.metals.items.ItemMetal;
 import com.dyonovan.neotech.common.tiles.machines.processors.TileSolidifier;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -322,7 +323,11 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricPickaxe()),
                 "CCC",
                 " S ",
-                " B ", 'C', "ingotCopper", 'S', "stickWood", 'B', "rfBattery"));
+                " B ", 'C', "ingotBronze", 'S', "stickWood", 'B', "rfBattery"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricSword()),
+                " B ",
+                " B ",
+                " b ", 'B', "ingotBronze", 'b', "rfBattery"));
 
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);

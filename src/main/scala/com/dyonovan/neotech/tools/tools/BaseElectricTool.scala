@@ -37,7 +37,6 @@ trait BaseElectricTool extends ItemBattery with ThermalBinderItem {
 
     def getBaseTexture : String
 
-
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
         if(!stack.hasTagCompound) {
             val tagCompound = new NBTTagCompound
