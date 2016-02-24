@@ -32,6 +32,13 @@ class MotherBoardItem(name: String, maxStackSize: Int, creative: Boolean) extend
 
     def getName: String = { name }
 
+    /**
+      * Gets the maximum count for upgrades, default 8
+      * @param stack The stack in
+      * @return How many this can hold, check for modifiers here
+      */
+    override def getMaximumUpgradeCount(stack : ItemStack) : Int = 18 // Has to hold everything
+
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, tooltip: java.util.List[String], advanced: Boolean): Unit = {
         stack.getItem match {
