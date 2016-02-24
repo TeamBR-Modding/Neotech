@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound
   * @author Dyonovan
   * @since 2/24/2016
   */
-class ModifierAOE extends Modifier("aoe") {
+object ModifierAOE extends Modifier("aoe") {
 
     lazy val AOE = "AOE"
 

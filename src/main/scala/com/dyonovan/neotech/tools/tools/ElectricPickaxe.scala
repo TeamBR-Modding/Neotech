@@ -7,7 +7,7 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
-import com.dyonovan.neotech.tools.modifier.{ModifierMiningLevel, ModifierMiningSpeed}
+import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed}
 import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.Block
@@ -34,9 +34,16 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     setUnlocalizedName(Reference.MOD_ID + ":electricPickaxe")
 
+    def getBlockList(level: Int) = {
+
+    }
+
     override def onBlockDestroyed(stack: ItemStack, world: World, block: Block, pos: BlockPos, player: EntityLivingBase): Boolean = {
         extractEnergy(stack, RF_PER_BLOCK, simulate = false)
         updateDamage(stack)
+        if (ModifierAOE.getAOELevel(stack) > 0) {
+            val blockList = getBlockList(ModifierAOE.getAOELevel(stack))
+        }
         true
     }
 
