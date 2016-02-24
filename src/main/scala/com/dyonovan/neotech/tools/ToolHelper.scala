@@ -74,9 +74,9 @@ object ToolHelper {
             for (l <- list.toArray()) {
                 val pos = l.asInstanceOf[BlockPos]
                 val block = world.getBlockState(pos).getBlock
-                if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player)) {
+                if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player) && !player.capabilities.isCreativeMode) {
                     actualList.add(pos)
-                }
+                } else if (player.capabilities.isCreativeMode) actualList.add(pos)
             }
             actualList
         } else util.Arrays.asList(mop.getBlockPos)

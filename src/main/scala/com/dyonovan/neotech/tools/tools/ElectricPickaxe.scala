@@ -44,8 +44,9 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
                 for (b <- 0 until blockList.size) {
                     val newPos = blockList.get(b)
                     val block = world.getBlockState(newPos).getBlock
-                    if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer])) {
-                        block.harvestBlock(world, player.asInstanceOf[EntityPlayer], newPos, block.getDefaultState, world.getTileEntity(newPos))
+                    if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
+                        if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
+                            block.harvestBlock(world, player.asInstanceOf[EntityPlayer], newPos, block.getDefaultState, world.getTileEntity(newPos))
                         world.setBlockToAir(newPos)
                         world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
                     }
@@ -77,7 +78,20 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     override def onBlockStartBreak(stack: ItemStack, pos: BlockPos, player: EntityPlayer): Boolean = {
         if (!player.capabilities.isCreativeMode)
             getEnergyStored(stack) < RF_PER_BLOCK
-        else true
+        else if (player.capabilities.isCreativeMode) {
+            val world = player.worldObj
+            val mop = stack.getItem.asInstanceOf[BaseElectricTool].getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], useLiquids = false)
+            if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack), mop, player.asInstanceOf[EntityPlayer], world, stack)
+                for (b <- 0 until blockList.size) {
+                    val newPos = blockList.get(b)
+                    val block = world.getBlockState(newPos).getBlock
+                    world.setBlockToAir(newPos)
+                    world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
+                }
+            }
+        }
+        false
     }
 
     override def getHarvestLevel(stack: ItemStack, toolClass: String): Int = {
