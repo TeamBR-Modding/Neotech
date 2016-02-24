@@ -107,7 +107,7 @@ trait BaseElectricTool extends ItemBattery with ThermalBinderItem {
         if(stack.hasTagCompound)
             list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(getMaxEnergyStored(stack)) + " RF")
         list.add("")
-        list.add("Upgrades: " + ToolHelper.getCurrentUpgradeCount(stack) + " / " + getMaximumUpgradeCount(stack))
+        list.add("Upgrades: " + (ToolHelper.getCurrentUpgradeCount(stack) - 1) + " / " + getMaximumUpgradeCount(stack))
         for(string <- ToolHelper.getToolTipForDisplay(stack))
             list.add(string)
     }
