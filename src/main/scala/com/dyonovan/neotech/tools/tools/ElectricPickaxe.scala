@@ -80,7 +80,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
             getEnergyStored(stack) < RF_PER_BLOCK
         else if (player.capabilities.isCreativeMode) {
             val world = player.worldObj
-            val mop = stack.getItem.asInstanceOf[BaseElectricTool].getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], useLiquids = false)
+            val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
             if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack), mop, player.asInstanceOf[EntityPlayer], world, stack)
                 for (b <- 0 until blockList.size) {
