@@ -317,7 +317,7 @@ public class CraftingRecipeManager {
 
 
 
-        GameRegistry.addRecipe(new ShapelessOreRecipe(MetalManager.getMetal("bronze").get().dust().get(),
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(MetalManager.getMetal("bronze").get().dust().get(), 4),
                 "dustCopper", "dustCopper", "dustCopper", "dustTin"));
 
         //RF Tools
