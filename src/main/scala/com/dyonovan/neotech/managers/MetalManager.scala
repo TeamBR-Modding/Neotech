@@ -242,10 +242,14 @@ object MetalManager {
         val still = new ResourceLocation(texture + "_still")
         val flowing = new ResourceLocation(texture + "_flow")
 
-        val fluid = new FluidMetal(color, name, still, flowing)
+        var fluid : Fluid = new FluidMetal(color, name, still, flowing)
         if(ConfigRegistry.generateFluids) {
-            FluidRegistry.registerFluid(fluid)
-            FluidRegistry.addBucketForFluid(fluid)
+            if(!FluidRegistry.isFluidRegistered(fluid))
+                FluidRegistry.registerFluid(fluid)
+            else
+                fluid = FluidRegistry.getFluid(name)
+            if(!FluidRegistry.getBucketFluids.contains(fluid))
+                FluidRegistry.addBucketForFluid(fluid)
             fluid
         } else FluidRegistry.getFluid(fluid.getName)
     }
