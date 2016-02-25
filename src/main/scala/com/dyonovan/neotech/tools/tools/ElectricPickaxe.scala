@@ -38,7 +38,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     override def onBlockDestroyed(stack: ItemStack, world: World, block: Block, pos: BlockPos, player: EntityLivingBase): Boolean = {
         if (ModifierAOE.getAOELevel(stack) > 0 && player.isInstanceOf[EntityPlayer] && ModifierAOE.getAOEActive(stack)) {
-            val mop = stack.getItem.asInstanceOf[BaseElectricTool].getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], useLiquids = false)
+            val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
             if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack), mop, player.asInstanceOf[EntityPlayer], world, stack)
                 for (b <- 0 until blockList.size) {

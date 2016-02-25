@@ -10,7 +10,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.util.MovingObjectPosition
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -37,11 +36,6 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
     def getToolName   : String
 
     def getBaseTexture : String
-
-
-    override def getMovingObjectPositionFromPlayer(world: World, player: EntityPlayer, useLiquids: Boolean): MovingObjectPosition = {
-        super.getMovingObjectPositionFromPlayer(world, player, useLiquids)
-    }
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
         if(!stack.hasTagCompound) {
