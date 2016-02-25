@@ -116,7 +116,6 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
                             if (extractOnMode(energyResourceEntity, simulate = true)) {
                                 provider.extractEnergy(dir.getOpposite, tempStorage.getEnergyStored, false)
                                 extractOnMode(nextResource, simulate = false)
-                                return
                             }
                         }
                     case _ =>
