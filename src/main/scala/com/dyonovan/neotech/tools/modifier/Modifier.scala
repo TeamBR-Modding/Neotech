@@ -58,6 +58,8 @@ abstract class Modifier(var name : String) {
       * @return The tag that modifier has written
       */
     def getModifierTagFromStack(stack : ItemStack) : NBTTagCompound = {
+        if(stack == null)
+            return null
         if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
             val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10) // Grab the tag list
             for(x <- 0 until tagList.tagCount()) { // Iterate the list

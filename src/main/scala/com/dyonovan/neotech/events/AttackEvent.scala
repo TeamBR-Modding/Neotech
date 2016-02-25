@@ -52,8 +52,10 @@ object AttackEvent {
                                 addDrops(event, new ItemStack(Items.skull, 1, skeleton.getSkeletonType))
                             case zombie : EntityZombie =>
                                 addDrops(event, new ItemStack(Items.skull, 1, 2))
+                            case creeper : EntityCreeper =>
+                                addDrops(event, new ItemStack(Items.skull, 1, 4))
                             case player : EntityPlayer =>
-                                val stack = new ItemStack(Items.skull, 1, 4)
+                                val stack = new ItemStack(Items.skull, 1, 3)
                                 val tag = new NBTTagCompound
                                 tag.setString("SkullOwner", player.getName)
                                 stack.setTagCompound(tag)
