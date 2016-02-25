@@ -40,14 +40,21 @@ object OnCraftedEvent {
         if (event.crafting.getItem.isInstanceOf[BaseElectricTool]) {
             val tag = new NBTTagCompound
             var capacity = 25000
+            var extract = 250
             event.craftMatrix.getStackInSlot(7).getItem match {
-                case ItemManager.advancedRFBattery => capacity = ItemManager.advancedRFBattery.capacity
-                case ItemManager.eliteRFBattery => capacity = ItemManager.eliteRFBattery.capacity
+                case ItemManager.advancedRFBattery =>
+                    capacity = ItemManager.advancedRFBattery.capacity
+                    extract = ItemManager.advancedRFBattery.maxExtract
+                case ItemManager.eliteRFBattery =>
+                    capacity = ItemManager.eliteRFBattery.capacity
+                    extract = ItemManager.eliteRFBattery.maxExtract
                 case _ =>
             }
             if (event.craftMatrix.getStackInSlot(4).hasTagCompound && event.craftMatrix.getStackInSlot(4).getTagCompound.hasKey("Energy"))
                 tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
             tag.setInteger("EnergyCapacity", capacity)
+            tag.setInteger("MaxExtract", extract)
+            tag.setInteger("MaxReceive", extract)
             event.crafting.setTagCompound(tag)
             return
         }

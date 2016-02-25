@@ -48,6 +48,8 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
             val tagList = new NBTTagList
             tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
             tagCompound.setInteger("EnergyCapacity", 25000)
+            tagCompound.setInteger("MaxExtract", 200)
+            tagCompound.setInteger("MaxReceive", 200)
             stack.setTagCompound(tagCompound)
         }
         capacity = stack.getTagCompound.getInteger("EnergyCapacity")
