@@ -62,7 +62,10 @@ trait ThermalBinderItem {
                     && stacksIn._4.getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName != ItemManager.basicRFBattery.getUpgradeName) stacksIn._4.stackSize else 0)
             return getUpgradeCount(stack) + upgradeCount <= getMaximumUpgradeCount(stack)
         }
-        false
+        (stacksIn._1 != null && stacksIn._1.getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName != ItemManager.basicRFBattery.getUpgradeName) ||
+                (stacksIn._2 != null && stacksIn._1.getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName != ItemManager.basicRFBattery.getUpgradeName) ||
+                (stacksIn._3 != null && stacksIn._1.getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName != ItemManager.basicRFBattery.getUpgradeName) ||
+                (stacksIn._4 != null && stacksIn._1.getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName != ItemManager.basicRFBattery.getUpgradeName)
     }
 
     /**

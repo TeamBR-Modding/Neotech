@@ -123,7 +123,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     override def getUpgradeCount(stack: ItemStack): Int = {
         if (stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
             val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
-            var count = 0
+            var count = -1
             for (x <- 0 until tagList.tagCount())
                 count += tagList.getCompoundTagAt(x).getInteger("ModifierLevel")
             return count
