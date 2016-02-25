@@ -78,7 +78,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     override def onBlockStartBreak(stack: ItemStack, pos: BlockPos, player: EntityPlayer): Boolean = {
         if (!player.capabilities.isCreativeMode)
-            getEnergyStored(stack) < RF_PER_BLOCK
+            return getEnergyStored(stack) < RF_PER_BLOCK
         else if (player.capabilities.isCreativeMode) {
             val world = player.worldObj
             val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
