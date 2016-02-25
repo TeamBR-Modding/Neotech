@@ -4,6 +4,7 @@ import com.dyonovan.neotech.client.gui.machines.processors.GuiThermalBinder
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.dyonovan.neotech.managers.{MetalManager, ItemManager}
+import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.upgradeitems.{ThermalBinderItem, BaseUpgradeItem}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
@@ -227,6 +228,11 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
                     // Check that there are no duplicates
                     if(listOfItems.size != listOfItems.toSet.size) // Sets contain no duplicates, so if that size is different return
                         return false
+
+                    // Special Battery Case
+                    if(getStackInSlot(OBJECT_INPUT).getItem.isInstanceOf[BaseElectricTool]
+                            && listOfItems.size == 1 && listOfItems.contains(ItemManager.basicRFBattery.getUpgradeName))
+                        return true
 
                     // Check count
                     if(!inputItem.canAcceptCount(getStackInSlot(OBJECT_INPUT),

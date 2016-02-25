@@ -67,7 +67,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
 
     override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
         if (ModifierAOE.getAOELevel(stack) > 0 && player.isSneaking) {
-            val tag = getModifierTagFromStack(stack)
+            val tag = ModifierAOE.getModifierTagFromStack(stack)
             if (tag != null && tag.hasKey(ACTIVE)) {
                 tag.setBoolean(ACTIVE, !tag.getBoolean(ACTIVE))
                 overrideModifierTag(stack, tag)

@@ -35,9 +35,8 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
     override def getToolName: String = "sword"
     override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/sword/electricSword", doLowerCase = false)
 
-    override def hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase) : Boolean = {
+    override def hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase) : Boolean =
         extractEnergy(stack, 250, simulate = false) > 0
-    }
 
     override def onBlockDestroyed(stack: ItemStack, worldIn: World, blockIn: Block,
                                   pos: BlockPos, playerIn: EntityLivingBase) : Boolean = true
