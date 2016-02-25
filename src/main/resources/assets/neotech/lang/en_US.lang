@@ -165,6 +165,7 @@ item.neotech:aoe.name=Area of Effect Upgrade
 item.neotech:electricSword.name=Electric Sword
 item.neotech:sharpness.name=Sharpness Upgrade
 item.neotech:smite.name=Smite Upgrade
+item.neotech:beheading.name=Beheading Upgrade
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery

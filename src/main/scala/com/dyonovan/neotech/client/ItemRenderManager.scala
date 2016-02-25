@@ -80,6 +80,7 @@ object ItemRenderManager {
         registerItem(ItemManager.electricSword)
         registerItem(UpgradeItemManager.upgradeSharpness)
         registerItem(UpgradeItemManager.upgradeSmite)
+        registerItem(UpgradeItemManager.upgradeBeheading)
 
         registerPipesAndColored()
     }

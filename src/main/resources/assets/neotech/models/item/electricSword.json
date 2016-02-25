@@ -3,6 +3,7 @@
     "textures": {
         "layer0"    : "neotech:items/tools/sword/electricSword",
         "sharpness" : "neotech:items/tools/sword/sharpness",
-        "smite"     : "neotech:items/tools/sword/smite"
+        "smite"     : "neotech:items/tools/sword/smite",
+        "beheading" : "neotech:items/tools/sword/beheading"
     }
 }
