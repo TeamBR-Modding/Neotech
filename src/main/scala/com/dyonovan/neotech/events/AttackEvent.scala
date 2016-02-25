@@ -56,6 +56,7 @@ object AttackEvent {
                                 val stack = new ItemStack(Items.skull, 1, 4)
                                 val tag = new NBTTagCompound
                                 tag.setString("SkullOwner", player.getName)
+                                stack.setTagCompound(tag)
                                 addDrops(event, stack)
                             case _ =>
                         }
