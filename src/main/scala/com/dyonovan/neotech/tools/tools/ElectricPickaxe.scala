@@ -48,7 +48,8 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
                         if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
                             block.harvestBlock(world, player.asInstanceOf[EntityPlayer], newPos, block.getDefaultState, world.getTileEntity(newPos))
                         world.setBlockToAir(newPos)
-                        world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
+                        if (newPos != pos)
+                            world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
                     }
                     rfCost(player.asInstanceOf[EntityPlayer], stack)
                 }

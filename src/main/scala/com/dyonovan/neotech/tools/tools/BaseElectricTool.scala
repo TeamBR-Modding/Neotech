@@ -92,6 +92,8 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
         energyReceived
     }
 
+    override def isBookEnchantable(stack: ItemStack, book: ItemStack): Boolean = false
+
     /**
       * Get the max amount of energy that can be stored in the container item.
       */

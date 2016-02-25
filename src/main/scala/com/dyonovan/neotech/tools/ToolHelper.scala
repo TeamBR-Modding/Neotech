@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagList
 import net.minecraft.util.{EnumFacing, BlockPos, MovingObjectPosition}
 import net.minecraft.world.World
 import net.minecraftforge.common.util.EnumHelper
+import net.minecraftforge.fluids.FluidRegistry
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -74,7 +75,8 @@ object ToolHelper {
             for (l <- list.toArray()) {
                 val pos = l.asInstanceOf[BlockPos]
                 val block = world.getBlockState(pos).getBlock
-                if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player) && !player.capabilities.isCreativeMode) {
+                if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player) && !player.capabilities.isCreativeMode &&
+                        block.getBlockHardness(world, pos) >= 0 && FluidRegistry.lookupFluidForBlock(block) == null) {
                     actualList.add(pos)
                 } else if (player.capabilities.isCreativeMode) actualList.add(pos)
             }
