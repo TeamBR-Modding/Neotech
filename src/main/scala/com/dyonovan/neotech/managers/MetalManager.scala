@@ -7,6 +7,7 @@ import com.dyonovan.neotech.client.ItemRenderManager
 import com.dyonovan.neotech.common.metals.blocks.{BlockFluidMetal, BlockMetalOre}
 import com.dyonovan.neotech.common.metals.fluids.FluidMetal
 import com.dyonovan.neotech.common.metals.items.ItemMetal
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.registries.ConfigRegistry
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.ResourceLocation
@@ -242,16 +243,13 @@ object MetalManager {
         val still = new ResourceLocation(texture + "_still")
         val flowing = new ResourceLocation(texture + "_flow")
 
-        var fluid : Fluid = new FluidMetal(color, name, still, flowing)
+        val fluid : Fluid = new FluidMetal(color, name, still, flowing)
         if(ConfigRegistry.generateFluids) {
-            if(!FluidRegistry.isFluidRegistered(fluid))
-                FluidRegistry.registerFluid(fluid)
-            else
-                fluid = FluidRegistry.getFluid(name)
+            FluidRegistry.registerFluid(fluid)
             if(!FluidRegistry.getBucketFluids.contains(fluid))
                 FluidRegistry.addBucketForFluid(fluid)
-            fluid
-        } else FluidRegistry.getFluid(fluid.getName)
+        }
+        fluid
     }
 
     /**
@@ -264,9 +262,7 @@ object MetalManager {
     def registerFluidBlock(fluid: Fluid, block: BlockFluidMetal): BlockFluidMetal = {
         if(fluid != null) {
             fluid.setBlock(block)
-            val fluidName = block.getFluid.getUnlocalizedName()
-            block.setUnlocalizedName(fluidName)
-            GameRegistry.registerBlock(block, fluidName)
+            GameRegistry.registerBlock(block, Reference.MOD_ID + "." + fluid.getName)
         }
         block
     }

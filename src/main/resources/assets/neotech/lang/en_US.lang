@@ -45,72 +45,40 @@ tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
 # Fluids
 #######################
 # Copper
-fluid.copper=Molten Copper
-fluid.dirtycopper=Dirty Molten Copper
 fluid.copper.name=Molten Copper
 fluid.dirtycopper.name=Dirty Molten Copper
-tile.fluid.copper.name=Molten Copper
-tile.fluid.dirtycopper.name=Dirty Molten Copper
 
 # Tin
-fluid.tin=Molten Tin
-fluid.dirtytin=Dirty Molten Tin
 fluid.tin.name=Molten Tin
 fluid.dirtytin.name=Dirty Molten Tin
-tile.fluid.tin.name=Molten Tin
-tile.fluid.dirtytin.name=Dirty Molten Tin
 
 # Lead
-fluid.lead=Molten Lead
-fluid.dirtylead=Dirty Molten Lead
 fluid.lead.name=Molten Lead
 fluid.dirtylead.name=Dirty Molten Lead
-tile.fluid.lead.name=Molten Lead
-tile.fluid.dirtylead.name=Dirty Molten Lead
 
 # Bronze
-fluid.bronze=Molten Bronze
 fluid.bronze.name=Molten Bronze
-tile.fluid.bronze.name=Molten Bronze
 
 # Steel
-fluid.steel=Molten Steel
 fluid.steel.name=Molten Steel
-tile.fluid.steel.name=Molten Steel
 
 # Silver
-fluid.silver=Molten Silver
-fluid.dirtysilver=Dirty Molten Silver
 fluid.silver.name=Molten Silver
 fluid.dirtysilver.name=Dirty Molten Silver
-tile.fluid.silver.name=Molten Silver
-tile.fluid.dirtysilver.name=Dirty Molten Silver
 
 # Gold
-fluid.gold=Molten Gold
-fluid.dirtygold=Dirty Molten Gold
 fluid.gold.name=Molten Gold
 fluid.dirtygold.name=Dirty Molten Gold
-tile.fluid.gold.name=Molten Gold
-tile.fluid.dirtygold.name=Dirty Molten Gold
 
 # Iron
-fluid.iron=Molten Iron
-fluid.dirtyiron=Dirty Molten Iron
 fluid.iron.name=Molten Iron
 fluid.dirtyiron.name=Dirty Molten Iron
-tile.fluid.iron.name=Molten Iron
-tile.fluid.dirtyiron.name=Dirty Molten Iron
 
 # Carbon
-fluid.carbon=Liquid Carbon
 fluid.carbon.name=Liquid Carbon
-tile.fluid.carbon.name=Liquid Carbon
 
 # Obsidian
-fluid.obsidian=Molten Obsidian
 fluid.obsidian.name=Molten Obsidian
-tile.fluid.obsidian.name=Molten Obsidian
 
 #######################
 # Items

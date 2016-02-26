@@ -1,7 +1,9 @@
 package com.dyonovan.neotech.common.metals.fluids
 
+import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.util.ResourceLocation
-import net.minecraftforge.fluids.Fluid
+import net.minecraftforge.fluids.{Fluid, FluidStack}
 
 /**
   * This file was created for NeoTech
@@ -14,10 +16,15 @@ import net.minecraftforge.fluids.Fluid
   * @since 2/16/2016
   */
 class FluidMetal(color : Int, name : String, still : ResourceLocation, flow : ResourceLocation) extends Fluid(name, still, flow) {
+    setUnlocalizedName(Reference.MOD_ID + "." + name)
     this.setLuminosity(10)
     this.setDensity(3000)
     this.setViscosity(6000)
     this.setTemperature(600)
 
     override def getColor : Int = color
+
+    override def getLocalizedName(stack : FluidStack) : String = {
+        ClientUtils.translate("fluid." + getName + ".name")
+    }
 }
