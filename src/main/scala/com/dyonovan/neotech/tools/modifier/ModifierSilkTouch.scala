@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.tools.modifier
 
-import net.minecraft.enchantment.{Enchantment, EnchantmentHelper}
+import com.dyonovan.neotech.tools.ToolHelper
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -32,12 +33,11 @@ object ModifierSilkTouch extends Modifier("silkTouch") {
 
     /**
       * Write info to tag
+      *
       * @return
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasSilkTouch: Boolean): NBTTagCompound = {
-        val list = EnchantmentHelper.getEnchantments(stack)
-        list.put(Enchantment.silkTouch.effectId, if (hasSilkTouch) 1 else 0)
-        EnchantmentHelper.setEnchantments(list, stack)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantment.silkTouch.effectId, 1)
         tag.setBoolean(SILK, hasSilkTouch)
         super.writeToNBT(tag, stack)
         tag
@@ -50,5 +50,5 @@ object ModifierSilkTouch extends Modifier("silkTouch") {
       * @return A list of tips
       */
     override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String]
-        = new ArrayBuffer[String]() //Vanilla handles this
+    = new ArrayBuffer[String]() //Vanilla handles this
 }

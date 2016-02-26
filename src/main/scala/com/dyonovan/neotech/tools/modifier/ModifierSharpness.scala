@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.tools.modifier
 
-import net.minecraft.enchantment.{Enchantment, EnchantmentHelper}
+import com.dyonovan.neotech.tools.ToolHelper
+import net.minecraft.enchantment.Enchantment
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -41,9 +42,7 @@ object ModifierSharpness extends Modifier("sharpness") {
       * Write info to the tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
-        val list = EnchantmentHelper.getEnchantments(stack)
-        list.put(Enchantment.sharpness.effectId, getSharpnessLevel(stack) + count)
-        EnchantmentHelper.setEnchantments(list, stack)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantment.sharpness.effectId, getSharpnessLevel(stack) + count)
         tag.setInteger(SHARPNESS, getSharpnessLevel(stack) + count)
         super.writeToNBT(tag, stack)
         tag

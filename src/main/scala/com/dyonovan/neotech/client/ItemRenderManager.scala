@@ -83,6 +83,7 @@ object ItemRenderManager {
         registerItem(UpgradeItemManager.upgradeSharpness)
         registerItem(UpgradeItemManager.upgradeSmite)
         registerItem(UpgradeItemManager.upgradeBeheading)
+        registerItem(UpgradeItemManager.upgradeSpiderBane)
 
         registerPipesAndColored()
     }

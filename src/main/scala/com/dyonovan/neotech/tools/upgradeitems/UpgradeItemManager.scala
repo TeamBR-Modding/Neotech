@@ -28,6 +28,7 @@ object UpgradeItemManager {
     val upgradeSharpness   = new ItemModifierSharpness
     val upgradeSmite       = new ItemModifierSmite
     val upgradeBeheading   = new ItemModifierBeheading
+    val upgradeSpiderBane  = new ItemModifierBaneOfArthropods
 
     def preInit(): Unit = {
         ItemManager.registerItem(upgradeSilkTouch, upgradeSilkTouch.getUpgradeName)
@@ -39,6 +40,7 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeSmite, upgradeSmite.getUpgradeName)
         ItemManager.registerItem(upgradeAOE, upgradeAOE.getUpgradeName)
         ItemManager.registerItem(upgradeBeheading, upgradeBeheading.getUpgradeName)
+        ItemManager.registerItem(upgradeSpiderBane, upgradeSpiderBane.getUpgradeName)
     }
 
     def registerRecipes() : Unit = {
@@ -60,6 +62,8 @@ object UpgradeItemManager {
             Items.rotten_flesh)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeBeheading), ItemManager.upgradeMBEmpty,
             Items.skull)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeSpiderBane), ItemManager.upgradeMBEmpty,
+            Items.spider_eye)
     }
 
     def init() : Unit = {

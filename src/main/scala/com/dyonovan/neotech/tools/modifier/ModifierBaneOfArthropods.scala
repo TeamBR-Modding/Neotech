@@ -14,19 +14,19 @@ import scala.collection.mutable.ArrayBuffer
   * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
-  * @author Paul Davis <pauljoda>
-  * @since 2/24/2016
+  * @author Paul Davis "pauljoda"
+  * @since 2/25/2016
   */
-object ModifierSmite extends Modifier("smite") {
-    lazy val SMITE = "Smite"
+object ModifierBaneOfArthropods extends Modifier("spiderBane") {
+    lazy val BANE = "SpiderBane"
 
     /**
-      * Get smite level
+      * Get the Bane level
       */
-    def getSmiteLevel(stack : ItemStack) : Int = {
+    def getBaneLevel(stack : ItemStack) : Int = {
         val tag = getModifierTagFromStack(stack)
-        if(tag != null && tag.hasKey(SMITE))
-            return tag.getInteger(SMITE)
+        if(tag != null && tag.hasKey(BANE))
+            return tag.getInteger(BANE)
         0
     }
 
@@ -36,14 +36,14 @@ object ModifierSmite extends Modifier("smite") {
       * @param tag The tag that the level is stored on
       * @return The level
       */
-    override def getLevel(tag : NBTTagCompound) = tag.getInteger(SMITE)
+    override def getLevel(tag : NBTTagCompound) = tag.getInteger(BANE)
 
     /**
-      * Write info to tag
+      * Write info to the tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantment.smite.effectId, getSmiteLevel(stack) + count)
-        tag.setInteger(SMITE, getSmiteLevel(stack) + count)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantment.baneOfArthropods.effectId, getBaneLevel(stack) + count)
+        tag.setInteger(BANE, getBaneLevel(stack) + count)
         super.writeToNBT(tag, stack)
         tag
     }
@@ -54,6 +54,5 @@ object ModifierSmite extends Modifier("smite") {
       * @param stack The stack in
       * @return A list of tips
       */
-    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String]
-        = new ArrayBuffer[String]() //Vanilla handles this
+    override def getToolTipForWriting(stack: ItemStack, tag: NBTTagCompound): ArrayBuffer[String] = new ArrayBuffer[String]()
 }

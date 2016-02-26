@@ -168,6 +168,7 @@ item.neotech:electricSword.name=Electric Sword
 item.neotech:sharpness.name=Sharpness Upgrade
 item.neotech:smite.name=Smite Upgrade
 item.neotech:beheading.name=Beheading Upgrade
+item.neotech:spiderBane.name=Bane of Arthropods Upgrade
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery
