@@ -1,7 +1,8 @@
-package com.dyonovan.neotech.tools.upgradeitems
+package com.dyonovan.neotech.tools
 
 import com.dyonovan.neotech.managers.ItemManager
-import net.minecraft.init.{Items, Blocks}
+import com.dyonovan.neotech.tools.upgradeitems._
+import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -43,6 +44,10 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeBeheading, upgradeBeheading.getUpgradeName)
         ItemManager.registerItem(upgradeSpiderBane, upgradeSpiderBane.getUpgradeName)
         ItemManager.registerItem(upgradeShovel, upgradeShovel.getUpgradeName)
+
+        if(Loader.isModLoaded("tconstruct")) {
+            ItemManager.registerItem(upgradeMiningLevel4, upgradeMiningLevel4.getUpgradeName)
+        }
     }
 
     def registerRecipes() : Unit = {
@@ -68,14 +73,15 @@ object UpgradeItemManager {
             Items.skull)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeSpiderBane), ItemManager.upgradeMBEmpty,
             Items.spider_eye)
-    }
 
-    def init() : Unit = {
         if(Loader.isModLoaded("tconstruct")) {
-            ItemManager.registerItem(upgradeMiningLevel4, upgradeMiningLevel4.getUpgradeName)
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,
                 Blocks.obsidian)
         }
+    }
+
+    def init() : Unit = {
+
     }
 
     /**

@@ -2,8 +2,8 @@ package com.dyonovan.neotech.managers
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.common.items._
-import com.dyonovan.neotech.tools.tools.{ElectricSword, ElectricPickaxe}
-import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
+import com.dyonovan.neotech.tools.UpgradeItemManager
+import com.dyonovan.neotech.tools.tools.{ElectricPickaxe, ElectricSword}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary

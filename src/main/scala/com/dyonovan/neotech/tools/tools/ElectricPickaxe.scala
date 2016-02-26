@@ -4,12 +4,11 @@ import java.util
 
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.tools.ToolHelper
+import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.ModifierAOE._
-import com.dyonovan.neotech.tools.modifier.{ModifierShovel, ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed}
-import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
+import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed, ModifierShovel}
 import com.dyonovan.neotech.utils.ClientUtils
 import gnu.trove.map.hash.THashMap
 import net.minecraft.block.Block
@@ -17,7 +16,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemPickaxe, ItemStack}
-import net.minecraft.util.{MovingObjectPosition, BlockPos}
+import net.minecraft.util.{BlockPos, MovingObjectPosition}
 import net.minecraft.world.World
 import net.minecraftforge.common.ForgeHooks
 
