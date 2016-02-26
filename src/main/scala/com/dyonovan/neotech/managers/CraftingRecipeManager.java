@@ -1,8 +1,6 @@
 package com.dyonovan.neotech.managers;
 
-import com.dyonovan.neotech.common.metals.items.ItemMetal;
-import com.dyonovan.neotech.common.tiles.machines.processors.TileSolidifier;
-import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager;
+import com.dyonovan.neotech.tools.UpgradeItemManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
