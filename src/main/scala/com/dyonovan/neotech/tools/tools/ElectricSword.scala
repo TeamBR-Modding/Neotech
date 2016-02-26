@@ -10,13 +10,12 @@ import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.Block
-import net.minecraft.entity.{EntityLivingBase, Entity}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{ItemStack, ItemSword}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.BlockPos
 import net.minecraft.world.World
-import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * This file was created for NeoTech
@@ -32,15 +31,39 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
 
     setUnlocalizedName(Reference.MOD_ID + ":electricSword")
 
-    override def getToolName: String = "sword"
-    override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/sword/electricSword", doLowerCase = false)
+    /*******************************************************************************************************************
+      **************************************** BaseElectricTool Functions **********************************************
+      ******************************************************************************************************************/
 
+    /**
+      * The tool name of this tool, should be all lower case and used when getting the tool info
+      *
+      * @return The tool name
+      */
+    override def getToolName: String = "sword"
+
+    /**
+      * Used by the model to get the base texture, this should be with no upgrades installed
+      *
+      * @return The texture location, eg "neotech:items/tools/sword/sword
+      */
+    override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/sword/electricSword")
+
+    /**
+      * To prevent the stack from taking damage while hitting entities, we must override this method
+      */
     override def hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase) : Boolean =
         extractEnergy(stack, 250, simulate = false) > 0
 
+    /**
+      * When the block is broken, apply AOE here
+      */
     override def onBlockDestroyed(stack: ItemStack, worldIn: World, blockIn: Block,
                                   pos: BlockPos, playerIn: EntityLivingBase) : Boolean = true
 
+    /**
+      * Called on tick, allows us to make sure things are installed
+      */
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
         if(!stack.hasTagCompound) {
             val tagCompound = new NBTTagCompound
@@ -54,6 +77,9 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
         capacity = stack.getTagCompound.getInteger("EnergyCapacity")
     }
 
+    /**
+      * Called when the stack is created, we use this to set defaults
+      */
     override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
         if (stack.hasTagCompound) {
             if (stack.getTagCompound.hasKey("Energy"))
@@ -67,13 +93,9 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
         }
     }
 
-    /**
-      * The list of things that are accepted by this item
-      */
-    override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
-        UpgradeItemManager.upgradeSharpness.getUpgradeName, UpgradeItemManager.upgradeSmite.getUpgradeName,
-        ItemManager.basicRFBattery.getUpgradeName, UpgradeItemManager.upgradeBeheading.getUpgradeName
-    ))
+    /*******************************************************************************************************************
+      *************************************** ThermalBinderItem Functions **********************************************
+      ******************************************************************************************************************/
 
     /**
       * What type of tool is this?
@@ -83,10 +105,15 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
     override def getToolType: ToolType = ToolType.Sword
 
     /**
+      * The list of things that are accepted by this item
+      */
+    override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
+        UpgradeItemManager.upgradeSharpness.getUpgradeName, UpgradeItemManager.upgradeSmite.getUpgradeName,
+        ItemManager.basicRFBattery.getUpgradeName, UpgradeItemManager.upgradeBeheading.getUpgradeName
+    ))
+
+    /**
       * Used to get the upgrade count on this item, mainly used in the motherboard to determine how long to cook
-      *
-      * @param stack
-      * @return
       */
     override def getUpgradeCount(stack: ItemStack): Int = {
         if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
@@ -97,15 +124,5 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
             return count
         }
         0
-    }
-
-    @SideOnly(Side.CLIENT)
-    override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
-        if(stack.hasTagCompound)
-            list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(getMaxEnergyStored(stack)) + " RF")
-        list.add("")
-        list.add("Upgrades: " + ToolHelper.getCurrentUpgradeCount(stack) + " / " + getMaximumUpgradeCount(stack))
-        for(string <- ToolHelper.getToolTipForDisplay(stack))
-            list.add(string)
     }
 }

@@ -259,7 +259,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
                 for(x <- INPUT_SLOTS)
                     if (getStackInSlot(x) != null)
                         getStackInSlot(x).getItem.asInstanceOf[BaseUpgradeItem]
-                                .writeInfoToNBT(getStackInSlot(OBJECT_INPUT), tag, getStackInSlot(x).stackSize)
+                                .writeInfoToNBT(getStackInSlot(OBJECT_INPUT), tag, getStackInSlot(x))
 
                 // Write tag to Input
                 getStackInSlot(OBJECT_INPUT).setTagCompound(tag)

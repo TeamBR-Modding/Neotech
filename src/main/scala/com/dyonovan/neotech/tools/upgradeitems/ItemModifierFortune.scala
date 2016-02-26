@@ -35,11 +35,11 @@ class ItemModifierFortune extends BaseUpgradeItem("fortune", 5) {
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = {
         var localTag = ModifierFortune.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierFortune.writeToNBT(localTag, stack, ModifierFortune.getFortuneLevel(stack) + count)
+        ModifierFortune.writeToNBT(localTag, stack, writingStack.stackSize)
         ModifierFortune.overrideModifierTag(stack, localTag)
     }
 }

@@ -19,13 +19,15 @@ import scala.collection.mutable.ArrayBuffer
 object ModifierBeheading extends Modifier("beheading") {
     lazy val BEHEADING = "Beheading"
 
+    /**
+      * Get the beheading level
+      */
     def getBeheadingLevel(stack : ItemStack) : Int = {
         val tag = getModifierTagFromStack(stack)
         if(tag != null && tag.hasKey(BEHEADING))
             return tag.getInteger(BEHEADING)
         0
     }
-
 
     /**
       * Used to get the level for this modifier
@@ -35,6 +37,9 @@ object ModifierBeheading extends Modifier("beheading") {
       */
     override def getLevel(tag : NBTTagCompound) = tag.getInteger(BEHEADING)
 
+    /**
+      * Write info to the tag
+      */
     def writeToNBT(tag: NBTTagCompound, stack : ItemStack, level : Int): NBTTagCompound = {
         tag.setFloat(BEHEADING, getBeheadingLevel(stack) + level)
         super.writeToNBT(tag, stack)

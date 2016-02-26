@@ -134,7 +134,6 @@ class ItemElectromagnet extends ItemBattery {
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if(stack.hasTagCompound) {
             val active = stack.getTagCompound.getBoolean("Active")
-            list.add(GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.magnetism"))
             list.add(if (active) GuiColor.GREEN + StatCollector.translateToLocal("neotech.text.active")
             else GuiColor.RED + StatCollector.translateToLocal("neotech.text.disabled"))
         }

@@ -48,5 +48,5 @@ abstract class BaseUpgradeItem(name: String, stackSize: Int,
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    def writeInfoToNBT(stack : ItemStack, tag: NBTTagCompound, count : Int) : Unit
+    def writeInfoToNBT(stack : ItemStack, tag: NBTTagCompound, writingStack : ItemStack) : Unit
 }

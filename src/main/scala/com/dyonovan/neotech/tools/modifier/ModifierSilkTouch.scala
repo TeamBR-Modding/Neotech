@@ -20,6 +20,9 @@ object ModifierSilkTouch extends Modifier("silkTouch") {
 
     lazy val SILK = "SilkTouch"
 
+    /**
+      * Checks for silk touch
+      */
     def hasSilkTouch(stack: ItemStack): Boolean = {
         val tag = getModifierTagFromStack(stack)
         if (tag != null && tag.hasKey(SILK))
@@ -27,6 +30,10 @@ object ModifierSilkTouch extends Modifier("silkTouch") {
         false
     }
 
+    /**
+      * Write info to tag
+      * @return
+      */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasSilkTouch: Boolean): NBTTagCompound = {
         val list = EnchantmentHelper.getEnchantments(stack)
         list.put(Enchantment.silkTouch.effectId, if (hasSilkTouch) 1 else 0)
@@ -42,5 +49,6 @@ object ModifierSilkTouch extends Modifier("silkTouch") {
       * @param stack The stack in
       * @return A list of tips
       */
-    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = new ArrayBuffer[String]() //Vanilla handles this
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String]
+        = new ArrayBuffer[String]() //Vanilla handles this
 }

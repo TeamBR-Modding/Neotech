@@ -9,6 +9,7 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers._
 import com.dyonovan.neotech.network.PacketDispatcher
 import com.dyonovan.neotech.registries._
+import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.world.{ChunkLoaderManager, NeotechWorldGenerator}
 import net.minecraft.command.ServerCommandManager
 import net.minecraft.creativetab.CreativeTabs
@@ -84,6 +85,7 @@ object NeoTech {
     @EventHandler def init(event : FMLInitializationEvent) =  {
         FertilizerBlacklistRegistry.init()
         RecipeManager.init()
+        UpgradeItemManager.init()
         PacketDispatcher.initPackets()
         EventManager.init()
         proxy.init()

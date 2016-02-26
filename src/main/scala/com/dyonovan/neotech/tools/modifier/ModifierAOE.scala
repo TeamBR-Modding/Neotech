@@ -20,6 +20,9 @@ object ModifierAOE extends Modifier("aoe") {
     lazy val AOE = "AOE"
     lazy val ACTIVE = "Active"
 
+    /**
+      * Get the AOE Level on this stack, 0 if none
+      */
     def getAOELevel(stack: ItemStack): Int = {
         val tag = getModifierTagFromStack(stack)
         if (tag != null && tag.hasKey(AOE))
@@ -27,7 +30,10 @@ object ModifierAOE extends Modifier("aoe") {
         0
     }
 
-    def getAOEActive(stack: ItemStack): Boolean = {
+    /**
+      * Checks if AOE is active
+      */
+    def isAOEActive(stack: ItemStack): Boolean = {
         val tag = getModifierTagFromStack(stack)
         if (tag != null && tag.hasKey(ACTIVE))
             tag.getBoolean(ACTIVE)
@@ -35,8 +41,16 @@ object ModifierAOE extends Modifier("aoe") {
             false
     }
 
+    /**
+      * Get the upgrade level
+      * @param tag The tag that the level is stored on
+      * @return The level
+      */
     override def getLevel(tag : NBTTagCompound) = tag.getInteger(AOE)
 
+    /**
+      * Write the info to that tag
+      */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, levelAOE: Int): NBTTagCompound = {
         tag.setInteger(AOE, getAOELevel(stack) + levelAOE)
         tag.setBoolean(ACTIVE, false)
@@ -56,8 +70,8 @@ object ModifierAOE extends Modifier("aoe") {
             case 1 => size = "3x3"
             case 2 => size = "5x5"
             case 3 => size = "7x7"
+            case 4 => size = "9x9"
             case _ => size = "1x1"
-
         }
         ArrayBuffer("AOE: " + size)
     }

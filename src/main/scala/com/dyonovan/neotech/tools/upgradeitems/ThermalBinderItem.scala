@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.tools.upgradeitems
 
+import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import net.minecraft.item.ItemStack
 
@@ -30,10 +31,19 @@ trait ThermalBinderItem {
     /**
       * Used to get the upgrade count on this item, mainly used in the motherboard to determine how long to cook
       *
-      * @param stack
+      * @param stack ItemStack
       * @return
       */
-    def getUpgradeCount(stack : ItemStack) : Int
+    def getUpgradeCount(stack: ItemStack): Int = {
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
+            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
+            var count = 0
+            for (x <- 0 until tagList.tagCount())
+                count += tagList.getCompoundTagAt(x).getInteger("ModifierLevel")
+            return count
+        }
+        0
+    }
 
     /**
       * Gets the maximum count for upgrades, default 8
@@ -66,7 +76,5 @@ trait ThermalBinderItem {
       * @param upgradeName The upgrade name
       * @return
       */
-    def isAcceptableUpgrade(upgradeName: String): Boolean = {
-        acceptableUpgrades.contains(upgradeName)
-    }
+    def isAcceptableUpgrade(upgradeName: String): Boolean = acceptableUpgrades.contains(upgradeName)
 }

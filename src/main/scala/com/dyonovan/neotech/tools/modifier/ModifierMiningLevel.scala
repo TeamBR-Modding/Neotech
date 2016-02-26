@@ -46,6 +46,11 @@ object ModifierMiningLevel extends Modifier("miningLevel") {
         1
     }
 
+    /**
+      * The level of this modifier
+      * @param tag The tag that the level is stored on
+      * @return The level
+      */
     override def getLevel(tag : NBTTagCompound) : Int = tag.getInteger(LEVEL)
 
     /**
@@ -69,6 +74,7 @@ object ModifierMiningLevel extends Modifier("miningLevel") {
         val  harvestLevel = tag.getInteger(LEVEL)
         var strLevel = ""
         harvestLevel match {
+            case 4 => strLevel = "Cobalt"
             case 3 => strLevel = "Obsidian"
             case 2 => strLevel = "Redstone"
             case 1 => strLevel = "Stone"

@@ -5,6 +5,7 @@
         "layer1"       : "neotech:items/tools/pickaxe/miningLevel1",
         "miningLevel2" : "neotech:items/tools/pickaxe/miningLevel2",
         "miningLevel3" : "neotech:items/tools/pickaxe/miningLevel3",
+        "miningLevel4" : "neotech:items/tools/pickaxe/miningLevel4",
         "miningSpeed"  : "neotech:items/tools/pickaxe/miningSpeed",
         "silkTouch"    : "neotech:items/tools/pickaxe/silkTouch",
         "fortune"      : "neotech:items/tools/pickaxe/fortune",

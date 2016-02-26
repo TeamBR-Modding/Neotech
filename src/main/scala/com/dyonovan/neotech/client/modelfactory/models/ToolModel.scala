@@ -42,13 +42,15 @@ class ToolModel(parent : IFlexibleBakedModel, transform : ImmutableMap[Transform
             val textureBuilder = ImmutableMap.builder[String, String]()
             textureBuilder.put("layer0", stack.getItem.asInstanceOf[BaseElectricTool].getBaseTexture)
 
-            val modifierList = ToolHelper.getModifierTag(stack)
+            val modifierList = ToolHelper.getModifierTagList(stack)
             var i = 1
             if(modifierList != null) {
                 for(x <- 0 until modifierList.tagCount()) {
                     val tagCompound = modifierList.getCompoundTagAt(x)
-                    textureBuilder.put("layer" + i.toString, tagCompound.getString("TextureLocation"))
-                    i += 1
+                    if(!tagCompound.hasKey("Active") || (tagCompound.hasKey("Active") && tagCompound.getBoolean("Active"))) {
+                        textureBuilder.put("layer" + i.toString, tagCompound.getString("TextureLocation"))
+                        i += 1
+                    }
                 }
             }
 

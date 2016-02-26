@@ -20,6 +20,9 @@ object ModifierFortune extends Modifier("fortune") {
 
     lazy val FORTUNE = "Fortune"
 
+    /**
+      * Get fortune level
+      */
     def getFortuneLevel(stack: ItemStack): Int = {
         val tag = getModifierTagFromStack(stack)
         if (tag != null && tag.hasKey(FORTUNE))
@@ -35,9 +38,12 @@ object ModifierFortune extends Modifier("fortune") {
       */
     override def getLevel(tag : NBTTagCompound) = tag.getInteger(FORTUNE)
 
+    /**
+      * Write info to the tag
+      */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, fortune: Int): NBTTagCompound = {
         val list = EnchantmentHelper.getEnchantments(stack)
-        list.put(Enchantment.fortune.effectId, fortune)
+        list.put(Enchantment.fortune.effectId, getFortuneLevel(stack) + fortune)
         EnchantmentHelper.setEnchantments(list, stack)
         tag.setInteger(FORTUNE, fortune)
         super.writeToNBT(tag, stack)
@@ -50,5 +56,6 @@ object ModifierFortune extends Modifier("fortune") {
       * @param stack The stack in
       * @return A list of tips
       */
-    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = new ArrayBuffer[String]()  //Vanilla handles this
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] =
+        new ArrayBuffer[String]()  //Vanilla handles this
 }

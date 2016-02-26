@@ -48,12 +48,12 @@ object ClientUtils {
 
     /**
       * Prefixes the given string with a MODID:, this should be used when using resource location. Set doLowerCase to
-      * true to have it formatted to lowercase, true by default for consistent usage
+      * true to have it formatted to lowercase
       *
       * @param standardResource The standard name, eg electricFurnace
       * @return The resource return, eg neotech:electricFurnace
       */
-    def prefixResource(standardResource : String, doLowerCase : Boolean = true) : String =
+    def prefixResource(standardResource : String, doLowerCase : Boolean = false) : String =
         String.format("%s:%s", RESOURCE, if(doLowerCase) standardResource.toLowerCase(Locale.US) else standardResource)
 
     /**

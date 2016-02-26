@@ -14,7 +14,8 @@ import net.minecraft.nbt.NBTTagCompound
   * @author Paul Davis <pauljoda>
   * @since 2/24/2016
   */
-class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 4) {
+class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 6) {
+
     /**
       * Can this upgrade item allow more to be applied to the item
       *
@@ -24,7 +25,7 @@ class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 4) {
       */
     override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean = {
         val speed = ModifierMiningSpeed.getMiningSpeed(stack)
-        speed + (count * 4.0F) <= 20.0F
+        speed + (count * 4.0F) <= 4 + (maxStackSize * 4)
     }
 
     /**
@@ -33,11 +34,11 @@ class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 4) {
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound,  writingStack : ItemStack): Unit = {
         var localTag = ModifierMiningSpeed.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierMiningSpeed.writeToNBT(localTag, stack, ModifierMiningSpeed.getMiningSpeed(stack) + (count * 4.0F))
+        ModifierMiningSpeed.writeToNBT(localTag, stack, writingStack.stackSize)
         ModifierMiningSpeed.overrideModifierTag(stack, localTag)
     }
 }

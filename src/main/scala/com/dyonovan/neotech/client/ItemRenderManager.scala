@@ -71,7 +71,9 @@ object ItemRenderManager {
         registerItem(ItemManager.eliteRFBattery)
 
         registerItem(ItemManager.electricPickaxe)
-        registerItem(UpgradeItemManager.upgradeMiningLevel)
+        registerItem(UpgradeItemManager.upgradeMiningLevel2)
+        registerItem(UpgradeItemManager.upgradeMiningLevel3)
+        registerItem(UpgradeItemManager.upgradeMiningLevel4)
         registerItem(UpgradeItemManager.upgradeSilkTouch)
         registerItem(UpgradeItemManager.upgradeFortune)
         registerItem(UpgradeItemManager.upgradeMiningSpeed)

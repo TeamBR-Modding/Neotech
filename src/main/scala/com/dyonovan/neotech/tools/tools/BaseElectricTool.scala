@@ -2,13 +2,13 @@ package com.dyonovan.neotech.tools.tools
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.tools.ToolHelper
-import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
+import com.dyonovan.neotech.tools.modifier.ModifierAOE._
+import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel}
 import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
-import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.common.items.traits.ItemBattery
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.item.{EnumRarity, Item, ItemStack}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -23,7 +23,6 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 2/21/2016
   */
-
 trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
 
     setCreativeTab(NeoTech.tabTools)
@@ -33,10 +32,59 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
     override var maxExtract: Int = 250
     override var maxReceive: Int = 250
 
+    /**
+      * The tool name of this tool, should be all lower case and used when getting the tool info
+      *
+      * @return The tool name
+      */
     def getToolName   : String
 
+    /**
+      * Used by the model to get the base texture, this should be with no upgrades installed
+      *
+      * @return The texture location, eg "neotech:items/tools/sword/sword
+      */
     def getBaseTexture : String
 
+    /*******************************************************************************************************************
+      ****************************************** Item/Tool Functions ***************************************************
+      ******************************************************************************************************************/
+    /**
+      * Used to define how much an operation costs
+      *
+      * @return How much energy to drain
+      */
+    def RF_COST(stack : ItemStack) : Int = 250
+
+    /**
+      * Extracts the energy, if in creative it won't
+      *
+      * @param player The player in
+      * @param stack The stack
+      */
+    def rfCost(player: EntityPlayer, stack: ItemStack): Unit = {
+        if (!player.capabilities.isCreativeMode) {
+            extractEnergy(stack, RF_COST(stack), simulate = false)
+            updateDamage(stack)
+        }
+    }
+
+    /**
+      * We want this name to be special
+      *
+      * @param stack The stack
+      * @return The rarity of the item
+      */
+    override def getRarity(stack: ItemStack): EnumRarity = EnumRarity.RARE
+
+    /**
+      * Keeps this from being enchanted
+      */
+    override def isBookEnchantable(stack: ItemStack, book: ItemStack): Boolean = false
+
+    /**
+      * Called on tick, allows us to make sure things are installed
+      */
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
         if(!stack.hasTagCompound) {
             val tagCompound = new NBTTagCompound
@@ -50,6 +98,9 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
         }
     }
 
+    /**
+      * Called when the stack is created, we use this to set defaults
+      */
     override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
         if (stack.hasTagCompound) {
             if (stack.getTagCompound.hasKey("Energy"))
@@ -67,6 +118,37 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
             stack.setTagCompound(tagCompound)
         }
     }
+
+    /**
+      * This will allow us to add more tool classes based on the stack
+      *
+      * @param stack The stack in
+      * @return The list of effective tools
+      */
+    override def getToolClasses(stack: ItemStack): java.util.Set[String] =
+        super.getToolClasses(stack)
+
+    /**
+      * To prevent the stack from taking damage while hitting entities, we must override this method
+      */
+    override def hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase) : Boolean =
+        extractEnergy(stack, RF_COST(stack), simulate = false) > 0
+
+    /**
+      * Puts effect if AOE is active
+      */
+    @SideOnly(Side.CLIENT)
+    override def hasEffect(stack: ItemStack): Boolean = {
+        val tag = ModifierAOE.getModifierTagFromStack(stack)
+        if (tag != null && tag.hasKey(ACTIVE))
+            tag.getBoolean(ACTIVE)
+        else
+            false
+    }
+
+    /*******************************************************************************************************************
+      ******************************************** Battery Functions ***************************************************
+      ******************************************************************************************************************/
 
     /**
       * Adds energy to a container item. Returns the quantity of energy that was accepted.
@@ -92,25 +174,18 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
         energyReceived
     }
 
-    override def isBookEnchantable(stack: ItemStack, book: ItemStack): Boolean = false
-
     /**
       * Get the max amount of energy that can be stored in the container item.
       */
-    override def getMaxEnergyStored(stack: ItemStack): Int = stack.getTagCompound.getInteger("EnergyCapacity")
+    override def getMaxEnergyStored(stack: ItemStack): Int =
+        stack.getTagCompound.getInteger("EnergyCapacity")
 
-    /**
-      * Turn off default enchantment look for our tools as we will be using the MC Enchantment NBT Data tag
-      */
-    @SideOnly(Side.CLIENT)
-    override def hasEffect(stack: ItemStack): Boolean = false
+    /*******************************************************************************************************************
+      *********************************************** Misc Functions ***************************************************
+      ******************************************************************************************************************/
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
-        if(stack.hasTagCompound)
-            list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(getMaxEnergyStored(stack)) + " RF")
-        list.add("")
-        list.add("Upgrades: " + (ToolHelper.getCurrentUpgradeCount(stack) - 1) + " / " + getMaximumUpgradeCount(stack))
         for(string <- ToolHelper.getToolTipForDisplay(stack))
             list.add(string)
     }

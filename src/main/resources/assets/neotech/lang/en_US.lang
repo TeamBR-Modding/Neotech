@@ -156,7 +156,9 @@ item.neotech:mobNet.name=Mob Net
 item.neotech:electroMagnet.name=Electromagnet
 
 item.neotech:electricPickaxe.name=Electric Pickaxe
-item.neotech:miningLevel.name=Mining Level Upgrade
+item.neotech:miningLevel2.name=Redstone Mining Level Upgrade
+item.neotech:miningLevel3.name=Obsidian Mining Level Upgrade
+item.neotech:miningLevel4.name=Cobalt Mining Level Upgrade
 item.neotech:silkTouch.name=Silk Touch Upgrade
 item.neotech:fortune.name=Fortune Upgrade
 item.neotech:miningSpeed.name=Mining Speed Upgrade
@@ -389,6 +391,8 @@ neotech.text.lookAtPlayer=Follow
 neotech.text.lookAtPlayerInfo=Have the mob look at the player
 neotech.text.renderName=Name
 neotech.text.renderNameInfo=Display Mob Name (Nametag Mob / Anvil Net)
+
+neotech.text.placeInBinder=Upgrade In Thermal Binder
 
 #######################
 # Commands

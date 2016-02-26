@@ -19,6 +19,9 @@ import scala.collection.mutable.ArrayBuffer
 object ModifierSharpness extends Modifier("sharpness") {
     lazy val SHARPNESS = "Sharpness"
 
+    /**
+      * Get the sharpness level
+      */
     def getSharpnessLevel(stack : ItemStack) : Int = {
         val tag = getModifierTagFromStack(stack)
         if(tag != null && tag.hasKey(SHARPNESS))
@@ -34,6 +37,9 @@ object ModifierSharpness extends Modifier("sharpness") {
       */
     override def getLevel(tag : NBTTagCompound) = tag.getInteger(SHARPNESS)
 
+    /**
+      * Write info to the tag
+      */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
         val list = EnchantmentHelper.getEnchantments(stack)
         list.put(Enchantment.sharpness.effectId, getSharpnessLevel(stack) + count)
@@ -49,5 +55,6 @@ object ModifierSharpness extends Modifier("sharpness") {
       * @param stack The stack in
       * @return A list of tips
       */
-    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = new ArrayBuffer[String]() //Vanilla handles this
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] =
+        new ArrayBuffer[String]() //Vanilla handles this
 }

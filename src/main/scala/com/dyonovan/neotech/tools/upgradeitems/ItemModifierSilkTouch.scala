@@ -33,9 +33,9 @@ class ItemModifierSilkTouch extends BaseUpgradeItem("silkTouch", 1) {
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound,  writingStack : ItemStack): Unit = {
         val localTag = new NBTTagCompound
-        ModifierSilkTouch.writeToNBT(localTag, stack, if (count > 0) true else false)
+        ModifierSilkTouch.writeToNBT(localTag, stack, if (writingStack.stackSize > 0) true else false)
         var tagList = new NBTTagList
         if(stack.getTagCompound.hasKey(ToolHelper.ModifierListTag))
             tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)

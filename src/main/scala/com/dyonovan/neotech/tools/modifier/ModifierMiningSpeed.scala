@@ -19,6 +19,9 @@ object ModifierMiningSpeed extends Modifier("miningSpeed") {
 
     lazy val SPEED = "MiningSpeed"
 
+    /**
+      * Get the mining speed
+      */
     def getMiningSpeed(stack: ItemStack): Float = {
         val tag = getModifierTagFromStack(stack)
         if (tag != null && tag.hasKey(SPEED))
@@ -26,8 +29,11 @@ object ModifierMiningSpeed extends Modifier("miningSpeed") {
         4.0F
     }
 
-    def writeToNBT(tag: NBTTagCompound, stack : ItemStack, miningSpeed : Float): NBTTagCompound = {
-        tag.setFloat(SPEED, miningSpeed)
+    /**
+      * Write info to tag
+      */
+    def writeToNBT(tag: NBTTagCompound, stack : ItemStack, count : Float): NBTTagCompound = {
+        tag.setFloat(SPEED, getMiningSpeed(stack) + (count * 4.0F))
         super.writeToNBT(tag, stack)
         tag
     }
@@ -47,6 +53,6 @@ object ModifierMiningSpeed extends Modifier("miningSpeed") {
       * @return A list of tips
       */
     override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = {
-        ArrayBuffer("Mining Speed: " + tag.getFloat(SPEED) * 100 / 4 + "%")
+        ArrayBuffer("Mining Speed: " + (tag.getFloat(SPEED) * 100 / 4).toInt + "%")
     }
 }

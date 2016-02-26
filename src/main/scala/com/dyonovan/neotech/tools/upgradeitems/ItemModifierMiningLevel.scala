@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.tools.upgradeitems
 
-import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -15,7 +14,8 @@ import net.minecraft.nbt.NBTTagCompound
   * @author Paul Davis <pauljoda>
   * @since 2/23/2016
   */
-class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
+class ItemModifierMiningLevel(level : Int) extends BaseUpgradeItem("miningLevel" + level, 1) {
+
     /**
       * Can this upgrade item allow more to be applied to the item
       *
@@ -24,21 +24,23 @@ class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
       * @return True if there is space for the entire count
       */
     override def canAcceptLevel(stack: ItemStack, count: Int, name : String): Boolean = {
-        if(count > getMaximumLevel)
-            return false
+        true
+    }
 
-        var currentLevelOnStack : NBTTagCompound = null
-
-        if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
-            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
-            for(x <- 0 until tagList.tagCount())
-                if(tagList.getCompoundTagAt(x).getString("ModifierID").equalsIgnoreCase(ModifierMiningLevel.name))
-                    currentLevelOnStack = tagList.getCompoundTagAt(x)
+    /**
+      * Used to get the mining level on an ItemModifierMiningLevel stack
+      * @param stack The stack
+      * @return The current mining level
+      */
+    def getMiningLevelOnThis(stack : ItemStack): Int = {
+        if(stack == null)
+            return 0
+        stack.getItem.asInstanceOf[BaseUpgradeItem].getUpgradeName match {
+            case "miningLevel2" => 2
+            case "miningLevel3" => 3
+            case "miningLevel4" => 4
+            case _ => 0
         }
-
-        if(currentLevelOnStack.getInteger(ModifierMiningLevel.LEVEL) + count <= getMaximumLevel + 1)
-            return true // The count is correct
-        false
     }
 
     /**
@@ -47,11 +49,11 @@ class ItemModifierMiningLevel extends BaseUpgradeItem("miningLevel", 2) {
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = {
         var localTag = ModifierMiningLevel.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierMiningLevel.writeToNBT(localTag, stack, ModifierMiningLevel.getLevel(localTag) + count)
+        ModifierMiningLevel.writeToNBT(localTag, stack, getMiningLevelOnThis(writingStack))
         ModifierMiningLevel.overrideModifierTag(stack, localTag)
     }
 }

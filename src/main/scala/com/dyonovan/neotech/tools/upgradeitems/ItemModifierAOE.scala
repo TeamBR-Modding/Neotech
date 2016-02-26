@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound
   * @author Dyonovan
   * @since 2/24/2016
   */
-class ItemModifierAOE extends BaseUpgradeItem("aoe", 3) {
+class ItemModifierAOE extends BaseUpgradeItem("aoe", 4) {
 
     /**
       * Can this upgrade item allow more to be applied to the item
@@ -23,10 +23,8 @@ class ItemModifierAOE extends BaseUpgradeItem("aoe", 3) {
       * @param count The stack size of the input
       * @return True if there is space for the entire count
       */
-    override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean = {
-        if (count > getMaximumLevel) return false
+    override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean =
         ModifierAOE.getAOELevel(stack) + count <= getMaximumLevel
-    }
 
     /**
       * Use this to put information onto the stack, called when put onto the stack
@@ -34,10 +32,10 @@ class ItemModifierAOE extends BaseUpgradeItem("aoe", 3) {
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = {
         var localTag = ModifierAOE.getModifierTagFromStack(stack)
         if (localTag == null) localTag = new NBTTagCompound
-        ModifierAOE.writeToNBT(localTag, stack, count)
+        ModifierAOE.writeToNBT(localTag, stack, writingStack.stackSize)
         ModifierAOE.overrideModifierTag(stack, localTag)
     }
 }

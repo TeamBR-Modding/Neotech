@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "neotech:items/tools/pickaxe/miningLevelUpgrade"
+        "layer0": "neotech:items/tools/pickaxe/miningLevelUpgrade2"
     },
     "display": {
         "thirdperson": {

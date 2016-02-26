@@ -19,6 +19,9 @@ import scala.collection.mutable.ArrayBuffer
 object ModifierSmite extends Modifier("smite") {
     lazy val SMITE = "Smite"
 
+    /**
+      * Get smite level
+      */
     def getSmiteLevel(stack : ItemStack) : Int = {
         val tag = getModifierTagFromStack(stack)
         if(tag != null && tag.hasKey(SMITE))
@@ -34,6 +37,9 @@ object ModifierSmite extends Modifier("smite") {
       */
     override def getLevel(tag : NBTTagCompound) = tag.getInteger(SMITE)
 
+    /**
+      * Write info to tag
+      */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
         val list = EnchantmentHelper.getEnchantments(stack)
         list.put(Enchantment.smite.effectId, getSmiteLevel(stack) + count)
@@ -49,5 +55,6 @@ object ModifierSmite extends Modifier("smite") {
       * @param stack The stack in
       * @return A list of tips
       */
-    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] = new ArrayBuffer[String]() //Vanilla handles this
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String]
+        = new ArrayBuffer[String]() //Vanilla handles this
 }

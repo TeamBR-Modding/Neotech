@@ -24,7 +24,8 @@ class MotherBoardUpgradeItem(name: String, stackSize: Int,
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound,  count : Int): Unit = {
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = {
+        val count = writingStack.stackSize
         name match {
             case "upgradeHardDrive" => tag.setInteger("HardDrive", count)
             case "upgradeControl"   => tag.setBoolean("Control", true)

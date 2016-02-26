@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound
   * @since 2/24/2016
   */
 class ItemModifierSmite extends BaseUpgradeItem("smite", 5) {
+
     /**
       * Can this upgrade item allow more to be applied to the item
       *
@@ -31,11 +32,11 @@ class ItemModifierSmite extends BaseUpgradeItem("smite", 5) {
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, count: Int): Unit = {
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound,  writingStack : ItemStack): Unit = {
         var localTag = ModifierSmite.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierSmite.writeToNBT(localTag, stack, count)
+        ModifierSmite.writeToNBT(localTag, stack, writingStack.stackSize)
         ModifierSmite.overrideModifierTag(stack, localTag)
     }
 }
