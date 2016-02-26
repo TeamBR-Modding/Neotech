@@ -3,9 +3,9 @@ package com.dyonovan.neotech.common.tiles.machines.processors
 import com.dyonovan.neotech.client.gui.machines.processors.GuiThermalBinder
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.MachineProcessor
-import com.dyonovan.neotech.managers.{MetalManager, ItemManager}
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
-import com.dyonovan.neotech.tools.upgradeitems.{ThermalBinderItem, BaseUpgradeItem}
+import com.dyonovan.neotech.tools.upgradeitems.{BaseUpgradeItem, ThermalBinderItem}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambr.bookshelf.util.InventoryUtils
@@ -349,7 +349,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * More formally, this should return true if fluid is able to enter from the given direction.
       */
     override def canFill(from: EnumFacing, fluid: Fluid): Boolean =
-        fluid == MetalManager.getMetal("tin").get.fluid.get
+        fluid.getName.equals("tin")
 
     /**
       * Called when something happens to the tank, you should mark the block for update here if a tile
