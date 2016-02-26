@@ -42,13 +42,17 @@ class MotherBoardItem(name: String, maxStackSize: Int, creative: Boolean) extend
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, tooltip: java.util.List[String], advanced: Boolean): Unit = {
+        if (stack == null) return
         stack.getItem match {
             case ItemManager.upgradeMBFull =>
-                val mb = UpgradeBoard.getBoardFromStack(stack)
-                tooltip.asInstanceOf[java.util.List[String]].add("Has Control: " + mb.hasControl)
-                tooltip.asInstanceOf[java.util.List[String]].add("Has Expansion: " + mb.hasExpansion)
-                tooltip.asInstanceOf[java.util.List[String]].add("HardDrives: " + mb.getHardDriveCount)
-                tooltip.asInstanceOf[java.util.List[String]].add("Processors: " + mb.getProcessorCount)
+                if (stack.hasTagCompound) {
+                    val mb = UpgradeBoard.getBoardFromStack(stack)
+                    if (mb == null) return
+                    tooltip.asInstanceOf[java.util.List[String]].add("Has Control: " + mb.hasControl)
+                    tooltip.asInstanceOf[java.util.List[String]].add("Has Expansion: " + mb.hasExpansion)
+                    tooltip.asInstanceOf[java.util.List[String]].add("HardDrives: " + mb.getHardDriveCount)
+                    tooltip.asInstanceOf[java.util.List[String]].add("Processors: " + mb.getProcessorCount)
+                }
             case _ =>
         }
     }
