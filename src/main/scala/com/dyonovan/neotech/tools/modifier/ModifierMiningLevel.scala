@@ -47,13 +47,6 @@ object ModifierMiningLevel extends Modifier("miningLevel") {
     }
 
     /**
-      * The level of this modifier
-      * @param tag The tag that the level is stored on
-      * @return The level
-      */
-    override def getLevel(tag : NBTTagCompound) : Int = tag.getInteger(LEVEL)
-
-    /**
       * Writes the info to the tag, store things you need here
       *
       * @param tag The incoming tag compound
