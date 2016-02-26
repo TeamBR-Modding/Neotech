@@ -96,12 +96,14 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     /**
       * Get the harvest level of this item
       */
-    override def getHarvestLevel(stack: ItemStack, toolClass: String): Int = ModifierMiningLevel.getMiningLevel(stack)
+    override def getHarvestLevel(stack: ItemStack, toolClass: String): Int =
+        if(super.getHarvestLevel(stack, toolClass) != -1) ModifierMiningLevel.getMiningLevel(stack) else super.getHarvestLevel(stack, toolClass)
 
     /**
       * Get the dig speed
       */
-    override def getDigSpeed(stack: ItemStack, state: IBlockState): Float = ModifierMiningSpeed.getMiningSpeed(stack)
+    override def getDigSpeed(stack: ItemStack, state: IBlockState): Float =
+        if(super.getDigSpeed(stack, state) > 1.0F) ModifierMiningSpeed.getMiningSpeed(stack) else super.getDigSpeed(stack, state)
 
     /**
       * Lets us set creative able to break, also checks if has power
@@ -137,7 +139,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
                 for (b <- 0 until blockList.size) {
                     val newPos = blockList.get(b)
                     val block = world.getBlockState(newPos).getBlock
-                    if (ForgeHooks.isToolEffective(world, newPos, stack) || block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
+                    if (ForgeHooks.isToolEffective(world, newPos, stack) && block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
                         if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
                             block.harvestBlock(world, player.asInstanceOf[EntityPlayer], newPos, block.getDefaultState, world.getTileEntity(newPos))
                         world.setBlockToAir(newPos)

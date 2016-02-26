@@ -1,10 +1,12 @@
 package com.dyonovan.neotech.common.items
 
+import cofh.api.energy.IEnergyContainerItem
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.common.items.traits.ItemBattery
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -37,6 +39,29 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
     override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
         if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
             updateDamage(stack)
+    }
+
+    override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
+        entityIn match {
+            case player: EntityPlayer if getEnergyStored(stack) > 0 =>
+                for(x <- 0 until player.inventory.getSizeInventory) {
+                    if(player.inventory.getStackInSlot(x) != null &&
+                            player.inventory.getStackInSlot(x).getItem.isInstanceOf[IEnergyContainerItem] &&
+                            !player.inventory.getStackInSlot(x).getItem.isInstanceOf[RFBattery]) {
+                        val energyContainerItem = player.inventory.getStackInSlot(x).getItem.asInstanceOf[IEnergyContainerItem]
+                        val amount =
+                            extractEnergy(stack,
+                            energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), maxExtract, false),
+                            simulate = false)
+                        if(amount > 0) {
+                            extractEnergy(stack,
+                                energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), amount, false),
+                                simulate = false)
+                        }
+                    }
+                }
+            case _ =>
+        }
     }
 
     /**

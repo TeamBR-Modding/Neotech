@@ -86,7 +86,7 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
       * Called on tick, allows us to make sure things are installed
       */
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
-        if(!stack.hasTagCompound) {
+        if(!stack.hasTagCompound || ToolHelper.getModifierTagList(stack) == null) {
             val tagCompound = new NBTTagCompound
             val tagList = new NBTTagList
             tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1))
