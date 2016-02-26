@@ -93,4 +93,5 @@ class MotherBoardItem(name: String, maxStackSize: Int, creative: Boolean) extend
       */
     override def canAcceptCount(stack: ItemStack, stacksIn: (ItemStack, ItemStack, ItemStack, ItemStack)): Boolean =
         getUpgradeCount(stack) == 0 // We only let things in when not there
+
 }
