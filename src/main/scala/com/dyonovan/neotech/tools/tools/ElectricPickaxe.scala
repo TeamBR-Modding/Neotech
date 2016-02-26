@@ -8,9 +8,10 @@ import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.ModifierAOE._
-import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed}
+import com.dyonovan.neotech.tools.modifier.{ModifierShovel, ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed}
 import com.dyonovan.neotech.tools.upgradeitems.UpgradeItemManager
 import com.dyonovan.neotech.utils.ClientUtils
+import gnu.trove.map.hash.THashMap
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
@@ -18,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemPickaxe, ItemStack}
 import net.minecraft.util.{MovingObjectPosition, BlockPos}
 import net.minecraft.world.World
+import net.minecraftforge.common.ForgeHooks
 
 /**
   * This file was created for Bookshelf API
@@ -52,6 +54,20 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
       */
     override def getBaseTexture: String = ClientUtils.prefixResource("items/tools/pickaxe/electricPickaxe")
 
+    /**
+      * This will allow us to add more tool classes based on the stack
+      *
+      * @param stack The stack in
+      * @return The list of effective tools
+      */
+    override def getToolClasses(stack: ItemStack): java.util.Set[String] = {
+        val defaults = new THashMap[String, Integer]()
+        defaults.put("pickaxe", ModifierMiningLevel.getMiningLevel(stack))
+        if(ModifierShovel.hasShovelUpgrade(stack))
+            defaults.put("shovel", ModifierMiningLevel.getMiningLevel(stack))
+        defaults.keySet()
+    }
+
     /*******************************************************************************************************************
       *************************************** ThermalBinderItem Functions **********************************************
       ******************************************************************************************************************/
@@ -70,25 +86,9 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
         UpgradeItemManager.upgradeMiningLevel2.getUpgradeName, UpgradeItemManager.upgradeMiningLevel3.getUpgradeName,
         UpgradeItemManager.upgradeMiningLevel4.getUpgradeName, UpgradeItemManager.upgradeSilkTouch.getUpgradeName,
         UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeMiningSpeed.getUpgradeName,
-        UpgradeItemManager.upgradeAOE.getUpgradeName, ItemManager.basicRFBattery.getUpgradeName
+        UpgradeItemManager.upgradeAOE.getUpgradeName, ItemManager.basicRFBattery.getUpgradeName,
+        UpgradeItemManager.upgradeShovel.getUpgradeName
     ))
-
-    /**
-      * Used to get the upgrade count on this item, mainly used in the motherboard to determine how long to cook
-      *
-      * @param stack ItemStack
-      * @return
-      */
-    override def getUpgradeCount(stack: ItemStack): Int = {
-        if (stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
-            val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
-            var count = -1
-            for (x <- 0 until tagList.tagCount())
-                count += tagList.getCompoundTagAt(x).getInteger("ModifierLevel")
-            return count
-        }
-        0
-    }
 
     /*******************************************************************************************************************
       ****************************************** Item/Tool Functions ***************************************************
@@ -138,7 +138,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
                 for (b <- 0 until blockList.size) {
                     val newPos = blockList.get(b)
                     val block = world.getBlockState(newPos).getBlock
-                    if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
+                    if (ForgeHooks.isToolEffective(world, newPos, stack) || block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
                         if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
                             block.harvestBlock(world, player.asInstanceOf[EntityPlayer], newPos, block.getDefaultState, world.getTileEntity(newPos))
                         world.setBlockToAir(newPos)

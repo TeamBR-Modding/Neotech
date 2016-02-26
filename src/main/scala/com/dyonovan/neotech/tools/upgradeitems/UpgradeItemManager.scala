@@ -24,6 +24,7 @@ object UpgradeItemManager {
     val upgradeMiningLevel4 = new ItemModifierMiningLevel(4)
     val upgradeMiningSpeed = new ItemModifierMiningSpeed
     val upgradeAOE         = new ItemModifierAOE
+    val upgradeShovel      = new ItemModifierShovel
 
     val upgradeSharpness   = new ItemModifierSharpness
     val upgradeSmite       = new ItemModifierSmite
@@ -41,6 +42,7 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeAOE, upgradeAOE.getUpgradeName)
         ItemManager.registerItem(upgradeBeheading, upgradeBeheading.getUpgradeName)
         ItemManager.registerItem(upgradeSpiderBane, upgradeSpiderBane.getUpgradeName)
+        ItemManager.registerItem(upgradeShovel, upgradeShovel.getUpgradeName)
     }
 
     def registerRecipes() : Unit = {
@@ -56,6 +58,8 @@ object UpgradeItemManager {
             Items.feather, Blocks.redstone_block)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeAOE), ItemManager.upgradeMBEmpty,
             Blocks.piston, Blocks.piston)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeShovel), ItemManager.upgradeMBEmpty,
+            Items.iron_shovel)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeSharpness), ItemManager.upgradeMBEmpty,
             Items.flint, Items.iron_sword)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeSmite), ItemManager.upgradeMBEmpty,

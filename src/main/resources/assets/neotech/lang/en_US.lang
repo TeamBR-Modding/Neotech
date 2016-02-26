@@ -163,6 +163,7 @@ item.neotech:silkTouch.name=Silk Touch Upgrade
 item.neotech:fortune.name=Fortune Upgrade
 item.neotech:miningSpeed.name=Mining Speed Upgrade
 item.neotech:aoe.name=Area of Effect Upgrade
+item.neotech:shovelPick.name=Shovel Upgrade
 
 item.neotech:electricSword.name=Electric Sword
 item.neotech:sharpness.name=Sharpness Upgrade

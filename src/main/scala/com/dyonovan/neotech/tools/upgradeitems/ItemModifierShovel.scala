@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.tools.upgradeitems
 
-import com.dyonovan.neotech.tools.modifier.ModifierSilkTouch
+import com.dyonovan.neotech.tools.modifier.ModifierShovel
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -11,10 +11,10 @@ import net.minecraft.nbt.NBTTagCompound
   * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
-  * @author Paul Davis <pauljoda>
-  * @since 2/24/2016
+  * @author Paul Davis "pauljoda"
+  * @since 2/25/2016
   */
-class ItemModifierSilkTouch extends BaseUpgradeItem("silkTouch", 1) {
+class ItemModifierShovel extends BaseUpgradeItem("shovelPick", 1) {
 
     /**
       * Can this upgrade item allow more to be applied to the item
@@ -23,8 +23,8 @@ class ItemModifierSilkTouch extends BaseUpgradeItem("silkTouch", 1) {
       * @param count The stack size of the input
       * @return True if there is space for the entire count
       */
-    override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean =
-        !ModifierSilkTouch.hasSilkTouch(stack)
+    override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean
+        = !ModifierShovel.hasShovelUpgrade(stack)
 
     /**
       * Use this to put information onto the stack, called when put onto the stack
@@ -32,11 +32,11 @@ class ItemModifierSilkTouch extends BaseUpgradeItem("silkTouch", 1) {
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound,  writingStack : ItemStack): Unit = {
-        var localTag = ModifierSilkTouch.getModifierTagFromStack(stack)
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack: ItemStack): Unit = {
+        var localTag = ModifierShovel.getModifierTagFromStack(stack)
         if(localTag == null)
             localTag = new NBTTagCompound
-        ModifierSilkTouch.writeToNBT(localTag, stack, if(writingStack.stackSize > 0) true else false)
-        ModifierSilkTouch.overrideModifierTag(stack, localTag)
+        ModifierShovel.writeToNBT(localTag, stack, if(writingStack.stackSize > 0) true else false)
+        ModifierShovel.overrideModifierTag(stack, localTag)
     }
 }
