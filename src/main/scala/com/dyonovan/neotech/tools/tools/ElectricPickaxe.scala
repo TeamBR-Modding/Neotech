@@ -3,20 +3,20 @@ package com.dyonovan.neotech.tools.tools
 import java.util
 
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.ModifierAOE._
-import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed, ModifierShovel}
+import com.dyonovan.neotech.tools.modifier._
 import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import com.dyonovan.neotech.utils.ClientUtils
 import gnu.trove.map.hash.THashMap
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
-import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemPickaxe, ItemStack}
-import net.minecraft.util.{BlockPos, MovingObjectPosition}
+import net.minecraft.util.{EnumFacing, BlockPos, MovingObjectPosition}
 import net.minecraft.world.World
 import collection.JavaConversions._
 
@@ -85,7 +85,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
         UpgradeItemManager.upgradeMiningLevel4.getUpgradeName, UpgradeItemManager.upgradeSilkTouch.getUpgradeName,
         UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeMiningSpeed.getUpgradeName,
         UpgradeItemManager.upgradeAOE.getUpgradeName, ItemManager.basicRFBattery.getUpgradeName,
-        UpgradeItemManager.upgradeShovel.getUpgradeName
+        UpgradeItemManager.upgradeShovel.getUpgradeName, UpgradeItemManager.upgradeLighting.getUpgradeName
     ))
 
     /*******************************************************************************************************************
@@ -113,7 +113,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
         else if (player.capabilities.isCreativeMode) {
             val world = player.worldObj
             val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
-            if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack), mop, player.asInstanceOf[EntityPlayer], world, stack)
                 for (b <- 0 until blockList.size) {
                     val newPos = blockList.get(b)
@@ -154,15 +154,49 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
         true
     }
 
-    /***
-      * Set AOE to true
+    override def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos,
+                           side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
+        val position = pos.offset(side)
+        if(worldIn.getBlockState(position).getBlock.isAir(worldIn, position)) {
+            worldIn.playSoundAtEntity(playerIn, "random.wood_click", 1.0F, 1.0F)
+            worldIn.setBlockState(position, BlockManager.lightSource.getDefaultState)
+            worldIn.markBlockForUpdate(position)
+            rfCost(playerIn, stack)
+            return true
+        }
+        false
+    }
+
+    override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
+        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected)
+        if(ModifierLighting.hasLighting(stack) && entityIn.isInstanceOf[EntityPlayer]) {
+            val pos = new BlockPos(entityIn.posX.toInt, entityIn.posY.toInt, entityIn.posZ.toInt)
+            if(worldIn.getLightBrightness(pos) < 0.5 &&
+                    worldIn.getBlockState(pos).getBlock.isAir(worldIn, pos)) {
+                worldIn.setBlockState(pos, BlockManager.lightSource.getDefaultState)
+                worldIn.markBlockForUpdate(pos)
+                rfCost(entityIn.asInstanceOf[EntityPlayer], stack)
+            }
+        }
+    }
+
+    /**
+      * Set Values to true
       */
     override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
         if (ModifierAOE.getAOELevel(stack) > 0 && player.isSneaking) {
             val tag = ModifierAOE.getModifierTagFromStack(stack)
             if (tag != null && tag.hasKey(ACTIVE)) {
                 tag.setBoolean(ACTIVE, !tag.getBoolean(ACTIVE))
-                overrideModifierTag(stack, tag)
+                ModifierAOE.overrideModifierTag(stack, tag)
+            }
+        }
+
+        if(ModifierLighting.hasLighting(stack) && player.isSneaking) {
+            val tag = ModifierLighting.getModifierTagFromStack(stack)
+            if(tag != null && tag.hasKey(ACTIVE)) {
+                tag.setBoolean(ACTIVE, !tag.getBoolean(ACTIVE))
+                ModifierLighting.overrideModifierTag(stack, tag)
             }
         }
         stack

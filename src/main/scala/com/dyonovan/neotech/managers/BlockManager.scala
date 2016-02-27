@@ -90,6 +90,7 @@ object BlockManager {
     val redstoneClock = new BlockRedstoneClock
     val mobStand = new BlockMobStand
     val blockAttractor = new BlockAttractor
+    val lightSource = new BlockLightSource
     val phantomGlass = new BlockPhantomGlass
     val voidGlass = new BlockVoidGlass
 
@@ -153,6 +154,8 @@ object BlockManager {
         registerBlock(redstoneClock, "redstoneClock", classOf[TileRedstoneClock])
         registerBlock(mobStand, "mobStand", classOf[TileMobStand])
         registerBlock(blockAttractor, "blockAttractor", classOf[TileAttractor])
+
+        registerBlock(lightSource, "lightSource", null)
 
         registerBlock(phantomGlass, "phantomGlass", null)
         registerBlock(voidGlass, "voidGlass", null)

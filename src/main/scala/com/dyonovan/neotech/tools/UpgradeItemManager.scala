@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.tools
 
-import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.tools.upgradeitems._
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
@@ -26,6 +26,7 @@ object UpgradeItemManager {
     val upgradeMiningSpeed = new ItemModifierMiningSpeed
     val upgradeAOE         = new ItemModifierAOE
     val upgradeShovel      = new ItemModifierShovel
+    val upgradeLighting    = new ItemModifierLighting
 
     val upgradeSharpness   = new ItemModifierSharpness
     val upgradeSmite       = new ItemModifierSmite
@@ -44,6 +45,7 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeBeheading, upgradeBeheading.getUpgradeName)
         ItemManager.registerItem(upgradeSpiderBane, upgradeSpiderBane.getUpgradeName)
         ItemManager.registerItem(upgradeShovel, upgradeShovel.getUpgradeName)
+        ItemManager.registerItem(upgradeLighting, upgradeLighting.getUpgradeName)
 
         if(Loader.isModLoaded("tconstruct")) {
             ItemManager.registerItem(upgradeMiningLevel4, upgradeMiningLevel4.getUpgradeName)
@@ -73,6 +75,8 @@ object UpgradeItemManager {
             Items.skull)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeSpiderBane), ItemManager.upgradeMBEmpty,
             Items.spider_eye)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeLighting), ItemManager.upgradeMBEmpty,
+            BlockManager.blockMiniatureSun)
 
         if(Loader.isModLoaded("tconstruct")) {
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,

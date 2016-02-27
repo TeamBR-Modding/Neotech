@@ -10,6 +10,7 @@
         "silkTouch"    : "neotech:items/tools/pickaxe/silkTouch",
         "fortune"      : "neotech:items/tools/pickaxe/fortune",
         "aoe"          : "neotech:items/tools/pickaxe/aoe",
-        "shovel"       : "neotech:items/tools/pickaxe/shovelPick"
+        "shovel"       : "neotech:items/tools/pickaxe/shovelPick",
+        "lighting"     : "neotech:items/tools/pickaxe/lighting"
     }
 }

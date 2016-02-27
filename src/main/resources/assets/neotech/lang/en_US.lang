@@ -45,6 +45,9 @@ tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
 tile.neotech:phantomGlass.name=Phantom Glass
 tile.neotech:voidGlass.name=Void Glass
 
+# Misc
+tile.neotech:lightSource.name=Light Source
+
 #######################
 # Fluids
 #######################
@@ -136,6 +139,7 @@ item.neotech:fortune.name=Fortune Upgrade
 item.neotech:miningSpeed.name=Mining Speed Upgrade
 item.neotech:aoe.name=Area of Effect Upgrade
 item.neotech:shovelPick.name=Shovel Upgrade
+item.neotech:lighting.name=Lightning Upgrade
 
 item.neotech:electricSword.name=Electric Sword
 item.neotech:sharpness.name=Sharpness Upgrade
@@ -367,6 +371,8 @@ neotech.text.renderName=Name
 neotech.text.renderNameInfo=Display Mob Name (Nametag Mob / Anvil Net)
 
 neotech.text.placeInBinder=Upgrade In Thermal Binder
+
+neotech.text.lighting=Places Light Sources Automatically
 
 #######################
 # Commands
