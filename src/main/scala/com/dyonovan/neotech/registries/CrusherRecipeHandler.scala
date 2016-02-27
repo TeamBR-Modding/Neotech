@@ -220,7 +220,9 @@ class CrusherRecipes(val input: String, val output: String, val qty: Int, val ou
                 new ItemStack(GameRegistry.findItem(name(0), name(1)), 1, Integer.valueOf(name(2)))
             case 1 =>
                 val itemList = OreDictionary.getOres(name(0), false)
-                itemList.get(0)
+                if (!itemList.isEmpty)
+                    itemList.get(0)
+                else null
             case _ => null
         }
     }

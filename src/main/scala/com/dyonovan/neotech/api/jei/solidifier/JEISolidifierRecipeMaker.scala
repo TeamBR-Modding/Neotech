@@ -3,9 +3,10 @@ package com.dyonovan.neotech.api.jei.solidifier
 import java.util
 
 import com.dyonovan.neotech.managers.RecipeManager
-import com.dyonovan.neotech.registries.{SolidifierRecipe, SolidifierRecipeHandler}
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
+import com.dyonovan.neotech.registries.SolidifierRecipeHandler
+import com.teambr.bookshelf.helper.LogHelper
+
+import scala.collection.JavaConversions._
 
 
 /**
@@ -22,11 +23,14 @@ object JEISolidifierRecipeMaker {
 
     def getRecipes: util.List[JEISolidifierRecipe] = {
         val recipes = new util.ArrayList[JEISolidifierRecipe]()
-        val solidifier = RecipeManager.getHandler[SolidifierRecipeHandler](RecipeManager.Solidifier).recipes.toArray()
-        for (i <- solidifier) {
-            val recipe = i.asInstanceOf[SolidifierRecipe]
-            var stack = new ItemStack(Blocks.iron_block)
-            recipes.add(new JEISolidifierRecipe(recipe.getFluidFromString(recipe.input), recipe.getItemStackFromString(recipe.output)))
+        val solidifier = RecipeManager.getHandler[SolidifierRecipeHandler](RecipeManager.Solidifier).recipes
+        for (recipe <- solidifier) {
+            val input = recipe.getFluidFromString(recipe.input)
+            val output = recipe.getItemStackFromString(recipe.output)
+            if (input != null && output != null)
+                recipes.add(new JEISolidifierRecipe(input, output))
+            else
+                LogHelper.severe("[NeoTech] SolidifierRecipe json is corrupt! Please delete and recreate!")
         }
         recipes
     }

@@ -3,7 +3,10 @@ package com.dyonovan.neotech.api.jei.grinder
 import java.util
 
 import com.dyonovan.neotech.managers.RecipeManager
-import com.dyonovan.neotech.registries.{CrusherRecipeHandler, CrusherRecipes}
+import com.dyonovan.neotech.registries.CrusherRecipeHandler
+import com.teambr.bookshelf.helper.LogHelper
+
+import scala.collection.JavaConversions._
 
 
 /**
@@ -13,12 +16,15 @@ object JEIGrinderRecipeMaker  {
 
     def getRecipes: java.util.List[JEIGrinderRecipe] = {
         val recipes = new util.ArrayList[JEIGrinderRecipe]()
-        val crusher = RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).recipes.toArray()
-        for (i <- crusher) {
-            val recipe = i.asInstanceOf[CrusherRecipes]
+        val crusher = RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).recipes
+        for (recipe <- crusher) {
+            val input = recipe.getItemStackFromString(recipe.input)
             val output = recipe.getItemStackFromString(recipe.output)
-            output.stackSize = recipe.qty
-            recipes.add(new JEIGrinderRecipe(recipe.getItemStackFromString(recipe.input), output))
+            if (input != null && output != null) {
+                output.stackSize = recipe.qty
+                recipes.add(new JEIGrinderRecipe(input, output))
+            } else
+                LogHelper.severe("[NeoTech] CrusherRecipe json is corrupt! Please delete and recreate!")
         }
         recipes
     }

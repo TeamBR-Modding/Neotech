@@ -10,7 +10,7 @@ import net.minecraft.command.{ICommandSender, CommandBase}
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
 import net.minecraft.util.{StatCollector, ChatComponentText}
-import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.oredict.OreDictionary
 
 /**
@@ -37,7 +37,7 @@ class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, Fl
       *
       * @return
       */
-    override def getVersion: Int = 1
+    override def getVersion: Int = 2
 
     /**
       * Used to get the default folder location
@@ -64,45 +64,46 @@ class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, Fl
         val iterator = MetalManager.metalRegistry.keySet().iterator()
         while(iterator.hasNext) {
             val metal = MetalManager.metalRegistry.get(iterator.next())
-            if (metal.fluid.isDefined) {
+            if (FluidRegistry.isFluidRegistered(metal.oreDict)) {
+
                 //Block
                 if(metal.block.isDefined)
-                    addSolidifierRecipe(new FluidStack(metal.fluid.get, MetalManager.BLOCK_MB), null, metal.block.get.getName)
+                    addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid(metal.oreDict), MetalManager.BLOCK_MB), null, metal.block.get.getName)
 
                 //Ingot
                 if(metal.ingot.isDefined)
-                    addSolidifierRecipe(new FluidStack(metal.fluid.get, MetalManager.INGOT_MB), null, metal.ingot.get.getName)
+                    addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid(metal.oreDict), MetalManager.INGOT_MB), null, metal.ingot.get.getName)
 
                 //Nugget
                 if(metal.nugget.isDefined)
-                    addSolidifierRecipe(new FluidStack(metal.fluid.get, MetalManager.NUGGET_MB), null, metal.nugget.get.getName)
+                    addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid(metal.oreDict), MetalManager.NUGGET_MB), null, metal.nugget.get.getName)
             }
         }
 
         // Extend Vanilla
 
         // Iron
-        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("iron").get.fluid.get, MetalManager.BLOCK_MB),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.BLOCK_MB),
             new ItemStack(Blocks.iron_block), "blockIron")
-        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("iron").get.fluid.get, MetalManager.INGOT_MB),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.INGOT_MB),
             new ItemStack(Items.iron_ingot), "ingotIron")
 
         // Gold
-        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.BLOCK_MB),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.BLOCK_MB),
             new ItemStack(Blocks.gold_block), "blockGold")
-        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.INGOT_MB),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.INGOT_MB),
             new ItemStack(Items.gold_ingot), "ingotGold")
-        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.NUGGET_MB),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.NUGGET_MB),
             new ItemStack(Items.gold_nugget), "nuggetGold")
 
         // Carbon
-        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.INGOT_MB),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.INGOT_MB),
             new ItemStack(Items.coal), "")
-        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.BLOCK_MB),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.BLOCK_MB),
             new ItemStack(Blocks.coal_block), "")
 
         // Obsidian
-        addSolidifierRecipe(new FluidStack(MetalManager.getMetal("obsidian").get.fluid.get, MetalManager.BLOCK_MB),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("obsidian"), MetalManager.BLOCK_MB),
             new ItemStack(Blocks.obsidian), "")
 
         saveToFile()
@@ -113,7 +114,7 @@ class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, Fl
       * Adds the recipe
       *
       * @param output If you set null for the itemstack, it will attempt to create one from ore dict
-      * @param fluidStack
+      * @param fluidStack FluidStack
       */
     def addSolidifierRecipe(fluidStack: FluidStack, output : ItemStack, ore : String) : Unit = {
         var stack : ItemStack = output

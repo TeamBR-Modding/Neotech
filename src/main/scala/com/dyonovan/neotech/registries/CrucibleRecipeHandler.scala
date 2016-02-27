@@ -37,7 +37,7 @@ class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
       *
       * @return
       */
-    override def getVersion: Int = 1
+    override def getVersion: Int = 2
 
     /**
       * Used to get the default folder location
@@ -65,47 +65,47 @@ class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
         while(iterator.hasNext) {
             val metal = MetalManager.metalRegistry.get(iterator.next())
             // Crucible Recipes
-            if (metal.fluid.isDefined) {
+            if (FluidRegistry.isFluidRegistered(metal.oreDict)) {
                 //Block - 1296mb
                 if (metal.block.isDefined)
-                    addCrucibleRecipe(null, metal.block.get.getName, new FluidStack(metal.fluid.get, MetalManager.BLOCK_MB))
+                    addCrucibleRecipe(null, metal.block.get.getName, new FluidStack(FluidRegistry.getFluid(metal.oreDict), MetalManager.BLOCK_MB))
 
                 //Ore - 432mb
                 if (metal.oreBlock.isDefined)
-                    addCrucibleRecipe(null, metal.oreBlock.get.getName, new FluidStack(MetalManager.getMetal("dirty" + metal.oreDict).get.fluid.get, MetalManager.ORE_MB))
+                    addCrucibleRecipe(null, metal.oreBlock.get.getName, new FluidStack(FluidRegistry.getFluid("dirty" + metal.oreDict), MetalManager.ORE_MB))
 
                 //Ingot - 144mb
                 if (metal.ingot.isDefined)
-                    addCrucibleRecipe(null, metal.ingot.get.getName, new FluidStack(metal.fluid.get, MetalManager.INGOT_MB))
+                    addCrucibleRecipe(null, metal.ingot.get.getName, new FluidStack(FluidRegistry.getFluid(metal.oreDict), MetalManager.INGOT_MB))
 
                 //Dust - 76mb
                 if(metal.dust.isDefined)
-                    addCrucibleRecipe(null, metal.dust.get.getName, new FluidStack(metal.fluid.get, MetalManager.DUST_MB))
+                    addCrucibleRecipe(null, metal.dust.get.getName, new FluidStack(FluidRegistry.getFluid(metal.oreDict), MetalManager.DUST_MB))
 
                 //Nugget - 16mb
                 if (metal.nugget.isDefined)
-                    addCrucibleRecipe(null, metal.nugget.get.getName, new FluidStack(metal.fluid.get, MetalManager.NUGGET_MB))
+                    addCrucibleRecipe(null, metal.nugget.get.getName, new FluidStack(FluidRegistry.getFluid(metal.oreDict), MetalManager.NUGGET_MB))
             }
         }
 
         // Iron
-        addCrucibleRecipe(null, "ingotIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, MetalManager.INGOT_MB))
-        addCrucibleRecipe(null, "oreIron", new FluidStack(MetalManager.getMetal("dirtyiron").get.fluid.get, MetalManager.ORE_MB))
-        addCrucibleRecipe(null, "blockIron", new FluidStack(MetalManager.getMetal("iron").get.fluid.get, MetalManager.BLOCK_MB))
+        addCrucibleRecipe(null, "ingotIron", new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.INGOT_MB))
+        addCrucibleRecipe(null, "oreIron", new FluidStack(FluidRegistry.getFluid("dirtyiron"), MetalManager.ORE_MB))
+        addCrucibleRecipe(null, "blockIron", new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.BLOCK_MB))
 
         // Gold
-        addCrucibleRecipe(null, "nuggetGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.NUGGET_MB))
-        addCrucibleRecipe(null, "ingotGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.INGOT_MB))
-        addCrucibleRecipe(null, "oreGold", new FluidStack(MetalManager.getMetal("dirtygold").get.fluid.get, MetalManager.ORE_MB))
-        addCrucibleRecipe(null, "blockGold", new FluidStack(MetalManager.getMetal("gold").get.fluid.get, MetalManager.BLOCK_MB))
+        addCrucibleRecipe(null, "nuggetGold", new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.NUGGET_MB))
+        addCrucibleRecipe(null, "ingotGold", new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.INGOT_MB))
+        addCrucibleRecipe(null, "oreGold", new FluidStack(FluidRegistry.getFluid("dirtygold"), MetalManager.ORE_MB))
+        addCrucibleRecipe(null, "blockGold", new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.BLOCK_MB))
 
         // Carbon
-        addCrucibleRecipe(new ItemStack(Items.coal, 1, 1),  "", new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.INGOT_MB * 2))
-        addCrucibleRecipe(new ItemStack(Items.coal),        "", new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.INGOT_MB))
-        addCrucibleRecipe(new ItemStack(Blocks.coal_block), "", new FluidStack(MetalManager.getMetal("carbon").get.fluid.get, MetalManager.BLOCK_MB))
+        addCrucibleRecipe(new ItemStack(Items.coal, 1, 1),  "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.INGOT_MB * 2))
+        addCrucibleRecipe(new ItemStack(Items.coal),        "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.INGOT_MB))
+        addCrucibleRecipe(new ItemStack(Blocks.coal_block), "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.BLOCK_MB))
 
         // Obsidian
-        addCrucibleRecipe(new ItemStack(Blocks.obsidian),  "", new FluidStack(MetalManager.getMetal("obsidian").get.fluid.get, MetalManager.BLOCK_MB))
+        addCrucibleRecipe(new ItemStack(Blocks.obsidian),  "", new FluidStack(FluidRegistry.getFluid("obsidian"), MetalManager.BLOCK_MB))
 
         // Ice/Snowball to Water
         addCrucibleRecipe(new ItemStack(Items.snowball), "", new FluidStack(FluidRegistry.WATER, 144))
@@ -124,7 +124,7 @@ class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
       * Adds the recipe
       *
       * @param input If you set null for the itemstack, it will attempt to create one from ore dict
-      * @param fluidStack
+      * @param fluidStack FluidStack
       */
     def addCrucibleRecipe(input : ItemStack, ore : String, fluidStack: FluidStack) : Unit = {
         var stack : ItemStack = input
