@@ -32,7 +32,6 @@ import collection.JavaConversions._
   */
 class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricTool {
 
-
     setUnlocalizedName(Reference.MOD_ID + ":electricPickaxe")
 
     /*******************************************************************************************************************
