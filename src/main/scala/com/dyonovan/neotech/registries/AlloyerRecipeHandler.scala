@@ -103,8 +103,8 @@ class AlloyerRecipeHandler extends AbstractRecipeHandler[AlloyerRecipe, (FluidSt
     /**
       * Used to check if a single fluid is valid for the recipes
       *
-      * @param input
-      * @return
+      * @param input FluidStack
+      * @return Boolean
       */
     def isValidSingle(input : FluidStack) : Boolean = {
         if(input == null)
@@ -153,8 +153,8 @@ class AlloyerRecipe(val fluidOne : String, val fluidTwo : String, val fluidOut :
     /**
       * Used to check if a single fluid is valid for the recipes
       *
-      * @param input
-      * @return
+      * @param input FluidStack
+      * @return Boolean
       */
     def isValidSingle(input : FluidStack) : Boolean = {
         if(input == null)

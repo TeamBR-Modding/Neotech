@@ -1,12 +1,12 @@
 package com.dyonovan.neotech.api.jei.centrifuge
 
 import java.util
-import java.util.Collections
 
-import com.dyonovan.neotech.api.jei.crucible.JEICrucibleRecipe
 import com.dyonovan.neotech.managers.RecipeManager
-import com.dyonovan.neotech.registries.{CentrifugeRecipe, CentrifugeRecipeHandler}
+import com.dyonovan.neotech.registries.CentrifugeRecipeHandler
 import com.teambr.bookshelf.helper.LogHelper
+
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -22,9 +22,8 @@ object JEICentrifugeRecipeMaker {
 
     def getRecipes: util.List[JEICentrifugeRecipe] = {
         val recipes = new util.ArrayList[JEICentrifugeRecipe]()
-        val centrifuge = RecipeManager.getHandler[CentrifugeRecipeHandler](RecipeManager.Centrifuge).recipes.toArray()
-        for (i <- centrifuge) {
-            val recipe = i.asInstanceOf[CentrifugeRecipe]
+        val centrifuge = RecipeManager.getHandler[CentrifugeRecipeHandler](RecipeManager.Centrifuge).recipes
+        for (recipe <- centrifuge) {
             val input = recipe.getFluidFromString(recipe.fluidIn)
             val out1 = recipe.getFluidFromString(recipe.fluidOne)
             val out2 = recipe.getFluidFromString(recipe.fluidTwo)

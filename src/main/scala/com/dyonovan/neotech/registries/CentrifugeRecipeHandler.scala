@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.command.{ICommandSender, CommandBase}
 import net.minecraft.util.{StatCollector, ChatComponentText}
-import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 
 /**
   * This file was created for NeoTech
@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidStack
   * @since 2/21/2016
   */
 class CentrifugeRecipeHandler
-        extends AbstractRecipeHandler[CentrifugeRecipe, FluidStack, (FluidStack, FluidStack)] {
+  extends AbstractRecipeHandler[CentrifugeRecipe, FluidStack, (FluidStack, FluidStack)] {
 
     /**
       * Used to get the base name of the files
@@ -42,7 +42,7 @@ class CentrifugeRecipeHandler
       *
       * @return
       */
-    override def getVersion: Int = 1
+    override def getVersion: Int = 2
 
     /**
       * Called when the file is not found, add all default recipes here
@@ -61,17 +61,13 @@ class CentrifugeRecipeHandler
 
         // Metals
         val iterator = MetalManager.metalRegistry.keySet().iterator()
-        while(iterator.hasNext) {
+        while (iterator.hasNext) {
             val metal = MetalManager.metalRegistry.get(iterator.next())
-
-            if(metal.fluid.isDefined) {
-                val dirtyName = "dirty" + metal.oreDict
-                if(MetalManager.getMetal(dirtyName).isDefined) {
-                    addRecipe(new CentrifugeRecipe(dirtyName + ":144", metal.oreDict + ":144", "lava:16"))
-                }
+            val dirtyName = "dirty" + metal.oreDict
+            if (MetalManager.getMetal(dirtyName).isDefined && FluidRegistry.isFluidRegistered(dirtyName)) {
+                addRecipe(new CentrifugeRecipe(dirtyName + ":144", metal.oreDict + ":144", "lava:16"))
             }
         }
-
         saveToFile()
     }
 
@@ -84,24 +80,24 @@ class CentrifugeRecipeHandler
         new CommandBase {
             override def getCommandName: String = "addCentrifugeRecipe"
 
-            override def getRequiredPermissionLevel : Int = 3
+            override def getRequiredPermissionLevel: Int = 3
 
             override def getCommandUsage(sender: ICommandSender): String = "commands.addCentrifugeRecipe.usage"
 
             override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
-                if(args.length < 3)
+                if (args.length < 3)
                     sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addCentrifugeRecipe.usage")))
                 else {
-                    val input  = args(0)
+                    val input = args(0)
                     val output1 = args(1)
                     val output2 = args(2)
 
-                    if(getFluidFromString(input) != null && getFluidFromString(output1) != null && getFluidFromString(output2) != null) {
+                    if (getFluidFromString(input) != null && getFluidFromString(output1) != null && getFluidFromString(output2) != null) {
                         addRecipe(new CentrifugeRecipe(input, output1, output2))
                         sender.addChatMessage(new ChatComponentText(input + " -> " + output1 + " " + output2 + " Added Successfully"))
                         saveToFile()
                     } else
-                        sender.addChatMessage(new ChatComponentText(input + " -> " + output1 + " " + output2  + " Failed Adding"))
+                        sender.addChatMessage(new ChatComponentText(input + " -> " + output1 + " " + output2 + " Failed Adding"))
                 }
             }
         }
@@ -117,8 +113,8 @@ class CentrifugeRecipeHandler
         new TypeToken[util.ArrayList[CentrifugeRecipe]]() {}
 }
 
-class CentrifugeRecipe(val fluidIn : String, val fluidOne : String, val fluidTwo : String)
-        extends AbstractRecipe[FluidStack, (FluidStack, FluidStack)] {
+class CentrifugeRecipe(val fluidIn: String, val fluidOne: String, val fluidTwo: String)
+  extends AbstractRecipe[FluidStack, (FluidStack, FluidStack)] {
     /**
       * Used to get the output of this recipe
       *
@@ -126,7 +122,7 @@ class CentrifugeRecipe(val fluidIn : String, val fluidOne : String, val fluidTwo
       * @return The output object
       */
     override def getOutput(input: FluidStack): Option[(FluidStack, FluidStack)] = {
-        if(isValidInput(input))
+        if (isValidInput(input))
             Option((getFluidFromString(fluidOne), getFluidFromString(fluidTwo)))
         else
             None
@@ -139,11 +135,11 @@ class CentrifugeRecipe(val fluidIn : String, val fluidOne : String, val fluidTwo
       * @return True if there is an output
       */
     override def isValidInput(input: FluidStack): Boolean = {
-        if(input == null || input.getFluid == null)
+        if (input == null || input.getFluid == null)
             false
         else {
             getFluidFromString(fluidIn).getFluid.getName.equalsIgnoreCase(input.getFluid.getName) &&
-                    input.amount >= getFluidFromString(fluidIn).amount
+              input.amount >= getFluidFromString(fluidIn).amount
         }
     }
 }

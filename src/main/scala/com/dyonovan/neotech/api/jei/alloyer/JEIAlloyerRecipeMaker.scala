@@ -3,7 +3,10 @@ package com.dyonovan.neotech.api.jei.alloyer
 import java.util
 
 import com.dyonovan.neotech.managers.RecipeManager
-import com.dyonovan.neotech.registries.{AlloyerRecipe, AlloyerRecipeHandler}
+import com.dyonovan.neotech.registries.AlloyerRecipeHandler
+import com.teambr.bookshelf.helper.LogHelper
+
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -19,10 +22,14 @@ object JEIAlloyerRecipeMaker {
 
     def getRecipes: util.List[JEIAlloyerRecipe] = {
         val recipes = new util.ArrayList[JEIAlloyerRecipe]()
-        val alloyer = RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).recipes.toArray()
-        for (i <- alloyer) {
-            val recipe = i.asInstanceOf[AlloyerRecipe]
-            recipes.add(new JEIAlloyerRecipe(recipe.getFluidFromString(recipe.fluidOne), recipe.getFluidFromString(recipe.fluidTwo), recipe.getFluidFromString(recipe.fluidOut)))
+        val alloyer = RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).recipes
+        for (recipe <- alloyer) {
+            val fluid1 = recipe.getFluidFromString(recipe.fluidOne)
+            val fluid2 = recipe.getFluidFromString(recipe.fluidTwo)
+            val fluidOut = recipe.getFluidFromString(recipe.fluidOut)
+            if (fluid1 != null && fluid2 != null && fluidOut != null)
+                recipes.add(new JEIAlloyerRecipe(fluid1, fluid2, fluidOut))
+            else LogHelper.severe("[NeoTech] AlloyerRecipe json is corrupt! Please delete and recreate!")
         }
         recipes
     }
