@@ -98,7 +98,7 @@ dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
-    compile group: "com.teambr.bookshelf", name: "Bookshelf", version: "+", classifier: "dev", changing: true
+    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "+", classifier: "dev", changing: true
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
