@@ -102,11 +102,13 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
-        list.add(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux"))
-        list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                .format(getEnergyStored(stack)) +
-                " / " +
-                NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                        .format(getMaxEnergyStored(stack)) + " RF")
+        if (stack.hasTagCompound) {
+            list.add(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux"))
+            list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+              .format(getEnergyStored(stack)) +
+              " / " +
+              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                .format(getMaxEnergyStored(stack)) + " RF")
+        }
     }
 }
