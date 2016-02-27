@@ -1,7 +1,8 @@
-package com.dyonovan.neotech.common.blocks
+package com.dyonovan.neotech.common.blocks.connected
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
+import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
@@ -24,6 +25,7 @@ class BlockPhantomGlass extends Block(Material.glass) with BlockConnectedTexture
 
     setCreativeTab(NeoTech.tabDecorations)
     setUnlocalizedName(Reference.MOD_ID + ":phantomGlass")
+    setHardness(2.0F)
 
     /**
       * Define true if you are a clear texture

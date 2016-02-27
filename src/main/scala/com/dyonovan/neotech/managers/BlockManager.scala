@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.BlockPhantomGlass
+import com.dyonovan.neotech.common.blocks.connected.{BlockVoidGlass, BlockPhantomGlass}
 import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine, BlockSolarPanel}
 import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.storage._
@@ -91,6 +91,7 @@ object BlockManager {
     val mobStand = new BlockMobStand
     val blockAttractor = new BlockAttractor
     val phantomGlass = new BlockPhantomGlass
+    val voidGlass = new BlockVoidGlass
 
     def preInit(): Unit = {
         //Machines
@@ -154,6 +155,7 @@ object BlockManager {
         registerBlock(blockAttractor, "blockAttractor", classOf[TileAttractor])
 
         registerBlock(phantomGlass, "phantomGlass", null)
+        registerBlock(voidGlass, "voidGlass", null)
     }
 
     /**

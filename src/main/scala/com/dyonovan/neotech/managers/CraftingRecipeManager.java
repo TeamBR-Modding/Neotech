@@ -328,6 +328,18 @@ public class CraftingRecipeManager {
                 " B ",
                 " b ", 'B', "ingotBronze", 'b', "rfBattery"));
 
+        // Phantom Glass
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.phantomGlass(), 8),
+                "GGG",
+                "GDG",
+                "GGG", 'G', "blockGlass", 'D', Items.oak_door));
+
+        // Void Glass
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.voidGlass(), 8),
+                "GGG",
+                "GDG",
+                "GGG", 'G', "blockGlass", 'D', "dyeBlack"));
+
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
         GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.iron_ingot), 1.0F);

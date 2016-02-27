@@ -43,6 +43,7 @@ tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
 
 # Connected
 tile.neotech:phantomGlass.name=Phantom Glass
+tile.neotech:voidGlass.name=Void Glass
 
 #######################
 # Fluids
