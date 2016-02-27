@@ -1,10 +1,10 @@
 package com.dyonovan.neotech.collections
 
-import com.dyonovan.neotech.managers.MetalManager
+import com.dyonovan.neotech.managers.{FluidManager, MetalManager}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.common.ForgeModContainer
-import net.minecraftforge.fluids.{FluidStack, UniversalBucket}
+import net.minecraftforge.fluids.{FluidRegistry, FluidStack, UniversalBucket}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -26,7 +26,8 @@ class CreativeTabMetals extends CreativeTabs("tabNeoTechMetals") {
     override def getIconItemStack : ItemStack = {
         val universalBucket = ForgeModContainer.getInstance().universalBucket
         val stack = new ItemStack(universalBucket)
-        universalBucket.asInstanceOf[UniversalBucket].fill(stack, new FluidStack(MetalManager.getMetal("copper").get.fluid.get, 1000), true)
+        if (FluidRegistry.isFluidRegistered("copper"))
+            universalBucket.asInstanceOf[UniversalBucket].fill(stack, new FluidStack(FluidRegistry.getFluid("copper"), 1000), true)
         stack
     }
 
