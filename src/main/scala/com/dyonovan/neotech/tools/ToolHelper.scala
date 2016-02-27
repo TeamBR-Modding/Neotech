@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.{BlockPos, EnumFacing, MovingObjectPosition}
 import net.minecraft.world.World
-import net.minecraftforge.common.ForgeHooks
 import net.minecraftforge.common.util.EnumHelper
 import net.minecraftforge.fluids.FluidRegistry
 
@@ -122,7 +121,7 @@ object ToolHelper {
                 val block = world.getBlockState(pos).getBlock
                 if (player.capabilities.isCreativeMode) actualList.add(pos) // Creative, add it anyway
                 else if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player) &&
-                        block.getBlockHardness(world, pos) >= 0 && FluidRegistry.lookupFluidForBlock(block) == null)) { // Check if not air, isn't too hard, fluid, or non effective
+                        block.getBlockHardness(world, pos) >= 0 && FluidRegistry.lookupFluidForBlock(block) == null) { // Check if not air, isn't too hard, fluid, or non effective
                     actualList.add(pos)
                 }
             }
