@@ -86,10 +86,10 @@ object ToolHelper {
       * @return         An List of blocks that are to be mined
       */
     def getBlockList(level: Int, mop: MovingObjectPosition, player : EntityPlayer, world: World, stack: ItemStack)
-    : java.util.List[BlockPos] = {
+        : java.util.List[BlockPos] = {
         // Has to be able to harvest the block targeted to add more, plus has AOE, and effective
         if(world.getBlockState(mop.getBlockPos).getBlock.canHarvestBlock(world, mop.getBlockPos, player)
-                && ModifierAOE.isAOEActive(stack) && ForgeHooks.isToolEffective(world, mop.getBlockPos, stack)) {
+                && ModifierAOE.isAOEActive(stack)) {
             var pos1: BlockPos = null
             var pos2: BlockPos = null
             if (mop.sideHit.getAxis.isHorizontal) { // Rotate for Horizontal
@@ -122,8 +122,7 @@ object ToolHelper {
                 val block = world.getBlockState(pos).getBlock
                 if (player.capabilities.isCreativeMode) actualList.add(pos) // Creative, add it anyway
                 else if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player) &&
-                        block.getBlockHardness(world, pos) >= 0 && FluidRegistry.lookupFluidForBlock(block) == null &&
-                        ForgeHooks.isToolEffective(world, pos, stack)) { // Check if not air, isn't too hard, fluid, or non effective
+                        block.getBlockHardness(world, pos) >= 0 && FluidRegistry.lookupFluidForBlock(block) == null)) { // Check if not air, isn't too hard, fluid, or non effective
                     actualList.add(pos)
                 }
             }

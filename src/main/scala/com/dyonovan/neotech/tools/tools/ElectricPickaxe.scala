@@ -4,11 +4,11 @@ import java.util
 
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
 import com.dyonovan.neotech.tools.modifier.ModifierAOE._
 import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel, ModifierMiningSpeed, ModifierShovel}
+import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import com.dyonovan.neotech.utils.ClientUtils
 import gnu.trove.map.hash.THashMap
 import net.minecraft.block.Block
@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemPickaxe, ItemStack}
 import net.minecraft.util.{BlockPos, MovingObjectPosition}
 import net.minecraft.world.World
-import net.minecraftforge.common.ForgeHooks
 
 /**
   * This file was created for Bookshelf API
@@ -135,15 +134,18 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
         if (ModifierAOE.getAOELevel(stack) > 0 && player.isInstanceOf[EntityPlayer] && ModifierAOE.isAOEActive(stack)) {
             val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
             if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack), mop, player.asInstanceOf[EntityPlayer], world, stack)
+                val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack),
+                    mop, player.asInstanceOf[EntityPlayer], world, stack)
                 for (b <- 0 until blockList.size) {
                     val newPos = blockList.get(b)
                     val block = world.getBlockState(newPos).getBlock
-                    if (ForgeHooks.isToolEffective(world, newPos, stack) && block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
+                    if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer])
+                            || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
                         if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
-                            block.harvestBlock(world, player.asInstanceOf[EntityPlayer], newPos, block.getDefaultState, world.getTileEntity(newPos))
+                            block.harvestBlock(world, player.asInstanceOf[EntityPlayer],
+                                newPos, world.getBlockState(newPos), world.getTileEntity(newPos))
                         world.setBlockToAir(newPos)
-                        if (newPos != pos)
+                        if (!world.isRemote && newPos != pos)
                             world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
                     }
                     rfCost(player.asInstanceOf[EntityPlayer], stack)
