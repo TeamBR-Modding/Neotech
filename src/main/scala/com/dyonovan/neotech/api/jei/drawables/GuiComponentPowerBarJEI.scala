@@ -30,5 +30,5 @@ class GuiComponentPowerBarJEI(x: Int, y: Int, width: Int, height: Int, colorFull
         super.renderOverlay(xOffset, yOffset, Mouse.getX, Mouse.getY)
     }
 
-    override def getEnergyPercent(scale: Int): Int = (ticker.getValue * scale) / ticker.getMaxValue
+    override def getEnergyPercent(scale: Int): Int = Math.max(0, (ticker.getValue * scale) / ticker.getMaxValue)
 }
