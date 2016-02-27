@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemPickaxe, ItemStack}
 import net.minecraft.util.{BlockPos, MovingObjectPosition}
 import net.minecraft.world.World
+import collection.JavaConversions._
 
 /**
   * This file was created for Bookshelf API
@@ -136,10 +137,9 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
             if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack),
                     mop, player.asInstanceOf[EntityPlayer], world, stack)
-                for (b <- 0 until blockList.size) {
-                    val newPos = blockList.get(b)
+                for (newPos <- blockList) {
                     val block = world.getBlockState(newPos).getBlock
-                    if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer])
+                    if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) && ToolHelper.isToolEffective(world, newPos, stack)
                             || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
                         if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
                             block.harvestBlock(world, player.asInstanceOf[EntityPlayer],

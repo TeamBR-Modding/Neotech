@@ -12,10 +12,11 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.{BlockPos, EnumFacing, MovingObjectPosition}
-import net.minecraft.world.World
+import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.EnumHelper
 import net.minecraftforge.fluids.FluidRegistry
 
+import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -88,7 +89,7 @@ object ToolHelper {
         : java.util.List[BlockPos] = {
         // Has to be able to harvest the block targeted to add more, plus has AOE, and effective
         if(world.getBlockState(mop.getBlockPos).getBlock.canHarvestBlock(world, mop.getBlockPos, player)
-                && ModifierAOE.isAOEActive(stack)) {
+                && isToolEffective(world, mop.getBlockPos, stack) && ModifierAOE.isAOEActive(stack)) {
             var pos1: BlockPos = null
             var pos2: BlockPos = null
             if (mop.sideHit.getAxis.isHorizontal) { // Rotate for Horizontal
@@ -121,12 +122,25 @@ object ToolHelper {
                 val block = world.getBlockState(pos).getBlock
                 if (player.capabilities.isCreativeMode) actualList.add(pos) // Creative, add it anyway
                 else if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player) &&
-                        block.getBlockHardness(world, pos) >= 0 && FluidRegistry.lookupFluidForBlock(block) == null) { // Check if not air, isn't too hard, fluid, or non effective
+                        isToolEffective(world, pos, stack) && block.getBlockHardness(world, pos) >= 0 && FluidRegistry.lookupFluidForBlock(block) == null) { // Check if not air, isn't too hard, fluid, or non effective
                     actualList.add(pos)
                 }
             }
             actualList // Return our built list
         } else util.Arrays.asList(mop.getBlockPos) // Return your own list
+    }
+
+    /**
+      * Used to check if a tool is effective, not using silly Forge/Minecraft no Redstone stuff
+      */
+    def isToolEffective(world: IBlockAccess, pos: BlockPos, stack: ItemStack) : Boolean = {
+        var state = world.getBlockState(pos)
+        state = state.getBlock.getActualState(state, world, pos)
+        for (toolType <- stack.getItem.getToolClasses(stack)) {
+            if (toolType != null && (toolType == state.getBlock.getHarvestTool(state)))
+                return true
+        }
+        false
     }
 
     /**

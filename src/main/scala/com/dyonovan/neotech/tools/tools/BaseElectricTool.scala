@@ -2,8 +2,7 @@ package com.dyonovan.neotech.tools.tools
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.tools.ToolHelper
-import com.dyonovan.neotech.tools.modifier.ModifierAOE._
-import com.dyonovan.neotech.tools.modifier.{ModifierAOE, ModifierMiningLevel}
+import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
 import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.player.EntityPlayer
@@ -135,17 +134,11 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
         extractEnergy(stack, RF_COST(stack), simulate = false) > 0
 
     /**
-      * Puts effect if AOE is active
+      * Disable MC Effect
       */
     @SideOnly(Side.CLIENT)
-    override def hasEffect(stack: ItemStack): Boolean = {
-        val tag = ModifierAOE.getModifierTagFromStack(stack)
-        if (tag != null && tag.hasKey(ACTIVE))
-            tag.getBoolean(ACTIVE)
-        else
-            false
-    }
-
+    override def hasEffect(stack: ItemStack): Boolean = false
+    
     /*******************************************************************************************************************
       ******************************************** Battery Functions ***************************************************
       ******************************************************************************************************************/
