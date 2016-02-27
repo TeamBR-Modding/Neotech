@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.events
 
+import com.dyonovan.neotech.client.TextureManager
 import com.dyonovan.neotech.common.items.ItemTrashBag
 import com.dyonovan.neotech.utils.TimeUtils
 import net.minecraftforge.common.MinecraftForge
@@ -12,5 +13,6 @@ object EventManager {
         MinecraftForge.EVENT_BUS.register(OnPlayerLoginEvent)
         MinecraftForge.EVENT_BUS.register(AttackEvent)
         MinecraftForge.EVENT_BUS.register(ItemTrashBag)
+        MinecraftForge.EVENT_BUS.register(TextureManager)
     }
 }

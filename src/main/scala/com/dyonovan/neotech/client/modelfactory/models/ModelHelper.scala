@@ -53,6 +53,15 @@ object ModelHelper {
         new SimpleModelState(ImmutableMap.of(ItemCameraTransforms.TransformType.THIRD_PERSON, thirdPerson, ItemCameraTransforms.TransformType.FIRST_PERSON, firstPerson))
     }
 
+    lazy val DEFAULT_BLOCK_STATE : IModelState = { //Normal block
+    val thirdPerson = TRSRTransformation.blockCenterToCorner(new TRSRTransformation(
+            new Vector3f(0, 1.5F, -2.75F),
+            TRSRTransformation.quatFromYXZDegrees(new Vector3f(10F, -45F, -2.75F)),
+            new Vector3f(0.375F, 0.375F, 0.375F),
+            null))
+        new SimpleModelState(ImmutableMap.of(ItemCameraTransforms.TransformType.THIRD_PERSON, thirdPerson))
+    }
+
     /**
       * Gets the texture for the block with meta
       *

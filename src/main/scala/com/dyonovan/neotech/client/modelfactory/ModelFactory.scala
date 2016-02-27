@@ -1,10 +1,13 @@
 package com.dyonovan.neotech.client.modelfactory
 
-import com.dyonovan.neotech.client.modelfactory.models.{ModelHelper, ToolModel, ModelTank}
+import com.dyonovan.neotech.client.ConnectedTextureBlocks
+import com.dyonovan.neotech.client.modelfactory.models.{ModelConnectedTextures, ModelHelper, ToolModel, ModelTank}
 import com.dyonovan.neotech.lib.Reference
 import com.google.common.collect.{ImmutableMap, Maps}
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType
 import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.item.Item
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.client.model.{IFlexibleBakedModel, IPerspectiveAwareModel, TRSRTransformation}
 import net.minecraftforge.common.MinecraftForge
@@ -56,5 +59,11 @@ class ModelFactory {
             new ToolModel(
                 event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricSword", "inventory")).asInstanceOf[IFlexibleBakedModel],
                 ImmutableMap.copyOf(builder)))
+
+        for(block <- ConnectedTextureBlocks.blocks) {
+            event.modelRegistry.putObject(block.getNormal, new ModelConnectedTextures())
+            event.modelRegistry.putObject(block.getInventory, new ModelConnectedTextures())
+            Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(Item.getItemFromBlock(block), 0, block.getInventory)
+        }
     }
 }

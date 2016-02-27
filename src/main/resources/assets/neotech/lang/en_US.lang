@@ -41,6 +41,9 @@ tile.neotech:blockMiniatureStar_silver.name=§7Silver §rStar Light
 tile.neotech:blockMiniatureStar_white.name=White Star Light
 tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
 
+# Connected
+tile.neotech:phantomGlass.name=Phantom Glass
+
 #######################
 # Fluids
 #######################
