@@ -1,10 +1,9 @@
 package com.dyonovan.neotech.pipes.collections
 
-import com.dyonovan.neotech.pipes.entities.{ItemResourceEntity, FluidResourceEntity, EnergyResourceEntity, ResourceEntity}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.fluids.{FluidContainerRegistry, IFluidContainerItem}
+import net.minecraftforge.fluids.{FluidContainerRegistry, FluidStack}
 import net.minecraftforge.oredict.OreDictionary
 
 import scala.util.control.Breaks._
@@ -44,11 +43,11 @@ trait Filter {
         tag.setBoolean("blackList", blackList)
     }
 
-    def isResourceValidForFilter(resource : ResourceEntity[_]) : Boolean = {
+    def isResourceValidForFilter(resource : AnyRef) : Boolean = {
         resource match {
-            case energy : EnergyResourceEntity => true
-            case liquid : FluidResourceEntity =>
-                if(liquid.resource.getFluid == null) //Just to be safe
+            case energy : Integer => true
+            case fluid : FluidStack =>
+                if(fluid.getFluid == null) //Just to be safe
                     return false
 
                 var hasItems = false
@@ -60,7 +59,7 @@ trait Filter {
                         if(FluidContainerRegistry.isFilledContainer(item)) {
                             if (FluidContainerRegistry.getFluidForFilledItem(item) != null &&
                                     FluidContainerRegistry.getFluidForFilledItem(item).getFluid != null &&
-                                    FluidContainerRegistry.getFluidForFilledItem(item).getFluid == liquid.resource.getFluid.getFluid) {
+                                    FluidContainerRegistry.getFluidForFilledItem(item).getFluid == fluid.getFluid) {
                                 matched = true
                                 if(!blackList)
                                     return true
@@ -69,8 +68,9 @@ trait Filter {
                     }
                 }
                 !hasItems || (if(blackList) !matched else matched)
-            case item : ItemResourceEntity =>
-                if(item.resource.getItem == null)
+
+            case item : ItemStack =>
+                if(item.getItem == null)
                     return false
 
                 var matched = false
@@ -80,15 +80,15 @@ trait Filter {
                         val itemStack = filterInventory.getStackInSlot(x)
                         if (itemStack != null && itemStack.getItem != null) {
                             hasItems = true
-                            if (itemStack.getItem == item.resource.getItem) {
+                            if (itemStack.getItem == item.getItem) {
                                 matched = true
-                                if (matchDamage && itemStack.getItemDamage != item.resource.getItemDamage)
+                                if (matchDamage && itemStack.getItemDamage != item.getItemDamage)
                                     matched = false
-                                if (matchTag && !ItemStack.areItemStackTagsEqual(item.resource, itemStack))
+                                if (matchTag && !ItemStack.areItemStackTagsEqual(item, itemStack))
                                     matched = false
                             }
                             if (matchOreDict && OreDictionary.getOreIDs(itemStack).nonEmpty) {
-                                for (oreId: Int <- OreDictionary.getOreIDs(item.resource)) {
+                                for (oreId: Int <- OreDictionary.getOreIDs(item)) {
                                     for (oreIdUs: Int <- OreDictionary.getOreIDs(itemStack)) {
                                         if (oreId == oreIdUs)
                                             matched = true

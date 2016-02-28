@@ -10,9 +10,6 @@ import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableC
 import com.dyonovan.neotech.events.RenderingEvents
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, MetalManager}
-import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
-import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
-import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.client.resources.IReloadableResourceManager
@@ -100,9 +97,6 @@ class ClientProxy extends CommonProxy {
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[AbstractMachine], new TileMachineIORenderer)
 
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[ItemInterfacePipe], new ItemResourceEntityRenderer)
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[EnergyInterfacePipe], new EnergyResourceEntityRenderer)
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[FluidInterfacePipe], new FluidResourceEntityRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileDimStorage], new TileDimStorageRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileMobStand], new MobStandEntityRenderer[TileMobStand])
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileAttractor], new AttractorEnderEyeRenderer)

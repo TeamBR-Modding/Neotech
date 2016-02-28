@@ -29,9 +29,7 @@
                     "connection_up": {
                         "model": "neotech:pipeConnection",
                         "x": 90
-                    }
-                },
-                "submodel": {
+                    },
                     "connection_up_special": {
                         "model": "neotech:pipeConnectionSpecial",
                         "x": 90
@@ -61,9 +59,7 @@
                     "connection_down": {
                         "model": "neotech:pipeConnection",
                         "x": 270
-                    }
-                },
-                "submodel": {
+                    },
                     "connection_down_special": {
                         "model": "neotech:pipeConnectionSpecial",
                         "x": 270
@@ -93,9 +89,7 @@
                     "connection_north": {
                         "model": "neotech:pipeConnection",
                         "x": 180
-                    }
-                },
-                "submodel": {
+                    },
                     "connection_north_special": {
                         "model": "neotech:pipeConnectionSpecial",
                         "x": 180
@@ -125,9 +119,7 @@
                     "connection_south": {
                         "model": "neotech:pipeConnection",
                         "x": 0
-                    }
-                },
-                "submodel": {
+                    },
                     "connection_south_special": {
                         "model": "neotech:pipeConnectionSpecial",
                         "x": 0
@@ -157,9 +149,7 @@
                     "connection_east": {
                         "model": "neotech:pipeConnection",
                         "y" : 270
-                    }
-                },
-                "submodel": {
+                    },
                     "connection_east_special": {
                         "model": "neotech:pipeConnectionSpecial",
                         "y" : 270
@@ -189,9 +179,7 @@
                     "connection_west": {
                         "model": "neotech:pipeConnection",
                         "y": 90
-                    }
-                },
-                "submodel": {
+                    },
                     "connection_west_special": {
                         "model": "neotech:pipeConnectionSpecial",
                         "y": 90

@@ -41,9 +41,13 @@ import org.lwjgl.input.Keyboard
   * @author Paul Davis pauljoda
   * @since August 14, 2015
   */
-class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockContainer(mat) with OpensGui with HasToolTip {
+class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockContainer(mat)
+        with OpensGui with HasToolTip {
 
-    //Constructor
+    /*******************************************************************************************************************
+      * Constructor                                                                                                    *
+      ******************************************************************************************************************/
+
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabPipes)
     setHardness(1.5F)
@@ -55,6 +59,10 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
             .withProperty(PipeProperties.SPECIAL_EAST, 0.asInstanceOf[Integer])
             .withProperty(PipeProperties.SPECIAL_SOUTH, 0.asInstanceOf[Integer])
             .withProperty(PipeProperties.SPECIAL_WEST, 0.asInstanceOf[Integer]))
+
+    /*******************************************************************************************************************
+      * Block State                                                                                                    *
+      ******************************************************************************************************************/
 
     protected override def createBlockState: BlockState = {
         new BlockState(this, PipeProperties.SPECIAL_UP, PipeProperties.SPECIAL_DOWN, PipeProperties.SPECIAL_NORTH, PipeProperties.SPECIAL_SOUTH, PipeProperties.SPECIAL_EAST, PipeProperties.SPECIAL_WEST)
@@ -78,6 +86,12 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * Convert the BlockState into the correct metadata value
       */
     override def getMetaFromState(state: IBlockState): Int = 0
+
+    /*******************************************************************************************************************
+      * Block Methods                                                                                                  *
+      ******************************************************************************************************************/
+
+    override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = tileClass.newInstance()
 
     override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
         if(worldIn.getTileEntity(pos) != null) {
@@ -123,12 +137,57 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         super.breakBlock(worldIn, pos, state)
     }
 
+
+    /**
+      * Called when the block is activated
+      *
+      * If you want to override this but still call it, make sure you call
+      *      super[OpensGui].onBlockActivated(...)
+      */
+    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, playerIn : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
+        playerIn.getCurrentEquippedItem match {
+            case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
+                if(!world.isRemote) {
+                    val random = new Random
+                    val stack = new ItemStack(world.getBlockState(pos).getBlock.getItemDropped(world.getBlockState(pos), random, 0), 1, damageDropped(world.getBlockState(pos)))
+                    if(stack != null && stack.stackSize > 0) {
+                        val rx = random.nextFloat * 0.8F + 0.1F
+                        val ry = random.nextFloat * 0.8F + 0.1F
+                        val rz = random.nextFloat * 0.8F + 0.1F
+
+                        val itemEntity = new EntityItem(world,
+                            pos.getX + rx, pos.getY + ry, pos.getZ + rz,
+                            new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
+
+                        if (stack.hasTagCompound)
+                            itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
+
+                        val factor = 0.05F
+
+                        itemEntity.motionX = random.nextGaussian * factor
+                        itemEntity.motionY = random.nextGaussian * factor + 0.2F
+                        itemEntity.motionZ = random.nextGaussian * factor
+                        world.spawnEntityInWorld(itemEntity)
+                    }
+                    world.setBlockToAir(pos)
+                    world.markBlockForUpdate(pos)
+                    return true
+                } else {
+                    playerIn.swingItem()
+                    return true
+                }
+
+            case _ =>
+        }
+        super.onBlockActivated(world, pos, state, playerIn, side, hitX, hitY, hitZ)
+    }
+
     override def setBlockBoundsBasedOnState(worldIn: IBlockAccess, pos: BlockPos) {
-        var x1 = 0.25F
+        var x1 = 6F / 16F
         var x2 = 1.0F - x1
-        var y1 = 0.25F
+        var y1 = x1
         var y2 = 1.0F - y1
-        var z1 = 0.25F
+        var z1 = x1
         var z2 = 1.0F - z1
         if (countConnections(worldIn, pos, EnumFacing.WEST) > 0) {
             x1 = 0.0F
@@ -184,23 +243,6 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
 
-    override def getRenderType: Int = 3
-
-    override def isOpaqueCube: Boolean = false
-
-    @SideOnly(Side.CLIENT)
-    override def isTranslucent: Boolean = true
-
-    override def isFullCube: Boolean = false
-
-    @SideOnly(Side.CLIENT)
-    override def getBlockLayer: EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
-
-    override def canRenderInLayer(layer: EnumWorldBlockLayer): Boolean =
-        layer == EnumWorldBlockLayer.TRANSLUCENT || layer == EnumWorldBlockLayer.CUTOUT
-
-    override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = tileClass.newInstance()
-
     override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
         if (!world.isRemote) {
             WorldPipes.notifyPipes()
@@ -222,49 +264,19 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         null
     }
 
-    /**
-      * Called when the block is activated
-      *
-      * If you want to override this but still call it, make sure you call
-      *      super[OpensGui].onBlockActivated(...)
-      */
-    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, playerIn : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
-        playerIn.getCurrentEquippedItem match {
-            case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
-                if(!world.isRemote) {
-                    val random = new Random
-                    val stack = new ItemStack(world.getBlockState(pos).getBlock.getItemDropped(world.getBlockState(pos), random, 0), 1, damageDropped(world.getBlockState(pos)))
-                    if(stack != null && stack.stackSize > 0) {
-                        val rx = random.nextFloat * 0.8F + 0.1F
-                        val ry = random.nextFloat * 0.8F + 0.1F
-                        val rz = random.nextFloat * 0.8F + 0.1F
+    /*******************************************************************************************************************
+      * Client Block Info                                                                                              *
+      ******************************************************************************************************************/
 
-                        val itemEntity = new EntityItem(world,
-                            pos.getX + rx, pos.getY + ry, pos.getZ + rz,
-                            new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
-
-                        if (stack.hasTagCompound)
-                            itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
-
-                        val factor = 0.05F
-
-                        itemEntity.motionX = random.nextGaussian * factor
-                        itemEntity.motionY = random.nextGaussian * factor + 0.2F
-                        itemEntity.motionZ = random.nextGaussian * factor
-                        world.spawnEntityInWorld(itemEntity)
-                    }
-                    world.setBlockToAir(pos)
-                    world.markBlockForUpdate(pos)
-                    return true
-                } else {
-                    playerIn.swingItem()
-                    return true
-                }
-
-            case _ =>
-        }
-        super.onBlockActivated(world, pos, state, playerIn, side, hitX, hitY, hitZ)
-    }
+    override def getRenderType: Int = 3
+    override def isOpaqueCube: Boolean = false
+    @SideOnly(Side.CLIENT)
+    override def isTranslucent: Boolean = true
+    override def isFullCube: Boolean = false
+    @SideOnly(Side.CLIENT)
+    override def getBlockLayer: EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
+    override def canRenderInLayer(layer: EnumWorldBlockLayer): Boolean =
+        layer == EnumWorldBlockLayer.TRANSLUCENT || layer == EnumWorldBlockLayer.CUTOUT
 
     override def getToolTip() : List[String] = {
         if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))

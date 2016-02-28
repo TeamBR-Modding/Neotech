@@ -104,11 +104,6 @@ object ItemRenderManager {
                 new ModelResourceLocation(Reference.MOD_ID + ":blockMiniatureStar_" + color.getName, "inventory"))
         }
 
-        //Speed
-        registerItem(Item.getItemFromBlock(BlockManager.pipeBasicSpeedStructure))
-        registerItem(Item.getItemFromBlock(BlockManager.pipeAdvancedSpeedStructure))
-        registerItem(Item.getItemFromBlock(BlockManager.pipeEliteSpeedStructure))
-
         //Item Stuff
         registerItem(Item.getItemFromBlock(BlockManager.pipeItemInterface))
 

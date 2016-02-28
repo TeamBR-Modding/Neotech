@@ -1,12 +1,8 @@
 package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.pipes.collections.WorldPipes
-import com.dyonovan.neotech.pipes.entities.ResourceEntity
-import net.minecraft.inventory.IInventory
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
-
-import scala.xml.dtd.ContentModel._labelT
 
 /**
   * This file was created for NeoTech
@@ -53,17 +49,6 @@ trait SimplePipe extends TileEntity {
       * @return
       */
     def isSpecialConnection(facing : EnumFacing) : Boolean = !getWorld.getTileEntity(getPos.offset(facing)).isInstanceOf[SimplePipe]
-
-    /**
-      * Called when a resource enters this pipe. You can do cool stuff here. The special pipes use it to insert and send
-      * back while the upgraded pipes apply a speed update.
-      *
-      * NOTE: If you are applying a speed update, either use the helper method or set nextSpeed. The resource will update to
-      * the next speed
-      *
-      * @param resource
-      */
-    def onResourceEnteredPipe(resource: ResourceEntity[_]): Unit = {}
 
     /**
       * Convert the position to a long format

@@ -149,17 +149,6 @@ public class CraftingRecipeManager {
                     "pipeStructure", new ItemStack(Items.dye, 1, color.getDyeDamage())));
         }
 
-        //Acceleration
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicSpeedStructure())),
-                "CAC",
-                "ABA",
-                "CAC", 'A', "ingotBronze", 'B', BlockManager.pipeBasicStructure(), 'C', Items
-                .redstone));
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.pipeAdvancedSpeedStructure()),
-                BlockManager.pipeBasicSpeedStructure(), BlockManager.pipeBasicSpeedStructure(), Blocks.glowstone);
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.pipeEliteSpeedStructure()),
-                BlockManager.pipeAdvancedSpeedStructure(), BlockManager.pipeAdvancedSpeedStructure(), Items.diamond);
-
         //Power
         GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergyInterface())),
                 Blocks.redstone_block, BlockManager.pipeBasicStructure());

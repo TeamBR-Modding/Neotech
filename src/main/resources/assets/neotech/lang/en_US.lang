@@ -223,11 +223,6 @@ tile.neotech:pipeStructure_silver.name=§7Silver §rStructure Pipe
 tile.neotech:pipeStructure_white.name=White Structure Pipe
 tile.neotech:pipeStructure_yellow.name=§eYellow §rStructure Pipe
 
-# Acceleration
-tile.neotech:pipeBasicSpeedStructure.name=Basic Acceleration Pipe
-tile.neotech:pipeAdvancedSpeedStructure.name=Advanced Acceleration Pipe
-tile.neotech:pipeEliteSpeedStructure.name=Elite Acceleration Pipe
-
 # Interfaces
 tile.neotech:pipeItemBasicInterface.name=Item Interface Pipe
 tile.neotech:pipeEnergyBasicInterface.name=Energy Interface Pipe

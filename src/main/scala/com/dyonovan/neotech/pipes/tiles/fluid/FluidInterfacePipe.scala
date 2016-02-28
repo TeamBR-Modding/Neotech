@@ -2,11 +2,9 @@ package com.dyonovan.neotech.pipes.tiles.fluid
 
 import java.util
 
-import com.dyonovan.neotech.pipes.entities.{FluidResourceEntity, ResourceEntity}
 import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.tileentity.TileEntity
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
 import net.minecraftforge.fluids._
 
@@ -20,7 +18,7 @@ import net.minecraftforge.fluids._
   * @author Paul Davis pauljoda
   * @since August 17, 2015
   */
-class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
+class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
 
     override def getDescription : String = {
         GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.fluidInterfacePipe.name") + ":\n" +
@@ -101,20 +99,20 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
       * have additional functions to the pipe besides just extracting. For example, a pipe that pulls items in the world
       */
     override def tryExtractResources(): Unit = {
-
         for(dir <- EnumFacing.values()) {
             if (canConnectExtract(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case tank: IFluidHandler =>
-                        val tempTank = new FluidTank(getMaxFluidDrain)
-                        tempTank.fill(tank.drain(dir.getOpposite, getMaxFluidDrain, false), true)
-                        if (extractOnMode(new FluidResourceEntity(tempTank,
-                            pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                            pos.offset(dir), pos.north(), pos.north(), worldObj), simulate = true)) {
-                            tank.drain(dir.getOpposite, nextResource.resource.getFluid.amount, true)
-                            nextResource.resource = tempTank
-                            extractOnMode(nextResource, simulate = false)
-                            return
+                    case tank: IFluidHandler if tank.getTankInfo(dir.getOpposite) != null
+                            && tank.getTankInfo(dir.getOpposite)(0).fluid != null =>
+                        if (extractOnMode(tank.getTankInfo(dir.getOpposite)(0).fluid, pos.offset(dir))) {
+                            if (foundSource != null) {
+                                val amount = foundSource._1.fill(foundSource._2,
+                                    tank.drain(dir.getOpposite, getMaxFluidDrain, false), false)
+                                if(amount > 0)
+                                    foundSource._1.fill(foundSource._2, tank.drain(dir.getOpposite, amount, true), true)
+                                foundSource = null
+                                return
+                            }
                         }
 
                     case _ =>
@@ -123,78 +121,41 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
         }
     }
 
-    /**
-      * This is called when we fail to send a resource. You should put the resource back where you found it or
-      * add it to the world
-      *
-      * @param resource
-      */
-    override def returnResource(resource: FluidResourceEntity): Unit = {
-        resource.isDead = true
-    }
-
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super.writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
-        tag.setInteger("SizeResources", resources.size())
-        val resourceList = new NBTTagList
-        for(i <- 0 until resources.size()) {
-            val resourceTag = new NBTTagCompound
-            resources.get(i).writeToNBT(resourceTag)
-            resourceList.appendTag(resourceTag)
-        }
-        tag.setTag("Resources", resourceList)
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super.readFromNBT(tag)
         super[TileEntity].readFromNBT(tag)
-        val resourceList = tag.getTagList("Resources", 10)
-        resources = new util.ArrayList[FluidResourceEntity]()
-        for(i <- 0 until resourceList.tagCount()) {
-            val resourceTag = resourceList.getCompoundTagAt(i)
-            val item = new FluidResourceEntity()
-            item.readFromNBT(resourceTag)
-            if(worldObj != null && !worldObj.isRemote) {
-                item.setWorld(worldObj)
-            }
-            resources.add(item)
-        }
     }
 
     /*******************************************************************************************************************
       *************************************** Insertion Methods ********************************************************
       ******************************************************************************************************************/
 
-    val waitingQueue  = new util.ArrayList[FluidResourceEntity]()
-    var tempTank : IFluidHandler = null
-
-
     /**
       * Used to check if this pipe can accept a resource
       *
       * You should not actually change anything, all simulation
       *
-      * @param resourceEntity
+      * @param fluid
       * @return
       */
-    override def willAcceptResource(resourceEntity: ResourceEntity[_], tilePos : BlockPos): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[FluidResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, tilePos))
+    override def willAcceptResource(fluid: FluidStack, tilePos : BlockPos): Boolean = {
+        if(fluid == null || !fluid.isInstanceOf[FluidStack] || !super.willAcceptResource(fluid, tilePos))
             return false
 
-        val resource = resourceEntity.asInstanceOf[FluidResourceEntity]
-
-        if(resource.resource.getFluid == null)
+        if(fluid.getFluid == null) // I can't use this!
             return false
 
         //Try and insert the fluid
         for(dir <- EnumFacing.values()) {
-            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
+            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir)) {
                 worldObj.getTileEntity(tilePos) match {
                     case tank: IFluidHandler =>
-                        val otherTile = createTileAndSimulate(tank, dir, tilePos)
-                        val filledAmount = otherTile.asInstanceOf[IFluidHandler].fill(dir.getOpposite, resource.resource.getFluid, false)
-                        otherTile.invalidate()
+                        val filledAmount = tank.fill(dir.getOpposite, fluid, false)
                         if (filledAmount >= 100) {
                             return true
                         }
@@ -206,121 +167,22 @@ class FluidInterfacePipe extends InterfacePipe[FluidTank, FluidResourceEntity] {
     }
 
     /**
-      * Called when the resource has found its target and is actually sending, change resource size here
-      *
-      * @param resource
-      */
-    override def resourceBeingExtracted(resource: FluidResourceEntity): Unit = {
-        val tilePos = resource.destinationTile
-        for(dir <- EnumFacing.values()) {
-            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
-                worldObj.getTileEntity(tilePos) match {
-                    case tank: IFluidHandler =>
-                        val otherTile = createTileAndSimulate(tank, dir, tilePos)
-                        val filledAmount = otherTile.asInstanceOf[IFluidHandler].fill(dir.getOpposite, resource.resource.getFluid, false)
-                        otherTile.invalidate()
-                        if (filledAmount > 0) {
-                            resource.resource.getFluid.amount = filledAmount
-                            waitingQueue.add(resource)
-                            return
-                        }
-                    case _ =>
-                }
-            }
-        }
-    }
-
-    def createTileAndSimulate(otherTank : IFluidHandler, dir : EnumFacing, position : BlockPos): TileEntity = {
-        var otherTile : TileEntity = null
-
-        if(worldObj.getTileEntity(position) != null) {
-            otherTile = worldObj.getBlockState(position).getBlock.createTileEntity(worldObj, worldObj.getBlockState(position))
-            val otherTag = new NBTTagCompound
-            worldObj.getTileEntity(position).writeToNBT(otherTag)
-            otherTile.readFromNBT(otherTag)
-            otherTile.setWorldObj(worldObj)
-        }
-
-        if (waitingQueue.isEmpty)
-            otherTile
-        else {
-            val iterator = waitingQueue.iterator() //Remove deads
-            while (iterator.hasNext) {
-                if (iterator.next().isDead)
-                    iterator.remove()
-            }
-
-            for(x <- 0 until waitingQueue.size) {
-                otherTile.asInstanceOf[IFluidHandler].fill(dir, waitingQueue.get(x).resource.getFluid, true)
-            }
-            otherTile
-        }
-    }
-
-    /**
       * Used to get a list of what tiles are attached that can accept resources. Don't worry about if full or not,
       * just if this pipe interfaces with the tile add it here
       *
       * @return A list of the tiles that are valid sinks
       */
-    override def getAttachedSinks: util.List[Long] = {
-        val returnList = new util.ArrayList[Long]()
+    override def getAttachedSinks: util.List[(Long, EnumFacing)] = {
+        val returnList = new util.ArrayList[(Long, EnumFacing)]()
         for(dir <- EnumFacing.values()) {
             if (canConnectSink(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case receiver: IFluidHandler => returnList.add(pos.offset(dir).toLong)
+                    case receiver: IFluidHandler => returnList.add((pos.offset(dir).toLong, dir.getOpposite))
                     case _ =>
                 }
             }
         }
         returnList
-    }
-
-    /**
-      * Try and insert the resource into an inventory.
-      *
-      * It is pretty good practice to send the resource back if you can't remove all of it
-      *
-      * @param resource
-      */
-    override def tryInsertResource(resource: FluidResourceEntity, dir : EnumFacing): Unit = {
-        if(resource == null || resource.resource == null)
-            return
-
-        //Try and insert the fluid
-        if (canConnectSink(dir)) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case tank: IFluidHandler if !resource.isDead =>
-                    resource.resource.drain(tank.fill(dir.getOpposite, resource.resource.getFluid, true), true)
-                    if (resource.resource.getFluidAmount <= 0) {
-                        resource.isDead = true
-                        resource.resource.setFluid(null)
-                        waitingQueue.remove(resource)
-                    }
-                case _ =>
-            }
-        }
-
-        //If we couldn't fill, move back to source
-        if(!resource.isDead) {
-            resource.isDead = true
-        }
-    }
-
-    var coolDownSink = 0
-    override def onServerTick(): Unit = {
-        super.onServerTick()
-        coolDownSink -= 1
-        if(coolDownSink < 0) {
-            coolDownSink = 200
-            if (!waitingQueue.isEmpty) {
-                val iterator = waitingQueue.iterator()
-                while (iterator.hasNext) {
-                    if (iterator.next().isDead)
-                        iterator.remove()
-                }
-            }
-        }
     }
 
     override def getPipeTypeID: Int = 1

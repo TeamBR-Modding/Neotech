@@ -2,11 +2,10 @@ package com.dyonovan.neotech.pipes.tiles.energy
 
 import java.util
 
-import cofh.api.energy.{EnergyStorage, IEnergyProvider, IEnergyReceiver}
-import com.dyonovan.neotech.pipes.entities.{EnergyResourceEntity, ResourceEntity}
+import cofh.api.energy.{IEnergyProvider, IEnergyReceiver}
 import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
 
 /**
@@ -19,7 +18,7 @@ import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
   * @author Paul Davis pauljoda
   * @since August 17, 2015
   */
-class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEntity] {
+class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
 
     override def getDescription : String = {
         GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.energyInterfacePipe.name") + ":\n" +
@@ -108,14 +107,16 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
                 getWorld.getTileEntity(pos.offset(dir)) match {
                     case provider: IEnergyProvider =>
                         if (provider.getEnergyStored(dir.getOpposite) > 0) {
-                            val tempStorage = new EnergyStorage(getMaxRFDrain)
-                            tempStorage.setEnergyStored(provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true))
-                            val energyResourceEntity = new EnergyResourceEntity(tempStorage,
-                                pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, getSpeed,
-                                pos.offset(dir), pos.north(), pos.north(), getWorld)
-                            if (extractOnMode(energyResourceEntity, simulate = true)) {
-                                provider.extractEnergy(dir.getOpposite, tempStorage.getEnergyStored, false)
-                                extractOnMode(nextResource, simulate = false)
+                            if (extractOnMode(provider.getEnergyStored(dir.getOpposite), pos.offset(dir))) {
+                                if(foundSource != null) {
+                                    val amount = foundSource._1.receiveEnergy(foundSource._2,
+                                        provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true), true)
+                                    if(amount > 0) {
+                                        foundSource._1.receiveEnergy(foundSource._2,
+                                            provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false), false)
+                                    }
+                                    foundSource = null
+                                }
                             }
                         }
                     case _ =>
@@ -124,43 +125,14 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
         }
     }
 
-    /**
-      * This is called when we fail to send a resource. You should put the resource back where you found it or
-      * add it to the world
-      *
-      * @param resource
-      */
-    override def returnResource(resource: EnergyResourceEntity): Unit = {
-        resource.isDead = true
-    }
-
     override def writeToNBT(tag : NBTTagCompound) : Unit = {
         super.writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
-        tag.setInteger("SizeResources", resources.size())
-        val resourceList = new NBTTagList
-        for(i <- 0 until resources.size()) {
-            val resourceTag = new NBTTagCompound
-            resources.get(i).writeToNBT(resourceTag)
-            resourceList.appendTag(resourceTag)
-        }
-        tag.setTag("Resources", resourceList)
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
         super.readFromNBT(tag)
         super[TileEntity].readFromNBT(tag)
-        val resourceList = tag.getTagList("Resources", 10)
-        resources = new util.ArrayList[EnergyResourceEntity]()
-        for(i <- 0 until resourceList.tagCount()) {
-            val resourceTag = resourceList.getCompoundTagAt(i)
-            val item = new EnergyResourceEntity()
-            item.readFromNBT(resourceTag)
-            if(worldObj != null && !worldObj.isRemote) {
-                item.setWorld(worldObj)
-            }
-            resources.add(item)
-        }
     }
 
     /**
@@ -181,21 +153,19 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
       *
       * You should not actually change anything, all simulation
       *
-      * @param resourceEntity
+      * @param energy
       * @return
       */
-    override def willAcceptResource(resourceEntity: ResourceEntity[_], tilePos : BlockPos): Boolean = {
-        if(resourceEntity == null || !resourceEntity.isInstanceOf[EnergyResourceEntity] || resourceEntity.resource == null || !super.willAcceptResource(resourceEntity, tilePos))
+    override def willAcceptResource(energy: Integer, tilePos : BlockPos): Boolean = {
+        if(!super.willAcceptResource(energy, tilePos))
             return false
-
-        val resource = resourceEntity.asInstanceOf[EnergyResourceEntity]
 
         //Try and insert the energy
         for(dir <- EnumFacing.values()) {
-            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
+            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir)) {
                 worldObj.getTileEntity(tilePos) match {
                     case receiver: IEnergyReceiver =>
-                        val usedEnergy = receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true)
+                        val usedEnergy = receiver.receiveEnergy(dir.getOpposite, energy, true)
                         if (usedEnergy > 0) {
                             return true
                         }
@@ -207,71 +177,22 @@ class EnergyInterfacePipe extends InterfacePipe[EnergyStorage, EnergyResourceEnt
     }
 
     /**
-      * Called when the resource has found its target and is actually sending, change resource size here
-      *
-      * @param resource
-      */
-    override def resourceBeingExtracted(resource: EnergyResourceEntity): Unit = {
-        val tilePos = resource.destinationTile
-        for(dir <- EnumFacing.values()) {
-            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir) && tilePos.toLong != resource.fromTileLocation.toLong) {
-                worldObj.getTileEntity(tilePos) match {
-                    case receiver: IEnergyReceiver =>
-                        val usedEnergy = receiver.receiveEnergy(dir.getOpposite, resource.resource.getEnergyStored, true)
-                        if (usedEnergy > 0) {
-                            resource.resource.setEnergyStored(usedEnergy)
-                            return
-                        }
-                    case _ =>
-                }
-            }
-        }
-    }
-
-    /**
       * Used to get a list of what tiles are attached that can accept resources. Don't worry about if full or not,
       * just if this pipe interfaces with the tile add it here
       *
       * @return A list of the tiles that are valid sinks
       */
-    override def getAttachedSinks: util.List[Long] = {
-        val returnList = new util.ArrayList[Long]()
+    override def getAttachedSinks: util.List[(Long, EnumFacing)] = {
+        val returnList = new util.ArrayList[(Long, EnumFacing)]()
         for(dir <- EnumFacing.values()) {
             if (canConnectSink(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case receiver: IEnergyReceiver => returnList.add(pos.offset(dir).toLong)
+                    case receiver: IEnergyReceiver => returnList.add((pos.offset(dir).toLong, dir.getOpposite))
                     case _ =>
                 }
             }
         }
         returnList
-    }
-
-    /**
-      * Try and insert the resource into an inventory.
-      *
-      * It is pretty good practice to send the resource back if you can't remove all of it
-      *
-      * @param resource
-      */
-    override def tryInsertResource(resource: EnergyResourceEntity, dir : EnumFacing): Unit = {
-        if (resource == null || resource.resource == null)
-            return
-
-        if (canConnectSink(dir)) {
-            worldObj.getTileEntity(pos.offset(dir)) match {
-                case receiver: IEnergyReceiver if !resource.isDead =>
-                    receiver.receiveEnergy(dir.getOpposite, resource.resource.extractEnergy(resource.resource.getEnergyStored, false), false)
-                    if (resource.resource.getEnergyStored <= 0)
-                        resource.isDead = true
-                case _ =>
-            }
-
-            //If we couldn't fill, move back to source
-            if (!resource.isDead) {
-                resource.isDead = true
-            }
-        }
     }
 
     override def getPipeTypeID: Int = 0

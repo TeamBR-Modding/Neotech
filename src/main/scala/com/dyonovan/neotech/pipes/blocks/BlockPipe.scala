@@ -32,11 +32,16 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   */
 class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: SimplePipe]) extends BlockContainer(mat) {
 
-    //Constructor
+    /*******************************************************************************************************************
+      * Constructor                                                                                                    *
+      ******************************************************************************************************************/
+
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabPipes)
     setHardness(1.5F)
     setLightOpacity(0)
+
+    // For colored, we need to add in the default color of white, these aren't really needed but better safe that sorry
     if(colored)
         setDefaultState(this.blockState.getBaseState.withProperty(PipeProperties.COLOR, EnumDyeColor.WHITE)
                 .withProperty(PipeProperties.UP, false.asInstanceOf[java.lang.Boolean])
@@ -54,14 +59,79 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
                 .withProperty(PipeProperties.SOUTH, false.asInstanceOf[java.lang.Boolean])
                 .withProperty(PipeProperties.WEST, false.asInstanceOf[java.lang.Boolean]))
 
-    override def onBlockPlaced(world: World, pos: BlockPos, facing: EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
+    /*******************************************************************************************************************
+      * Block State                                                                                                    *
+      ******************************************************************************************************************/
+
+    /**
+      * Used to create the block state of the pipes
+      */
+    protected override def createBlockState: BlockState = {
+        if(colored) // Create state with color
+            new BlockState(this, PipeProperties.COLOR, PipeProperties.UP, PipeProperties.DOWN, PipeProperties.NORTH,
+                PipeProperties.SOUTH, PipeProperties.EAST, PipeProperties.WEST)
+        else
+            new BlockState(this, PipeProperties.UP, PipeProperties.DOWN, PipeProperties.NORTH, PipeProperties.SOUTH,
+                PipeProperties.EAST, PipeProperties.WEST)
+    }
+
+    /**
+      * We can't store all the info we want on the state, so access the info from the world on demand
+      */
+    override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState=  {
+        state.withProperty(PipeProperties.UP, isPipeConnected(worldIn, pos, EnumFacing.UP).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.DOWN, isPipeConnected(worldIn, pos, EnumFacing.DOWN).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.NORTH, isPipeConnected(worldIn, pos, EnumFacing.NORTH).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.EAST, isPipeConnected(worldIn, pos, EnumFacing.EAST).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.SOUTH, isPipeConnected(worldIn, pos, EnumFacing.SOUTH).asInstanceOf[java.lang.Boolean])
+                .withProperty(PipeProperties.WEST, isPipeConnected(worldIn, pos, EnumFacing.WEST).asInstanceOf[java.lang.Boolean])
+    }
+
+    /**
+      * Convert the given metadata into a BlockState for this Block
+      */
+    override def getStateFromMeta(meta: Int): IBlockState = {
+        if(colored)
+            this.getDefaultState.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(meta))
+        else
+            getDefaultState
+    }
+
+    /**
+      * Convert the BlockState into the correct metadata value
+      */
+    override def getMetaFromState(state: IBlockState): Int = {
+        if(colored)
+            state.getValue(PipeProperties.COLOR).getMetadata
+        else
+            0
+    }
+
+    /*******************************************************************************************************************
+      * Block Methods                                                                                                  *
+      ******************************************************************************************************************/
+
+    /**
+      * Called when we need to create a new tile class
+      */
+    override def createNewTileEntity(worldIn : World, meta : Int) : TileEntity = tileClass.newInstance()
+
+    /**
+      * Called the moment the block is placed, for us we need to set the property to the default values if colored
+      */
+    override def onBlockPlaced(world: World, pos: BlockPos, facing: EnumFacing,
+                               hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
         if(colored)
             getDefaultState.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(meta))
         else
             getDefaultState
     }
 
-    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
+    /**
+      * Called when the block is clicked on, if we are colored or using a wrench perform relevant actions
+      */
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing,
+                                  hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         playerIn.getCurrentEquippedItem match {
             case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
                 if(!world.isRemote) {
@@ -113,6 +183,75 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     }
 
     /**
+      * Notify pipe to execute code when broken
+      */
+    override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) : Unit = {
+        worldIn.getTileEntity(pos) match {
+            case pipe : SimplePipe =>
+                pipe.onPipeBroken()
+            case _ =>
+        }
+    }
+
+    /**
+      * Send update to pipes in grid to reform their cache
+      */
+    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
+        if (!world.isRemote)
+            WorldPipes.notifyPipes()
+        super.onNeighborBlockChange(world, pos, state, block)
+    }
+
+    /*******************************************************************************************************************
+      * Block Info Methods                                                                                             *
+      ******************************************************************************************************************/
+
+    /**
+      * Used to set the bounding box based on the current state
+      */
+    override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos) {
+        var x1 = 6F / 16F
+        var x2 = 1.0F - x1
+        var y1 = x1
+        var y2 = 1.0F - y1
+        var z1 = x1
+        var z2 = 1.0F - z1
+        if(isPipeConnected(worldIn, pos, EnumFacing.WEST))
+            x1 = 0.0F
+        if(isPipeConnected(worldIn, pos, EnumFacing.EAST))
+            x2 = 1.0F
+        if(isPipeConnected(worldIn, pos, EnumFacing.NORTH))
+            z1 = 0.0F
+        if(isPipeConnected(worldIn, pos, EnumFacing.SOUTH))
+            z2 = 1.0F
+        if(isPipeConnected(worldIn, pos, EnumFacing.DOWN))
+            y1 = 0.0F
+        if(isPipeConnected(worldIn, pos, EnumFacing.UP))
+            y2 = 1.0F
+        this.setBlockBounds(x1, y1, z1, x2, y2, z2)
+    }
+
+    /**
+      * Checks pipe connection status
+      */
+    def isPipeConnected(world: IBlockAccess, pos: BlockPos, facing: EnumFacing) : Boolean = {
+        world.getTileEntity(pos) match {
+            case pipe : SimplePipe =>
+                pipe.canConnect(facing)
+            case _ => false
+        }
+    }
+
+    /**
+      * Add collision, allows player to get close to pipe bounds
+      */
+    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
+                                         list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
+        this.setBlockBoundsBasedOnState(worldIn, pos)
+        super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
+    }
+
+    /**
       * Get the damage value that this Block should drop
       */
     override def damageDropped (state: IBlockState) : Int = {
@@ -135,6 +274,10 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
             super.getSubBlocks(itemIn, tab, list)
     }
 
+    /*******************************************************************************************************************
+      * Client Block Info                                                                                              *
+      ******************************************************************************************************************/
+
     /**
       * Get the MapColor for this Block and the given BlockState
       */
@@ -146,117 +289,21 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     }
 
     /**
-      * Convert the given metadata into a BlockState for this Block
+      * Tells minecraft to use a default model
+      * @return
       */
-    override def getStateFromMeta(meta: Int): IBlockState = {
-        if(colored)
-            this.getDefaultState.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(meta))
-        else
-            getDefaultState
-    }
-
-    /**
-      * Convert the BlockState into the correct metadata value
-      */
-    override def getMetaFromState(state: IBlockState): Int = {
-        if(colored)
-            state.getValue(PipeProperties.COLOR).getMetadata
-        else
-            0
-    }
-
-    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
-        if (!world.isRemote) {
-            WorldPipes.notifyPipes()
-        }
-        super.onNeighborBlockChange(world, pos, state, block)
-    }
-
-    protected override def createBlockState: BlockState = {
-        if(colored)
-            new BlockState(this, PipeProperties.COLOR, PipeProperties.UP, PipeProperties.DOWN, PipeProperties.NORTH, PipeProperties.SOUTH, PipeProperties.EAST, PipeProperties.WEST)
-        else
-            new BlockState(this, PipeProperties.UP, PipeProperties.DOWN, PipeProperties.NORTH, PipeProperties.SOUTH, PipeProperties.EAST, PipeProperties.WEST)
-    }
-
-    override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState=  {
-        state.withProperty(PipeProperties.UP, isPipeConnected(worldIn, pos, EnumFacing.UP).asInstanceOf[java.lang.Boolean])
-                .withProperty(PipeProperties.DOWN, isPipeConnected(worldIn, pos, EnumFacing.DOWN).asInstanceOf[java.lang.Boolean])
-                .withProperty(PipeProperties.NORTH, isPipeConnected(worldIn, pos, EnumFacing.NORTH).asInstanceOf[java.lang.Boolean])
-                .withProperty(PipeProperties.EAST, isPipeConnected(worldIn, pos, EnumFacing.EAST).asInstanceOf[java.lang.Boolean])
-                .withProperty(PipeProperties.SOUTH, isPipeConnected(worldIn, pos, EnumFacing.SOUTH).asInstanceOf[java.lang.Boolean])
-                .withProperty(PipeProperties.WEST, isPipeConnected(worldIn, pos, EnumFacing.WEST).asInstanceOf[java.lang.Boolean])
-    }
-
-    override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState) : Unit = {
-        worldIn.getTileEntity(pos) match {
-            case pipe : SimplePipe =>
-                pipe.onPipeBroken()
-            case _ =>
-        }
-    }
-
-    override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos) {
-        var x1 = 0.25F
-        var x2 = 1.0F - x1
-        var y1 = 0.25F
-        var y2 = 1.0F - y1
-        var z1 = 0.25F
-        var z2 = 1.0F - z1
-        if(isPipeConnected(worldIn, pos, EnumFacing.WEST)) {
-            x1 = 0.0F
-        }
-
-        if(isPipeConnected(worldIn, pos, EnumFacing.EAST)) {
-            x2 = 1.0F
-        }
-
-        if(isPipeConnected(worldIn, pos, EnumFacing.NORTH)) {
-            z1 = 0.0F
-        }
-
-        if(isPipeConnected(worldIn, pos, EnumFacing.SOUTH)) {
-            z2 = 1.0F
-        }
-
-        if(isPipeConnected(worldIn, pos, EnumFacing.DOWN)) {
-            y1 = 0.0F
-        }
-
-        if(isPipeConnected(worldIn, pos, EnumFacing.UP)) {
-            y2 = 1.0F
-        }
-
-        this.setBlockBounds(x1, y1, z1, x2, y2, z2)
-    }
-
-    def isPipeConnected(world: IBlockAccess, pos: BlockPos, facing: EnumFacing) : Boolean = {
-        world.getTileEntity(pos) match {
-            case pipe : SimplePipe =>
-                pipe.canConnect(facing)
-            case _ => false
-        }
-    }
-
-    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
-        this.setBlockBoundsBasedOnState(worldIn, pos)
-        super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
-    }
-
     override def getRenderType : Int = 3
 
+    /**
+      * We are clear, the following are all needed for best clear performance, rendering on Translucent layer
+      * allows for alpha pixels (for things like acceleration pipes)
+      */
     override def isOpaqueCube : Boolean = false
-
     @SideOnly(Side.CLIENT)
     override def isTranslucent : Boolean = true
-
     override def isFullCube : Boolean = false
-
     @SideOnly(Side.CLIENT)
     override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
-
     override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
         layer == EnumWorldBlockLayer.TRANSLUCENT || layer == EnumWorldBlockLayer.CUTOUT
-
-    override def createNewTileEntity(worldIn : World, meta : Int) : TileEntity = tileClass.newInstance()
 }
