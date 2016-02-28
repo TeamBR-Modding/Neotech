@@ -107,7 +107,7 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
                 getWorld.getTileEntity(pos.offset(dir)) match {
                     case provider: IEnergyProvider =>
                         if (provider.getEnergyStored(dir.getOpposite) > 0) {
-                            if (extractOnMode(provider.getEnergyStored(dir.getOpposite), pos.offset(dir))) {
+                            if (findSourceOnMode(provider.getEnergyStored(dir.getOpposite), pos.offset(dir))) {
                                 if(foundSource != null) {
                                     val amount = foundSource._1.receiveEnergy(foundSource._2,
                                         provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true), true)
@@ -156,24 +156,18 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
       * @param energy
       * @return
       */
-    override def willAcceptResource(energy: Integer, tilePos : BlockPos): Boolean = {
-        if(!super.willAcceptResource(energy, tilePos))
+    override def willAcceptResource(energy: Integer, tilePos : BlockPos, facing : EnumFacing): Boolean = {
+        if(!super.willAcceptResource(energy, tilePos, facing))
             return false
 
         //Try and insert the energy
-        for(dir <- EnumFacing.values()) {
-            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir)) {
-                worldObj.getTileEntity(tilePos) match {
-                    case receiver: IEnergyReceiver =>
-                        val usedEnergy = receiver.receiveEnergy(dir.getOpposite, energy, true)
-                        if (usedEnergy > 0) {
-                            return true
-                        }
-                    case _ =>
-                }
-            }
+        worldObj.getTileEntity(tilePos) match {
+            case receiver: IEnergyReceiver =>
+                if (receiver.receiveEnergy(facing, energy, true) > 0)
+                    return true
+                false
+            case _ => false
         }
-        false
     }
 
     /**

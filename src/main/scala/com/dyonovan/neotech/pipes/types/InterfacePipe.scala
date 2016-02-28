@@ -84,7 +84,7 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
       *
       * @return
       */
-    def extractOnMode(resource : S, extractFrom : BlockPos) : Boolean = {
+    def findSourceOnMode(resource : S, extractFrom : BlockPos) : Boolean = {
         if(!isResourceValidForFilter(resource))
             return false
         mode match {
@@ -129,68 +129,8 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
         if (resource == null)
             return false
 
-        if(shouldRefreshCache) {
-            sinkPipes.clear()
-            sinkTileValues.clear()
-            distance.clear()
-            parent.clear()
-            queue.clear()
-
-            distance.put(getPosAsLong, 0) //We are right here
-            parent.put(getPosAsLong, null) //No parent
-            sinkPipes.add(getPosAsLong)
-
-            queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
-
-            //Search the graph
-            while (!queue.isEmpty) {
-                val thisPos: BlockPos = queue.poll
-                getWorld.getTileEntity(thisPos) match {
-                    //Make sure this is a pipe
-                    case thisPipe: SimplePipe =>
-                        for (facing <- EnumFacing.values) {
-                            //Add children
-                            if (thisPipe.canConnect(facing)) {
-                                val otherPos: BlockPos = thisPos.offset(facing)
-                                if (distance.get(otherPos.toLong) == null) {
-                                    //If it hasn't already been added
-                                    queue.add(otherPos)
-                                    distance.put(otherPos.toLong, Integer.MAX_VALUE) //We will set the distance later
-                                    parent.put(otherPos.toLong, null) //Also parent
-
-                                    val newDistance: Int = (distance.get(thisPos.toLong) + thisPos.distanceSq(otherPos)).toInt
-                                    //If our distance is less than what existed, replace
-                                    if (newDistance < distance.get(otherPos.toLong)) {
-                                        distance.put(otherPos.toLong, newDistance)
-                                        parent.put(otherPos.toLong, thisPos)
-                                    }
-
-                                    getWorld.getTileEntity(otherPos) match {
-                                        //Add to sinks
-                                        case pipe: InterfacePipe[T, S] if pipe.frequency == frequency && doTypesMatch(pipe) =>
-                                            if(!sinkPipes.contains(pipe.getPosAsLong))
-                                                sinkPipes.add(pipe.getPosAsLong)
-                                        case _ =>
-                                    }
-                                }
-                            }
-                        }
-                    case _ =>
-                }
-            }
-            //Add all sink tiles
-            for(x <- 0 until sinkPipes.size()) { //Iterate Sink Pipes
-            val sinkPipe = sinkPipes.get(x) //Get sink pipe
-                for(j <- 0 until getWorld.getTileEntity(BlockPos.fromLong(sinkPipe)).asInstanceOf[InterfacePipe[T, S]].getAttachedSinks.size()) { //Get attached tiles
-                val tileValues = getWorld.getTileEntity(BlockPos.fromLong(sinkPipe)).asInstanceOf[InterfacePipe[T, S]].getAttachedSinks.get(j) //Get tile at side
-                    distance.put(tileValues._1, distance.get(sinkPipe) + 1) //Add one to distance with pipe as base
-                    parent.put(tileValues._1, BlockPos.fromLong(sinkPipe)) //Add pipe as parent
-                    if(!sinkTileValues.contains(tileValues))sinkTileValues.add(tileValues)
-                }
-            }
-
-            shouldRefreshCache = false
-        }
+        if(shouldRefreshCache)
+            rebuildMap()
 
         //Find the shortest
         var destination : BlockPos = null
@@ -201,7 +141,8 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
                     sinkTileValues.get(i)._1 != extractFrom.toLong &&
                     parent.get(sinkTileValues.get(i)._1) != null &&
                     getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)) != null &&
-                    getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)).asInstanceOf[InterfacePipe[T, S]].willAcceptResource(resource, BlockPos.fromLong(sinkTileValues.get(i)._1))) {
+                    getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)).asInstanceOf[InterfacePipe[T, S]]
+                            .willAcceptResource(resource, BlockPos.fromLong(sinkTileValues.get(i)._1), sinkTileValues.get(i)._2)) {
                 val d = BlockPos.fromLong(sinkTileValues.get(i)._1)
                 if (distance.get(d.toLong) < shortest) {
                     destination = d
@@ -231,70 +172,8 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
         if (resource == null)
             return false
 
-        if (shouldRefreshCache) {
-            sinkPipes.clear()
-            sinkTileValues.clear()
-            distance.clear()
-            parent.clear()
-            queue.clear()
-
-            distance.put(getPosAsLong, 0) //We are right here
-            parent.put(getPosAsLong, null) //No parent
-            sinkPipes.add(getPosAsLong)
-
-            queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
-
-            //Search the graph
-            while (!queue.isEmpty) {
-                val thisPos: BlockPos = queue.poll
-                getWorld.getTileEntity(thisPos) match {
-                    //Make sure this is a pipe
-                    case thisPipe: SimplePipe =>
-                        for (facing <- EnumFacing.values) {
-                            //Add children
-                            if (thisPipe.canConnect(facing)) {
-                                val otherPos: BlockPos = thisPos.offset(facing)
-                                if (distance.get(otherPos.toLong) == null) {
-                                    //If it hasn't already been added
-                                    queue.add(otherPos)
-                                    distance.put(otherPos.toLong, Integer.MAX_VALUE) //We will set the distance later
-                                    parent.put(otherPos.toLong, null) //Also parent
-
-                                    val newDistance: Int = (distance.get(thisPos.toLong) + thisPos.distanceSq(otherPos)).toInt
-                                    //If our distance is less than what existed, replace
-                                    if (newDistance < distance.get(otherPos.toLong)) {
-                                        distance.put(otherPos.toLong, newDistance)
-                                        parent.put(otherPos.toLong, thisPos)
-                                    }
-
-                                    getWorld.getTileEntity(otherPos) match {
-                                        //Add to sinks
-                                        case pipe: InterfacePipe[T, S] if pipe.frequency == frequency && doTypesMatch(pipe) =>
-                                            if (!sinkPipes.contains(pipe.getPosAsLong))
-                                                sinkPipes.add(pipe.getPosAsLong)
-                                        case _ =>
-                                    }
-                                }
-                            }
-                        }
-                    case _ =>
-                }
-            }
-            //Add all sink tiles
-            for (x <- 0 until sinkPipes.size()) {
-                //Iterate Sink Pipes
-                val sinkPipe = sinkPipes.get(x) //Get sink pipe
-                for (j <- 0 until getWorld.getTileEntity(BlockPos.fromLong(sinkPipe)).asInstanceOf[InterfacePipe[T, S]].getAttachedSinks.size()) {
-                    //Get attached tiles
-                    val tileValues = getWorld.getTileEntity(BlockPos.fromLong(sinkPipe)).asInstanceOf[InterfacePipe[T, S]].getAttachedSinks.get(j) //Get tile at side
-                    distance.put(tileValues._1, distance.get(sinkPipe) + 1) //Add one to distance with pipe as base
-                    parent.put(tileValues._1, BlockPos.fromLong(sinkPipe)) //Add pipe as parent
-                    if (!sinkTileValues.contains(tileValues)) sinkTileValues.add(tileValues)
-                }
-            }
-
-            shouldRefreshCache = false
-        }
+        if (shouldRefreshCache)
+            rebuildMap()
 
         //Find the longest
         var destination: BlockPos = null
@@ -305,7 +184,8 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
                     parent.get(sinkTileValues.get(i)._1) != null &&
                     sinkTileValues.get(i)._1 != extractFrom.toLong &&
                     getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)) != null &&
-                    getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)).asInstanceOf[InterfacePipe[T, S]].willAcceptResource(resource, BlockPos.fromLong(sinkTileValues.get(i)._1))) {
+                    getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)).asInstanceOf[InterfacePipe[T, S]]
+                            .willAcceptResource(resource, BlockPos.fromLong(sinkTileValues.get(i)._1), sinkTileValues.get(i)._2)) {
                 val d = BlockPos.fromLong(sinkTileValues.get(i)._1)
                 if (distance.get(d.toLong) > longest) {
                     destination = d
@@ -333,68 +213,8 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
         if (resource == null)
             return false
 
-        if(shouldRefreshCache) {
-            sinkPipes.clear()
-            sinkTileValues.clear()
-            distance.clear()
-            parent.clear()
-            queue.clear()
-
-            distance.put(getPosAsLong, 0) //We are right here
-            parent.put(getPosAsLong, null) //No parent
-            sinkPipes.add(getPosAsLong)
-
-            queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
-
-            //Search the graph
-            while (!queue.isEmpty) {
-                val thisPos: BlockPos = queue.poll
-                getWorld.getTileEntity(thisPos) match {
-                    //Make sure this is a pipe
-                    case thisPipe: SimplePipe =>
-                        for (facing <- EnumFacing.values) {
-                            //Add children
-                            if (thisPipe.canConnect(facing)) {
-                                val otherPos: BlockPos = thisPos.offset(facing)
-                                if (distance.get(otherPos.toLong) == null) {
-                                    //If it hasn't already been added
-                                    queue.add(otherPos)
-                                    distance.put(otherPos.toLong, Integer.MAX_VALUE) //We will set the distance later
-                                    parent.put(otherPos.toLong, null) //Also parent
-
-                                    val newDistance: Int = (distance.get(thisPos.toLong) + thisPos.distanceSq(otherPos)).toInt
-                                    //If our distance is less than what existed, replace
-                                    if (newDistance < distance.get(otherPos.toLong)) {
-                                        distance.put(otherPos.toLong, newDistance)
-                                        parent.put(otherPos.toLong, thisPos)
-                                    }
-
-                                    getWorld.getTileEntity(otherPos) match {
-                                        //Add to sinks
-                                        case pipe: InterfacePipe[T, S] if pipe.frequency == frequency && doTypesMatch(pipe) =>
-                                            if(!sinkPipes.contains(pipe.getPosAsLong))
-                                                sinkPipes.add(pipe.getPosAsLong)
-                                        case _ =>
-                                    }
-                                }
-                            }
-                        }
-                    case _ =>
-                }
-            }
-            //Add all sink tiles
-            for(x <- 0 until sinkPipes.size()) { //Iterate Sink Pipes
-            val sinkPipe = sinkPipes.get(x) //Get sink pipe
-                for(j <- 0 until getWorld.getTileEntity(BlockPos.fromLong(sinkPipe)).asInstanceOf[InterfacePipe[T, S]].getAttachedSinks.size()) { //Get attached tiles
-                val tileValues = getWorld.getTileEntity(BlockPos.fromLong(sinkPipe)).asInstanceOf[InterfacePipe[T, S]].getAttachedSinks.get(j) //Get tile at side
-                    distance.put(tileValues._1, distance.get(sinkPipe) + 1) //Add one to distance with pipe as base
-                    parent.put(tileValues._1, BlockPos.fromLong(sinkPipe)) //Add pipe as parent
-                    if(!sinkTileValues.contains(tileValues))
-                        sinkTileValues.add(tileValues)
-                }
-            }
-            shouldRefreshCache = false
-        }
+        if(shouldRefreshCache)
+            rebuildMap()
 
         //Find the next source
         var destination: BlockPos = null
@@ -405,7 +225,8 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
                     parent.get(sinkTileValues.get(i)._1) != null &&
                     sinkTileValues.get(i)._1 != extractFrom.toLong &&
                     getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)) != null &&
-                    getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)).asInstanceOf[InterfacePipe[T, S]].willAcceptResource(resource, BlockPos.fromLong(sinkTileValues.get(i)._1))) {
+                    getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)).asInstanceOf[InterfacePipe[T, S]]
+                            .willAcceptResource(resource, BlockPos.fromLong(sinkTileValues.get(i)._1), sinkTileValues.get(i)._2)) {
                 if (pickNext) {
                     destination = BlockPos.fromLong(sinkTileValues.get(i)._1)
                     fromSide = sinkTileValues.get(i)._2
@@ -423,7 +244,8 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
                         parent.get(sinkTileValues.get(i)._1) != null &&
                         sinkTileValues.get(i)._1 != extractFrom.toLong &&
                         getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)) != null &&
-                        getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)).asInstanceOf[InterfacePipe[T, S]].willAcceptResource(resource, BlockPos.fromLong(sinkTileValues.get(i)._1))) {
+                        getWorld.getTileEntity(parent.get(sinkTileValues.get(i)._1)).asInstanceOf[InterfacePipe[T, S]]
+                                .willAcceptResource(resource, BlockPos.fromLong(sinkTileValues.get(i)._1), sinkTileValues.get(i)._2)) {
                     if (pickNext) {
                         destination = BlockPos.fromLong(sinkTileValues.get(i)._1)
                         fromSide = sinkTileValues.get(i)._2
@@ -443,6 +265,69 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
 
         foundSource = (getWorld.getTileEntity(destination).asInstanceOf[T], fromSide)
         true
+    }
+
+    def rebuildMap() : Unit = {
+        sinkPipes.clear()
+        sinkTileValues.clear()
+        distance.clear()
+        parent.clear()
+        queue.clear()
+
+        distance.put(getPosAsLong, 0) //We are right here
+        parent.put(getPosAsLong, null) //No parent
+        sinkPipes.add(getPosAsLong)
+
+        queue.add(BlockPos.fromLong(getPosAsLong)) //Add ourselves
+
+        //Search the graph
+        while (!queue.isEmpty) {
+            val thisPos: BlockPos = queue.poll
+            getWorld.getTileEntity(thisPos) match {
+                //Make sure this is a pipe
+                case thisPipe: SimplePipe =>
+                    for (facing <- EnumFacing.values) {
+                        //Add children
+                        if (thisPipe.canConnect(facing)) {
+                            val otherPos: BlockPos = thisPos.offset(facing)
+                            if (distance.get(otherPos.toLong) == null) {
+                                //If it hasn't already been added
+                                queue.add(otherPos)
+                                distance.put(otherPos.toLong, Integer.MAX_VALUE) //We will set the distance later
+                                parent.put(otherPos.toLong, null) //Also parent
+
+                                val newDistance: Int = (distance.get(thisPos.toLong) + thisPos.distanceSq(otherPos)).toInt
+                                //If our distance is less than what existed, replace
+                                if (newDistance < distance.get(otherPos.toLong)) {
+                                    distance.put(otherPos.toLong, newDistance)
+                                    parent.put(otherPos.toLong, thisPos)
+                                }
+
+                                getWorld.getTileEntity(otherPos) match {
+                                    //Add to sinks
+                                    case pipe: InterfacePipe[T, S] if pipe.frequency == frequency && doTypesMatch(pipe) =>
+                                        if(!sinkPipes.contains(pipe.getPosAsLong))
+                                            sinkPipes.add(pipe.getPosAsLong)
+                                    case _ =>
+                                }
+                            }
+                        }
+                    }
+                case _ =>
+            }
+        }
+        //Add all sink tiles
+        for(x <- 0 until sinkPipes.size()) { //Iterate Sink Pipes
+        val sinkPipe = sinkPipes.get(x) //Get sink pipe
+            for(j <- 0 until getWorld.getTileEntity(BlockPos.fromLong(sinkPipe)).asInstanceOf[InterfacePipe[T, S]].getAttachedSinks.size()) { //Get attached tiles
+            val tileValues = getWorld.getTileEntity(BlockPos.fromLong(sinkPipe)).asInstanceOf[InterfacePipe[T, S]].getAttachedSinks.get(j) //Get tile at side
+                distance.put(tileValues._1, distance.get(sinkPipe) + 1) //Add one to distance with pipe as base
+                parent.put(tileValues._1, BlockPos.fromLong(sinkPipe)) //Add pipe as parent
+                if(!sinkTileValues.contains(tileValues))
+                    sinkTileValues.add(tileValues)
+            }
+        }
+        shouldRefreshCache = false
     }
 
     /**
@@ -480,7 +365,7 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
       * @param resource
       * @return
       */
-    def willAcceptResource(resource: S, pos : BlockPos) : Boolean = {
+    def willAcceptResource(resource: S, pos : BlockPos, side : EnumFacing) : Boolean = {
         if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
             if(redstone == -1 && isPowered)
                 return false

@@ -92,36 +92,28 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
             20
     }
 
-    override def doExtraction(): Unit = {
+    override def doExtraction(): Unit =
         tryExtractResources()
-    }
 
     override def tryExtractResources(): Unit = {
-        val tempInv = new Inventory() {
-            override def initialSize: Int = 1
-        }
-
         for(dir <- EnumFacing.values()) {
             if (canConnectExtract(dir)) {
-                val otherObject = worldObj.getTileEntity(pos.offset(dir))
-                if (otherObject != null) {
-                    val otherInv =
-                        if (otherObject.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite))
-                            otherObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
-                        else null
-
-                    if (otherInv != null) {
-                        for (x <- 0 until otherInv.getSlots) {
-                            if (otherInv.extractItem(x, getMaxStackExtract, true) != null) {
-                                if (otherInv.getStackInSlot(x) != null &&
-                                        extractOnMode(otherInv.getStackInSlot(x).copy(), pos.offset(dir))) {
-                                    if (foundSource != null) {
-                                        InventoryUtils.moveItemInto(otherInv, x, foundSource._1, -1,
-                                            getMaxStackExtract, foundSource._2, doMove = true)
-                                        foundSource = null
-                                        worldObj.markBlockForUpdate(pos)
-                                        return
-                                    }
+                val fromObject = worldObj.getTileEntity(pos.offset(dir))
+                if (fromObject != null) {
+                    val fromInventory =
+                        if (fromObject.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite))
+                            fromObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
+                        else return
+                    for (x <- 0 until fromInventory.getSlots) {
+                        if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
+                            if (fromInventory.getStackInSlot(x) != null &&
+                                    findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
+                                if (foundSource != null) {
+                                    InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
+                                        getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
+                                    foundSource = null
+                                    worldObj.markBlockForUpdate(pos)
+                                    return
                                 }
                             }
                         }
@@ -154,25 +146,26 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
       *
       * @return
       */
-    override def willAcceptResource(checkingResource: ItemStack, tilePos : BlockPos): Boolean = {
-        if(checkingResource == null || !checkingResource.isInstanceOf[ItemStack] || !super.willAcceptResource(checkingResource, tilePos))
+    override def willAcceptResource(checkingResource: ItemStack, tilePos : BlockPos, facing : EnumFacing): Boolean = {
+        if(checkingResource == null || !checkingResource.isInstanceOf[ItemStack] || !super.willAcceptResource(checkingResource, tilePos, facing))
             return false
 
-        tempInventory = new Inventory() {
-            override def initialSize: Int = 1
+        if(tempInventory == null) {
+            tempInventory = new Inventory() {
+                override def initialSize: Int = 1
+            }
         }
 
         //Try and insert the stack
-        for(dir <- EnumFacing.values()) {
-            if (worldObj != null && pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir)
-                    && worldObj.getTileEntity(tilePos) != null && !worldObj.getTileEntity(tilePos).isInstanceOf[SimplePipe]) { //Checking simple pipe just to be safe, shouldn't ever be a pipe
-            val otherTile = worldObj.getTileEntity(pos.offset(dir))
-                if (otherTile != null) {
-                    tempInventory.setInventorySlotContents(0, checkingResource.copy())
-                    val movedStack = InventoryUtils.getStackLeftAfterMove(tempInventory, 0, otherTile, -1, 64, dir, doMove = false)
-                    if (movedStack.isDefined) {
-                        return true
-                    }
+        if (worldObj != null && worldObj.getTileEntity(tilePos) != null &&
+                !worldObj.getTileEntity(tilePos).isInstanceOf[SimplePipe]) { //Checking simple pipe just to be safe, shouldn't ever be a pipe
+        val otherTile = worldObj.getTileEntity(tilePos)
+            if (otherTile != null) {
+                tempInventory.setInventorySlotContents(0, checkingResource.copy())
+                val movedStack = InventoryUtils.getStackLeftAfterMove(tempInventory, 0, otherTile, -1, 64, facing.getOpposite, doMove = false)
+                tempInventory.clear()
+                if (movedStack.isDefined) {
+                    return true
                 }
             }
         }

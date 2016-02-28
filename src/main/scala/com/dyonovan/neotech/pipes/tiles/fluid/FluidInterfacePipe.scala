@@ -104,7 +104,7 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case tank: IFluidHandler if tank.getTankInfo(dir.getOpposite) != null
                             && tank.getTankInfo(dir.getOpposite)(0).fluid != null =>
-                        if (extractOnMode(tank.getTankInfo(dir.getOpposite)(0).fluid, pos.offset(dir))) {
+                        if (findSourceOnMode(tank.getTankInfo(dir.getOpposite)(0).fluid, pos.offset(dir))) {
                             if (foundSource != null) {
                                 val amount = foundSource._1.fill(foundSource._2,
                                     tank.drain(dir.getOpposite, getMaxFluidDrain, false), false)
@@ -143,27 +143,21 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
       * @param fluid
       * @return
       */
-    override def willAcceptResource(fluid: FluidStack, tilePos : BlockPos): Boolean = {
-        if(fluid == null || !fluid.isInstanceOf[FluidStack] || !super.willAcceptResource(fluid, tilePos))
+    override def willAcceptResource(fluid: FluidStack, tilePos : BlockPos, facing : EnumFacing): Boolean = {
+        if(fluid == null || !fluid.isInstanceOf[FluidStack] || !super.willAcceptResource(fluid, tilePos, facing))
             return false
 
         if(fluid.getFluid == null) // I can't use this!
             return false
 
         //Try and insert the fluid
-        for(dir <- EnumFacing.values()) {
-            if (pos.offset(dir).toLong == tilePos.toLong && canConnectSink(dir)) {
-                worldObj.getTileEntity(tilePos) match {
-                    case tank: IFluidHandler =>
-                        val filledAmount = tank.fill(dir.getOpposite, fluid, false)
-                        if (filledAmount >= 100) {
-                            return true
-                        }
-                    case _ =>
-                }
-            }
+        worldObj.getTileEntity(tilePos) match {
+            case tank: IFluidHandler =>
+                if (tank.fill(facing, fluid, false) >= 100)
+                    return true
+                false
+            case _ => false
         }
-        false
     }
 
     /**
