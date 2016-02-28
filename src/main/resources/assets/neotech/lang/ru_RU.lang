@@ -5,6 +5,7 @@ itemGroup.tabNeoTech=NeoTech
 itemGroup.tabNeoTechPipes=NeoTech: Transport Pipes
 itemGroup.tabNeoTechMetals=NeoTech: Metals
 itemGroup.tabNeoTechDecorations=NeoTech: В§4DВ§6eВ§ecВ§2oВ§9rВ§5aВ§4tВ§6iВ§evВ§2e
+itemGroup.tabNeoTechTools=NeoTech: Tools
 
 #######################
 # Blocks
@@ -39,6 +40,12 @@ tile.neotech:blockMiniatureStar_red.name=§cКрасная §rМини звез�
 tile.neotech:blockMiniatureStar_silver.name=§7Серебристая §rМини звезда
 tile.neotech:blockMiniatureStar_white.name=Белая Мини звезда
 tile.neotech:blockMiniatureStar_yellow.name=§eЖёлтая §rМини звезда
+# Connected
+tile.neotech:phantomGlass.name=Призрачное стекло
+tile.neotech:voidGlass.name=Пустотное стекло
+
+# Misc
+tile.neotech:lightSource.name=Light Source
 
 #######################
 # Fluids
@@ -153,6 +160,22 @@ item.neotech:spawnerMover.name=Переноска спаунеров
 item.neotech:mobGun.name=Метатель сети
 item.neotech:mobNet.name=Ловчая сеть
 item.neotech:electroMagnet.name=Электромагнит
+item.neotech:electricPickaxe.name=Электрокирка
+item.neotech:miningLevel2.name=Улучшение "Уровень добычи Редстон"
+item.neotech:miningLevel3.name=Улучшение "Уровень добычи Обсидиан"
+item.neotech:miningLevel4.name=Улучшение "Уровень добычи Кобальт"
+item.neotech:silkTouch.name=Улучшение "Шёлковое касание"
+item.neotech:fortune.name=Улучшение "Удача"
+item.neotech:miningSpeed.name=Улучшение "Скорость"
+item.neotech:aoe.name=Улучшение "Площадь"
+item.neotech:shovelPick.name=Улучшение "Лопата"
+item.neotech:lighting.name=Улучшение "Освещение"
+
+item.neotech:electricSword.name=Электромеч
+item.neotech:sharpness.name=Улучшение "Острота"
+item.neotech:smite.name=Улучшение "Небесная кара"
+item.neotech:beheading.name=Улучшение "Обезглавливание"
+item.neotech:spiderBane.name=Улучшение "Гибель насекомых"
 
 # Batteries
 item.neotech:basicRFBattery.name=Простая батарея RF
@@ -376,6 +399,10 @@ neotech.text.lookAtPlayer=Следовать
 neotech.text.lookAtPlayerInfo=Заставить моба смотреть на игрока
 neotech.text.renderName=Имя
 neotech.text.renderNameInfo=Показывать имя (Nametag Mob / Anvil Net)
+
+neotech.text.placeInBinder=Upgrade In Thermal Binder
+
+neotech.text.lighting=Позволяет ставить источники света
 
 #######################
 # Commands
