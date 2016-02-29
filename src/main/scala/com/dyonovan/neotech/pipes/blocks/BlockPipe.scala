@@ -252,6 +252,15 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     }
 
     /**
+      * Add collision, allows player to get close to pipe bounds
+      */
+    override def addCollisionBoxesToListDefault(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
+                                         list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
+        this.setBlockBoundsBasedOnStateDefault(worldIn, pos)
+        super.addCollisionBoxesToListDefault(worldIn, pos, state, mask, list, collidingEntity)
+    }
+
+    /**
       * Get the damage value that this Block should drop
       */
     override def damageDropped (state: IBlockState) : Int = {
