@@ -183,7 +183,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     }
 
     override def setBlockBoundsBasedOnState(worldIn: IBlockAccess, pos: BlockPos) {
-        var x1 = 6F / 16F
+        var x1 = 5F / 16F
         var x2 = 1.0F - x1
         var y1 = x1
         var y2 = 1.0F - y1
@@ -274,9 +274,9 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def isTranslucent: Boolean = true
     override def isFullCube: Boolean = false
     @SideOnly(Side.CLIENT)
-    override def getBlockLayer: EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
+    override def getBlockLayer: EnumWorldBlockLayer = EnumWorldBlockLayer.SOLID
     override def canRenderInLayer(layer: EnumWorldBlockLayer): Boolean =
-        layer == EnumWorldBlockLayer.TRANSLUCENT || layer == EnumWorldBlockLayer.CUTOUT
+        layer == EnumWorldBlockLayer.SOLID
 
     override def getToolTip() : List[String] = {
         if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))

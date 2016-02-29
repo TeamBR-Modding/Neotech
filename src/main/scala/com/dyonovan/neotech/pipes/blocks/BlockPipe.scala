@@ -210,7 +210,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       * Used to set the bounding box based on the current state
       */
     override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos) {
-        var x1 = 6F / 16F
+        var x1 = 5F / 16F
         var x2 = 1.0F - x1
         var y1 = x1
         var y2 = 1.0F - y1
@@ -303,7 +303,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     override def isTranslucent : Boolean = true
     override def isFullCube : Boolean = false
     @SideOnly(Side.CLIENT)
-    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
+    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.SOLID
     override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
-        layer == EnumWorldBlockLayer.TRANSLUCENT || layer == EnumWorldBlockLayer.CUTOUT
+        layer == EnumWorldBlockLayer.SOLID
 }

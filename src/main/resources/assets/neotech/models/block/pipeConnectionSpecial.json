@@ -4,12 +4,12 @@
     },
     "elements" : [
         {
-            "from" : [ 5, 5, 12.01 ],
-            "to" : [ 11, 11, 16 ],
+            "from" : [ 4, 4, 12.01 ],
+            "to" : [ 12, 12, 16 ],
             "faces" : {
                 "up"   : { "texture" : "#extra"},
-                "down" : { "uv" : [5, 0, 11, 4], "texture" : "#extra"},
-                "east" : { "uv" : [0, 5, 4, 11], "texture" : "#extra"},
+                "down" : { "uv" : [4, 0, 12, 4], "texture" : "#extra"},
+                "east" : { "uv" : [0, 4, 4, 12], "texture" : "#extra"},
                 "west" : { "texture" : "#extra"},
                 "north" :{ "texture" : "#extra"}
             }
