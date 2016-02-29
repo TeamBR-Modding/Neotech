@@ -209,7 +209,6 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     override def onNeighborBlockChangeDefault(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
         if (!world.isRemote)
             WorldPipes.notifyPipes()
-        //super.onNeighborBlockChange(world, pos, state, block)
     }
 
     /*******************************************************************************************************************
@@ -250,15 +249,6 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
                 pipe.canConnect(facing)
             case _ => false
         }
-    }
-
-    /**
-      * Add collision, allows player to get close to pipe bounds
-      */
-    override def addCollisionBoxesToListDefault(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
-                                         list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
-        this.setBlockBoundsBasedOnState(worldIn, pos)
-        //super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
 
     /**

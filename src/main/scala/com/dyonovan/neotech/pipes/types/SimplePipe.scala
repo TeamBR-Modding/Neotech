@@ -1,8 +1,13 @@
 package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.pipes.collections.WorldPipes
+import mcmultipart.microblock.IMicroblock.IFaceMicroblock
+import mcmultipart.microblock.IMicroblockTile
+import mcmultipart.multipart.{OcclusionHelper, PartSlot}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.EnumFacing
+import net.minecraft.util.{AxisAlignedBB, EnumFacing}
+
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -24,11 +29,15 @@ trait SimplePipe extends TileEntity {
     /**
       * Used as a simple check to see if the pipe can connect. At it's most basic, it just checks if the tile in that
       * direction is a pipe. This is mainly used for path finding but also on the renderer
- *
+      *
       * @param facing The direction from this block
       * @return
       */
     def canConnect(facing: EnumFacing): Boolean = {
+        // Check for multi-part
+        if(hasIntersect(facing))
+            return false
+
         if (getWorld.getTileEntity(getPos) == null) return false
         getWorld.getTileEntity(getPos) match {
             case advanced : AdvancedPipe if advanced.isDisabled(facing) => return false
@@ -36,8 +45,62 @@ trait SimplePipe extends TileEntity {
         }
         getWorld.getTileEntity(getPos.offset(facing)) match {
             case advanced: AdvancedPipe => !advanced.isDisabled(facing.getOpposite)
-            case pipe: SimplePipe => true
+            case pipe: SimplePipe => !pipe.hasIntersect(facing.getOpposite)
             case _ => true
+        }
+    }
+
+    def hasIntersect(facing : EnumFacing) : Boolean = {
+        getWorld.getTileEntity(getPos) match {
+            case tileContainer: IMicroblockTile =>
+                if(tileContainer.getMicroblockContainer != null && tileContainer.getMicroblockContainer.getPartContainer != null) {
+                    val parts = tileContainer.getMicroblockContainer.getParts
+                    for(part <- parts) {
+                        // Check for hollow
+                        if(part.getContainer.getPartInSlot(PartSlot.getFaceSlot(facing)) != null) {
+                            part.getContainer.getPartInSlot(PartSlot.getFaceSlot(facing)) match {
+                                case microblock: IFaceMicroblock =>
+                                    if (!microblock.isFaceHollow)
+                                        return true
+                                case _ =>
+                            }
+                        }
+                    }
+
+                    // Occlusion Check
+                    if(!OcclusionHelper.occlusionTest(parts, getAxisForFace(facing)))
+                        return true
+
+                }
+            case _ => return false
+        }
+        false
+    }
+
+    lazy val AxisUp    = AxisAlignedBB.fromBounds(5 / 16F, 11 / 16F, 5 / 16F,
+        11 / 16F, 1.0F, 11 / 16F)
+    lazy val AxisDown  = AxisAlignedBB.fromBounds(5 / 16F, 0F, 5 / 16F,
+        11 / 16F, 5 / 16F, 11 / 16F)
+    lazy val AxisSouth = AxisAlignedBB.fromBounds(5 / 16F, 5 / 16F, 11 / 16F,
+        11 / 16F, 11 / 16F, 1F)
+    lazy val AxisNorth = AxisAlignedBB.fromBounds(5 / 16F, 5 / 16F, 0F,
+        11 / 16F, 11 / 16F, 5 / 16F)
+    lazy val AxisEast  = AxisAlignedBB.fromBounds(11 / 16F, 5 / 16F, 5 / 16F,
+        1F, 11 / 16F, 11 / 16F)
+    lazy val AxisWest  = AxisAlignedBB.fromBounds(0F, 5 / 16F, 5 / 16F,
+        5 / 16F, 11 / 16F, 11 / 16F)
+    lazy val AxisSelf  = AxisAlignedBB.fromBounds(5 / 16F, 5 / 16F, 5 / 16F,
+        11 / 16F, 11 / 16F, 11 / 16F)
+
+    def getAxisForFace(facing : EnumFacing) : AxisAlignedBB = {
+        facing match {
+            case EnumFacing.UP    => AxisUp
+            case EnumFacing.DOWN  => AxisDown
+            case EnumFacing.NORTH => AxisNorth
+            case EnumFacing.SOUTH => AxisSouth
+            case EnumFacing.EAST  => AxisEast
+            case EnumFacing.WEST  => AxisWest
+            case _ => AxisSelf
         }
     }
 
