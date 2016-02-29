@@ -44,6 +44,7 @@ tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
 # Connected
 tile.neotech:phantomGlass.name=Phantom Glass
 tile.neotech:voidGlass.name=Void Glass
+tile.neotech:rockWall.name=Rock Climbing Wall
 
 # Misc
 tile.neotech:lightSource.name=Light Source
@@ -445,6 +446,15 @@ neotech.grinder.description=The grinder is an early game ore doubling mechanic. 
 neotech.flushableChest.description=The flushable chest allows you to put items into the inventory and when a redstone signal is applied, it will destroy all items inside. It will output a redstone signal based on how full the inventory is.
 neotech.playerPlate.description=The Player Sensitive Plate is like any other pressure plate, except it will only activate when a player entity is on the plate
 neotech.trashBag.description=The Trash Bag is an automatic item removal system. Right click with it to open the inventory and place an item in the slot to automatically trash that item on pickup. You can also trash items manually by opening the GUI and placing items on the trash bag icon.
+
+# Phantom Glass
+neotech.phantomGlass.tip=Players pass through if not sneaky
+
+# Void Glass
+neotech.voidGlass.tip=Blocks light
+
+# Rock Wall Tip
+neotech.rockWall.tip=Sneak and right-click to scale wall
 
 #######################
 # JEI

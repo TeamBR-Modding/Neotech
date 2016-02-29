@@ -1,9 +1,8 @@
 package com.dyonovan.neotech.common.blocks.connected
 
-import com.dyonovan.neotech.NeoTech
-import com.dyonovan.neotech.lib.Reference
-import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
-import net.minecraft.block.Block
+import com.dyonovan.neotech.utils.ClientUtils
+import com.teambr.bookshelf.client.gui.GuiTextFormat
+import com.teambr.bookshelf.traits.HasToolTip
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.Entity
@@ -21,11 +20,7 @@ import net.minecraft.world.World
   * @author Paul Davis "pauljoda"
   * @since 2/26/2016
   */
-class BlockPhantomGlass extends Block(Material.glass) with BlockConnectedTextures {
-
-    setCreativeTab(NeoTech.tabDecorations)
-    setUnlocalizedName(Reference.MOD_ID + ":phantomGlass")
-    setHardness(2.0F)
+class BlockPhantomGlass extends BlockConnected("phantomGlass", Material.glass) with HasToolTip {
 
     /**
       * Define true if you are a clear texture
@@ -34,12 +29,6 @@ class BlockPhantomGlass extends Block(Material.glass) with BlockConnectedTexture
       */
     override def isClear: Boolean = true
 
-    // Methods to move textures to lower class, handle others here
-    override def NoCornersTextureLocation: String = "neotech:blocks/connected/phantomGlass/phantomGlass"
-    override def CornersTextureLocation: String = "neotech:blocks/connected/phantomGlass/phantomGlass_corners"
-    override def VerticalTextureLocation: String = "neotech:blocks/connected/phantomGlass/phantomGlass_vertical"
-    override def AntiCornersTextureLocation: String = "neotech:blocks/connected/phantomGlass/phantomGlass_anti_corners"
-    override def HorizontalTextureLocation: String = "neotech:blocks/connected/phantomGlass/phantomGlass_horizontal"
 
     override def addCollisionBoxesToList(worldIn: World, pos: BlockPos, state: IBlockState, mask: AxisAlignedBB,
                                             list: java.util.List[AxisAlignedBB], collidingEntity: Entity) : Unit = {
@@ -47,4 +36,6 @@ class BlockPhantomGlass extends Block(Material.glass) with BlockConnectedTexture
         else
             super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
+
+    override def getToolTip(): List[String] = List(GuiTextFormat.ITALICS + ClientUtils.translate("neotech.phantomGlass.tip"))
 }

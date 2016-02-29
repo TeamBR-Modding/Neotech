@@ -324,8 +324,16 @@ public class CraftingRecipeManager {
                 "GGG", 'G', "blockGlass", 'D', Items.oak_door));
 
         // Void Glass
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BlockManager.voidGlass(), 8),
-                "blockGlass", "dyeBlack"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.voidGlass(), 8),
+                "GDG",
+                "GGG",
+                "GGG", 'G', "blockGlass", 'D', "dyeBlack"));
+
+        // Rock Climbing Wall
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.rockWall(), 8),
+                "GGG",
+                "TGT",
+                "GGG", 'G', Blocks.cobblestone, 'T', "ingotTin"));
 
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
