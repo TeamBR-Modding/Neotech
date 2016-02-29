@@ -7,6 +7,7 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.types.SimplePipe
+import mcmultipart.block.BlockCoverable
 import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.{MapColor, Material}
 import net.minecraft.block.state.{BlockState, IBlockState}
@@ -14,7 +15,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
-import net.minecraft.item.{ItemDye, EnumDyeColor, Item, ItemStack}
+import net.minecraft.item.{EnumDyeColor, Item, ItemDye, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.{IBlockAccess, World}
@@ -30,7 +31,8 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis pauljoda
   * @since August 14, 2015
   */
-class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: SimplePipe]) extends BlockContainer(mat) {
+class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: SimplePipe])
+            extends BlockCoverable(mat) {
 
     /*******************************************************************************************************************
       * Constructor                                                                                                    *
@@ -130,7 +132,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Called when the block is clicked on, if we are colored or using a wrench perform relevant actions
       */
-    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing,
+    override def onBlockActivatedDefault(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing,
                                   hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         playerIn.getCurrentEquippedItem match {
             case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
@@ -196,10 +198,10 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Send update to pipes in grid to reform their cache
       */
-    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
+    override def onNeighborBlockChangeDefault(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
         if (!world.isRemote)
             WorldPipes.notifyPipes()
-        super.onNeighborBlockChange(world, pos, state, block)
+        //super.onNeighborBlockChange(world, pos, state, block)
     }
 
     /*******************************************************************************************************************
@@ -209,7 +211,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Used to set the bounding box based on the current state
       */
-    override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos) {
+    override def setBlockBoundsBasedOnStateDefault(worldIn : IBlockAccess, pos : BlockPos) {
         var x1 = 5F / 16F
         var x2 = 1.0F - x1
         var y1 = x1
@@ -245,10 +247,10 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Add collision, allows player to get close to pipe bounds
       */
-    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
+    override def addCollisionBoxesToListDefault(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
                                          list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
         this.setBlockBoundsBasedOnState(worldIn, pos)
-        super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
+        //super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
     }
 
     /**
@@ -304,6 +306,6 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     override def isFullCube : Boolean = false
     @SideOnly(Side.CLIENT)
     override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.SOLID
-    override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
+    override def canRenderInLayerDefault(layer : EnumWorldBlockLayer) : Boolean =
         layer == EnumWorldBlockLayer.SOLID
 }

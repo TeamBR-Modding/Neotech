@@ -30,6 +30,7 @@ repositories {
         name 'DVS1 Maven FS'
         url "http://dvs1.progwml6.com/files/maven"
     }
+    maven { url "http://maven.amadornes.com/" }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -98,6 +99,7 @@ dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
+    deobfCompile "MCMultiPart:MCMultiPart:1.0.7:universal"
     compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "+", classifier: "dev", changing: true
 }
 

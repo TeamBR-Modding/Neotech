@@ -2,6 +2,7 @@ package com.dyonovan.neotech.pipes.tiles.structure
 
 import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, PipeProperties}
 import com.dyonovan.neotech.pipes.types.SimplePipe
+import mcmultipart.block.TileCoverable
 import net.minecraft.item.EnumDyeColor
 import net.minecraft.util.EnumFacing
 
@@ -15,7 +16,7 @@ import net.minecraft.util.EnumFacing
   * @author Paul Davis pauljoda
   * @since August 15, 2015
   */
-class StructurePipe extends SimplePipe {
+class StructurePipe extends TileCoverable with SimplePipe {
     /**
       * Used as a simple check to see if the pipe can connect. At it's most basic, it just checks if the tile in that
       * direction is a pipe. This is mainly used for path finding but also on the renderer
