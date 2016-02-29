@@ -7,7 +7,8 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.types.SimplePipe
-import mcmultipart.block.BlockCoverable
+import mcmultipart.block.{BlockMultipart, BlockCoverable}
+import net.minecraft.block.properties.IProperty
 import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.{MapColor, Material}
 import net.minecraft.block.state.{BlockState, IBlockState}
@@ -19,7 +20,10 @@ import net.minecraft.item.{EnumDyeColor, Item, ItemDye, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -69,19 +73,23 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       * Used to create the block state of the pipes
       */
     protected override def createBlockState: BlockState = {
-        if(colored) // Create state with color
-            new BlockState(this, PipeProperties.COLOR, PipeProperties.UP, PipeProperties.DOWN, PipeProperties.NORTH,
-                PipeProperties.SOUTH, PipeProperties.EAST, PipeProperties.WEST)
-        else
-            new BlockState(this, PipeProperties.UP, PipeProperties.DOWN, PipeProperties.NORTH, PipeProperties.SOUTH,
-                PipeProperties.EAST, PipeProperties.WEST)
+        val listed = new ArrayBuffer[IProperty[_]]()
+        if(colored)
+            listed += PipeProperties.COLOR
+        listed += PipeProperties.UP
+        listed += PipeProperties.DOWN
+        listed += PipeProperties.EAST
+        listed += PipeProperties.WEST
+        listed += PipeProperties.NORTH
+        listed += PipeProperties.SOUTH
+        new ExtendedBlockState(this, listed.toArray, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
     }
 
     /**
       * We can't store all the info we want on the state, so access the info from the world on demand
       */
     override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState=  {
-        state.withProperty(PipeProperties.UP, isPipeConnected(worldIn, pos, EnumFacing.UP).asInstanceOf[java.lang.Boolean])
+        super.getExtendedState(state, worldIn, pos).withProperty(PipeProperties.UP, isPipeConnected(worldIn, pos, EnumFacing.UP).asInstanceOf[java.lang.Boolean])
                 .withProperty(PipeProperties.DOWN, isPipeConnected(worldIn, pos, EnumFacing.DOWN).asInstanceOf[java.lang.Boolean])
                 .withProperty(PipeProperties.NORTH, isPipeConnected(worldIn, pos, EnumFacing.NORTH).asInstanceOf[java.lang.Boolean])
                 .withProperty(PipeProperties.EAST, isPipeConnected(worldIn, pos, EnumFacing.EAST).asInstanceOf[java.lang.Boolean])
@@ -292,6 +300,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
 
     /**
       * Tells minecraft to use a default model
+      *
       * @return
       */
     override def getRenderType : Int = 3
