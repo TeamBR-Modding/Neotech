@@ -324,10 +324,8 @@ public class CraftingRecipeManager {
                 "GGG", 'G', "blockGlass", 'D', Items.oak_door));
 
         // Void Glass
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.voidGlass(), 8),
-                "GGG",
-                "GDG",
-                "GGG", 'G', "blockGlass", 'D', "dyeBlack"));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BlockManager.voidGlass(), 8),
+                "blockGlass", "dyeBlack"));
 
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
