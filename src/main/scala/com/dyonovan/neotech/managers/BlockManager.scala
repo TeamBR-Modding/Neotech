@@ -18,10 +18,8 @@ import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import mcmultipart.item.MicroContainerPlacementWrapper
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.client.resources.model.ModelResourceLocation
-import net.minecraft.item.{EnumDyeColor, Item, ItemBlock, ItemStack}
+import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -115,11 +113,10 @@ object BlockManager {
 
         //Pipes
         registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockColored])
-        for(color <- EnumDyeColor.values())
+        for(color <- EnumDyeColor.values()) {
             OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
-        new MicroContainerPlacementWrapper(new ItemStack(pipeBasicStructure)).register("neotech:pipeStructure")
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(pipeBasicStructure), 0, new ModelResourceLocation(
-            "neotech:pipeStructure", "inventory"))
+            new MicroContainerPlacementWrapper(new ItemStack(pipeBasicStructure, 1, color.getMetadata)).register("neotech:pipeStructure")
+        }
 
         registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
         registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
