@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.blocks.connected.{BlockRockWall, BlockVoidGlass, BlockPhantomGlass}
+import com.dyonovan.neotech.common.blocks.connected.{BlockPhantomGlass, BlockRockWall, BlockVoidGlass}
 import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine, BlockSolarPanel}
 import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.storage._
@@ -15,10 +15,13 @@ import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
+import mcmultipart.item.MicroContainerPlacementWrapper
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
+import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.item.{EnumDyeColor, Item, ItemBlock, ItemStack}
 import net.minecraft.tileentity.TileEntity
+import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -114,6 +117,10 @@ object BlockManager {
         registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockColored])
         for(color <- EnumDyeColor.values())
             OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
+        new MicroContainerPlacementWrapper(new ItemStack(pipeBasicStructure)).register("neotech:pipeStructure")
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(pipeBasicStructure), 0, new ModelResourceLocation(
+            "neotech:pipeStructure", "inventory"))
+
         registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
         registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
         registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])

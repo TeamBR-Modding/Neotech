@@ -5,6 +5,10 @@ import net.minecraftforge.common.MinecraftForge
 
 object EventManager {
 
+    def preInit(): Unit = {
+        MinecraftForge.EVENT_BUS.register(OnModelBake)
+    }
+
     def init(): Unit = {
         MinecraftForge.EVENT_BUS.register(OnCraftedEvent)
         MinecraftForge.EVENT_BUS.register(TimeUtils)
