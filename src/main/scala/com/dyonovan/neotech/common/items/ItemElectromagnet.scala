@@ -33,19 +33,13 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 class ItemElectromagnet extends ItemBattery {
     lazy val RANGE = 10D
 
-    override var capacity: Int = 8000
-    override var maxExtract: Int = 100
-    override var maxReceive: Int = 100
-
     setMaxStackSize(1)
     setCreativeTab(NeoTech.tabNeoTech)
     setMaxStackSize(maxStackSize)
     setUnlocalizedName(Reference.MOD_ID + ":" + "electroMagnet")
 
-    override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
-        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
-            updateDamage(stack)
-        else {
+    override def setDefaultTags(stack: ItemStack): Unit = {
+        if (!stack.hasTagCompound && stack.getTagCompound.hasKey("Energy")) {
             val nbt = new NBTTagCompound
             nbt.setInteger("Energy", 0)
             stack.setTagCompound(nbt)
@@ -144,4 +138,6 @@ class ItemElectromagnet extends ItemBattery {
                 NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
                         .format(getMaxEnergyStored(stack)) + " RF")
     }
+
+
 }

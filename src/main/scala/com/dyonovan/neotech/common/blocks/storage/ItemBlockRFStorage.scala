@@ -25,11 +25,6 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with ItemBattery
     setMaxStackSize(1)
     setHasSubtypes(true)
 
-    val info = getEnergyInfo
-    override var capacity: Int = info._2
-    override var maxExtract: Int = info._2
-    override var maxReceive: Int = info._2
-
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if (getEnergyInfo._1 != 4) {
@@ -50,5 +45,7 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with ItemBattery
             case _ => (1, 25000, 200)
         }
     }
+
+    override def setDefaultTags(stack: ItemStack): Unit = {}
 }
 

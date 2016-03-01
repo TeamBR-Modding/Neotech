@@ -2,7 +2,7 @@ package com.dyonovan.neotech.events
 
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
-import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.item.Item
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.PlayerEvent
@@ -23,7 +23,7 @@ object OnCraftedEvent {
     def onCrafted(event: PlayerEvent.ItemCraftedEvent): Unit = {
         // Mob Gun
         if (event.crafting.getItem == ItemManager.mobGun) {
-            val tag = setTierPower(event.craftMatrix.getStackInSlot(7))
+            val tag = setTierPower(event.craftMatrix.getStackInSlot(7).getItem)
             if (event.craftMatrix.getStackInSlot(8).hasTagCompound && event.craftMatrix.getStackInSlot(8).getTagCompound.hasKey("Energy"))
                 tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
             event.crafting.setTagCompound(tag)
@@ -31,7 +31,7 @@ object OnCraftedEvent {
         }
         //Electric Tools
         if (event.crafting.getItem.isInstanceOf[BaseElectricTool]) {
-            val tag = setTierPower(event.craftMatrix.getStackInSlot(7))
+            val tag = setTierPower(event.craftMatrix.getStackInSlot(7).getItem)
             if (event.craftMatrix.getStackInSlot(4).hasTagCompound && event.craftMatrix.getStackInSlot(4).getTagCompound.hasKey("Energy"))
                 tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
             event.crafting.setTagCompound(tag)
@@ -51,7 +51,7 @@ object OnCraftedEvent {
         }
     }
 
-    private def setTierPower(item: ItemStack): NBTTagCompound = {
+    private def setTierPower(item: Item): NBTTagCompound = {
         val tag = new NBTTagCompound
         var tier = 1
         item match {
