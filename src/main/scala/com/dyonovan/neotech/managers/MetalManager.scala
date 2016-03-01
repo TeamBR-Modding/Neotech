@@ -13,6 +13,7 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fluids.{Fluid, FluidRegistry}
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
 
 /**
@@ -271,7 +272,8 @@ object MetalManager {
     }
 
     def inTinkers(fluid: String): Boolean = {
-        tinkers.contains(fluid)
+        if (!Loader.isModLoaded("tconstruct")) false
+        else tinkers.contains(fluid)
     }
 
     /**
