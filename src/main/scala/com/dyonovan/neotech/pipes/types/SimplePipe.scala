@@ -44,7 +44,7 @@ trait SimplePipe extends TileEntity {
             case _ =>
         }
         getWorld.getTileEntity(getPos.offset(facing)) match {
-            case advanced: AdvancedPipe => !advanced.isDisabled(facing.getOpposite)
+            case advanced: AdvancedPipe => !advanced.isDisabled(facing.getOpposite) && !advanced.hasIntersect(facing.getOpposite)
             case pipe: SimplePipe => !pipe.hasIntersect(facing.getOpposite)
             case _ => true
         }

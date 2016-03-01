@@ -15,6 +15,8 @@ import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.bookshelf.traits.HasToolTip
 import com.teambr.bookshelf.util.WorldUtils
+import mcmultipart.block.{BlockMultipart, BlockCoverable}
+import net.minecraft.block.properties.IProperty
 import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.{BlockState, IBlockState}
@@ -26,9 +28,12 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.{WorldServer, IBlockAccess, World}
 import net.minecraftforge.client.MinecraftForgeClient
+import net.minecraftforge.common.property.{IUnlistedProperty, ExtendedBlockState}
 import net.minecraftforge.fml.client.FMLClientHandler
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 import org.lwjgl.input.Keyboard
+
+import scala.collection.mutable.ArrayBuffer
 
 
 /**
@@ -41,8 +46,8 @@ import org.lwjgl.input.Keyboard
   * @author Paul Davis pauljoda
   * @since August 14, 2015
   */
-class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockContainer(mat)
-        with OpensGui with HasToolTip {
+class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockCoverable(mat)
+        with HasToolTip {
 
     /*******************************************************************************************************************
       * Constructor                                                                                                    *
@@ -64,8 +69,18 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * Block State                                                                                                    *
       ******************************************************************************************************************/
 
+    /**
+      * Used to create the block state of the pipes
+      */
     protected override def createBlockState: BlockState = {
-        new BlockState(this, PipeProperties.SPECIAL_UP, PipeProperties.SPECIAL_DOWN, PipeProperties.SPECIAL_NORTH, PipeProperties.SPECIAL_SOUTH, PipeProperties.SPECIAL_EAST, PipeProperties.SPECIAL_WEST)
+        val listed = new ArrayBuffer[IProperty[_]]()
+        listed += PipeProperties.SPECIAL_UP
+        listed += PipeProperties.SPECIAL_DOWN
+        listed += PipeProperties.SPECIAL_NORTH
+        listed += PipeProperties.SPECIAL_SOUTH
+        listed += PipeProperties.SPECIAL_EAST
+        listed += PipeProperties.SPECIAL_WEST
+        new ExtendedBlockState(this, listed.toArray, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
     }
 
     override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): IBlockState = {
@@ -134,7 +149,6 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                 case _ =>
             }
         }
-        super.breakBlock(worldIn, pos, state)
     }
 
 
@@ -144,10 +158,10 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * If you want to override this but still call it, make sure you call
       *      super[OpensGui].onBlockActivated(...)
       */
-    override def onBlockActivated(world : World, pos : BlockPos, state : IBlockState, playerIn : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
+    override def onBlockActivatedDefault(world : World, pos : BlockPos, state : IBlockState, playerIn : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
         playerIn.getCurrentEquippedItem match {
-            case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
-                if(!world.isRemote) {
+            case stack : ItemStack if stack.getItem == ItemManager.wrench =>
+                if(!world.isRemote && playerIn.isSneaking) {
                     val random = new Random
                     val stack = new ItemStack(world.getBlockState(pos).getBlock.getItemDropped(world.getBlockState(pos), random, 0), 1, damageDropped(world.getBlockState(pos)))
                     if(stack != null && stack.stackSize > 0) {
@@ -173,16 +187,17 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                     world.markBlockForUpdate(pos)
                     return true
                 } else {
+                    playerIn.openGui(NeoTech, 0, world, pos.getX, pos.getY, pos.getZ)
                     playerIn.swingItem()
                     return true
                 }
 
             case _ =>
         }
-        super.onBlockActivated(world, pos, state, playerIn, side, hitX, hitY, hitZ)
+        false
     }
 
-    override def setBlockBoundsBasedOnState(worldIn: IBlockAccess, pos: BlockPos) {
+    override def setBlockBoundsBasedOnStateDefault(worldIn: IBlockAccess, pos: BlockPos) {
         var x1 = 5F / 16F
         var x2 = 1.0F - x1
         var y1 = x1
@@ -238,18 +253,17 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
     }
 
-    override def addCollisionBoxesToList(worldIn: World, pos: BlockPos, state: IBlockState, mask: AxisAlignedBB, list: java.util.List[AxisAlignedBB], collidingEntity: Entity) {
+    override def addCollisionBoxesToListDefault(worldIn: World, pos: BlockPos, state: IBlockState, mask: AxisAlignedBB, list: java.util.List[AxisAlignedBB], collidingEntity: Entity) {
         this.setBlockBoundsBasedOnState(worldIn, pos)
-        super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
+        super.addCollisionBoxesToListDefault(worldIn, pos, state, mask, list, collidingEntity)
     }
 
-    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
-        if (!world.isRemote) {
+    override def onNeighborBlockChangeDefault(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
+        if (!world.isRemote)
             WorldPipes.notifyPipes()
-        }
     }
 
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+    def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench &&
                 world.getTileEntity(new BlockPos(x, y, z)).isInstanceOf[AdvancedPipe])
             return new ContainerAdvancedPipeMenu(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
@@ -257,7 +271,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     }
 
     @SideOnly(Side.CLIENT)
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+    def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench &&
                 world.getTileEntity(new BlockPos(x, y, z)).isInstanceOf[AdvancedPipe])
             return new GuiAdvancedPipeMenu(player, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[AdvancedPipe])
@@ -275,7 +289,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def isFullCube: Boolean = false
     @SideOnly(Side.CLIENT)
     override def getBlockLayer: EnumWorldBlockLayer = EnumWorldBlockLayer.SOLID
-    override def canRenderInLayer(layer: EnumWorldBlockLayer): Boolean =
+    override def canRenderInLayerDefault(layer: EnumWorldBlockLayer): Boolean =
         layer == EnumWorldBlockLayer.SOLID
 
     override def getToolTip() : List[String] = {

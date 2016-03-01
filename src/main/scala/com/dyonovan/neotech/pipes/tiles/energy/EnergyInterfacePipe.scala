@@ -3,9 +3,8 @@ package com.dyonovan.neotech.pipes.tiles.energy
 import java.util
 
 import cofh.api.energy.{IEnergyProvider, IEnergyReceiver}
-import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
+import com.dyonovan.neotech.pipes.types.{SimplePipe, AdvancedPipe, InterfacePipe}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
 
 /**
@@ -45,7 +44,8 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
             getWorld.getTileEntity(pos.offset(facing)) match {
                 case energy : IEnergyReceiver => energy.canConnectEnergy(facing.getOpposite)
                 case energy : IEnergyProvider => energy.canConnectEnergy(facing.getOpposite)
-                case pipe : SimplePipe => true
+                case advanced: AdvancedPipe => !advanced.isDisabled(facing.getOpposite) && !advanced.hasIntersect(facing.getOpposite)
+                case pipe: SimplePipe => !pipe.hasIntersect(facing.getOpposite)
                 case _ => false
             }
         else
@@ -123,16 +123,6 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
                 }
             }
         }
-    }
-
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
-        super.writeToNBT(tag)
-        super[TileEntity].writeToNBT(tag)
-    }
-
-    override def readFromNBT(tag : NBTTagCompound) : Unit = {
-        super.readFromNBT(tag)
-        super[TileEntity].readFromNBT(tag)
     }
 
     /**

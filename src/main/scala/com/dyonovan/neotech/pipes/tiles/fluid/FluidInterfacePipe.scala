@@ -2,9 +2,8 @@ package com.dyonovan.neotech.pipes.tiles.fluid
 
 import java.util
 
-import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
+import com.dyonovan.neotech.pipes.types.{SimplePipe, AdvancedPipe, InterfacePipe}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
 import net.minecraftforge.fluids._
 
@@ -42,7 +41,8 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
         if(super.canConnect(facing))
             getWorld.getTileEntity(pos.offset(facing)) match {
                 case inventory : IFluidHandler => true
-                case pipe : SimplePipe => true
+                case advanced: AdvancedPipe => !advanced.isDisabled(facing.getOpposite) && !advanced.hasIntersect(facing.getOpposite)
+                case pipe: SimplePipe => !pipe.hasIntersect(facing.getOpposite)
                 case _ => false
             }
         else
@@ -119,16 +119,6 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
                 }
             }
         }
-    }
-
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
-        super.writeToNBT(tag)
-        super[TileEntity].writeToNBT(tag)
-    }
-
-    override def readFromNBT(tag : NBTTagCompound) : Unit = {
-        super.readFromNBT(tag)
-        super[TileEntity].readFromNBT(tag)
     }
 
     /*******************************************************************************************************************

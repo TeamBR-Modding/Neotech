@@ -2,9 +2,12 @@ package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.collections.InputOutput
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.dyonovan.neotech.pipes.collections.{WorldPipes, Filter}
+import com.dyonovan.neotech.pipes.collections.{Filter, WorldPipes}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
+import mcmultipart.block.TileCoverable
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.network.NetworkManager
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -32,7 +35,8 @@ object AdvancedPipe {
     val FILTER_BLACKLIST = 3
 }
 
-trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with SimplePipe with Filter with InputOutput {
+abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable with RedstoneAware
+        with SimplePipe with Filter with InputOutput {
 
     override def resetIO() : Unit = {
         for(dir <- EnumFacing.values()) {
@@ -55,6 +59,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
 
     /**
       * Can this pipe connect
+      *
       * @param facing The direction from this block
       * @return
       */
@@ -70,6 +75,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
         super[Upgradeable].writeToNBT(tag)
         super[Filter].writeToNBT(tag)
         super[InputOutput].writeToNBT(tag)
+        super[TileCoverable].writeToNBT(tag)
         tag.setInteger("mode", mode)
         tag.setInteger("redstone", redstone)
         tag.setInteger("frequency", frequency)
@@ -89,9 +95,33 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
         super[Upgradeable].readFromNBT(tag)
         super[Filter].readFromNBT(tag)
         super[InputOutput].readFromNBT(tag)
+        super[TileCoverable].readFromNBT(tag)
         mode = tag.getInteger("mode")
         redstone = tag.getInteger("redstone")
         frequency = tag.getInteger("frequency")
+    }
+
+    /**
+      * Used to identify the packet that will get called on update
+      *
+      * @return The packet to send
+      */
+    override def getDescriptionPacket: S35PacketUpdateTileEntity = {
+        val tag = new NBTTagCompound
+        this.writeToNBT(tag)
+        getMicroblockContainer.getPartContainer.writeDescription(tag)
+        new S35PacketUpdateTileEntity(getPos, 1, tag)
+    }
+
+    /**
+      * Called when a packet is received
+      *
+      * @param net The manager sending
+      * @param pkt The packet received
+      */
+    override def onDataPacket(net : NetworkManager, pkt : S35PacketUpdateTileEntity) = {
+        this.readFromNBT(pkt.getNbtCompound)
+        getMicroblockContainer.getPartContainer.readDescription(pkt.getNbtCompound)
     }
 
     /**
@@ -126,6 +156,7 @@ trait AdvancedPipe extends Syncable with Upgradeable with RedstoneAware with Sim
             case AdvancedPipe.IO_FIELD_ID =>
                 toggleMode(EnumFacing.getFront(value.toInt))
                 getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
+                WorldPipes.notifyPipes()
             case AdvancedPipe.FREQUENCY =>
                 frequency = value.toInt
                 WorldPipes.notifyPipes()

@@ -119,8 +119,12 @@ object BlockManager {
         }
 
         registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
+        new MicroContainerPlacementWrapper(new ItemStack(pipeItemInterface)).register("neotech:pipeItemBasicInterface")
         registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
+        new MicroContainerPlacementWrapper(new ItemStack(pipeEnergyInterface)).register("neotech:pipeEnergyBasicInterface")
         registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])
+        new MicroContainerPlacementWrapper(new ItemStack(pipeFluidInterface)).register("neotech:pipeFluidBasicInterface")
+
 
         //RF Storage
         registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])

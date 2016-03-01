@@ -50,7 +50,8 @@ class ModelFactory {
 
         for(modelLocation <- event.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
             if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
-                    modelLocation.getResourcePath.contains("pipeStructure") &&
+                    (modelLocation.getResourcePath.contains("pipeStructure") ||
+                            modelLocation.getResourcePath.contains("BasicInterface")) &&
                     !modelLocation.toString.contains("inventory")) {
                 event.modelRegistry.putObject(modelLocation, new ModelMultipartContainer(event.modelRegistry.getObject(modelLocation)))
             }

@@ -2,13 +2,12 @@ package com.dyonovan.neotech.pipes.tiles.item
 
 import java.util
 
-import com.dyonovan.neotech.pipes.types.{InterfacePipe, SimplePipe}
+import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe, SimplePipe}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
@@ -47,7 +46,8 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
         if(super.canConnect(facing)) {
             getWorld.getTileEntity(pos.offset(facing)) match {
                 case tile : TileEntity if tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite) => true
-                case pipe: SimplePipe => true
+                case advanced: AdvancedPipe => !advanced.isDisabled(facing.getOpposite) && !advanced.hasIntersect(facing.getOpposite)
+                case pipe: SimplePipe => !pipe.hasIntersect(facing.getOpposite)
                 case _ => false
             }
         }
@@ -121,16 +121,6 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
                 }
             }
         }
-    }
-
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
-        super.writeToNBT(tag)
-        super[TileEntity].writeToNBT(tag)
-    }
-
-    override def readFromNBT(tag : NBTTagCompound) : Unit = {
-        super.readFromNBT(tag)
-        super[TileEntity].readFromNBT(tag)
     }
 
     /*******************************************************************************************************************
