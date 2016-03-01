@@ -37,7 +37,7 @@ class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, Fl
       *
       * @return
       */
-    override def getVersion: Int = 2
+    override def getVersion: Int = 3
 
     /**
       * Used to get the default folder location

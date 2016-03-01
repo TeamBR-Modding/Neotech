@@ -115,7 +115,7 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
       *
       * @return
       */
-    override def getVersion: Int = 1
+    override def getVersion: Int = 3
 
     /**
       * Used to get what type token to read from file (Generics don't handle well)
