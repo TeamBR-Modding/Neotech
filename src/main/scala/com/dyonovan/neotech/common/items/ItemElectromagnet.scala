@@ -39,10 +39,13 @@ class ItemElectromagnet extends ItemBattery {
     setUnlocalizedName(Reference.MOD_ID + ":" + "electroMagnet")
 
     override def setDefaultTags(stack: ItemStack): Unit = {
-        if (!stack.hasTagCompound && stack.getTagCompound.hasKey("Energy")) {
-            val nbt = new NBTTagCompound
-            nbt.setInteger("Energy", 0)
-            stack.setTagCompound(nbt)
+        if (!stack.hasTagCompound) {
+            val tag = new NBTTagCompound
+            tag.setInteger("Energy", 0)
+            tag.setInteger("EnergyCapacity", 25000)
+            tag.setInteger("MaxExtract", 200)
+            tag.setInteger("MaxReceive", 200)
+            stack.setTagCompound(tag)
         }
     }
 
@@ -66,6 +69,7 @@ class ItemElectromagnet extends ItemBattery {
     }
 
     override def onUpdate(stack: ItemStack, world: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
+        super.onUpdate(stack, world, entityIn, itemSlot, isSelected)
         entityIn match {
             case player: EntityPlayer =>
                 if(stack.hasTagCompound) {
@@ -130,13 +134,14 @@ class ItemElectromagnet extends ItemBattery {
             val active = stack.getTagCompound.getBoolean("Active")
             list.add(if (active) GuiColor.GREEN + StatCollector.translateToLocal("neotech.text.active")
             else GuiColor.RED + StatCollector.translateToLocal("neotech.text.disabled"))
+
+            list.add(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux"))
+            list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+              .format(getEnergyStored(stack)) +
+              " / " +
+              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                .format(getMaxEnergyStored(stack)) + " RF")
         }
-        list.add(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux"))
-        list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                .format(getEnergyStored(stack)) +
-                " / " +
-                NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                        .format(getMaxEnergyStored(stack)) + " RF")
     }
 
 
