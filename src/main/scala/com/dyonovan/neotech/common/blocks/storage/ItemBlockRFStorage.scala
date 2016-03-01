@@ -1,12 +1,12 @@
 package com.dyonovan.neotech.common.blocks.storage
 
 import com.dyonovan.neotech.managers.BlockManager
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemBlock, ItemStack}
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -30,9 +30,13 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with ItemBattery
         if (getEnergyInfo._1 != 4) {
             if (stack.hasTagCompound) {
                 if (stack.getTagCompound.getInteger("Energy") != 0) {
-                    list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + (stack.getTagCompound.getInteger("Energy") + "/" + getEnergyInfo._2 + " RF"))
-                } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0/" + getEnergyInfo._2 + " RF")
-            } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0/" + getEnergyInfo._2 + " RF")
+                    list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + (
+                            ClientUtils.formatNumber(stack.getTagCompound.getInteger("Energy")) + " / " +
+                                    ClientUtils.formatNumber(getEnergyInfo._2) + " RF"))
+                } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0 / " +
+                        ClientUtils.formatNumber(getEnergyInfo._2) + " RF")
+            } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0 / " +
+                    ClientUtils.formatNumber(getEnergyInfo._2) + " RF")
         }
     }
 
