@@ -72,9 +72,9 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
       */
     def amountEnergy(t: Int): Int = {
         t match {
-            case 1 => 25000
-            case 2 => 1000000
-            case 3 => 10000000
+            case 1 => 32000
+            case 2 => 512000
+            case 3 => 4096000
             case 4 => 100000000
             case _ => 0
         }

@@ -88,9 +88,9 @@ class TileSolarPanel extends MachineGenerator with Waila {
       */
     override def getEnergyProduced: Int = {
         tier match {
-            case 1 => 10
-            case 2 => 80
-            case 3 => 640
+            case 1 => 8
+            case 2 => 32
+            case 3 => 128
             case _ => 0
         }
     }

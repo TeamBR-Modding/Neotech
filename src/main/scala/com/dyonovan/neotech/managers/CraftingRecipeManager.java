@@ -80,17 +80,17 @@ public class CraftingRecipeManager {
 
         //Solar Panels
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT1()),
-                "   ",
                 "CCC",
-                "ABA", 'A', Items.redstone, 'B', BlockManager.basicRFStorage(), 'C', Blocks.glass);
+                "RRR",
+                "ABA", 'A', Items.iron_ingot, 'B', BlockManager.basicRFStorage(), 'C', Blocks.glass, 'R', Items.redstone);
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT2()),
-                "PPP",
-                "PSP",
-                "PPP", 'P', BlockManager.solarPanelT1(), 'S', BlockManager.advancedRFStorage());
+                "CCC",
+                "BSB",
+                "gsg", 'C', Blocks.glass, 'B', Items.blaze_powder, 'S', BlockManager.solarPanelT1(), 's', BlockManager.advancedRFStorage(), 'g', Items.gold_ingot);
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT3()),
-                "PPP",
+                "CCC",
                 "PSP",
-                "PPP", 'P', BlockManager.solarPanelT2(), 'S', BlockManager.eliteRFStorage());
+                "DED", 'D', Items.diamond, 'P', Items.ender_pearl, 'C', Blocks.glass, 'S', BlockManager.solarPanelT2(), 'E', BlockManager.eliteRFStorage());
 
         //Thermal Binder
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.thermalBinder()),
@@ -106,17 +106,17 @@ public class CraftingRecipeManager {
 
         //RF Storage
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage())),
-                "ABA",
+                "ALA",
                 "DCD",
-                "ABA", 'A', Items.iron_ingot, 'B', Blocks.iron_bars, 'C', Blocks.redstone_block, 'D', "ingotTin"));
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage())),
-                "ABA",
+                "ALA", 'A', "ingotIron", 'L', "ingotLead", 'C', Blocks.redstone_block, 'D', ItemManager.basicRFBattery()));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage())),
+                "ALA",
                 "DCD",
-                "ABA", 'A', Items.gold_ingot, 'B', Blocks.iron_bars, 'C', BlockManager.basicRFStorage(), 'D', Items.comparator);
-        GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage())),
-                "ABA",
+                "ALA", 'A', "ingotGold", 'L', "ingotLead", 'C', BlockManager.basicRFStorage(), 'D', ItemManager.advancedRFBattery()));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage())),
+                "ALA",
                 "DCD",
-                "ABA", 'A', Items.diamond, 'B', Blocks.iron_bars, 'C', BlockManager.advancedRFStorage(), 'D', Items.comparator);
+                "ALA", 'A', "ingotSteel", 'L', "ingotLead", 'C', BlockManager.advancedRFStorage(), 'D', ItemManager.eliteRFBattery()));
 
         //Tanks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.ironTank()),
