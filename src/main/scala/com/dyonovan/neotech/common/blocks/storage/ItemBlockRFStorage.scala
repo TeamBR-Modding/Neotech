@@ -7,6 +7,7 @@ import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemBlock, ItemStack}
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -42,14 +43,24 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with ItemBattery
 
     private def getEnergyInfo: (Int, Int, Int) = {
         block match {
-            case BlockManager.basicRFStorage => (1, 25000, 200)
-            case BlockManager.advancedRFStorage => (2, 1000000, 1000)
-            case BlockManager.eliteRFStorage => (3, 10000000, 10000)
+            case BlockManager.basicRFStorage => (1, 32000, 200)
+            case BlockManager.advancedRFStorage => (2, 512000, 1000)
+            case BlockManager.eliteRFStorage => (3, 4096000, 10000)
             case BlockManager.creativeRFStorage => (4, 100000000, 100000)
-            case _ => (1, 25000, 200)
+            case _ => (1, 32000, 200)
         }
     }
 
-    override def setDefaultTags(stack: ItemStack): Unit = {}
+    override def setDefaultTags(stack: ItemStack): Unit = {
+        var energy = 0
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
+            energy = stack.getTagCompound.getInteger("Energy")
+        val amount = getEnergyInfo
+        val tag = new NBTTagCompound
+        tag.setInteger("EnergyCapacity", amount._2)
+        tag.setInteger("MaxExtract", amount._3)
+        tag.setInteger("MaxReceive", amount._3)
+        stack.setTagCompound(tag)
+    }
 }
 

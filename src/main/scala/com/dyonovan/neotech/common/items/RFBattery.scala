@@ -80,7 +80,8 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
-        list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(getMaxEnergyStored(stack)) + " RF")
+        val amount = getTierPower(tier)
+        list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(amount._1) + " RF")
     }
 
     /**

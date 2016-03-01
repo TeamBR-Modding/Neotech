@@ -30,9 +30,9 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
 
     setUnlocalizedName(Reference.MOD_ID + ":electricSword")
 
-    /*******************************************************************************************************************
-      **************************************** BaseElectricTool Functions **********************************************
-      ******************************************************************************************************************/
+    /** *****************************************************************************************************************
+      * *************************************** BaseElectricTool Functions **********************************************
+      * *****************************************************************************************************************/
 
     /**
       * The tool name of this tool, should be all lower case and used when getting the tool info
@@ -51,33 +51,35 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
     /**
       * To prevent the stack from taking damage while hitting entities, we must override this method
       */
-    override def hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase) : Boolean =
+    override def hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase): Boolean =
         extractEnergy(stack, 250, simulate = false) > 0
 
     /**
       * When the block is broken, apply AOE here
       */
     override def onBlockDestroyed(stack: ItemStack, worldIn: World, blockIn: Block,
-                                  pos: BlockPos, playerIn: EntityLivingBase) : Boolean = true
+                                  pos: BlockPos, playerIn: EntityLivingBase): Boolean = true
 
     /**
       * Called on tick, allows us to make sure things are installed
       */
     override def setDefaultTags(stack: ItemStack): Unit = {
-        if(!stack.hasTagCompound) {
-            val tagCompound = new NBTTagCompound
-            val tagList = new NBTTagList
-            tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
-            tagCompound.setInteger("EnergyCapacity", 25000)
-            tagCompound.setInteger("MaxExtract", 200)
-            tagCompound.setInteger("MaxReceive", 200)
-            stack.setTagCompound(tagCompound)
-        }
+        var tier = 1
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
+            tier = stack.getTagCompound.getInteger("Tier")
+        val tagCompound = new NBTTagCompound
+        val tagList = new NBTTagList
+        tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
+        tagCompound.setInteger("EnergyCapacity", 25000)
+        tagCompound.setInteger("MaxExtract", 200)
+        tagCompound.setInteger("MaxReceive", 200)
+        tagCompound.setInteger("Tier", tier)
+        stack.setTagCompound(tagCompound)
     }
 
-    /*******************************************************************************************************************
-      *************************************** ThermalBinderItem Functions **********************************************
-      ******************************************************************************************************************/
+    /** *****************************************************************************************************************
+      * ************************************** ThermalBinderItem Functions **********************************************
+      * *****************************************************************************************************************/
 
     /**
       * What type of tool is this?
@@ -99,10 +101,10 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
       * Used to get the upgrade count on this item, mainly used in the motherboard to determine how long to cook
       */
     override def getUpgradeCount(stack: ItemStack): Int = {
-        if(stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey(ToolHelper.ModifierListTag)) {
             val tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10)
             var count = 0
-            for(x <- 0 until tagList.tagCount())
+            for (x <- 0 until tagList.tagCount())
                 count += tagList.getCompoundTagAt(x).getInteger("ModifierLevel")
             return count
         }
