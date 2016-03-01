@@ -77,29 +77,23 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
     override def isBookEnchantable(stack: ItemStack, book: ItemStack): Boolean = false
 
     override def setDefaultTags(stack: ItemStack): Unit = {
+        var tagList: NBTTagList = new NBTTagList
+        val tag = new NBTTagCompound
         if (stack.hasTagCompound) {
-            val tag = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10) // Load the modifier list
-            if(tag != null && ModifierMiningLevel.getModifierTagFromStack(stack) == null) // Does not already exist
-                tag.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1)) // Put mining level one in
-            stack.getTagCompound.setTag(ToolHelper.ModifierListTag, tag) // Send back the tag
+            tagList = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10) // Load the modifier list
+            if(tagList != null && ModifierMiningLevel.getModifierTagFromStack(stack) == null) // Does not already exist
+                tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1)) // Put mining level one in
+            tag.setTag(ToolHelper.ModifierListTag, tagList) // Send back the tag
         } else {
             // Set empty modifier list
-            val tagCompound = new NBTTagCompound
-            val tagList = new NBTTagList
             tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1))
-            tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
+            tag.setTag(ToolHelper.ModifierListTag, tagList)
 
-            val amount = getTierPower(stack.getT)
-            tagCompound.setInteger("EnergyCapacity", 25000)
-            tagCompound.setInteger("MaxExtract", 200)
-            tagCompound.setInteger("MaxReceive", 200)
-            stack.setTagCompound(tagCompound)
         }
         var tier = 1
         if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
             tier = stack.getTagCompound.getInteger("Tier")
         val amount = getTierPower(tier)
-        val tag = new NBTTagCompound
         tag.setInteger("EnergyCapacity", amount._1)
         tag.setInteger("MaxExtract", amount._2)
         tag.setInteger("MaxReceive", amount._2)
