@@ -30,17 +30,6 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
     setMaxStackSize(maxStackSize)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 
-    val tierPower = getTierPower(tier)
-
-    override var capacity: Int = tierPower._1
-    override var maxExtract: Int = tierPower._2
-    override var maxReceive: Int = tierPower._2
-
-    override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
-        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
-            updateDamage(stack)
-    }
-
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
         entityIn match {
             case player: EntityPlayer if getEnergyStored(stack) > 0 =>
@@ -51,7 +40,7 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
                         val energyContainerItem = player.inventory.getStackInSlot(x).getItem.asInstanceOf[IEnergyContainerItem]
                         val amount =
                             extractEnergy(stack,
-                            energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), maxExtract, false),
+                            energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), stack.getTagCompound.getInteger("maxExtract"), false),
                             simulate = false)
                         if(amount > 0) {
                             extractEnergy(stack,
@@ -61,6 +50,16 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
                     }
                 }
             case _ =>
+        }
+    }
+
+    override def setDefaultTags(stack: ItemStack): Unit = {
+        if(!stack.hasTagCompound) {
+            val tagCompound = new NBTTagCompound
+            tagCompound.setInteger("EnergyCapacity", 25000)
+            tagCompound.setInteger("MaxExtract", 200)
+            tagCompound.setInteger("MaxReceive", 200)
+            stack.setTagCompound(tagCompound)
         }
     }
 
@@ -99,9 +98,5 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = {
-        stack.getTagCompound.setInteger("EnergyCapacity", capacity)
-        stack.getTagCompound.setInteger("MaxReceive", maxReceive)
-        stack.getTagCompound.setInteger("MaxExtract", maxExtract)
-    }
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = { }
 }

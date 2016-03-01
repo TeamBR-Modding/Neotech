@@ -63,7 +63,7 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
     /**
       * Called on tick, allows us to make sure things are installed
       */
-    override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
+    override def setDefaultTags(stack: ItemStack): Unit = {
         if(!stack.hasTagCompound) {
             val tagCompound = new NBTTagCompound
             val tagList = new NBTTagList
@@ -71,23 +71,6 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
             tagCompound.setInteger("EnergyCapacity", 25000)
             tagCompound.setInteger("MaxExtract", 200)
             tagCompound.setInteger("MaxReceive", 200)
-            stack.setTagCompound(tagCompound)
-        }
-        capacity = stack.getTagCompound.getInteger("EnergyCapacity")
-    }
-
-    /**
-      * Called when the stack is created, we use this to set defaults
-      */
-    override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
-        if (stack.hasTagCompound) {
-            if (stack.getTagCompound.hasKey("Energy"))
-                updateDamage(stack)
-        } else {
-            // Set empty modifier list
-            val tagCompound = new NBTTagCompound
-            val tagList = new NBTTagList
-            tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
             stack.setTagCompound(tagCompound)
         }
     }

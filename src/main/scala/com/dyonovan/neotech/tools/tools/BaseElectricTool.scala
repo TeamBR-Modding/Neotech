@@ -5,11 +5,10 @@ import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
 import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
 import com.teambr.bookshelf.common.items.traits.ItemBattery
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{EnumRarity, Item, ItemStack}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -26,10 +25,6 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
 
     setCreativeTab(NeoTech.tabTools)
     setMaxStackSize(1)
-
-    override var capacity: Int = 25000
-    override var maxExtract: Int = 250
-    override var maxReceive: Int = 250
 
     /**
       * The tool name of this tool, should be all lower case and used when getting the tool info
@@ -81,29 +76,8 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
       */
     override def isBookEnchantable(stack: ItemStack, book: ItemStack): Boolean = false
 
-    /**
-      * Called on tick, allows us to make sure things are installed
-      */
-    override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
-        if(!stack.hasTagCompound || ToolHelper.getModifierTagList(stack) == null) {
-            val tagCompound = new NBTTagCompound
-            val tagList = new NBTTagList
-            tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1))
-            tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
-            tagCompound.setInteger("EnergyCapacity", 25000)
-            tagCompound.setInteger("MaxExtract", 200)
-            tagCompound.setInteger("MaxReceive", 200)
-            stack.setTagCompound(tagCompound)
-        }
-    }
-
-    /**
-      * Called when the stack is created, we use this to set defaults
-      */
-    override def onCreated(stack: ItemStack, worldIn: World, player: EntityPlayer): Unit = {
+    override def setDefaultTags(stack: ItemStack): Unit = {
         if (stack.hasTagCompound) {
-            if (stack.getTagCompound.hasKey("Energy"))
-                updateDamage(stack)
             val tag = stack.getTagCompound.getTagList(ToolHelper.ModifierListTag, 10) // Load the modifier list
             if(tag != null && ModifierMiningLevel.getModifierTagFromStack(stack) == null) // Does not already exist
                 tag.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1)) // Put mining level one in
@@ -114,8 +88,23 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
             val tagList = new NBTTagList
             tagList.appendTag(ModifierMiningLevel.writeToNBT(new NBTTagCompound, stack, 1))
             tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
+
+            val amount = getTierPower(stack.getT)
+            tagCompound.setInteger("EnergyCapacity", 25000)
+            tagCompound.setInteger("MaxExtract", 200)
+            tagCompound.setInteger("MaxReceive", 200)
             stack.setTagCompound(tagCompound)
         }
+        var tier = 1
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
+            tier = stack.getTagCompound.getInteger("Tier")
+        val amount = getTierPower(tier)
+        val tag = new NBTTagCompound
+        tag.setInteger("EnergyCapacity", amount._1)
+        tag.setInteger("MaxExtract", amount._2)
+        tag.setInteger("MaxReceive", amount._2)
+        tag.setInteger("Tier", tier)
+        stack.setTagCompound(tag)
     }
 
     /**
@@ -133,46 +122,21 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
     override def hitEntity(stack: ItemStack, target: EntityLivingBase, attacker: EntityLivingBase) : Boolean =
         extractEnergy(stack, RF_COST(stack), simulate = false) > 0
 
+    def getTierPower(t: Int): (Int, Int) = {
+        t match {
+            case 1 => (25000, 250)
+            case 2 => (100000, 1000)
+            case 3 => (1000000, 10000)
+            case _ => (25000, 250)
+        }
+    }
+
     /**
       * Disable MC Effect
       */
     @SideOnly(Side.CLIENT)
     override def hasEffect(stack: ItemStack): Boolean = false
     
-    /*******************************************************************************************************************
-      ******************************************** Battery Functions ***************************************************
-      ******************************************************************************************************************/
-
-    /**
-      * Adds energy to a container item. Returns the quantity of energy that was accepted.
-      * This should always return 0 if the item cannot be externally charged.
-      *
-      * @param stack ItemStack to be charged.
-      * @param maxReceive Maximum amount of energy to be sent into the item.
-      * @param simulate If TRUE, the charge will only be simulated.
-      * @return Amount of energy that was (or would have been, if simulated) received by the item.
-      */
-    override def receiveEnergy(stack: ItemStack, maxReceive: Int, simulate: Boolean): Int = {
-        if (!stack.hasTagCompound) {
-            stack.setTagCompound(new NBTTagCompound)
-        }
-        var energy: Int = stack.getTagCompound.getInteger("Energy")
-        val energyReceived: Int = Math.min(stack.getTagCompound.getInteger("EnergyCapacity") - energy,
-            Math.min(stack.getTagCompound.getInteger("MaxReceive"), maxReceive))
-        if (!simulate) {
-            energy += energyReceived
-            stack.getTagCompound.setInteger("Energy", energy)
-            updateDamage(stack)
-        }
-        energyReceived
-    }
-
-    /**
-      * Get the max amount of energy that can be stored in the container item.
-      */
-    override def getMaxEnergyStored(stack: ItemStack): Int =
-        stack.getTagCompound.getInteger("EnergyCapacity")
-
     /*******************************************************************************************************************
       *********************************************** Misc Functions ***************************************************
       ******************************************************************************************************************/

@@ -79,7 +79,6 @@ object NeoTech {
         proxy.preInit()
         GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ItemGuiManager)
-        EventManager.preInit()
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {

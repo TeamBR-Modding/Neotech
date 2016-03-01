@@ -10,6 +10,7 @@ import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{EnumAction, ItemStack}
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.StatCollector
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -30,18 +31,18 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
 
     final val RF_PER_USE = 2500
 
-    override var capacity: Int = 25000
-    override var maxExtract: Int = 2500
-    override var maxReceive: Int = 2500
+    override def setDefaultTags(stack: ItemStack): Unit = {
+        var tier = 1
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
+            tier = stack.getTagCompound.getInteger("Tier")
 
-    override def onCreated(stack: ItemStack, worldIn: World, playerIn: EntityPlayer): Unit = {
-        if (stack.hasTagCompound) {
-            val amount = getTierPower(stack.getTagCompound.getInteger("Tier"))
-            capacity = amount._1
-            maxReceive = amount._2
-            maxExtract = amount._2
-        }
-        updateDamage(stack)
+        val amount = getTierPower(tier)
+        val tag = new NBTTagCompound
+        tag.setInteger("EnergyCapacity", amount._1)
+        tag.setInteger("MaxExtract", amount._2)
+        tag.setInteger("MaxReceive", amount._2)
+        tag.setInteger("Tier", tier)
+        stack.setTagCompound(tag)
     }
 
     /**
@@ -70,7 +71,7 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
     private def hasAmmo(player: EntityPlayer, remove: Boolean): Boolean = {
         for (i <- 0 until player.inventory.getSizeInventory) {
             if (player.inventory.getStackInSlot(i) != null && !player.inventory.getStackInSlot(i).hasTagCompound &&
-                    player.inventory.getStackInSlot(i).getItem.isInstanceOf[ItemManager.mobNet.type]) {
+              player.inventory.getStackInSlot(i).getItem.isInstanceOf[ItemManager.mobNet.type]) {
                 if (remove) player.inventory.decrStackSize(i, 1)
                 return true
             }
