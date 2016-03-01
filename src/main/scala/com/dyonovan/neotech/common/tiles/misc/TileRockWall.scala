@@ -23,8 +23,10 @@ class TileRockWall extends UpdatingTile {
             pos.getX + 1.5, pos.getY + 1.5, pos.getZ + 1.5))
         if(!players.isEmpty) {
             for(player <- players) {
-                if(player.isSneaking)
+                if(player.isSneaking) {
                     player.motionY = 0
+                    player.fallDistance = 0.0F
+                }
             }
         }
     }
