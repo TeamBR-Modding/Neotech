@@ -1,7 +1,11 @@
 package com.dyonovan.neotech.common.tiles.machines.generators
 
+import java.text.NumberFormat
+import java.util.Locale
+
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.teambr.bookshelf.api.waila.Waila
+import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -167,7 +171,11 @@ class TileSolarPanel extends MachineGenerator with Waila {
     override def returnWailaBody(tipList: java.util.List[String]) : java.util.List[String] = {
         tipList.add("Generating: " + generating() + " (" + (if (generating() == 0) 0 else (worldObj.getSunBrightnessFactor(1.0F) * 100).toInt) + "%)")
         tipList.add("Max: " + getEnergyProduced)
-        tipList.add(energyStorage.getEnergyStored + "/" + energyStorage.getMaxEnergyStored)
+        val stored = NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+          .format(energyStorage.getEnergyStored)
+        val max = NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+          .format(energyStorage.getMaxEnergyStored)
+        tipList.add(stored + "/" + max)
         tipList
     }
 }
