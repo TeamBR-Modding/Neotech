@@ -34,6 +34,10 @@ trait SimplePipe extends TileEntity {
       * @return
       */
     def canConnect(facing: EnumFacing): Boolean = {
+        //Safety Check
+        if(getWorld == null || getPos == null)
+            return false
+
         // Check for multi-part
         if(hasIntersect(facing))
             return false
