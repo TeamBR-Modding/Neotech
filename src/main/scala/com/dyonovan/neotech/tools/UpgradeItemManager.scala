@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.tools
 
-import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.upgradeitems._
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
@@ -76,7 +76,7 @@ object UpgradeItemManager {
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeSpiderBane), ItemManager.upgradeMBEmpty,
             Items.spider_eye)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeLighting), ItemManager.upgradeMBEmpty,
-            BlockManager.blockMiniatureSun)
+            Items.blaze_rod, Items.blaze_rod)
 
         if(Loader.isModLoaded("tconstruct")) {
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,

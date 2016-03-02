@@ -14,10 +14,11 @@ import net.minecraft.block.{Block, BlockLeaves, BlockSapling}
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
-import net.minecraft.item.{Item, ItemAxe, ItemShears, ItemStack}
+import net.minecraft.item._
 import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, StatCollector}
 import net.minecraft.world.World
 
+import scala.collection.JavaConversions._
 import scala.util.control.Breaks._
 
 /**
@@ -33,8 +34,8 @@ import scala.util.control.Breaks._
 class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
 
     def RANGE : Int = {
-        if(processorCount > 0)
-            return 4 + processorCount
+        if(hardDriveCount > 0)
+            return 4 + hardDriveCount
         4
     }
 
@@ -70,7 +71,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         time -= 1
         saplingTimer -= 1
         if (!isBuildingCache && time <= 0 && energyStorage.getEnergyStored > costToOperate) {
-            time = 40
+            time = 20
             if(cache.isEmpty)
                 findNextTree()
             else
@@ -179,12 +180,10 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             sendValueToClient(ENERGY_UPDATE, energyStorage.getEnergyStored)
             return true
         } else {
-            if(worldObj.rand.nextInt(20) == 0) {
-                addHarvestToInventory(
-                    new ItemStack(worldObj.getBlockState(leavePosition).getBlock.asInstanceOf[BlockLeaves]
-                            .getItemDropped(worldObj.getBlockState(leavePosition), worldObj.rand, 0), 1,
-                        worldObj.getBlockState(leavePosition).getBlock.asInstanceOf[BlockLeaves]
-                                .damageDropped(worldObj.getBlockState(leavePosition))), sapling = true)
+            for(item <- worldObj.getBlockState(leavePosition).getBlock.asInstanceOf[BlockLeaves]
+                    .getDrops(worldObj, leavePosition, worldObj.getBlockState(leavePosition), 1)) {
+                addHarvestToInventory(item, Block.getBlockFromItem(item.getItem) != null &&
+                        Block.getBlockFromItem(item.getItem).isInstanceOf[BlockSapling])
             }
             worldObj.setBlockToAir(leavePosition)
             return true
@@ -284,7 +283,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.processorUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.hardDriveUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
@@ -353,7 +352,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                     Block.getBlockFromItem(itemStackIn.getItem).isInstanceOf[BlockSapling]
         }
         slot match {
-            case AXE_SLOT if itemStackIn != null => itemStackIn.getItem.isInstanceOf[ItemAxe]
+            case AXE_SLOT if itemStackIn != null => itemStackIn.getItem.isInstanceOf[ItemTool] && itemStackIn.getItem.asInstanceOf[ItemTool].getToolClasses(itemStackIn).contains("axe")
             case SHEARS_SLOT if itemStackIn != null => itemStackIn.getItem.isInstanceOf[ItemShears]
             case _ => true
         }
@@ -393,12 +392,14 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
 
     /**
       * Return true if you want this to be able to provide energy
+      *
       * @return
       */
     def isProvider : Boolean = false
 
     /**
       * Return true if you want this to be able to receive energy
+      *
       * @return
       */
     def isReceiver : Boolean = true
