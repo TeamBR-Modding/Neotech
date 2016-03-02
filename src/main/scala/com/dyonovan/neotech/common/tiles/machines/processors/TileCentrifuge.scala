@@ -61,16 +61,17 @@ class TileCentrifuge extends MachineProcessor[FluidStack, (FluidStack, FluidStac
                 val recipe = recipeTest.get
                     val fluidOne = recipe._1
                     val fluidTwo = recipe._2
-                    if(fluidOne.getFluid != null && fluidTwo.getFluid != null) { // Check name and amount for each or swap
-                        return (fluidOne.getFluid.getName.equalsIgnoreCase(tanks(OUTPUT_TANK_1).getFluid.getFluid.getName) &&
-                                fluidTwo.getFluid.getName.equalsIgnoreCase(tanks(OUTPUT_TANK_2).getFluid.getFluid.getName) &&
-                                fluidOne.amount + tanks(OUTPUT_TANK_1).getFluidAmount <= tanks(OUTPUT_TANK_1).getCapacity &&
-                                fluidTwo.amount + tanks(OUTPUT_TANK_2).getFluidAmount <= tanks(OUTPUT_TANK_2).getCapacity) ||
-                                (fluidOne.getFluid.getName.equalsIgnoreCase(tanks(OUTPUT_TANK_2).getFluid.getFluid.getName) &&
-                                        fluidTwo.getFluid.getName.equalsIgnoreCase(tanks(OUTPUT_TANK_1).getFluid.getFluid.getName) &&
-                                        fluidOne.amount + tanks(OUTPUT_TANK_2).getFluidAmount <= tanks(OUTPUT_TANK_2).getCapacity &&
-                                        fluidTwo.amount + tanks(OUTPUT_TANK_1).getFluidAmount <= tanks(OUTPUT_TANK_1).getCapacity)
-                    }
+
+                    val flag1 = fluidOne.getFluid.getName.equalsIgnoreCase(tanks(OUTPUT_TANK_1).getFluid.getFluid.getName) &&
+                            fluidTwo.getFluid.getName.equalsIgnoreCase(tanks(OUTPUT_TANK_2).getFluid.getFluid.getName) &&
+                            fluidOne.amount + tanks(OUTPUT_TANK_1).getFluidAmount <= tanks(OUTPUT_TANK_1).getCapacity &&
+                            fluidTwo.amount + tanks(OUTPUT_TANK_2).getFluidAmount <= tanks(OUTPUT_TANK_2).getCapacity & fluidTwo.getFluid != null
+                    val flag2 =  fluidOne.getFluid.getName.equalsIgnoreCase(tanks(OUTPUT_TANK_2).getFluid.getFluid.getName) &&
+                            fluidTwo.getFluid.getName.equalsIgnoreCase(tanks(OUTPUT_TANK_1).getFluid.getFluid.getName) &&
+                            fluidOne.amount + tanks(OUTPUT_TANK_2).getFluidAmount <= tanks(OUTPUT_TANK_2).getCapacity &&
+                            fluidTwo.amount + tanks(OUTPUT_TANK_1).getFluidAmount <= tanks(OUTPUT_TANK_1).getCapacity && fluidOne.getFluid != null
+
+                    return flag1 || flag2
                 }
             }
         }

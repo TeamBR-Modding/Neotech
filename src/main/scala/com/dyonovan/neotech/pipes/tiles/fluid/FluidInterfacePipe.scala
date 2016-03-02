@@ -102,19 +102,22 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
         for(dir <- EnumFacing.values()) {
             if (canConnectExtract(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case tank: IFluidHandler if tank.getTankInfo(dir.getOpposite) != null
-                            && tank.getTankInfo(dir.getOpposite)(0).fluid != null =>
-                        if (findSourceOnMode(tank.getTankInfo(dir.getOpposite)(0).fluid, pos.offset(dir))) {
-                            if (foundSource != null) {
-                                val amount = foundSource._1.fill(foundSource._2,
-                                    tank.drain(dir.getOpposite, getMaxFluidDrain, false), false)
-                                if(amount > 0)
-                                    foundSource._1.fill(foundSource._2, tank.drain(dir.getOpposite, amount, true), true)
-                                foundSource = null
-                                return
+                    case tank: IFluidHandler if tank.getTankInfo(dir.getOpposite) != null =>
+                        for(tankInfoSlot <- 0 until tank.getTankInfo(dir.getOpposite).length) {
+                            if (tank.getTankInfo(dir.getOpposite)(tankInfoSlot).fluid != null) {
+                                if (findSourceOnMode(tank.getTankInfo(dir.getOpposite)(tankInfoSlot).fluid.copy(), pos.offset(dir))) {
+                                    if (foundSource != null) {
+                                        val amount = foundSource._1.fill(foundSource._2,
+                                            tank.drain(dir.getOpposite, getMaxFluidDrain, false), false)
+                                        if (amount > 0) {
+                                            foundSource._1.fill(foundSource._2, tank.drain(dir.getOpposite, amount, true), true)
+                                            foundSource = null
+                                            return
+                                        }
+                                    }
+                                }
                             }
                         }
-
                     case _ =>
                 }
             }
@@ -143,7 +146,7 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
         //Try and insert the fluid
         worldObj.getTileEntity(tilePos) match {
             case tank: IFluidHandler =>
-                if (tank.fill(facing, fluid, false) >= 100)
+                if (tank.fill(facing, fluid, false) >= 10)
                     return true
                 false
             case _ => false
