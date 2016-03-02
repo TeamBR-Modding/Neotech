@@ -113,7 +113,7 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
                                         provider.extractEnergy(dir.getOpposite, getMaxRFDrain, true), true)
                                     if(amount > 0) {
                                         foundSource._1.receiveEnergy(foundSource._2,
-                                            provider.extractEnergy(dir.getOpposite, getMaxRFDrain, false), false)
+                                            provider.extractEnergy(dir.getOpposite, amount, false), false)
                                     }
                                     foundSource = null
                                 }
