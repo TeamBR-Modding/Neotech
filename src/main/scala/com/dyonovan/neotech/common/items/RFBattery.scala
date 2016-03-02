@@ -31,6 +31,7 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
+        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected)
         entityIn match {
             case player: EntityPlayer if getEnergyStored(stack) > 0 =>
                 for (x <- 0 until player.inventory.getSizeInventory) {
