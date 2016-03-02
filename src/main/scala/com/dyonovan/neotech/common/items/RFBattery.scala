@@ -31,18 +31,19 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
+        super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected)
         entityIn match {
             case player: EntityPlayer if getEnergyStored(stack) > 0 =>
-                for(x <- 0 until player.inventory.getSizeInventory) {
-                    if(player.inventory.getStackInSlot(x) != null &&
-                            player.inventory.getStackInSlot(x).getItem.isInstanceOf[IEnergyContainerItem] &&
-                            !player.inventory.getStackInSlot(x).getItem.isInstanceOf[RFBattery]) {
+                for (x <- 0 until player.inventory.getSizeInventory) {
+                    if (player.inventory.getStackInSlot(x) != null &&
+                      player.inventory.getStackInSlot(x).getItem.isInstanceOf[IEnergyContainerItem] &&
+                      !player.inventory.getStackInSlot(x).getItem.isInstanceOf[RFBattery]) {
                         val energyContainerItem = player.inventory.getStackInSlot(x).getItem.asInstanceOf[IEnergyContainerItem]
                         val amount =
                             extractEnergy(stack,
-                            energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), stack.getTagCompound.getInteger("maxExtract"), false),
-                            simulate = false)
-                        if(amount > 0) {
+                                energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), stack.getTagCompound.getInteger("maxExtract"), false),
+                                simulate = false)
+                        if (amount > 0) {
                             extractEnergy(stack,
                                 energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), amount, false),
                                 simulate = false)
@@ -54,13 +55,17 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
     }
 
     override def setDefaultTags(stack: ItemStack): Unit = {
-        if(!stack.hasTagCompound) {
-            val tagCompound = new NBTTagCompound
-            tagCompound.setInteger("EnergyCapacity", 25000)
-            tagCompound.setInteger("MaxExtract", 200)
-            tagCompound.setInteger("MaxReceive", 200)
-            stack.setTagCompound(tagCompound)
-        }
+        var tier = 1
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
+            tier = stack.getTagCompound.getInteger("Tier")
+        val tagCompound = new NBTTagCompound
+        val energy = getTierPower(tier)
+        tagCompound.setInteger("EnergyCapacity", energy._1)
+        tagCompound.setInteger("MaxExtract", energy._2)
+        tagCompound.setInteger("MaxReceive", energy._2)
+        tagCompound.setInteger("Tier", tier)
+        stack.setTagCompound(tagCompound)
+
     }
 
     /**
@@ -80,7 +85,8 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
-        list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(getMaxEnergyStored(stack)) + " RF")
+        val amount = getTierPower(tier)
+        list.add(ClientUtils.formatNumber(getEnergyStored(stack)) + " / " + ClientUtils.formatNumber(amount._1) + " RF")
     }
 
     /**
@@ -98,5 +104,5 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
       * @param stack The stack to put onto
       * @return The tag passed
       */
-    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = { }
+    override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack: ItemStack): Unit = {}
 }

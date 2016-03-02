@@ -46,8 +46,8 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
         markForUpdate()
     }
 
-    override def onServerTick() : Unit = {
-        if(!isPowered && tank != null && tank.getFluid != null && worldObj.getWorldTime % 20 == 0 && tier != 5) {
+    override def onServerTick(): Unit = {
+        if (!isPowered && tank != null && tank.getFluid != null && worldObj.getWorldTime % 20 == 0 && tier != 5) {
             worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
                 case otherTank: IFluidHandler =>
                     if (otherTank.canFill(EnumFacing.UP, tank.getFluid.getFluid)) {
@@ -65,14 +65,14 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
 
 
     override def onClientTick(): Unit = {
-        if(tank.getFluid != null && tier != 5) {
+        if (tank.getFluid != null && tier != 5) {
             offset += dir
             if (offset >= 0.3 || offset <= -0.3)
                 dir = -dir
         }
 
         val light = getBrightness
-        if(lastLightLevel != getBrightness) {
+        if (lastLightLevel != getBrightness) {
             lastLightLevel = light
             worldObj.setLightFor(EnumSkyBlock.BLOCK, pos, light)
         }
@@ -128,7 +128,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
         val fluidAmount = tank.drain(maxDrain, false)
         if (fluidAmount != null && doDrain && tier != 4)
             tank.drain(maxDrain, true)
-        if(doDrain)
+        if (doDrain)
             markForUpdate()
 
         fluidAmount
@@ -143,13 +143,23 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
     }
 
     override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
-        if (canFill(from, if(resource == null) null else resource.getFluid) && tier != 5) {
-            if (tank.fill(resource, false) > 0) {
+        if (canFill(from, if (resource == null) null else resource.getFluid) && tier != 5) {
+            if (tank.fill(resource, false) > 0 && tier != 4) {
                 val actual = tank.fill(resource, doFill)
-                if(doFill)
+                if (doFill)
                     markForUpdate()
                 return actual
-            } else if (tier == 4) return resource.amount
+            } else if (tier == 4) {
+                if (tank.fill(resource, false) > 0) {
+                    if (doFill) {
+                        val newResource = resource.copy()
+                        newResource.amount = tank.getCapacity
+                        tank.fill(newResource, doFill)
+                        markForUpdate()
+                    }
+                    return resource.amount
+                }
+            }
             else return fillAbove(from, resource, doFill)
         } else if (tier == 5) return resource.amount
         0
@@ -157,7 +167,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
 
     def fillAbove(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
         val newPos = pos.offset(EnumFacing.UP)
-        if(worldObj != null) {
+        if (worldObj != null) {
             while (!worldObj.isAirBlock(newPos) && worldObj.getBlockState(newPos).getBlock.isInstanceOf[BlockTank])
                 return worldObj.getTileEntity(newPos).asInstanceOf[TileTank].fill(from, resource, doFill)
         }
@@ -184,7 +194,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
     }
 
     def markForUpdate() = {
-        if(worldObj != null)
+        if (worldObj != null)
             worldObj.markBlockForUpdate(pos)
     }
 
@@ -194,15 +204,15 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
         if (tank.getFluid != null) {
             fluidName = GuiColor.WHITE + tank.getFluid.getLocalizedName
             fluidAmount = GuiColor.ORANGE +
-                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                            .format(tank.getFluidAmount) + " / " +
-                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                            .format(tank.getCapacity) + " mb"
+              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                .format(tank.getFluidAmount) + " / " +
+              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                .format(tank.getCapacity) + " mb"
         } else {
             fluidName = GuiColor.GRAY + "Empty"
             fluidAmount = GuiColor.RED + "0 / " +
-                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                    .format(tank.getCapacity) + " mb"
+              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                .format(tank.getCapacity) + " mb"
         }
         if (tier != 5) {
             tipList.add(GuiColor.WHITE + "Fluid: " + fluidName)
