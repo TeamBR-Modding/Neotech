@@ -253,8 +253,9 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
     }
 
-    override def addCollisionBoxesToListDefault(worldIn: World, pos: BlockPos, state: IBlockState, mask: AxisAlignedBB, list: java.util.List[AxisAlignedBB], collidingEntity: Entity) {
-        this.setBlockBoundsBasedOnState(worldIn, pos)
+    override def addCollisionBoxesToListDefault(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
+                                                list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
+        this.setBlockBoundsBasedOnStateDefault(worldIn, pos)
         super.addCollisionBoxesToListDefault(worldIn, pos, state, mask, list, collidingEntity)
     }
 

@@ -6,6 +6,7 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.pipes.collections.WorldPipes
+import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.dyonovan.neotech.pipes.types.SimplePipe
 import mcmultipart.block.{BlockMultipart, BlockCoverable}
 import net.minecraft.block.properties.IProperty
@@ -35,7 +36,7 @@ import scala.collection.mutable.ArrayBuffer
   * @author Paul Davis pauljoda
   * @since August 14, 2015
   */
-class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: SimplePipe])
+class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: StructurePipe])
             extends BlockCoverable(mat) {
 
     /*******************************************************************************************************************
