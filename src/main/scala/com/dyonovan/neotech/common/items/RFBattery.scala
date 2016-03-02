@@ -3,6 +3,7 @@ package com.dyonovan.neotech.common.items
 import cofh.api.energy.IEnergyContainerItem
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.common.items.traits.ItemBattery
@@ -56,8 +57,11 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
 
     override def setDefaultTags(stack: ItemStack): Unit = {
         var tier = 1
-        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
-            tier = stack.getTagCompound.getInteger("Tier")
+        stack.getItem match {
+            case ItemManager.basicRFBattery => tier = 1
+            case ItemManager.advancedRFBattery => tier = 2
+            case ItemManager.eliteRFBattery => tier = 3
+        }
         val tagCompound = new NBTTagCompound
         val energy = getTierPower(tier)
         tagCompound.setInteger("EnergyCapacity", energy._1)
