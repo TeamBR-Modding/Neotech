@@ -172,6 +172,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
         if(ModifierLighting.hasLighting(stack) && entityIn.isInstanceOf[EntityPlayer]) {
             val pos = new BlockPos(entityIn.posX.toInt, entityIn.posY.toInt, entityIn.posZ.toInt)
             if(worldIn.getLightBrightness(pos) < 0.5 &&
+                    ModifierLighting.isLightingActive(stack) &&
                     worldIn.getBlockState(pos).getBlock.isAir(worldIn, pos) &&
                     worldIn.getBlockState(pos).getBlock != BlockManager.lightSource) {
                 worldIn.setBlockState(pos, BlockManager.lightSource.getDefaultState)
