@@ -64,7 +64,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                     .compareTo(o2.distanceSq(pos.getX, pos.getY, pos.getZ))
     })
 
-    var time = 40
+    var time = 20
     var saplingTimer = 600
     override def doWork() : Unit = {
         time -= 1
