@@ -4,13 +4,12 @@ import java.util
 
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
+import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.Block
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.{ItemStack, ItemSword}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
 import net.minecraft.util.BlockPos
@@ -67,12 +66,13 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
         var tier = 1
         if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
             tier = stack.getTagCompound.getInteger("Tier")
+        val amount = getTierPower(tier)
         val tagCompound = new NBTTagCompound
         val tagList = new NBTTagList
         tagCompound.setTag(ToolHelper.ModifierListTag, tagList)
-        tagCompound.setInteger("EnergyCapacity", 25000)
-        tagCompound.setInteger("MaxExtract", 200)
-        tagCompound.setInteger("MaxReceive", 200)
+        tagCompound.setInteger("EnergyCapacity", amount._1)
+        tagCompound.setInteger("MaxExtract", amount._2)
+        tagCompound.setInteger("MaxReceive", amount._2)
         tagCompound.setInteger("Tier", tier)
         stack.setTagCompound(tagCompound)
     }
