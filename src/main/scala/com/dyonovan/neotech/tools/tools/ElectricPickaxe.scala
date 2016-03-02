@@ -157,7 +157,8 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH) with BaseElectricT
     override def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos,
                            side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         val position = pos.offset(side)
-        if(ModifierLighting.hasLighting(stack) && worldIn.getBlockState(position).getBlock.isAir(worldIn, position)) {
+        if(ModifierLighting.hasLighting(stack) && ModifierLighting.isLightingActive(stack)
+                && worldIn.getBlockState(position).getBlock.isAir(worldIn, position)) {
             worldIn.playSoundAtEntity(playerIn, "random.wood_click", 1.0F, 1.0F)
             worldIn.setBlockState(position, BlockManager.lightSource.getDefaultState)
             worldIn.markBlockForUpdate(position)
