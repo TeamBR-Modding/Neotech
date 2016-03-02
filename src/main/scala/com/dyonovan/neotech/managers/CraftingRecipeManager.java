@@ -108,15 +108,15 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage())),
                 "ALA",
                 "DCD",
-                "ALA", 'A', "ingotIron", 'L', "ingotLead", 'C', Blocks.redstone_block, 'D', ItemManager.basicRFBattery()));
+                "ALA", 'A', "ingotIron", 'L', "ingotLead", 'C', Blocks.redstone_block, 'D', new ItemStack(ItemManager.basicRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage())),
                 "ALA",
                 "DCD",
-                "ALA", 'A', "ingotGold", 'L', "ingotLead", 'C', BlockManager.basicRFStorage(), 'D', ItemManager.advancedRFBattery()));
+                "ALA", 'A', "ingotGold", 'L', "ingotLead", 'C', BlockManager.basicRFStorage(), 'D', new ItemStack(ItemManager.advancedRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage())),
                 "ALA",
                 "DCD",
-                "ALA", 'A', "ingotSteel", 'L', "ingotLead", 'C', BlockManager.advancedRFStorage(), 'D', ItemManager.eliteRFBattery()));
+                "ALA", 'A', "ingotSteel", 'L', "ingotLead", 'C', BlockManager.advancedRFStorage(), 'D', new ItemStack(ItemManager.eliteRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
 
         //Tanks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.ironTank()),
