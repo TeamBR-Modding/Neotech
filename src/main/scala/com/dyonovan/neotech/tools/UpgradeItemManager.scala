@@ -1,8 +1,21 @@
 package com.dyonovan.neotech.tools
 
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.tools.modifier.ModifierAOE
-import com.dyonovan.neotech.tools.upgradeitems._
+import com.dyonovan.neotech.tools.modifier.ModifierAOE.ItemModifierAOE
+import com.dyonovan.neotech.tools.modifier.ModifierBaneOfArthropods.ItemModifierBaneOfArthropods
+import com.dyonovan.neotech.tools.modifier.ModifierBeheading.ItemModifierBeheading
+import com.dyonovan.neotech.tools.modifier.ModifierFallResist.ItemModifierFallResist
+import com.dyonovan.neotech.tools.modifier.ModifierFortune.ItemModifierFortune
+import com.dyonovan.neotech.tools.modifier.ModifierGlide.ItemModifierGlide
+import com.dyonovan.neotech.tools.modifier.ModifierJetpack.ItemModifierJetpack
+import com.dyonovan.neotech.tools.modifier.ModifierLighting.ItemModifierLighting
+import com.dyonovan.neotech.tools.modifier.ModifierLooting.ItemModifierLooting
+import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel.ItemModifierMiningLevel
+import com.dyonovan.neotech.tools.modifier.ModifierMiningSpeed.ItemModifierMiningSpeed
+import com.dyonovan.neotech.tools.modifier.ModifierSharpness.ItemModifierSharpness
+import com.dyonovan.neotech.tools.modifier.ModifierShovel.ItemModifierShovel
+import com.dyonovan.neotech.tools.modifier.ModifierSilkTouch.ItemModifierSilkTouch
+import com.dyonovan.neotech.tools.modifier.ModifierSmite.ItemModifierSmite
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.Loader
@@ -20,21 +33,25 @@ import net.minecraftforge.oredict.OreDictionary
   * @since 2/23/2016
   */
 object UpgradeItemManager {
-    val upgradeSilkTouch   = new ItemModifierSilkTouch
-    val upgradeFortune     = new ItemModifierFortune
+    val upgradeSilkTouch    = new ItemModifierSilkTouch
+    val upgradeFortune      = new ItemModifierFortune
     val upgradeMiningLevel2 = new ItemModifierMiningLevel(2)
     val upgradeMiningLevel3 = new ItemModifierMiningLevel(3)
     val upgradeMiningLevel4 = new ItemModifierMiningLevel(4)
-    val upgradeMiningSpeed = new ItemModifierMiningSpeed
-    val upgradeAOE         = new ModifierAOE.ItemModifierAOE
-    val upgradeShovel      = new ItemModifierShovel
-    val upgradeLighting    = new ItemModifierLighting
+    val upgradeMiningSpeed  = new ItemModifierMiningSpeed
+    val upgradeAOE          = new ItemModifierAOE
+    val upgradeShovel       = new ItemModifierShovel
+    val upgradeLighting     = new ItemModifierLighting
 
-    val upgradeSharpness   = new ItemModifierSharpness
-    val upgradeSmite       = new ItemModifierSmite
-    val upgradeBeheading   = new ItemModifierBeheading
-    val upgradeSpiderBane  = new ItemModifierBaneOfArthropods
-    val upgradeLooting     = new ItemModifierLooting
+    val upgradeSharpness    = new ItemModifierSharpness
+    val upgradeSmite        = new ItemModifierSmite
+    val upgradeBeheading    = new ItemModifierBeheading
+    val upgradeSpiderBane   = new ItemModifierBaneOfArthropods
+    val upgradeLooting      = new ItemModifierLooting
+
+    val upgradeJetpack      = new ItemModifierJetpack
+    val upgradeFallResist   = new ItemModifierFallResist
+    val upgradeGlide        = new ItemModifierGlide
 
     def preInit(): Unit = {
         ItemManager.registerItem(upgradeSilkTouch, upgradeSilkTouch.getUpgradeName)
@@ -50,6 +67,9 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeShovel, upgradeShovel.getUpgradeName)
         ItemManager.registerItem(upgradeLighting, upgradeLighting.getUpgradeName)
         ItemManager.registerItem(upgradeLooting, upgradeLooting.getUpgradeName)
+        ItemManager.registerItem(upgradeJetpack, upgradeJetpack.getUpgradeName)
+        ItemManager.registerItem(upgradeFallResist, upgradeFallResist.getUpgradeName)
+        ItemManager.registerItem(upgradeGlide, upgradeGlide.getUpgradeName)
 
         if(Loader.isModLoaded("tconstruct")) {
             ItemManager.registerItem(upgradeMiningLevel4, upgradeMiningLevel4.getUpgradeName)
@@ -83,7 +103,12 @@ object UpgradeItemManager {
             Items.blaze_rod, Items.blaze_rod)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeLooting), ItemManager.upgradeMBEmpty,
             Items.spider_eye, Items.blaze_powder, Items.rotten_flesh, Items.bone, Items.gunpowder)
-
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeJetpack), ItemManager.upgradeMBEmpty,
+            Items.feather, Items.gunpowder)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeFallResist), ItemManager.upgradeMBEmpty,
+            Blocks.slime_block)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeGlide), ItemManager.upgradeMBEmpty,
+            Items.leather, Items.feather)
         if(Loader.isModLoaded("tconstruct")) {
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,
                 Blocks.obsidian)

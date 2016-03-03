@@ -15,34 +15,29 @@ import scala.collection.mutable.ArrayBuffer
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
   * @author Paul Davis "pauljoda"
-  * @since 2/24/2016
+  * @since 3/3/2016
   */
-object ModifierBeheading extends Modifier("beheading") {
-    lazy val BEHEADING = "Beheading"
+object ModifierJetpack extends Modifier("jetpack") {
+
+    lazy val JETPACK = "Jetpack"
 
     /**
-      * Get the beheading level
+      * Checks for silk touch
       */
-    def getBeheadingLevel(stack : ItemStack) : Int = {
+    def hasJetpack(stack: ItemStack): Boolean = {
         val tag = getModifierTagFromStack(stack)
-        if(tag != null && tag.hasKey(BEHEADING))
-            return tag.getInteger(BEHEADING)
-        0
+        if (tag != null && tag.hasKey(JETPACK))
+            return tag.getBoolean(JETPACK)
+        false
     }
 
     /**
-      * Used to get the level for this modifier
+      * Write info to tag
       *
-      * @param tag The tag that the level is stored on
-      * @return The level
+      * @return
       */
-    override def getLevel(tag : NBTTagCompound) = tag.getInteger(BEHEADING)
-
-    /**
-      * Write info to the tag
-      */
-    def writeToNBT(tag: NBTTagCompound, stack : ItemStack, level : Int): NBTTagCompound = {
-        tag.setFloat(BEHEADING, getBeheadingLevel(stack) + level)
+    def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasSilkTouch: Boolean): NBTTagCompound = {
+        tag.setBoolean(JETPACK, hasSilkTouch)
         super.writeToNBT(tag, stack)
         tag
     }
@@ -53,11 +48,10 @@ object ModifierBeheading extends Modifier("beheading") {
       * @param stack The stack in
       * @return A list of tips
       */
-    override def getToolTipForWriting(stack: ItemStack, tag: NBTTagCompound): ArrayBuffer[String] = {
-        ArrayBuffer("Beheading: " + ClientUtils.translate("enchantment.level." + tag.getInteger(BEHEADING)))
-    }
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] =
+         ArrayBuffer[String](ClientUtils.translate("neotech.text.jetpack"))
 
-    class ItemModifierBeheading extends BaseUpgradeItem("beheading", 3) {
+    class ItemModifierJetpack extends BaseUpgradeItem("jetpack", 1) {
 
         /**
           * Can this upgrade item allow more to be applied to the item
@@ -67,7 +61,7 @@ object ModifierBeheading extends Modifier("beheading") {
           * @return True if there is space for the entire count
           */
         override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean =
-            ModifierBeheading.getBeheadingLevel(stack) + count <= maxStackSize
+            !ModifierJetpack.hasJetpack(stack)
 
         /**
           * Use this to put information onto the stack, called when put onto the stack
@@ -75,12 +69,12 @@ object ModifierBeheading extends Modifier("beheading") {
           * @param stack The stack to put onto
           * @return The tag passed
           */
-        override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = {
-            var localTag = ModifierBeheading.getModifierTagFromStack(stack)
+        override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound,  writingStack : ItemStack): Unit = {
+            var localTag = ModifierJetpack.getModifierTagFromStack(stack)
             if(localTag == null)
                 localTag = new NBTTagCompound
-            ModifierBeheading.writeToNBT(localTag, stack, writingStack.stackSize)
-            ModifierBeheading.overrideModifierTag(stack, localTag)
+            ModifierJetpack.writeToNBT(localTag, stack, if(writingStack.stackSize > 0) true else false)
+            ModifierJetpack.overrideModifierTag(stack, localTag)
         }
     }
 }

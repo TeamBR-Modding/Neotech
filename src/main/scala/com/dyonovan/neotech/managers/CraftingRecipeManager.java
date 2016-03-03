@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.managers;
 
 import com.dyonovan.neotech.tools.UpgradeItemManager;
+import com.dyonovan.neotech.tools.modifier.ModifierAOE;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -311,11 +312,28 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricPickaxe()),
                 "CCC",
                 " S ",
-                " B ", 'C', "ingotBronze", 'S', "stickWood", 'B', "rfBattery"));
+                " B ", 'C', "ingotSteel", 'S', "stickWood", 'B', "rfBattery"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricSword()),
                 " B ",
                 " B ",
-                " b ", 'B', "ingotBronze", 'b', "rfBattery"));
+                " b ", 'B', "ingotSteel", 'b', "rfBattery"));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricArmorHelmet()),
+                "SSS",
+                "S S",
+                " B ", 'S', "ingotSteel", 'B', "rfBattery"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricArmorChestplate()),
+                "S S",
+                "SSS",
+                "SBS", 'S', "ingotSteel", 'B', "rfBattery"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricArmorLeggings()),
+                "SSS",
+                "S S",
+                "SBS", 'S', "ingotSteel", 'B', "rfBattery"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electricArmorBoots()),
+                "   ",
+                "S S",
+                "SBS", 'S', "ingotSteel", 'B', "rfBattery"));
 
         // Phantom Glass
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.phantomGlass(), 8),

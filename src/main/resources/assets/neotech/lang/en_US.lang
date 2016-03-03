@@ -155,6 +155,8 @@ item.neotech:electricArmorLeggings.name=Electric Leggings
 item.neotech:electricArmorBoots.name=Electric Boots
 
 item.neotech:jetpack.name=Jetpack Upgrade
+item.neotech:fallResist.name=Fall Resist Upgrade
+item.neotech:glide.name=Glide Upgrade
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery
@@ -377,6 +379,10 @@ neotech.text.renderNameInfo=Display Mob Name (Nametag Mob / Anvil Net)
 neotech.text.placeInBinder=Upgrade In Thermal Binder
 
 neotech.text.lighting=Places Light Sources Automatically
+
+neotech.text.jetpack=Jetpack Installed
+neotech.text.fallResist=Removes Fall Damage
+neotech.text.glide=Sneak to glide in the air
 
 #######################
 # Commands
