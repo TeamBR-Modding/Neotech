@@ -41,6 +41,8 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
             rightTabs.getTabs.clear()
             rightTabs.getTabs += motherBoardTab
             addRightTabs(rightTabs, tileEntity, inventory, updateMotherBoard = false)
+            leftTabs.getTabs.clear()
+            addLeftTabs(leftTabs)
         }
 
         super[GuiBase].drawGuiContainerBackgroundLayer(f, i, j)

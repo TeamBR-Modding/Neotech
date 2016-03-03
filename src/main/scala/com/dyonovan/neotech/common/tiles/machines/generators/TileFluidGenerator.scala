@@ -5,6 +5,7 @@ import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidG
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.dyonovan.neotech.managers.RecipeManager
 import com.dyonovan.neotech.registries.FluidFuelRecipeHandler
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -98,8 +99,10 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
     }
 
     override def getDescription : String = {
-        GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:fluidGenerator.name") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.fluidGenerator.desc") + "\n\n" +
+        "" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.generating") + ":\n" +
+                GuiColor.WHITE + "  " + getEnergyProduced.toString + " \n\n" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.furnaceGenerator.processorUpgrade.desc") + "\n\n" +

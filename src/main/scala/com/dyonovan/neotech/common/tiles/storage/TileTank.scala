@@ -190,7 +190,10 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
             //tier = tag.getInteger("Tier")
             initTank()
         }
-        tank.readFromNBT(tag)
+        if(tank != null)
+            tank.readFromNBT(tag)
+        else
+            initTank()
     }
 
     def markForUpdate() = {
@@ -204,15 +207,15 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
         if (tank.getFluid != null) {
             fluidName = GuiColor.WHITE + tank.getFluid.getLocalizedName
             fluidAmount = GuiColor.ORANGE +
-              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                .format(tank.getFluidAmount) + " / " +
-              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                .format(tank.getCapacity) + " mb"
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(tank.getFluidAmount) + " / " +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(tank.getCapacity) + " mb"
         } else {
             fluidName = GuiColor.GRAY + "Empty"
             fluidAmount = GuiColor.RED + "0 / " +
-              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                .format(tank.getCapacity) + " mb"
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(tank.getCapacity) + " mb"
         }
         if (tier != 5) {
             tipList.add(GuiColor.WHITE + "Fluid: " + fluidName)

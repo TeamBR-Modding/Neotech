@@ -7,6 +7,7 @@ import cofh.api.energy.IEnergyReceiver
 import com.dyonovan.neotech.client.gui.machines.operators.GuiTreeFarm
 import com.dyonovan.neotech.common.container.machines.operators.ContainerTreeFarm
 import com.dyonovan.neotech.common.tiles.AbstractMachine
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.collections.Location
 import net.minecraft.block.state.IBlockState
@@ -277,7 +278,14 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     }
 
     override def getDescription : String = {
-        GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:treeFarm.name") + ":\n" +
+        "" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
+                GuiColor.WHITE + "  " + costToOperate + " RF/chop\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.rangeTree") + ":\n" +
+                GuiColor.WHITE + "  " + (RANGE + 1) + "x"  + (RANGE + 1) + " blocks\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.chopCount") + ":\n" +
+                GuiColor.WHITE + "  " + getChopCount + "  \n\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.desc") + "\n\n" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +

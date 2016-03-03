@@ -1,14 +1,14 @@
 package com.dyonovan.neotech.common.tiles.machines.generators
 
-import cofh.api.energy.EnergyStorage
 import com.dyonovan.neotech.client.gui.machines.generators.GuiFurnaceGenerator
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFurnaceGenerator
 import com.dyonovan.neotech.common.tiles.MachineGenerator
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.dyonovan.neotech.utils.ClientUtils
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntityFurnace
-import net.minecraft.util.{StatCollector, EnumFacing, EnumParticleTypes}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes, StatCollector}
 import net.minecraft.world.World
 import net.minecraftforge.fluids.FluidContainerRegistry
 
@@ -77,7 +77,10 @@ class TileFurnaceGenerator extends MachineGenerator {
     }
 
     override def getDescription : String = {
-        GuiColor.YELLOW + "" + GuiTextFormat.BOLD +  StatCollector.translateToLocal("tile.neotech:furnaceGenerator.name") + ":\n" +
+        "" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.generating") + ":\n" +
+                GuiColor.WHITE + "  " + getEnergyProduced + "\n\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.furnaceGenerator.desc") + "\n\n" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +

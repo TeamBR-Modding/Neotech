@@ -5,6 +5,7 @@ import com.dyonovan.neotech.common.container.machines.processors.ContainerAlloye
 import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.dyonovan.neotech.managers.{MetalManager, RecipeManager}
 import com.dyonovan.neotech.registries.AlloyerRecipeHandler
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import net.minecraft.entity.player.EntityPlayer
@@ -235,7 +236,12 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
       ******************************************************************************************************************/
 
     override def getDescription : String = {
-        GuiColor.YELLOW + "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("tile.neotech:alloyer.name") + ":\n" +
+        "" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
+                GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
+                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" +
                 GuiColor.WHITE + StatCollector.translateToLocal("neotech.alloyer.desc") + "\n\n" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +

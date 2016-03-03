@@ -1,7 +1,7 @@
 {
     "parent": "neotech:block/machine",
     "textures" : {
-        "front" : "neotech:blocks/alloyer"
+        "front" : "neotech:blocks/centrifuge"
     },
     "display": {
         "thirdperson": {

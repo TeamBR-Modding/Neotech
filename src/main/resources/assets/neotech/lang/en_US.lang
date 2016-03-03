@@ -376,6 +376,14 @@ neotech.text.lookAtPlayerInfo=Have the mob look at the player
 neotech.text.renderName=Name
 neotech.text.renderNameInfo=Display Mob Name (Nametag Mob / Anvil Net)
 
+neotech.text.stats=Current Stats
+neotech.text.energyUsage=Energy Usage
+neotech.text.processTime=Process Time
+neotech.text.generating=Energy Generating
+
+neotech.text.rangeTree=Range
+neotech.text.chopCount=Chop Count
+
 neotech.text.placeInBinder=Upgrade In Thermal Binder
 
 neotech.text.lighting=Places Light Sources Automatically
