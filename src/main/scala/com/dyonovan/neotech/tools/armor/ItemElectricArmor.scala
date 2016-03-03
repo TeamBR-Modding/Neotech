@@ -28,8 +28,11 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
     setNoRepair()
 
     override def setDefaultTags(stack: ItemStack): Unit = {
+        var energy = 0
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
+            energy = stack.getTagCompound.getInteger("Energy")
         val tag = new NBTTagCompound
-        tag.setInteger("Energy", 0)
+        tag.setInteger("Energy", energy)
         tag.setInteger("EnergyCapacity", 2500)
         tag.setInteger("MaxExtract", 200)
         tag.setInteger("MaxReceive", 200)
