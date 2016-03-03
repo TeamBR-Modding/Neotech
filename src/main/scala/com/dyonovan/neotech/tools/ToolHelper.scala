@@ -122,7 +122,8 @@ object ToolHelper {
                 val block = world.getBlockState(pos).getBlock
                 if (player.capabilities.isCreativeMode) actualList.add(pos) // Creative, add it anyway
                 else if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player) &&
-                        isToolEffective(world, pos, stack) && block.getBlockHardness(world, pos) >= 0 && FluidRegistry.lookupFluidForBlock(block) == null) { // Check if not air, isn't too hard, fluid, or non effective
+                        isToolEffective(world, pos, stack) && block.getBlockHardness(world, pos) >= 0 &&
+                        FluidRegistry.lookupFluidForBlock(block) == null) { // Check if not air, isn't too hard, fluid, or non effective
                     actualList.add(pos)
                 }
             }
