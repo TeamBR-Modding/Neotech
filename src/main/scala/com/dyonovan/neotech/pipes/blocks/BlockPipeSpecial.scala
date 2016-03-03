@@ -186,12 +186,13 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                     world.setBlockToAir(pos)
                     world.markBlockForUpdate(pos)
                     return true
-                } else {
+                } else if(!playerIn.isSneaking) {
+                    playerIn.openGui(NeoTech, 0, world, pos.getX, pos.getY, pos.getZ)
                     playerIn.swingItem()
                     return true
                 }
 
-            case _ => playerIn.openGui(NeoTech, 0, world, pos.getX, pos.getY, pos.getZ)
+            case _ =>
         }
         false
     }
