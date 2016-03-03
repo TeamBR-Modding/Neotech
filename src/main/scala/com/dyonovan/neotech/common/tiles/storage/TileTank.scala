@@ -187,7 +187,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super.readFromNBT(tag)
         if (tag.hasKey("Tier") && tag.getInteger("Tier") != tier) {
-            tier = tag.getInteger("Tier")
+            //tier = tag.getInteger("Tier")
             initTank()
         }
         tank.readFromNBT(tag)
