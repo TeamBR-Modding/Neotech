@@ -31,4 +31,25 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         tag.setInteger("MaxReceive", 200)
         stack.setTagCompound(tag)
     }
+
+    /**
+      * Prevent the armor from being broken
+      *
+      * @param stack The stack
+      * @param damage Damage to apply
+      */
+    override def setDamage(stack: ItemStack, damage: Int) : Unit = {
+        super.setDamage(stack, damage)
+
+        // Drain the energy
+        if (stack.getTagCompound == null || !stack.getTagCompound.hasKey("Energy")) {
+            var energy = stack.getTagCompound.getInteger("Energy")
+            val energyExtracted = Math.min(energy, Math.min(stack.getTagCompound.getInteger("MaxExtract"), 1000))
+            energy -= energyExtracted
+            stack.getTagCompound.setInteger("Energy", energy)
+        }
+
+        if(stack.getItemDamage > stack.getMaxDamage)
+            stack.setItemDamage(stack.getMaxDamage - 1)
+    }
 }
