@@ -60,6 +60,7 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with ItemBattery
         tag.setInteger("EnergyCapacity", amount._2)
         tag.setInteger("MaxExtract", amount._3)
         tag.setInteger("MaxReceive", amount._3)
+        tag.setInteger("Energy", energy)
         stack.setTagCompound(tag)
     }
 }
