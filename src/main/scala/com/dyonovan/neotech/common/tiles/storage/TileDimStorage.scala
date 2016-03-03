@@ -173,6 +173,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgrade
         else {
             tipList.add(GuiColor.ORANGE + getStackInSlot(0).getDisplayName + ": " + GuiColor.WHITE + qty)
             if (isLocked) tipList.add(GuiColor.RED + "Locked")
+            tipList.add("Max Items: " +  getStackInSlot(0).getMaxStackSize * maxStacks)
         }
         tipList.add("Max Stacks: " + maxStacks)
         tipList
