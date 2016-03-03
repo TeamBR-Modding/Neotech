@@ -4,6 +4,7 @@ import java.util
 
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
@@ -173,7 +174,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgrade
         else {
             tipList.add(GuiColor.ORANGE + getStackInSlot(0).getDisplayName + ": " + GuiColor.WHITE + qty)
             if (isLocked) tipList.add(GuiColor.RED + "Locked")
-            tipList.add("Max Items: " +  getStackInSlot(0).getMaxStackSize * maxStacks)
+            tipList.add("Max Items: " +  ClientUtils.formatNumber(getStackInSlot(0).getMaxStackSize * maxStacks))
         }
         tipList.add("Max Stacks: " + maxStacks)
         tipList
