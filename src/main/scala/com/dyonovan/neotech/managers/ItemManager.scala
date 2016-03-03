@@ -3,6 +3,7 @@ package com.dyonovan.neotech.managers
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.common.items._
 import com.dyonovan.neotech.tools.UpgradeItemManager
+import com.dyonovan.neotech.tools.armor.ItemElectricArmor
 import com.dyonovan.neotech.tools.tools.{ElectricPickaxe, ElectricSword}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -44,6 +45,12 @@ object ItemManager {
     val electricPickaxe = new ElectricPickaxe
     val electricSword = new ElectricSword
 
+    //Electric Armor
+    val electricArmorHelmet = new ItemElectricArmor("electricArmorHelmet", 1, 0)
+    val electricArmorChestplate = new ItemElectricArmor("electricArmorChestplate", 1, 1)
+    val electricArmorLeggings = new ItemElectricArmor("electricArmorLeggings", 2, 2)
+    val electricArmorBoots = new ItemElectricArmor("electricArmorBoots", 1, 3)
+
     def preInit(): Unit = {
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
         registerItem(upgradeMBFull, "upgradeMBFull")
@@ -65,6 +72,11 @@ object ItemManager {
 
         registerItem(electricPickaxe, "electricPickaxe")
         registerItem(electricSword, "electricSword")
+
+        registerItem(electricArmorHelmet, "electricArmorHelmet")
+        registerItem(electricArmorChestplate, "electricArmorChestplate")
+        registerItem(electricArmorLeggings, "electricArmorLeggings")
+        registerItem(electricArmorBoots, "electricArmorBoots")
 
         UpgradeItemManager.preInit()
     }

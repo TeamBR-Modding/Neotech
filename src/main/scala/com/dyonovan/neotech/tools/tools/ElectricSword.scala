@@ -25,7 +25,7 @@ import net.minecraft.world.World
   * @author Paul Davis <pauljoda>
   * @since 2/24/2016
   */
-class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool {
+class ElectricSword extends ItemSword(ToolHelper.NEOTECH_TOOLS) with BaseElectricTool {
 
     setUnlocalizedName(Reference.MOD_ID + ":electricSword")
 

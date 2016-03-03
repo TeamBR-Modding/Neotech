@@ -2,6 +2,7 @@ package com.dyonovan.neotech.tools
 
 import java.util
 
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.modifier.ModifierAOE
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
@@ -37,7 +38,8 @@ object ToolHelper {
         val Pickaxe, Axe, Shovel, Hoe, Sword, Empty_MB, Filled_MB = Value
     }
 
-    lazy val NEOTECH         = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 1.0F, 0)
+    lazy val NEOTECH_TOOLS   = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 1.0F, 0)
+    lazy val NEOTECH_ARMOR   = EnumHelper.addArmorMaterial("NEOTECH_ARMOR", Reference.MOD_ID + ":electricArmor", 1, Array(2, 6, 5, 2), 0)
     lazy val ModifierListTag = "ModifierList"
 
     /**

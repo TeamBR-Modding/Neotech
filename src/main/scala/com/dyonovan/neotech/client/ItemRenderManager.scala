@@ -88,6 +88,11 @@ object ItemRenderManager {
         registerItem(UpgradeItemManager.upgradeSpiderBane)
         registerItem(UpgradeItemManager.upgradeLooting)
 
+        registerItem(ItemManager.electricArmorHelmet)
+        registerItem(ItemManager.electricArmorChestplate)
+        registerItem(ItemManager.electricArmorLeggings)
+        registerItem(ItemManager.electricArmorBoots)
+
         registerPipesAndColored()
     }
 

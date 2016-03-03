@@ -149,6 +149,11 @@ item.neotech:beheading.name=Beheading Upgrade
 item.neotech:spiderBane.name=Bane of Arthropods Upgrade
 item.neotech:looting.name=Looting Upgrade
 
+item.neotech:electricArmorHelmet.name=Electric Helmet
+item.neotech:electricArmorChestplate.name=Electric Chestplate
+item.neotech:electricArmorLeggings.name=Electric Leggings
+item.neotech:electricArmorBoots.name=Electric Boots
+
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery
 item.neotech:advancedRFBattery.name=Advanced RF Battery
