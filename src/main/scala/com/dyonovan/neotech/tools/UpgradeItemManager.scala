@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.tools
 
 import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.tools.modifier.ModifierAOE
 import com.dyonovan.neotech.tools.upgradeitems._
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
@@ -25,7 +26,7 @@ object UpgradeItemManager {
     val upgradeMiningLevel3 = new ItemModifierMiningLevel(3)
     val upgradeMiningLevel4 = new ItemModifierMiningLevel(4)
     val upgradeMiningSpeed = new ItemModifierMiningSpeed
-    val upgradeAOE         = new ItemModifierAOE
+    val upgradeAOE         = new ModifierAOE.ItemModifierAOE
     val upgradeShovel      = new ItemModifierShovel
     val upgradeLighting    = new ItemModifierLighting
 

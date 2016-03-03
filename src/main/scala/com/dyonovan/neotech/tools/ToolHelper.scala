@@ -35,7 +35,7 @@ object ToolHelper {
     // The enumeration for tool types
     object ToolType extends Enumeration {
         type ToolType = Value
-        val Pickaxe, Axe, Shovel, Hoe, Sword, Empty_MB, Filled_MB = Value
+        val Pickaxe, Axe, Shovel, Hoe, Sword, ARMOR, Empty_MB, Filled_MB = Value
     }
 
     lazy val NEOTECH_TOOLS   = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 1.0F, 0)
@@ -158,7 +158,7 @@ object ToolHelper {
             buffer += GuiColor.ORANGE + ClientUtils.translate("neotech.text.redstoneFlux")
             buffer += ClientUtils.formatNumber(
                 stack.getItem.asInstanceOf[BaseElectricTool].getEnergyStored(stack)) + " / " +
-                    ClientUtils.formatNumber(stack.getItem.asInstanceOf[BaseElectricTool].getMaxEnergyStored(stack))
+                    ClientUtils.formatNumber(stack.getItem.asInstanceOf[BaseElectricTool].getMaxEnergyStored(stack)) + " RF"
             buffer += ""
             buffer += GuiColor.YELLOW + ClientUtils.translate("neotech.text.upgrades") + ": " + GuiTextFormat.RESET +
                     ToolHelper.getCurrentUpgradeCount(stack) + " / " +

@@ -1,9 +1,13 @@
 package com.dyonovan.neotech.tools.armor
 
-import com.dyonovan.neotech.NeoTech
+import java.util
+
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.ToolHelper
-import com.teambr.bookshelf.common.items.traits.ItemBattery
+import com.dyonovan.neotech.tools.ToolHelper.ToolType
+import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
+import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemArmor, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
@@ -21,11 +25,14 @@ import org.lwjgl.input.Keyboard
   * @since 3/3/2016
   */
 class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
-        ItemArmor(ToolHelper.NEOTECH_ARMOR, index, armorType) with ItemBattery {
+        ItemArmor(ToolHelper.NEOTECH_ARMOR, index, armorType) with BaseElectricTool {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
-    setCreativeTab(NeoTech.tabTools)
     setNoRepair()
+
+    /*******************************************************************************************************************
+      * Item Battery                                                                                                   *
+      ******************************************************************************************************************/
 
     override def setDefaultTags(stack: ItemStack): Unit = {
         var energy = 0
@@ -37,14 +44,6 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         tag.setInteger("MaxExtract", 200)
         tag.setInteger("MaxReceive", 200)
         stack.setTagCompound(tag)
-    }
-
-    override def onArmorTick(world: World, player: EntityPlayer, itemStack: ItemStack): Unit = {
-        if(world.isRemote) {
-            if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-                player.motionY += 0.2
-            }
-        }
     }
 
     /**
@@ -68,6 +67,67 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             toSet = 1
         else if(toSet == 16)
             toSet = 15
-        stack.setItemDamage(toSet)
+        super.setDamage(stack, toSet)
     }
+
+    /*******************************************************************************************************************
+      * Armor                                                                                                          *
+      ******************************************************************************************************************/
+
+    override def onArmorTick(world: World, player: EntityPlayer, itemStack: ItemStack): Unit = {
+        if(world.isRemote) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+                player.motionY += 0.2
+        }
+
+        if(player.motionY < -0.1 && player.isSneaking) {
+            var horizontalSpeed : Double = 0
+            var verticalSpeed : Double = 0
+
+            horizontalSpeed = 0.2
+            verticalSpeed = 0.4
+
+            player.motionY *= verticalSpeed
+            player.motionX += Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed
+            player.motionZ += Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed
+            player.fallDistance = 0F
+        }
+    }
+
+    /*******************************************************************************************************************
+      * Thermal Binder Item                                                                                            *
+      ******************************************************************************************************************/
+
+    /**
+      * The list of things that are accepted by this item
+      */
+    override def acceptableUpgrades: util.ArrayList[String] = {
+        val list = new util.ArrayList[String]()
+        index match {
+            case _=>
+                list.add(ItemManager.basicRFBattery.getUpgradeName)
+        }
+        list
+    }
+
+    /**
+      * What type of tool is this?
+      *
+      * @return
+      */
+    override def getToolType: ToolType = ToolType.ARMOR
+
+    /**
+      * The tool name of this tool, should be all lower case and used when getting the tool info
+      *
+      * @return The tool name
+      */
+    override def getToolName: String = "armor"
+
+    /**
+      * Used by the model to get the base texture, this should be with no upgrades installed
+      *
+      * @return The texture location, eg "neotech:items/tools/sword/sword
+      */
+    override def getBaseTexture: String = ""
 }
