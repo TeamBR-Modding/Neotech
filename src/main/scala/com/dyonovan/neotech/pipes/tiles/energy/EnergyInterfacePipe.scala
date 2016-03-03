@@ -52,19 +52,6 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
             super.canConnect(facing)
 
     /**
-      * This is the speed to extract from. You should be calling this when building your resources to send.
-      *
-      * This is included as a reminder to the child to have variable speeds
-      *
-      * @return
-      */
-    override def getSpeed: Double = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            getUpgradeBoard.getProcessorCount * 0.5
-        else
-            0.5
-    }
-    /**
       * Used to specify how much RF, check for upgrades here
       *
       * @return

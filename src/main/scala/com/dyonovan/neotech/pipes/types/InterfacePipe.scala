@@ -71,15 +71,6 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
     def tryExtractResources() : Unit
 
     /**
-      * This is the speed to extract from. You should be calling this when building your resources to send.
-      *
-      * This is included as a reminder to the child to have variable speeds
-      *
-      * @return
-      */
-    def getSpeed : Double
-
-    /**
       * Extracts on the current mode
       *
       * @return

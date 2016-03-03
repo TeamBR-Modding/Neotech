@@ -55,20 +55,6 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
             super.canConnect(facing)
 
     /**
-      * This is the speed to extract from. You should be calling this when building your resources to send.
-      *
-      * This is included as a reminder to the child to have variable speeds
-      *
-      * @return
-      */
-    override def getSpeed: Double = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            getUpgradeBoard.getProcessorCount * 0.05
-        else
-            0.05
-    }
-
-    /**
       * Used to specify how big a stack to pull. Judge with upgrades here
       *
       * @return

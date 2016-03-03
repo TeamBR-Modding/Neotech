@@ -48,6 +48,7 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
     var mode : Int = 0 //Used to set mode (Round Robin etc) only used in extract pipe
     var redstone : Int = 0
     var frequency : Int = 0
+    var reRender = false
 
     /**
       * Used to tell if this pipe is allowed to connect
@@ -79,6 +80,8 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
         tag.setInteger("mode", mode)
         tag.setInteger("redstone", redstone)
         tag.setInteger("frequency", frequency)
+        tag.setBoolean("ReRender", reRender)
+        reRender = false
     }
 
     /**
@@ -99,6 +102,8 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
         mode = tag.getInteger("mode")
         redstone = tag.getInteger("redstone")
         frequency = tag.getInteger("frequency")
+        if(tag.hasKey("ReRender") && tag.getBoolean("ReRender") && getWorld != null)
+            worldObj.markBlockRangeForRenderUpdate(getPos, getPos)
     }
 
     /**
@@ -151,14 +156,16 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
 
     override def setVariable(id : Int, value : Double) = {
         id match {
-            case AdvancedPipe.REDSTONE_FIELD_ID => redstone = value.toInt
-            case AdvancedPipe.MODE_FIELD_ID => mode = value.toInt
+            case AdvancedPipe.REDSTONE_FIELD_ID => redstone = value.toInt; worldObj.markBlockForUpdate(getPos)
+            case AdvancedPipe.MODE_FIELD_ID => mode = value.toInt; worldObj.markBlockForUpdate(getPos)
             case AdvancedPipe.IO_FIELD_ID =>
                 toggleMode(EnumFacing.getFront(value.toInt))
-                getWorld.markBlockRangeForRenderUpdate(getPos, getPos)
+                reRender = true
+                worldObj.markBlockForUpdate(getPos)
                 WorldPipes.notifyPipes()
             case AdvancedPipe.FREQUENCY =>
                 frequency = value.toInt
+                worldObj.markBlockForUpdate(getPos)
                 WorldPipes.notifyPipes()
             case AdvancedPipe.FILTER =>
                 value.toInt match {
@@ -168,6 +175,7 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
                     case AdvancedPipe.FILTER_BLACKLIST => blackList = !blackList
                     case _ =>
                 }
+                worldObj.markBlockForUpdate(getPos)
                 WorldPipes.notifyPipes()
             case _ =>
         }

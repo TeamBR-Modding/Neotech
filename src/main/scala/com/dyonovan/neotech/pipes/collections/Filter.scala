@@ -3,7 +3,7 @@ package com.dyonovan.neotech.pipes.collections
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.fluids.{FluidContainerRegistry, FluidStack}
+import net.minecraftforge.fluids.{IFluidContainerItem, FluidContainerRegistry, FluidStack}
 import net.minecraftforge.oredict.OreDictionary
 
 import scala.util.control.Breaks._
@@ -58,12 +58,19 @@ trait Filter {
                         hasItems = true
                         if(FluidContainerRegistry.isFilledContainer(item)) {
                             if (FluidContainerRegistry.getFluidForFilledItem(item) != null &&
-                                    FluidContainerRegistry.getFluidForFilledItem(item).getFluid != null &&
                                     FluidContainerRegistry.getFluidForFilledItem(item).getFluid == fluid.getFluid) {
                                 matched = true
                                 if(!blackList)
                                     return true
                             }
+                        } else item.getItem match {
+                            case fluidItem: IFluidContainerItem =>
+                                if(fluidItem.getFluid(item) != null && fluid.getFluid == fluidItem.getFluid(item).getFluid) {
+                                    matched = true
+                                    if(!blackList)
+                                        return true
+                                }
+                            case _ =>
                         }
                     }
                 }
