@@ -23,7 +23,7 @@ object OnCraftedEvent {
     def onCrafted(event: PlayerEvent.ItemCraftedEvent): Unit = {
         // Mob Gun
         if (event.crafting.getItem == ItemManager.mobGun) {
-            val tag = setTierPower(event.craftMatrix.getStackInSlot(7).getItem)
+            val tag = setTierPower(event.craftMatrix.getStackInSlot(8).getItem)
             if (event.craftMatrix.getStackInSlot(8).hasTagCompound && event.craftMatrix.getStackInSlot(8).getTagCompound.hasKey("Energy"))
                 tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
             event.crafting.setTagCompound(tag)
