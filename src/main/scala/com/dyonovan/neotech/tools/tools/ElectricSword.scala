@@ -94,7 +94,7 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH) with BaseElectricTool 
     override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
         UpgradeItemManager.upgradeSharpness.getUpgradeName, UpgradeItemManager.upgradeSmite.getUpgradeName,
         ItemManager.basicRFBattery.getUpgradeName, UpgradeItemManager.upgradeBeheading.getUpgradeName,
-        UpgradeItemManager.upgradeSpiderBane.getUpgradeName
+        UpgradeItemManager.upgradeSpiderBane.getUpgradeName, UpgradeItemManager.upgradeLooting.getUpgradeName
     ))
 
     /**

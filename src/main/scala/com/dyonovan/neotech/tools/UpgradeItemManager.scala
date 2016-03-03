@@ -6,6 +6,7 @@ import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.oredict.OreDictionary
 
 /**
   * This file was created for NeoTech
@@ -32,6 +33,7 @@ object UpgradeItemManager {
     val upgradeSmite       = new ItemModifierSmite
     val upgradeBeheading   = new ItemModifierBeheading
     val upgradeSpiderBane  = new ItemModifierBaneOfArthropods
+    val upgradeLooting     = new ItemModifierLooting
 
     def preInit(): Unit = {
         ItemManager.registerItem(upgradeSilkTouch, upgradeSilkTouch.getUpgradeName)
@@ -46,6 +48,7 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeSpiderBane, upgradeSpiderBane.getUpgradeName)
         ItemManager.registerItem(upgradeShovel, upgradeShovel.getUpgradeName)
         ItemManager.registerItem(upgradeLighting, upgradeLighting.getUpgradeName)
+        ItemManager.registerItem(upgradeLooting, upgradeLooting.getUpgradeName)
 
         if(Loader.isModLoaded("tconstruct")) {
             ItemManager.registerItem(upgradeMiningLevel4, upgradeMiningLevel4.getUpgradeName)
@@ -72,11 +75,13 @@ object UpgradeItemManager {
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeSmite), ItemManager.upgradeMBEmpty,
             Items.rotten_flesh)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeBeheading), ItemManager.upgradeMBEmpty,
-            Items.skull)
+            new ItemStack(Items.skull, 1, OreDictionary.WILDCARD_VALUE))
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeSpiderBane), ItemManager.upgradeMBEmpty,
             Items.spider_eye)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeLighting), ItemManager.upgradeMBEmpty,
             Items.blaze_rod, Items.blaze_rod)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeLooting), ItemManager.upgradeMBEmpty,
+            Items.spider_eye, Items.blaze_powder, Items.rotten_flesh, Items.bone, Items.gunpowder)
 
         if(Loader.isModLoaded("tconstruct")) {
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,

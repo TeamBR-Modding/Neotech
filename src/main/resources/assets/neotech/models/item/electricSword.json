@@ -5,6 +5,7 @@
         "sharpness" : "neotech:items/tools/sword/sharpness",
         "smite"     : "neotech:items/tools/sword/smite",
         "beheading" : "neotech:items/tools/sword/beheading",
-        "spider"    : "neotech:items/tools/sword/spiderBane"
+        "spider"    : "neotech:items/tools/sword/spiderBane",
+        "looting"   : "neotech:items/tools/sword/looting"
     }
 }
