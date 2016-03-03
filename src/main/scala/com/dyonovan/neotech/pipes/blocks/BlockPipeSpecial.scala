@@ -187,12 +187,11 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                     world.markBlockForUpdate(pos)
                     return true
                 } else {
-                    playerIn.openGui(NeoTech, 0, world, pos.getX, pos.getY, pos.getZ)
                     playerIn.swingItem()
                     return true
                 }
 
-            case _ =>
+            case _ => playerIn.openGui(NeoTech, 0, world, pos.getX, pos.getY, pos.getZ)
         }
         false
     }

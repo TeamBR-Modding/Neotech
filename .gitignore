@@ -150,3 +150,4 @@ eclipse/
 APIToken
 
 refreshDependencies.bat
+*.ipr___jb_bak___

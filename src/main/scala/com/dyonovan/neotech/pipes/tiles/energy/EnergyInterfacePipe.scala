@@ -70,9 +70,11 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
       * @return
       */
     def getMaxRFDrain : Int = {
-        var rate = 2000
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
-            rate *= (getUpgradeBoard.getHardDriveCount * 4)
+        var rate = 200
+        if(processorCount > 0)
+            rate *= (processorCount * 400)
+        if(hardDriveCount > 0)
+            rate *= (processorCount * 400)
         rate
     }
 
@@ -82,10 +84,7 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
       * @return 20 = 1 second
       */
     override def getDelay: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            20 - getUpgradeBoard.getProcessorCount * 2
-        else
-            20
+            1
     }
     /**
       * This is what is actually called to the child class. Here you should call your extractResources or whatever you want
