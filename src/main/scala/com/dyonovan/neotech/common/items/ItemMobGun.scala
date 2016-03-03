@@ -35,13 +35,16 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
         var tier = 1
         if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
             tier = stack.getTagCompound.getInteger("Tier")
-
+        var energy = 0
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
+            energy = stack.getTagCompound.getInteger("Energy")
         val amount = getTierPower(tier)
         val tag = new NBTTagCompound
         tag.setInteger("EnergyCapacity", amount._1)
         tag.setInteger("MaxExtract", amount._2)
         tag.setInteger("MaxReceive", amount._2)
         tag.setInteger("Tier", tier)
+        tag.setInteger("Energy", energy)
         stack.setTagCompound(tag)
     }
 
