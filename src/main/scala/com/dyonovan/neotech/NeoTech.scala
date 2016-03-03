@@ -10,6 +10,7 @@ import com.dyonovan.neotech.managers._
 import com.dyonovan.neotech.network.PacketDispatcher
 import com.dyonovan.neotech.registries._
 import com.dyonovan.neotech.world.{ChunkLoaderManager, NeotechWorldGenerator}
+import net.minecraft.block.Block
 import net.minecraft.command.ServerCommandManager
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
@@ -17,11 +18,13 @@ import net.minecraft.server.MinecraftServer
 import net.minecraftforge.common.ForgeChunkManager
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fml.common.Mod.EventHandler
-import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLPostInitializationEvent, FMLPreInitializationEvent, FMLServerStartingEvent}
+import net.minecraftforge.fml.common.event._
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.common.{Mod, SidedProxy}
 import org.apache.logging.log4j.LogManager
+
+import collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -92,6 +95,16 @@ object NeoTech {
     @EventHandler def postInit(event : FMLPostInitializationEvent) = {
         proxy.postInit()
         ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoaderManager)
+    }
+
+    @EventHandler def imcMessages(event: FMLInterModComms.IMCEvent): Unit  = {
+        val messages = event.getMessages
+        for (msg <- messages) {
+            if (msg.key.equalsIgnoreCase("blacklistFertilizer")) {
+                val block = Block.getBlockFromName(msg.getStringValue)
+                if (block != null) FertilizerBlacklistRegistry.addToBlacklist(block)
+            }
+        }
     }
 
     @EventHandler def serverLoad(event : FMLServerStartingEvent): Unit = {
