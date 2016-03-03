@@ -32,8 +32,8 @@ object OnCraftedEvent {
         //Electric Tools
         if (event.crafting.getItem.isInstanceOf[BaseElectricTool]) {
             val tag = setTierPower(event.craftMatrix.getStackInSlot(7).getItem)
-            if (event.craftMatrix.getStackInSlot(4).hasTagCompound && event.craftMatrix.getStackInSlot(4).getTagCompound.hasKey("Energy"))
-                tag.setInteger("Energy", event.craftMatrix.getStackInSlot(8).getTagCompound.getInteger("Energy"))
+            if (event.craftMatrix.getStackInSlot(7).hasTagCompound && event.craftMatrix.getStackInSlot(7).getTagCompound.hasKey("Energy"))
+                tag.setInteger("Energy", event.craftMatrix.getStackInSlot(7).getTagCompound.getInteger("Energy"))
             event.crafting.setTagCompound(tag)
             return
         }
