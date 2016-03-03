@@ -4,8 +4,11 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.ToolHelper
 import com.teambr.bookshelf.common.items.traits.ItemBattery
-import net.minecraft.item.{ItemStack, ItemArmor}
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.{ItemArmor, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.world.World
+import org.lwjgl.input.Keyboard
 
 /**
   * This file was created for NeoTech
@@ -26,10 +29,19 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
 
     override def setDefaultTags(stack: ItemStack): Unit = {
         val tag = new NBTTagCompound
+        tag.setInteger("Energy", 0)
         tag.setInteger("EnergyCapacity", 2500)
         tag.setInteger("MaxExtract", 200)
         tag.setInteger("MaxReceive", 200)
         stack.setTagCompound(tag)
+    }
+
+    override def onArmorTick(world: World, player: EntityPlayer, itemStack: ItemStack): Unit = {
+        if(world.isRemote) {
+            if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+                player.motionY += 0.2
+            }
+        }
     }
 
     /**
@@ -39,8 +51,6 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
       * @param damage Damage to apply
       */
     override def setDamage(stack: ItemStack, damage: Int) : Unit = {
-        super.setDamage(stack, damage)
-
         // Drain the energy
         if (stack.getTagCompound == null || !stack.getTagCompound.hasKey("Energy")) {
             var energy = stack.getTagCompound.getInteger("Energy")
@@ -49,7 +59,12 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             stack.getTagCompound.setInteger("Energy", energy)
         }
 
-        if(stack.getItemDamage > stack.getMaxDamage)
-            stack.setItemDamage(stack.getMaxDamage - 1)
+        val scaled = getEnergyStored(stack).toFloat / getMaxEnergyStored(stack)
+        var toSet = 16 - Math.round(scaled * 16)
+        if (scaled < 1 && toSet == 0)
+            toSet = 1
+        else if(toSet == 16)
+            toSet = 15
+        stack.setItemDamage(toSet)
     }
 }
