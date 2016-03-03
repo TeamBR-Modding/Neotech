@@ -39,11 +39,15 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         var energy = 0
         if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
             energy = stack.getTagCompound.getInteger("Energy")
+        var tier = 1
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Tier"))
+            tier = stack.getTagCompound.getInteger("Tier")
+        val amount = getTierPower(tier)
         val tag = new NBTTagCompound
-        tag.setInteger("Energy", energy)
-        tag.setInteger("EnergyCapacity", 2500)
-        tag.setInteger("MaxExtract", 200)
-        tag.setInteger("MaxReceive", 200)
+        tag.setInteger("EnergyCapacity", amount._1)
+        tag.setInteger("MaxExtract", amount._2)
+        tag.setInteger("MaxReceive", amount._2)
+        tag.setInteger("Tier", tier)
         stack.setTagCompound(tag)
     }
 
