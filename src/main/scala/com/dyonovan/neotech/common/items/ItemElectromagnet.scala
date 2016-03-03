@@ -6,6 +6,7 @@ import java.util.Locale
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.registries.ConfigRegistry
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.client.Minecraft
@@ -42,7 +43,7 @@ class ItemElectromagnet extends ItemBattery {
         if (!stack.hasTagCompound) {
             val tag = new NBTTagCompound
             tag.setInteger("Energy", 0)
-            tag.setInteger("EnergyCapacity", 25000)
+            tag.setInteger("EnergyCapacity", ConfigRegistry.totalRFEM)
             tag.setInteger("MaxExtract", 200)
             tag.setInteger("MaxReceive", 200)
             stack.setTagCompound(tag)

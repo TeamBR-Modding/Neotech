@@ -45,6 +45,7 @@ object ConfigRegistry {
     var fertBlacklist: Array[String] = _
     var versionCheck = true
     var chunkLoaderMax = 3
+    var totalRFEM = 25000
 
 
     def preInit(): Unit = {
@@ -83,6 +84,9 @@ object ConfigRegistry {
 
         chunkLoaderMax = config.get(Reference.CONFIG_CHUNKLOADER, "chunkLoaderMax", 3,
                             "Max Chunks (squared) to keep loaded per Chunk Loader").getInt
+
+        totalRFEM = config.get(Reference.CONFIG_ELECTROMAGNET, "EMrfTotal", 25000,
+                            "Total RF ElectroMagnet Stores").getInt()
 
         config.save()
 
