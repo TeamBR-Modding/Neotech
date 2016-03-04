@@ -92,7 +92,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
                     ModifierJetpack.hasJetpack(itemStack) && getEnergyStored(itemStack) > RF_COST(itemStack)) {
                 player.motionY += 0.2
                 if (!player.capabilities.isCreativeMode) {
-                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType, 10))
+                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType, 50))
                 }
             }
         }

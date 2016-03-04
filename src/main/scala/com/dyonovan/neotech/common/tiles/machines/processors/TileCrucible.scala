@@ -73,7 +73,8 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
                     if(recipeOutput.getFluid != null) {
                         if(tanks(OUTPUT_TANK).getFluid == null && recipeOutput.amount <= tanks(OUTPUT_TANK).getCapacity)
                             return true
-                        else if((tanks(OUTPUT_TANK).getFluid.amount + recipeOutput.amount) <= tanks(OUTPUT_TANK).getCapacity)
+                        else if(tanks(OUTPUT_TANK).getFluid.getFluid == recipeOutput.getFluid &&
+                                (tanks(OUTPUT_TANK).getFluid.amount + recipeOutput.amount) <= tanks(OUTPUT_TANK).getCapacity)
                             return true
                         return false
                     }
