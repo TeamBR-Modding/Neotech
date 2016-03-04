@@ -22,6 +22,7 @@ public class PacketDispatcher {
         net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID().toUpperCase());
 
         registerMessage(OpenContainerGui.class, OpenContainerGui.class);
+        registerMessage(DrainEnergyPacketArmor.class, DrainEnergyPacketArmor.class);
     }
 
     @SuppressWarnings("unchecked")

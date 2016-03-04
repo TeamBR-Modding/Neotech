@@ -4,9 +4,10 @@ import java.util
 
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.network.{DrainEnergyPacketArmor, PacketDispatcher}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
-import com.dyonovan.neotech.tools.modifier.{ModifierGlide, ModifierFallResist, ModifierJetpack}
+import com.dyonovan.neotech.tools.modifier.{ModifierFallResist, ModifierGlide, ModifierJetpack}
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import net.minecraft.entity.player.EntityPlayer
@@ -91,8 +92,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
                     ModifierJetpack.hasJetpack(itemStack) && getEnergyStored(itemStack) > RF_COST(itemStack)) {
                 player.motionY += 0.2
                 if (!player.capabilities.isCreativeMode) {
-                    extractEnergy(itemStack, 1, simulate = false)
-                    updateDamage(itemStack)
+                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType, 10))
                 }
             }
         }
@@ -102,12 +102,15 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             var verticalSpeed: Double = 0
 
             horizontalSpeed = 0.2
-            verticalSpeed = 0.4
+            verticalSpeed = 0.7
 
             player.motionY *= verticalSpeed
             player.motionX += Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed
             player.motionZ += Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed
-            player.fallDistance = 0F
+            if (!player.capabilities.isCreativeMode) {
+                extractEnergy(itemStack, 5, simulate = false)
+                updateDamage(itemStack)
+            }
         }
     }
 
