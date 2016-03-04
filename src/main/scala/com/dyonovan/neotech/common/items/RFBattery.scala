@@ -42,7 +42,7 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
                         val energyContainerItem = player.inventory.getStackInSlot(x).getItem.asInstanceOf[IEnergyContainerItem]
                         val amount =
                             extractEnergy(stack,
-                                energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), stack.getTagCompound.getInteger("maxExtract"), false),
+                                energyContainerItem.receiveEnergy(player.inventory.getStackInSlot(x), stack.getTagCompound.getInteger("MaxExtract"), false),
                                 simulate = false)
                         if (amount > 0) {
                             extractEnergy(stack,
