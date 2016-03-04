@@ -17,7 +17,7 @@ import scala.collection.mutable.ArrayBuffer
   * @author Paul Davis "pauljoda"
   * @since 2/27/2016
   */
-object ModifierLighting extends Modifier("lighting"){
+object ModifierLighting extends Modifier("lighting") {
     lazy val LIGHTING = "Lighting"
     lazy val ACTIVE = "Active"
 

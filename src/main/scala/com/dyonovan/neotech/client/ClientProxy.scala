@@ -90,6 +90,9 @@ class ClientProxy extends CommonProxy {
         MetalManager.registerModels()
         ItemRenderManager.registerItemRenderer()
 
+        KeybindHandler.registerBindings()
+        MinecraftForge.EVENT_BUS.register(ClientTickHandler)
+
         Minecraft.getMinecraft.getRenderItem.getItemModelMesher.getModelManager.getBlockModelShapes.registerBuiltInBlocks(BlockManager.flushableChest)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileFlushableChest], new TileFlushableChestRenderer[TileFlushableChest])
 

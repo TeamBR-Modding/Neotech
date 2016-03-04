@@ -6,19 +6,19 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
-import com.dyonovan.neotech.tools.modifier.ModifierAOE._
 import com.dyonovan.neotech.tools.modifier._
 import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import com.dyonovan.neotech.utils.ClientUtils
 import gnu.trove.map.hash.THashMap
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
-import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{ItemPickaxe, ItemStack}
-import net.minecraft.util.{EnumFacing, BlockPos, MovingObjectPosition}
+import net.minecraft.util.{BlockPos, EnumFacing, MovingObjectPosition}
 import net.minecraft.world.World
-import collection.JavaConversions._
+
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for Bookshelf API
@@ -183,27 +183,5 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
                 rfCost(entityIn.asInstanceOf[EntityPlayer], stack)
             }
         }
-    }
-
-    /**
-      * Set Values to true
-      */
-    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
-        if (ModifierAOE.getAOELevel(stack) > 0 && player.isSneaking) {
-            val tag = ModifierAOE.getModifierTagFromStack(stack)
-            if (tag != null && tag.hasKey(ACTIVE)) {
-                tag.setBoolean(ACTIVE, !tag.getBoolean(ACTIVE))
-                ModifierAOE.overrideModifierTag(stack, tag)
-            }
-        }
-
-        if(ModifierLighting.hasLighting(stack) && player.isSneaking) {
-            val tag = ModifierLighting.getModifierTagFromStack(stack)
-            if(tag != null && tag.hasKey(ACTIVE)) {
-                tag.setBoolean(ACTIVE, !tag.getBoolean(ACTIVE))
-                ModifierLighting.overrideModifierTag(stack, tag)
-            }
-        }
-        stack
     }
 }

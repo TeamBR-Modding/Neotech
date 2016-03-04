@@ -23,6 +23,7 @@ public class PacketDispatcher {
 
         registerMessage(OpenContainerGui.class, OpenContainerGui.class);
         registerMessage(DrainEnergyPacketArmor.class, DrainEnergyPacketArmor.class);
+        registerMessage(UpdateToolTag.class, UpdateToolTag.class);
     }
 
     @SuppressWarnings("unchecked")

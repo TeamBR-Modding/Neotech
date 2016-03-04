@@ -392,6 +392,12 @@ neotech.text.jetpack=Jetpack Installed
 neotech.text.fallResist=Removes Fall Damage
 neotech.text.glide=Sneak to glide in the air
 
+neotech.text.modName=Neotech
+neotech.text.radialMenuKey=Tool/Armor Menu
+
+aoe=Area of Effect
+lighting=Automatic Lighting
+
 #######################
 # Commands
 #######################
