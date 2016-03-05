@@ -61,7 +61,7 @@ class GuiToggleMenu extends GuiScreen {
         var wasSelected = false
         for(seg <- 0 until segments) {
             val mouseOverSection = distance <= maxRadius && (mouseIn && angle > totalDeg && angle < totalDeg + degPer)
-            var radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius))
+            var radius = Math.max(0F, Math.min(timeIn * 10F, maxRadius))
 
             GL11.glBegin(GL11.GL_TRIANGLE_FAN)
             var gs = 0.25F
@@ -69,7 +69,7 @@ class GuiToggleMenu extends GuiScreen {
                 gs += 0.1F
             var r = if(upgrades(seg)._2) gs else 200
             var g = if(!upgrades(seg)._2) gs else 200
-            val b = 0
+            val b = gs
             var a = 0.4F
             if(mouseOverSection) {
                 selectedUpgrade = seg
