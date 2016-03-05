@@ -158,6 +158,7 @@ item.neotech:jetpack.name=Jetpack Upgrade
 item.neotech:fallResist.name=Fall Resist Upgrade
 item.neotech:glide.name=Glide Upgrade
 item.neotech:nightVision.name=Night Vision Upgrade
+item.neotech:sprinting.name=Sprinting Upgrade
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery
@@ -388,11 +389,13 @@ neotech.text.chopCount=Chop Count
 neotech.text.placeInBinder=Upgrade In Thermal Binder
 
 neotech.text.lighting=Places Light Sources Automatically
+neotech.text.beheading=Beheading
 
 neotech.text.jetpack=Jetpack Installed
 neotech.text.fallResist=Removes Fall Damage
 neotech.text.glide=Sneak to glide in the air
 neotech.text.nightVision=Has Night Vision
+neotech.text.sprinting=Sprinting
 
 neotech.text.modName=Neotech
 neotech.text.radialMenuKey=Tool/Armor Menu
@@ -402,6 +405,7 @@ lighting=Automatic Lighting
 jetpack=Jetpack
 glide=Gliding
 nightVision=Night Vision
+sprinting=Speed
 
 #######################
 # Commands

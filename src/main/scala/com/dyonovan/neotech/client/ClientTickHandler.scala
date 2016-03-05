@@ -1,15 +1,13 @@
 package com.dyonovan.neotech.client
 
-import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.armor.ItemElectricArmor
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.client.Minecraft
-import net.minecraft.init.Blocks
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.fml.common.gameevent.TickEvent.{Phase, ClientTickEvent}
+import net.minecraftforge.fml.common.gameevent.TickEvent.{ClientTickEvent, Phase}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -35,8 +33,8 @@ object ClientTickHandler {
 
     def player = Minecraft.getMinecraft.thePlayer
 
-    def getUpgrades : ArrayBuffer[(String, ItemStack, Boolean, String, Int, ItemStack)] = {
-        val buffer = new ArrayBuffer[(String, ItemStack, Boolean, String, Int, ItemStack)]()
+    def getUpgrades : ArrayBuffer[(String, Boolean, String, Int, ItemStack)] = {
+        val buffer = new ArrayBuffer[(String, Boolean, String, Int, ItemStack)]()
 
         val itemBuffer = new ArrayBuffer[(Int, ItemStack)]()
 
@@ -65,10 +63,9 @@ object ClientTickHandler {
                     val tag = tagList.getCompoundTagAt(x)
                     if (tag.hasKey("Active")) {
                         val name = ClientUtils.translate(tag.getString("ModifierID"))
-                        val stackDisplay = getStackForDisplay(tag.getString("ModifierID"))
                         val active = tag.getBoolean("Active")
                         val id = tag.getString("ModifierID")
-                        val tuple = (name, stackDisplay, active, id, stack._1, stack._2)
+                        val tuple = (name, active, id, stack._1, stack._2)
                         buffer += tuple
                     }
                 }
@@ -76,16 +73,5 @@ object ClientTickHandler {
         }
 
         buffer
-    }
-
-    def getStackForDisplay(id : String) : ItemStack = {
-        id match {
-            case "aoe"         => new ItemStack(Blocks.piston)
-            case "lighting"    => new ItemStack(Blocks.torch)
-            case "jetpack"     => new ItemStack(ItemManager.electricArmorChestplate)
-            case "glide"       => new ItemStack(ItemManager.electricArmorChestplate)
-            case "nightVision" => new ItemStack(ItemManager.electricArmorHelmet)
-            case _             => new ItemStack(Blocks.air)
-        }
     }
 }

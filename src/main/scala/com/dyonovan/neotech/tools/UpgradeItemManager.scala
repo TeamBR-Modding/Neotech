@@ -17,6 +17,7 @@ import com.dyonovan.neotech.tools.modifier.ModifierSharpness.ItemModifierSharpne
 import com.dyonovan.neotech.tools.modifier.ModifierShovel.ItemModifierShovel
 import com.dyonovan.neotech.tools.modifier.ModifierSilkTouch.ItemModifierSilkTouch
 import com.dyonovan.neotech.tools.modifier.ModifierSmite.ItemModifierSmite
+import com.dyonovan.neotech.tools.modifier.ModifierSprinting.ItemModifierSprinting
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.Loader
@@ -54,6 +55,7 @@ object UpgradeItemManager {
     val upgradeFallResist   = new ItemModifierFallResist
     val upgradeGlide        = new ItemModifierGlide
     val upgradeNightVision  = new ItemModifierNightVision
+    val upgradeSprinting    = new ItemModifierSprinting
 
     def preInit(): Unit = {
         ItemManager.registerItem(upgradeSilkTouch, upgradeSilkTouch.getUpgradeName)
@@ -73,6 +75,7 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeFallResist, upgradeFallResist.getUpgradeName)
         ItemManager.registerItem(upgradeGlide, upgradeGlide.getUpgradeName)
         ItemManager.registerItem(upgradeNightVision, upgradeNightVision.getUpgradeName)
+        ItemManager.registerItem(upgradeSprinting, upgradeSprinting.getUpgradeName)
 
         if(Loader.isModLoaded("tconstruct")) {
             ItemManager.registerItem(upgradeMiningLevel4, upgradeMiningLevel4.getUpgradeName)
@@ -114,6 +117,8 @@ object UpgradeItemManager {
             Items.leather, Items.feather)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeNightVision), ItemManager.upgradeMBEmpty,
             Items.glowstone_dust, Items.glowstone_dust)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeSprinting), ItemManager.upgradeMBEmpty,
+            Items.feather, Blocks.piston)
         if(Loader.isModLoaded("tconstruct")) {
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,
                 Blocks.obsidian)

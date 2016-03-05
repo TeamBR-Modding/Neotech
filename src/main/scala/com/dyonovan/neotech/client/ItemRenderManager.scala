@@ -95,6 +95,7 @@ object ItemRenderManager {
         registerItem(UpgradeItemManager.upgradeJetpack)
         registerItem(UpgradeItemManager.upgradeFallResist)
         registerItem(UpgradeItemManager.upgradeGlide)
+        registerItem(UpgradeItemManager.upgradeSprinting)
         registerItem(UpgradeItemManager.upgradeNightVision)
 
         registerPipesAndColored()

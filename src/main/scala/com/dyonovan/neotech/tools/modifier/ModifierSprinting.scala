@@ -15,18 +15,19 @@ import scala.collection.mutable.ArrayBuffer
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
   * @author Paul Davis "pauljoda"
-  * @since 2/24/2016
+  * @since 3/4/2016
   */
-object ModifierBeheading extends Modifier("beheading") {
-    lazy val BEHEADING = "Beheading"
+object ModifierSprinting extends Modifier("sprinting") {
+    lazy val SPRINTING = "Sprinting"
+    lazy val ACTIVE = "Active"
 
     /**
-      * Get the beheading level
+      * Get sprinting level
       */
-    def getBeheadingLevel(stack : ItemStack) : Int = {
+    def getSprintingLevel(stack : ItemStack) : Int = {
         val tag = getModifierTagFromStack(stack)
-        if(tag != null && tag.hasKey(BEHEADING))
-            return tag.getInteger(BEHEADING)
+        if(tag != null && tag.hasKey(SPRINTING) && tag.getBoolean(ACTIVE))
+            return tag.getInteger(SPRINTING)
         0
     }
 
@@ -36,13 +37,14 @@ object ModifierBeheading extends Modifier("beheading") {
       * @param tag The tag that the level is stored on
       * @return The level
       */
-    override def getLevel(tag : NBTTagCompound) = tag.getInteger(BEHEADING)
+    override def getLevel(tag : NBTTagCompound) = tag.getInteger(SPRINTING)
 
     /**
-      * Write info to the tag
+      * Write info to tag
       */
-    def writeToNBT(tag: NBTTagCompound, stack : ItemStack, level : Int): NBTTagCompound = {
-        tag.setFloat(BEHEADING, getBeheadingLevel(stack) + level)
+    def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
+        tag.setInteger(SPRINTING, getSprintingLevel(stack) + count)
+        tag.setBoolean(ACTIVE, true)
         super.writeToNBT(tag, stack)
         tag
     }
@@ -53,12 +55,11 @@ object ModifierBeheading extends Modifier("beheading") {
       * @param stack The stack in
       * @return A list of tips
       */
-    override def getToolTipForWriting(stack: ItemStack, tag: NBTTagCompound): ArrayBuffer[String] = {
-        ArrayBuffer(ClientUtils.translate("neotech.text.beheading") + ": " +
-                ClientUtils.translate("enchantment.level." + tag.getInteger(BEHEADING)))
-    }
+    override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] =
+        ArrayBuffer(ClientUtils.translate("neotech.text.sprinting") + ": " +
+                ClientUtils.translate("enchantment.level." + tag.getInteger(SPRINTING)))
 
-    class ItemModifierBeheading extends BaseUpgradeItem("beheading", 3) {
+    class ItemModifierSprinting extends BaseUpgradeItem("sprinting", 5) {
 
         /**
           * Can this upgrade item allow more to be applied to the item
@@ -68,7 +69,7 @@ object ModifierBeheading extends Modifier("beheading") {
           * @return True if there is space for the entire count
           */
         override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean =
-            ModifierBeheading.getBeheadingLevel(stack) + count <= maxStackSize
+            ModifierSprinting.getSprintingLevel(stack) + count <= maxStackSize
 
         /**
           * Use this to put information onto the stack, called when put onto the stack
@@ -76,12 +77,12 @@ object ModifierBeheading extends Modifier("beheading") {
           * @param stack The stack to put onto
           * @return The tag passed
           */
-        override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound, writingStack : ItemStack): Unit = {
-            var localTag = ModifierBeheading.getModifierTagFromStack(stack)
+        override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound,  writingStack : ItemStack): Unit = {
+            var localTag = ModifierSprinting.getModifierTagFromStack(stack)
             if(localTag == null)
                 localTag = new NBTTagCompound
-            ModifierBeheading.writeToNBT(localTag, stack, writingStack.stackSize)
-            ModifierBeheading.overrideModifierTag(stack, localTag)
+            ModifierSprinting.writeToNBT(localTag, stack, writingStack.stackSize)
+            ModifierSprinting.overrideModifierTag(stack, localTag)
         }
     }
 }

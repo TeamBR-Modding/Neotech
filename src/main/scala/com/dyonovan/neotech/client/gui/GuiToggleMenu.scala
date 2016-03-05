@@ -67,15 +67,15 @@ class GuiToggleMenu extends GuiScreen {
             var gs = 0.25F
             if(seg % 2 == 0)
                 gs += 0.1F
-            var r = if(upgrades(seg)._3) gs else 200
-            var g = if(!upgrades(seg)._3) gs else 200
+            var r = if(upgrades(seg)._2) gs else 200
+            var g = if(!upgrades(seg)._2) gs else 200
             val b = 0
             var a = 0.4F
             if(mouseOverSection) {
                 selectedUpgrade = seg
                 wasSelected = true
-                r = if(upgrades(seg)._3) r else 255
-                g = if(!upgrades(seg)._3) g else 255
+                r = if(upgrades(seg)._2) r else 255
+                g = if(!upgrades(seg)._2) g else 255
                 a = 0.5F
             }
             GlStateManager.color(r, g, b, a)
@@ -111,7 +111,7 @@ class GuiToggleMenu extends GuiScreen {
             val yp = pos(2)
             val c = pos(3).toChar
 
-            val displayStack = slot._2
+            val displayStack = slot._5
             if(displayStack != null) {
                 var xsp = xp - 4
                 var ysp = yp
@@ -124,8 +124,8 @@ class GuiToggleMenu extends GuiScreen {
 
                 RenderHelper.enableGUIStandardItemLighting()
                 GlStateManager.pushMatrix()
-                GlStateManager.translate(xdp - 15, ydp - 15, 2)
-                GlStateManager.scale(2, 2, 2)
+                GlStateManager.translate(xdp - 10, ydp - 10, 2)
+                GlStateManager.scale(1.25, 1.25, 1.25)
                 Minecraft.getMinecraft.getRenderItem.renderItemIntoGUI(displayStack, 0, 0)
                 GlStateManager.popMatrix()
                 RenderHelper.disableStandardItemLighting()
@@ -147,19 +147,19 @@ class GuiToggleMenu extends GuiScreen {
 
         if(selectedUpgrade != -1 && selectedUpgrade < upgrades.length) {
             val tuple = upgrades.get(selectedUpgrade)
-            val active = !tuple._3
+            val active = !tuple._2
 
-            val tagList = ToolHelper.getModifierTagList(tuple._6)
+            val tagList = ToolHelper.getModifierTagList(tuple._5)
             if(tagList != null && tagList.tagCount() > 0) {
                 for(x <- 0 until tagList.tagCount()) {
                     val tag = tagList.getCompoundTagAt(x)
-                    if (tag.getString("ModifierID").equalsIgnoreCase(tuple._4)) {
+                    if (tag.getString("ModifierID").equalsIgnoreCase(tuple._3)) {
                         tag.setBoolean("Active", active)
                         GuiHelper.playButtonSound
 
                         PacketDispatcher.net.sendToServer(new UpdateToolTag(
-                            tuple._5,
-                            tuple._6.getTagCompound))
+                            tuple._4,
+                            tuple._5.getTagCompound))
                     }
                 }
             }

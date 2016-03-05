@@ -7,7 +7,7 @@ import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.network.{ResetFallDistance, DrainEnergyPacketArmor, PacketDispatcher}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
-import com.dyonovan.neotech.tools.modifier.{ModifierNightVision, ModifierFallResist, ModifierGlide, ModifierJetpack}
+import com.dyonovan.neotech.tools.modifier._
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import net.minecraft.entity.player.EntityPlayer
@@ -126,6 +126,15 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             player.removePotionEffect(Potion.nightVision.id)
         }
 
+        // Sprinting
+        if(getEnergyStored(itemStack) > 5 && itemStack.getItem == ItemManager.electricArmorLeggings &&
+                ModifierSprinting.getSprintingLevel(itemStack) > 0) {
+            player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 20,
+                ModifierSprinting.getSprintingLevel(itemStack) - 1, false, false))
+        } else if(itemStack.getItem == ItemManager.electricArmorLeggings) {
+            player.removePotionEffect(Potion.moveSpeed.id)
+        }
+
         // Glider
         if (getEnergyStored(itemStack) > 5 && ModifierGlide.hasGlide(itemStack) && player.motionY < -0.1 && player.isSneaking) {
             var horizontalSpeed: Double = 0
@@ -165,6 +174,8 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             case 1 =>
                 list.add(UpgradeItemManager.upgradeJetpack.getUpgradeName)
                 list.add(UpgradeItemManager.upgradeGlide.getUpgradeName)
+            case 2 =>
+                list.add(UpgradeItemManager.upgradeSprinting.getUpgradeName)
             case 3 =>
                 list.add(UpgradeItemManager.upgradeFallResist.getUpgradeName)
             case _=>
