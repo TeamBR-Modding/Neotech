@@ -62,9 +62,9 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
       */
     override def setDamage(stack: ItemStack, damage: Int) : Unit = {
         // Drain the energy
-        if (stack.getTagCompound == null || !stack.getTagCompound.hasKey("Energy")) {
+        if (stack.getTagCompound != null && stack.getTagCompound.hasKey("Energy")) {
             var energy = stack.getTagCompound.getInteger("Energy")
-            val energyExtracted = Math.min(energy, Math.min(stack.getTagCompound.getInteger("MaxExtract"), 250))
+            val energyExtracted = Math.min(energy, Math.min(stack.getTagCompound.getInteger("MaxExtract"), 150))
             energy -= energyExtracted
             stack.getTagCompound.setInteger("Energy", energy)
         }
@@ -127,7 +127,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         }
 
         // Sprinting
-        if(getEnergyStored(itemStack) > 5 && itemStack.getItem == ItemManager.electricArmorLeggings &&
+        if(getEnergyStored(itemStack) > 1 && itemStack.getItem == ItemManager.electricArmorLeggings &&
                 ModifierSprinting.getSprintingLevel(itemStack) > 0) {
             player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 20,
                 ModifierSprinting.getSprintingLevel(itemStack) - 1, false, false))
@@ -181,6 +181,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             case _=>
         }
         list.add(ItemManager.basicRFBattery.getUpgradeName)
+        list.add(UpgradeItemManager.upgradeProtection.getUpgradeName)
         list
     }
 

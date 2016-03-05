@@ -92,6 +92,7 @@ object ItemRenderManager {
         registerItem(ItemManager.electricArmorChestplate)
         registerItem(ItemManager.electricArmorLeggings)
         registerItem(ItemManager.electricArmorBoots)
+        registerItem(UpgradeItemManager.upgradeProtection)
         registerItem(UpgradeItemManager.upgradeJetpack)
         registerItem(UpgradeItemManager.upgradeFallResist)
         registerItem(UpgradeItemManager.upgradeGlide)

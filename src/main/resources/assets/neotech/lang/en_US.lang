@@ -159,6 +159,7 @@ item.neotech:fallResist.name=Fall Resist Upgrade
 item.neotech:glide.name=Glide Upgrade
 item.neotech:nightVision.name=Night Vision Upgrade
 item.neotech:sprinting.name=Sprinting Upgrade
+item.neotech:protection.name=Protection Upgrade
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery

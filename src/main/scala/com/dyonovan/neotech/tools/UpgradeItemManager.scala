@@ -13,6 +13,7 @@ import com.dyonovan.neotech.tools.modifier.ModifierLooting.ItemModifierLooting
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel.ItemModifierMiningLevel
 import com.dyonovan.neotech.tools.modifier.ModifierMiningSpeed.ItemModifierMiningSpeed
 import com.dyonovan.neotech.tools.modifier.ModifierNightVision.ItemModifierNightVision
+import com.dyonovan.neotech.tools.modifier.ModifierProtection.ItemModifierProtection
 import com.dyonovan.neotech.tools.modifier.ModifierSharpness.ItemModifierSharpness
 import com.dyonovan.neotech.tools.modifier.ModifierShovel.ItemModifierShovel
 import com.dyonovan.neotech.tools.modifier.ModifierSilkTouch.ItemModifierSilkTouch
@@ -51,6 +52,7 @@ object UpgradeItemManager {
     val upgradeSpiderBane   = new ItemModifierBaneOfArthropods
     val upgradeLooting      = new ItemModifierLooting
 
+    val upgradeProtection   = new ItemModifierProtection
     val upgradeJetpack      = new ItemModifierJetpack
     val upgradeFallResist   = new ItemModifierFallResist
     val upgradeGlide        = new ItemModifierGlide
@@ -76,6 +78,7 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeGlide, upgradeGlide.getUpgradeName)
         ItemManager.registerItem(upgradeNightVision, upgradeNightVision.getUpgradeName)
         ItemManager.registerItem(upgradeSprinting, upgradeSprinting.getUpgradeName)
+        ItemManager.registerItem(upgradeProtection, upgradeProtection.getUpgradeName)
 
         if(Loader.isModLoaded("tconstruct")) {
             ItemManager.registerItem(upgradeMiningLevel4, upgradeMiningLevel4.getUpgradeName)
@@ -119,6 +122,8 @@ object UpgradeItemManager {
             Items.glowstone_dust, Items.glowstone_dust)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeSprinting), ItemManager.upgradeMBEmpty,
             Items.feather, Blocks.piston)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeProtection), ItemManager.upgradeMBEmpty,
+            Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block)
         if(Loader.isModLoaded("tconstruct")) {
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,
                 Blocks.obsidian)
