@@ -20,14 +20,18 @@ import scala.collection.mutable.ArrayBuffer
 object ModifierGlide extends Modifier("glide") {
 
     lazy val GLIDE = "Glide"
+    lazy val ACTIVE = "Active"
 
     /**
       * Checks for silk touch
       */
     def hasGlide(stack: ItemStack): Boolean = {
         val tag = getModifierTagFromStack(stack)
+        // TODO: Remove this after the update after this update
+        if(tag != null && !tag.hasKey(ACTIVE))
+            tag.setBoolean(ACTIVE, true)
         if (tag != null && tag.hasKey(GLIDE))
-            return tag.getBoolean(GLIDE)
+            return tag.getBoolean(GLIDE) && tag.getBoolean("Active")
         false
     }
 
@@ -36,8 +40,9 @@ object ModifierGlide extends Modifier("glide") {
       *
       * @return
       */
-    def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasSilkTouch: Boolean): NBTTagCompound = {
-        tag.setBoolean(GLIDE, hasSilkTouch)
+    def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasGlide: Boolean): NBTTagCompound = {
+        tag.setBoolean(GLIDE, hasGlide)
+        tag.setBoolean(ACTIVE, true)
         super.writeToNBT(tag, stack)
         tag
     }

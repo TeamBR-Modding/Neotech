@@ -91,6 +91,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             if (FMLClientHandler.instance().getClient.gameSettings.keyBindJump.isKeyDown &&
                     ModifierJetpack.hasJetpack(itemStack) && getEnergyStored(itemStack) > RF_COST(itemStack)) {
                 player.motionY += 0.2
+                player.fallDistance = 0
                 if (!player.capabilities.isCreativeMode) {
                     PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType, 50))
                 }
@@ -107,6 +108,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             player.motionY *= verticalSpeed
             player.motionX += Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed
             player.motionZ += Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed
+            player.fallDistance = 0
             if (!player.capabilities.isCreativeMode) {
                 extractEnergy(itemStack, 5, simulate = false)
                 updateDamage(itemStack)

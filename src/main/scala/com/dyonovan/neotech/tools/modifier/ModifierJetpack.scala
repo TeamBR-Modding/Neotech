@@ -20,14 +20,18 @@ import scala.collection.mutable.ArrayBuffer
 object ModifierJetpack extends Modifier("jetpack") {
 
     lazy val JETPACK = "Jetpack"
+    lazy val ACTIVE = "Active"
 
     /**
       * Checks for silk touch
       */
     def hasJetpack(stack: ItemStack): Boolean = {
         val tag = getModifierTagFromStack(stack)
+        // TODO: Remove this after the update after this update
+        if(tag != null && !tag.hasKey(ACTIVE))
+            tag.setBoolean(ACTIVE, true)
         if (tag != null && tag.hasKey(JETPACK))
-            return tag.getBoolean(JETPACK)
+            return tag.getBoolean(JETPACK) && tag.getBoolean("Active")
         false
     }
 
@@ -36,8 +40,9 @@ object ModifierJetpack extends Modifier("jetpack") {
       *
       * @return
       */
-    def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasSilkTouch: Boolean): NBTTagCompound = {
-        tag.setBoolean(JETPACK, hasSilkTouch)
+    def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasJetpack: Boolean): NBTTagCompound = {
+        tag.setBoolean(JETPACK, hasJetpack)
+        tag.setBoolean(ACTIVE, true)
         super.writeToNBT(tag, stack)
         tag
     }

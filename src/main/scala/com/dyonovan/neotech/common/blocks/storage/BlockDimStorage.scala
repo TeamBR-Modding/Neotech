@@ -157,7 +157,8 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
       * @param meta The meta
       * @return
       */
-    override def getStateFromMeta(meta: Int): IBlockState = getDefaultState.withProperty(PropertyRotation.FOUR_WAY, EnumFacing.getFront(meta))
+    override def getStateFromMeta(meta: Int): IBlockState =
+        getDefaultState.withProperty(PropertyRotation.FOUR_WAY, EnumFacing.getFront(meta))
 
     /**
       * Called to convert state from meta
@@ -165,7 +166,8 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
       * @param state The state
       * @return
       */
-    override def getMetaFromState(state: IBlockState) = state.getValue(PropertyRotation.FOUR_WAY).getIndex
+    override def getMetaFromState(state: IBlockState) =
+        state.getValue(PropertyRotation.FOUR_WAY).getIndex
 
     override def isOpaqueCube: Boolean = false
 

@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.network
 
+import com.dyonovan.neotech.tools.armor.ItemElectricArmor
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
@@ -40,8 +41,14 @@ class UpdateToolTag extends IMessage with IMessageHandler[UpdateToolTag, IMessag
     override def onMessage(message: UpdateToolTag, ctx: MessageContext): IMessage = {
         if(ctx.side.isServer && message.slot != -1 && message.tag != null) {
             val player = ctx.getServerHandler.playerEntity
-            if(player.inventory.getStackInSlot(message.slot) != null && player.inventory.getStackInSlot(message.slot).getItem.isInstanceOf[BaseElectricTool]) {
+            if(message.slot < 10 && player.inventory.getStackInSlot(message.slot) != null &&
+                    player.inventory.getStackInSlot(message.slot).getItem.isInstanceOf[BaseElectricTool]) {
                 player.inventory.getStackInSlot(message.slot).setTagCompound(message.tag)
+            } else {
+                val armorSlot = message.slot - 10
+                if(player.inventory.armorInventory(armorSlot) != null &&
+                        player.inventory.armorInventory(armorSlot).getItem.isInstanceOf[ItemElectricArmor])
+                    player.inventory.armorInventory(armorSlot).setTagCompound(message.tag)
             }
         }
         null

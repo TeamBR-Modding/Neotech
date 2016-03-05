@@ -1,17 +1,14 @@
 package com.dyonovan.neotech.client.gui
 
-import com.dyonovan.neotech.client.KeybindHandler
-import com.dyonovan.neotech.network.{UpdateToolTag, PacketDispatcher}
+import com.dyonovan.neotech.client.{ClientTickHandler, KeybindHandler}
+import com.dyonovan.neotech.network.{PacketDispatcher, UpdateToolTag}
 import com.dyonovan.neotech.tools.ToolHelper
-import com.dyonovan.neotech.utils.ClientUtils
 import com.google.common.collect.ImmutableSet
 import com.teambr.bookshelf.helper.GuiHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.renderer.{GlStateManager, RenderHelper}
 import net.minecraft.client.settings.KeyBinding
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
 import org.lwjgl.input.{Keyboard, Mouse}
 import org.lwjgl.opengl.GL11
 import org.lwjgl.util.vector.Vector2f
@@ -29,14 +26,16 @@ import scala.collection.mutable.ArrayBuffer
   * @author Paul Davis "pauljoda"
   * @since 3/4/2016
   */
-class GuiToggleMenu(stack : ItemStack) extends GuiScreen {
+class GuiToggleMenu extends GuiScreen {
 
     var timeIn = 0
-    var upgrades = getUpgrades
+    var upgrades = ClientTickHandler.getUpgrades
     var selectedUpgrade = -1
+    lazy val player = Minecraft.getMinecraft.thePlayer
 
     override def drawScreen(mx : Int, my : Int, partialTicks : Float): Unit = {
         super.drawScreen(mx, my, partialTicks)
+        upgrades = ClientTickHandler.getUpgrades
 
         GlStateManager.pushMatrix()
         GlStateManager.disableTexture2D()
@@ -47,6 +46,7 @@ class GuiToggleMenu(stack : ItemStack) extends GuiScreen {
 
         val mouseIn = true
         val angle = mouseAngle(x, y, mx, my)
+        val distance = mouseDistance(x, y, mx, my)
 
         val highlight = 5
 
@@ -58,20 +58,22 @@ class GuiToggleMenu(stack : ItemStack) extends GuiScreen {
 
         val stringPosition = new ArrayBuffer[Array[Int]]
 
+        var wasSelected = false
         for(seg <- 0 until segments) {
-            val mouseOverSection = mouseIn && angle > totalDeg && angle < totalDeg + degPer
+            val mouseOverSection = distance <= maxRadius && (mouseIn && angle > totalDeg && angle < totalDeg + degPer)
             var radius = Math.max(0F, Math.min((timeIn + partialTicks - seg * 6F / segments) * 40F, maxRadius))
 
             GL11.glBegin(GL11.GL_TRIANGLE_FAN)
             var gs = 0.25F
             if(seg % 2 == 0)
-               gs += 0.1F
+                gs += 0.1F
             var r = if(upgrades(seg)._3) gs else 200
             var g = if(!upgrades(seg)._3) gs else 200
             val b = 0
             var a = 0.4F
             if(mouseOverSection) {
                 selectedUpgrade = seg
+                wasSelected = true
                 r = if(upgrades(seg)._3) r else 255
                 g = if(!upgrades(seg)._3) g else 255
                 a = 0.5F
@@ -96,6 +98,9 @@ class GuiToggleMenu(stack : ItemStack) extends GuiScreen {
             if(mouseOverSection)
                 radius -= highlight
         }
+
+        if(!wasSelected)
+            selectedUpgrade = -1
 
         GlStateManager.shadeModel(GL11.GL_FLAT)
         GlStateManager.enableTexture2D()
@@ -141,23 +146,25 @@ class GuiToggleMenu(stack : ItemStack) extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton)
 
         if(selectedUpgrade != -1 && selectedUpgrade < upgrades.length) {
-            val upgrade = upgrades.get(selectedUpgrade)
-            val active = !upgrade._3
-            val tagList = ToolHelper.getModifierTagList(stack)
+            val tuple = upgrades.get(selectedUpgrade)
+            val active = !tuple._3
 
+            val tagList = ToolHelper.getModifierTagList(tuple._6)
             if(tagList != null && tagList.tagCount() > 0) {
                 for(x <- 0 until tagList.tagCount()) {
                     val tag = tagList.getCompoundTagAt(x)
-                    if(tag.getString("ModifierID").equalsIgnoreCase(upgrade._4)) {
+                    if (tag.getString("ModifierID").equalsIgnoreCase(tuple._4)) {
                         tag.setBoolean("Active", active)
                         GuiHelper.playButtonSound
+
+                        PacketDispatcher.net.sendToServer(new UpdateToolTag(
+                            tuple._5,
+                            tuple._6.getTagCompound))
                     }
                 }
             }
 
-            upgrades = getUpgrades
-
-            PacketDispatcher.net.sendToServer(new UpdateToolTag(Minecraft.getMinecraft.thePlayer.inventory.currentItem, stack.getTagCompound))
+            upgrades = ClientTickHandler.getUpgrades
         }
     }
 
@@ -166,7 +173,9 @@ class GuiToggleMenu(stack : ItemStack) extends GuiScreen {
             Minecraft.getMinecraft.displayGuiScreen(null)
         }
 
-        val set = ImmutableSet.of(mc.gameSettings.keyBindForward, mc.gameSettings.keyBindLeft, mc.gameSettings.keyBindBack, mc.gameSettings.keyBindRight, mc.gameSettings.keyBindSneak, mc.gameSettings.keyBindSprint, mc.gameSettings.keyBindJump)
+        val set = ImmutableSet.of(mc.gameSettings.keyBindForward, mc.gameSettings.keyBindLeft,
+            mc.gameSettings.keyBindBack, mc.gameSettings.keyBindRight, mc.gameSettings.keyBindSneak,
+            mc.gameSettings.keyBindSprint, mc.gameSettings.keyBindJump)
         for(k <- set)
             KeyBinding.setKeyBindState(k.getKeyCode, isKeyDown(k))
 
@@ -182,35 +191,6 @@ class GuiToggleMenu(stack : ItemStack) extends GuiScreen {
         Keyboard.isKeyDown(key)
     }
 
-    def getUpgrades : ArrayBuffer[(String, ItemStack, Boolean, String)] = {
-        val buffer = new ArrayBuffer[(String, ItemStack, Boolean, String)]()
-
-        val tagList = ToolHelper.getModifierTagList(stack)
-        if(tagList != null && tagList.tagCount() > 0) {
-            for(x <- 0 until tagList.tagCount()) {
-                val tag = tagList.getCompoundTagAt(x)
-                if(tag.hasKey("Active")) {
-                    val name = ClientUtils.translate(tag.getString("ModifierID"))
-                    val stack = getStackForDisplay(tag.getString("ModifierID"))
-                    val active = tag.getBoolean("Active")
-                    val id = tag.getString("ModifierID")
-                    val tuple = (name, stack, active, id)
-                    buffer += tuple
-                }
-            }
-        }
-
-        buffer
-    }
-
-    def getStackForDisplay(id : String) : ItemStack = {
-        id match {
-            case "aoe"      => new ItemStack(Blocks.piston)
-            case "lighting" => new ItemStack(Blocks.torch)
-            case _          => new ItemStack(Blocks.air)
-        }
-    }
-
     def mouseAngle(x : Int, y : Int, mx : Int, my : Int) : Float = {
         val baseVec = new Vector2f(1F, 0F)
         val mouseVec = new Vector2f(mx - x, my - y)
@@ -218,6 +198,10 @@ class GuiToggleMenu(stack : ItemStack) extends GuiScreen {
             (Math.acos(Vector2f.dot(baseVec, mouseVec) / (baseVec.length() * mouseVec.length())) * (180F / Math.PI)).toFloat
         if(my < y) 360F - angle else angle
     }
+
+    def mouseDistance(x : Int, y : Int, mx : Int, my : Int) : Int =
+        Math.abs(Math.sqrt(((mx - x) * (mx - x)) + ((my - y) * (my - y)))).toInt
+
 
     override def doesGuiPauseGame = false
 }

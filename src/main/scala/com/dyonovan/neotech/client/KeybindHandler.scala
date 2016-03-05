@@ -1,7 +1,6 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.client.gui.GuiToggleMenu
-import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.client.settings.KeyBinding
@@ -32,9 +31,8 @@ object KeybindHandler {
         val radialMenuKey = radialMenu.getKeyCode
         binding.getKeyCode match {
             case `radialMenuKey`
-                if Minecraft.getMinecraft.thePlayer.getHeldItem != null &&
-                        Minecraft.getMinecraft.thePlayer.getHeldItem.getItem.isInstanceOf[BaseElectricTool] =>
-                Minecraft.getMinecraft.displayGuiScreen(new GuiToggleMenu(Minecraft.getMinecraft.thePlayer.getHeldItem))
+                if ClientTickHandler.getUpgrades.nonEmpty =>
+                Minecraft.getMinecraft.displayGuiScreen(new GuiToggleMenu())
             case _ =>
         }
     }

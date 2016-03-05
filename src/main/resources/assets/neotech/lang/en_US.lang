@@ -397,6 +397,8 @@ neotech.text.radialMenuKey=Tool/Armor Menu
 
 aoe=Area of Effect
 lighting=Automatic Lighting
+jetpack=Jetpack
+glide=Gliding
 
 #######################
 # Commands
