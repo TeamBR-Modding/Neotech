@@ -4,15 +4,17 @@ import java.util
 
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.network.{DrainEnergyPacketArmor, PacketDispatcher}
+import com.dyonovan.neotech.network.{ResetFallDistance, DrainEnergyPacketArmor, PacketDispatcher}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
-import com.dyonovan.neotech.tools.modifier.{ModifierFallResist, ModifierGlide, ModifierJetpack}
+import com.dyonovan.neotech.tools.modifier.{ModifierNightVision, ModifierFallResist, ModifierGlide, ModifierJetpack}
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemArmor, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.potion.{Potion, PotionEffect}
+import net.minecraft.util.EnumParticleTypes
 import net.minecraft.world.World
 import net.minecraftforge.fml.client.FMLClientHandler
 
@@ -85,6 +87,8 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             if(ModifierFallResist.hasFallResist(itemStack))
                 player.fallDistance = 0
         } else {
+
+            // Jetpack
             if(ModifierFallResist.hasFallResist(itemStack))
                 player.fallDistance = 0
 
@@ -92,13 +96,38 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
                     ModifierJetpack.hasJetpack(itemStack) && getEnergyStored(itemStack) > RF_COST(itemStack)) {
                 player.motionY += 0.2
                 player.fallDistance = 0
+
+                val r = 0.2
+                for(t <- 1 until 3) {
+                    for (i <- 0 until (360 / 20)) {
+                        val x = player.posX + Math.cos(Math.toRadians(i * 20)) * r * t * 2
+                        val z = player.posZ + Math.sin(Math.toRadians(i * 20)) * r * t * 2
+                        world.spawnParticle(EnumParticleTypes.FLAME, x, player.posY, z, 0, -1 + (t * 0.5), 0)
+                    }
+                }
+
                 if (!player.capabilities.isCreativeMode) {
                     PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType, 50))
+                    if(player.motionY > -1)
+                    PacketDispatcher.net.sendToServer(new ResetFallDistance)
                 }
             }
         }
 
-        if (ModifierGlide.hasGlide(itemStack) && player.motionY < -0.1 && player.isSneaking) {
+        // Night Vision
+        if(getEnergyStored(itemStack) > 5 && itemStack.getItem == ItemManager.electricArmorHelmet &&
+                ModifierNightVision.hasNightVision(itemStack)) {
+            player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 220, 0, false, false))
+            if (!player.capabilities.isCreativeMode) {
+                extractEnergy(itemStack, 5, simulate = false)
+                updateDamage(itemStack)
+            }
+        } else if(itemStack.getItem == ItemManager.electricArmorHelmet) {
+            player.removePotionEffect(Potion.nightVision.id)
+        }
+
+        // Glider
+        if (getEnergyStored(itemStack) > 5 && ModifierGlide.hasGlide(itemStack) && player.motionY < -0.1 && player.isSneaking) {
             var horizontalSpeed: Double = 0
             var verticalSpeed: Double = 0
 
@@ -116,6 +145,11 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         }
     }
 
+    def addPotionToPlayer(player : EntityPlayer, potion : Potion, amplifier : Int): Unit = {
+        if(player.getActivePotionEffect(potion) == null)
+            player.addPotionEffect(new PotionEffect(potion.id, 220, amplifier, true, false))
+    }
+
     /*******************************************************************************************************************
       * Thermal Binder Item                                                                                            *
       ******************************************************************************************************************/
@@ -126,6 +160,8 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
     override def acceptableUpgrades: util.ArrayList[String] = {
         val list = new util.ArrayList[String]()
         armorType match {
+            case 0 =>
+                list.add(UpgradeItemManager.upgradeNightVision.getUpgradeName)
             case 1 =>
                 list.add(UpgradeItemManager.upgradeJetpack.getUpgradeName)
                 list.add(UpgradeItemManager.upgradeGlide.getUpgradeName)

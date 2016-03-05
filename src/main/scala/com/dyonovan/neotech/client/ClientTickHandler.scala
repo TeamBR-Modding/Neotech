@@ -24,6 +24,7 @@ import scala.collection.mutable.ArrayBuffer
   * @since 3/4/2016
   */
 object ClientTickHandler {
+
     @SubscribeEvent
     def clientTickEnd(event : ClientTickEvent): Unit = {
         if(event.phase == Phase.END) {
@@ -79,11 +80,12 @@ object ClientTickHandler {
 
     def getStackForDisplay(id : String) : ItemStack = {
         id match {
-            case "aoe"      => new ItemStack(Blocks.piston)
-            case "lighting" => new ItemStack(Blocks.torch)
-            case "jetpack"  => new ItemStack(ItemManager.electricArmorChestplate)
-            case "glide"    => new ItemStack(ItemManager.electricArmorChestplate)
-            case _          => new ItemStack(Blocks.air)
+            case "aoe"         => new ItemStack(Blocks.piston)
+            case "lighting"    => new ItemStack(Blocks.torch)
+            case "jetpack"     => new ItemStack(ItemManager.electricArmorChestplate)
+            case "glide"       => new ItemStack(ItemManager.electricArmorChestplate)
+            case "nightVision" => new ItemStack(ItemManager.electricArmorHelmet)
+            case _             => new ItemStack(Blocks.air)
         }
     }
 }

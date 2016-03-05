@@ -55,7 +55,10 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
         val renderManager: RenderManager = Minecraft.getMinecraft.getRenderManager
 
         renderManager.setRenderShadow(false)
+        GlStateManager.pushAttrib()
         renderManager.renderEntityWithPosYaw(ent, 0.0, 0.0, 0.0, 0.0F, partialTicks)
+        GlStateManager.popAttrib()
+        GlStateManager.enableLighting()
         renderManager.setRenderShadow(true)
 
         GlStateManager.popMatrix()

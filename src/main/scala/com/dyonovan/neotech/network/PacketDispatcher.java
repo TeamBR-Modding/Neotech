@@ -24,6 +24,7 @@ public class PacketDispatcher {
         registerMessage(OpenContainerGui.class, OpenContainerGui.class);
         registerMessage(DrainEnergyPacketArmor.class, DrainEnergyPacketArmor.class);
         registerMessage(UpdateToolTag.class, UpdateToolTag.class);
+        registerMessage(ResetFallDistance.class, ResetFallDistance.class);
     }
 
     @SuppressWarnings("unchecked")

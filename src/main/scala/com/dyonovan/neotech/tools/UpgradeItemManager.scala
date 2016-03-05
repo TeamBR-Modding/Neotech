@@ -12,6 +12,7 @@ import com.dyonovan.neotech.tools.modifier.ModifierLighting.ItemModifierLighting
 import com.dyonovan.neotech.tools.modifier.ModifierLooting.ItemModifierLooting
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel.ItemModifierMiningLevel
 import com.dyonovan.neotech.tools.modifier.ModifierMiningSpeed.ItemModifierMiningSpeed
+import com.dyonovan.neotech.tools.modifier.ModifierNightVision.ItemModifierNightVision
 import com.dyonovan.neotech.tools.modifier.ModifierSharpness.ItemModifierSharpness
 import com.dyonovan.neotech.tools.modifier.ModifierShovel.ItemModifierShovel
 import com.dyonovan.neotech.tools.modifier.ModifierSilkTouch.ItemModifierSilkTouch
@@ -52,6 +53,7 @@ object UpgradeItemManager {
     val upgradeJetpack      = new ItemModifierJetpack
     val upgradeFallResist   = new ItemModifierFallResist
     val upgradeGlide        = new ItemModifierGlide
+    val upgradeNightVision  = new ItemModifierNightVision
 
     def preInit(): Unit = {
         ItemManager.registerItem(upgradeSilkTouch, upgradeSilkTouch.getUpgradeName)
@@ -70,6 +72,7 @@ object UpgradeItemManager {
         ItemManager.registerItem(upgradeJetpack, upgradeJetpack.getUpgradeName)
         ItemManager.registerItem(upgradeFallResist, upgradeFallResist.getUpgradeName)
         ItemManager.registerItem(upgradeGlide, upgradeGlide.getUpgradeName)
+        ItemManager.registerItem(upgradeNightVision, upgradeNightVision.getUpgradeName)
 
         if(Loader.isModLoaded("tconstruct")) {
             ItemManager.registerItem(upgradeMiningLevel4, upgradeMiningLevel4.getUpgradeName)
@@ -109,6 +112,8 @@ object UpgradeItemManager {
             Blocks.slime_block)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeGlide), ItemManager.upgradeMBEmpty,
             Items.leather, Items.feather)
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeNightVision), ItemManager.upgradeMBEmpty,
+            Items.glowstone_dust, Items.glowstone_dust)
         if(Loader.isModLoaded("tconstruct")) {
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,
                 Blocks.obsidian)
