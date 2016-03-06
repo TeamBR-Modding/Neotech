@@ -55,6 +55,10 @@ trait SimplePipe extends TileEntity {
     }
 
     def hasIntersect(facing : EnumFacing) : Boolean = {
+        //Safety Check
+        if(getWorld == null || getPos == null)
+            return true
+
         getWorld.getTileEntity(getPos) match {
             case tileContainer: IMicroblockTile =>
                 if(tileContainer.getMicroblockContainer != null && tileContainer.getMicroblockContainer.getPartContainer != null) {
