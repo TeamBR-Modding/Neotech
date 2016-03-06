@@ -9,6 +9,7 @@ import com.dyonovan.neotech.common.container.machines.processors.{ContainerElect
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator, TileFurnaceGenerator}
 import com.dyonovan.neotech.common.tiles.machines.processors.{TileElectricCrusher, TileElectricFurnace, TileThermalBinder}
+import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, OpensGui}
@@ -26,6 +27,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{EnumWorldBlockLayer, MathHelper, BlockPos, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
+import net.minecraftforge.fluids.{FluidUtil, IFluidHandler}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.mutable.ArrayBuffer
@@ -81,6 +83,19 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
             return true
         }
         false
+    }
+
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing,
+                                  hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+        val heldItem = player.getHeldItem
+        val tank = world.getTileEntity(pos)
+
+        if (heldItem != null && tank.isInstanceOf[IFluidHandler]) {
+            if (FluidUtil.interactWithTank(heldItem, player, tank.asInstanceOf[IFluidHandler], side.getOpposite))
+                return true
+        }
+
+        super[OpensGui].onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
