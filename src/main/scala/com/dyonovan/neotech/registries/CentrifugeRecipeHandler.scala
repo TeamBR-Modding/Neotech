@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
   * @since 2/21/2016
   */
 class CentrifugeRecipeHandler
-  extends AbstractRecipeHandler[CentrifugeRecipe, FluidStack, (FluidStack, FluidStack)] {
+        extends AbstractRecipeHandler[CentrifugeRecipe, FluidStack, (FluidStack, FluidStack)] {
 
     /**
       * Used to get the base name of the files
@@ -114,7 +114,7 @@ class CentrifugeRecipeHandler
 }
 
 class CentrifugeRecipe(val fluidIn: String, val fluidOne: String, val fluidTwo: String)
-  extends AbstractRecipe[FluidStack, (FluidStack, FluidStack)] {
+        extends AbstractRecipe[FluidStack, (FluidStack, FluidStack)] {
     /**
       * Used to get the output of this recipe
       *
@@ -138,8 +138,9 @@ class CentrifugeRecipe(val fluidIn: String, val fluidOne: String, val fluidTwo: 
         if (input == null || input.getFluid == null)
             false
         else {
-            getFluidFromString(fluidIn).getFluid.getName.equalsIgnoreCase(input.getFluid.getName) &&
-              input.amount >= getFluidFromString(fluidIn).amount
+            getFluidFromString(fluidIn) != null &&
+                    getFluidFromString(fluidIn).getFluid.getName.equalsIgnoreCase(input.getFluid.getName) &&
+                    input.amount >= getFluidFromString(fluidIn).amount
         }
     }
 }
