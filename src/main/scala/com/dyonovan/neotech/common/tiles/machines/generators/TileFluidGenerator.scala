@@ -199,6 +199,8 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
     override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = false
 
     override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
+        if(resource == null)
+            return 0
         if (canFill(from, resource.getFluid)) {
             if (tank.fill(resource, false) > 0) {
                 val actual = tank.fill(resource, doFill)
