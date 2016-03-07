@@ -50,7 +50,7 @@ class ClientProxy extends CommonProxy {
         for(dye <- EnumDyeColor.values())
             ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.pipeBasicStructure),
                 "pipeStructure",
-                "color=" + dye.getName + ",down=true,east=false,north=false,south=false,up=true,west=false,inventory")
+                "color=" + dye.getName + ",down=true,east=false,north=false,south=false,up=true,west=false")
 
 
         //Item Stuff
@@ -58,21 +58,21 @@ class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(
             BlockManager.pipeItemInterface,
                 "pipeItemBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0,inventory")
+            "down=2,east=0,north=0,south=0,up=1,west=0")
 
         //Fluid Stuff
         ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeFluidInterface), new PipeSpecialModelMesh)
         ItemRenderManager.registerBlockModel(
             BlockManager.pipeFluidInterface,
             "pipeFluidBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0,inventory")
+            "down=2,east=0,north=0,south=0,up=1,west=0")
 
         //Energy
         ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeEnergyInterface), new PipeSpecialModelMesh)
         ItemRenderManager.registerBlockModel(
             BlockManager.pipeEnergyInterface,
             "pipeEnergyBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0,inventory")
+            "down=2,east=0,north=0,south=0,up=1,west=0")
 
         ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricFurnace", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.grinder, "grinder", "normal")

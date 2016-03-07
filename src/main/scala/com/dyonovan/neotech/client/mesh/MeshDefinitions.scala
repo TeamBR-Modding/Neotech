@@ -31,7 +31,7 @@ object MeshDefinitions {
         override def getModelLocation(stack: ItemStack): ModelResourceLocation =
             new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID + ":pipeStructure"),
                 "color=" + EnumDyeColor.byMetadata(stack.getItemDamage).getName +
-                ",down=true,east=false,north=false,south=false,up=true,west=false,inventory")
+                ",down=true,east=false,north=false,south=false,up=true,west=false")
     }
 
     class PipeSpecialModelMesh extends ItemMeshDefinition {
@@ -44,7 +44,7 @@ object MeshDefinitions {
                 case _ =>
             }
             new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID + ":" + path),
-                "down=2,east=0,north=false,0=false,up=1,west=0,inventory")
+                "down=2,east=0,north=false,0=false,up=1,west=0")
         }
     }
 

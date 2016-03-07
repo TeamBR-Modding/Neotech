@@ -12,7 +12,6 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.{EventPriority, SubscribeEvent}
 
 import scala.collection.JavaConversions._
-import scala.collection.mutable.ArrayBuffer
 
 
 /**
@@ -49,27 +48,15 @@ class ModelFactory {
         event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "voidTank", "inventory"),
             new ModelTank(event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "voidTank", "inventory"))))
 
-        val itemModelsToReadd = new ArrayBuffer[(ModelResourceLocation, IBakedModel)]()
         for(modelLocation <- event.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
             if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
                     (modelLocation.getResourcePath.contains("pipeStructure") ||
                             modelLocation.getResourcePath.contains("BasicInterface"))) {
-                if(modelLocation.toString.contains("down=2,east=0,north=0,south=0,up=1,west=0") ||
-                    modelLocation.toString.contains("down=true,east=false,north=false,south=false,up=true,west=false")) {
-                    // Preserve the old model for item rendering
-                    val oldModel = event.modelRegistry.getObject(modelLocation)
-                    val itemModelLocation = new ModelResourceLocation(modelLocation.toString + ",inventory")
-                    val tuple = (itemModelLocation, oldModel)
-                    itemModelsToReadd += tuple
-                }
 
                 // Create Multipart world obj
                 event.modelRegistry.putObject(modelLocation, new ModelMultipartContainer(event.modelRegistry.getObject(modelLocation)))
             }
         }
-
-        for(pair <- itemModelsToReadd)
-            event.modelRegistry.putObject(pair._1, pair._2)
 
         val builder = Maps.newHashMap[TransformType, TRSRTransformation]()
         builder.putAll(IPerspectiveAwareModel.MapWrapper.getTransforms(ModelHelper.DEFAULT_TOOL_STATE))
