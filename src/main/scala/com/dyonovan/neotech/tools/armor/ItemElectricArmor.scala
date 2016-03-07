@@ -132,7 +132,9 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             var horizontalSpeed: Double = 0
             var verticalSpeed: Double = 0
 
-            horizontalSpeed = 0.2
+            horizontalSpeed = 0.2 * (if(player.inventory.armorInventory(1) != null &&
+                    player.inventory.armorInventory(1).getItem == ItemManager.electricArmorLeggings)
+                    Math.max(ModifierSprinting.getSprintingLevel(player.inventory.armorInventory(1)) / 2, 1) else 1)
             verticalSpeed = 0.7
 
             player.motionY *= verticalSpeed
