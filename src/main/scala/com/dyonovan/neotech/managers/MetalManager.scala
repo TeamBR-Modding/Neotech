@@ -3,14 +3,16 @@ package com.dyonovan.neotech.managers
 import java.util
 import javax.annotation.Nullable
 
-import com.dyonovan.neotech.client.ItemRenderManager
+import com.dyonovan.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefinition
+import com.dyonovan.neotech.client.{ItemRenderManager, ModelLoaderHelper}
 import com.dyonovan.neotech.common.metals.blocks.{BlockFluidMetal, BlockMetalOre}
 import com.dyonovan.neotech.common.metals.fluids.FluidMetal
 import com.dyonovan.neotech.common.metals.items.ItemMetal
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.registries.ConfigRegistry
-import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
+import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fluids.{Fluid, FluidRegistry}
 import net.minecraftforge.fml.common.Loader
@@ -50,27 +52,32 @@ object MetalManager {
             val metal = metalRegistry.get(iterator.next())
             //Blocks
             if (metal.block.isDefined)
-                ItemRenderManager.registerItem(Item.getItemFromBlock(metal.block.get))
+                ItemRenderManager.registerBlockModel(metal.block.get, metal.block.get.getName, "normal")
 
             //Ore
             if (metal.oreBlock.isDefined)
-                ItemRenderManager.registerItem(Item.getItemFromBlock(metal.oreBlock.get))
+                ItemRenderManager.registerBlockModel(metal.oreBlock.get, metal.oreBlock.get.getName, "normal")
 
             //Ingots
-            if (metal.ingot.isDefined)
-                ItemRenderManager.registerItem(metal.ingot.get)
+            if (metal.ingot.isDefined) {
+                ModelLoader.setCustomMeshDefinition(metal.ingot.get,
+                    new SimpleItemMeshDefinition("metalItem", "type=ingot"))
+                ModelLoaderHelper.registerItem(metal.ingot.get, "items/metalItem", "type=ingot")
+            }
 
             //Dust
-            if (metal.dust.isDefined)
-                ItemRenderManager.registerItem(metal.dust.get)
+            if (metal.dust.isDefined) {
+                ModelLoader.setCustomMeshDefinition(metal.dust.get,
+                    new SimpleItemMeshDefinition("metalItem", "type=dust"))
+                ModelLoaderHelper.registerItem(metal.dust.get, "items/metalItem", "type=dust")
+            }
 
             //Nugget
-            if (metal.nugget.isDefined)
-                ItemRenderManager.registerItem(metal.nugget.get)
-
-            // Fluids
-            if (metal.fluidBlock.isDefined)
-                ItemRenderManager.registerItem(Item.getItemFromBlock(metal.fluidBlock.get))
+            if (metal.nugget.isDefined) {
+                ModelLoader.setCustomMeshDefinition(metal.nugget.get,
+                    new SimpleItemMeshDefinition("metalItem", "type=nugget"))
+                ModelLoaderHelper.registerItem(metal.nugget.get, "items/metalItem", "type=nugget")
+            }
         }
     }
 

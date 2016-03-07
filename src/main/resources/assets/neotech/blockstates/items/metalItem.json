@@ -1,0 +1,26 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "type": {
+            "dust": {
+                "textures": {
+                    "layer0": "neotech:items/metal_dust"
+                }
+            },
+            "ingot": {
+                "textures": {
+                    "layer0": "neotech:items/metal_ingot"
+                }
+            },
+            "nugget": {
+                "textures": {
+                    "layer0": "neotech:items/metal_nugget"
+                }
+            }
+        }
+    }
+}

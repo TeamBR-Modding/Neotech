@@ -1,11 +1,14 @@
 package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.UpgradeItemManager
+import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.resources.model.ModelResourceLocation
-import net.minecraft.item.{EnumDyeColor, Item}
+import net.minecraft.item.Item
+import net.minecraft.util.ResourceLocation
+import net.minecraftforge.client.model.ModelLoader
 
 /**
   * This file was created for NeoTech
@@ -20,40 +23,6 @@ import net.minecraft.item.{EnumDyeColor, Item}
 object ItemRenderManager {
 
     def registerItemRenderer(): Unit = {
-        registerItem(Item.getItemFromBlock(BlockManager.grinder))
-        registerItem(Item.getItemFromBlock(BlockManager.electricFurnace))
-        registerItem(Item.getItemFromBlock(BlockManager.electricCrusher))
-        registerItem(Item.getItemFromBlock(BlockManager.furnaceGenerator))
-        registerItem(Item.getItemFromBlock(BlockManager.fluidGenerator))
-        registerItem(Item.getItemFromBlock(BlockManager.thermalBinder))
-        registerItem(Item.getItemFromBlock(BlockManager.electricCrucible))
-        registerItem(Item.getItemFromBlock(BlockManager.electricSolidifier))
-        registerItem(Item.getItemFromBlock(BlockManager.electricAlloyer))
-        registerItem(Item.getItemFromBlock(BlockManager.electricCentrifuge))
-        registerItem(Item.getItemFromBlock(BlockManager.pump))
-        registerItem(Item.getItemFromBlock(BlockManager.treeFarm))
-        registerItem(Item.getItemFromBlock(BlockManager.mechanicalPipe))
-        registerItem(Item.getItemFromBlock(BlockManager.solarPanelT1))
-        registerItem(Item.getItemFromBlock(BlockManager.solarPanelT2))
-        registerItem(Item.getItemFromBlock(BlockManager.solarPanelT3))
-        registerItem(Item.getItemFromBlock(BlockManager.basicRFStorage))
-        registerItem(Item.getItemFromBlock(BlockManager.advancedRFStorage))
-        registerItem(Item.getItemFromBlock(BlockManager.eliteRFStorage))
-        registerItem(Item.getItemFromBlock(BlockManager.creativeRFStorage))
-        registerItem(Item.getItemFromBlock(BlockManager.ironTank))
-        registerItem(Item.getItemFromBlock(BlockManager.goldTank))
-        registerItem(Item.getItemFromBlock(BlockManager.diamondTank))
-        registerItem(Item.getItemFromBlock(BlockManager.creativeTank))
-        registerItem(Item.getItemFromBlock(BlockManager.voidTank))
-        registerItem(Item.getItemFromBlock(BlockManager.blockCrafter))
-        registerItem(Item.getItemFromBlock(BlockManager.blockMiniatureSun))
-        registerItem(Item.getItemFromBlock(BlockManager.playerPlate))
-        registerItem(Item.getItemFromBlock(BlockManager.chunkLoader))
-        registerItem(Item.getItemFromBlock(BlockManager.flushableChest))
-        registerItem(Item.getItemFromBlock(BlockManager.dimStorage))
-        registerItem(Item.getItemFromBlock(BlockManager.redstoneClock))
-        registerItem(Item.getItemFromBlock(BlockManager.mobStand))
-        registerItem(Item.getItemFromBlock(BlockManager.blockAttractor))
         registerItem(ItemManager.upgradeMBFull)
         registerItem(ItemManager.upgradeMBEmpty)
         registerItem(ItemManager.upgradeHardDrive)
@@ -98,8 +67,6 @@ object ItemRenderManager {
         registerItem(UpgradeItemManager.upgradeGlide)
         registerItem(UpgradeItemManager.upgradeSprinting)
         registerItem(UpgradeItemManager.upgradeNightVision)
-
-        registerPipesAndColored()
     }
 
     def registerItem(item: Item): Unit = {
@@ -107,22 +74,13 @@ object ItemRenderManager {
             new ModelResourceLocation(item.getUnlocalizedName.substring(5), "inventory"))
     }
 
-    def registerPipesAndColored() : Unit = {
-        //Colored
-        for(color <- EnumDyeColor.values()) {
-            Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(Item.getItemFromBlock(BlockManager.pipeBasicStructure), color.getMetadata,
-                new ModelResourceLocation(Reference.MOD_ID + ":pipeStructure_" + color.getName, "inventory"))
-            Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(Item.getItemFromBlock(BlockManager.blockMiniatureStar), color.getMetadata,
-                new ModelResourceLocation(Reference.MOD_ID + ":blockMiniatureStar_" + color.getName, "inventory"))
-        }
+    def registerBlockModel(block : Block, name : String, variants : String, meta : Int = 0) : Unit = {
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
+            meta, new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, name), variants))
+    }
 
-        //Item Stuff
-        registerItem(Item.getItemFromBlock(BlockManager.pipeItemInterface))
-
-        //Fluid Stuff
-        registerItem(Item.getItemFromBlock(BlockManager.pipeFluidInterface))
-
-        //Energy
-        registerItem(Item.getItemFromBlock(BlockManager.pipeEnergyInterface))
+    def registerItemModel(item : Item, name : String, variants : String, meta : Int = 0) : Unit = {
+        ModelLoader.setCustomModelResourceLocation(item,
+            meta, new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, name), variants))
     }
 }

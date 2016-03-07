@@ -5,5 +5,7 @@
 			"all": "neotech:blocks/advancedRFStorage"
 		}
 	},
-	"variants" : { "normal" : { "model": "neotech:block" } }
+	"variants" : {
+        "normal" : { "model": "neotech:block" }
+    }
 }

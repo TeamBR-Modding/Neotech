@@ -4,8 +4,8 @@
     },
     "elements" : [
         {
-            "from" : [ 4, 4, 12.01 ],
-            "to" : [ 12, 12, 16 ],
+            "from" : [ 3.99, 3.99, 12.01 ],
+            "to" : [ 11.99, 11.99, 16 ],
             "faces" : {
                 "up"   : { "texture" : "#extra"},
                 "down" : { "uv" : [4, 0, 12, 4], "texture" : "#extra"},
@@ -14,5 +14,12 @@
                 "north" :{ "texture" : "#extra"}
             }
         }
-    ]
+    ],
+    "display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    }
 }

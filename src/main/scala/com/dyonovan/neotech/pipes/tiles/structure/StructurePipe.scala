@@ -26,8 +26,11 @@ class StructurePipe extends TileCoverable with SimplePipe {
     override def canConnect(facing: EnumFacing): Boolean = {
         worldObj.getBlockState(pos.offset(facing)).getBlock match {
             case block: BlockPipe  => //We are checking if it and us are colored
-                if (worldObj.getBlockState(pos.offset(facing)).getBlock.asInstanceOf[BlockPipe].colored &&
-                        worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).ordinal() != 0)
+                // Check for white
+                if(worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).ordinal() == 0 ||
+                    worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).ordinal() == 0)
+                    return true
+                if (worldObj.getBlockState(pos.offset(facing)).getBlock.asInstanceOf[BlockPipe].colored)
                     worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).ordinal() ==
                             worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).ordinal() && super.canConnect(facing)
                 else
