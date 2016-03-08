@@ -86,6 +86,7 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
                 return false
             }
         }
+        failCoolDown = 40
         false
     }
 

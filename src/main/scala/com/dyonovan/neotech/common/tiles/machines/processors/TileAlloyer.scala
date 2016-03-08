@@ -58,6 +58,7 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
                     (if(tanks(OUTPUT_TANK).getFluid == null) true else RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer)
                             .getOutput(tanks(INPUT_TANK_1).getFluid, tanks(INPUT_TANK_2).getFluid).get.amount + tanks(OUTPUT_TANK).getFluidAmount <= tanks(OUTPUT_TANK).getCapacity)
         }
+        failCoolDown = 40
         false
     }
     /**

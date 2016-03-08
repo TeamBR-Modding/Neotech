@@ -83,6 +83,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
                 return false
             }
         }
+        failCoolDown = 40
         false
     }
 

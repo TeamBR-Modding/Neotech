@@ -76,6 +76,7 @@ class TileCentrifuge extends MachineProcessor[FluidStack, (FluidStack, FluidStac
                 }
             }
         }
+        failCoolDown = 40
         false
     }
     /**
