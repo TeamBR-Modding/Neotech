@@ -17,6 +17,7 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fluids.{Fluid, FluidRegistry}
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
   * This file was created for NeoTech
@@ -45,6 +46,7 @@ object MetalManager {
     lazy val tinkers: util.List[String] = util.Arrays.asList("brass", "copper", "tin", "bronze", "zinc", "lead",
         "nickel", "silver", "electrum", "steel", "aluminium")
 
+    @SideOnly(Side.CLIENT)
     def registerModels(): Unit = {
         MinecraftForge.EVENT_BUS.register(this)
         val iterator = metalRegistry.keySet().iterator()
