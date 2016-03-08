@@ -119,6 +119,10 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
                 ModifierSprinting.getSprintingLevel(itemStack) > 0) {
             player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 20,
                 ModifierSprinting.getSprintingLevel(itemStack) * 10 - 1, false, false))
+            if (!player.capabilities.isCreativeMode && !world.isRemote) {
+                extractEnergy(itemStack, 1, simulate = false)
+                updateDamage(itemStack)
+            }
         } else if(itemStack.getItem == ItemManager.electricArmorLeggings) {
             player.removePotionEffect(Potion.moveSpeed.id)
         }
