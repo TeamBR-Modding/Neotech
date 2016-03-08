@@ -63,17 +63,13 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         // Drain the energy
         if (stack.getTagCompound != null && stack.getTagCompound.hasKey("Energy")) {
             var energy = stack.getTagCompound.getInteger("Energy")
-            val energyExtracted = Math.min(energy, Math.min(stack.getTagCompound.getInteger("MaxExtract"), 150))
+            val energyExtracted = Math.min(energy, Math.min(stack.getTagCompound.getInteger("MaxExtract"), if (damage > 0) 150 else 0))
             energy -= energyExtracted
             stack.getTagCompound.setInteger("Energy", energy)
         }
 
         val scaled = getEnergyStored(stack).toFloat / getMaxEnergyStored(stack)
-        var toSet = 16 - Math.round(scaled * 16)
-        if (scaled < 1 && toSet == 0)
-            toSet = 1
-        else if(toSet == 16)
-            toSet = 15
+        val toSet = 16 - Math.round(scaled * 16)
         super.setDamage(stack, toSet)
     }
 
