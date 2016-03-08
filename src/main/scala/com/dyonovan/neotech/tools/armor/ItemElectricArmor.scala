@@ -63,7 +63,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         // Drain the energy
         if (stack.getTagCompound != null && stack.getTagCompound.hasKey("Energy")) {
             var energy = stack.getTagCompound.getInteger("Energy")
-            val energyExtracted = Math.min(energy, Math.min(stack.getTagCompound.getInteger("MaxExtract"), if (damage > 0) 150 else 0))
+            val energyExtracted = Math.min(energy, Math.min(stack.getTagCompound.getInteger("MaxExtract"), if (damage > 0) damage else 0))
             energy -= energyExtracted
             stack.getTagCompound.setInteger("Energy", energy)
         }
@@ -106,8 +106,8 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         if(getEnergyStored(itemStack) > 5 && itemStack.getItem == ItemManager.electricArmorHelmet &&
                 ModifierNightVision.hasNightVision(itemStack)) {
             player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 220, 0, false, false))
-            if (!player.capabilities.isCreativeMode) {
-                extractEnergy(itemStack, 5, simulate = false)
+            if (!player.capabilities.isCreativeMode && !world.isRemote) {
+                extractEnergy(itemStack, 1, simulate = false)
                 updateDamage(itemStack)
             }
         } else if(itemStack.getItem == ItemManager.electricArmorHelmet) {
