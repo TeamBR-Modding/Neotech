@@ -6,6 +6,7 @@ import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.google.common.base.Function
 import com.google.common.collect.{ImmutableList, ImmutableMap}
+import com.teambr.bookshelf.client.ModelHelper
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType
@@ -31,14 +32,15 @@ class ToolModel(parent : IFlexibleBakedModel, transform : ImmutableMap[Transform
         ItemLayerModel.BakedModel(parent.getGeneralQuads.asInstanceOf[ImmutableList[BakedQuad]],
             parent.getParticleTexture, parent.getFormat) with ISmartItemModel with IPerspectiveAwareModel {
 
+    lazy  val function = new Function[ResourceLocation, TextureAtlasSprite] {
+        override def apply(input: ResourceLocation): TextureAtlasSprite =
+            Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(input.toString)
+    }
+
     override def handleItemState(stack: ItemStack): IBakedModel = {
         if(stack == null || !stack.hasTagCompound)
             parent
         else {
-            val function = new Function[ResourceLocation, TextureAtlasSprite] {
-                override def apply(input: ResourceLocation): TextureAtlasSprite =
-                    Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(input.toString)
-            }
             val textureBuilder = ImmutableMap.builder[String, String]()
             textureBuilder.put("layer0", stack.getItem.asInstanceOf[BaseElectricTool].getBaseTexture)
 

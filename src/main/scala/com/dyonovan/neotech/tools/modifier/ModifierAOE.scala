@@ -1,6 +1,8 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
+import com.teambr.bookshelf.annotations.ModItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -78,6 +80,7 @@ object ModifierAOE extends Modifier("aoe") {
         ArrayBuffer("AOE: " + size)
     }
 
+    @ModItem(modid = Reference.MOD_ID)
     class ItemModifierAOE extends BaseUpgradeItem("aoe", 4) {
 
         /**

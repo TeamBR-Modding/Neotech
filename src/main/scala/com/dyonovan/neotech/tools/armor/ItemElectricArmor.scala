@@ -4,12 +4,21 @@ import java.util
 
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.network.{SpawnJetpackParticles, DrainEnergyPacketArmor, PacketDispatcher, ResetFallDistance}
+import com.dyonovan.neotech.network.{DrainEnergyPacketArmor, PacketDispatcher, ResetFallDistance, SpawnJetpackParticles}
+import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
+import com.dyonovan.neotech.tools.modifier.ModifierFallResist.ItemModifierFallResist
+import com.dyonovan.neotech.tools.modifier.ModifierGlide.ItemModifierGlide
+import com.dyonovan.neotech.tools.modifier.ModifierHover.ItemModifierHover
+import com.dyonovan.neotech.tools.modifier.ModifierJetpack.ItemModifierJetpack
+import com.dyonovan.neotech.tools.modifier.ModifierNightVision.ItemModifierNightVision
+import com.dyonovan.neotech.tools.modifier.ModifierProtection.ItemModifierProtection
+import com.dyonovan.neotech.tools.modifier.ModifierSprinting.ItemModifierSprinting
 import com.dyonovan.neotech.tools.modifier._
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
-import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
+import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
+import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemArmor, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
@@ -82,7 +91,6 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
             if(ModifierFallResist.hasFallResist(itemStack))
                 player.fallDistance = 0
         } else {
-
             // Jetpack
             if(ModifierFallResist.hasFallResist(itemStack))
                 player.fallDistance = 0
@@ -99,6 +107,17 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
                     if(player.motionY > -1)
                         PacketDispatcher.net.sendToServer(new ResetFallDistance)
                 }
+            }
+
+            if(getEnergyStored(itemStack) > 1 &&
+                    ClientUtils.isCtrlPressed && ModifierHover.hasHover(itemStack) && !player.onGround) {
+                player.motionY = 0
+                if (!player.capabilities.isCreativeMode) {
+                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType, 1))
+                    if(player.motionY > -1)
+                        PacketDispatcher.net.sendToServer(new ResetFallDistance)
+                }
+                PacketDispatcher.net.sendToServer(new SpawnJetpackParticles(player))
             }
         }
 
@@ -164,18 +183,19 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         val list = new util.ArrayList[String]()
         armorType match {
             case 0 =>
-                list.add(UpgradeItemManager.upgradeNightVision.getUpgradeName)
+                list.add(ItemManager.itemRegistry.get(classOf[ItemModifierNightVision]).asInstanceOf[BaseUpgradeItem].getUpgradeName)
             case 1 =>
-                list.add(UpgradeItemManager.upgradeJetpack.getUpgradeName)
-                list.add(UpgradeItemManager.upgradeGlide.getUpgradeName)
+                list.add(ItemManager.itemRegistry.get(classOf[ItemModifierJetpack]).asInstanceOf[BaseUpgradeItem].getUpgradeName)
+                list.add(ItemManager.itemRegistry.get(classOf[ItemModifierGlide]).asInstanceOf[BaseUpgradeItem].getUpgradeName)
+                list.add(ItemManager.itemRegistry.get(classOf[ItemModifierHover]).asInstanceOf[BaseUpgradeItem].getUpgradeName)
             case 2 =>
-                list.add(UpgradeItemManager.upgradeSprinting.getUpgradeName)
+                list.add(ItemManager.itemRegistry.get(classOf[ItemModifierSprinting]).asInstanceOf[BaseUpgradeItem].getUpgradeName)
             case 3 =>
-                list.add(UpgradeItemManager.upgradeFallResist.getUpgradeName)
+                list.add(ItemManager.itemRegistry.get(classOf[ItemModifierFallResist]).asInstanceOf[BaseUpgradeItem].getUpgradeName)
             case _=>
         }
         list.add(ItemManager.basicRFBattery.getUpgradeName)
-        list.add(UpgradeItemManager.upgradeProtection.getUpgradeName)
+        list.add(ItemManager.itemRegistry.get(classOf[ItemModifierProtection]).asInstanceOf[BaseUpgradeItem].getUpgradeName)
         list
     }
 

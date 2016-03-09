@@ -1,7 +1,9 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
+import com.teambr.bookshelf.annotations.ModItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -63,6 +65,7 @@ object ModifierLighting extends Modifier("lighting") {
     override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] =
         ArrayBuffer(ClientUtils.translate("neotech.text.lighting"))
 
+    @ModItem(modid = Reference.MOD_ID)
     class ItemModifierLighting extends BaseUpgradeItem("lighting", 1) {
 
         /**

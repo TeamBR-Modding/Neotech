@@ -56,7 +56,7 @@ class SpawnJetpackParticles extends IMessage with IMessageHandler[SpawnJetpackPa
                 for (i <- 0 until (360 / 20)) {
                     val x = message.x + Math.cos(Math.toRadians(i * 20)) * r * t * 2
                     val z = message.z + Math.sin(Math.toRadians(i * 20)) * r * t * 2
-                    Minecraft.getMinecraft.theWorld.spawnParticle(EnumParticleTypes.FLAME, x, message.y, z, 0, -1 + (t * 0.5), 0)
+                    Minecraft.getMinecraft.theWorld.spawnParticle(EnumParticleTypes.FLAME, x, message.y, z, 0, -1 + (t * 0.4), 0)
                 }
             }
         }

@@ -4,9 +4,15 @@ import java.util
 
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
-import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
+import com.dyonovan.neotech.tools.modifier.ModifierBaneOfArthropods.ItemModifierBaneOfArthropods
+import com.dyonovan.neotech.tools.modifier.ModifierBeheading.ItemModifierBeheading
+import com.dyonovan.neotech.tools.modifier.ModifierLooting.ItemModifierLooting
+import com.dyonovan.neotech.tools.modifier.ModifierSharpness.ItemModifierSharpness
+import com.dyonovan.neotech.tools.modifier.ModifierSmite.ItemModifierSmite
+import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.Block
 import net.minecraft.entity.EntityLivingBase
@@ -92,9 +98,12 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH_TOOLS) with BaseElectri
       * The list of things that are accepted by this item
       */
     override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
-        UpgradeItemManager.upgradeSharpness.getUpgradeName, UpgradeItemManager.upgradeSmite.getUpgradeName,
-        ItemManager.basicRFBattery.getUpgradeName, UpgradeItemManager.upgradeBeheading.getUpgradeName,
-        UpgradeItemManager.upgradeSpiderBane.getUpgradeName, UpgradeItemManager.upgradeLooting.getUpgradeName
+        ItemManager.basicRFBattery.getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierSharpness]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierSmite]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierBeheading]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierBaneOfArthropods]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierLooting]).asInstanceOf[BaseUpgradeItem].getUpgradeName
     ))
 
     /**

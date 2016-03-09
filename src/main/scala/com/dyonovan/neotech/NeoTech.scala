@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.fml.common.{Mod, SidedProxy}
 import org.apache.logging.log4j.LogManager
 
-import collection.JavaConversions._
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech

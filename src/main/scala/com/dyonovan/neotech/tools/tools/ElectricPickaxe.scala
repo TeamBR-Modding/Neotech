@@ -6,7 +6,14 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.tools.ToolHelper.ToolType
 import com.dyonovan.neotech.tools.ToolHelper.ToolType.ToolType
+import com.dyonovan.neotech.tools.modifier.ModifierAOE.ItemModifierAOE
+import com.dyonovan.neotech.tools.modifier.ModifierFortune.ItemModifierFortune
+import com.dyonovan.neotech.tools.modifier.ModifierLighting.ItemModifierLighting
+import com.dyonovan.neotech.tools.modifier.ModifierMiningSpeed.ItemModifierMiningSpeed
+import com.dyonovan.neotech.tools.modifier.ModifierShovel.ItemModifierShovel
+import com.dyonovan.neotech.tools.modifier.ModifierSilkTouch.ItemModifierSilkTouch
 import com.dyonovan.neotech.tools.modifier._
+import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.tools.{ToolHelper, UpgradeItemManager}
 import com.dyonovan.neotech.utils.ClientUtils
 import gnu.trove.map.hash.THashMap
@@ -82,10 +89,13 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
       */
     override def acceptableUpgrades: util.ArrayList[String] = new util.ArrayList[String](util.Arrays.asList(
         UpgradeItemManager.upgradeMiningLevel2.getUpgradeName, UpgradeItemManager.upgradeMiningLevel3.getUpgradeName,
-        UpgradeItemManager.upgradeMiningLevel4.getUpgradeName, UpgradeItemManager.upgradeSilkTouch.getUpgradeName,
-        UpgradeItemManager.upgradeFortune.getUpgradeName, UpgradeItemManager.upgradeMiningSpeed.getUpgradeName,
-        UpgradeItemManager.upgradeAOE.getUpgradeName, ItemManager.basicRFBattery.getUpgradeName,
-        UpgradeItemManager.upgradeShovel.getUpgradeName, UpgradeItemManager.upgradeLighting.getUpgradeName
+        UpgradeItemManager.upgradeMiningLevel4.getUpgradeName, ItemManager.basicRFBattery.getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierSilkTouch]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierFortune]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierMiningSpeed]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierAOE]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierShovel]).asInstanceOf[BaseUpgradeItem].getUpgradeName,
+        ItemManager.itemRegistry.get(classOf[ItemModifierLighting]).asInstanceOf[BaseUpgradeItem].getUpgradeName
     ))
 
     /*******************************************************************************************************************

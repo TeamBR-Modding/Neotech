@@ -1,6 +1,8 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
+import com.teambr.bookshelf.annotations.ModItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -50,6 +52,7 @@ object ModifierShovel extends Modifier("shovelPick") {
     override def getToolTipForWriting(stack: ItemStack, tag: NBTTagCompound): ArrayBuffer[String] =
         ArrayBuffer("Also a shovel!")
 
+    @ModItem(modid = Reference.MOD_ID)
     class ItemModifierShovel extends BaseUpgradeItem("shovelPick", 1) {
 
         /**

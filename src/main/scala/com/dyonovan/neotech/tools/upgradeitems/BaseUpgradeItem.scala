@@ -2,9 +2,12 @@ package com.dyonovan.neotech.tools.upgradeitems
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
+import com.teambr.bookshelf.common.items.traits.SimpleItemModelProvider
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -17,7 +20,7 @@ import net.minecraft.nbt.NBTTagCompound
   * @since 2/23/2016
   */
 abstract class BaseUpgradeItem(name: String, stackSize: Int,
-                      tab : CreativeTabs = NeoTech.tabTools) extends Item {
+                               tab : CreativeTabs = NeoTech.tabTools) extends SimpleItemModelProvider {
 
     setMaxStackSize(stackSize)
     if(tab != null)
@@ -28,14 +31,20 @@ abstract class BaseUpgradeItem(name: String, stackSize: Int,
 
     /**
       * Used to get the max level of this item
- *
+      *
       * @return
       */
     def getMaximumLevel : Int = stackSize
 
     /**
+      * Provide the manager with a list of upgrades to create
+      * @return
+      */
+    override def getTextures: ArrayBuffer[String] = ArrayBuffer("neotech:items/tools/upgrades/" + name + "Upgrade")
+
+    /**
       * Can this upgrade item allow more to be applied to the item
- *
+      *
       * @param stack The stack we want to apply to, get count from there
       * @param count The stack size of the input
       * @return True if there is space for the entire count
@@ -44,9 +53,10 @@ abstract class BaseUpgradeItem(name: String, stackSize: Int,
 
     /**
       * Use this to put information onto the stack, called when put onto the stack
- *
+      *
       * @param stack The stack to put onto
       * @return The tag passed
       */
     def writeInfoToNBT(stack : ItemStack, tag: NBTTagCompound, writingStack : ItemStack) : Unit
+
 }

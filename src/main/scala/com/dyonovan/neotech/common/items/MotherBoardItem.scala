@@ -34,7 +34,7 @@ class MotherBoardItem(name: String, maxStackSize: Int, creative: Boolean) extend
 
     /**
       * Gets the maximum count for upgrades, default 8
- *
+      *
       * @param stack The stack in
       * @return How many this can hold, check for modifiers here
       */

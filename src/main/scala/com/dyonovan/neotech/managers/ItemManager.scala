@@ -5,9 +5,14 @@ import com.dyonovan.neotech.common.items._
 import com.dyonovan.neotech.tools.UpgradeItemManager
 import com.dyonovan.neotech.tools.armor.ItemElectricArmor
 import com.dyonovan.neotech.tools.tools.{ElectricPickaxe, ElectricSword}
+import com.teambr.bookshelf.Bookshelf
+import com.teambr.bookshelf.helper.LogHelper
+import gnu.trove.map.hash.THashMap
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
+
+import scala.collection.JavaConversions._
 
 /**
  * This file was created for NeoTech
@@ -20,6 +25,8 @@ import net.minecraftforge.oredict.OreDictionary
  * @since August 12, 2015
  */
 object ItemManager {
+
+    lazy val itemRegistry = new THashMap[Class[_ <: Item], Item]()
 
     //Upgrade System
     val upgradeMBEmpty = new MotherBoardItem("upgradeMBEmpty", 1, true)
@@ -77,6 +84,24 @@ object ItemManager {
         registerItem(electricArmorChestplate, "electricArmorChestplate")
         registerItem(electricArmorLeggings, "electricArmorLeggings")
         registerItem(electricArmorBoots, "electricArmorBoots")
+
+        for (data <- Bookshelf.itemsToRegister) {
+            if (data.getAnnotationInfo.get("modid") != null &&
+                    data.getAnnotationInfo.get("modid").equals("neotech")) {
+                try {
+                    val asmClass = Class.forName(data.getClassName)
+                    val itemClass = asmClass.asSubclass(classOf[Item])
+
+                    val modItem = itemClass.newInstance()
+
+                    GameRegistry.registerItem(modItem, modItem.getUnlocalizedName.split(":")(1))
+                    itemRegistry.put(itemClass, modItem)
+                } catch {
+                    case e: Exception =>
+                        LogHelper.severe(String.format("Could not register item class %s", data.getClassName))
+                }
+            }
+        }
 
         UpgradeItemManager.preInit()
     }

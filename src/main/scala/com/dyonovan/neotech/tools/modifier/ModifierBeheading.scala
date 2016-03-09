@@ -1,7 +1,9 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
+import com.teambr.bookshelf.annotations.ModItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -58,6 +60,7 @@ object ModifierBeheading extends Modifier("beheading") {
                 ClientUtils.translate("enchantment.level." + tag.getInteger(BEHEADING)))
     }
 
+    @ModItem(modid = Reference.MOD_ID)
     class ItemModifierBeheading extends BaseUpgradeItem("beheading", 3) {
 
         /**

@@ -160,6 +160,7 @@ item.neotech:glide.name=Glide Upgrade
 item.neotech:nightVision.name=Night Vision Upgrade
 item.neotech:sprinting.name=Sprinting Upgrade
 item.neotech:protection.name=Protection Upgrade
+item.neotech:hover.name=Hover Upgrade
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery
@@ -397,6 +398,7 @@ neotech.text.fallResist=Removes Fall Damage
 neotech.text.glide=Sneak to glide in the air
 neotech.text.nightVision=Has Night Vision
 neotech.text.sprinting=Sprinting
+neotech.text.hover=CTRL to Hover
 
 neotech.text.modName=Neotech
 neotech.text.radialMenuKey=Tool/Armor Menu
@@ -407,6 +409,7 @@ jetpack=Jetpack
 glide=Gliding
 nightVision=Night Vision
 sprinting=Speed
+hover=Hover
 
 #######################
 # Commands

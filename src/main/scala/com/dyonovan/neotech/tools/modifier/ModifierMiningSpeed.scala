@@ -1,6 +1,8 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
+import com.teambr.bookshelf.annotations.ModItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -57,6 +59,7 @@ object ModifierMiningSpeed extends Modifier("miningSpeed") {
         ArrayBuffer("Mining Speed: " + (tag.getFloat(SPEED) * 100 / 4).toInt + "%")
     }
 
+    @ModItem(modid = Reference.MOD_ID)
     class ItemModifierMiningSpeed extends BaseUpgradeItem("miningSpeed", 6) {
 
         /**

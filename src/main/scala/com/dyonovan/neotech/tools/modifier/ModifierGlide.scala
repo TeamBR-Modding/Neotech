@@ -1,7 +1,9 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
+import com.teambr.bookshelf.annotations.ModItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -56,6 +58,7 @@ object ModifierGlide extends Modifier("glide") {
     override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] =
         ArrayBuffer[String](ClientUtils.translate("neotech.text.glide"))
 
+    @ModItem(modid = Reference.MOD_ID)
     class ItemModifierGlide extends BaseUpgradeItem("glide", 1) {
 
         /**

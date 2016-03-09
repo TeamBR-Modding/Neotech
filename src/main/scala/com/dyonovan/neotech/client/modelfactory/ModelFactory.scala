@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.client.modelfactory
-import com.dyonovan.neotech.client.modelfactory.models.{ModelHelper, ModelTank, ToolModel}
+import com.dyonovan.neotech.client.modelfactory.models.{ModelTank, ToolModel}
 import com.dyonovan.neotech.lib.Reference
 import com.google.common.collect.{ImmutableMap, Maps}
+import com.teambr.bookshelf.client.ModelHelper
 import mcmultipart.client.multipart.ModelMultipartContainer
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType
 import net.minecraft.client.resources.model.{IBakedModel, ModelResourceLocation}

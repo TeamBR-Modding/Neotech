@@ -17,19 +17,20 @@ import scala.collection.mutable.ArrayBuffer
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
   * @author Paul Davis "pauljoda"
-  * @since 3/3/2016
+  * @since 3/8/2016
   */
-object ModifierFallResist extends Modifier("fallResist") {
+object ModifierHover extends Modifier("hover") {
 
-    lazy val FALL_RESIST = "FallResist"
+    lazy val HOVER = "Hover"
+    lazy val ACTIVE = "Active"
 
     /**
       * Checks for silk touch
       */
-    def hasFallResist(stack: ItemStack): Boolean = {
+    def hasHover(stack: ItemStack): Boolean = {
         val tag = getModifierTagFromStack(stack)
-        if (tag != null && tag.hasKey(FALL_RESIST))
-            return tag.getBoolean(FALL_RESIST)
+        if (tag != null && tag.hasKey(HOVER))
+            return tag.getBoolean(HOVER) && tag.getBoolean("Active")
         false
     }
 
@@ -38,8 +39,9 @@ object ModifierFallResist extends Modifier("fallResist") {
       *
       * @return
       */
-    def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasSilkTouch: Boolean): NBTTagCompound = {
-        tag.setBoolean(FALL_RESIST, hasSilkTouch)
+    def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasHover: Boolean): NBTTagCompound = {
+        tag.setBoolean(HOVER, hasHover)
+        tag.setBoolean(ACTIVE, true)
         super.writeToNBT(tag, stack)
         tag
     }
@@ -51,10 +53,10 @@ object ModifierFallResist extends Modifier("fallResist") {
       * @return A list of tips
       */
     override def getToolTipForWriting(stack: ItemStack, tag : NBTTagCompound): ArrayBuffer[String] =
-        ArrayBuffer[String](ClientUtils.translate("neotech.text.fallResist"))
+        ArrayBuffer[String](ClientUtils.translate("neotech.text.hover"))
 
     @ModItem(modid = Reference.MOD_ID)
-    class ItemModifierFallResist extends BaseUpgradeItem("fallResist", 1) {
+    class ItemModifierHover extends BaseUpgradeItem("hover", 1) {
 
         /**
           * Can this upgrade item allow more to be applied to the item
@@ -64,7 +66,7 @@ object ModifierFallResist extends Modifier("fallResist") {
           * @return True if there is space for the entire count
           */
         override def canAcceptLevel(stack: ItemStack, count: Int, name: String): Boolean =
-            !ModifierFallResist.hasFallResist(stack)
+            !ModifierHover.hasHover(stack)
 
         /**
           * Use this to put information onto the stack, called when put onto the stack
@@ -73,11 +75,11 @@ object ModifierFallResist extends Modifier("fallResist") {
           * @return The tag passed
           */
         override def writeInfoToNBT(stack: ItemStack, tag: NBTTagCompound,  writingStack : ItemStack): Unit = {
-            var localTag = ModifierFallResist.getModifierTagFromStack(stack)
+            var localTag = ModifierHover.getModifierTagFromStack(stack)
             if(localTag == null)
                 localTag = new NBTTagCompound
-            ModifierFallResist.writeToNBT(localTag, stack, if(writingStack.stackSize > 0) true else false)
-            ModifierFallResist.overrideModifierTag(stack, localTag)
+            ModifierHover.writeToNBT(localTag, stack, if(writingStack.stackSize > 0) true else false)
+            ModifierHover.overrideModifierTag(stack, localTag)
         }
     }
 }

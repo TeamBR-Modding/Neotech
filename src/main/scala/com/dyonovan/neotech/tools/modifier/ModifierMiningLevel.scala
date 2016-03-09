@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.dyonovan.neotech.tools.UpgradeItemManager
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.teambr.bookshelf.client.gui.GuiTextFormat
 import net.minecraft.item.ItemStack
@@ -86,6 +87,19 @@ object ModifierMiningLevel extends Modifier("miningLevel") {
     }
 
     class ItemModifierMiningLevel(level : Int) extends BaseUpgradeItem("miningLevel" + level, 1) {
+
+        override def getTextures: ArrayBuffer[String] = ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade2",
+            "neotech:items/tools/upgrades/miningLevelUpgrade3", "neotech:items/tools/upgrades/miningLevelUpgrade4")
+
+        override def getTextures(stack : ItemStack) : ArrayBuffer[String] = {
+            stack.getItem match {
+                case item : UpgradeItemManager.upgradeMiningLevel2.type => ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade2")
+                case item : UpgradeItemManager.upgradeMiningLevel3.type => ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade3")
+                case item : UpgradeItemManager.upgradeMiningLevel4.type => ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade4")
+                case _ => ArrayBuffer("neotech:items/upgrades/miningLevelUpgrade2")
+
+            }
+        }
 
         /**
           * Can this upgrade item allow more to be applied to the item

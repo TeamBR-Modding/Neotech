@@ -1,10 +1,13 @@
 package com.dyonovan.neotech.common.items
 
 import com.dyonovan.neotech.NeoTech
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -18,6 +21,20 @@ import net.minecraft.nbt.NBTTagCompound
   */
 class MotherBoardUpgradeItem(name: String, stackSize: Int,
                              tab : CreativeTabs = NeoTech.tabTools) extends BaseUpgradeItem(name, stackSize, tab) {
+
+    override def getTextures: ArrayBuffer[String] = ArrayBuffer("neotech:items/upgradeControl",
+        "neotech:items/upgradeExpansion", "neotech:items/upgradeHardDrive", "neotech:items/upgradeProcessor")
+
+    override def getTextures(stack : ItemStack) : ArrayBuffer[String] = {
+        stack.getItem match {
+            case item : ItemManager.upgradeControl.type => ArrayBuffer("neotech:items/upgradeControl")
+            case item : ItemManager.upgradeExpansion.type => ArrayBuffer("neotech:items/upgradeExpansion")
+            case item : ItemManager.upgradeHardDrive.type => ArrayBuffer("neotech:items/upgradeHardDrive")
+            case item : ItemManager.upgradeProcessor.type => ArrayBuffer("neotech:items/upgradeProcessor")
+            case _ => ArrayBuffer("neotech:items/upgradeProcessor")
+        }
+    }
+
     /**
       * Use this to put information onto the stack, called when put onto the stack
       *

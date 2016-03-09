@@ -14,6 +14,8 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
   * This file was created for NeoTech
   *
@@ -30,6 +32,18 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
     setCreativeTab(NeoTech.tabNeoTech)
     setMaxStackSize(maxStackSize)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
+
+    override def getTextures: ArrayBuffer[String] = ArrayBuffer("neotech:items/basicRFBattery",
+        "neotech:items/advancedRFBattery", "neotech:items/eliteRFBattery")
+
+    override def getTextures(stack : ItemStack) : ArrayBuffer[String] = {
+        stack.getItem match {
+            case item : ItemManager.basicRFBattery.type => ArrayBuffer("neotech:items/basicRFBattery")
+            case item : ItemManager.advancedRFBattery.type => ArrayBuffer("neotech:items/advancedRFBattery")
+            case item : ItemManager.eliteRFBattery.type => ArrayBuffer("neotech:items/eliteRFBattery")
+            case _ => ArrayBuffer("neotech:items/basicRFBattery")
+        }
+    }
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
         super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected)

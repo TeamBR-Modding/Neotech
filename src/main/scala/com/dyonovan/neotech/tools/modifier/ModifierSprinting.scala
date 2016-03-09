@@ -1,7 +1,9 @@
 package com.dyonovan.neotech.tools.modifier
 
+import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
+import com.teambr.bookshelf.annotations.ModItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -59,6 +61,7 @@ object ModifierSprinting extends Modifier("sprinting") {
         ArrayBuffer(ClientUtils.translate("neotech.text.sprinting") + ": " +
                 ClientUtils.translate("enchantment.level." + tag.getInteger(SPRINTING)))
 
+    @ModItem(modid = Reference.MOD_ID)
     class ItemModifierSprinting extends BaseUpgradeItem("sprinting", 5) {
 
         /**
