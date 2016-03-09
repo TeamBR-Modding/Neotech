@@ -2,6 +2,7 @@ package com.dyonovan.neotech.tools.armor
 
 import java.util
 
+import com.dyonovan.neotech.events.PlayerUpdateEvent
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.network.{DrainEnergyPacketArmor, PacketDispatcher, ResetFallDistance, SpawnJetpackParticles}
@@ -19,6 +20,7 @@ import com.dyonovan.neotech.tools.modifier._
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
+import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemArmor, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
@@ -136,6 +138,10 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         // Sprinting
         if(getEnergyStored(itemStack) > 1 && itemStack.getItem == ItemManager.electricArmorLeggings &&
                 ModifierSprinting.getSprintingLevel(itemStack) > 0) {
+            if(world.isRemote) {
+                PlayerUpdateEvent.dontChangeFOV = true
+                PlayerUpdateEvent.previousFOV = Minecraft.getMinecraft.gameSettings.fovSetting
+            }
             player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 20,
                 ModifierSprinting.getSprintingLevel(itemStack) * 10 - 1, false, false))
             if (!player.capabilities.isCreativeMode && !world.isRemote) {
