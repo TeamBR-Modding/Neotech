@@ -1,13 +1,16 @@
 package com.dyonovan.neotech.common.blocks.storage
 
 import com.dyonovan.neotech.NeoTech
+import com.dyonovan.neotech.client.modelfactory.models.ModelTank
 import com.dyonovan.neotech.common.items.ItemWrench
 import com.dyonovan.neotech.common.tiles.storage.TileTank
 import com.dyonovan.neotech.lib.Reference
+import com.teambr.bookshelf.loadables.ILoadActionProvider
 import com.teambr.bookshelf.notification.{Notification, NotificationHelper}
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
+import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
@@ -16,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{BlockPos, EnumFacing, EnumWorldBlockLayer}
 import net.minecraft.world.World
+import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.fluids.{IFluidContainerItem, FluidUtil, IFluidHandler, FluidContainerRegistry}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -31,7 +35,7 @@ import scala.util.Random
   * @author Dyonovan
   * @since August 16, 2015
   */
-class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) {
+class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) with ILoadActionProvider {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
@@ -180,5 +184,14 @@ class BlockTank(name: String, tier: Int) extends BlockContainer(Material.glass) 
 
     override def canRenderInLayer(layer: EnumWorldBlockLayer): Boolean = {
         layer == EnumWorldBlockLayer.CUTOUT || layer == EnumWorldBlockLayer.TRANSLUCENT
+    }
+
+    override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
+        event match {
+            case modelBake : ModelBakeEvent =>
+                modelBake.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + name, "inventory"),
+                    new ModelTank(modelBake.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + name, "inventory"))))
+            case _ =>
+        }
     }
 }

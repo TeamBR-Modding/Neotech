@@ -8,23 +8,28 @@ import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.dyonovan.neotech.pipes.types.SimplePipe
+import com.teambr.bookshelf.loadables.ILoadActionProvider
 import mcmultipart.block.{BlockMultipart, BlockCoverable}
+import mcmultipart.client.multipart.ModelMultipartContainer
 import net.minecraft.block.properties.IProperty
 import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.{MapColor, Material}
 import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.client.resources.model.{IBakedModel, ModelResourceLocation}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{EnumDyeColor, Item, ItemDye, ItemStack}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, EnumWorldBlockLayer}
+import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
+import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -37,7 +42,7 @@ import scala.collection.mutable.ArrayBuffer
   * @since August 14, 2015
   */
 class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: StructurePipe])
-            extends BlockCoverable(mat) {
+            extends BlockCoverable(mat) with ILoadActionProvider {
 
     /*******************************************************************************************************************
       * Constructor                                                                                                    *
@@ -317,4 +322,19 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.SOLID
     override def canRenderInLayerDefault(layer : EnumWorldBlockLayer) : Boolean =
         layer == EnumWorldBlockLayer.SOLID
+
+    override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
+        event match {
+            case modelBake: ModelBakeEvent =>
+                for(modelLocation <- modelBake.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
+                    if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
+                            modelLocation.getResourcePath.contains("pipeStructure")) {
+                        // Create Multipart world obj
+                        modelBake.modelRegistry.putObject(modelLocation,
+                            new ModelMultipartContainer(modelBake.modelRegistry.getObject(modelLocation)))
+                    }
+                }
+            case _ =>
+        }
+    }
 }

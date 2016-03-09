@@ -5,35 +5,35 @@ import java.util.Random
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
+import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.container.ContainerAdvancedPipeMenu
 import com.dyonovan.neotech.pipes.gui.GuiAdvancedPipeMenu
-import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe, SimplePipe}
-import com.teambr.bookshelf.Bookshelf
+import com.dyonovan.neotech.pipes.types.{AdvancedPipe, SimplePipe}
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.common.tiles.traits.OpensGui
+import com.teambr.bookshelf.loadables.ILoadActionProvider
 import com.teambr.bookshelf.traits.HasToolTip
-import com.teambr.bookshelf.util.WorldUtils
-import mcmultipart.block.{BlockMultipart, BlockCoverable}
-import net.minecraft.block.properties.IProperty
-import net.minecraft.block.{Block, BlockContainer}
+import mcmultipart.block.{BlockCoverable, BlockMultipart}
+import mcmultipart.client.multipart.ModelMultipartContainer
+import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.client.resources.model.{IBakedModel, ModelResourceLocation}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, EnumWorldBlockLayer}
-import net.minecraft.world.{WorldServer, IBlockAccess, World}
-import net.minecraftforge.client.MinecraftForgeClient
-import net.minecraftforge.common.property.{IUnlistedProperty, ExtendedBlockState}
-import net.minecraftforge.fml.client.FMLClientHandler
-import net.minecraftforge.fml.relauncher.{SideOnly, Side}
+import net.minecraft.util._
+import net.minecraft.world.{IBlockAccess, World, WorldServer}
+import net.minecraftforge.client.event.ModelBakeEvent
+import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
+import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.input.Keyboard
 
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.JavaConversions._
 
 
 /**
@@ -47,7 +47,7 @@ import scala.collection.mutable.ArrayBuffer
   * @since August 14, 2015
   */
 class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockCoverable(mat)
-        with HasToolTip {
+        with HasToolTip with ILoadActionProvider {
 
     /*******************************************************************************************************************
       * Constructor                                                                                                    *
@@ -301,5 +301,20 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                 GuiColor.YELLOW + "Expansion Upgrade (Max 1): " + GuiColor.WHITE + "Allows Mode Selection (Round Robin, etc).",
                 GuiColor.YELLOW + "Hard Drive (Max 8): " + GuiColor.WHITE + "Increases amount extracted per tick.",
                 GuiColor.YELLOW + "Processor Upgrade (Max 8): " + GuiColor.WHITE + "Increases Extraction Rate.")
+    }
+
+    override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
+        event match {
+            case modelBake: ModelBakeEvent =>
+                for(modelLocation <- modelBake.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
+                    if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
+                            modelLocation.getResourcePath.contains("BasicInterface")) {
+                        // Create Multipart world obj
+                        modelBake.modelRegistry.putObject(modelLocation,
+                            new ModelMultipartContainer(modelBake.modelRegistry.getObject(modelLocation)))
+                    }
+                }
+            case _ =>
+        }
     }
 }
