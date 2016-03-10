@@ -1,7 +1,8 @@
 {
     "textures" : {
         "particle" : "neotech:blocks/sun",
-        "base" : "neotech:blocks/sun"
+        "base" : "neotech:blocks/sun",
+        "special": "neotech:blocks/star/star"
     },
     "elements" : [
         {

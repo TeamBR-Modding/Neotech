@@ -1,9 +1,11 @@
 package com.dyonovan.neotech.client.renderers
 
+import com.dyonovan.neotech.client.TexturedSphere
 import com.dyonovan.neotech.common.tiles.misc.TileAttractor
 import com.teambr.bookshelf.util.RenderUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.client.renderer.{GlStateManager, RenderHelper}
 import net.minecraft.entity.item.EntityItem
@@ -11,7 +13,7 @@ import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
-import org.lwjgl.util.glu.{GLU, Sphere}
+import org.lwjgl.util.glu.GLU
 
 /**
   * This file was created for NeoTech
@@ -66,19 +68,22 @@ class AttractorEnderEyeRenderer extends TileEntitySpecialRenderer[TileAttractor]
     }
 
     def renderSphere(partialTick : Float): Unit = {
-        val sphere = new Sphere()
+        val sphere = new TexturedSphere()
         GL11.glShadeModel(GL11.GL_SMOOTH)
         sphere.setDrawStyle(GLU.GLU_FILL)
         sphere.setNormals(GLU.GLU_SMOOTH)
         GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTick, 0.75F, 1.0F, -0.5F)
         sphere.setTextureFlag(true)
         sphere.setOrientation(GLU.GLU_OUTSIDE)
-        Minecraft.getMinecraft.getTextureManager.bindTexture(new ResourceLocation("neotech:textures/blocks/star/star.png"))
-        sphere.draw(0.2F, 16, 16)
+        RenderUtils.bindMinecraftBlockSheet()
+        val texture = new ResourceLocation("minecraft", "blocks/lava_still")
+        val tex : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(texture.toString)
+        GL11.glTexCoord4f(tex.getMinU, tex.getMaxU, tex.getMinV, tex.getMaxV)
+        sphere.drawNoFit(0.23F, 16, 16,tex.getMinU, tex.getMaxU, tex.getMinV, tex.getMaxV)
         GlStateManager.color(1, 1, 1, 0.5F)
         GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTick, 0.75F, 1.0F, -0.5F)
         GL11.glDepthMask(false)
-        sphere.draw(0.25F, 16, 16)
+        sphere.drawNoFit(0.25F, 16, 16, tex.getMinU, tex.getMaxU, tex.getMinV, tex.getMaxV)
         GL11.glDepthMask(true)
     }
 }

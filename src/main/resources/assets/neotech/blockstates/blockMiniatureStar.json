@@ -1,9 +1,6 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "textures": {
-            "base": "neotech:blocks/star/star"
-        },
         "model" : "neotech:sun"
     },
     "variants": {
