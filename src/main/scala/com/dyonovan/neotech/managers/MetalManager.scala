@@ -9,7 +9,6 @@ import com.dyonovan.neotech.common.metals.blocks.{BlockFluidMetal, BlockMetalOre
 import com.dyonovan.neotech.common.metals.fluids.FluidMetal
 import com.dyonovan.neotech.common.metals.items.ItemMetal
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.registries.ConfigRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.ModelLoader
@@ -257,11 +256,10 @@ object MetalManager {
         val flowing = new ResourceLocation(texture + "_flow")
 
         val fluid: Fluid = new FluidMetal(color, name, still, flowing)
-        if (ConfigRegistry.generateFluids) {
-            FluidRegistry.registerFluid(fluid)
-            if (!FluidRegistry.getBucketFluids.contains(fluid))
-                FluidRegistry.addBucketForFluid(fluid)
-        }
+        FluidRegistry.registerFluid(fluid)
+        if (!FluidRegistry.getBucketFluids.contains(fluid))
+            FluidRegistry.addBucketForFluid(fluid)
+
         fluid
     }
 

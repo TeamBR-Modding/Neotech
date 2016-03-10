@@ -20,8 +20,6 @@ object ConfigRegistry {
 
     var config = new Configuration(new File(NeoTech.configFolderLocation + File.separator + "NeoTech.cfg"))
 
-    var generateFluids = true
-
     var genTin = true
     var genCopper = true
     var genLead = true
@@ -50,8 +48,6 @@ object ConfigRegistry {
 
     def preInit(): Unit = {
         config.load()
-
-        generateFluids  = config.getBoolean(Reference.CONFIG_WORLD, "generateFluids", true, "Generate Fluids")
 
         genCopper       = config.get(Reference.CONFIG_WORLD, "copperEnable", true, "Generate Copper").getBoolean
         copperMin       = config.get(Reference.CONFIG_WORLD, "copperMin", 40, "Copper Min Level").getInt
