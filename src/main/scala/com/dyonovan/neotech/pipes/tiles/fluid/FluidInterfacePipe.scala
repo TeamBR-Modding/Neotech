@@ -93,7 +93,10 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
                         for(tankInfoSlot <- 0 until tank.getTankInfo(dir.getOpposite).length) {
                             if (tank.getTankInfo(dir.getOpposite)(tankInfoSlot).fluid != null) {
                                 if (findSourceOnMode(tank.getTankInfo(dir.getOpposite)(tankInfoSlot).fluid.copy(), pos.offset(dir))) {
-                                    if (foundSource != null) {
+                                    if (foundSource != null &&
+                                            tank.drain(dir.getOpposite, getMaxFluidDrain, false) != null &&
+                                            foundSource._1.canFill(foundSource._2,
+                                        tank.drain(dir.getOpposite, getMaxFluidDrain, false).getFluid)) {
                                         val amount = foundSource._1.fill(foundSource._2,
                                             tank.drain(dir.getOpposite, getMaxFluidDrain, false), false)
                                         if (amount > 0) {
@@ -133,7 +136,7 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
         //Try and insert the fluid
         worldObj.getTileEntity(tilePos) match {
             case tank: IFluidHandler =>
-                if (tank.fill(facing, fluid, false) >= 10)
+                if (tank.canFill(facing, fluid.getFluid) && tank.fill(facing, fluid, false) >= 10)
                     return true
                 false
             case _ => false

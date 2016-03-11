@@ -30,19 +30,6 @@ class AttractorEnderEyeRenderer extends TileEntitySpecialRenderer[TileAttractor]
     var sphereIdOutside : Int = -1
     var sphereIdInside : Int = -1
     override def renderTileEntityAt(te: TileAttractor, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int): Unit = {
-
-
-        GL11.glPushMatrix()
-        GL11.glTranslated (x +  0.5f, y +  2.75F, z +  0.5f)
-        GL11.glScalef (3.0F, 3.0F, 3.0F)
-        GL11.glEnable(GL11.GL_BLEND)
-
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1f)
-        GL11.glEnable(GL11. GL_ALPHA_TEST)
-        renderSphere(partialTicks)
-        GL11.glPopMatrix()
-
         GlStateManager.pushMatrix()
         GlStateManager.pushAttrib()
         GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5)
