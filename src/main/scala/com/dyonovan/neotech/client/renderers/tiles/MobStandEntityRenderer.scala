@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.client.renderers
+package com.dyonovan.neotech.client.renderers.tiles
 
 import com.dyonovan.neotech.common.tiles.misc.TileMobStand
 import net.minecraft.client.Minecraft

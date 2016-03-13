@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.client.renderers
+package com.dyonovan.neotech.client.renderers.entity
 
 import com.dyonovan.neotech.common.entities.EntityNet
 import com.dyonovan.neotech.managers.ItemManager

@@ -1,10 +1,11 @@
 package com.dyonovan.neotech.client
 
-import com.dyonovan.neotech.client.mesh.MeshDefinitions.{PipeSpecialModelMesh, PipeModelMesh, StarModelMesh}
+import com.dyonovan.neotech.client.mesh.MeshDefinitions.{PipeModelMesh, PipeSpecialModelMesh, StarModelMesh}
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
-import com.dyonovan.neotech.client.renderers._
+import com.dyonovan.neotech.client.renderers.entity.{RenderSun, RenderNet}
+import com.dyonovan.neotech.client.renderers.tiles._
 import com.dyonovan.neotech.common.CommonProxy
-import com.dyonovan.neotech.common.entities.EntityNet
+import com.dyonovan.neotech.common.entities.{EntitySun, EntityNet}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
@@ -38,6 +39,10 @@ class ClientProxy extends CommonProxy {
     override def preInit() = {
         RenderingRegistry.registerEntityRenderingHandler(classOf[EntityNet], new IRenderFactory[EntityNet] {
             override def createRenderFor(manager: RenderManager): Render[_ >: EntityNet] = new RenderNet(manager)
+        })
+
+        RenderingRegistry.registerEntityRenderingHandler(classOf[EntitySun], new IRenderFactory[EntitySun] {
+            override def createRenderFor(manager: RenderManager): Render[_ >: EntitySun] = new RenderSun(manager)
         })
 
         ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.blockMiniatureStar), new StarModelMesh)

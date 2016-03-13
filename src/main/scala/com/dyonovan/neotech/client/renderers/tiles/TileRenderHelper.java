@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.client.renderers;
+package com.dyonovan.neotech.client.renderers.tiles;
 
 import com.teambr.bookshelf.util.RenderUtils;
 import mezz.jei.config.Config;
