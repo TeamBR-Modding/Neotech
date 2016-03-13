@@ -175,6 +175,4 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
     override def isTranslucent: Boolean = true
 
     override def isFullCube = false
-
-
 }

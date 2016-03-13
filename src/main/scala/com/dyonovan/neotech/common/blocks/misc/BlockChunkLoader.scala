@@ -7,8 +7,10 @@ import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{EnumParticleTypes, BlockPos, EnumWorldBlockLayer}
+import net.minecraft.item.ItemStack
+import net.minecraft.util.{BlockPos, EnumParticleTypes, EnumWorldBlockLayer}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -67,5 +69,11 @@ class BlockChunkLoader extends BaseBlock(Material.rock, "chunkLoader", classOf[T
             case tile : TileChunkLoader => new GuiChunkLoader(tile)
             case _ => null
         }
+    }
+
+    override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack: ItemStack): Unit = {
+        val tile = world.getTileEntity(pos)
+        if (tile != null && tile.isInstanceOf[TileChunkLoader])
+            tile.asInstanceOf[TileChunkLoader].setOwner(placer.asInstanceOf[EntityPlayer].getUniqueID)
     }
 }
