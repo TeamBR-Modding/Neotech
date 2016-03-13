@@ -3,6 +3,7 @@ package com.dyonovan.neotech.common.tiles.machines.generators
 import java.text.NumberFormat
 import java.util.Locale
 
+import cofh.api.energy.IEnergyReceiver
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.teambr.bookshelf.api.waila.Waila
 import net.minecraft.client.Minecraft
@@ -60,6 +61,34 @@ class TileSolarPanel extends MachineGenerator with Waila {
     }
 
     override def getSupposedEnergy : Int = { amountEnergy(tier) }
+
+    override def doWork(): Unit = {
+        didWork = burnTime == 1
+
+        //Transfer
+        if (energyStorage.getEnergyStored > 0) {
+                worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
+                    case tile: IEnergyReceiver =>
+                        val want = tile.receiveEnergy(EnumFacing.DOWN, energyStorage.getEnergyStored, true)
+                        if (want > 0) {
+                            val actual = extractEnergy(EnumFacing.UP, want, simulate = false)
+                            tile.receiveEnergy(EnumFacing.DOWN, actual, false)
+                            didWork = true
+                        }
+                    case _ =>
+                }
+        }
+
+        if(manageBurnTime()) {
+            generate()
+            didWork = true
+        } else
+            reset()
+
+        if (didWork) {
+            worldObj.markBlockForUpdate(pos)
+        }
+    }
 
     /**
       * Called to tick generation. This is where you add power to the generator
