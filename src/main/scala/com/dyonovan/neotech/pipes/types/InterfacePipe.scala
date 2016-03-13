@@ -141,10 +141,11 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
                     shortest = distance.get(d.toLong)
                 }
             }
-            if(destination != null) {
-                foundSource = (getWorld.getTileEntity(destination).asInstanceOf[T], fromSide)
-                return true
-            }
+        }
+
+        if(destination != null) {
+            foundSource = (getWorld.getTileEntity(destination).asInstanceOf[T], fromSide)
+            return true
         }
         false
     }
@@ -184,11 +185,11 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
                     longest = distance.get(d.toLong)
                 }
             }
+        }
 
-            if(destination != null) {
-                foundSource = (getWorld.getTileEntity(destination).asInstanceOf[T], fromSide)
-                return true
-            }
+        if(destination != null) {
+            foundSource = (getWorld.getTileEntity(destination).asInstanceOf[T], fromSide)
+            return true
         }
         false
     }
