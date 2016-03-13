@@ -32,7 +32,7 @@ class TileChunkLoader extends Syncable {
     }
 
     override def onServerTick() = {
-        if ((ConfigRegistry.onlineOnly && worldObj.getPlayerEntityByUUID(owner) == null) || owner == null) {
+        if (ConfigRegistry.onlineOnly && (worldObj.getPlayerEntityByUUID(owner) == null || owner == null)) {
             if (chunkTicket != null) {
                 ForgeChunkManager.releaseTicket(chunkTicket)
                 chunkTicket = null
