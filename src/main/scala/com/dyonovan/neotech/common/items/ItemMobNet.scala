@@ -32,8 +32,8 @@ class ItemMobNet extends BaseItem("mobNet", 16) {
                 val entity = EntityList.createEntityByName(stack.getTagCompound.getString("type"), world)
                 if (entity != null) {
                     entity.readFromNBT(stack.getTagCompound)
-                    offsetInDir(entity, mop.sideHit)
                     entity.setPosition(mop.hitVec.xCoord, mop.hitVec.yCoord, mop.hitVec.zCoord)
+                    offsetInDir(entity, mop.sideHit)
                     if (stack.hasDisplayName)
                         entity.setCustomNameTag(stack.getDisplayName)
                     world.spawnEntityInWorld(entity)

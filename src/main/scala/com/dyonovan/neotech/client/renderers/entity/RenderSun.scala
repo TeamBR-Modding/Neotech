@@ -2,7 +2,7 @@ package com.dyonovan.neotech.client.renderers.entity
 
 import java.awt.Color
 
-import com.dyonovan.neotech.common.entities.EntitySun
+import com.dyonovan.neotech.universe.entities.{EnumSunType, EntitySun}
 import com.teambr.bookshelf.client.shapes.DrawableShape.TEXTURE_MODE
 import com.teambr.bookshelf.util.RenderUtils
 import net.minecraft.client.Minecraft
@@ -31,16 +31,23 @@ class RenderSun (renderManager : RenderManager) extends Render[EntitySun](render
       */
     override def doRender(entity: EntitySun, x: Double, y: Double, z: Double, entityYaw: Float, partialTicks: Float): Unit = {
         GlStateManager.pushMatrix()
-        val texture = new ResourceLocation("minecraft", "blocks/lava_still")
+        val texture = new ResourceLocation("neotech", "blocks/metal_still")
         val tex : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(texture.toString)
-        GlStateManager.translate(x.toFloat, y.toFloat, z.toFloat)
+
+        val radius = entity.getDataWatcher.getWatchableObjectFloat(20)
+        val sunType = EnumSunType.values()(entity.getDataWatcher.getWatchableObjectInt(21))
+
+        GlStateManager.translate(x.toFloat, y.toFloat + entity.radius, z.toFloat)
         GlStateManager.enableRescaleNormal()
         GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTicks, 0.75F, 1.0F, -0.5F)
-        RenderUtils.renderSphere(0.23F, 16, 16, tex, TEXTURE_MODE.PANEL, new Color(255, 255, 255))
+        RenderUtils.renderSphere(radius, 16, 16, tex, TEXTURE_MODE.PANEL, sunType.getColor)
         GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTicks, 0.75F, 1.0F, -0.5F)
-        GlStateManager.disableDepth()
-        RenderUtils.renderSphere(0.25F, 16, 16, tex, TEXTURE_MODE.PANEL, new Color(255, 255, 255, 150))
-        GlStateManager.enableDepth()
+        val color = new Color(sunType.getColor.getRed, sunType.getColor.getGreen, sunType.getColor.getBlue, 155)
+
+        GlStateManager.depthMask(false)
+        RenderUtils.renderSphere(radius + sunType.getSecondLayerOffset, 16, 16, tex, TEXTURE_MODE.PANEL, color)
+        GlStateManager.depthMask(true)
+
         GlStateManager.popMatrix()
     }
 

@@ -5,6 +5,7 @@ import com.dyonovan.neotech.common.items._
 import com.dyonovan.neotech.tools.UpgradeItemManager
 import com.dyonovan.neotech.tools.armor.ItemElectricArmor
 import com.dyonovan.neotech.tools.tools.{ElectricPickaxe, ElectricSword}
+import com.dyonovan.neotech.universe.items.SunItem
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.helper.LogHelper
 import gnu.trove.map.hash.THashMap
@@ -58,6 +59,10 @@ object ItemManager {
     val electricArmorLeggings = new ItemElectricArmor("electricArmorLeggings", 2, 2)
     val electricArmorBoots = new ItemElectricArmor("electricArmorBoots", 1, 3)
 
+    // Universe Items
+    val inertSun = new SunItem("inertSun")
+    val blueDwarf = new SunItem("blueDwarf")
+
     def preInit(): Unit = {
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
         registerItem(upgradeMBFull, "upgradeMBFull")
@@ -84,6 +89,9 @@ object ItemManager {
         registerItem(electricArmorChestplate, "electricArmorChestplate")
         registerItem(electricArmorLeggings, "electricArmorLeggings")
         registerItem(electricArmorBoots, "electricArmorBoots")
+
+        registerItem(inertSun, "inertSun")
+        registerItem(blueDwarf, "blueDwarf")
 
         for (data <- Bookshelf.itemsToRegister) {
             if (data.getAnnotationInfo.get("modid") != null &&

@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.entities.{EntitySun, EntityNet}
+import com.dyonovan.neotech.common.entities.EntityNet
 import com.dyonovan.neotech.lib.Reference
+import com.dyonovan.neotech.universe.entities.EntitySun
 import net.minecraftforge.fml.common.registry.EntityRegistry
 
 /**
@@ -18,7 +19,6 @@ object EntityManager {
 
     def preInit(): Unit = {
         EntityRegistry.registerModEntity(classOf[EntityNet], "mobNet", 0, Reference.MOD_ID, 32, 5, true)
-        EntityRegistry.registerModEntity(classOf[EntitySun], "sun", 1, Reference.MOD_ID, 32, 5, true)
-        EntityRegistry.registerEgg(classOf[EntitySun], 0xff3300, 0xff9900)
+        EntityRegistry.registerModEntity(classOf[EntitySun], "sun", 1, Reference.MOD_ID, 64, 80, true)
     }
 }

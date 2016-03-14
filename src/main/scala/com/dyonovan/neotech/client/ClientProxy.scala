@@ -5,12 +5,13 @@ import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.client.renderers.entity.{RenderSun, RenderNet}
 import com.dyonovan.neotech.client.renderers.tiles._
 import com.dyonovan.neotech.common.CommonProxy
-import com.dyonovan.neotech.common.entities.{EntitySun, EntityNet}
+import com.dyonovan.neotech.common.entities.EntityNet
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
 import com.dyonovan.neotech.events.RenderingEvents
 import com.dyonovan.neotech.managers.{BlockManager, MetalManager}
+import com.dyonovan.neotech.universe.entities.EntitySun
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.client.resources.IReloadableResourceManager

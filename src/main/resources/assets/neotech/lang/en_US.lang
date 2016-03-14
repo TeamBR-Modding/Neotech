@@ -167,6 +167,11 @@ item.neotech:basicRFBattery.name=Basic RF Battery
 item.neotech:advancedRFBattery.name=Advanced RF Battery
 item.neotech:eliteRFBattery.name=Elite RF Battery
 
+# Universe
+entity.neotech.sun.name=Sun
+item.neotech:inertSun.name=Inert Sun
+item.neotech:blueDwarf.name=Blue Dwarf
+
 #######################
 # Tile Entities
 #######################
