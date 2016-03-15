@@ -9,7 +9,7 @@ import com.dyonovan.neotech.common.entities.EntityNet
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
-import com.dyonovan.neotech.events.RenderingEvents
+import com.dyonovan.neotech.events.{GuiEvents, RenderingEvents}
 import com.dyonovan.neotech.managers.{BlockManager, MetalManager}
 import com.dyonovan.neotech.universe.entities.EntitySun
 import net.minecraft.client.Minecraft
@@ -38,6 +38,8 @@ class ClientProxy extends CommonProxy {
       * This is where you would register blocks and such
       */
     override def preInit() = {
+        MinecraftForge.EVENT_BUS.register(GuiEvents)
+
         RenderingRegistry.registerEntityRenderingHandler(classOf[EntityNet], new IRenderFactory[EntityNet] {
             override def createRenderFor(manager: RenderManager): Render[_ >: EntityNet] = new RenderNet(manager)
         })

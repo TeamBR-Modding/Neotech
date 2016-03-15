@@ -62,5 +62,5 @@ object TimeUtils {
     @SubscribeEvent
     def onWorldTick(worldTick : TickEvent.WorldTickEvent) : Unit =
         if(worldTick.phase == TickEvent.Phase.END)
-            tick = worldTick.world.getWorldTime
+            tick = worldTick.world.getTotalWorldTime
 }

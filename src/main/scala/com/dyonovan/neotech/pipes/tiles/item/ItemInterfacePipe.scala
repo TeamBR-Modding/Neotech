@@ -3,9 +3,11 @@ package com.dyonovan.neotech.pipes.tiles.item
 import java.util
 
 import com.dyonovan.neotech.pipes.types.{AdvancedPipe, InterfacePipe, SimplePipe}
+import com.dyonovan.neotech.utils.TimeUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambr.bookshelf.util.InventoryUtils
+import gnu.trove.map.hash.THashMap
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
@@ -41,6 +43,10 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
     /*******************************************************************************************************************
       ************************************** Extraction Methods ********************************************************
       ******************************************************************************************************************/
+
+    lazy val slotMap = new THashMap[EnumFacing, Int]()
+    for(face <- EnumFacing.values())
+        slotMap.put(face, 0)
 
     override def canConnect(facing: EnumFacing): Boolean =
         if(super.canConnect(facing)) {
@@ -82,6 +88,7 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
         tryExtractResources()
 
     override def tryExtractResources(): Unit = {
+        var shouldRecheck = false
         for(dir <- EnumFacing.values()) {
             if (canConnectExtract(dir)) {
                 val fromObject = worldObj.getTileEntity(pos.offset(dir))
@@ -90,19 +97,49 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
                         if (fromObject.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite))
                             fromObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
                         else return
-                    for (x <- 0 until fromInventory.getSlots) {
-                        if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
-                            if (fromInventory.getStackInSlot(x) != null &&
-                                    findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
-                                if (foundSource != null) {
-                                    InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
-                                        getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
-                                    foundSource = null
-                                    worldObj.markBlockForUpdate(pos)
-                                    return
-                                }
+
+                    var x = slotMap.get(dir)
+
+                    if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
+                        if (fromInventory.getStackInSlot(x) != null &&
+                                findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
+                            if (foundSource != null) {
+                                InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
+                                    getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
+                                foundSource = null
+                                worldObj.markBlockForUpdate(pos)
+                                shouldRecheck = true
                             }
                         }
+                    }
+
+                    if(!shouldRecheck && TimeUtils.onSecond(5))
+                        shouldRecheck = true
+
+                    if (shouldRecheck) {
+                        // Move up
+                        x += 1
+
+                        // Check for above list
+                        if (x >= fromInventory.getSlots)
+                            x = 0
+
+                        // Look for next stack if nothing in next slot
+                        if (fromInventory.getStackInSlot(x) == null) {
+                            var foundSomething = false
+                            for (i <- 0 until fromInventory.getSlots) {
+                                if (!foundSomething && fromInventory.getStackInSlot(i) != null) {
+                                    x = i
+                                    foundSomething = true
+                                }
+                            }
+                            if (!foundSomething)
+                                x = 0
+                        }
+
+                        // Update client, for rendering in chests
+                        sendValueToClient(dir.ordinal() + 30, x)
+                        slotMap.put(dir, x)
                     }
                 }
             }
@@ -169,4 +206,13 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
     }
 
     override def getPipeTypeID: Int = 3
+
+    override def setVariable(id : Int, value : Double) = {
+        if(id > 30) {
+            val newId = id - 30
+            val facing = EnumFacing.values()(newId)
+            slotMap.put(facing, value.toInt)
+        } else
+            super.setVariable(id, value)
+    }
 }
