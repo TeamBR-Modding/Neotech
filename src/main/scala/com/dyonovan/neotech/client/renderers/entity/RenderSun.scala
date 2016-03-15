@@ -32,23 +32,25 @@ class RenderSun (renderManager : RenderManager) extends Render[EntitySun](render
     override def doRender(entity: EntitySun, x: Double, y: Double, z: Double, entityYaw: Float, partialTicks: Float): Unit = {
         GlStateManager.pushMatrix()
         val texture = new ResourceLocation("neotech", "blocks/metal_still")
-        val tex : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(texture.toString)
+        var tex : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(texture.toString)
 
-        val radius = entity.getDataWatcher.getWatchableObjectFloat(20)
-        val sunType = EnumSunType.values()(entity.getDataWatcher.getWatchableObjectInt(21))
+        val radius = entity.getDataWatcher.getWatchableObjectFloat(entity.DATA_WATCHER_RADIUS)
+        val sunType = EnumSunType.values()(entity.getDataWatcher.getWatchableObjectInt(entity.DATA_WATCHER_TYPE))
 
-        GlStateManager.translate(x.toFloat, y.toFloat + entity.radius, z.toFloat)
+        if(sunType == EnumSunType.INERT)
+            tex = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(new ResourceLocation("minecraft", "blocks/stone").toString)
+
+        GlStateManager.translate(x.toFloat, y.toFloat, z.toFloat)
         GlStateManager.enableRescaleNormal()
         GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTicks, 0.75F, 1.0F, -0.5F)
         RenderUtils.renderSphere(radius, 16, 16, tex, TEXTURE_MODE.PANEL, sunType.getColor)
         GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTicks, 0.75F, 1.0F, -0.5F)
         val color = new Color(sunType.getColor.getRed, sunType.getColor.getGreen, sunType.getColor.getBlue, 155)
 
-        GlStateManager.depthMask(false)
         RenderUtils.renderSphere(radius + sunType.getSecondLayerOffset, 16, 16, tex, TEXTURE_MODE.PANEL, color)
-        GlStateManager.depthMask(true)
 
         GlStateManager.popMatrix()
+        RenderUtils.restoreRenderState()
     }
 
     override def getEntityTexture(entity: EntitySun): ResourceLocation = TextureMap.locationBlocksTexture

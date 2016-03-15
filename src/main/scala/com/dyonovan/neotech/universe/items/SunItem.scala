@@ -30,7 +30,10 @@ class SunItem(name : String) extends SimpleItemModelProvider {
     override def getTextures: ArrayBuffer[String] =
         ArrayBuffer(
             ClientUtils.prefixResource("items/universe/inertSun"),
-            ClientUtils.prefixResource("items/universe/blueDwarf"))
+            ClientUtils.prefixResource("items/universe/blueDwarf"),
+            ClientUtils.prefixResource("items/universe/smallSun"),
+            ClientUtils.prefixResource("items/universe/largeSun"),
+            ClientUtils.prefixResource("items/universe/redGiant"))
 
     /**
       * Creates a list of strings to register and render, ItemStack aware
@@ -41,6 +44,9 @@ class SunItem(name : String) extends SimpleItemModelProvider {
         stack.getItem match {
             case ItemManager.inertSun => ArrayBuffer(ClientUtils.prefixResource("items/universe/inertSun"))
             case ItemManager.blueDwarf => ArrayBuffer(ClientUtils.prefixResource("items/universe/blueDwarf"))
+            case ItemManager.smallSun => ArrayBuffer(ClientUtils.prefixResource("items/universe/smallSun"))
+            case ItemManager.largeSun => ArrayBuffer(ClientUtils.prefixResource("items/universe/largeSun"))
+            case ItemManager.redGiant => ArrayBuffer(ClientUtils.prefixResource("items/universe/redGiant"))
             case _ => ArrayBuffer()
         }
     }
@@ -70,6 +76,9 @@ class SunItem(name : String) extends SimpleItemModelProvider {
             itemstack.getItem match {
                 case ItemManager.inertSun => EnumSunType.INERT
                 case ItemManager.blueDwarf => EnumSunType.BLUE_DWARF
+                case ItemManager.smallSun => EnumSunType.SMALL_SUN
+                case ItemManager.largeSun => EnumSunType.LARGE_SUN
+                case ItemManager.redGiant => EnumSunType.RED_GIANT
                 case _ => EnumSunType.INERT
             }
         }

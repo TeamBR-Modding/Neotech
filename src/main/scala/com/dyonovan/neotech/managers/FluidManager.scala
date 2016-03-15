@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.common.metals.fluids.FluidMetal
+import com.dyonovan.neotech.common.fluids.{FluidBlockGas, FluidGas}
+import com.dyonovan.neotech.lib.Reference
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fluids._
 import net.minecraftforge.fml.common.registry.GameRegistry
@@ -9,31 +10,37 @@ import net.minecraftforge.fml.common.registry.GameRegistry
   * Created by Dyonovan on 2/9/2016.
   */
 object FluidManager {
+    def registerModels() : Unit = {}
 
-    def preInit() = {}
+    var hydrogen : FluidGas = null
+    var oxygen : FluidGas = null
 
-    def registerModels() : Unit = {
+    var blockHydrogen : FluidBlockGas = null
+    var blockOxygen : FluidBlockGas = null
 
+    def preInit() = {
+        hydrogen = createFluidGas(0xFF0044BB, "hydrogen")
+        blockHydrogen = registerFluidBlock(hydrogen, new FluidBlockGas(hydrogen))
+
+        oxygen = createFluidGas(0xFFDDDDDD, "oxygen")
+        blockOxygen = registerFluidBlock(oxygen, new FluidBlockGas(oxygen))
     }
 
-    def createFluidMetal(color : Int, name: String, texture: String): Fluid = {
-        val still = new ResourceLocation("neotech", texture + "_still")
-        val flowing = new ResourceLocation("neotech", texture + "_flow")
+    def createFluidGas(color : Int, name: String): FluidGas = {
+        val still = new ResourceLocation("neotech", "blocks/metal_still")
+        val flowing = new ResourceLocation("neotech", "blocks/metal_flow")
 
-        val fluid = new FluidMetal(color, name, still, flowing)
-        if(FluidRegistry.getFluid(fluid.getName) == null) {
-            FluidRegistry.registerFluid(fluid)
+        val fluid = new FluidGas(color, name, still, flowing)
+        FluidRegistry.registerFluid(fluid)
+        if (!FluidRegistry.getBucketFluids.contains(fluid))
             FluidRegistry.addBucketForFluid(fluid)
-            fluid
-        } else null
+        fluid
     }
 
-    def registerFluidBlock(fluid: Fluid, block: BlockFluidClassic): BlockFluidClassic = {
-        if(fluid != null) {
+    def registerFluidBlock(fluid: Fluid, block: FluidBlockGas): FluidBlockGas = {
+        if (fluid != null) {
             fluid.setBlock(block)
-            val fluidName = block.getFluid.getUnlocalizedName()
-            block.setUnlocalizedName(fluidName)
-            GameRegistry.registerBlock(block, fluidName)
+            GameRegistry.registerBlock(block, Reference.MOD_ID + "." + fluid.getName)
         }
         block
     }

@@ -50,51 +50,51 @@ class TileChunkLoader extends Syncable {
         }
     }
 
-        def forceChunkLoading(ticket: Ticket): Unit = {
-            if (chunkTicket == null)
-                chunkTicket = ticket
+    def forceChunkLoading(ticket: Ticket): Unit = {
+        if (chunkTicket == null)
+            chunkTicket = ticket
 
-            //Load Us
-            ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(pos.getX >> 4, pos.getY >> 4))
+        //Load Us
+        ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(pos.getX >> 4, pos.getY >> 4))
 
-            for (i <- (pos.getX >> 4) - diameter to (pos.getX >> 4) + diameter) {
-                for (j <- (pos.getZ >> 4) - diameter to (pos.getZ >> 4) + diameter) {
-                    val chunk = new ChunkCoordIntPair(i, j)
-                    ForgeChunkManager.forceChunk(ticket, chunk)
-                }
+        for (i <- (pos.getX >> 4) - diameter to (pos.getX >> 4) + diameter) {
+            for (j <- (pos.getZ >> 4) - diameter to (pos.getZ >> 4) + diameter) {
+                val chunk = new ChunkCoordIntPair(i, j)
+                ForgeChunkManager.forceChunk(ticket, chunk)
             }
         }
-
-        override def readFromNBT(tag: NBTTagCompound) =
-        {
-            super.readFromNBT(tag)
-            diameter = tag.getInteger("Diameter")
-            if (tag.hasKey("Owner"))
-                owner = UUID.fromString(tag.getString("Owner"))
-        }
-
-        override def writeToNBT(tag: NBTTagCompound) =
-        {
-            super.writeToNBT(tag)
-            tag.setInteger("Diameter", diameter)
-            if (owner != null)
-                tag.setString("Owner", owner.toString)
-        }
-
-        override def setVariable(id: Int, value: Double): Unit =
-        {
-            diameter = value.toInt
-            if (diameter > ConfigRegistry.chunkLoaderMax)
-                diameter = ConfigRegistry.chunkLoaderMax
-            else if (diameter < 0)
-                diameter = 0
-            worldObj.markBlockForUpdate(pos)
-        }
-
-        override def getVariable(id: Int): Double =
-        {
-            0.0
-        }
-
-        def setOwner(entity: UUID): Unit = owner = entity
     }
+
+    override def readFromNBT(tag: NBTTagCompound) =
+    {
+        super.readFromNBT(tag)
+        diameter = tag.getInteger("Diameter")
+        if (tag.hasKey("Owner"))
+            owner = UUID.fromString(tag.getString("Owner"))
+    }
+
+    override def writeToNBT(tag: NBTTagCompound) =
+    {
+        super.writeToNBT(tag)
+        tag.setInteger("Diameter", diameter)
+        if (owner != null)
+            tag.setString("Owner", owner.toString)
+    }
+
+    override def setVariable(id: Int, value: Double): Unit =
+    {
+        diameter = value.toInt
+        if (diameter > ConfigRegistry.chunkLoaderMax)
+            diameter = ConfigRegistry.chunkLoaderMax
+        else if (diameter < 0)
+            diameter = 0
+        worldObj.markBlockForUpdate(pos)
+    }
+
+    override def getVariable(id: Int): Double =
+    {
+        0.0
+    }
+
+    def setOwner(entity: UUID): Unit = owner = entity
+}

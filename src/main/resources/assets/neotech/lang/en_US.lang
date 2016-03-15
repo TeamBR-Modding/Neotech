@@ -88,6 +88,12 @@ fluid.carbon.name=Liquid Carbon
 # Obsidian
 fluid.obsidian.name=Molten Obsidian
 
+# Hydrogen
+fluid.hydrogen.name=Hydrogen
+
+# Oxygen
+fluid.oxygen.name=Oxygen
+
 #######################
 # Items
 #######################
@@ -171,6 +177,9 @@ item.neotech:eliteRFBattery.name=Elite RF Battery
 entity.neotech.sun.name=Sun
 item.neotech:inertSun.name=Inert Sun
 item.neotech:blueDwarf.name=Blue Dwarf
+item.neotech:smallSun.name=Small Sun
+item.neotech:largeSun.name=Large Sun
+item.neotech:redGiant.name=Red Giant
 
 #######################
 # Tile Entities

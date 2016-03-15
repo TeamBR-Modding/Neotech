@@ -36,6 +36,8 @@ class TileTankFluidRenderer extends TileEntitySpecialRenderer[TileTank] {
             if (te.getTier < 5) {
                 val fluidIcon: TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(te.getCurrentFluid.getStill(te.tank.getFluid).toString)
                 RenderUtils.setColor(Color.decode(te.tank.getFluid.getFluid.getColor.toString))
+                if(te.tank.getFluid.getFluid.isGaseous(te.tank.getFluid))
+                    GlStateManager.translate(0, 1 - (te.getFluidLevelScaled / 16) - 0.1, 0)
                 RenderUtils.renderCubeWithTexture(2.01 / 16.0, 1.01 / 16, 2.01 / 16.0, 13.99 / 16.0, te.getFluidLevelScaled / 16, 13.99 / 16.0,
                     fluidIcon.getMinU, fluidIcon.getMinV, fluidIcon.getMaxU, fluidIcon.getMaxV)
             } else if (te.getTier == 5) {

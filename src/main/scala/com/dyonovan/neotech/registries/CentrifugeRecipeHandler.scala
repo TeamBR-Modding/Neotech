@@ -42,7 +42,7 @@ class CentrifugeRecipeHandler
       *
       * @return
       */
-    override def getVersion: Int = 3
+    override def getVersion: Int = 4
 
     /**
       * Called when the file is not found, add all default recipes here
@@ -51,13 +51,16 @@ class CentrifugeRecipeHandler
         LogHelper.info("Loading Default Alloyer Recipes...")
 
         // Obsidian
-        addRecipe(new CentrifugeRecipe("obsidian:1296", "water:1000", "lava:1000"))
+        addRecipe(new CentrifugeRecipe("obsidian:36", "water:125", "lava:125"))
 
         // Steel
         addRecipe(new CentrifugeRecipe("steel:144", "iron:144", "carbon:144"))
 
         // Bronze
         addRecipe(new CentrifugeRecipe("bronze:576", "copper:432", "tin:144"))
+
+        // Hydrogen - Oxygen
+        addRecipe(new CentrifugeRecipe("water:750", "hydrogen:500", "oxygen:250"))
 
         // Metals
         val iterator = MetalManager.metalRegistry.keySet().iterator()

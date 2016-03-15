@@ -19,6 +19,6 @@ object EntityManager {
 
     def preInit(): Unit = {
         EntityRegistry.registerModEntity(classOf[EntityNet], "mobNet", 0, Reference.MOD_ID, 32, 5, true)
-        EntityRegistry.registerModEntity(classOf[EntitySun], "sun", 1, Reference.MOD_ID, 64, 80, true)
+        EntityRegistry.registerModEntity(classOf[EntitySun], "sun", 1, Reference.MOD_ID, 128, 80, true)
     }
 }

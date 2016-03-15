@@ -62,6 +62,9 @@ object ItemManager {
     // Universe Items
     val inertSun = new SunItem("inertSun")
     val blueDwarf = new SunItem("blueDwarf")
+    val smallSun = new SunItem("smallSun")
+    val largeSun = new SunItem("largeSun")
+    val redGiant = new SunItem("redGiant")
 
     def preInit(): Unit = {
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
@@ -92,6 +95,9 @@ object ItemManager {
 
         registerItem(inertSun, "inertSun")
         registerItem(blueDwarf, "blueDwarf")
+        registerItem(smallSun, "smallSun")
+        registerItem(largeSun, "largeSun")
+        registerItem(redGiant, "redGiant")
 
         for (data <- Bookshelf.itemsToRegister) {
             if (data.getAnnotationInfo.get("modid") != null &&
