@@ -227,27 +227,29 @@ class TileCentrifuge extends MachineProcessor[FluidStack, (FluidStack, FluidStac
         for(dir <- EnumFacing.values) {
             if(canOutputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case otherTank : IFluidHandler =>
-                        val fluid = otherTank.getTankInfo(dir.getOpposite)(0).fluid
+                    case otherTank: IFluidHandler =>
+                        if (otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty) {
+                            val fluid = otherTank.getTankInfo(dir.getOpposite)(0).fluid
 
-                        if((if(fluid == null) true else
-                        if (tanks(OUTPUT_TANK_1).getFluid != null)
-                            otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK_1).getFluid.getFluid
-                        else false)
-                                && canDrain(dir.getOpposite, if(fluid != null) fluid.getFluid else null)) {
-                            val amount1 = otherTank.fill(dir.getOpposite, tanks(OUTPUT_TANK_1).drain(1000, false), false)
-                            if (amount1 > 0)
-                                otherTank.fill(dir, tanks(OUTPUT_TANK_1).drain(amount1, true),  true)
-                        }
+                            if ((if (fluid == null) true
+                            else if (tanks(OUTPUT_TANK_1).getFluid != null)
+                                otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK_1).getFluid.getFluid
+                            else false)
+                                    && canDrain(dir.getOpposite, if (fluid != null) fluid.getFluid else null)) {
+                                val amount1 = otherTank.fill(dir.getOpposite, tanks(OUTPUT_TANK_1).drain(1000, false), false)
+                                if (amount1 > 0)
+                                    otherTank.fill(dir, tanks(OUTPUT_TANK_1).drain(amount1, true), true)
+                            }
 
-                        if((if(fluid == null) true else
-                        if (tanks(OUTPUT_TANK_2).getFluid != null)
-                            otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK_2).getFluid.getFluid
-                        else false)
-                                && canDrain(dir.getOpposite, if(fluid != null) fluid.getFluid else null)) {
-                            val amount = otherTank.fill(dir.getOpposite, tanks(OUTPUT_TANK_2).drain(1000, false), false)
-                            if (amount > 0)
-                                otherTank.fill(dir, tanks(OUTPUT_TANK_2).drain(amount, true),  true)
+                            if ((if (fluid == null) true
+                            else if (tanks(OUTPUT_TANK_2).getFluid != null)
+                                otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK_2).getFluid.getFluid
+                            else false)
+                                    && canDrain(dir.getOpposite, if (fluid != null) fluid.getFluid else null)) {
+                                val amount = otherTank.fill(dir.getOpposite, tanks(OUTPUT_TANK_2).drain(1000, false), false)
+                                if (amount > 0)
+                                    otherTank.fill(dir, tanks(OUTPUT_TANK_2).drain(amount, true), true)
+                            }
                         }
                     case _ =>
                 }
