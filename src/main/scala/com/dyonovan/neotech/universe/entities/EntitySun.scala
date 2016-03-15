@@ -19,7 +19,7 @@ import net.minecraft.world.World
 class EntitySun(world : World) extends Entity(world) {
     lazy val MASS_CONSTANT = 10
     lazy val BASE_RF_TICK = 200
-    lazy val BASE_RADIUS_DRAIN = 0.001F
+    lazy val BASE_RADIUS_DRAIN = 0.0001F
 
     lazy val DATA_WATCHER_RADIUS = 20
     lazy val DATA_WATCHER_TYPE = 21
@@ -99,13 +99,13 @@ class EntitySun(world : World) extends Entity(world) {
     }
 
     def drainPower() : Int = {
-        if(sunType != EnumSunType.INERT) {
+        if (sunType.ordinal() > 1) {
             radius -= BASE_RADIUS_DRAIN
             getDataWatcher.updateObject(DATA_WATCHER_RADIUS, radius)
             getDataWatcher.setObjectWatched(DATA_WATCHER_RADIUS)
 
             // Check if we need to move down a tier
-            if (sunType.ordinal() > 0) {
+            if (sunType.ordinal() > 1) {
                 val smallerSunType = EnumSunType.values()(sunType.ordinal() - 1)
                 if (radius <= smallerSunType.getDefaultRadius) {
                     sunType = smallerSunType
@@ -115,7 +115,7 @@ class EntitySun(world : World) extends Entity(world) {
             }
 
             BASE_RF_TICK * (radius * 200).toInt
-        }else 0
+        } else if(sunType == EnumSunType.INERT) 0 else BASE_RF_TICK * (radius * 25).toInt
     }
 
     override def canBeCollidedWith = true

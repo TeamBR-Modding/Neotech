@@ -42,9 +42,10 @@ class RenderSun (renderManager : RenderManager) extends Render[EntitySun](render
 
         GlStateManager.translate(x.toFloat, y.toFloat, z.toFloat)
         GlStateManager.enableRescaleNormal()
+
         GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTicks, 0.75F, 1.0F, -0.5F)
         RenderUtils.renderSphere(radius, 16, 16, tex, TEXTURE_MODE.PANEL, sunType.getColor)
-        GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTicks, 0.75F, 1.0F, -0.5F)
+        GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTicks, 0.75F, 1.0F, -0.57F)
         val color = new Color(sunType.getColor.getRed, sunType.getColor.getGreen, sunType.getColor.getBlue, 155)
 
         RenderUtils.renderSphere(radius + sunType.getSecondLayerOffset, 16, 16, tex, TEXTURE_MODE.PANEL, color)

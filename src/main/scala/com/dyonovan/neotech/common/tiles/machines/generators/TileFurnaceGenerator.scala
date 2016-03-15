@@ -3,14 +3,17 @@ package com.dyonovan.neotech.common.tiles.machines.generators
 import com.dyonovan.neotech.client.gui.machines.generators.GuiFurnaceGenerator
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFurnaceGenerator
 import com.dyonovan.neotech.common.tiles.MachineGenerator
+import com.dyonovan.neotech.managers.FluidManager
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
+import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityFurnace
 import net.minecraft.util.{EnumFacing, EnumParticleTypes, StatCollector}
 import net.minecraft.world.World
-import net.minecraftforge.fluids.FluidContainerRegistry
+import net.minecraftforge.fluids.{Fluid, FluidContainerRegistry, FluidTank}
 
 /**
   * This file was created for NeoTech
@@ -22,7 +25,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry
   * @author Dyonovan
   * @since August 13, 2015
   */
-class TileFurnaceGenerator extends MachineGenerator {
+class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
 
     final val BASE_ENERGY_TICK = 20
     final val INPUT_SLOT       = 0
@@ -40,17 +43,22 @@ class TileFurnaceGenerator extends MachineGenerator {
       * @return How much energy to produce per tick
       */
     override def getEnergyProduced: Int = {
+        val oxygenModifier = if(tanks(OXYGEN_TANK).getFluid != null && tanks(OXYGEN_TANK).getFluid.getFluid == FluidManager.oxygen)
+            5 else 1
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 10)
+            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 10) * oxygenModifier
         else
-            BASE_ENERGY_TICK
+            BASE_ENERGY_TICK * oxygenModifier
     }
 
     /**
       * Called to tick generation. This is where you add power to the generator
       */
-    override def generate(): Unit =
+    override def generate(): Unit = {
         energyStorage.receiveEnergy(getEnergyProduced, false)
+        if(tanks(OXYGEN_TANK).getFluid != null)
+            tanks(OXYGEN_TANK).drain(1, true)
+    }
 
     /**
       * Called per tick to manage burn time. You can do nothing here if there is nothing to generate. You should decrease burn time here
@@ -121,6 +129,22 @@ class TileFurnaceGenerator extends MachineGenerator {
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
         new GuiFurnaceGenerator(player, this)
 
+    /**
+      * Write the tag
+      */
+    override def writeToNBT(tag: NBTTagCompound): Unit = {
+        super[MachineGenerator].writeToNBT(tag)
+        super[FluidHandler].writeToNBT(tag)
+    }
+
+    /**
+      * Read the tag
+      */
+    override def readFromNBT(tag: NBTTagCompound): Unit = {
+        super[MachineGenerator].readFromNBT(tag)
+        super[FluidHandler].readFromNBT(tag)
+    }
+
     /*******************************************************************************************************************
       ************************************************ Inventory methods ***********************************************
       ******************************************************************************************************************/
@@ -161,6 +185,29 @@ class TileFurnaceGenerator extends MachineGenerator {
       */
     override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean =
         TileEntityFurnace.getItemBurnTime(stack) > 0 && !FluidContainerRegistry.isContainer(stack)
+
+    /*******************************************************************************************************************
+      ************************************************** Fluid methods *************************************************
+      ******************************************************************************************************************/
+
+    lazy val OXYGEN_TANK = 0
+
+    override def setupTanks(): Unit = tanks += new FluidTank(bucketsToMB(10))
+
+    override def getInputTanks: Array[Int] = Array(OXYGEN_TANK)
+
+    override def getOutputTanks: Array[Int] = Array(OXYGEN_TANK)
+
+    override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
+
+    /**
+      * Returns true if the given fluid can be inserted into the given direction.
+      *
+      * More formally, this should return true if fluid is able to enter from the given direction.
+      */
+    override def canFill(from: EnumFacing, fluid: Fluid): Boolean = {
+        fluid == FluidManager.oxygen && super.canFill(from, fluid)
+    }
 
     /*******************************************************************************************************************
       *************************************************** Misc methods *************************************************

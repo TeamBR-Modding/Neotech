@@ -9,7 +9,7 @@ import com.dyonovan.neotech.common.container.machines.generators.ContainerFurnac
 import com.dyonovan.neotech.common.tiles.machines.generators.TileFurnaceGenerator
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFlame, GuiComponentPowerBarGradient, GuiComponentText}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFluidTank, GuiComponentFlame, GuiComponentPowerBarGradient, GuiComponentText}
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.StatCollector
@@ -42,7 +42,7 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
         }
 
         //Energy Stored
-        components += new GuiComponentPowerBarGradient(14, 18, 18, 60, new Color(255, 0, 0)) {
+        components += new GuiComponentPowerBarGradient(7, 18, 18, 60, new Color(255, 0, 0)) {
             addColor(new Color(255, 150, 0))
             addColor(new Color(255, 255, 0))
 
@@ -55,6 +55,20 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                 buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
                 buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
                         ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
+                buffer
+            }
+        }
+
+        //Oxygen Fluid
+        components += new GuiComponentFluidTank(150, 18, 18, 60, tileEntity.tanks(tileEntity.OXYGEN_TANK)) {
+            override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
+                val buffer = new ArrayBuffer[String]()
+                buffer += (if(tileEntity.tanks(tileEntity.OXYGEN_TANK).getFluid != null)
+                    GuiColor.ORANGE + tileEntity.tanks(tileEntity.OXYGEN_TANK).getFluid.getLocalizedName
+                else
+                    GuiColor.RED + "Empty")
+                buffer += ClientUtils.formatNumber(tileEntity.tanks(tileEntity.OXYGEN_TANK).getFluidAmount) + " / " +
+                        ClientUtils.formatNumber(tileEntity.tanks(tileEntity.OXYGEN_TANK).getCapacity) + " mb"
                 buffer
             }
         }
