@@ -55,16 +55,18 @@ class EntitySun(world : World) extends Entity(world) {
             drainPower()
 
         // Dirty fix until we have all things integrated and can change on the fly
-        this.setEntityBoundingBox(
-            new AxisAlignedBB(
-                posX - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
-                posY - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
-                posZ - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
-                posX + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
-                posY + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
-                posZ + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS)))
-        width = radius * 2
-        height = radius * 2
+        if(worldObj.isRemote) {
+            this.setEntityBoundingBox(
+                new AxisAlignedBB(
+                    posX - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posY - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posZ - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posX + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posY + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posZ + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS)))
+            width = radius * 2
+            height = radius * 2
+        }
     }
 
     override def writeEntityToNBT(tagCompound: NBTTagCompound): Unit = {
@@ -103,6 +105,17 @@ class EntitySun(world : World) extends Entity(world) {
             radius -= BASE_RADIUS_DRAIN
             getDataWatcher.updateObject(DATA_WATCHER_RADIUS, radius)
             getDataWatcher.setObjectWatched(DATA_WATCHER_RADIUS)
+
+            this.setEntityBoundingBox(
+                new AxisAlignedBB(
+                    posX - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posY - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posZ - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posX + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posY + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                    posZ + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS)))
+            width = radius * 2
+            height = radius * 2
 
             // Check if we need to move down a tier
             if (sunType.ordinal() > 1) {

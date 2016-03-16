@@ -15,11 +15,11 @@ import java.awt.*;
  * @since 3/14/2016
  */
 public enum EnumSunType {
-    INERT("Inert Sun", 0.05F, -0.01F, 150, 150, 150),
-    BLUE_DWARF("Blue Dwarf", 0.09F, 0.02F, 102, 153, 255),
-    SMALL_SUN("Small Sun", 0.80F, 0.05F, 255, 194, 102),
-    LARGE_SUN("Large Sun", 2.80F, 0.10F, 255, 153, 0),
-    RED_GIANT("Red Giant", 5.0F, 0.2F, 255, 51, 0);
+    INERT("Inert Sun", 0.1F, -0.01F, 150, 150, 150),
+    BLUE_DWARF("Blue Dwarf", 0.18F, 0.02F, 102, 153, 255),
+    SMALL_SUN("Small Sun", 1.6F, 0.05F, 255, 194, 102),
+    LARGE_SUN("Large Sun", 5.6F, 0.10F, 255, 153, 0),
+    RED_GIANT("Red Giant", 10.0F, 0.2F, 255, 51, 0);
 
     /**
      * Display Name
