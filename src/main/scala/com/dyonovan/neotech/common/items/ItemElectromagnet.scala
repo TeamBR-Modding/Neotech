@@ -17,7 +17,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.projectile.{EntityLargeFireball, EntitySmallFireball, EntityArrow}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{StatCollector, AxisAlignedBB, ChatComponentText}
+import net.minecraft.util.{Vec3, StatCollector, AxisAlignedBB, ChatComponentText}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -77,8 +77,8 @@ class ItemElectromagnet extends ItemBattery {
                     val energy = stack.getTagCompound.getInteger("Energy")
                     if(stack.getTagCompound.getBoolean("Active") && energy > 0){
                         val bb = AxisAlignedBB.fromBounds(
-                                player.posX - RANGE, player.posY - RANGE, player.posZ - RANGE,
-                                player.posX + RANGE, player.posY + RANGE, player.posZ + RANGE)
+                            player.posX - RANGE, player.posY - RANGE, player.posZ - RANGE,
+                            player.posX + RANGE, player.posY + RANGE, player.posZ + RANGE)
 
                         val entities = new util.ArrayList[Entity]()
 
@@ -98,26 +98,26 @@ class ItemElectromagnet extends ItemBattery {
                                 val entity = x.asInstanceOf[Entity]
                                 var speed = 0.075F
 
+                                var motionVector =
+                                    new Vec3(
+                                        player.posX - entity.posX,
+                                        player.posY - entity.posY,
+                                        player.posZ - entity.posZ)
+                                if(motionVector.lengthVector() > 1)
+                                    motionVector = motionVector.normalize()
+
                                 // Arrows are already moving, increase pull
-                                if(entity.isInstanceOf[EntityArrow])
+                                if (entity.isInstanceOf[EntityArrow])
                                     speed += 0.2F
 
-                                //Check X Position
-                                if(entity.posX < player.posX)
-                                    entity.motionX += speed
-                                else
-                                    entity.motionX -= speed
+                                motionVector.xCoord * speed
+                                motionVector.yCoord * speed
+                                motionVector.zCoord * speed
 
-                                //Check Y Position
-                                if(entity.posY < player.posY)
-                                    entity.motionY += speed
-                                else entity.motionY -= speed
-
-                                //Check Z Position
-                                if(entity.posZ < player.posZ)
-                                    entity.motionZ += speed
-                                else
-                                    entity.motionZ -= speed
+                                entity.motionX = motionVector.xCoord
+                                entity.motionY = motionVector.yCoord
+                                entity.motionZ = motionVector.zCoord
+                                entity.velocityChanged = true
                             }
 
                             //Moved stuff, drain
@@ -138,10 +138,10 @@ class ItemElectromagnet extends ItemBattery {
 
             list.add(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux"))
             list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-              .format(getEnergyStored(stack)) +
-              " / " +
-              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                .format(getMaxEnergyStored(stack)) + " RF")
+                    .format(getEnergyStored(stack)) +
+                    " / " +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(getMaxEnergyStored(stack)) + " RF")
         }
     }
 

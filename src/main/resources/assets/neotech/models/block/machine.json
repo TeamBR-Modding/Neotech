@@ -8,7 +8,10 @@
         //IO
         "input" : "neotech:blocks/inputFace",
         "output" : "neotech:blocks/outputFace",
-        "inputOutputFace" : "neotech:blocks/inputOutputFace"
+        "inputOutputFace" : "neotech:blocks/inputOutputFace",
+        "disable" : "neotech:blocks/disabled",
+        "in2" : "neotech:blocks/inputFaceSecondary",
+        "out2" : "neotech:blocks/outputFaceSecondary"
     },
     "display": {
         "thirdperson": {

@@ -55,6 +55,7 @@ class EntitySun(world : World) extends Entity(world) {
             drainPower()
 
         // Dirty fix until we have all things integrated and can change on the fly
+        renderDistanceWeight = 5
         if(worldObj.isRemote) {
             this.setEntityBoundingBox(
                 new AxisAlignedBB(
@@ -82,6 +83,17 @@ class EntitySun(world : World) extends Entity(world) {
         sunType = sunType.getTypeFromTag(tagCompound)
         getDataWatcher.updateObject(DATA_WATCHER_TYPE, sunType.ordinal())
         getDataWatcher.setObjectWatched(DATA_WATCHER_TYPE)
+
+        this.setEntityBoundingBox(
+            new AxisAlignedBB(
+                posX - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                posY - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                posZ - getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                posX + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                posY + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS),
+                posZ + getDataWatcher.getWatchableObjectFloat(DATA_WATCHER_RADIUS)))
+        width = radius * 2
+        height = radius * 2
     }
 
     override def clientUpdateEntityNBT(tagCompound: NBTTagCompound): Unit = {

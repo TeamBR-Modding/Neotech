@@ -42,6 +42,7 @@ class RenderSun (renderManager : RenderManager) extends Render[EntitySun](render
 
         GlStateManager.translate(x.toFloat, y.toFloat, z.toFloat)
         GlStateManager.enableRescaleNormal()
+        RenderUtils.bindMinecraftBlockSheet()
 
         GlStateManager.rotate(Minecraft.getMinecraft.theWorld.getTotalWorldTime + partialTicks, 0.75F, 1.0F, -0.5F)
         RenderUtils.renderSphere(radius, 16, 16, tex, TEXTURE_MODE.PANEL, sunType.getColor)

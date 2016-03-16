@@ -19,73 +19,64 @@ import net.minecraft.util.EnumFacing
   * @since 1/24/2016
   */
 trait InputOutput extends NBTSavable {
-    sealed trait IOMODE { def name: String }
-    case object DISABLED extends IOMODE { val name = "DISABLED" }
-    case object OUTONLY extends IOMODE { val name = "OUTONLY" }
-    case object INONLY extends IOMODE { val name = "INONLY" }
-    case object BOTH extends IOMODE { val name = "BOTH" }
+    sealed trait IO_MODE { def name: String }
+    case object DISABLED extends IO_MODE { val name = "DISABLED" }
+    case object OUT_ONLY extends IO_MODE { val name = "OUT_ONLY" }
+    case object OUT_FIRST_ONLY extends IO_MODE { val name = "OUTFIRSTONLY" }
+    case object IN_ONLY extends IO_MODE { val name = "INONLY" }
+    case object BOTH extends IO_MODE { val name = "BOTH" }
 
-    def modeToInt(mode : IOMODE): Int = {
+    def modeToInt(mode : IO_MODE): Int = {
         mode match {
             case DISABLED => 0
-            case OUTONLY => 2
-            case INONLY => 1
+            case OUT_ONLY => 2
+            case IN_ONLY => 1
             case BOTH => 3
             case _ => 0
         }
     }
 
-    def modeFromInt(mode : Int) : IOMODE = {
+    def modeFromInt(mode : Int) : IO_MODE = {
         mode match {
             case 0 => DISABLED
-            case 2 => OUTONLY
-            case 1 => INONLY
+            case 2 => OUT_ONLY
+            case 1 => IN_ONLY
             case 3 => BOTH
             case _ => DISABLED
         }
     }
 
-    def getNextMode(mode : IOMODE) : IOMODE = {
+    def getNextMode(mode : IO_MODE) : IO_MODE = {
         mode match {
-            case DISABLED => INONLY
-            case OUTONLY => BOTH
-            case INONLY => OUTONLY
+            case DISABLED => IN_ONLY
+            case OUT_ONLY => BOTH
+            case IN_ONLY => OUT_ONLY
             case BOTH => DISABLED
             case _ => DISABLED
         }
     }
 
-    def getDisplayNameForIOMode(mode : IOMODE) : String = {
+    def getDisplayNameForIOMode(mode : IO_MODE) : String = {
         mode match {
             case DISABLED => GuiColor.GRAY + "Disabled"
-            case OUTONLY => GuiColor.ORANGE + "Output Only"
-            case INONLY => GuiColor.BLUE + "Input Only"
+            case OUT_ONLY => GuiColor.ORANGE + "Output Only"
+            case IN_ONLY => GuiColor.BLUE + "Input Only"
             case BOTH => GuiColor.BLUE + "Input " + GuiColor.WHITE + "and " + GuiColor.ORANGE + "Output"
             case _ => GuiColor.RED + "ERROR"
         }
     }
 
-    def getUVForMode(mode : IOMODE) : (Int, Int) = {
-        mode match {
-            case DISABLED => (95, 239)
-            case OUTONLY => (127, 239)
-            case INONLY => (111, 239)
-            case BOTH => (143, 239)
-            case _ => (90, 239)
-        }
-    }
-
-    def getColor(mode : IOMODE) : Color = {
+    def getColor(mode : IO_MODE) : Color = {
         mode match {
             case DISABLED => null
-            case OUTONLY => new Color(255, 102, 0, 150)
-            case INONLY => new Color(0, 102, 255, 150)
+            case OUT_ONLY => new Color(255, 102, 0, 150)
+            case IN_ONLY => new Color(0, 102, 255, 150)
             case BOTH => new Color(0, 153, 0, 150)
             case _ => null
         }
     }
 
-    val sideModes = new util.HashMap[EnumFacing, IOMODE]()
+    val sideModes = new util.HashMap[EnumFacing, IO_MODE]()
     resetIO()
 
     def toggleMode(dir : EnumFacing): Unit = {
@@ -93,26 +84,26 @@ trait InputOutput extends NBTSavable {
     }
 
     def canOutputFromSide(dir : EnumFacing): Boolean = {
-        sideModes.get(dir) == OUTONLY || sideModes.get(dir) == BOTH
+        sideModes.get(dir) == OUT_ONLY || sideModes.get(dir) == BOTH
     }
 
     def canInputFromSide(dir : EnumFacing): Boolean = {
-        sideModes.get(dir) == INONLY || sideModes.get(dir) == BOTH
+        sideModes.get(dir) == IN_ONLY || sideModes.get(dir) == BOTH
     }
 
     def canOutputFromSideNoRotate(dir : EnumFacing): Boolean = {
-        sideModes.get(dir) == OUTONLY || sideModes.get(dir) == BOTH
+        sideModes.get(dir) == OUT_ONLY || sideModes.get(dir) == BOTH
     }
 
     def canInputFromSideNoRotate(dir : EnumFacing): Boolean = {
-        sideModes.get(dir) == INONLY || sideModes.get(dir) == BOTH
+        sideModes.get(dir) == IN_ONLY || sideModes.get(dir) == BOTH
     }
 
     def isDisabled(dir : EnumFacing) : Boolean = {
         sideModes.get(dir) == DISABLED
     }
 
-    def getModeForSide(dir : EnumFacing) : IOMODE = {
+    def getModeForSide(dir : EnumFacing) : IO_MODE = {
         sideModes.get(dir)
     }
 

@@ -40,7 +40,7 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
 
     override def resetIO() : Unit = {
         for(dir <- EnumFacing.values()) {
-            sideModes.put(dir, INONLY)
+            sideModes.put(dir, IN_ONLY)
         }
     }
 
