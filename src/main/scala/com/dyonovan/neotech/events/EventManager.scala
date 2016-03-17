@@ -12,5 +12,6 @@ object EventManager {
         MinecraftForge.EVENT_BUS.register(AttackEvent)
         MinecraftForge.EVENT_BUS.register(ItemTrashBag)
         MinecraftForge.EVENT_BUS.register(new PlayerUpdateEvent)
+        MinecraftForge.EVENT_BUS.register(ConfigChanged)
     }
 }

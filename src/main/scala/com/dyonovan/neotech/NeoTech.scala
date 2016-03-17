@@ -36,8 +36,13 @@ import scala.collection.JavaConversions._
   * @author Dyonovan
   * @since August 07, 2015
   */
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION,
-    dependencies = Reference.DEPENDENCIES, modLanguage = "scala", updateJSON = Reference.UPDATE_JSON)
+@Mod(modid          = Reference.MOD_ID,
+     name           = Reference.MOD_NAME,
+     version        = Reference.VERSION,
+     dependencies   = Reference.DEPENDENCIES,
+     modLanguage    = "scala",
+     updateJSON     = Reference.UPDATE_JSON,
+     guiFactory     = "com.dyonovan.neotech.client.ingameconfig.GuiFactoryNeoTech")
 object NeoTech {
 
     //Lets us make some buckets

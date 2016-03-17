@@ -77,7 +77,7 @@ object ConfigRegistry {
         fertBlacklist= config.get(Reference.CONFIG_FERT_BLACKLIST, "Blocks to Blacklist from Being Fertilized",
                         Array(""),"Format MODID:BLOCKNAME 1 per Line").getStringList
 
-        versionCheck = config.get(Reference.CONFIG_VERSION_CHECK, "Version Check", true).getBoolean()
+        versionCheck = config.get(Reference.CONFIG_CLIENT, "versionCheck", true, "Enable Version Check?").getBoolean()
 
         chunkLoaderMax = config.get(Reference.CONFIG_CHUNKLOADER, "chunkLoaderMax", 3,
                             "Max Chunks (squared) to keep loaded per Chunk Loader").getInt
