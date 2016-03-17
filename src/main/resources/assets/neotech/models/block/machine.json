@@ -10,7 +10,9 @@
         "output" : "neotech:blocks/outputFace",
         "inputOutputFace" : "neotech:blocks/inputOutputFace",
         "disable" : "neotech:blocks/disabled",
+        "in1" : "neotech:blocks/inputFacePrimary",
         "in2" : "neotech:blocks/inputFaceSecondary",
+        "out1" : "neotech:blocks/outputFacePrimary",
         "out2" : "neotech:blocks/outputFaceSecondary"
     },
     "display": {

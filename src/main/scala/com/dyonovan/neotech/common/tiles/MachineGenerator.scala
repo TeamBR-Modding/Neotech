@@ -153,10 +153,11 @@ abstract class MachineGenerator extends AbstractMachine {
       * @return An array of slots to interface with
       */
     override def getSlotsForFace(side: EnumFacing): Array[Int] = {
+        if(isDisabled(side)) return Array()
         side match {
-            case EnumFacing.UP => getInputSlots
-            case EnumFacing.DOWN => getOutputSlots
-            case _ => getInputSlots ++ getOutputSlots
+            case EnumFacing.UP => getInputSlots(getModeForSide(side))
+            case EnumFacing.DOWN => getOutputSlots(getModeForSide(side))
+            case _ => getInputSlots(getModeForSide(side)) ++ getOutputSlots(getModeForSide(side))
         }
     }
 }

@@ -1,20 +1,19 @@
 package com.dyonovan.neotech.client.gui.machines.processors
 
 import java.awt.Color
-import java.text.NumberFormat
-import java.util.Locale
 
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.processors.ContainerAlloyer
 import com.dyonovan.neotech.common.tiles.machines.processors.TileAlloyer
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFluidTank, GuiComponentPowerBarGradient, GuiComponentArrow}
-import net.minecraft.client.Minecraft
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentColoredZone, GuiComponentArrow, GuiComponentFluidTank, GuiComponentPowerBarGradient}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.StatCollector
+import net.minecraft.util.{EnumFacing, StatCollector}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.util.control.Breaks._
 
 /**
   * This file was created for NeoTech
@@ -52,6 +51,27 @@ class GuiAlloyer(player: EntityPlayer, tileEntity: TileAlloyer) extends
             }
         }
 
+        // Input One
+        components += new GuiComponentColoredZone(37, 17, 20, 62, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_PRIMARY)
+                            color = EnumInputOutputMode.INPUT_PRIMARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
         components += new GuiComponentFluidTank(38, 18, 18, 60, tileEntity.tanks(tileEntity.INPUT_TANK_1)) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
@@ -65,6 +85,27 @@ class GuiAlloyer(player: EntityPlayer, tileEntity: TileAlloyer) extends
             }
         }
 
+        // Input Two
+        components += new GuiComponentColoredZone(59, 17, 20, 62, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_SECONDARY)
+                            color = EnumInputOutputMode.INPUT_SECONDARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
         components += new GuiComponentFluidTank(60, 18, 18, 60, tileEntity.tanks(tileEntity.INPUT_TANK_2)) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
@@ -75,6 +116,24 @@ class GuiAlloyer(player: EntityPlayer, tileEntity: TileAlloyer) extends
                 buffer += ClientUtils.formatNumber(tileEntity.tanks(tileEntity.INPUT_TANK_2).getFluidAmount) + " / " +
                         ClientUtils.formatNumber(tileEntity.tanks(tileEntity.INPUT_TANK_2).getCapacity) + " mb"
                 buffer
+            }
+        }
+
+        // Output
+        components += new GuiComponentColoredZone(114, 17, 52, 62, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.OUTPUT_ALL)
+                            color = EnumInputOutputMode.OUTPUT_ALL.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
             }
         }
 

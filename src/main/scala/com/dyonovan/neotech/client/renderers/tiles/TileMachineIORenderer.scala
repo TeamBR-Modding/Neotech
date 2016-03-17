@@ -19,15 +19,11 @@ class TileMachineIORenderer extends TileRenderHelper[AbstractMachine] {
         try {
             if (te != null && te.shouldRenderInputOutputOnTile && te.getWorld.getBlockState(te.getPos) != null) {
                 for (dir <- EnumFacing.values()) {
-                    if (te.canInputFromSide(dir) && te.canOutputFromSide(dir))
-                        renderIconOnBlock(Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("neotech:blocks/inputOutputFace"),
+                    val iconName = te.getDisplayIconForSide(dir)
+                    if(iconName != null) {
+                        renderIconOnBlock(Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(iconName),
                             0, dir, dir, new LocationDouble(x, y, z), 16.0F, 0.0, 0.0, -0.001)
-                    else if (!te.canInputFromSide(dir) && te.canOutputFromSide(dir))
-                        renderIconOnBlock(Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("neotech:blocks/outputFace"),
-                            0, dir, dir, new LocationDouble(x, y, z), 16.0F, 0.0F, 0.0F, -0.001)
-                    else if (te.canInputFromSide(dir) && !te.canOutputFromSide(dir))
-                        renderIconOnBlock(Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("neotech:blocks/inputFace"),
-                            0, dir, dir, new LocationDouble(x, y, z), 16.0F, 0.0, 0.0, -0.001)
+                    }
                 }
             }
         } catch {

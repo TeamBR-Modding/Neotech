@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.pipes.types
 
-import com.dyonovan.neotech.collections.InputOutput
+import com.dyonovan.neotech.collections.{EnumInputOutputMode, InputOutput}
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.collections.{Filter, WorldPipes}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
@@ -40,9 +40,24 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
 
     override def resetIO() : Unit = {
         for(dir <- EnumFacing.values()) {
-            sideModes.put(dir, IN_ONLY)
+            sideModes.put(dir, EnumInputOutputMode.INPUT_ALL)
         }
     }
+
+    /**
+      * Add all modes you want, in order, here
+      */
+    override def setupValidModes() : Unit = {
+        validModes += EnumInputOutputMode.INPUT_ALL
+        validModes += EnumInputOutputMode.OUTPUT_ALL
+        validModes += EnumInputOutputMode.ALL_MODES
+        validModes += EnumInputOutputMode.DISABLED
+    }
+
+    /**
+      * Add all modes you want, in order, here
+      */
+    def addValidModes() : Unit = {} // We aren't using the defaults, use above
 
     //Variables
     var mode : Int = 0 //Used to set mode (Round Robin etc) only used in extract pipe
@@ -56,7 +71,7 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
       * @param facing The direction from this block
       * @return Can connect
       */
-    def canConnectExtract(facing: EnumFacing): Boolean = canOutputFromSideNoRotate(facing) && super.canConnect(facing)
+    def canConnectExtract(facing: EnumFacing): Boolean = canOutputFromSide(facing) && super.canConnect(facing)
 
     /**
       * Can this pipe connect
@@ -64,7 +79,7 @@ abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable
       * @param facing The direction from this block
       * @return
       */
-    def canConnectSink(facing: EnumFacing): Boolean = canInputFromSideNoRotate(facing) && super.canConnect(facing)
+    def canConnectSink(facing: EnumFacing): Boolean = canInputFromSide(facing) && super.canConnect(facing)
 
     /**
       * This is mainly used to sending info to the client so it knows what to render. It will also be used to save on world

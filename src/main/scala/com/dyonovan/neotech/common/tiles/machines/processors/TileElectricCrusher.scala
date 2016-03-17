@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.common.tiles.machines.processors
 
 import com.dyonovan.neotech.client.gui.machines.processors.GuiElectricCrusher
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.processors.ContainerElectricCrusher
 import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.dyonovan.neotech.managers.RecipeManager
@@ -41,6 +42,29 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
     override def initialSize: Int = 3
 
     /**
+      * Add all modes you want, in order, here
+      */
+    def addValidModes() : Unit = {
+        validModes += EnumInputOutputMode.INPUT_ALL
+        validModes += EnumInputOutputMode.OUTPUT_ALL
+        validModes += EnumInputOutputMode.OUTPUT_PRIMARY
+        validModes += EnumInputOutputMode.OUTPUT_SECONDARY
+        validModes += EnumInputOutputMode.ALL_MODES
+    }
+
+    /**
+      * Used to get how much energy to drain per tick, you should check for upgrades at this point
+      *
+      * @return How much energy to drain per tick
+      */
+    override def getEnergyCostPerTick: Int = {
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
+        else
+            BASE_ENERGY_TICK
+    }
+
+    /**
       * Used to get how long it takes to cook things, you should check for upgrades at this point
       *
       * @return The time it takes in ticks to cook the current item
@@ -75,6 +99,29 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
     }
 
     /**
+      * Used to actually cook the item. You should reset values here if need be
+      */
+    override def cook(): Unit = cookTime += 1
+
+    /**
+      * Called when the tile has completed the cook process
+      */
+    override def completeCook() {
+        val input = getStackInSlot(INPUT_SLOT)
+        var recipeResult: ItemStack = getOutput(getStackInSlot(INPUT_SLOT))
+        decrStackSize(INPUT_SLOT, 1)
+        if (getStackInSlot(OUTPUT_SLOT_1) == null) {
+            recipeResult = recipeResult.copy
+            recipeResult.stackSize = recipeResult.stackSize
+            setInventorySlotContents(OUTPUT_SLOT_1, recipeResult)
+        }
+        else {
+            getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize
+        }
+        if (getUpgradeBoard != null && getUpgradeBoard.hasExpansion) extraOutput(input)
+    }
+
+    /**
       * Get the output of the recipe
       *
       * @param stack The input
@@ -96,26 +143,10 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
     override def getOutput(input: ItemStack): ItemStack = getOutputForStack(input)
 
     /**
-      * Used to actually cook the item. You should reset values here if need be
+      * Used to get the recipe for the crusher
       */
-    override def cook(): Unit = cookTime += 1
-
-    /**
-      * Called when the tile has completed the cook process
-      */
-    override def completeCook() {
-        val input = getStackInSlot(INPUT_SLOT)
-        var recipeResult: ItemStack = getOutput(getStackInSlot(INPUT_SLOT))
-        decrStackSize(INPUT_SLOT, 1)
-        if (getStackInSlot(OUTPUT_SLOT_1) == null) {
-            recipeResult = recipeResult.copy
-            recipeResult.stackSize = recipeResult.stackSize
-            setInventorySlotContents(OUTPUT_SLOT_1, recipeResult)
-        }
-        else {
-            getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize
-        }
-        if (getUpgradeBoard != null && getUpgradeBoard.hasExpansion) extraOutput(input)
+    def recipeCrusher(stack: ItemStack): (ItemStack, ItemStack, Int) = {
+        RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).getOutput(stack).orNull
     }
 
     /**
@@ -141,42 +172,78 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
         }
     }
 
+    /*******************************************************************************************************************
+      **************************************************  Tile Methods  ************************************************
+      ******************************************************************************************************************/
+
     /**
-      * Used to get the recipe for the crusher
+      * This will try to take things from other inventories and put it into ours
       */
-    def recipeCrusher(stack: ItemStack): (ItemStack, ItemStack, Int) = {
-        RecipeManager.getHandler[CrusherRecipeHandler](RecipeManager.Crusher).getOutput(stack).orNull
+    override def tryInput(): Unit = {
+        for(dir <- EnumFacing.values())
+            if(canInputFromSide(dir))
+                InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, INPUT_SLOT, 64,
+                    dir.getOpposite, doMove = true, checkSidedTarget = false)
     }
 
     /**
-      * Used to get how much energy to drain per tick, you should check for upgrades at this point
+      * This will try to take things from our inventory and try to place them in others
+      */
+    override def tryOutput(): Unit = {
+        for(dir <- EnumFacing.values()) {
+            if(canOutputFromSide(dir))
+                InventoryUtils.moveItemInto(this, OUTPUT_SLOT_1, worldObj.getTileEntity(pos.offset(dir)), -1, 64,
+                    dir.getOpposite, doMove = true, checkSidedSource = false)
+            if(canOutputFromSide(dir, isPrimary = false))
+                InventoryUtils.moveItemInto(this, OUTPUT_SLOT_2, worldObj.getTileEntity(pos.offset(dir)), -1, 64,
+                    dir.getOpposite, doMove = true, checkSidedSource = false)
+        }
+    }
+
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to get what slots are allowed to be input
       *
-      * @return How much energy to drain per tick
+      * @return The slots to input from
       */
-    override def getEnergyCostPerTick: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
-        else
-            BASE_ENERGY_TICK
+    override def getInputSlots(mode : EnumInputOutputMode) : Array[Int] = Array(INPUT_SLOT)
+
+    /**
+      * Used to get what slots are allowed to be output
+      *
+      * @return The slots to output from
+      */
+    override def getOutputSlots(mode : EnumInputOutputMode) : Array[Int] = Array(OUTPUT_SLOT_1, OUTPUT_SLOT_2)
+
+    /**
+      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = {
+        index == OUTPUT_SLOT_1 || index == OUTPUT_SLOT_2
     }
 
-    override def getDescription : String = {
-        "" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
-                GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
-                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" +                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrusher.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricCrusher.expansionUpgrade.desc")
+    /**
+      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
+      * side
+      */
+    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+        if (slot == INPUT_SLOT && getOutput(itemStackIn) != null) {
+            if (getStackInSlot(INPUT_SLOT) == null) return true
+            if (getStackInSlot(INPUT_SLOT).isItemEqual(itemStackIn)) {
+                if (getStackInSlot(INPUT_SLOT).getMaxStackSize >= getStackInSlot(INPUT_SLOT).stackSize + itemStackIn.stackSize)
+                    return true
+            }
+        }
+        false
     }
+
+    /*******************************************************************************************************************
+      *************************************************** Misc methods *************************************************
+      ******************************************************************************************************************/
 
     /**
       * Return the container for this tile
@@ -206,50 +273,23 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
         new GuiElectricCrusher(player, this)
 
-    /*******************************************************************************************************************
-      ************************************************ Inventory methods ***********************************************
-      ******************************************************************************************************************/
-
-    /**
-      * Used to get what slots are allowed to be output
-      *
-      * @return The slots to output from
-      */
-    override def getOutputSlots: Array[Int] = Array(OUTPUT_SLOT_1, OUTPUT_SLOT_2)
-
-    /**
-      * Used to get what slots are allowed to be input
-      *
-      * @return The slots to input from
-      */
-    override def getInputSlots: Array[Int] = Array(INPUT_SLOT)
-
-    /**
-      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
-      * side
-      */
-    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = {
-        index == OUTPUT_SLOT_1 || index == OUTPUT_SLOT_2
+    override def getDescription : String = {
+        "" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
+                GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
+                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" +                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrusher.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricCrusher.expansionUpgrade.desc")
     }
-
-    /**
-      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
-      * side
-      */
-    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
-        if (slot == INPUT_SLOT && getOutput(itemStackIn) != null) {
-            if (getStackInSlot(INPUT_SLOT) == null) return true
-            if (getStackInSlot(INPUT_SLOT).isItemEqual(itemStackIn)) {
-                if (getStackInSlot(INPUT_SLOT).getMaxStackSize >= getStackInSlot(INPUT_SLOT).stackSize + itemStackIn.stackSize)
-                    return true
-            }
-        }
-        false
-    }
-
-    /*******************************************************************************************************************
-      *************************************************** Misc methods *************************************************
-      ******************************************************************************************************************/
 
     /**
       * Used to output the redstone single from this structure

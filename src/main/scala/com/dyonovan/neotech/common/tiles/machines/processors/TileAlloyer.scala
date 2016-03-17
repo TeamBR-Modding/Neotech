@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.common.tiles.machines.processors
 
 import com.dyonovan.neotech.client.gui.machines.processors.GuiAlloyer
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.processors.ContainerAlloyer
 import com.dyonovan.neotech.common.tiles.MachineProcessor
 import com.dyonovan.neotech.managers.{MetalManager, RecipeManager}
@@ -27,11 +28,36 @@ import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank, IFluidHandler}
   */
 class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack] with FluidHandler {
 
-    lazy val INPUT_TANK_1 = 0
-    lazy val INPUT_TANK_2 = 1
-    lazy val OUTPUT_TANK  = 2
-
     lazy val BASE_ENERGY_TICK = 100
+
+    /**
+      * The initial size of the inventory
+      *
+      * @return
+      */
+    override def initialSize: Int = 0
+
+    /**
+      * Add all modes you want, in order, here
+      */
+    def addValidModes() : Unit = {
+        validModes += EnumInputOutputMode.INPUT_ALL
+        validModes += EnumInputOutputMode.INPUT_PRIMARY
+        validModes += EnumInputOutputMode.INPUT_SECONDARY
+        validModes += EnumInputOutputMode.OUTPUT_ALL
+        validModes += EnumInputOutputMode.ALL_MODES
+    }
+
+    /**
+      * Used to get how much energy to drain per tick, you should check for upgrades at this point
+      *
+      * @return How much energy to drain per tick
+      */
+    override def getEnergyCostPerTick: Int =
+        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
+        else
+            BASE_ENERGY_TICK
 
     /**
       * Used to get how long it takes to cook things, you should check for upgrades at this point
@@ -61,25 +87,6 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
         failCoolDown = 40
         false
     }
-    /**
-      * Get the output of the recipe
-      *
-      * @param input The input
-      * @return The output
-      */
-    override def getOutput(input: (FluidStack, FluidStack)): FluidStack =
-        if(RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).getOutput(input).isDefined)
-            RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).getOutput(input).get
-        else
-            null
-
-    /**
-      * Get the output of the recipe (used in insert options)
-      *
-      * @param input The input
-      * @return The output
-      */
-    override def getOutputForStack(input: ItemStack): ItemStack = null
 
     /**
       * Used to actually cook the item
@@ -109,100 +116,56 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
     }
 
     /**
-      * Used to get how much energy to drain per tick, you should check for upgrades at this point
+      * Get the output of the recipe
       *
-      * @return How much energy to drain per tick
+      * @param input The input
+      * @return The output
       */
-    override def getEnergyCostPerTick: Int =
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
+    override def getOutput(input: (FluidStack, FluidStack)): FluidStack =
+        if(RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).getOutput(input).isDefined)
+            RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).getOutput(input).get
         else
-            BASE_ENERGY_TICK
+            null
 
     /**
-      * The initial size of the inventory
+      * Get the output of the recipe (used in insert options)
       *
-      * @return
+      * @param input The input
+      * @return The output
       */
-    override def initialSize: Int = 0
-
-    /**
-      * Used to get what slots are allowed to be input
-      *
-      * @return The slots to input from
-      */
-    override def getInputSlots: Array[Int] = Array()
-
-    /**
-      * Used to get what slots are allowed to be output
-      *
-      * @return The slots to output from
-      */
-    override def getOutputSlots: Array[Int] = Array()
-
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
-        super[MachineProcessor].writeToNBT(tag)
-        super[FluidHandler].writeToNBT(tag)
-    }
-
-    override def readFromNBT(tag : NBTTagCompound) : Unit = {
-        super[MachineProcessor].readFromNBT(tag)
-        super[FluidHandler].readFromNBT(tag)
-    }
+    override def getOutputForStack(input: ItemStack): ItemStack = null
 
     /*******************************************************************************************************************
-      **************************************************** Fluid methods ***********************************************
+      **************************************************  Tile Methods  ************************************************
       ******************************************************************************************************************/
-
-    override def setupTanks(): Unit = {
-        tanks += new FluidTank(10 * MetalManager.BLOCK_MB) // IN 1
-        tanks += new FluidTank(10 * MetalManager.BLOCK_MB) // IN 2
-        tanks += new FluidTank(10 * MetalManager.BLOCK_MB) // OUT
-    }
-
-    override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
-
-    override def getOutputTanks: Array[Int] = Array(OUTPUT_TANK)
-
-    override def getInputTanks: Array[Int] = Array(INPUT_TANK_1, INPUT_TANK_2)
-
-    /**
-      * Returns true if the given fluid can be inserted into the given direction.
-      *
-      * More formally, this should return true if fluid is able to enter from the given direction.
-      */
-    override def canFill(from: EnumFacing, fluid: Fluid): Boolean = {
-        if(fluid == null) return false
-        if(tanks(INPUT_TANK_1).getFluid == null)
-            return RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).isValidSingle(new FluidStack(fluid, 1000))
-        else if(tanks(INPUT_TANK_2).getFluid == null)
-            return RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).isValidSingle(new FluidStack(fluid, 1000))
-        else {
-            if(fluid == tanks(INPUT_TANK_1).getFluid.getFluid || fluid == tanks(INPUT_TANK_2).getFluid.getFluid)
-                return true
-            else
-                return false
-        }
-        false
-    }
 
     /**
       * This will try to take things from other inventories and put it into ours
       */
     override def tryInput() : Unit = {
-        super.tryInput()
         for(dir <- EnumFacing.values) {
-            if(canInputFromSide(dir)) {
-                worldObj.getTileEntity(pos.offset(dir)) match {
-                    case otherTank : IFluidHandler =>
+            worldObj.getTileEntity(pos.offset(dir)) match {
+                case otherTank : IFluidHandler =>
+
+                    if(canInputFromSide(dir)) // Left Tank
                         if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
-                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
-                            val amount = fill(dir, otherTank.drain(dir.getOpposite, 1000, false), doFill = false)
+                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null &&
+                                canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
+                            val amount = tanks(INPUT_TANK_1).fill(otherTank.drain(dir.getOpposite, 1000, false), false)
                             if (amount > 0)
-                                fill(dir, otherTank.drain(dir.getOpposite, amount, true), doFill = true)
+                                tanks(INPUT_TANK_1).fill(otherTank.drain(dir.getOpposite, amount, true), true)
                         }
-                    case _ =>
-                }
+
+                    if(canInputFromSide(dir, isPrimary = false)) // Right Tank
+                        if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
+                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null &&
+                                canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
+                            val amount = tanks(INPUT_TANK_2).fill(otherTank.drain(dir.getOpposite, 1000, false), false)
+                            if (amount > 0)
+                                tanks(INPUT_TANK_2).fill(otherTank.drain(dir.getOpposite, amount, true), true)
+                        }
+
+                case _ =>
             }
         }
     }
@@ -211,7 +174,6 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
       * This will try to take things from other inventories and put it into ours
       */
     override def tryOutput() : Unit = {
-        super.tryOutput()
         for(dir <- EnumFacing.values) {
             if(canOutputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
@@ -232,28 +194,95 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
         }
     }
 
+    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+        super[MachineProcessor].writeToNBT(tag)
+        super[FluidHandler].writeToNBT(tag)
+    }
+
+    override def readFromNBT(tag : NBTTagCompound) : Unit = {
+        super[MachineProcessor].readFromNBT(tag)
+        super[FluidHandler].readFromNBT(tag)
+    }
+
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Used to get what slots are allowed to be input
+      *
+      * @return The slots to input from
+      */
+    override def getInputSlots(mode : EnumInputOutputMode) : Array[Int] = Array()
+
+    /**
+      * Used to get what slots are allowed to be output
+      *
+      * @return The slots to output from
+      */
+    override def getOutputSlots(mode : EnumInputOutputMode) : Array[Int] = Array()
+
+    /*******************************************************************************************************************
+      **************************************************** Fluid methods ***********************************************
+      ******************************************************************************************************************/
+
+    lazy val INPUT_TANK_1 = 0
+    lazy val INPUT_TANK_2 = 1
+    lazy val OUTPUT_TANK  = 2
+
+    /**
+      * Used to set up the tanks needed. You can insert any number of tanks
+      */
+    override def setupTanks(): Unit = {
+        tanks += new FluidTank(10 * MetalManager.BLOCK_MB) // IN 1
+        tanks += new FluidTank(10 * MetalManager.BLOCK_MB) // IN 2
+        tanks += new FluidTank(10 * MetalManager.BLOCK_MB) // OUT
+    }
+
+    /**
+      * Which tanks can input
+      *
+      * @return
+      */
+    override def getInputTanks: Array[Int] = Array(INPUT_TANK_1, INPUT_TANK_2)
+
+    /**
+      * Which tanks can output
+      *
+      * @return
+      */
+    override def getOutputTanks: Array[Int] = Array(OUTPUT_TANK)
+
+    /**
+      * Called when something happens to the tank, you should mark the block for update here if a tile
+      */
+    override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
+
+    /**
+      * Returns true if the given fluid can be inserted into the given direction.
+      *
+      * More formally, this should return true if fluid is able to enter from the given direction.
+      */
+    override def canFill(from: EnumFacing, fluid: Fluid): Boolean = {
+        if(fluid == null) return false
+        if(isDisabled(from)) return false
+        if(tanks(INPUT_TANK_1).getFluid == null)
+            return RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).isValidSingle(new FluidStack(fluid, 1000))
+        else if(tanks(INPUT_TANK_2).getFluid == null)
+            return RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).isValidSingle(new FluidStack(fluid, 1000))
+        else {
+            if(fluid == tanks(INPUT_TANK_1).getFluid.getFluid || fluid == tanks(INPUT_TANK_2).getFluid.getFluid)
+                return true
+            else
+                return false
+        }
+        false
+    }
+
+
     /*******************************************************************************************************************
       ***************************************************** Misc methods ***********************************************
       ******************************************************************************************************************/
-
-    override def getDescription : String = {
-        "" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
-                GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
-                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.alloyer.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrucible.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
-    }
 
     /**
       * Return the container for this tile
@@ -282,6 +311,25 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
       */
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
         new GuiAlloyer(player, this)
+
+    override def getDescription : String = {
+        "" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
+                GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
+                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.alloyer.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrucible.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+    }
 
     /**
       * Used to output the redstone single from this structure

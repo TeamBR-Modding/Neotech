@@ -159,10 +159,11 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
       * @return An array of slots to interface with
       */
     override def getSlotsForFace(side: EnumFacing): Array[Int] = {
+        if(isDisabled(side)) return Array()
         side match {
-            case EnumFacing.UP => getInputSlots
-            case EnumFacing.DOWN => getOutputSlots
-            case _ => getInputSlots ++ getOutputSlots
+            case EnumFacing.UP => getInputSlots(getModeForSide(side))
+            case EnumFacing.DOWN => getOutputSlots(getModeForSide(side))
+            case _ => getInputSlots(getModeForSide(side)) ++ getOutputSlots(getModeForSide(side))
         }
     }
 
@@ -171,6 +172,7 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
       * side
       */
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
+        if(isDisabled(direction)) return false
         if (slot == 0 && getOutputForStack(itemStackIn) != null) {
             if (getStackInSlot(0) == null) return true
             if (getStackInSlot(0).isItemEqual(itemStackIn)) {
@@ -185,7 +187,7 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
       * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
       * side
       */
-    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == 1
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = index == 1 && !isDisabled(direction)
 
     /**
       * Used to define if an item is valid for a slot

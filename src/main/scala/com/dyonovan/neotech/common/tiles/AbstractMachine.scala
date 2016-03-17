@@ -1,9 +1,8 @@
 package com.dyonovan.neotech.common.tiles
 
-import com.dyonovan.neotech.collections.InputOutput
+import com.dyonovan.neotech.collections.{EnumInputOutputMode, InputOutput}
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, InventorySided, RedstoneAware, Syncable}
-import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{EnumFacing, StatCollector}
@@ -49,14 +48,14 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       *
       * @return The slots to output from
       */
-    def getOutputSlots : Array[Int]
+    def getOutputSlots(mode : EnumInputOutputMode) : Array[Int]
 
     /**
       * Used to get what slots are allowed to be input
       *
       * @return The slots to input from
       */
-    def getInputSlots : Array[Int]
+    def getInputSlots(mode : EnumInputOutputMode) : Array[Int]
 
     /**
       * Used to output the redstone single from this structure
@@ -172,27 +171,12 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     /**
       * This will try to take things from our inventory and try to place them in others
       */
-    def tryOutput() : Unit = {
-        for(dir <- EnumFacing.values) {
-            if(canOutputFromSide(dir)) {
-                for(slot <- getOutputSlots)
-                    InventoryUtils.moveItemInto(this, slot, worldObj.getTileEntity(pos.offset(dir)), -1, 64, dir, doMove = true, checkSidedSource = false)
-            }
-        }
-    }
+    def tryOutput() : Unit
 
     /**
       * This will try to take things from other inventories and put it into ours
       */
-    def tryInput() : Unit = {
-        for(dir <- EnumFacing.values) {
-            if(canInputFromSide(dir)) {
-                for (x <- getInputSlots) {
-                    InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, x, 64, dir.getOpposite, doMove = true, checkSidedTarget = false)
-                }
-            }
-        }
-    }
+    def tryInput() : Unit
 
     /**
       * Used to manually disable the IO rendering on tile, true by default

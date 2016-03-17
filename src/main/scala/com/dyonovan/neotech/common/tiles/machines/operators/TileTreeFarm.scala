@@ -5,18 +5,20 @@ import java.util.Comparator
 
 import cofh.api.energy.IEnergyReceiver
 import com.dyonovan.neotech.client.gui.machines.operators.GuiTreeFarm
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.operators.ContainerTreeFarm
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
+import com.dyonovan.neotech.utils.{ClientUtils, TimeUtils}
+import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
 import com.teambr.bookshelf.collections.Location
+import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.block.state.IBlockState
 import net.minecraft.block.{Block, BlockLeaves, BlockSapling}
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item._
-import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing, StatCollector}
+import net.minecraft.util.{StatCollector, AxisAlignedBB, BlockPos, EnumFacing}
 import net.minecraft.world.World
 
 import scala.collection.JavaConversions._
@@ -33,28 +35,6 @@ import scala.util.control.Breaks._
   * @since 2/11/2016
   */
 class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
-
-    def RANGE : Int = {
-        if(hardDriveCount > 0)
-            return 4 + hardDriveCount
-        4
-    }
-
-    def costToOperate : Int = {
-        if(processorCount > 0)
-            return 200 * processorCount
-        200
-    }
-
-    def getChopCount : Int = {
-        if(processorCount > 0)
-            processorCount * 16
-        else
-            2
-    }
-
-    override def initialSize: Int = 18
-
     lazy val AXE_SLOT = 0
     lazy val SHEARS_SLOT = 1
     lazy val SAPLING_SLOTS = getSizeInventory - 3 until getSizeInventory
@@ -66,13 +46,63 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                     .compareTo(o2.distanceSq(pos.getX, pos.getY, pos.getZ))
     })
 
-    var time = 20
-    var saplingTimer = 600
+    /**
+      * Used to get the range of this machines operation, includes upgrades
+      */
+    def RANGE : Int = {
+        if(hardDriveCount > 0)
+            return 4 + hardDriveCount
+        4
+    }
+
+    /**
+      * Used to get the cost to operate, includes upgrades
+      */
+    def costToOperate : Int = {
+        if(processorCount > 0)
+            return 200 * processorCount
+        200
+    }
+
+    /**
+      * Gets how many blocks to break based on upgrades, 2 by default
+      *
+      * @return
+      */
+    def getChopCount : Int = {
+        if(processorCount > 0)
+            processorCount * 16
+        else
+            2
+    }
+
+    /**
+      * The initial size of the inventory
+      *
+      * @return
+      */
+    override def initialSize: Int = 18
+
+    /**
+      * Add all modes you want, in order, here
+      */
+    def addValidModes() : Unit = {
+        validModes += EnumInputOutputMode.INPUT_ALL
+        validModes += EnumInputOutputMode.INPUT_PRIMARY
+        validModes += EnumInputOutputMode.INPUT_SECONDARY
+        validModes += EnumInputOutputMode.OUTPUT_ALL
+        validModes += EnumInputOutputMode.ALL_MODES
+    }
+
+    /*******************************************************************************************************************
+      **************************************************  Tile Methods  ************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Called per tick, does the work
+      */
     override def doWork() : Unit = {
-        time -= 1
-        saplingTimer -= 1
-        if (!isBuildingCache && time <= 0 && energyStorage.getEnergyStored > costToOperate) {
-            time = 20
+        if (!isBuildingCache && TimeUtils.onSecond(2) && energyStorage.getEnergyStored > costToOperate) {
             if(cache.isEmpty)
                 findNextTree()
             else
@@ -80,12 +110,14 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             pullInSaplings()
         }
 
-        if(saplingTimer <= 0) {
+        if (TimeUtils.onSecond(30)) {
             plantSaplings()
-            saplingTimer = 600
         }
     }
 
+    /**
+      * Find the next tree in the chopping area
+      */
     def findNextTree() : Unit = {
         isBuildingCache = true
 
@@ -130,6 +162,9 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         isBuildingCache = false
     }
 
+    /**
+      * Chop the tree cache found
+      */
     def chopTree() : Unit = {
         breakable {
             for (x <- 0 until getChopCount) {
@@ -156,6 +191,12 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         }
     }
 
+    /**
+      * Chop a log
+      *
+      * @param logPosition The log position
+      * @return True if able to chop
+      */
     def chopLog(logPosition : BlockPos) : Boolean = {
         if(getStackInSlot(AXE_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(logPosition).getBlock, 1, worldObj.getBlockState(logPosition).getBlock.damageDropped(worldObj.getBlockState(logPosition))), sapling = false)) {
             /*if(worldObj.getBlockState(logPosition).getBlock != null)
@@ -170,6 +211,12 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         false
     }
 
+    /**
+      * Chop a leave, taking into account the leave drops, eg apples
+      *
+      * @param leavePosition The leave position
+      * @return True if something happened
+      */
     def chopLeave(leavePosition : BlockPos) : Boolean = {
         if(getStackInSlot(SHEARS_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(leavePosition).getBlock, 1, worldObj.getBlockState(leavePosition).getBlock.damageDropped(worldObj.getBlockState(leavePosition))), sapling = false)) {
             if(worldObj.getBlockState(leavePosition).getBlock != null)
@@ -192,8 +239,11 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         false
     }
 
+    /**
+      * Scan the area around and pick saplings
+      */
     def pullInSaplings() : Unit = {
-        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], AxisAlignedBB.fromBounds(pos.getX - RANGE - 4, pos.getY, pos.getZ - RANGE - 4, pos.getX + RANGE + 5, pos.getY + 1, pos.getZ + RANGE + 5))
+        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], AxisAlignedBB.fromBounds(pos.getX - RANGE - 4, pos.getY, pos.getZ - RANGE - 4, pos.getX + RANGE + 5, pos.getY + 2, pos.getZ + RANGE + 5))
         for(x <- 0 until items.size()) {
             val item = items.get(x)
             item.getEntityItem.getItem match {
@@ -210,6 +260,9 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         }
     }
 
+    /**
+      * Take saplings in the inventory and plant them
+      */
     def plantSaplings() : Unit = {
         if(hasSaplings) {
             for (x <- pos.getX - RANGE + 1 until pos.getX + RANGE) {
@@ -229,6 +282,11 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         }
     }
 
+    /**
+      * Checks if this block actually has some saplings
+      *
+      * @return
+      */
     def hasSaplings: Boolean = {
         for(x <- SAPLING_SLOTS) {
             if(getStackInSlot(x) != null)
@@ -237,6 +295,11 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         false
     }
 
+    /**
+      * Gets the state for the next sapling to place and reduces the stack
+      *
+      * @return
+      */
     def getNextSaplingAndReduce:  IBlockState = {
         for(x <- SAPLING_SLOTS) {
             if (getStackInSlot(x) != null) {
@@ -251,6 +314,13 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         null
     }
 
+    /**
+      * Adds a harvest into the inventory, making sure to put saplings in the correct place
+      *
+      * @param stack The stack to insert
+      * @param sapling True to try place in sapling slot first
+      * @return True if able to place in inventory
+      */
     def addHarvestToInventory(stack : ItemStack, sapling : Boolean): Boolean = {
         if(sapling) {
             for(x <- SAPLING_SLOTS) {
@@ -277,69 +347,65 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         false
     }
 
-    override def getDescription : String = {
-        "" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
-                GuiColor.WHITE + "  " + costToOperate + " RF/chop\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.rangeTree") + ":\n" +
-                GuiColor.WHITE + "  " + (RANGE + 1) + "x"  + (RANGE + 1) + " blocks\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.chopCount") + ":\n" +
-                GuiColor.WHITE + "  " + getChopCount + "  \n\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.hardDriveUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+    /**
+      * This will try to take things from other inventories and put it into ours
+      */
+    override def tryInput(): Unit = {
+        for(dir <- EnumFacing.values()) {
+            if(canInputFromSide(dir)) // Try Axe Slot
+                InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, AXE_SLOT, 64,
+                    dir.getOpposite, doMove = true, checkSidedTarget = false)
+            if(canInputFromSide(dir, isPrimary = false)) // Try Shears Slot
+                InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, SHEARS_SLOT, 64,
+                    dir.getOpposite, doMove = true, checkSidedTarget = false)
+        }
     }
 
     /**
-      * Used to get what particles to spawn. This will be called when the tile is active
+      * This will try to take things from our inventory and try to place them in others
       */
-    override def spawnActiveParticles(xPos: Double, yPos: Double, zPos: Double): Unit = {}
-
-    /**
-      * Used to check if this tile is active or not
-      *
-      * @return True if active state
-      */
-    override def isActive: Boolean = { false }
-
-    /**
-      * Used to get what slots are allowed to be output
-      *
-      * @return The slots to output from
-      */
-    override def getOutputSlots: Array[Int] = SHEARS_SLOT until getSizeInventory - 3 toArray
-
-    /**
-      * Used to output the redstone single from this structure
-      *
-      * Use a range from 0 - 16.
-      *
-      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
-      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
-      *
-      * @return int range 0 - 16
-      */
-    override def getRedstoneOutput: Int = 0
+    override def tryOutput(): Unit = {
+        for(dir <- EnumFacing.values()) {
+            if(canOutputFromSide(dir))
+                for(x <- getOutputSlots(getModeForSide(dir))) // Try to get rid of our things
+                    InventoryUtils.moveItemInto(this, x, worldObj.getTileEntity(pos.offset(dir)), -1, 64,
+                        dir.getOpposite, doMove = true, checkSidedSource = false)
+        }
+    }
 
     /**
       * Use this to set all variables back to the default values, usually means the operation failed
       */
     override def reset(): Unit = {}
 
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
     /**
       * Used to get what slots are allowed to be input
       *
       * @return The slots to input from
       */
-    override def getInputSlots: Array[Int] = Array(AXE_SLOT, SHEARS_SLOT)
+    override def getInputSlots(mode : EnumInputOutputMode): Array[Int] = {
+        if(mode == EnumInputOutputMode.INPUT_ALL)
+            Array(AXE_SLOT, SHEARS_SLOT)
+        else if(mode == EnumInputOutputMode.INPUT_PRIMARY)
+            Array(AXE_SLOT)
+        else if(mode == EnumInputOutputMode.INPUT_SECONDARY)
+            Array(SHEARS_SLOT)
+        else if(mode == EnumInputOutputMode.DEFAULT)
+            Array(AXE_SLOT, SHEARS_SLOT)
+        else
+            Array()
+    }
+
+    /**
+      * Used to get what slots are allowed to be output
+      *
+      * @return The slots to output from
+      */
+    override def getOutputSlots(mode : EnumInputOutputMode) : Array[Int] = SHEARS_SLOT until getSizeInventory - 3 toArray
 
     override def getSlotsForFace(side: EnumFacing): Array[Int] = 0 until getSizeInventory toArray
 
@@ -348,7 +414,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
 
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = {
         slot match {
-            case AXE_SLOT if itemStackIn != null => itemStackIn.getItem.isInstanceOf[ItemAxe]
+            case AXE_SLOT if itemStackIn != null => itemStackIn.getItem.isInstanceOf[ItemTool] && itemStackIn.getItem.asInstanceOf[ItemTool].getToolClasses(itemStackIn).contains("axe")
             case SHEARS_SLOT if itemStackIn != null => itemStackIn.getItem.isInstanceOf[ItemShears]
             case _ => false
         }
@@ -365,6 +431,28 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             case _ => true
         }
     }
+
+    /*******************************************************************************************************************
+      ************************************************ Energy methods **************************************************
+      ******************************************************************************************************************/
+
+    /**
+      * Return true if you want this to be able to provide energy
+      *
+      * @return
+      */
+    def isProvider : Boolean = false
+
+    /**
+      * Return true if you want this to be able to receive energy
+      *
+      * @return
+      */
+    def isReceiver : Boolean = true
+
+    /*******************************************************************************************************************
+      *************************************************** Misc methods *************************************************
+      ******************************************************************************************************************/
 
     /**
       * Return the container for this tile
@@ -394,21 +482,50 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
         new GuiTreeFarm(player, this)
 
-    /*******************************************************************************************************************
-      ************************************************ Energy methods **************************************************
-      ******************************************************************************************************************/
+    override def getDescription : String = {
+        "" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
+                GuiColor.WHITE + "  " + costToOperate + " RF/chop\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.rangeTree") + ":\n" +
+                GuiColor.WHITE + "  " + (RANGE + 1) + "x"  + (RANGE + 1) + " blocks\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.chopCount") + ":\n" +
+                GuiColor.WHITE + "  " + getChopCount + "  \n\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+    }
 
     /**
-      * Return true if you want this to be able to provide energy
+      * Used to output the redstone single from this structure
       *
-      * @return
+      * Use a range from 0 - 16.
+      *
+      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
+      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
+      *
+      * @return int range 0 - 16
       */
-    def isProvider : Boolean = false
+    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
 
     /**
-      * Return true if you want this to be able to receive energy
-      *
-      * @return
+      * Used to get what particles to spawn. This will be called when the tile is active
       */
-    def isReceiver : Boolean = true
+    override def spawnActiveParticles(xPos: Double, yPos: Double, zPos: Double): Unit = {}
+
+    /**
+      * Used to check if this tile is active or not
+      *
+      * @return True if active state
+      */
+    override def isActive: Boolean = {
+        false
+    }
 }

@@ -5,6 +5,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.dyonovan.neotech.common.tiles.machines.generators.TileFluidGenerator
 import com.dyonovan.neotech.utils.ClientUtils
@@ -12,20 +13,20 @@ import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display._
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.StatCollector
+import net.minecraft.util.{EnumFacing, StatCollector}
 
 import scala.collection.mutable.ArrayBuffer
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 21, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 21, 2015
+  */
 class GuiFluidGenerator(player: EntityPlayer, tileEntity: TileFluidGenerator) extends
         GuiAbstractMachine[ContainerFluidGenerator](new ContainerFluidGenerator(player.inventory, tileEntity), 175, 165, "neotech.fluidgenerator.title", player, tileEntity) {
 
@@ -69,16 +70,30 @@ class GuiFluidGenerator(player: EntityPlayer, tileEntity: TileFluidGenerator) ex
             }
         }
 
+        // Fluid Color Indicator
+        components += new GuiComponentColoredZone(6, 17, 20, 62, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor() = {
+                var color = new Color(0, 0, 0, 0)
+                for(dir <- EnumFacing.values) {
+                    if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL)
+                        color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
         //Stored Fluid
-        components += new GuiComponentFluidTank(7, 18, 18, 60, tileEntity.tank) {
+        components += new GuiComponentFluidTank(7, 18, 18, 60, tileEntity.tanks(tileEntity.INPUT_TANK)) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
-                buffer += (if(tileEntity.tank.getFluid != null)
-                    GuiColor.ORANGE + tileEntity.tank.getFluid.getLocalizedName
+                buffer += (if(tileEntity.tanks(tileEntity.INPUT_TANK).getFluid != null)
+                    GuiColor.ORANGE + tileEntity.tanks(tileEntity.INPUT_TANK).getFluid.getLocalizedName
                 else
                     GuiColor.RED + "Empty")
-                buffer += ClientUtils.formatNumber(tileEntity.tank.getFluidAmount) + " / " +
-                        ClientUtils.formatNumber(tileEntity.tank.getCapacity) + " mb"
+                buffer += ClientUtils.formatNumber(tileEntity.tanks(tileEntity.INPUT_TANK).getFluidAmount) + " / " +
+                        ClientUtils.formatNumber(tileEntity.tanks(tileEntity.INPUT_TANK).getCapacity) + " mb"
                 buffer
             }
         }

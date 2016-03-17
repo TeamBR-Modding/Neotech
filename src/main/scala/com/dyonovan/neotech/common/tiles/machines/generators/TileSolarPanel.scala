@@ -4,6 +4,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 import cofh.api.energy.IEnergyReceiver
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.teambr.bookshelf.api.waila.Waila
 import net.minecraft.client.Minecraft
@@ -23,14 +24,20 @@ import net.minecraft.util.EnumFacing
   */
 class TileSolarPanel extends MachineGenerator with Waila {
 
+    // Hold the current tier
     var tier = 0
 
+    // Secondary Constructor to allow tier
     def this(t: Int) {
         this()
         tier = t
         initEnergy(t)
     }
 
+    /**
+      * Set the energy to what mode it should be based on tier
+      * @param t The tier number, 1, 2, 3
+      */
     def initEnergy(t: Int): Unit = {
         t match {
             case 1 =>
@@ -51,6 +58,11 @@ class TileSolarPanel extends MachineGenerator with Waila {
             worldObj.markBlockForUpdate(pos)
     }
 
+    /**
+      * How much energy is expected by tier
+      * @param t The tier
+      * @return How much should be stored
+      */
     def amountEnergy(t: Int): Int = {
         t match {
             case 1 => 25000
@@ -59,6 +71,59 @@ class TileSolarPanel extends MachineGenerator with Waila {
             case _ => 0
         }
     }
+
+    /**
+      * The initial size of the inventory
+      *
+      * @return
+      */
+    override def initialSize: Int = 0
+
+    /**
+      * Add all modes you want, in order, here
+      */
+    def addValidModes() : Unit = {}
+
+    /**
+      * We don't need IO here
+      * @return False to prevent
+      */
+    override def shouldHandleIO = false
+
+    /**
+      * This method handles how much energy to produce per tick
+      *
+      * @return How much energy to produce per tick
+      */
+    override def getEnergyProduced: Int = {
+        tier match {
+            case 1 => 8
+            case 2 => 32
+            case 3 => 128
+            case _ => 0
+        }
+    }
+
+    /**
+      * Called to tick generation. This is where you add power to the generator
+      */
+    override def generate(): Unit = energyStorage.receiveEnergy(generating(), false)
+
+    /**
+      * Called per tick to manage burn time. You can do nothing here if there is nothing to generate. You should decrease burn time here
+      * You should be handling checks if burnTime is 0 in this method, otherwise the tile won't know what to do
+      *
+      * @return True if able to continue generating
+      */
+    override def manageBurnTime(): Boolean = {
+        if (worldObj.canSeeSky(pos) && worldObj.getSunBrightnessFactor(1.0F) > 0.7F) return true
+
+        false
+    }
+
+    /*******************************************************************************************************************
+      **************************************************  Tile Methods  ************************************************
+      ******************************************************************************************************************/
 
     override def getSupposedEnergy : Int = { amountEnergy(tier) }
 
@@ -90,10 +155,6 @@ class TileSolarPanel extends MachineGenerator with Waila {
         }
     }
 
-    /**
-      * Called to tick generation. This is where you add power to the generator
-      */
-    override def generate(): Unit = energyStorage.receiveEnergy(generating(), false)
 
     private def generating(): Int = {
         if (worldObj.canSeeSky(pos) && worldObj.getSunBrightnessFactor(1.0F) > 0.7F) {
@@ -103,44 +164,65 @@ class TileSolarPanel extends MachineGenerator with Waila {
     }
 
     /**
-      * Called per tick to manage burn time. You can do nothing here if there is nothing to generate. You should decrease burn time here
-      * You should be handling checks if burnTime is 0 in this method, otherwise the tile won't know what to do
-      *
-      * @return True if able to continue generating
+      * This will try to take things from other inventories and put it into ours
       */
-    override def manageBurnTime(): Boolean = {
-        if (worldObj.canSeeSky(pos) && worldObj.getSunBrightnessFactor(1.0F) > 0.7F) return true
+    override def tryInput() : Unit =  { /* No Op, no input */ }
 
-        false
+    /**
+      * This will try to take things from our inventory and try to place them in others
+      */
+    override def tryOutput(): Unit = { /* No Op, no output */ }
+
+    /**
+      * Write the tag
+      */
+    override def writeToNBT(tag: NBTTagCompound): Unit = {
+        super[MachineGenerator].writeToNBT(tag)
+        tag.setInteger("Tier", tier)
     }
 
     /**
-      * This method handles how much energy to produce per tick
-      *
-      * @return How much energy to produce per tick
+      * Read the tag
       */
-    override def getEnergyProduced: Int = {
-        tier match {
-            case 1 => 8
-            case 2 => 32
-            case 3 => 128
-            case _ => 0
+    override def readFromNBT(tag: NBTTagCompound): Unit = {
+        super[MachineGenerator].readFromNBT(tag)
+        if (tag.hasKey("Tier")) {
+            if (tier == 0) initEnergy(tag.getInteger("Tier"))
+            tier = tag.getInteger("Tier")
         }
+        tier = tag.getInteger("Tier")
     }
 
+    /*******************************************************************************************************************
+      ************************************************ Inventory methods ***********************************************
+      ******************************************************************************************************************/
+
     /**
-      * The initial size of the inventory
+      * Used to get what slots are allowed to be input
       *
-      * @return
+      * @return The slots to input from
       */
-    override def initialSize: Int = 0
+    override def getInputSlots(mode : EnumInputOutputMode) : Array[Int] = Array()
 
     /**
       * Used to get what slots are allowed to be output
       *
       * @return The slots to output from
       */
-    override def getOutputSlots: Array[Int] = Array()
+    override def getOutputSlots(mode : EnumInputOutputMode) : Array[Int] = Array()
+
+    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = false
+    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = false
+
+    /*******************************************************************************************************************
+      ************************************************** Energy methods ************************************************
+      ******************************************************************************************************************/
+
+    override def canConnectEnergy(from: EnumFacing): Boolean = from == EnumFacing.DOWN
+
+    /*******************************************************************************************************************
+      *************************************************** Misc methods *************************************************
+      ******************************************************************************************************************/
 
     /**
       * Used to output the redstone single from this structure
@@ -152,47 +234,12 @@ class TileSolarPanel extends MachineGenerator with Waila {
       *
       * @return int range 0 - 16
       */
-    override def getRedstoneOutput: Int = 0
-
-    /**
-      * Used to get what slots are allowed to be input
-      *
-      * @return The slots to input from
-      */
-    override def getInputSlots: Array[Int] = Array()
+    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
 
     /**
       * Used to get what particles to spawn. This will be called when the tile is active
       */
     override def spawnActiveParticles(xPos: Double, yPos: Double, zPos: Double): Unit = { }
-
-    override def canExtractItem(index: Int, stack: ItemStack, direction: EnumFacing): Boolean = false
-
-    override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = false
-
-    override def shouldHandleIO = false
-
-    override def canConnectEnergy(from: EnumFacing): Boolean = from == EnumFacing.DOWN
-
-    /**
-      * Write the tag
-      */
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
-        super.writeToNBT(tag)
-        tag.setInteger("Tier", tier)
-    }
-
-    /**
-      * Read the tag
-      */
-    override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
-        if (tag.hasKey("Tier")) {
-            if (tier == 0) initEnergy(tag.getInteger("Tier"))
-            tier = tag.getInteger("Tier")
-        }
-        tier = tag.getInteger("Tier")
-    }
 
     /**
       * Waila

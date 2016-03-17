@@ -5,17 +5,19 @@ import java.text.NumberFormat
 import java.util.Locale
 
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.processors.ContainerThermalBinder
 import com.dyonovan.neotech.common.tiles.machines.processors.TileThermalBinder
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFluidTank, GuiComponentArrow, GuiComponentPowerBarGradient, GuiComponentText}
+import com.teambr.bookshelf.client.gui.component.display._
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.StatCollector
+import net.minecraft.util.{EnumFacing, StatCollector}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.util.control.Breaks._
 
 /**
   * This file was created for NeoTech
@@ -49,7 +51,153 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
             }
         }
 
+        // Lots of Slots
+
+        // Object IN
+        components += new GuiComponentColoredZone(36, 42, 20, 20, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_PRIMARY)
+                            color = EnumInputOutputMode.INPUT_PRIMARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
+        // Upgrade 1
+        components += new GuiComponentColoredZone(65, 20, 20, 20, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_PRIMARY)
+                            color = EnumInputOutputMode.INPUT_PRIMARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
+        // Upgrade 2
+        components += new GuiComponentColoredZone(90, 20, 20, 20, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_PRIMARY)
+                            color = EnumInputOutputMode.INPUT_PRIMARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
+        // Upgrade 3
+        components += new GuiComponentColoredZone(65, 65, 20, 20, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_PRIMARY)
+                            color = EnumInputOutputMode.INPUT_PRIMARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
+        // Upgrade 4
+        components += new GuiComponentColoredZone(90, 65, 20, 20, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_PRIMARY)
+                            color = EnumInputOutputMode.INPUT_PRIMARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
+        // Output
+        components += new GuiComponentColoredZone(120, 42, 20, 20, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                for(dir <- EnumFacing.values())
+                    breakable {
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if (tileEntity.getModeForSide(dir) == EnumInputOutputMode.OUTPUT_ALL)
+                            color = EnumInputOutputMode.OUTPUT_ALL.getHighlightColor
+                    }
+
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
         //Stored Fluid
+        components += new GuiComponentColoredZone(149, 17, 20, 52, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_SECONDARY)
+                            color = EnumInputOutputMode.INPUT_SECONDARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
         components += new GuiComponentFluidTank(150, 18, 18, 50, tileEntity.tanks(tileEntity.TIN_TANK)) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()

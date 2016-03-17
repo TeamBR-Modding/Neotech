@@ -1,12 +1,14 @@
 package com.dyonovan.neotech.collections
 
-import java.awt.Color
 import java.util
 
-import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.traits.NBTSavable
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
+
+import scala.collection.mutable.ArrayBuffer
+import scala.util.control.Breaks._
+
 
 /**
   * This file was created for NeoTech
@@ -15,113 +17,179 @@ import net.minecraft.util.EnumFacing
   * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
   * http://creativecommons.org/licenses/by-nc-sa/4.0/
   *
+  * Used as the base trait for all machines that automatically move things in and out, also handles disabled faces
+  *
   * @author Paul Davis <pauljoda>
   * @since 1/24/2016
   */
 trait InputOutput extends NBTSavable {
-    sealed trait IO_MODE { def name: String }
-    case object DISABLED extends IO_MODE { val name = "DISABLED" }
-    case object OUT_ONLY extends IO_MODE { val name = "OUT_ONLY" }
-    case object OUT_FIRST_ONLY extends IO_MODE { val name = "OUTFIRSTONLY" }
-    case object IN_ONLY extends IO_MODE { val name = "INONLY" }
-    case object BOTH extends IO_MODE { val name = "BOTH" }
 
-    def modeToInt(mode : IO_MODE): Int = {
-        mode match {
-            case DISABLED => 0
-            case OUT_ONLY => 2
-            case IN_ONLY => 1
-            case BOTH => 3
-            case _ => 0
-        }
+    // A list of the valid modes for this instance
+    lazy val validModes = new ArrayBuffer[EnumInputOutputMode]()
+
+    // Holds the current mode for each side
+    val sideModes = new util.HashMap[EnumFacing, EnumInputOutputMode]()
+
+    // Setup Modes
+    setupValidModes()
+
+    // Reset things to defaults
+    resetIO()
+
+    /**
+      * Used to set the default modes for this, calls the helper function to the child
+      */
+    def setupValidModes(): Unit = {
+        // Set default as the first, always
+        validModes += EnumInputOutputMode.DEFAULT
+
+        // Add in specific instance modes
+        addValidModes()
+
+        // Add disabled to the end
+        validModes += EnumInputOutputMode.DISABLED
     }
 
-    def modeFromInt(mode : Int) : IO_MODE = {
-        mode match {
-            case 0 => DISABLED
-            case 2 => OUT_ONLY
-            case 1 => IN_ONLY
-            case 3 => BOTH
-            case _ => DISABLED
+    /**
+      * Add all modes you want, in order, here
+      */
+    def addValidModes() : Unit
+
+    /**
+      * Toggles the mode to the next available mode in the list
+      *
+      * @param dir The face to toggle
+      */
+    def toggleMode(dir : EnumFacing): Unit = {
+        // Loop to find the next value
+        var nextMode : EnumInputOutputMode = null
+        var selectNext = false
+
+        breakable {
+            for (mode <- validModes) {
+                if (selectNext) {
+                    nextMode = mode
+                    break
+                }
+                if (mode == sideModes.get(dir))
+                    selectNext = true
+            }
         }
+
+        // Means we need to loop back to the front
+        if(nextMode == null)
+            nextMode = validModes(0)
+
+        // Update collection
+        sideModes.put(dir, nextMode)
     }
 
-    def getNextMode(mode : IO_MODE) : IO_MODE = {
-        mode match {
-            case DISABLED => IN_ONLY
-            case OUT_ONLY => BOTH
-            case IN_ONLY => OUT_ONLY
-            case BOTH => DISABLED
-            case _ => DISABLED
-        }
+    /**
+      * Used to check if the side is set to a mode that allows output
+      * @param dir The face to output from
+      * @param isPrimary Is this a primary output or false for secondary
+      * @return True if you can move
+      */
+    def canOutputFromSide(dir : EnumFacing, isPrimary : Boolean = true): Boolean = {
+        if(isDisabled(dir))
+            return false
+
+        if(isPrimary)
+            sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
+                    sideModes.get(dir) == EnumInputOutputMode.OUTPUT_PRIMARY
+        else
+            sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
+                    sideModes.get(dir) == EnumInputOutputMode.OUTPUT_SECONDARY
     }
 
-    def getDisplayNameForIOMode(mode : IO_MODE) : String = {
-        mode match {
-            case DISABLED => GuiColor.GRAY + "Disabled"
-            case OUT_ONLY => GuiColor.ORANGE + "Output Only"
-            case IN_ONLY => GuiColor.BLUE + "Input Only"
-            case BOTH => GuiColor.BLUE + "Input " + GuiColor.WHITE + "and " + GuiColor.ORANGE + "Output"
-            case _ => GuiColor.RED + "ERROR"
-        }
-    }
+    /**
+      * Used to check if the side is set to a mode that allows input
+      * @param dir The face to input from
+      * @param isPrimary Is this a primary input or false for secondary
+      * @return True if you can move
+      */
+    def canInputFromSide(dir : EnumFacing, isPrimary : Boolean = true): Boolean = {
+        if(isDisabled(dir))
+            return false
 
-    def getColor(mode : IO_MODE) : Color = {
-        mode match {
-            case DISABLED => null
-            case OUT_ONLY => new Color(255, 102, 0, 150)
-            case IN_ONLY => new Color(0, 102, 255, 150)
-            case BOTH => new Color(0, 153, 0, 150)
+        if(isPrimary)
+            sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
+                    sideModes.get(dir) == EnumInputOutputMode.INPUT_PRIMARY
+        else
+            sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
+                    sideModes.get(dir) == EnumInputOutputMode.INPUT_SECONDARY    }
+
+    /**
+      * Used to check if the side has been set to disabled
+      * @param dir The face
+      * @return True if disabled
+      */
+    def isDisabled(dir : EnumFacing) : Boolean =
+        sideModes.get(dir) == EnumInputOutputMode.DISABLED
+
+    /**
+      * Used to get the mode for a specific side, probably should use this as there are helper methods but
+      * some instances may need this
+      * @param dir The face
+      * @return The mode for the side
+      */
+    def getModeForSide(dir : EnumFacing) : EnumInputOutputMode =
+        sideModes.get(dir)
+
+    /**
+      * Get the string used to find the texture for this mode
+      */
+    def getDisplayIconForSide(dir : EnumFacing) : String = {
+        getModeForSide(dir) match {
+            case EnumInputOutputMode.INPUT_ALL =>
+                "neotech:blocks/inputFace"
+            case EnumInputOutputMode.INPUT_PRIMARY =>
+                "neotech:blocks/inputFacePrimary"
+            case EnumInputOutputMode.INPUT_SECONDARY =>
+                "neotech:blocks/inputFaceSecondary"
+            case EnumInputOutputMode.OUTPUT_ALL =>
+                "neotech:blocks/outputFace"
+            case EnumInputOutputMode.OUTPUT_PRIMARY =>
+                "neotech:blocks/outputFacePrimary"
+            case EnumInputOutputMode.OUTPUT_SECONDARY =>
+                "neotech:blocks/outputFaceSecondary"
+            case EnumInputOutputMode.ALL_MODES =>
+                "neotech:blocks/inputOutputFace"
+            case EnumInputOutputMode.DISABLED =>
+                "neotech:blocks/disabled"
             case _ => null
         }
     }
 
-    val sideModes = new util.HashMap[EnumFacing, IO_MODE]()
-    resetIO()
-
-    def toggleMode(dir : EnumFacing): Unit = {
-        sideModes.put(dir, getNextMode(sideModes.get(dir)))
-    }
-
-    def canOutputFromSide(dir : EnumFacing): Boolean = {
-        sideModes.get(dir) == OUT_ONLY || sideModes.get(dir) == BOTH
-    }
-
-    def canInputFromSide(dir : EnumFacing): Boolean = {
-        sideModes.get(dir) == IN_ONLY || sideModes.get(dir) == BOTH
-    }
-
-    def canOutputFromSideNoRotate(dir : EnumFacing): Boolean = {
-        sideModes.get(dir) == OUT_ONLY || sideModes.get(dir) == BOTH
-    }
-
-    def canInputFromSideNoRotate(dir : EnumFacing): Boolean = {
-        sideModes.get(dir) == IN_ONLY || sideModes.get(dir) == BOTH
-    }
-
-    def isDisabled(dir : EnumFacing) : Boolean = {
-        sideModes.get(dir) == DISABLED
-    }
-
-    def getModeForSide(dir : EnumFacing) : IO_MODE = {
-        sideModes.get(dir)
-    }
-
+    /**
+      * Resets everything to default mode
+      */
     def resetIO() : Unit = {
-        for(dir <- EnumFacing.values()) {
-            sideModes.put(dir, DISABLED)
-        }
+        for(dir <- EnumFacing.values())
+            sideModes.put(dir, validModes(0))
     }
 
+    /**
+      * Read the info from the tag
+      * @param tag The stored data
+      */
     override def readFromNBT(tag : NBTTagCompound) = {
-        for(side <- EnumFacing.values()) {
-            sideModes.put(side, modeFromInt(tag.getInteger("Side: " + side.ordinal())))
-        }
+        for(side <- EnumFacing.values())
+            sideModes.put(side, EnumInputOutputMode.getModeFromInt(tag.getInteger("Side: " + side.ordinal())))
+
+        //TODO: Remove this in the future, just for smooth updating
+        // To prevent old tags from getting messed up when updating, keep this around a few versions
+        if(!tag.hasKey("NewVersion"))
+            resetIO()
     }
 
+    /**
+      * Write information to the tag
+      * @param tag The data to write to
+      */
     override def writeToNBT(tag : NBTTagCompound)= {
-        for(side <- EnumFacing.values()) {
-            tag.setInteger("Side: " + side.ordinal(), modeToInt(sideModes.get(side)))
-        }
+        tag.setBoolean("NewVersion", true)
+        for(side <- EnumFacing.values())
+            tag.setInteger("Side: " + side.ordinal(), sideModes.get(side).getIntValue)
     }
 }

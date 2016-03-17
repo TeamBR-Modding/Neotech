@@ -21,6 +21,7 @@ import net.minecraft.block.state.{BlockState, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -195,6 +196,12 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
         else
             0
     }
+
+    override def hasComparatorInputOverride: Boolean =
+        true
+
+    override def getComparatorInputOverride(worldIn: World, pos: BlockPos): Int =
+        worldIn.getTileEntity(pos).asInstanceOf[AbstractMachine].getRedstoneOutput
 
     override def getRenderType : Int = 3
 

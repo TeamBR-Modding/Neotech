@@ -1,16 +1,18 @@
 package com.dyonovan.neotech.common.tiles.machines.generators
 
 import com.dyonovan.neotech.client.gui.machines.generators.GuiFluidGenerator
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.dyonovan.neotech.common.tiles.MachineGenerator
 import com.dyonovan.neotech.managers.RecipeManager
 import com.dyonovan.neotech.registries.FluidFuelRecipeHandler
 import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
+import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.util.{StatCollector, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.fluids._
 
@@ -24,13 +26,11 @@ import net.minecraftforge.fluids._
   * @author Dyonovan
   * @since August 21, 2015
   */
-class TileFluidGenerator extends MachineGenerator with IFluidHandler {
+class TileFluidGenerator extends MachineGenerator with FluidHandler {
 
-    final val BASE_ENERGY_TICK = 80
-    final val INPUT_SLOT       = 0
-    final val OUTPUT_SLOT      = 1
-
-    val tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10)
+    lazy val BASE_ENERGY_TICK = 80
+    lazy val INPUT_SLOT       = 0
+    lazy val OUTPUT_SLOT      = 1
 
     /**
       * The initial size of the inventory
@@ -38,6 +38,13 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
       * @return
       */
     override def initialSize: Int = 2
+
+    /**
+      * Add all modes you want, in order, here
+      */
+    def addValidModes() : Unit = {
+        validModes += EnumInputOutputMode.INPUT_ALL
+    }
 
     /**
       * This method handles how much energy to produce per tick
@@ -68,9 +75,9 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
         if(getStackInSlot(INPUT_SLOT) != null && FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)) != null &&
                 getStackInSlot(OUTPUT_SLOT) == null) {
             val fluidStackCopy = FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT))
-            if(tank.getFluidAmount + FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)).amount < tank.getCapacity &&
+            if(tanks(INPUT_TANK).getFluidAmount + FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(INPUT_SLOT)).amount < tanks(INPUT_TANK).getCapacity &&
                     FluidContainerRegistry.drainFluidContainer(getStackInSlot(INPUT_SLOT)) != null) {
-                tank.fill(fluidStackCopy, true)
+                tanks(INPUT_TANK).fill(fluidStackCopy, true)
 
                 if(getStackInSlot(OUTPUT_SLOT) == null) {
                     setInventorySlotContents(OUTPUT_SLOT, FluidContainerRegistry.drainFluidContainer(getStackInSlot(INPUT_SLOT)))
@@ -81,7 +88,7 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
 
         //Do burntime
         if(energyStorage.getEnergyStored < energyStorage.getMaxEnergyStored  && burnTime <= 1) {
-            val fluidDrained = tank.drain(FluidContainerRegistry.BUCKET_VOLUME / 10, true)
+            val fluidDrained = tanks(INPUT_TANK).drain(FluidContainerRegistry.BUCKET_VOLUME / 10, true)
             if (fluidDrained == null || fluidDrained.getFluid == null || fluidDrained.amount <= 0)
                 return false
 
@@ -98,50 +105,6 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
         burnTime > 0
     }
 
-    override def getDescription : String = {
-        "" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.generating") + ":\n" +
-                GuiColor.WHITE + "  " + getEnergyProduced.toString + " \n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.furnaceGenerator.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
-    }
-
-    /**
-      * Return the container for this tile
-      *
-      * @param ID Id, probably not needed but could be used for multiple guis
-      * @param player The player that is opening the gui
-      * @param world The world
-      * @param x X Pos
-      * @param y Y Pos
-      * @param z Z Pos
-      * @return The container to open
-      */
-    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new ContainerFluidGenerator(player.inventory, this)
-
-    /**
-      * Return the gui for this tile
-      *
-      * @param ID Id, probably not needed but could be used for multiple guis
-      * @param player The player that is opening the gui
-      * @param world The world
-      * @param x X Pos
-      * @param y Y Pos
-      * @param z Z Pos
-      * @return The gui to open
-      */
-    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new GuiFluidGenerator(player, this)
-
     /*******************************************************************************************************************
       **************************************************  Tile Methods  ************************************************
       ******************************************************************************************************************/
@@ -150,13 +113,13 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
       * This will try to take things from other inventories and put it into ours
       */
     override def tryInput() : Unit = {
-        super.tryInput()
         for(dir <- EnumFacing.values) {
             if(canInputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case otherTank : IFluidHandler =>
                         if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
-                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
+                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null &&
+                                canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
                             val amount = fill(dir, otherTank.drain(dir.getOpposite, 1000, false), doFill = false)
                             if (amount > 0)
                                 fill(dir, otherTank.drain(dir.getOpposite, amount, true), doFill = true)
@@ -167,51 +130,70 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
         }
     }
 
+    /**
+      * This will try to take things from our inventory and try to place them in others
+      */
+    override def tryOutput(): Unit = { /* No Op, no output */ }
+
     override def writeToNBT(tag: NBTTagCompound): Unit = {
-        super.writeToNBT(tag)
-        tank.writeToNBT(tag)
+        super[MachineGenerator].writeToNBT(tag)
+        super[FluidHandler].writeToNBT(tag)
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
-        tank.readFromNBT(tag)
+        super[MachineGenerator].readFromNBT(tag)
+        super[FluidHandler].readFromNBT(tag)
     }
 
     /*******************************************************************************************************************
       ********************************************* FluidHandler methods ***********************************************
       ******************************************************************************************************************/
 
-    override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = drain(from, resource, doDrain)
+    lazy val INPUT_TANK = 0
 
-    override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = {
-        val fluidAmount = tank.drain(maxDrain, false)
-        if (fluidAmount != null && doDrain)
-            tank.drain(maxDrain, true)
-        worldObj.markBlockForUpdate(pos)
-
-        fluidAmount
+    /**
+      * Used to set up the tanks needed. You can insert any number of tanks
+      */
+    def setupTanks() : Unit = {
+        tanks += new FluidTank(bucketsToMB(10))
     }
 
+    /**
+      * Which tanks can input
+      *
+      * @return
+      */
+    def getInputTanks: Array[Int] = Array(INPUT_TANK)
+
+    /**
+      * Which tanks can output
+      *
+      * @return
+      */
+    def getOutputTanks : Array[Int] = Array(INPUT_TANK)
+
+    /**
+      * Called when something happens to the tank, you should mark the block for update here if a tile
+      */
+    def onTankChanged(tank : FluidTank) : Unit = worldObj.markBlockForUpdate(pos)
+
+    /**
+      * Returns true if the given fluid can be inserted into the given direction.
+      *
+      * More formally, this should return true if fluid is able to enter from the given direction.
+      */
     override def canFill(from: EnumFacing, fluid: Fluid): Boolean =
-        (tank.getFluid == null || tank.getFluid.getFluid == fluid) && RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).isValidInput(fluid)
+        !isDisabled(from) &&
+                super.canFill(from, fluid) &&
+                RecipeManager.getHandler[FluidFuelRecipeHandler](RecipeManager.FluidFuels).isValidInput(fluid)
 
 
-    override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = false
-
-    override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
-        if(resource == null)
-            return 0
-        if (canFill(from, resource.getFluid)) {
-            if (tank.fill(resource, false) > 0) {
-                val actual = tank.fill(resource, doFill)
-                worldObj.markBlockForUpdate(pos)
-                return actual
-            }
-        }
-        0
-    }
-
-    override def getTankInfo(from: EnumFacing): Array[FluidTankInfo] = Array(tank.getInfo)
+    /**
+      * Returns true if the given fluid can be extracted from the given direction.
+      *
+      * More formally, this should return true if fluid is able to leave from the given direction.
+      */
+    override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = !isDisabled(from)
 
     /*******************************************************************************************************************
       ************************************************ Inventory methods ***********************************************
@@ -222,14 +204,14 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
       *
       * @return The slots to input from
       */
-    override def getInputSlots: Array[Int] = Array(INPUT_SLOT)
+    override def getInputSlots(mode : EnumInputOutputMode) : Array[Int] = Array(INPUT_SLOT)
 
     /**
       * Used to get what slots are allowed to be output
       *
       * @return The slots to output from
       */
-    override def getOutputSlots: Array[Int] = Array(OUTPUT_SLOT)
+    override def getOutputSlots(mode : EnumInputOutputMode) : Array[Int] = Array(OUTPUT_SLOT)
 
     /**
       * Used to define if an item is valid for a slot
@@ -271,6 +253,50 @@ class TileFluidGenerator extends MachineGenerator with IFluidHandler {
     /*******************************************************************************************************************
       *************************************************** Misc methods *************************************************
       ******************************************************************************************************************/
+
+    /**
+      * Return the container for this tile
+      *
+      * @param ID Id, probably not needed but could be used for multiple guis
+      * @param player The player that is opening the gui
+      * @param world The world
+      * @param x X Pos
+      * @param y Y Pos
+      * @param z Z Pos
+      * @return The container to open
+      */
+    override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
+        new ContainerFluidGenerator(player.inventory, this)
+
+    /**
+      * Return the gui for this tile
+      *
+      * @param ID Id, probably not needed but could be used for multiple guis
+      * @param player The player that is opening the gui
+      * @param world The world
+      * @param x X Pos
+      * @param y Y Pos
+      * @param z Z Pos
+      * @return The gui to open
+      */
+    override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
+        new GuiFluidGenerator(player, this)
+
+    override def getDescription : String = {
+        "" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.generating") + ":\n" +
+                GuiColor.WHITE + "  " + getEnergyProduced.toString + " \n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.furnaceGenerator.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+    }
 
     /**
       * Used to output the redstone single from this structure

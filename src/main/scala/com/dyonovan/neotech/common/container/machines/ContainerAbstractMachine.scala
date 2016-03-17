@@ -21,14 +21,14 @@ import net.minecraft.entity.player.InventoryPlayer
 class ContainerAbstractMachine(playerInventory: InventoryPlayer, tile: AbstractMachine) extends
         BaseContainer(playerInventory, tile) {
 
-        class MotherboardSlot(inventory : Inventory, id : Int, x : Int, y : Int)
-                extends RestrictedSlot(inventory, id, x, y) with ICustomSlot {
+    class MotherboardSlot(inventory : Inventory, id : Int, x : Int, y : Int)
+            extends RestrictedSlot(inventory, id, x, y) with ICustomSlot {
 
-            override def getSlotSize: SLOT_SIZE.Value = SLOT_SIZE.STANDARD
-            override def getPoint: (Integer, Integer) = (xDisplayPosition - 1, yDisplayPosition - 1)
-            override def hasColor = true
-            override def getColor : Color = new Color(0, 255, 0)
-        }
+        override def getSlotSize: SLOT_SIZE.Value = SLOT_SIZE.STANDARD
+        override def getPoint: (Integer, Integer) = (xDisplayPosition - 1, yDisplayPosition - 1)
+        override def hasColor = true
+        override def getColor : Color = new Color(0, 255, 0)
+    }
 
     val motherboardSlot = new MotherboardSlot(tile.upgradeInventory, 0, -10000, -1000)
     addSlotToContainer(motherboardSlot)

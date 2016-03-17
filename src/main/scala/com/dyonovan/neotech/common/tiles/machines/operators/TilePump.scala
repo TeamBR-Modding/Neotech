@@ -26,10 +26,8 @@ import net.minecraftforge.fluids._
   */
 class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Waila {
 
-    val RANGE = 50
-    def costToOperate = 1000
+    lazy val RANGE = 50
 
-    val TANK = 0
     var pumpingFrom = new BlockPos(pos)
     var isBuildingCache = false
     lazy val cache : util.Queue[BlockPos] = new util.PriorityQueue[BlockPos](new Comparator[BlockPos] {
@@ -38,11 +36,7 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Wa
                     .compareTo(o2.distanceSq(pumpingFrom.getX, pumpingFrom.getY, pumpingFrom.getZ))
     })
 
-    override def setupTanks(): Unit = {
-        tanks += new FluidTank(bucketsToMB(10))
-    }
-
-    override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
+    def costToOperate = 1000
 
     def operationDelay = 20
 
@@ -88,17 +82,17 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Wa
     }
 
     def isValidSourceBlock(position : BlockPos) : Boolean = {
-        if(tanks(TANK).getFluidAmount < tanks(TANK).getCapacity) {
-            val shouldMatch = tanks(TANK).getFluid != null
+        if(tanks(INPUT_TANK).getFluidAmount < tanks(INPUT_TANK).getCapacity) {
+            val shouldMatch = tanks(INPUT_TANK).getFluid != null
             worldObj.getBlockState(position).getBlock match {
                 case fluid: IFluidBlock =>
                     return fluid.canDrain(worldObj, position) && fluid.drain(worldObj, position, false) != null &&
                             fluid.drain(worldObj, position, false).amount > 0 &&
-                            (if(shouldMatch) tanks(TANK).getFluid.getFluid == fluid.getFluid else true)
+                            (if(shouldMatch) tanks(INPUT_TANK).getFluid.getFluid == fluid.getFluid else true)
                 case water: Blocks.water.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
-                    return if (shouldMatch) tanks(TANK).getFluid.getFluid == FluidRegistry.WATER else true
+                    return if (shouldMatch) tanks(INPUT_TANK).getFluid.getFluid == FluidRegistry.WATER else true
                 case lava: Blocks.lava.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
-                    return if (shouldMatch) tanks(TANK).getFluid.getFluid == FluidRegistry.LAVA else true
+                    return if (shouldMatch) tanks(INPUT_TANK).getFluid.getFluid == FluidRegistry.LAVA else true
                 case _ =>
             }
         }
@@ -109,7 +103,7 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Wa
         isBuildingCache = true
         val stack : util.Stack[BlockPos] = new util.Stack[BlockPos]()
         stack.push(startPos)
-        pumpingFrom = findBlockUnderPipeline()
+        pumpingFrom = findBlockUnderPipeline().offset(EnumFacing.UP)
         while(!stack.isEmpty) {
             val lookingPosition = stack.pop()
             if(isValidSourceBlock(lookingPosition)) {
@@ -132,7 +126,7 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Wa
     }
 
     def pumpBlock(position : BlockPos) : Boolean = {
-        if(tanks(TANK).getFluidAmount < tanks(TANK).getCapacity) {
+        if(tanks(INPUT_TANK).getFluidAmount < tanks(INPUT_TANK).getCapacity) {
             worldObj.getBlockState(position).getBlock match {
                 case fluid: IFluidBlock =>
                     val drained = fluid.drain(worldObj, position, false)
@@ -168,7 +162,7 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Wa
         for(dir <- EnumFacing.values) {
             worldObj.getTileEntity(pos.offset(dir)) match {
                 case otherTank : IFluidHandler =>
-                    if(tanks(TANK).getFluid != null && tanks(TANK).getFluid.getFluid != null && otherTank.canFill(dir.getOpposite, tanks(TANK).getFluid.getFluid)
+                    if(tanks(INPUT_TANK).getFluid != null && tanks(INPUT_TANK).getFluid.getFluid != null && otherTank.canFill(dir.getOpposite, tanks(INPUT_TANK).getFluid.getFluid)
                             && otherTank.fill(dir.getOpposite, drain(dir, 1000, doDrain = false), false) > 0)
                         otherTank.fill(dir.getOpposite, drain(dir, 1000, doDrain = true), true)
                 case _ =>
@@ -189,19 +183,67 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Wa
         super[EnergyHandler].readFromNBT(tag)
     }
 
-    override def getInputTanks: Array[Int] = Array(TANK)
+    /*******************************************************************************************************************
+      ************************************************** Fluid methods *************************************************
+      ******************************************************************************************************************/
 
-    override def getOutputTanks: Array[Int] = Array(TANK)
+    lazy val INPUT_TANK = 0
+
+    /**
+      * Used to set up the tanks needed. You can insert any number of tanks
+      */
+    override def setupTanks(): Unit = tanks += new FluidTank(bucketsToMB(10))
+
+    /**
+      * Which tanks can input
+      *
+      * @return
+      */
+    override def getInputTanks: Array[Int] = Array(INPUT_TANK)
+
+    /**
+      * Which tanks can output
+      *
+      * @return
+      */
+    override def getOutputTanks: Array[Int] = Array(INPUT_TANK)
+
+    /**
+      * Called when something happens to the tank, you should mark the block for update here if a tile
+      */
+    override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
+
+    /**
+      * Returns true if the given fluid can be inserted into the given direction.
+      *
+      * More formally, this should return true if fluid is able to enter from the given direction.
+      */
+    override def canFill(from: EnumFacing, fluid: Fluid): Boolean = false
 
     /*******************************************************************************************************************
       ************************************************ Energy methods **************************************************
       ******************************************************************************************************************/
 
-    override def defaultEnergyStorageSize: Int = 8000
+    /**
+      * Used to define the default energy storage for this energy handler
+      *
+      * @return
+      */
+    def defaultEnergyStorageSize : Int = 8000
 
-    override def isReceiver: Boolean = true
+    /**
+      * Return true if you want this to be able to provide energy
+      *
+      * @return
+      */
+    def isProvider : Boolean = false
 
-    override def isProvider: Boolean = false
+    /**
+      * Return true if you want this to be able to receive energy
+      *
+      * @return
+      */
+    def isReceiver : Boolean = true
 
     /*******************************************************************************************************************
       ************************************************** Misc methods **************************************************

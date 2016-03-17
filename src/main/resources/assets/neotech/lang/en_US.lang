@@ -359,8 +359,8 @@ neotech.text.ioConfig=I/O Config
 neotech.text.blue=Blue
 neotech.text.orange=Orange
 neotech.text.green=Green
-neotech.text.input=Input
-neotech.text.output=Output
+neotech.text.extract=Extract
+neotech.text.insert=Insert
 neotech.text.both=Both
 
 neotech.text.information=Information

@@ -5,16 +5,18 @@ import java.text.NumberFormat
 import java.util.Locale
 
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.generators.ContainerFurnaceGenerator
 import com.dyonovan.neotech.common.tiles.machines.generators.TileFurnaceGenerator
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentFluidTank, GuiComponentFlame, GuiComponentPowerBarGradient, GuiComponentText}
+import com.teambr.bookshelf.client.gui.component.display._
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.StatCollector
+import net.minecraft.util.{EnumFacing, StatCollector}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.util.control.Breaks._
 
 /**
  * This file was created for NeoTech
@@ -56,6 +58,42 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
                 buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
                         ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                 buffer
+            }
+        }
+
+        // Slot Backdrop
+        components += new GuiComponentColoredZone(76, 33, 20, 20, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                    for(dir <- EnumFacing.values())
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                            break
+                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_PRIMARY)
+                            color = EnumInputOutputMode.INPUT_PRIMARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
+        // Tank Backdrop
+        components += new GuiComponentColoredZone(149, 17, 20, 62, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                breakable {
+                for(dir <- EnumFacing.values())
+                    if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL) {
+                        color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                        break
+                    } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_SECONDARY)
+                        color = EnumInputOutputMode.INPUT_SECONDARY.getHighlightColor
+                }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
             }
         }
 

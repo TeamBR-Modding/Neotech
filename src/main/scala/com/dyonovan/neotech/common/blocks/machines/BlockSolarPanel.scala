@@ -1,7 +1,9 @@
 package com.dyonovan.neotech.common.blocks.machines
 
+import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.machines.generators.TileSolarPanel
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -16,9 +18,15 @@ import net.minecraft.world.World
   */
 class BlockSolarPanel(name: String, tier: Int) extends BlockMachine(name, classOf[TileSolarPanel], fourWayRotation = false) {
     setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.375F, 1.0F)
+
     override def isFullCube : Boolean = false
-    override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = new TileSolarPanel(tier)
     def getTier: Int = tier
 
+    override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = new TileSolarPanel(tier)
 
+    override def hasComparatorInputOverride: Boolean =
+        true
+
+    override def getComparatorInputOverride(worldIn: World, pos: BlockPos): Int =
+        worldIn.getTileEntity(pos).asInstanceOf[AbstractMachine].getRedstoneOutput
 }

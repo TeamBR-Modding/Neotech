@@ -3,16 +3,18 @@ package com.dyonovan.neotech.client.gui.machines.processors
 import java.awt.Color
 
 import com.dyonovan.neotech.client.gui.machines.GuiAbstractMachine
+import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.container.machines.processors.ContainerSolidifier
 import com.dyonovan.neotech.common.tiles.machines.processors.TileSolidifier
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentItemStackButton
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentFluidTank, GuiComponentPowerBarGradient}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentColoredZone, GuiComponentArrow, GuiComponentFluidTank, GuiComponentPowerBarGradient}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.StatCollector
+import net.minecraft.util.{EnumFacing, StatCollector}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.util.control.Breaks._
 
 /**
   * This file was created for NeoTech
@@ -66,7 +68,43 @@ class GuiSolidifier(player: EntityPlayer, tileEntity: TileSolidifier) extends
             }
         }
 
+        // Output Slot
+        components += new GuiComponentColoredZone(131, 33, 20, 20, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                for(dir <- EnumFacing.values())
+                    breakable {
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if (tileEntity.getModeForSide(dir) == EnumInputOutputMode.OUTPUT_ALL)
+                            color = EnumInputOutputMode.OUTPUT_ALL.getHighlightColor
+                    }
+
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
         //Stored Fluid
+        components += new GuiComponentColoredZone(34, 17, 52, 62, new Color(0, 0, 0, 0)) {
+            override def getDynamicColor = {
+                var color = new Color(0, 0, 0, 0)
+                for(dir <- EnumFacing.values())
+                    breakable {
+                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                            color = EnumInputOutputMode.ALL_MODES.getHighlightColor
+                            break
+                        } else if (tileEntity.getModeForSide(dir) == EnumInputOutputMode.INPUT_ALL)
+                            color = EnumInputOutputMode.INPUT_ALL.getHighlightColor
+                    }
+                if(color.getAlpha != 0)
+                    color = new Color(color.getRed, color.getGreen, color.getBlue, 80)
+                color
+            }
+        }
+
         components += new GuiComponentFluidTank(35, 18, 50, 60, tileEntity.tanks(tileEntity.INPUT_TANK)) {
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
