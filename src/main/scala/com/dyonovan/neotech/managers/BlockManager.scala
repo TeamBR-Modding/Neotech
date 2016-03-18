@@ -92,6 +92,7 @@ object BlockManager {
     val phantomGlass = new BlockPhantomGlass
     val voidGlass = new BlockVoidGlass
     val rockWall = new BlockRockWall
+    val displayPanel = new BlockDisplayPanel
 
     def preInit(): Unit = {
         //Machines
@@ -163,6 +164,8 @@ object BlockManager {
         registerBlock(phantomGlass, "phantomGlass", null)
         registerBlock(voidGlass, "voidGlass", null)
         registerBlock(rockWall, "rockWall", classOf[TileRockWall])
+
+        registerBlock(displayPanel, "displayPanel", classOf[TileDisplayPanel])
     }
 
     /**
