@@ -5,13 +5,13 @@ import java.util.Comparator
 
 import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, FluidHandler, UpdatingTile}
 import net.minecraft.block.BlockLiquid
 import net.minecraft.init.Blocks
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraftforge.fluids._
 
 /**
@@ -24,7 +24,7 @@ import net.minecraftforge.fluids._
   * @author Paul Davis <pauljoda>
   * @since 2/4/2016
   */
-class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Waila {
+class TilePump extends UpdatingTile with FluidHandler with EnergyHandler {
 
     lazy val RANGE = 50
 
@@ -249,7 +249,7 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Wa
       ************************************************** Misc methods **************************************************
       ******************************************************************************************************************/
 
-    override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
+    /*override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
         var color = ""
         if (getEnergyStored(null) > 0)
             color = GuiColor.GREEN.toString
@@ -258,5 +258,5 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler with Wa
         tipList.add(color + ClientUtils.formatNumber(getEnergyStored(null)) + " / " +
                 ClientUtils.formatNumber(getMaxEnergyStored(null)) + " RF")
         tipList
-    }
+    }*/
 }

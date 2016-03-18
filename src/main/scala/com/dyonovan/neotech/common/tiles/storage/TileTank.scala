@@ -4,7 +4,6 @@ import java.text.NumberFormat
 import java.util.Locale
 
 import com.dyonovan.neotech.common.blocks.storage.BlockTank
-import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, UpdatingTile}
 import net.minecraft.client.Minecraft
@@ -25,7 +24,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since August 16, 2015
   */
-class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneAware {
+class TileTank extends UpdatingTile with IFluidHandler with RedstoneAware {
 
     var tier = 0
     var offset = 0.0F
@@ -201,7 +200,7 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
             worldObj.markBlockForUpdate(pos)
     }
 
-    override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
+    /*override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
         var fluidName = ""
         var fluidAmount = ""
         if (tank.getFluid != null) {
@@ -222,5 +221,5 @@ class TileTank extends UpdatingTile with IFluidHandler with Waila with RedstoneA
             tipList.add(fluidAmount)
         }
         tipList
-    }
+    }*/
 }

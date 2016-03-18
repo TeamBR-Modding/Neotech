@@ -47,7 +47,7 @@ object ClientTickHandler {
         }
 
         // Get Armor Items
-        for(i <- 0 until player.inventory.armorInventory.length) {
+        for(i <- player.inventory.armorInventory.indices) {
             if(player.inventory.armorInventory(i) != null &&
                     player.inventory.armorInventory(i).getItem.isInstanceOf[ItemElectricArmor]) {
                 val stack = player.inventory.armorInventory(i)

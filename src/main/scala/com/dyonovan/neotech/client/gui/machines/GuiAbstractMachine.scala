@@ -13,7 +13,8 @@ import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{StatCollector, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.text.translation.I18n
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -52,7 +53,7 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
 
     override def addLeftTabs(tabs : GuiTabCollection) = {
         val infoTab = new ArrayBuffer[BaseComponent]()
-        infoTab += new GuiComponentText(GuiColor.YELLOW + StatCollector.translateToLocal("neotech.text.information"), 10, 7)
+        infoTab += new GuiComponentText(GuiColor.YELLOW + I18n.translateToLocal("neotech.text.information"), 10, 7)
         infoTab += new GuiComponentLongText(10, 20, tileEntity.getDescription, 100, 65, textScale = 50)
         tabs.addReverseTab(infoTab.toList, 120, 100, new Color(130, 0, 0), new ItemStack(tileEntity.getBlockType))
     }
@@ -62,14 +63,14 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
 
             if(updateMotherBoard) {
                 val motherBoardTag = new ArrayBuffer[BaseComponent]
-                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.motherboard"), 26, 6)
+                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.motherboard"), 26, 6)
                 tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.upgradeMBFull))
 
                 tabs.getTabs.head.addChild(new GuiComponentTabSlotHolder(41, 25, 18, 18, tabs.getTabs.head, container.motherboardSlot, 170 + 41, 27))
             }
             if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasControl) {
                 var redstoneTab = new ArrayBuffer[BaseComponent]
-                redstoneTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneMode"), 20, 7)
+                redstoneTab += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneMode"), 20, 7)
                 redstoneTab += new GuiComponentButton(5, 20, 15, 20, "<") {
                     override def doAction(): Unit = {
                         tileEntity.moveRedstoneMode(-1)
@@ -95,7 +96,7 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
 
             if (tileEntity.shouldHandleIO && tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
                 val selectorTab = new ArrayBuffer[BaseComponent]
-                selectorTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.ioConfig"), 29, 6)
+                selectorTab += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.ioConfig"), 29, 6)
                 selectorTab += new GuiComponentSideSelector(15, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {
                     override def setToggleController(): Unit = {
                         toggleableSidesController = new ToggleableSidesController {

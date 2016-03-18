@@ -6,7 +6,8 @@ import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui.{IDrawable, IGuiItemStackGroup, IRecipeLayout}
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
-import net.minecraft.util.{ResourceLocation, StatCollector}
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.translation.I18n
 
 /**
   * Created by Dyonovan on 1/16/2016.
@@ -44,7 +45,7 @@ class JEIGrinderRecipeCategory extends IRecipeCategory {
         outputSlot3.draw(minecraft)
     }
 
-    override def getTitle: String = StatCollector.translateToLocal("tile.neotech:grinder.name")
+    override def getTitle: String = I18n.translateToLocal("tile.neotech:grinder.name")
 
     override def getUid: String = Reference.MOD_ID + ":grinder"
 }

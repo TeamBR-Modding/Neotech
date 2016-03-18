@@ -8,7 +8,8 @@ import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui._
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
-import net.minecraft.util.{ResourceLocation, StatCollector}
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.translation.I18n
 
 /**
   * This file was created for NeoTech
@@ -58,7 +59,7 @@ class JEISolidifierRecipeCategory extends IRecipeCategory {
         tank.draw(minecraft)
     }
 
-    override def getTitle: String = StatCollector.translateToLocal("tile.neotech:electricSolidifier.name")
+    override def getTitle: String = I18n.translateToLocal("tile.neotech:electricSolidifier.name")
 
     override def getUid: String = Reference.MOD_ID + ":solidifier"
 }

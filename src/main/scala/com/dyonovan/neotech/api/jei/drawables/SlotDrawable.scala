@@ -4,7 +4,7 @@ import com.teambr.bookshelf.util.RenderUtils
 import mezz.jei.api.gui.IDrawable
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.client.renderer.{GlStateManager, WorldRenderer, Tessellator}
+import net.minecraft.client.renderer.{GlStateManager, Tessellator}
 
 /**
   * This file was created for NeoTech

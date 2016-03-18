@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.achievement
 
 import com.teambr.bookshelf.achievement.AchievementList
-import net.minecraft.util.StatCollector
+import net.minecraft.util.text.translation.I18n
 
 /**
   * This file was created for NeoTech
@@ -13,7 +13,7 @@ import net.minecraft.util.StatCollector
   * @author Paul Davis <pauljoda>
   * @since 2/8/2016
   */
-class ModAchievements extends AchievementList(StatCollector.translateToLocal("achievement.neotech.title")) {
+class ModAchievements extends AchievementList(I18n. translateToLocal("achievement.neotech.title")) {
     lazy val CRAFT_FURNACE = "craftFurnace"
     lazy val CRAFT_CRUSHER = "craftCrusher"
     lazy val CRAFT_FURNACE_GENERATOR = "craftFurnaceGenerator"

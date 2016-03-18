@@ -9,13 +9,10 @@ import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.dyonovan.neotech.pipes.types.SimplePipe
 import com.teambr.bookshelf.loadables.ILoadActionProvider
-import mcmultipart.block.{BlockMultipart, BlockCoverable}
-import mcmultipart.client.multipart.ModelMultipartContainer
-import net.minecraft.block.properties.IProperty
 import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.{MapColor, Material}
-import net.minecraft.block.state.{BlockState, IBlockState}
-import net.minecraft.client.resources.model.{IBakedModel, ModelResourceLocation}
+import net.minecraft.block.properties.IProperty
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
@@ -23,13 +20,13 @@ import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{EnumDyeColor, Item, ItemDye, ItemStack}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -42,7 +39,7 @@ import scala.collection.JavaConversions._
   * @since August 14, 2015
   */
 class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: StructurePipe])
-            extends BlockCoverable(mat) with ILoadActionProvider {
+            extends BlockContainer(mat) with ILoadActionProvider {
 
     /*******************************************************************************************************************
       * Constructor                                                                                                    *
@@ -78,7 +75,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Used to create the block state of the pipes
       */
-    protected override def createBlockState: BlockState = {
+    protected override def createBlockState: BlockStateContainer = {
         val listed = new ArrayBuffer[IProperty[_]]()
         if(colored)
             listed += PipeProperties.COLOR
@@ -88,7 +85,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         listed += PipeProperties.WEST
         listed += PipeProperties.NORTH
         listed += PipeProperties.SOUTH
-        new ExtendedBlockState(this, listed.toArray, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
+        new ExtendedBlockState(this, listed.toArray)//, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
     }
 
     /**
@@ -146,7 +143,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Called when the block is clicked on, if we are colored or using a wrench perform relevant actions
       */
-    override def onBlockActivatedDefault(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing,
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing,
                                   hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         playerIn.getCurrentEquippedItem match {
             case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
@@ -212,7 +209,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Send update to pipes in grid to reform their cache
       */
-    override def onNeighborBlockChangeDefault(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
+    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
         if (!world.isRemote)
             WorldPipes.notifyPipes()
     }
@@ -308,20 +305,20 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       *
       * @return
       */
-    override def getRenderType : Int = 3
+    override def getRenderType(state: IBlockState) : Int = 3
 
     /**
       * We are clear, the following are all needed for best clear performance, rendering on Translucent layer
       * allows for alpha pixels (for things like acceleration pipes)
       */
-    override def isOpaqueCube : Boolean = false
+    override def isOpaqueCube(state: IBlockState) : Boolean = false
     @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean = true
-    override def isFullCube : Boolean = false
+    override def isTranslucent(state: IBlockState) : Boolean = true
+    override def isFullCube(state: IBlockState) : Boolean = false
     @SideOnly(Side.CLIENT)
-    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.SOLID
-    override def canRenderInLayerDefault(layer : EnumWorldBlockLayer) : Boolean =
-        layer == EnumWorldBlockLayer.SOLID
+    override def getBlockLayer : BlockRenderLayer = BlockRenderLayer.SOLID
+    override def canRenderInLayer(layer : BlockRenderLayer) : Boolean =
+        layer == BlockRenderLayer.SOLID
 
     override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
         event match {

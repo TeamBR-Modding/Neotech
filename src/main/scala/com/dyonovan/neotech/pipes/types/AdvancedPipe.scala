@@ -4,10 +4,8 @@ import com.dyonovan.neotech.collections.{EnumInputOutputMode, InputOutput}
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.collections.{Filter, WorldPipes}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
-import mcmultipart.block.TileCoverable
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.NetworkManager
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -35,7 +33,7 @@ object AdvancedPipe {
     val FILTER_BLACKLIST = 3
 }
 
-abstract class AdvancedPipe extends TileCoverable with Syncable with Upgradeable with RedstoneAware
+abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
         with SimplePipe with Filter with InputOutput {
 
     override def resetIO() : Unit = {

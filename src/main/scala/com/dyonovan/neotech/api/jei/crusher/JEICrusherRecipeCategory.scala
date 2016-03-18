@@ -3,13 +3,14 @@ package com.dyonovan.neotech.api.jei.crusher
 import java.awt.Color
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
-import com.dyonovan.neotech.api.jei.drawables.{GuiComponentArrowJEI, SlotDrawable, GuiComponentPowerBarJEI}
+import com.dyonovan.neotech.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentPowerBarJEI, SlotDrawable}
 import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui._
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{ResourceLocation, StatCollector}
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.translation.I18n
 
 /**
   * Created by Dyonovan on 1/13/2016.
@@ -64,7 +65,7 @@ class JEICrusherRecipeCategory extends IRecipeCategory {
         slotOutput2.draw(minecraft)
     }
 
-    override def getTitle: String = StatCollector.translateToLocal("tile.neotech:electricCrusher.name")
+    override def getTitle: String = I18n.translateToLocal("tile.neotech:electricCrusher.name")
 
     override def getUid: String = Reference.MOD_ID + ":electricCrusher"
 }

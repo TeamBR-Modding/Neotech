@@ -3,12 +3,13 @@ package com.dyonovan.neotech.api.jei.crucible
 import java.awt.Color
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
-import com.dyonovan.neotech.api.jei.drawables.{GuiComponentBox, GuiComponentPowerBarJEI, GuiComponentArrowJEI, SlotDrawable}
+import com.dyonovan.neotech.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI, SlotDrawable}
 import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui.{IDrawable, IRecipeLayout}
-import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeCategory}
+import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
-import net.minecraft.util.{ResourceLocation, StatCollector}
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.text.translation.I18n
 
 /**
   * This file was created for NeoTech
@@ -57,7 +58,7 @@ class JEICrucibleRecipeCategory extends IRecipeCategory {
         tank.draw(minecraft)
     }
 
-    override def getTitle: String = StatCollector.translateToLocal("tile.neotech:electricCrucible.name")
+    override def getTitle: String = I18n.translateToLocal("tile.neotech:electricCrucible.name")
 
     override def getUid: String = Reference.MOD_ID + ":crucible"
 }

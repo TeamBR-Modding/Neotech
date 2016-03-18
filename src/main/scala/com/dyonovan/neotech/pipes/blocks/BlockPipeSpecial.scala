@@ -13,27 +13,24 @@ import com.dyonovan.neotech.pipes.types.{AdvancedPipe, SimplePipe}
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.loadables.ILoadActionProvider
 import com.teambr.bookshelf.traits.HasToolTip
-import mcmultipart.block.{BlockCoverable, BlockMultipart}
-import mcmultipart.client.multipart.ModelMultipartContainer
-import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.IProperty
-import net.minecraft.block.state.{BlockState, IBlockState}
-import net.minecraft.client.resources.model.{IBakedModel, ModelResourceLocation}
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
+import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
+import net.minecraftforge.common.property.ExtendedBlockState
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.input.Keyboard
 
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.JavaConversions._
 
 
 /**
@@ -46,7 +43,7 @@ import scala.collection.JavaConversions._
   * @author Paul Davis pauljoda
   * @since August 14, 2015
   */
-class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockCoverable(mat)
+class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockContainer(mat)
         with HasToolTip with ILoadActionProvider {
 
     /*******************************************************************************************************************
@@ -72,7 +69,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     /**
       * Used to create the block state of the pipes
       */
-    protected override def createBlockState: BlockState = {
+    protected override def createBlockState: BlockStateContainer = {
         val listed = new ArrayBuffer[IProperty[_]]()
         listed += PipeProperties.SPECIAL_UP
         listed += PipeProperties.SPECIAL_DOWN
@@ -80,7 +77,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         listed += PipeProperties.SPECIAL_SOUTH
         listed += PipeProperties.SPECIAL_EAST
         listed += PipeProperties.SPECIAL_WEST
-        new ExtendedBlockState(this, listed.toArray, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
+        new ExtendedBlockState(this, listed.toArray) //, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
     }
 
     override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): IBlockState = {
@@ -253,13 +250,18 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
     }
 
-    override def addCollisionBoxesToListDefault(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
+    /*override def addCollisionBoxesToListDefault(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
                                                 list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
         this.setBlockBoundsBasedOnStateDefault(worldIn, pos)
         super.addCollisionBoxesToListDefault(worldIn, pos, state, mask, list, collidingEntity)
     }
 
     override def onNeighborBlockChangeDefault(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
+        if (!world.isRemote)
+            WorldPipes.notifyPipes()
+    }*/
+
+    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
         if (!world.isRemote)
             WorldPipes.notifyPipes()
     }
@@ -283,15 +285,15 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * Client Block Info                                                                                              *
       ******************************************************************************************************************/
 
-    override def getRenderType: Int = 3
-    override def isOpaqueCube: Boolean = false
+    override def getRenderType(state: IBlockState): Int = 3
+    override def isOpaqueCube(state: IBlockState): Boolean = false
     @SideOnly(Side.CLIENT)
-    override def isTranslucent: Boolean = true
-    override def isFullCube: Boolean = false
+    override def isTranslucent(state: IBlockState): Boolean = true
+    override def isFullCube(state: IBlockState): Boolean = false
     @SideOnly(Side.CLIENT)
-    override def getBlockLayer: EnumWorldBlockLayer = EnumWorldBlockLayer.SOLID
-    override def canRenderInLayerDefault(layer: EnumWorldBlockLayer): Boolean =
-        layer == EnumWorldBlockLayer.SOLID
+    override def getBlockLayer: BlockRenderLayer = BlockRenderLayer.SOLID
+    override def canRenderInLayer(layer: BlockRenderLayer): Boolean =
+        layer == BlockRenderLayer.SOLID
 
     override def getToolTip() : List[String] = {
         if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))

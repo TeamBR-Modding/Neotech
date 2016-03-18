@@ -5,7 +5,6 @@ import java.util
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.api.waila.Waila
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import com.teambr.bookshelf.util.WorldUtils
@@ -20,7 +19,7 @@ import scala.util.control.Breaks._
 /**
   * Created by Dyonovan on 1/23/2016.
   */
-class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgradeable {
+class TileDimStorage extends UpdatingTile with Inventory with Upgradeable {
 
     final val BASE_STACKS = 64
 
@@ -168,7 +167,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgrade
     /*
      * Waila Methods
      */
-    override def returnWailaHead(tipList: java.util.List[String]): java.util.List[String] = {
+    /*override def returnWailaHead(tipList: java.util.List[String]): java.util.List[String] = {
         if (getStackInSlot(0) == null)
             tipList.add(GuiColor.WHITE + "Empty")
         else {
@@ -178,7 +177,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Waila with Upgrade
         }
         tipList.add("Max Stacks: " + maxStacks)
         tipList
-    }
+    }*/
 
     def dropStacks(dropQty: Int, stack: ItemStack): Unit = {
         var actQty = dropQty
