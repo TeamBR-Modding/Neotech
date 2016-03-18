@@ -5,9 +5,6 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        //1.9 Stuff
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "http://maven.modmuss50.me" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
@@ -33,7 +30,6 @@ repositories {
         url "http://dvs1.progwml6.com/files/maven"
     }
     maven { url "http://maven.amadornes.com/" }
-    maven { url "http://maven.modmuss50.me" }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -101,9 +97,9 @@ configurations {
 dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
     //compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
-    //deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
+    deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     //deobfCompile "MCMultiPart:MCMultiPart-experimental:1.0.9_45:universal"
-    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "+", classifier: "dev", changing: true
+    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "3.+", classifier: "dev", changing: true
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
