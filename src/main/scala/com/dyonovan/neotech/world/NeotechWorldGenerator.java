@@ -3,7 +3,7 @@ package com.dyonovan.neotech.world;
 import com.dyonovan.neotech.managers.BlockManager;
 import com.dyonovan.neotech.managers.MetalManager;
 import com.dyonovan.neotech.registries.ConfigRegistry;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;

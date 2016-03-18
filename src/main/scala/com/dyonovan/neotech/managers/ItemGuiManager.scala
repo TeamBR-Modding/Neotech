@@ -5,7 +5,7 @@ import com.dyonovan.neotech.common.container.misc.ContainerTrashBag
 import com.dyonovan.neotech.common.items.ItemTrashBag
 import com.dyonovan.neotech.pipes.blocks.BlockPipeSpecial
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.BlockPos
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.common.network.IGuiHandler
 

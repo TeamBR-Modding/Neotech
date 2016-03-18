@@ -3,7 +3,7 @@ package com.dyonovan.neotech.common.blocks.machines
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.machines.generators.TileSolarPanel
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.BlockPos
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 /**

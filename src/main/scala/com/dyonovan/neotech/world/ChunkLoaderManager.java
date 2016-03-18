@@ -4,7 +4,7 @@ import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader;
 import com.dyonovan.neotech.managers.BlockManager;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 

@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.client.renderer.{GlStateManager, RenderHelper, Tessellator, WorldRenderer}
 import net.minecraft.entity.Entity
-import net.minecraft.util.BlockPos
+import net.minecraft.util.math.BlockPos
 import org.lwjgl.opengl.GL11
 
 /**
