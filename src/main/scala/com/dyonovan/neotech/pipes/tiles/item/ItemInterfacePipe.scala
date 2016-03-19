@@ -11,7 +11,9 @@ import gnu.trove.map.hash.THashMap
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
 
 /**
@@ -27,17 +29,17 @@ import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
 class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
 
     override def getDescription : String = {
-        GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.itemInterfacePipe.name") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.itemInterfacePipe.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.itemInterfacePipe.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.itemInterfacePipe.hardDriveUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.energyInterfacePipe.expansionUpgrade.desc")
+        GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.itemInterfacePipe.name") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.itemInterfacePipe.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.itemInterfacePipe.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.itemInterfacePipe.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.energyInterfacePipe.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.energyInterfacePipe.expansionUpgrade.desc")
     }
 
     /*******************************************************************************************************************
@@ -107,7 +109,7 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
                                 InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
                                     getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
                                 foundSource = null
-                                worldObj.markBlockForUpdate(pos)
+                                worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
                                 shouldRecheck = true
                             }
                         }

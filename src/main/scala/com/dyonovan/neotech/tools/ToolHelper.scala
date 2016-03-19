@@ -8,11 +8,13 @@ import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
-import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.enchantment.{Enchantment, EnchantmentHelper}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.SoundEvents
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraft.util.{BlockPos, EnumFacing, MovingObjectPosition}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.{BlockPos, RayTraceResult}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.EnumHelper
 import net.minecraftforge.fluids.FluidRegistry
@@ -39,7 +41,7 @@ object ToolHelper {
     }
 
     lazy val NEOTECH_TOOLS   = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 1.0F, 0)
-    lazy val NEOTECH_ARMOR   = EnumHelper.addArmorMaterial("NEOTECH_ARMOR", Reference.MOD_ID + ":electricArmor", 1, Array(2, 6, 5, 2), 0)
+    lazy val NEOTECH_ARMOR   = EnumHelper.addArmorMaterial("NEOTECH_ARMOR", Reference.MOD_ID + ":electricArmor", 1, Array(2, 6, 5, 2), 0, SoundEvents.item_armor_equip_generic)
     lazy val ModifierListTag = "ModifierList"
 
     /**
@@ -71,7 +73,7 @@ object ToolHelper {
     /**
       * Used to put vanilla enchant on item
       */
-    def writeVanillaEnchantment(tag: NBTTagCompound, stack: ItemStack, id : Int, level: Int) : Unit = {
+    def writeVanillaEnchantment(tag: NBTTagCompound, stack: ItemStack, id : Enchantment, level: Int) : Unit = {
         val list = EnchantmentHelper.getEnchantments(stack)
         list.put(id, level)
         EnchantmentHelper.setEnchantments(list, stack)
@@ -87,7 +89,7 @@ object ToolHelper {
       * @param stack    The stack mining
       * @return         An List of blocks that are to be mined
       */
-    def getBlockList(level: Int, mop: MovingObjectPosition, player : EntityPlayer, world: World, stack: ItemStack)
+    def getBlockList(level: Int, mop: RayTraceResult, player : EntityPlayer, world: World, stack: ItemStack)
         : java.util.List[BlockPos] = {
         // Has to be able to harvest the block targeted to add more, plus has AOE, and effective
         if(world.getBlockState(mop.getBlockPos).getBlock.canHarvestBlock(world, mop.getBlockPos, player)
@@ -123,8 +125,8 @@ object ToolHelper {
                 val pos = iterator.next()
                 val block = world.getBlockState(pos).getBlock
                 if (player.capabilities.isCreativeMode) actualList.add(pos) // Creative, add it anyway
-                else if (!block.isAir(world, pos) && block.canHarvestBlock(world, pos, player) &&
-                        isToolEffective(world, pos, stack) && block.getBlockHardness(world, pos) >= 0 &&
+                else if (!block.isAir(world.getBlockState(pos), world, pos) && block.canHarvestBlock(world, pos, player) &&
+                        isToolEffective(world, pos, stack) && block.getBlockHardness(world.getBlockState(pos), world, pos) >= 0 &&
                         FluidRegistry.lookupFluidForBlock(block) == null) { // Check if not air, isn't too hard, fluid, or non effective
                     actualList.add(pos)
                 }

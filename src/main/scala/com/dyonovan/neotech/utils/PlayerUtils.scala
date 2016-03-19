@@ -17,7 +17,8 @@ object PlayerUtils {
 
     def isPlayerHoldingEither(player: EntityPlayer, item: Item): Boolean = {
         if (player == null || item == null || player.getHeldEquipment == null) return false
-        if (player.getHeldItemMainhand.getItem == item || player.getHeldItemOffhand.getItem == item) return true
+        if ((player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem == item )
+                || (player.getHeldItemOffhand != null && player.getHeldItemOffhand.getItem == item)) return true
         false
     }
 

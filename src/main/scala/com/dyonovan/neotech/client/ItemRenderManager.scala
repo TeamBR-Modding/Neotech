@@ -3,8 +3,7 @@ package com.dyonovan.neotech.client
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import net.minecraft.block.Block
-import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.Item
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.ModelLoader
@@ -42,7 +41,7 @@ object ItemRenderManager {
     }
 
     def registerItem(item: Item): Unit = {
-        Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(item, 0,
+        ModelLoader.setCustomModelResourceLocation(item, 0,
             new ModelResourceLocation(item.getUnlocalizedName.substring(5), "inventory"))
     }
 

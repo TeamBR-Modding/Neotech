@@ -13,8 +13,8 @@ import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 /**
@@ -32,18 +32,18 @@ public class EntityNet extends EntityThrowable {
     @SuppressWarnings("unused")
     public EntityNet(World world) {
         super(world);
-        renderDistanceWeight = 10.0D;
+      //  renderDistanceWeight = 10.0D;
     }
 
     @SuppressWarnings("unused")
     public EntityNet(World world, double x, double y, double z) {
         super(world, x, y, z);
-        renderDistanceWeight = 10.0D;
+        //renderDistanceWeight = 10.0D;
     }
 
     public EntityNet(World world, EntityLivingBase shooter, double velocity) {
         super(world, shooter);
-        renderDistanceWeight = 10.0D;
+      //  renderDistanceWeight = 10.0D;
         this.setSize(0.5F, 0.5F);
         this.setLocationAndAngles(shooter.posX, shooter.posY + (double)shooter.getEyeHeight(), shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
         this.posX -= (double)(MathHelper.cos(this.rotationYaw / 180.0F * (float)Math.PI) * 0.16F);
@@ -57,7 +57,7 @@ public class EntityNet extends EntityThrowable {
     }
 
     @Override
-    protected void onImpact(MovingObjectPosition mop) {
+    protected void onImpact(RayTraceResult mop) {
         ItemStack stack = new ItemStack(ItemManager.mobNet(), 1);
         if (mop != null && !worldObj.isRemote) {
             if (isValidEntity(mop.entityHit)) {

@@ -5,7 +5,7 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.utils.PlayerUtils
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
+import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, OpensGui}
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.BlockPistonBase
@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.{BlockPos, MathHelper}
-import net.minecraft.util.{BlockRenderLayer, EnumFacing, EnumHand}
+import net.minecraft.util.{EnumBlockRenderType, BlockRenderLayer, EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fluids.{FluidUtil, IFluidHandler}
@@ -44,7 +44,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     @SideOnly(Side.CLIENT)
     override def randomDisplayTick(state: IBlockState, world: World, pos: BlockPos, rand: java.util.Random): Unit = {
         if (activeState && getActualState(state, world, pos).getValue(this.PROPERTY_ACTIVE).asInstanceOf[Boolean]) {
-            val enumFacing:EnumFacing = state.getValue(PropertyRotation.FOUR_WAY)
+            val enumFacing:EnumFacing = state.getValue(Properties.FOUR_WAY)
             val d0: Double = pos.getX + 0.5
             val d1: Double = pos.getY + rand.nextDouble() * 6.0D / 16.0D
             val d2: Double = pos.getZ + 0.5D
@@ -69,9 +69,9 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
             val tag = new NBTTagCompound
             world.getTileEntity(pos).writeToNBT(tag)
             if (side != EnumFacing.UP && side != EnumFacing.DOWN)
-                world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, side))
+                world.setBlockState(pos, world.getBlockState(pos).withProperty(Properties.FOUR_WAY, side))
             else
-                world.setBlockState(pos, world.getBlockState(pos).withProperty(PropertyRotation.FOUR_WAY, WorldUtils.rotateRight(world.getBlockState(pos).getValue(PropertyRotation.FOUR_WAY))))
+                world.setBlockState(pos, world.getBlockState(pos).withProperty(Properties.FOUR_WAY, WorldUtils.rotateRight(world.getBlockState(pos).getValue(Properties.FOUR_WAY))))
             if (tag != null) {
                 world.getTileEntity(pos).readFromNBT(tag)
             }
@@ -118,9 +118,9 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
         if (fourWayRotation) {
             val playerFacingDirection = if (placer == null) 0 else MathHelper.floor_double((placer.rotationYaw / 90.0F) + 0.5D) & 3
             val enumFacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite
-            this.getDefaultState.withProperty(PropertyRotation.FOUR_WAY, enumFacing).withProperty(PROPERTY_ACTIVE, false.asInstanceOf[java.lang.Boolean])
+            this.getDefaultState.withProperty(Properties.FOUR_WAY, enumFacing).withProperty(PROPERTY_ACTIVE, false.asInstanceOf[java.lang.Boolean])
         } else if(sixWayRotation)
-            this.getDefaultState.withProperty(PropertyRotation.SIX_WAY, BlockPistonBase.getFacingFromEntity(blockPos, placer))
+            this.getDefaultState.withProperty(Properties.SIX_WAY, BlockPistonBase.getFacingFromEntity(blockPos, placer))
         else
             getDefaultState
     }
@@ -131,8 +131,8 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     override def createBlockState() : BlockStateContainer = {
         val properties = new ArrayBuffer[IProperty[_]]()
         if(activeState) properties += PROPERTY_ACTIVE
-        if(fourWayRotation) properties += PropertyRotation.FOUR_WAY
-        if(sixWayRotation) properties += PropertyRotation.SIX_WAY
+        if(fourWayRotation) properties += Properties.FOUR_WAY
+        if(sixWayRotation) properties += Properties.SIX_WAY
         val unlisted = new Array[IUnlistedProperty[_]](0)
         new ExtendedBlockState(this, properties.toArray, unlisted)
     }
@@ -167,10 +167,10 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
         if(fourWayRotation) {
             if(facing.getAxis == EnumFacing.Axis.Y)
                 facing = EnumFacing.NORTH
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY, facing)
+            getDefaultState.withProperty(Properties.FOUR_WAY, facing)
         }
         else if(sixWayRotation)
-            getDefaultState.withProperty(PropertyRotation.FOUR_WAY, facing)
+            getDefaultState.withProperty(Properties.FOUR_WAY, facing)
         else
             getDefaultState
     }
@@ -183,9 +183,9 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
       */
     override def getMetaFromState(state : IBlockState) = {
         if(fourWayRotation)
-            state.getValue(PropertyRotation.FOUR_WAY).ordinal()
+            state.getValue(Properties.FOUR_WAY).ordinal()
         else if(sixWayRotation)
-            state.getValue(PropertyRotation.SIX_WAY).ordinal()
+            state.getValue(Properties.SIX_WAY).ordinal()
         else
             0
     }
@@ -196,7 +196,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     override def getComparatorInputOverride(state: IBlockState, worldIn: World, pos: BlockPos): Int =
         worldIn.getTileEntity(pos).asInstanceOf[AbstractMachine].getRedstoneOutput
 
-    override def getRenderType(state: IBlockState) : Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     override def isOpaqueCube(state: IBlockState) : Boolean = false
 

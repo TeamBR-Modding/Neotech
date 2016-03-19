@@ -9,24 +9,20 @@ import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.dyonovan.neotech.pipes.types.SimplePipe
 import com.teambr.bookshelf.loadables.ILoadActionProvider
-import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.block.material.{MapColor, Material}
-import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
+import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
-import net.minecraft.item.{EnumDyeColor, Item, ItemDye, ItemStack}
+import net.minecraft.item._
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-
-import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -76,7 +72,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       * Used to create the block state of the pipes
       */
     protected override def createBlockState: BlockStateContainer = {
-        val listed = new ArrayBuffer[IProperty[_]]()
+       /* val listed = new ArrayBuffer[IProperty[_]]()
         if(colored)
             listed += PipeProperties.COLOR
         listed += PipeProperties.UP
@@ -84,8 +80,11 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         listed += PipeProperties.EAST
         listed += PipeProperties.WEST
         listed += PipeProperties.NORTH
-        listed += PipeProperties.SOUTH
-        new ExtendedBlockState(this, listed.toArray)//, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
+        listed += PipeProperties.SOUTH*/
+        new BlockStateContainer(this, PipeProperties.COLOR,
+            PipeProperties.UP, PipeProperties.DOWN,
+            PipeProperties.EAST, PipeProperties.WEST,
+            PipeProperties.NORTH, PipeProperties.SOUTH)//, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
     }
 
     /**
@@ -143,9 +142,10 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Called when the block is clicked on, if we are colored or using a wrench perform relevant actions
       */
-    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing,
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+                                  hand: EnumHand, heldItem: ItemStack, side: EnumFacing,
                                   hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
-        playerIn.getCurrentEquippedItem match {
+        heldItem match {
             case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
                 if(!world.isRemote) {
                     val random = new Random
@@ -170,21 +170,21 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
                         world.spawnEntityInWorld(itemEntity)
                     }
                     world.setBlockToAir(pos)
-                    world.markBlockForUpdate(pos)
+                    world.setBlockState(pos, state, 3)
                     return true
                 } else
-                    playerIn.swingItem()
+                    playerIn.swingArm(hand)
 
             case _ =>
         }
 
         if(colored) {
-            playerIn.getCurrentEquippedItem match {
+            heldItem match {
                 case stack: ItemStack if stack.getItem.isInstanceOf[ItemDye] =>
-                    if (stack.getItemDamage != world.getBlockState(pos).getValue(PipeProperties.COLOR).asInstanceOf[EnumDyeColor].getMetadata) {
+                    if (stack.getItemDamage != world.getBlockState(pos).getValue(PipeProperties.COLOR).getMetadata) {
                         world.setBlockState(pos, state.withProperty(PipeProperties.COLOR, EnumDyeColor.byDyeDamage(stack.getItemDamage)))
                         if (!playerIn.capabilities.isCreativeMode) {
-                            playerIn.getCurrentEquippedItem.stackSize -= 1
+                            heldItem.stackSize -= 1
                         }
                         return true
                     }
@@ -217,11 +217,12 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /*******************************************************************************************************************
       * Block Info Methods                                                                                             *
       ******************************************************************************************************************/
+    var BB = new AxisAlignedBB(4F / 16F, 0F, 4F / 16F, 12F / 16F, 1F, 12F / 16F)
 
     /**
       * Used to set the bounding box based on the current state
       */
-    override def setBlockBoundsBasedOnStateDefault(worldIn : IBlockAccess, pos : BlockPos) {
+    override def getBoundingBox(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
         var x1 = 5F / 16F
         var x2 = 1.0F - x1
         var y1 = x1
@@ -243,6 +244,11 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         this.setBlockBounds(x1, y1, z1, x2, y2, z2)
     }
 
+    def setBlockBounds(x1 : Float, y1 : Float, z1 : Float, x2 : Float, y2 : Float, z2 : Float): AxisAlignedBB = {
+        BB = new AxisAlignedBB(x1, y1, z1, x2, y2, z2)
+        BB
+    }
+
     /**
       * Checks pipe connection status
       */
@@ -257,10 +263,9 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Add collision, allows player to get close to pipe bounds
       */
-    override def addCollisionBoxesToListDefault(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
-                                         list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
-        this.setBlockBoundsBasedOnStateDefault(worldIn, pos)
-        super.addCollisionBoxesToListDefault(worldIn, pos, state, mask, list, collidingEntity)
+    override def addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) = {
+        this.getBoundingBox(state, worldIn, pos)
+        super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity)
     }
 
     /**
@@ -305,7 +310,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       *
       * @return
       */
-    override def getRenderType(state: IBlockState) : Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     /**
       * We are clear, the following are all needed for best clear performance, rendering on Translucent layer
@@ -323,14 +328,14 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
         event match {
             case modelBake: ModelBakeEvent =>
-                for(modelLocation <- modelBake.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
+              /*  for(modelLocation <- modelBake.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
                     if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
                             modelLocation.getResourcePath.contains("pipeStructure")) {
                         // Create Multipart world obj
                         modelBake.modelRegistry.putObject(modelLocation,
                             new ModelMultipartContainer(modelBake.modelRegistry.getObject(modelLocation)))
                     }
-                }
+                }*/
             case _ =>
         }
     }

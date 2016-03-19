@@ -8,14 +8,16 @@ import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.client.Minecraft
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.SoundEvents
 import net.minecraft.item.{EnumAction, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.StatCollector
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.text.translation.I18n
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-
-import scala.util.Random
 
 /**
   * This file was created for NeoTech
@@ -63,14 +65,15 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
         }
     }
 
+    //TODO figure this out
+/*
     override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
         if (hasAmmo(player, remove = false) && extractEnergy(stack, RF_PER_USE, simulate = true) == RF_PER_USE) {
             player.setItemInUse(stack, getMaxItemUseDuration(stack))
         }
         else world.playSoundAtEntity(player, "fire.ignite", 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
         stack
-    }
-
+    }*/
     private def hasAmmo(player: EntityPlayer, remove: Boolean): Boolean = {
         for (i <- 0 until player.inventory.getSizeInventory) {
             if (player.inventory.getStackInSlot(i) != null && !player.inventory.getStackInSlot(i).hasTagCompound &&
@@ -88,9 +91,9 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
 
     override def getMaxItemUseDuration(stack: ItemStack): Int = 72000
 
-    override def onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, timeLeft: Int): Unit = {
-        if (!world.isRemote) {
-            hasAmmo(player, remove = true)
+    override def onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityLivingBase, timeLeft: Int) : Unit = {
+    if (!world.isRemote && player.isInstanceOf[EntityPlayer]) {
+            hasAmmo(player.asInstanceOf[EntityPlayer], remove = true)
             extractEnergy(stack, RF_PER_USE, simulate = false)
             val heldTime = this.getMaxItemUseDuration(stack) - timeLeft
             var f: Float = heldTime.toFloat / 20.0F
@@ -100,14 +103,16 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
 
             val net = new EntityNet(world, player, f * 2.0F)
             world.spawnEntityInWorld(net)
-            world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
+            world.playSound(null.asInstanceOf[EntityPlayer],
+                new BlockPos(player.posX, player.posY, player.posZ), SoundEvents.entity_arrow_shoot,
+                SoundCategory.BLOCKS, 0.3F, 0.5F)
         }
     }
 
     @SideOnly(Side.CLIENT)
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if (stack.hasTagCompound) {
-            list.add(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux"))
+            list.add(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneFlux"))
             list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
               .format(getEnergyStored(stack)) +
               " / " +

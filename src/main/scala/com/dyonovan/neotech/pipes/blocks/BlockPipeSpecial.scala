@@ -14,10 +14,8 @@ import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.loadables.ILoadActionProvider
 import com.teambr.bookshelf.traits.HasToolTip
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.block.{Block, BlockContainer}
-import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
@@ -26,11 +24,8 @@ import net.minecraft.util._
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.common.property.ExtendedBlockState
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.input.Keyboard
-
-import scala.collection.mutable.ArrayBuffer
 
 
 /**
@@ -70,14 +65,17 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * Used to create the block state of the pipes
       */
     protected override def createBlockState: BlockStateContainer = {
-        val listed = new ArrayBuffer[IProperty[_]]()
+     /*   val listed = new ArrayBuffer[IProperty[_]]()
         listed += PipeProperties.SPECIAL_UP
         listed += PipeProperties.SPECIAL_DOWN
         listed += PipeProperties.SPECIAL_NORTH
         listed += PipeProperties.SPECIAL_SOUTH
         listed += PipeProperties.SPECIAL_EAST
-        listed += PipeProperties.SPECIAL_WEST
-        new ExtendedBlockState(this, listed.toArray) //, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
+        listed += PipeProperties.SPECIAL_WEST*/
+        new BlockStateContainer(this,
+            PipeProperties.SPECIAL_UP, PipeProperties.SPECIAL_DOWN,
+            PipeProperties.SPECIAL_EAST, PipeProperties.SPECIAL_WEST,
+            PipeProperties.SPECIAL_NORTH, PipeProperties.SPECIAL_SOUTH) //, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
     }
 
     override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): IBlockState = {
@@ -155,8 +153,10 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * If you want to override this but still call it, make sure you call
       *      super[OpensGui].onBlockActivated(...)
       */
-    override def onBlockActivatedDefault(world : World, pos : BlockPos, state : IBlockState, playerIn : EntityPlayer, side : EnumFacing, hitX : Float, hitY : Float, hitZ : Float) : Boolean = {
-        playerIn.getCurrentEquippedItem match {
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+                                  hand: EnumHand, heldItem: ItemStack, side: EnumFacing,
+                                  hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
+        heldItem match {
             case stack : ItemStack if stack.getItem == ItemManager.wrench =>
                 if(!world.isRemote && playerIn.isSneaking) {
                     val random = new Random
@@ -181,11 +181,11 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                         world.spawnEntityInWorld(itemEntity)
                     }
                     world.setBlockToAir(pos)
-                    world.markBlockForUpdate(pos)
+                    world.setBlockState(pos, state, 3)
                     return true
                 } else if(!playerIn.isSneaking) {
                     playerIn.openGui(NeoTech, 0, world, pos.getX, pos.getY, pos.getZ)
-                    playerIn.swingItem()
+                    playerIn.swingArm(hand)
                     return true
                 }
 
@@ -194,7 +194,9 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         false
     }
 
-    override def setBlockBoundsBasedOnStateDefault(worldIn: IBlockAccess, pos: BlockPos) {
+    var BB = new AxisAlignedBB(4F / 16F, 0F, 4F / 16F, 12F / 16F, 1F, 12F / 16F)
+
+    override def getBoundingBox(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
         var x1 = 5F / 16F
         var x2 = 1.0F - x1
         var y1 = x1
@@ -226,6 +228,11 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
 
         this.setBlockBounds(x1, y1, z1, x2, y2, z2)
+    }
+
+    def setBlockBounds(x1 : Float, y1 : Float, z1 : Float, x2 : Float, y2 : Float, z2 : Float): AxisAlignedBB = {
+        BB = new AxisAlignedBB(x1, y1, z1, x2, y2, z2)
+        BB
     }
 
     def isPipeConnected(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Boolean = {
@@ -285,7 +292,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * Client Block Info                                                                                              *
       ******************************************************************************************************************/
 
-    override def getRenderType(state: IBlockState): Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
     override def isOpaqueCube(state: IBlockState): Boolean = false
     @SideOnly(Side.CLIENT)
     override def isTranslucent(state: IBlockState): Boolean = true
@@ -308,14 +315,14 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
         event match {
             case modelBake: ModelBakeEvent =>
-                for(modelLocation <- modelBake.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
+              /*  for(modelLocation <- modelBake.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
                     if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
                             modelLocation.getResourcePath.contains("BasicInterface")) {
                         // Create Multipart world obj
                         modelBake.modelRegistry.putObject(modelLocation,
                             new ModelMultipartContainer(modelBake.modelRegistry.getObject(modelLocation)))
                     }
-                }
+                }*/
             case _ =>
         }
     }

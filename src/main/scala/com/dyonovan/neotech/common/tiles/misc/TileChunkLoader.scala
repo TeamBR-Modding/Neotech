@@ -88,7 +88,7 @@ class TileChunkLoader extends Syncable {
             diameter = ConfigRegistry.chunkLoaderMax
         else if (diameter < 0)
             diameter = 0
-        worldObj.markBlockForUpdate(pos)
+        worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
     }
 
     override def getVariable(id: Int): Double =

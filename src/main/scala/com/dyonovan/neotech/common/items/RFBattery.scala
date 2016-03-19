@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.common.items
 
+import java.util
+
 import cofh.api.energy.IEnergyContainerItem
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
@@ -33,16 +35,18 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
     setMaxStackSize(maxStackSize)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 
-    override def getTextures: ArrayBuffer[String] = ArrayBuffer("neotech:items/basicRFBattery",
+    override def getTexturesToStitch: ArrayBuffer[String] = ArrayBuffer("neotech:items/basicRFBattery",
         "neotech:items/advancedRFBattery", "neotech:items/eliteRFBattery")
 
-    override def getTextures(stack : ItemStack) : ArrayBuffer[String] = {
+    override def getTextures(stack : ItemStack): java.util.List[String] = {
+        val list = new util.ArrayList[String]()
         stack.getItem match {
-            case item : ItemManager.basicRFBattery.type => ArrayBuffer("neotech:items/basicRFBattery")
-            case item : ItemManager.advancedRFBattery.type => ArrayBuffer("neotech:items/advancedRFBattery")
-            case item : ItemManager.eliteRFBattery.type => ArrayBuffer("neotech:items/eliteRFBattery")
-            case _ => ArrayBuffer("neotech:items/basicRFBattery")
+            case item : ItemManager.basicRFBattery.type => list.add("neotech:items/basicRFBattery")
+            case item : ItemManager.advancedRFBattery.type => list.add("neotech:items/advancedRFBattery")
+            case item : ItemManager.eliteRFBattery.type => list.add("neotech:items/eliteRFBattery")
+            case _ => list.add("neotech:items/basicRFBattery")
         }
+        list
     }
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {

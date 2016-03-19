@@ -10,8 +10,8 @@ import net.minecraft.block.properties.PropertyDirection
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.EnumFacing
-import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{EnumBlockRenderType, EnumFacing}
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -27,7 +27,7 @@ class BlockAttractor extends BaseBlock(Material.portal, "blockAttractor", classO
     setDefaultState(this.blockState.getBaseState
             .withProperty(BlockAttractor.DIR, EnumFacing.UP))
 
-    override def getRenderType(state: IBlockState): Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     override def isOpaqueCube(state: IBlockState) : Boolean = false
 
@@ -52,7 +52,7 @@ class BlockAttractor extends BaseBlock(Material.portal, "blockAttractor", classO
         state.getValue(BlockAttractor.DIR).ordinal()
     }
 
-    override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos): Unit = {
+    override def getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
         var minX = 5 / 16F
         var minY = 5 / 16F
         var minZ = 5 / 16F
@@ -60,7 +60,7 @@ class BlockAttractor extends BaseBlock(Material.portal, "blockAttractor", classO
         var maxY = 11 / 16F
         var maxZ = 11 / 16F
 
-        val state = worldIn.getBlockState(pos)
+        val state = source.getBlockState(pos)
         val side = state.getValue(BlockAttractor.DIR)
 
         side match {

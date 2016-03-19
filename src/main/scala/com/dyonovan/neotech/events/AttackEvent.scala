@@ -27,8 +27,8 @@ object AttackEvent {
     def entityAttacked(event : LivingAttackEvent) : Unit = {
         event.source.getSourceOfDamage match {
             case player: EntityPlayer =>
-                if (player.getCurrentEquippedItem != null && player.getCurrentEquippedItem.getItem == ItemManager.electricSword) {
-                    val sword = player.getCurrentEquippedItem
+                if (player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem == ItemManager.electricSword) {
+                    val sword = player.getHeldItemMainhand
                     if(sword.getItem.asInstanceOf[ElectricSword].getEnergyStored(sword) <= 0)
                         event.setCanceled(true)
                 }
@@ -43,7 +43,7 @@ object AttackEvent {
             if(event.entityLiving.isInstanceOf[EntitySkeleton] || event.entityLiving.isInstanceOf[EntityZombie] ||
                     event.entityLiving.isInstanceOf[EntityCreeper] ||event.entityLiving.isInstanceOf[EntityPlayer]) {
                 val player = event.source.getEntity.asInstanceOf[EntityPlayer]
-                val stack = player.getCurrentEquippedItem
+                val stack = player.getHeldItemMainhand
                 if(stack != null && ModifierBeheading.getBeheadingLevel(stack) > 0) {
                     val chance = event.entityLiving.worldObj.rand.nextInt(100) - ( ModifierBeheading.getBeheadingLevel(stack) * 25)
                     if(chance <= 0) {

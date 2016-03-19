@@ -10,7 +10,7 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{BlockRenderLayer, EnumParticleTypes}
+import net.minecraft.util.{EnumBlockRenderType, BlockRenderLayer, EnumParticleTypes}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -46,7 +46,7 @@ class BlockChunkLoader extends BaseBlock(Material.rock, "chunkLoader", classOf[T
     }
 
     setHardness(1.5F)
-    override def getRenderType(state: IBlockState): Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
     setLightOpacity(0)
     override def isOpaqueCube(state: IBlockState) : Boolean = false
 

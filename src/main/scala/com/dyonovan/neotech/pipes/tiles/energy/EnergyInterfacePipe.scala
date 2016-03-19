@@ -5,7 +5,9 @@ import java.util
 import cofh.api.energy.{IEnergyProvider, IEnergyReceiver}
 import com.dyonovan.neotech.pipes.types.{SimplePipe, AdvancedPipe, InterfacePipe}
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
-import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.text.translation.I18n
+import net.minecraft.util.{EnumFacing}
 
 /**
   * This file was created for NeoTech
@@ -20,17 +22,17 @@ import net.minecraft.util.{BlockPos, EnumFacing, StatCollector}
 class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
 
     override def getDescription : String = {
-        GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.energyInterfacePipe.name") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.hardDriveUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.energyInterfacePipe.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.energyInterfacePipe.expansionUpgrade.desc")
+        GuiColor.YELLOW +  "" + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.energyInterfacePipe.name") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.energyInterfacePipe.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.energyInterfacePipe.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.energyInterfacePipe.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.energyInterfacePipe.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.energyInterfacePipe.expansionUpgrade.desc")
     }
 
 /*******************************************************************************************************************
@@ -117,7 +119,7 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
     override def resetValues(): Unit = {
         super.resetValues()
         mode = 2
-        worldObj.markBlockForUpdate(pos)
+        worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 6)
     }
 
     /*******************************************************************************************************************

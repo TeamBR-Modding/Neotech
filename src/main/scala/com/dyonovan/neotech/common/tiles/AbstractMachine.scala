@@ -5,7 +5,8 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, InventorySided, RedstoneAware, Syncable}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.text.translation.I18n
 import net.minecraft.world.World
 
 /**
@@ -250,7 +251,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             setMaxEnergyStored(BASE_ENERGY)
         }
         updateClient = true
-        worldObj.markBlockForUpdate(pos)
+        worldObj.setBlockState(pos, getWorld.getBlockState(getPos), 6)
     }
 
     /**
@@ -315,10 +316,10 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       */
     def getRedstoneModeName : String = {
         redstone match {
-            case -1 => StatCollector.translateToLocal("neotech.text.low")
-            case 0  =>  StatCollector.translateToLocal("neotech.text.disabled")
-            case 1  =>  StatCollector.translateToLocal("neotech.text.high")
-            case _  =>  StatCollector.translateToLocal("neotech.text.error")
+            case -1 =>  I18n.translateToLocal("neotech.text.low")
+            case 0  =>  I18n.translateToLocal("neotech.text.disabled")
+            case 1  =>  I18n.translateToLocal("neotech.text.high")
+            case _  =>  I18n.translateToLocal("neotech.text.error")
         }
     }
 

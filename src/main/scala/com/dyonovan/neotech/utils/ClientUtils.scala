@@ -7,9 +7,10 @@ import javax.annotation.Nullable
 import com.dyonovan.neotech.lib.Reference
 import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.client.Minecraft
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.Item
-import net.minecraft.util.{StatCollector, ResourceLocation}
+import net.minecraft.util.text.translation.I18n
+import net.minecraft.util.{ResourceLocation}
 import net.minecraftforge.fml.common.registry.GameData
 import org.lwjgl.input.Keyboard
 
@@ -35,7 +36,7 @@ object ClientUtils {
       * @return The translated text
       */
     def translate(text : String) : String =
-        StatCollector.translateToLocal(text)
+        I18n.translateToLocal(text)
 
     /**
       * Used to translate a number to a standard format based on Locale
@@ -96,6 +97,7 @@ object ClientUtils {
 
     /**
       * Checks for CTRL key, Macs use Command so this will enable that key as well
+      *
       * @return True if CTRL is pressed
       */
     def isCtrlPressed : Boolean = {
@@ -107,6 +109,7 @@ object ClientUtils {
 
     /**
       * Checks for the Shift key pressed
+      *
       * @return True if pressed
       */
     def isShiftPressed : Boolean = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)

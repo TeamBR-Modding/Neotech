@@ -18,7 +18,9 @@ import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item._
-import net.minecraft.util.{StatCollector, AxisAlignedBB, BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
+import net.minecraft.util.text.translation.I18n
 import net.minecraft.world.World
 
 import scala.collection.JavaConversions._
@@ -243,7 +245,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       * Scan the area around and pick saplings
       */
     def pullInSaplings() : Unit = {
-        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], AxisAlignedBB.fromBounds(pos.getX - RANGE - 4, pos.getY, pos.getZ - RANGE - 4, pos.getX + RANGE + 5, pos.getY + 2, pos.getZ + RANGE + 5))
+        val items = worldObj.getEntitiesWithinAABB(classOf[EntityItem], new AxisAlignedBB(pos.getX - RANGE - 4, pos.getY, pos.getZ - RANGE - 4, pos.getX + RANGE + 5, pos.getY + 2, pos.getZ + RANGE + 5))
         for(x <- 0 until items.size()) {
             val item = items.get(x)
             item.getEntityItem.getItem match {
@@ -491,16 +493,16 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                 GuiColor.WHITE + "  " + (RANGE + 1) + "x"  + (RANGE + 1) + " blocks\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.chopCount") + ":\n" +
                 GuiColor.WHITE + "  " + getChopCount + "  \n\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.treeFarm.hardDriveUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+                GuiColor.WHITE + I18n.translateToLocal("neotech.treeFarm.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.treeFarm.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.treeFarm.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
     }
 
     /**

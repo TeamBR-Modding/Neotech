@@ -4,7 +4,7 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.teambr.bookshelf.annotations.ModItem
-import net.minecraft.enchantment.Enchantment
+import net.minecraft.init.Enchantments
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -46,7 +46,7 @@ object ModifierLooting extends Modifier("looting") {
       * Write info to the tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, looting: Int): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantment.looting.effectId, getLootingLevel(stack) + looting)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.looting, getLootingLevel(stack) + looting)
         tag.setInteger(LOOTING, looting)
         super.writeToNBT(tag, stack)
         tag

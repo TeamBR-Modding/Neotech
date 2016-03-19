@@ -14,7 +14,6 @@ import net.minecraft.block.Block
 import net.minecraft.command.ServerCommandManager
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.Item
-import net.minecraft.server.MinecraftServer
 import net.minecraftforge.common.ForgeChunkManager
 import net.minecraftforge.fluids.FluidRegistry
 import net.minecraftforge.fml.common.Mod.EventHandler

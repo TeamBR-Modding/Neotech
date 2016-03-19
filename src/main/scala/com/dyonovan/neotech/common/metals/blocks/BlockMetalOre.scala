@@ -4,7 +4,7 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.util.EnumWorldBlockLayer
+import net.minecraft.util.BlockRenderLayer
 
 /**
  * This file was created for NeoTech
@@ -25,7 +25,7 @@ class BlockMetalOre(name: String, color : Int, miningLevel: Int) extends Block(M
 
     def getName: String = name
 
-    override def getBlockColor : Int = color
+    def getBlockColor : Int = color
 
-    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
+    override def getBlockLayer : BlockRenderLayer = BlockRenderLayer.CUTOUT
 }

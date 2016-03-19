@@ -4,8 +4,8 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.registries.ConfigRegistry
 import com.teambr.bookshelf.client.gui.GuiColor
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.event.ClickEvent
-import net.minecraft.util.{ChatComponentText, ChatStyle}
+import net.minecraft.util.text.{Style, TextComponentString}
+import net.minecraft.util.text.event.ClickEvent
 import net.minecraftforge.common.ForgeVersion
 import net.minecraftforge.event.entity.EntityJoinWorldEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -45,10 +45,10 @@ object OnPlayerLoginEvent {
                 if (versionCheck.status == ForgeVersion.Status.OUTDATED) {
                     val msg = GuiColor.ORANGE + "NEOTECH" + GuiColor.WHITE + " is outdated. Newset version is " + GuiColor.GREEN +
                       versionCheck.target + GuiColor.WHITE
-                    player.addChatComponentMessage(new ChatComponentText(msg))
+                    player.addChatComponentMessage(new TextComponentString(msg))
                     val clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, versionCheck.url)
-                    val chatStyle = new ChatStyle().setChatClickEvent(clickEvent)
-                    val update = new ChatComponentText("Update at " + versionCheck.url)
+                    val chatStyle = new Style().setChatClickEvent(clickEvent)
+                    val update = new TextComponentString("Update at " + versionCheck.url)
                     update.setChatStyle(chatStyle)
                     player.addChatComponentMessage(update)
                 }

@@ -4,7 +4,7 @@ import com.teambr.bookshelf.util.RenderUtils
 import mezz.jei.api.gui.IDrawable
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.client.renderer.{GlStateManager, Tessellator}
+import net.minecraft.client.renderer.{VertexBuffer, GlStateManager, Tessellator}
 
 /**
   * This file was created for NeoTech
@@ -23,7 +23,7 @@ class SlotDrawable(x : Int, y : Int, isLarge : Boolean = false) extends IDrawabl
         val f: Float = 0.00390625F
         val f1: Float = 0.00390625F
         val tessellator: Tessellator = Tessellator.getInstance
-        val worldrenderer: WorldRenderer = tessellator.getWorldRenderer
+        val worldrenderer: VertexBuffer = tessellator.getBuffer
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX)
         worldrenderer.pos((x + 0).toDouble, (y + height).toDouble, this.zLevel.toDouble).tex(((textureX + 0).toFloat * f).toDouble, ((textureY + height).toFloat * f1).toDouble).endVertex()
         worldrenderer.pos((x + width).toDouble, (y + height).toDouble, this.zLevel.toDouble).tex(((textureX + width).toFloat * f).toDouble, ((textureY + height).toFloat * f1).toDouble).endVertex()

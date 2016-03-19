@@ -4,7 +4,6 @@ import java.util
 
 import com.dyonovan.neotech.registries.FertilizerBlacklistRegistry
 import com.google.common.collect.Lists
-import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, Syncable}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.block.{Block, IGrowable}
@@ -46,7 +45,7 @@ class TileFertilizer extends TileEntity with Inventory with Syncable {
                     growPlant(block, plantPOS, state)
                     if (worldObj.rand.nextInt(100) <= 14) {
                         decrStackSize(isBoneMeal._2, 1)
-                        worldObj.markBlockForUpdate(getPos)
+                        worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
                     }
                 } else if (worldObj.rand.nextInt(100) <= 79) {
                     growPlant(block, plantPOS, state)
@@ -95,7 +94,7 @@ class TileFertilizer extends TileEntity with Inventory with Syncable {
         tipList
     }*/
 
-    override def setVariable(id: Int, value: Double): Unit = { this.disabled = !this.disabled; worldObj.markBlockForUpdate(pos) }
+    override def setVariable(id: Int, value: Double): Unit = { this.disabled = !this.disabled; worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6) }
 
     override def getVariable(id: Int): Double = { 0.0 }
 }

@@ -2,13 +2,11 @@ package com.dyonovan.neotech.common.blocks.misc
 
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.tiles.misc.TileRedstoneClock
-import com.teambr.bookshelf.common.container.ContainerGeneric
-import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.BlockPressurePlate
 import net.minecraft.block.material.Material
-import net.minecraft.block.state.{BlockState, IBlockState}
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
+import net.minecraft.util.{EnumBlockRenderType, EnumFacing}
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
 
 /**
@@ -25,9 +23,9 @@ class BlockRedstoneClock extends BaseBlock(Material.rock, "redstoneClock", class
 
     this.setDefaultState(this.blockState.getBaseState.withProperty(BlockPressurePlate.POWERED, false.asInstanceOf[java.lang.Boolean]))
 
-    override def getRenderType: Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
-    override def isNormalCube(world: IBlockAccess, pos: BlockPos) = true
+    override def isNormalCube(state : IBlockState, world: IBlockAccess, pos: BlockPos) = true
 
     def setRedstoneStrength(state: IBlockState, strength: Int): IBlockState =
         state.withProperty(BlockPressurePlate.POWERED, (strength > 0).asInstanceOf[java.lang.Boolean])
@@ -50,18 +48,18 @@ class BlockRedstoneClock extends BaseBlock(Material.rock, "redstoneClock", class
         worldIn.notifyNeighborsOfStateChange(pos.down, this)
     }
 
-    override def getWeakPower(worldIn: IBlockAccess, pos: BlockPos, state: IBlockState, side: EnumFacing): Int = {
+    override def getWeakPower(state : IBlockState, worldIn: IBlockAccess, pos: BlockPos, side: EnumFacing): Int = {
         this.getRedstoneStrength(state)
     }
 
-    override def getStrongPower(worldIn: IBlockAccess, pos: BlockPos, state: IBlockState, side: EnumFacing): Int = {
+    override def getStrongPower(state : IBlockState, worldIn: IBlockAccess, pos: BlockPos, side: EnumFacing): Int = {
         this.getRedstoneStrength(state)
     }
 
     /**
       * Can this block provide power. Only wire currently seems to have this change based on its state.
       */
-    override def canProvidePower: Boolean = {
+    override def canProvidePower(state : IBlockState): Boolean = {
         true
     }
 
@@ -75,7 +73,7 @@ class BlockRedstoneClock extends BaseBlock(Material.rock, "redstoneClock", class
         if(state.getValue(BlockPressurePlate.POWERED).asInstanceOf[Boolean]) 1 else 0
     }
 
-    override def createBlockState() : BlockState = {
-        new BlockState(this, BlockPressurePlate.POWERED)
+    override def createBlockState() : BlockStateContainer = {
+        new BlockStateContainer(this, BlockPressurePlate.POWERED)
     }
 }

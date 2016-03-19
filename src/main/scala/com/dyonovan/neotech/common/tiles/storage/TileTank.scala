@@ -1,10 +1,6 @@
 package com.dyonovan.neotech.common.tiles.storage
 
-import java.text.NumberFormat
-import java.util.Locale
-
 import com.dyonovan.neotech.common.blocks.storage.BlockTank
-import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, UpdatingTile}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
@@ -197,7 +193,7 @@ class TileTank extends UpdatingTile with IFluidHandler with RedstoneAware {
 
     def markForUpdate() = {
         if (worldObj != null)
-            worldObj.markBlockForUpdate(pos)
+            worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
     }
 
     /*override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {

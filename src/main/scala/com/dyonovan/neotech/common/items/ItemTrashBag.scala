@@ -5,7 +5,10 @@ import com.dyonovan.neotech.managers.{ItemGuiManager, ItemManager}
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.SoundEvents
 import net.minecraft.item.ItemStack
+import net.minecraft.util.{EnumActionResult, ActionResult, EnumHand, SoundCategory}
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -25,10 +28,10 @@ import scala.util.control.Breaks._
   */
 class ItemTrashBag extends BaseItem("trashBag", 1) {
 
-    override def onItemRightClick(stack : ItemStack, world : World, player : EntityPlayer) : ItemStack = {
+    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand) : ActionResult[ItemStack] = {
         if(!world.isRemote)
             player.openGui(NeoTech, ItemGuiManager.TRASH_BAG_GUI_ID, world, player.posX.toInt, player.posY.toInt, player.posZ.toInt)
-        stack
+        new ActionResult[ItemStack](EnumActionResult.SUCCESS, stack)
     }
 
     @SideOnly(Side.CLIENT)
@@ -74,7 +77,10 @@ object ItemTrashBag {
                         if (containedStack.getItem == pickedUp.getItem && containedStack.getItemDamage == pickedUp.getItemDamage &&
                                 ItemStack.areItemStackTagsEqual(containedStack, pickedUp)) {
                             pickedUp.stackSize = 0
-                            event.entityPlayer.worldObj.playSoundEffect(event.entityPlayer.posX, event.entityPlayer.posY, event.entityPlayer.posZ, "random.pop", 0.5F, event.entityPlayer.worldObj.rand.nextFloat() * 0.1F + 0.9F)
+                            event.entity.worldObj.playSound(null.asInstanceOf[EntityPlayer],
+                                new BlockPos(event.entity.posX, event.entity.posY, event.entity.posZ),
+                                SoundEvents.entity_item_pickup,
+                                SoundCategory.BLOCKS, 0.3F, 0.5F)
                             break
                         }
                     }

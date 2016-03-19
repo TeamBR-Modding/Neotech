@@ -9,7 +9,9 @@ import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.command.{ICommandSender, CommandBase}
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{StatCollector, ChatComponentText}
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.oredict.OreDictionary
 
@@ -144,26 +146,26 @@ class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, Fl
 
             override def getCommandUsage(sender: ICommandSender): String = "commands.addSolidifierRecipe.usage"
 
-            override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
+            override def execute(server: MinecraftServer, sender: ICommandSender, args: Array[String]): Unit = {
                 if(args.length < 2)
-                    sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addSolidifierRecipe.usage")))
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addSolidifierRecipe.usage")))
                 else {
                     var outputStack : String = null
                     if(args(1).split(":").nonEmpty) {
                         outputStack = args(1)
                         if(getItemStackFromString(outputStack) != null && getFluidFromString(args(0)) != null) {
                             addRecipe(new SolidifierRecipe(args(0), "", outputStack))
-                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + outputStack + " Added Successfully"))
+                            sender.addChatMessage(new TextComponentString(args(0) + " -> " + outputStack + " Added Successfully"))
                             saveToFile()
                         } else
-                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + outputStack + " Failed to be added"))
+                            sender.addChatMessage(new TextComponentString(args(0) + " -> " + outputStack + " Failed to be added"))
                     } else {
                         if(!OreDictionary.getOres(args(1)).isEmpty && getFluidFromString(args(0)) != null) {
                             addRecipe(new SolidifierRecipe(args(0), args(1), ""))
-                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + args(1) + " Added Successfully"))
+                            sender.addChatMessage(new TextComponentString(args(0) + " -> " + args(1) + " Added Successfully"))
                             saveToFile()
                         } else
-                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + outputStack + " Failed to be added"))
+                            sender.addChatMessage(new TextComponentString(args(0) + " -> " + outputStack + " Failed to be added"))
                     }
                 }
             }

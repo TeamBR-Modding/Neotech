@@ -27,8 +27,6 @@ object NeoTechPlugin {
 @JEIPlugin
 class NeoTechPlugin extends IModPlugin {
 
-    override def onRecipeRegistryAvailable(recipeRegistry: IRecipeRegistry): Unit = { }
-
     override def register(registry: IModRegistry): Unit = {
         //Crafter Shift Right Click
         registry.getRecipeTransferRegistry.addRecipeTransferHandler(classOf[ContainerCrafter], VanillaRecipeCategoryUid.CRAFTING,  2, 9, 20, 36)
@@ -70,10 +68,6 @@ class NeoTechPlugin extends IModPlugin {
         NeoTechPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(ItemManager.upgradeMBFull))
         NeoTechPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(BlockManager.mechanicalPipe))
     }
-
-    override def onItemRegistryAvailable(itemRegistry: IItemRegistry): Unit = { }
-
-    override def onJeiHelpersAvailable(jeiHelpers: IJeiHelpers): Unit = { NeoTechPlugin.jeiHelpers = jeiHelpers }
 
     override def onRuntimeAvailable(iJeiRuntime: IJeiRuntime): Unit = { }
 }

@@ -21,5 +21,5 @@ class ItemMetal(name: String, color : Int, maxStackSize: Int) extends Item {
 
     def getName: String = name
 
-    override def getColorFromItemStack(stack: ItemStack, renderPass: Int) : Int = color
+    def getColorFromItemStack(stack: ItemStack) : Int = color
 }

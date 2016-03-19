@@ -3,7 +3,8 @@ package com.dyonovan.neotech.pipes.types
 import java.util
 
 import com.dyonovan.neotech.pipes.collections.WorldPipes
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.EnumFacing
 
 /**
   * This file was created for NeoTech

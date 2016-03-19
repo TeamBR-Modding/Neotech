@@ -1,13 +1,9 @@
 package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.pipes.collections.WorldPipes
-import mcmultipart.microblock.IMicroblock.IFaceMicroblock
-import mcmultipart.microblock.IMicroblockTile
-import mcmultipart.multipart.{OcclusionHelper, PartSlot}
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{AxisAlignedBB, EnumFacing}
-
-import scala.collection.JavaConversions._
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.AxisAlignedBB
 
 /**
   * This file was created for NeoTech
@@ -60,7 +56,7 @@ trait SimplePipe extends TileEntity {
             return true
 
         getWorld.getTileEntity(getPos) match {
-            case tileContainer: IMicroblockTile =>
+           /* case tileContainer: IMicroblockTile =>
                 if(tileContainer.getMicroblockContainer != null && tileContainer.getMicroblockContainer.getPartContainer != null) {
                     val parts = tileContainer.getMicroblockContainer.getParts
                     for(part <- parts) {
@@ -79,25 +75,25 @@ trait SimplePipe extends TileEntity {
                     if(!OcclusionHelper.occlusionTest(parts, getAxisForFace(facing)))
                         return true
 
-                }
+                }*/
             case _ => return false
         }
         false
     }
 
-    lazy val AxisUp    = AxisAlignedBB.fromBounds(5 / 16F, 11 / 16F, 5 / 16F,
+    lazy val AxisUp    = new AxisAlignedBB(5 / 16F, 11 / 16F, 5 / 16F,
         11 / 16F, 1.0F, 11 / 16F)
-    lazy val AxisDown  = AxisAlignedBB.fromBounds(5 / 16F, 0F, 5 / 16F,
+    lazy val AxisDown  = new AxisAlignedBB(5 / 16F, 0F, 5 / 16F,
         11 / 16F, 5 / 16F, 11 / 16F)
-    lazy val AxisSouth = AxisAlignedBB.fromBounds(5 / 16F, 5 / 16F, 11 / 16F,
+    lazy val AxisSouth = new AxisAlignedBB(5 / 16F, 5 / 16F, 11 / 16F,
         11 / 16F, 11 / 16F, 1F)
-    lazy val AxisNorth = AxisAlignedBB.fromBounds(5 / 16F, 5 / 16F, 0F,
+    lazy val AxisNorth = new AxisAlignedBB(5 / 16F, 5 / 16F, 0F,
         11 / 16F, 11 / 16F, 5 / 16F)
-    lazy val AxisEast  = AxisAlignedBB.fromBounds(11 / 16F, 5 / 16F, 5 / 16F,
+    lazy val AxisEast  = new AxisAlignedBB(11 / 16F, 5 / 16F, 5 / 16F,
         1F, 11 / 16F, 11 / 16F)
-    lazy val AxisWest  = AxisAlignedBB.fromBounds(0F, 5 / 16F, 5 / 16F,
+    lazy val AxisWest  = new AxisAlignedBB(0F, 5 / 16F, 5 / 16F,
         5 / 16F, 11 / 16F, 11 / 16F)
-    lazy val AxisSelf  = AxisAlignedBB.fromBounds(5 / 16F, 5 / 16F, 5 / 16F,
+    lazy val AxisSelf  = new AxisAlignedBB(5 / 16F, 5 / 16F, 5 / 16F,
         11 / 16F, 11 / 16F, 11 / 16F)
 
     def getAxisForFace(facing : EnumFacing) : AxisAlignedBB = {

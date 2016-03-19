@@ -22,6 +22,8 @@ import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.MobEffects
+import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.{ItemArmor, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.{Potion, PotionEffect}
@@ -38,7 +40,7 @@ import net.minecraftforge.fml.client.FMLClientHandler
   * @author Paul Davis "pauljoda"
   * @since 3/3/2016
   */
-class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
+class ItemElectricArmor(name : String, index : Int, armorType : EntityEquipmentSlot) extends
         ItemArmor(ToolHelper.NEOTECH_ARMOR, index, armorType) with BaseElectricTool {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
@@ -105,7 +107,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
                 PacketDispatcher.net.sendToServer(new SpawnJetpackParticles(player))
 
                 if (!player.capabilities.isCreativeMode) {
-                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType, 50))
+                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType.getIndex, 50))
                     if(player.motionY > -1)
                         PacketDispatcher.net.sendToServer(new ResetFallDistance)
                 }
@@ -115,7 +117,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
                     ClientUtils.isCtrlPressed && ModifierHover.hasHover(itemStack) && !player.onGround) {
                 player.motionY = 0
                 if (!player.capabilities.isCreativeMode) {
-                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType, 1))
+                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType.getIndex, 1))
                     if(player.motionY > -1)
                         PacketDispatcher.net.sendToServer(new ResetFallDistance)
                 }
@@ -126,13 +128,13 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
         // Night Vision
         if(getEnergyStored(itemStack) > 5 && itemStack.getItem == ItemManager.electricArmorHelmet &&
                 ModifierNightVision.hasNightVision(itemStack)) {
-            player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 220, 0, false, false))
+            player.addPotionEffect(new PotionEffect(MobEffects.nightVision, 220, 0, false, false))
             if (!player.capabilities.isCreativeMode && !world.isRemote) {
                 extractEnergy(itemStack, 1, simulate = false)
                 updateDamage(itemStack)
             }
         } else if(itemStack.getItem == ItemManager.electricArmorHelmet) {
-            player.removePotionEffect(Potion.nightVision.id)
+            player.removePotionEffect(MobEffects.nightVision)
         }
 
         // Sprinting
@@ -142,14 +144,14 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
                 PlayerUpdateEvent.dontChangeFOV = true
                 PlayerUpdateEvent.previousFOV = Minecraft.getMinecraft.gameSettings.fovSetting
             }
-            player.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 20,
+            player.addPotionEffect(new PotionEffect(MobEffects.moveSpeed, 20,
                 ModifierSprinting.getSprintingLevel(itemStack) * 10 - 1, false, false))
             if (!player.capabilities.isCreativeMode && !world.isRemote) {
                 extractEnergy(itemStack, 1, simulate = false)
                 updateDamage(itemStack)
             }
         } else if(itemStack.getItem == ItemManager.electricArmorLeggings) {
-            player.removePotionEffect(Potion.moveSpeed.id)
+            player.removePotionEffect(MobEffects.moveSpeed)
         }
 
         // Glider
@@ -175,7 +177,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
 
     def addPotionToPlayer(player : EntityPlayer, potion : Potion, amplifier : Int): Unit = {
         if(player.getActivePotionEffect(potion) == null)
-            player.addPotionEffect(new PotionEffect(potion.id, 220, amplifier, true, false))
+            player.addPotionEffect(new PotionEffect(potion, 220, amplifier, true, false))
     }
 
     /*******************************************************************************************************************
@@ -187,7 +189,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : Int) extends
       */
     override def acceptableUpgrades: util.ArrayList[String] = {
         val list = new util.ArrayList[String]()
-        armorType match {
+        3 - armorType.getIndex match {
             case 0 =>
                 list.add(ItemManager.itemRegistry.get(classOf[ItemModifierNightVision]).asInstanceOf[BaseUpgradeItem].getUpgradeName)
             case 1 =>

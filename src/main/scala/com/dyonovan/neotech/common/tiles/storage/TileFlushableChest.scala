@@ -2,12 +2,12 @@ package com.dyonovan.neotech.common.tiles.storage
 
 import com.dyonovan.neotech.common.container.storage.ContainerFlushableChest
 import com.dyonovan.neotech.managers.BlockManager
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import com.teambr.bookshelf.common.tiles.traits.{Syncable, UpdatingTile, Inventory}
+import com.teambr.bookshelf.common.tiles.traits.{Syncable, Inventory}
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.init.SoundEvents
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{EnumParticleTypes, AxisAlignedBB}
+import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.{SoundCategory, EnumParticleTypes}
 
 /**
   * Created by Dyonovan on 1/22/2016.
@@ -40,8 +40,8 @@ class TileFlushableChest extends Syncable with Inventory {
         prevLidAngle = lidAngle
         val f = 0.1F
         if(numUsingPlayers > 0 && lidAngle == 0.0F)
-            worldObj.playSoundEffect(pos.getX + 0.5D, pos.getY + 0.5, pos.getZ + 0.5, "random.chestopen", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F)
-
+            worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_chest_open,
+                SoundCategory.BLOCKS, 0.3F, 0.5F)
         if((numUsingPlayers == 0 && lidAngle > 0.0F) || (numUsingPlayers > 0 && lidAngle < 1.0F)) {
             val f1 = lidAngle
             if(numUsingPlayers > 0)
@@ -54,8 +54,8 @@ class TileFlushableChest extends Syncable with Inventory {
 
             val f2 = 0.5F
             if(lidAngle < f2 && f1 > f2)
-                worldObj.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.chestclosed", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F)
-
+                worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_chest_close,
+                    SoundCategory.BLOCKS, 0.3F, 0.5F)
             if(lidAngle < 0.0F)
                 lidAngle = 0.0F
         }
@@ -91,7 +91,8 @@ class TileFlushableChest extends Syncable with Inventory {
     override def clear() = {
         super.clear()
         if(worldObj != null && !worldObj.isRemote) {
-            worldObj.playSoundEffect(pos.getX + 0.5, pos.getY + 0.5D, pos.getZ + 0.5, "random.fizz", 0.5F, worldObj.rand.nextFloat() * 0.1F + 0.9F)
+            worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_lava_extinguish,
+                SoundCategory.BLOCKS, 0.3F, 0.5F)
             sendValueToClient(0, 0)
         }
     }

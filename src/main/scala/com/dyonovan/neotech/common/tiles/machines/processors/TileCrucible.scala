@@ -13,7 +13,8 @@ import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{EnumParticleTypes, EnumFacing, StatCollector}
+import net.minecraft.util.text.translation.I18n
+import net.minecraft.util.{EnumParticleTypes, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank, IFluidHandler}
 
@@ -219,7 +220,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
     /**
       * Called when something happens to the tank, you should mark the block for update here if a tile
       */
-    override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
+    override def onTankChanged(tank: FluidTank): Unit = worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
 
     /**
       * Returns true if the given fluid can be inserted into the given direction.
@@ -315,16 +316,16 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
                 GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
-                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" +                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrucible.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + StatCollector.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricCrucible.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.control") + ":\n" +
-                GuiColor.WHITE + StatCollector.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + StatCollector.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  StatCollector.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" + GuiColor.WHITE + I18n.translateToLocal("neotech.electricCrucible.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricCrucible.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
     }
 
     /**

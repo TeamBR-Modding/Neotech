@@ -9,6 +9,7 @@ import com.dyonovan.neotech.universe.items.SunItem
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.helper.LogHelper
 import gnu.trove.map.hash.THashMap
+import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -54,10 +55,10 @@ object ItemManager {
     val electricSword = new ElectricSword
 
     //Electric Armor
-    val electricArmorHelmet = new ItemElectricArmor("electricArmorHelmet", 1, 0)
-    val electricArmorChestplate = new ItemElectricArmor("electricArmorChestplate", 1, 1)
-    val electricArmorLeggings = new ItemElectricArmor("electricArmorLeggings", 2, 2)
-    val electricArmorBoots = new ItemElectricArmor("electricArmorBoots", 1, 3)
+    val electricArmorHelmet = new ItemElectricArmor("electricArmorHelmet", 1, EntityEquipmentSlot.HEAD)
+    val electricArmorChestplate = new ItemElectricArmor("electricArmorChestplate", 1, EntityEquipmentSlot.CHEST)
+    val electricArmorLeggings = new ItemElectricArmor("electricArmorLeggings", 2, EntityEquipmentSlot.LEGS)
+    val electricArmorBoots = new ItemElectricArmor("electricArmorBoots", 1, EntityEquipmentSlot.FEET)
 
     // Universe Items
     val inertSun = new SunItem("inertSun")

@@ -1,9 +1,5 @@
 package com.dyonovan.neotech.common
 
-import com.dyonovan.neotech.managers.BlockManager
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
-import net.minecraft.client.renderer.block.statemap.StateMap.Builder
-import net.minecraftforge.client.model.ModelLoader
 
 /**
  * This file was created for NeoTech

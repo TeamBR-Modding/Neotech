@@ -9,13 +9,13 @@ import com.dyonovan.neotech.managers.ItemManager
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
-import net.minecraft.block.properties.PropertyInteger
-import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing}
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
+import net.minecraft.util.{EnumBlockRenderType, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
 /**
@@ -36,9 +36,9 @@ class BlockMiniatureSun(name: String, tileEntity: Class[_ <: TileEntity]) extend
     setDefaultState(this.blockState.getBaseState
             .withProperty(NeoStates.ON_BLOCK, 6.asInstanceOf[Integer]))
 
-    override def isFullBlock: Boolean = false
-    override def isFullCube : Boolean = false
-    override def isOpaqueCube : Boolean = false
+    override def isFullBlock(state : IBlockState): Boolean = false
+    override def isFullCube(state : IBlockState) : Boolean = false
+    override def isOpaqueCube(state : IBlockState) : Boolean = false
 
     override def onBlockPlaced(world: World, pos: BlockPos, facing: EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
         var attachedSide = 6
@@ -50,13 +50,13 @@ class BlockMiniatureSun(name: String, tileEntity: Class[_ <: TileEntity]) extend
             case _ =>
         }
 
-        if (attachedSide == 6 && world.getBlockState(pos.offset(facing.getOpposite)) != null && world.getBlockState(pos.offset(facing.getOpposite)).getBlock.isSideSolid(world, pos.offset(facing.getOpposite), facing)) {
+        if (attachedSide == 6 && world.getBlockState(pos.offset(facing.getOpposite)) != null && world.getBlockState(pos.offset(facing.getOpposite)).getBlock.isSideSolid(world.getBlockState(pos.offset(facing.getOpposite)), world, pos.offset(facing.getOpposite), facing)) {
             attachedSide = facing.getOpposite.ordinal()
         }
 
         if(attachedSide == 6) {
             for (dir <- EnumFacing.values()) {
-                if (attachedSide == 6 && world.getBlockState(pos.offset(dir)) != null && world.getBlockState(pos.offset(dir)).getBlock.isSideSolid(world, pos.offset(dir), dir.getOpposite))
+                if (attachedSide == 6 && world.getBlockState(pos.offset(dir)) != null && world.getBlockState(pos.offset(dir)).getBlock.isSideSolid(world.getBlockState(pos.offset(dir)), world, pos.offset(dir), dir.getOpposite))
                     attachedSide = dir.ordinal()
             }
         }
@@ -92,15 +92,15 @@ class BlockMiniatureSun(name: String, tileEntity: Class[_ <: TileEntity]) extend
         state.getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]
     }
 
-    override def createBlockState: BlockState = {
-        new BlockState(this, NeoStates.ON_BLOCK)
+    override def createBlockState: BlockStateContainer = {
+        new BlockStateContainer(this, NeoStates.ON_BLOCK)
     }
 
-    override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos): Unit = {
-        if(worldIn.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int] == 6) {
+    override def getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
+        if(source.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int] == 6) {
             this.setBlockBounds(6F / 16F, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F, 10F / 16F)
         } else {
-            EnumFacing.getFront(worldIn.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]) match {
+            EnumFacing.getFront(source.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]) match {
                 case EnumFacing.UP =>
                     this.setBlockBounds(6F / 16F, 12F / 16F, 6F / 16F, 10F / 16F, 16F / 16F, 10F / 16F)
                 case EnumFacing.DOWN =>
@@ -121,12 +121,12 @@ class BlockMiniatureSun(name: String, tileEntity: Class[_ <: TileEntity]) extend
 
     def facingToInt(facing : EnumFacing) : Int = facing.ordinal()
 
-    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
-        this.setBlockBoundsBasedOnState(worldIn, pos)
-        super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
+    override def addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) = {
+        this.getBoundingBox(state, worldIn, pos)
+        super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity)
     }
 
-    override def getRenderType : Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         if(player.inventory.getCurrentItem != null && player.inventory.getCurrentItem.getItem == ItemManager.wrench)

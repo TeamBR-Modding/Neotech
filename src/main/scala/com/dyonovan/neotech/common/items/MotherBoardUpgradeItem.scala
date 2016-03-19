@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.common.items
 
+import java.util
+
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
@@ -22,17 +24,20 @@ import scala.collection.mutable.ArrayBuffer
 class MotherBoardUpgradeItem(name: String, stackSize: Int,
                              tab : CreativeTabs = NeoTech.tabTools) extends BaseUpgradeItem(name, stackSize, tab) {
 
-    override def getTextures: ArrayBuffer[String] = ArrayBuffer("neotech:items/upgradeControl",
+    override def getTexturesToStitch: ArrayBuffer[String] = ArrayBuffer("neotech:items/upgradeControl",
         "neotech:items/upgradeExpansion", "neotech:items/upgradeHardDrive", "neotech:items/upgradeProcessor")
 
-    override def getTextures(stack : ItemStack) : ArrayBuffer[String] = {
+    override def getTextures(stack : ItemStack): java.util.List[String] = {
+        val list = new util.ArrayList[String]()
+
         stack.getItem match {
-            case item : ItemManager.upgradeControl.type => ArrayBuffer("neotech:items/upgradeControl")
-            case item : ItemManager.upgradeExpansion.type => ArrayBuffer("neotech:items/upgradeExpansion")
-            case item : ItemManager.upgradeHardDrive.type => ArrayBuffer("neotech:items/upgradeHardDrive")
-            case item : ItemManager.upgradeProcessor.type => ArrayBuffer("neotech:items/upgradeProcessor")
-            case _ => ArrayBuffer("neotech:items/upgradeProcessor")
+            case item : ItemManager.upgradeControl.type => list.add("neotech:items/upgradeControl")
+            case item : ItemManager.upgradeExpansion.type => list.add("neotech:items/upgradeExpansion")
+            case item : ItemManager.upgradeHardDrive.type => list.add("neotech:items/upgradeHardDrive")
+            case item : ItemManager.upgradeProcessor.type => list.add("neotech:items/upgradeProcessor")
+            case _ => list.add("neotech:items/upgradeProcessor")
         }
+        list
     }
 
     /**

@@ -6,7 +6,7 @@ import com.dyonovan.neotech.lib.Reference;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -31,8 +31,8 @@ public class GuiCrafter extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y) {
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("neotech.crafter.title"), 88 - (fontRendererObj
-                .getStringWidth(StatCollector.translateToLocal("neotech.crafter.title")) / 2), 5, 0x404040);
+        this.fontRendererObj.drawString(I18n.translateToLocal("neotech.crafter.title"), 88 - (fontRendererObj
+                .getStringWidth(I18n.translateToLocal("neotech.crafter.title")) / 2), 5, 0x404040);
     }
 
     @Override

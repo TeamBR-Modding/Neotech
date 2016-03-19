@@ -14,7 +14,7 @@ import com.dyonovan.neotech.tools.modifier.ModifierSharpness.ItemModifierSharpne
 import com.dyonovan.neotech.tools.modifier.ModifierSmite.ItemModifierSmite
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
-import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.{ItemStack, ItemSword}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
@@ -62,8 +62,8 @@ class ElectricSword extends ItemSword(ToolHelper.NEOTECH_TOOLS) with BaseElectri
     /**
       * When the block is broken, apply AOE here
       */
-    override def onBlockDestroyed(stack: ItemStack, worldIn: World, blockIn: Block,
-                                  pos: BlockPos, playerIn: EntityLivingBase): Boolean = true
+    override def onBlockDestroyed(stack: ItemStack, worldIn: World, blockIn: IBlockState,
+                                  pos: BlockPos, entityLiving: EntityLivingBase): Boolean = true
 
     /**
       * Called on tick, allows us to make sure things are installed

@@ -6,7 +6,7 @@ import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.renderer.entity.RenderManager
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.client.renderer.{GlStateManager, RenderHelper, Tessellator, WorldRenderer}
+import net.minecraft.client.renderer.{VertexBuffer, GlStateManager, RenderHelper, Tessellator}
 import net.minecraft.entity.Entity
 import net.minecraft.util.math.BlockPos
 import org.lwjgl.opengl.GL11
@@ -56,7 +56,7 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
 
         renderManager.setRenderShadow(false)
         GlStateManager.pushAttrib()
-        renderManager.renderEntityWithPosYaw(ent, 0.0, 0.0, 0.0, 0.0F, partialTicks)
+        renderManager.doRenderEntity(ent, 0.0, 0.0, 0.0, 0.0F, partialTicks, true)
         GlStateManager.popAttrib()
         GlStateManager.enableLighting()
         renderManager.setRenderShadow(true)
@@ -85,7 +85,7 @@ class MobStandEntityRenderer[T <: TileMobStand] extends TileEntitySpecialRendere
             GlStateManager.enableBlend()
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
             val tessellator: Tessellator = Tessellator.getInstance
-            val worldrenderer: WorldRenderer = tessellator.getWorldRenderer
+            val worldrenderer: VertexBuffer = tessellator.getBuffer
             val i: Int = 0
             val j: Int = fontRenderer.getStringWidth(str) / 2
             GlStateManager.disableTexture2D()

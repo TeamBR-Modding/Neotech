@@ -2,12 +2,13 @@ package com.dyonovan.neotech.common.blocks.misc
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
-import net.minecraft.block.properties.IProperty
 import net.minecraft.block.{BlockPressurePlate, BlockBasePressurePlate}
 import net.minecraft.block.material.Material
-import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{AxisAlignedBB, BlockPos}
+import net.minecraft.init.SoundEvents
+import net.minecraft.util.SoundCategory
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.World
 
 /**
@@ -52,7 +53,15 @@ class BlockPlayerPlate extends BlockBasePressurePlate(Material.iron) {
          if(state.getValue(BlockPressurePlate.POWERED).asInstanceOf[Boolean]) 1 else 0
     }
 
-    override def createBlockState() : BlockState = {
-         new BlockState(this, BlockPressurePlate.POWERED)
+    override def createBlockState() : BlockStateContainer = {
+         new BlockStateContainer(this, BlockPressurePlate.POWERED)
     }
+
+    override def playClickOnSound(worldIn: World, color: BlockPos): Unit =
+        worldIn.playSound(null.asInstanceOf[EntityPlayer], color, SoundEvents.block_stone_pressplate_click_on,
+            SoundCategory.BLOCKS, 0.3F, 0.6F)
+
+    override def playClickOffSound(worldIn: World, pos: BlockPos): Unit =
+        worldIn.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_stone_pressplate_click_off,
+            SoundCategory.BLOCKS, 0.3F, 0.5F)
 }

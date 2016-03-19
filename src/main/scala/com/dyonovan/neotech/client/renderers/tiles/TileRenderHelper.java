@@ -1,31 +1,20 @@
 package com.dyonovan.neotech.client.renderers.tiles;
 
 import com.teambr.bookshelf.util.RenderUtils;
-import mezz.jei.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
-
-import net.minecraftforge.client.model.pipeline.LightUtil;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import java.util.List;
 
 /**
  * This file was created for NeoTech
@@ -166,7 +155,7 @@ public abstract class TileRenderHelper<T extends TileEntity> extends TileEntityS
         float maxV = icon.getMaxV();
         int sizeX = 16;
         int sizeY = 16;
-        WorldRenderer tes = Tessellator.getInstance().getWorldRenderer();
+        VertexBuffer tes = Tessellator.getInstance().getBuffer();
 
         tes.begin(GL11.GL_QUADS, RenderUtils.POSITION_TEX_NORMALF());
         tes.pos(posX, posY + sizeY, 0).tex(minU, maxV).normal(0, -1, 0).endVertex();

@@ -33,7 +33,12 @@ class ItemGuiManager extends IGuiHandler {
 
         ID match {
             case ItemGuiManager.TRASH_BAG_GUI_ID =>
-                new GuiTrashBag(ItemTrashBag.getInventory(player.getHeldItem), player.inventory, player.getHeldItem)
+                if(player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem == ItemManager.trashBag)
+                    new GuiTrashBag(ItemTrashBag.getInventory(player.getHeldItemMainhand), player.inventory, player.getHeldItemMainhand)
+                else if(player.getHeldItemOffhand != null && player.getHeldItemOffhand.getItem == ItemManager.trashBag)
+                    new GuiTrashBag(ItemTrashBag.getInventory(player.getHeldItemOffhand), player.inventory, player.getHeldItemOffhand)
+                else
+                    null
             case _ => null
         }
     }
@@ -47,7 +52,12 @@ class ItemGuiManager extends IGuiHandler {
 
         ID match {
             case ItemGuiManager.TRASH_BAG_GUI_ID =>
-                new ContainerTrashBag(ItemTrashBag.getInventory(player.getHeldItem), player.inventory, player.getHeldItem)
+                if(player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem == ItemManager.trashBag)
+                    new ContainerTrashBag(ItemTrashBag.getInventory(player.getHeldItemMainhand), player.inventory, player.getHeldItemMainhand)
+                else if(player.getHeldItemOffhand != null && player.getHeldItemOffhand.getItem == ItemManager.trashBag)
+                    new ContainerTrashBag(ItemTrashBag.getInventory(player.getHeldItemOffhand), player.inventory, player.getHeldItemOffhand)
+                else
+                    null
             case _ => null
         }
     }

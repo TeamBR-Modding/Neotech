@@ -5,7 +5,7 @@ import com.teambr.bookshelf.common.tiles.traits.{Inventory, Syncable}
 import net.minecraft.entity.{Entity, EntityList, EntityLivingBase}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.AxisAlignedBB
+import net.minecraft.util.math.AxisAlignedBB
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -51,7 +51,7 @@ class TileMobStand extends Syncable with Inventory {
             entity = EntityList.createEntityByName(entityType, worldObj)
             if (entity == null) {
                 entityType = null
-                worldObj.markBlockForUpdate(pos)
+                worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
                 return
             }
             entity.readFromNBT(stack.getTagCompound)
@@ -62,11 +62,11 @@ class TileMobStand extends Syncable with Inventory {
             entity.asInstanceOf[EntityLivingBase].renderYawOffset = 0.0F
             if (stack.hasDisplayName)
                 entity.setCustomNameTag(stack.getDisplayName)
-            worldObj.markBlockForUpdate(pos)
+            worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
         } else {
             entity = null
             entityType = null
-            worldObj.markBlockForUpdate(pos)
+            worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
         }
     }
 

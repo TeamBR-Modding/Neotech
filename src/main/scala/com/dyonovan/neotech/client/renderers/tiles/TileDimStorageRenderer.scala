@@ -2,7 +2,7 @@ package com.dyonovan.neotech.client.renderers.tiles
 
 import com.dyonovan.neotech.common.blocks.storage.BlockDimStorage
 import com.dyonovan.neotech.common.tiles.storage.TileDimStorage
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
+import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.bookshelf.util.RenderUtils
 import net.minecraft.client.renderer.{GlStateManager, RenderHelper}
 import net.minecraft.util.EnumFacing
@@ -30,7 +30,7 @@ class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA)
             GlStateManager.enableLighting()
             for(dir <- EnumFacing.values()) {
-                if(tile.getWorld.getBlockState(tile.getPos).getValue(PropertyRotation.FOUR_WAY) == dir) {
+                if(tile.getWorld.getBlockState(tile.getPos).getValue(Properties.FOUR_WAY) == dir) {
 
                     mc.entityRenderer.disableLightmap()
                     RenderHelper.enableGUIStandardItemLighting()
@@ -38,7 +38,7 @@ class TileDimStorageRenderer extends TileRenderHelper[TileDimStorage]{
 
                     val stack = tile.getStackInSlot(0).copy()
                     stack.stackSize = 1
-                    renderStackOnBlock(stack, dir,  tile.getWorld.getBlockState(tile.getPos).getValue(PropertyRotation.FOUR_WAY), new LocationDouble(x, y, z), 6.8F, 72.0F, 112.0F)
+                    renderStackOnBlock(stack, dir,  tile.getWorld.getBlockState(tile.getPos).getValue(Properties.FOUR_WAY), new LocationDouble(x, y, z), 6.8F, 72.0F, 112.0F)
 
                     RenderHelper.disableStandardItemLighting()
                     mc.entityRenderer.enableLightmap()

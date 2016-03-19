@@ -5,7 +5,6 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.collections.{Filter, WorldPipes}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.network.NetworkManager
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -89,7 +88,7 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
         super[Upgradeable].writeToNBT(tag)
         super[Filter].writeToNBT(tag)
         super[InputOutput].writeToNBT(tag)
-        super[TileCoverable].writeToNBT(tag)
+        super[Syncable].writeToNBT(tag)
         tag.setInteger("mode", mode)
         tag.setInteger("redstone", redstone)
         tag.setInteger("frequency", frequency)
@@ -111,14 +110,14 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
         super[Upgradeable].readFromNBT(tag)
         super[Filter].readFromNBT(tag)
         super[InputOutput].readFromNBT(tag)
-        super[TileCoverable].readFromNBT(tag)
+        super[Syncable].readFromNBT(tag)
         mode = tag.getInteger("mode")
         redstone = tag.getInteger("redstone")
         frequency = tag.getInteger("frequency")
         if(tag.hasKey("ReRender") && tag.getBoolean("ReRender") && getWorld != null)
             worldObj.markBlockRangeForRenderUpdate(getPos, getPos)
     }
-
+/*
     /**
       * Used to identify the packet that will get called on update
       *
@@ -141,7 +140,7 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
         this.readFromNBT(pkt.getNbtCompound)
         getMicroblockContainer.getPartContainer.readDescription(pkt.getNbtCompound)
     }
-
+*/
     /**
       * Used to mark for update
       */
@@ -154,7 +153,7 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
         mode = 0
         redstone = 0
         frequency = 0
-        getWorld.markBlockForUpdate(getPos)
+        worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 6)
     }
 
     @SideOnly(Side.CLIENT)
@@ -169,16 +168,16 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
 
     override def setVariable(id : Int, value : Double) = {
         id match {
-            case AdvancedPipe.REDSTONE_FIELD_ID => redstone = value.toInt; worldObj.markBlockForUpdate(getPos)
-            case AdvancedPipe.MODE_FIELD_ID => mode = value.toInt; worldObj.markBlockForUpdate(getPos)
+            case AdvancedPipe.REDSTONE_FIELD_ID => redstone = value.toInt; worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 6)
+            case AdvancedPipe.MODE_FIELD_ID => mode = value.toInt; worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 6)
             case AdvancedPipe.IO_FIELD_ID =>
                 toggleMode(EnumFacing.getFront(value.toInt))
                 reRender = true
-                worldObj.markBlockForUpdate(getPos)
+                worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 3)
                 WorldPipes.notifyPipes()
             case AdvancedPipe.FREQUENCY =>
                 frequency = value.toInt
-                worldObj.markBlockForUpdate(getPos)
+                worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 6)
                 WorldPipes.notifyPipes()
             case AdvancedPipe.FILTER =>
                 value.toInt match {
@@ -188,7 +187,7 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
                     case AdvancedPipe.FILTER_BLACKLIST => blackList = !blackList
                     case _ =>
                 }
-                worldObj.markBlockForUpdate(getPos)
+                worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 3)
                 WorldPipes.notifyPipes()
             case _ =>
         }

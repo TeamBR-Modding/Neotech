@@ -5,7 +5,8 @@ import net.minecraft.entity.monster.EntityMob
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityList}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{EnumFacing, MovingObjectPosition}
+import net.minecraft.util.math.RayTraceResult
+import net.minecraft.util.{EnumActionResult, ActionResult, EnumHand, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -24,11 +25,10 @@ object ItemMobNet {
 }
 
 class ItemMobNet extends BaseItem("mobNet", 16) {
-
-    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
-        if (stack.hasTagCompound && !world.isRemote) {
+    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand) : ActionResult[ItemStack] = {
+    if (stack.hasTagCompound && !world.isRemote) {
             val mop = getMovingObjectPositionFromPlayer(world, player, false)
-            if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
                 val entity = EntityList.createEntityByName(stack.getTagCompound.getString("type"), world)
                 if (entity != null) {
                     entity.readFromNBT(stack.getTagCompound)
@@ -46,7 +46,7 @@ class ItemMobNet extends BaseItem("mobNet", 16) {
                 }
             }
         }
-        stack
+        new ActionResult[ItemStack](EnumActionResult.PASS, stack)
     }
 
     def offsetInDir(entity : Entity, dir : EnumFacing) = {

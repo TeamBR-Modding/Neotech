@@ -29,7 +29,7 @@ class SpawnJetpackParticles extends IMessage with IMessageHandler[SpawnJetpackPa
         x = player.posX
         y = player.posY
         z = player.posZ
-        dimId = player.worldObj.provider.getDimensionId
+        dimId = player.worldObj.provider.getDimension
     }
 
     override def toBytes(buf: ByteBuf): Unit = {

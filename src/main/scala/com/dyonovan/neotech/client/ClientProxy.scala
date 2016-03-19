@@ -6,19 +6,28 @@ import com.dyonovan.neotech.client.renderers.entity.{RenderSun, RenderNet}
 import com.dyonovan.neotech.client.renderers.tiles._
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.entities.EntityNet
+import com.dyonovan.neotech.common.fluids.FluidBlockGas
+import com.dyonovan.neotech.common.metals.blocks.BlockFluidMetal
+import com.dyonovan.neotech.common.metals.items.ItemMetal
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
 import com.dyonovan.neotech.events.{GuiEvents, RenderingEvents}
-import com.dyonovan.neotech.managers.{BlockManager, MetalManager}
+import com.dyonovan.neotech.managers.{FluidManager, BlockManager, MetalManager}
 import com.dyonovan.neotech.universe.entities.EntitySun
+import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.color.{IItemColor, IBlockColor}
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.client.resources.IReloadableResourceManager
-import net.minecraft.item.{EnumDyeColor, Item}
+import net.minecraft.item.{ItemStack, EnumDyeColor, Item}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.world.IBlockAccess
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.{ClientRegistry, IRenderFactory, RenderingRegistry}
+
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -65,7 +74,7 @@ class ClientProxy extends CommonProxy {
         ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeItemInterface), new PipeSpecialModelMesh)
         ItemRenderManager.registerBlockModel(
             BlockManager.pipeItemInterface,
-                "pipeItemBasicInterface",
+            "pipeItemBasicInterface",
             "down=2,east=0,north=0,south=0,up=1,west=0")
 
         //Fluid Stuff
@@ -131,6 +140,72 @@ class ClientProxy extends CommonProxy {
 
         KeybindHandler.registerBindings()
         MinecraftForge.EVENT_BUS.register(ClientTickHandler)
+
+        // Register fluid colors
+        for(metal <- MetalManager.metalRegistry.keySet()) {
+            Minecraft.getMinecraft.getBlockColors.registerBlockColorHandler(new IBlockColor {
+                override def colorMultiplier(state: IBlockState, world: IBlockAccess, pos: BlockPos, tintIndex: Int): Int = {
+                    state.getBlock match {
+                        case metal: BlockFluidMetal => metal.getBlockColor
+                        case _ => 0xFFFFFF
+                    }
+                }
+            }, MetalManager.metalRegistry.get(metal).fluidBlock.get)
+        }
+
+        Minecraft.getMinecraft.getBlockColors.registerBlockColorHandler(new IBlockColor {
+            override def colorMultiplier(state: IBlockState, world: IBlockAccess, pos: BlockPos, tintIndex: Int): Int = {
+                state.getBlock match {
+                    case metal: FluidBlockGas => metal.getBlockColor
+                    case _ => 0xFFFFFF
+                }
+            }
+        }, FluidManager.blockOxygen)
+
+
+        Minecraft.getMinecraft.getBlockColors.registerBlockColorHandler(new IBlockColor {
+            override def colorMultiplier(state: IBlockState, world: IBlockAccess, pos: BlockPos, tintIndex: Int): Int = {
+                state.getBlock match {
+                    case metal: FluidBlockGas => metal.getBlockColor
+                    case _ => 0xFFFFFF
+                }
+            }
+        }, FluidManager.blockHydrogen)
+
+        for(metal <- MetalManager.metalRegistry.keySet()) {
+            // Dusts
+            if(MetalManager.metalRegistry.get(metal).dust.isDefined)
+                Minecraft.getMinecraft.getItemColors.registerItemColorHandler(new IItemColor {
+                    override def getColorFromItemstack(stack: ItemStack, tintIndex: Int): Int = {
+                        stack.getItem match {
+                            case metal : ItemMetal => metal.getColorFromItemStack(stack)
+                            case _ => 0xFFFFFF
+                        }
+                    }
+                }, MetalManager.metalRegistry.get(metal).dust.get)
+
+            // Ingots
+            if(MetalManager.metalRegistry.get(metal).ingot.isDefined)
+                Minecraft.getMinecraft.getItemColors.registerItemColorHandler(new IItemColor {
+                    override def getColorFromItemstack(stack: ItemStack, tintIndex: Int): Int = {
+                        stack.getItem match {
+                            case metal : ItemMetal => metal.getColorFromItemStack(stack)
+                            case _ => 0xFFFFFF
+                        }
+                    }
+                }, MetalManager.metalRegistry.get(metal).ingot.get)
+
+            // Nuggets
+            if(MetalManager.metalRegistry.get(metal).nugget.isDefined)
+                Minecraft.getMinecraft.getItemColors.registerItemColorHandler(new IItemColor {
+                    override def getColorFromItemstack(stack: ItemStack, tintIndex: Int): Int = {
+                        stack.getItem match {
+                            case metal : ItemMetal => metal.getColorFromItemStack(stack)
+                            case _ => 0xFFFFFF
+                        }
+                    }
+                }, MetalManager.metalRegistry.get(metal).nugget.get)
+        }
 
         Minecraft.getMinecraft.getRenderItem.getItemModelMesher.getModelManager.getBlockModelShapes.registerBuiltInBlocks(BlockManager.flushableChest)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileFlushableChest], new TileFlushableChestRenderer[TileFlushableChest])

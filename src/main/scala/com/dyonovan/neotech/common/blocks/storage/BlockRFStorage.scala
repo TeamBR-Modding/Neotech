@@ -16,7 +16,8 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{EnumBlockRenderType, EnumFacing}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -65,7 +66,7 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
                 tile.energyStorage.setEnergyStored(stack.getTagCompound.getInteger("Energy"))
             if (tile.tier == 4)
                 tile.energyStorage.setEnergyStored(tile.amountEnergy(tile.tier))
-            world.markBlockForUpdate(pos)
+            world.setBlockState(pos, state, 3)
         }
     }
 
@@ -95,7 +96,7 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
                 .asInstanceOf[TileRFStorage], title)
     }
 
-    override def getRenderType: Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     def getName: String = name
 

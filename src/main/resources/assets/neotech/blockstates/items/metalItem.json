@@ -1,7 +1,8 @@
 {
     "forge_marker": 1,
+    "parent" : "item/generated",
     "defaults": {
-        "model": "builtin/generated",
+        "model": "item/generated",
         "transform": "forge:default-item"
     },
     "variants": {

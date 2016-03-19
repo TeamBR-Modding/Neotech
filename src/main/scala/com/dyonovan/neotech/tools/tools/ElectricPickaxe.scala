@@ -22,7 +22,8 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{ItemPickaxe, ItemStack}
-import net.minecraft.util.{BlockPos, EnumFacing, MovingObjectPosition}
+import net.minecraft.util.{EnumActionResult, EnumHand, EnumFacing}
+import net.minecraft.util.math.{RayTraceResult, BlockPos}
 import net.minecraft.world.World
 
 import scala.collection.JavaConversions._
@@ -111,8 +112,8 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
     /**
       * Get the dig speed
       */
-    override def getDigSpeed(stack: ItemStack, state: IBlockState): Float =
-        if(super.getDigSpeed(stack, state) > 1.0F) ModifierMiningSpeed.getMiningSpeed(stack) else super.getDigSpeed(stack, state)
+    override def getStrVsBlock(stack: ItemStack, state: IBlockState): Float =
+        if(super.getStrVsBlock(stack, state) > 1.0F) ModifierMiningSpeed.getMiningSpeed(stack) else super.getStrVsBlock(stack, state)
 
     /**
       * Lets us set creative able to break, also checks if has power
@@ -123,7 +124,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
         else if (player.capabilities.isCreativeMode) {
             val world = player.worldObj
             val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
-            if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
                 val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack), mop, player.asInstanceOf[EntityPlayer], world, stack)
                 for (b <- 0 until blockList.size) {
                     val newPos = blockList.get(b)
@@ -140,43 +141,47 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
     /**
       * When the block is broken, apply AOE here
       */
-    override def onBlockDestroyed(stack: ItemStack, world: World, block: Block, pos: BlockPos, player: EntityLivingBase): Boolean = {
-        if (ModifierAOE.getAOELevel(stack) > 0 && player.isInstanceOf[EntityPlayer] && ModifierAOE.isAOEActive(stack)) {
-            val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
-            if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-                val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack),
-                    mop, player.asInstanceOf[EntityPlayer], world, stack)
-                for (newPos <- blockList) {
-                    val block = world.getBlockState(newPos).getBlock
-                    if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) && ToolHelper.isToolEffective(world, newPos, stack)
-                            || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
-                        if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
-                            block.harvestBlock(world, player.asInstanceOf[EntityPlayer],
-                                newPos, world.getBlockState(newPos), world.getTileEntity(newPos))
-                        world.setBlockToAir(newPos)
-                        if (!world.isRemote && newPos != pos)
-                            world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
+    override def onBlockDestroyed(stack: ItemStack, world: World, blockIn: IBlockState, pos: BlockPos, entityLiving: EntityLivingBase): Boolean = {
+        entityLiving match {
+            case player: EntityPlayer =>
+                if (ModifierAOE.getAOELevel(stack) > 0 && player.isInstanceOf[EntityPlayer] && ModifierAOE.isAOEActive(stack)) {
+                    val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
+                    if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
+                        val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack),
+                            mop, player.asInstanceOf[EntityPlayer], world, stack)
+                        for (newPos <- blockList) {
+                            val block = world.getBlockState(newPos).getBlock
+                            if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) && ToolHelper.isToolEffective(world, newPos, stack)
+                                    || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
+                                if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
+                                    block.harvestBlock(world, player.asInstanceOf[EntityPlayer],
+                                        newPos, world.getBlockState(newPos), world.getTileEntity(newPos), stack)
+                                world.setBlockToAir(newPos)
+                                if (!world.isRemote && newPos != pos)
+                                    world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
+                            }
+                            rfCost(player.asInstanceOf[EntityPlayer], stack)
+                        }
                     }
-                    rfCost(player.asInstanceOf[EntityPlayer], stack)
-                }
-            }
-        } else rfCost(player.asInstanceOf[EntityPlayer], stack)
-        true
+                } else rfCost(player.asInstanceOf[EntityPlayer], stack)
+                true
+            case _ => true
+        }
     }
 
-    override def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos,
-                           side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
-        val position = pos.offset(side)
+    override def onItemUse(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand,
+                           facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : EnumActionResult = {
+        val position = pos.offset(facing)
         if(getEnergyStored(stack) > RF_COST(stack) &&
                 ModifierLighting.hasLighting(stack) && ModifierLighting.isLightingActive(stack)
-                && worldIn.getBlockState(position).getBlock.isAir(worldIn, position)) {
-            worldIn.playSoundAtEntity(playerIn, "random.wood_click", 1.0F, 1.0F)
+                && worldIn.getBlockState(position).getBlock.isAir(worldIn.getBlockState(position), worldIn, position)) {
+           // worldIn.playSoundAtEntity(playerIn, "random.wood_click", 1.0F, 1.0F)
             worldIn.setBlockState(position, BlockManager.lightSource.getDefaultState)
-            worldIn.markBlockForUpdate(position)
+            worldIn.setBlockState(position, worldIn.getBlockState(position), 3)
             rfCost(playerIn, stack)
-            return true
+            return EnumActionResult.SUCCESS
         }
-        false
+        EnumActionResult.PASS
     }
 
     override def onUpdate(stack: ItemStack, worldIn: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
@@ -186,10 +191,9 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
             if(getEnergyStored(stack) > RF_COST(stack) &&
                     worldIn.getLightBrightness(pos) < 0.5 &&
                     ModifierLighting.isLightingActive(stack) &&
-                    worldIn.getBlockState(pos).getBlock.isAir(worldIn, pos) &&
+                    worldIn.getBlockState(pos).getBlock.isAir(worldIn.getBlockState(pos), worldIn, pos) &&
                     worldIn.getBlockState(pos).getBlock != BlockManager.lightSource) {
-                worldIn.setBlockState(pos, BlockManager.lightSource.getDefaultState)
-                worldIn.markBlockForUpdate(pos)
+                worldIn.setBlockState(pos, BlockManager.lightSource.getDefaultState, 3)
                 rfCost(entityIn.asInstanceOf[EntityPlayer], stack)
             }
         }

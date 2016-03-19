@@ -8,8 +8,10 @@ import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.bookshelf.loadables.CreatesTextures
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -31,7 +33,7 @@ class BlockCrafter(name: String, tileEntity: Class[_ <: TileEntity]) extends Bas
 
     setHardness(1.5F)
 
-    override def getRenderType: Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         new ContainerCrafter(player.inventory, world.getTileEntity(new BlockPos(x, y, z)).asInstanceOf[TileCrafter])

@@ -4,7 +4,7 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.teambr.bookshelf.annotations.ModItem
-import net.minecraft.enchantment.Enchantment
+import net.minecraft.init.Enchantments
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
@@ -45,7 +45,7 @@ object ModifierSmite extends Modifier("smite") {
       * Write info to tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantment.smite.effectId, getSmiteLevel(stack) + count)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.smite, getSmiteLevel(stack) + count)
         tag.setInteger(SMITE, getSmiteLevel(stack) + count)
         super.writeToNBT(tag, stack)
         tag

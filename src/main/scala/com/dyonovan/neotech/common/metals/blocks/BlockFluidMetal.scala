@@ -3,7 +3,8 @@ package com.dyonovan.neotech.common.metals.blocks
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.block.material.Material
-import net.minecraft.util.{BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.fluids.{BlockFluidClassic, Fluid}
 
@@ -20,7 +21,8 @@ import net.minecraftforge.fluids.{BlockFluidClassic, Fluid}
 class BlockFluidMetal(fluidMetal: Fluid) extends BlockFluidClassic(fluidMetal, Material.lava) {
     setUnlocalizedName(Reference.MOD_ID + "." + fluidMetal.getName)
 
-    override def getBlockColor : Int = fluidMetal.getColor
+
+    def getBlockColor : Int = fluidMetal.getColor
 
     //For setting fire and not burning ourselves
     override def getFireSpreadSpeed(world : IBlockAccess, pos : BlockPos, facing : EnumFacing) : Int = 300

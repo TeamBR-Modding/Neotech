@@ -4,8 +4,6 @@ import java.util
 import java.util.Comparator
 
 import com.dyonovan.neotech.managers.BlockManager
-import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, FluidHandler, UpdatingTile}
 import net.minecraft.block.BlockLiquid
 import net.minecraft.init.Blocks
@@ -211,7 +209,7 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler {
     /**
       * Called when something happens to the tank, you should mark the block for update here if a tile
       */
-    override def onTankChanged(tank: FluidTank): Unit = worldObj.markBlockForUpdate(pos)
+    override def onTankChanged(tank: FluidTank): Unit = worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
 
     /**
       * Returns true if the given fluid can be inserted into the given direction.

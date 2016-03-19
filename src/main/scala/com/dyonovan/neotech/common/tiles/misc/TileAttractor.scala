@@ -5,7 +5,8 @@ import com.teambr.bookshelf.common.tiles.traits.{InventorySided, UpdatingTile}
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{AxisAlignedBB, EnumFacing, EnumParticleTypes}
+import net.minecraft.util.math.AxisAlignedBB
+import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.items.CapabilityItemHandler
 
@@ -49,7 +50,7 @@ class TileAttractor extends UpdatingTile with InventorySided {
                     entityItem.setDead()
                     itemList.remove(0)
                 } else entityItem.getEntityItem.stackSize = actual.get
-                worldObj.markBlockForUpdate(pos)
+                worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
             }
         }
         if (itemList != null && itemList.isEmpty) itemList = null

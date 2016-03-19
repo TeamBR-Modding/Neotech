@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.{BlockFluidClassic, Fluid}
   */
 class FluidBlockGas(fluidGas: Fluid) extends BlockFluidClassic(fluidGas, Material.lava) {
     setUnlocalizedName(Reference.MOD_ID + "." + fluidGas.getName)
-    override def getBlockColor : Int = fluidGas.getColor
+    def getBlockColor : Int = fluidGas.getColor
 
     override def getLocalizedName : String = {
         ClientUtils.translate("fluid." + fluidGas.getName + ".name")

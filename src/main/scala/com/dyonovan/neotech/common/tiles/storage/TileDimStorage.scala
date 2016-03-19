@@ -4,8 +4,6 @@ import java.util
 
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.managers.ItemManager
-import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.init.Blocks
@@ -130,7 +128,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Upgradeable {
                     newStack.stackSize = 1
                     inventoryContents.set(0, newStack)
                     qty = originalStack.stackSize
-                    worldObj.markBlockForUpdate(pos)
+                    worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
                 }
                 return null
             } else {
@@ -139,7 +137,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Upgradeable {
                 returnStack.stackSize = originalStack.stackSize - Math.min(originalStack.stackSize, (inventoryContents.get(0).getMaxStackSize * maxStacks) - qty)
                 if (!simulate) {
                     qty += originalStack.stackSize - returnStack.stackSize
-                    worldObj.markBlockForUpdate(pos)
+                    worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
                 }
                 if (returnStack.stackSize > 0) return returnStack else return null
             }
@@ -157,7 +155,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Upgradeable {
             if (!simulate) {
                 qty -= actual
                 checkQty()
-                worldObj.markBlockForUpdate(pos)
+                worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
             }
             return returnStack
         }
@@ -210,7 +208,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Upgradeable {
             dropStacks(leftOver, getStackInSlot(0).copy())
             qty = maxStacks * getStackInSlot(0).getMaxStackSize
         }
-        worldObj.markBlockForUpdate(pos)
+        worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
     }
 
     def compareOreDict(stack: ItemStack): Boolean = {

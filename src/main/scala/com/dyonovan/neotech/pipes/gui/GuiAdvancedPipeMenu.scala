@@ -14,7 +14,8 @@ import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.text.translation.I18n
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -51,34 +52,34 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
     }
 
     override def addComponents(): Unit = {
-        components +=  new GuiComponentButton(if (tile.isInstanceOf[ItemInterfacePipe]) 8 else 61, 45, 50, 20, if (tile.blackList) StatCollector.translateToLocal("neotech.text.blacklist") else StatCollector.translateToLocal("neotech.text.whitelist")) {
+        components +=  new GuiComponentButton(if (tile.isInstanceOf[ItemInterfacePipe]) 8 else 61, 45, 50, 20, if (tile.blackList) I18n.translateToLocal("neotech.text.blacklist") else I18n.translateToLocal("neotech.text.whitelist")) {
             override def doAction(): Unit = {
                 tile.setVariable(AdvancedPipe.FILTER, AdvancedPipe.FILTER_BLACKLIST)
                 tile.sendValueToServer(AdvancedPipe.FILTER, AdvancedPipe.FILTER_BLACKLIST)
             }
 
             override def renderOverlay(i: Int, j: Int, x: Int, y: Int) = {
-                setText(if (tile.blackList) StatCollector.translateToLocal("neotech.text.blacklist") else StatCollector.translateToLocal("neotech.text.whitelist"))
+                setText(if (tile.blackList) I18n.translateToLocal("neotech.text.blacklist") else I18n.translateToLocal("neotech.text.whitelist"))
                 super.renderOverlay(i, j, x, y)
             }
         }
 
         if (tile.isInstanceOf[ItemInterfacePipe]) {
-            components += new GuiComponentCheckBox(8, 70, StatCollector.translateToLocal("neotech.text.oredict"), tile.matchOreDict) {
+            components += new GuiComponentCheckBox(8, 70, I18n.translateToLocal("neotech.text.oredict"), tile.matchOreDict) {
                 override def setValue(bool: Boolean): Unit = {
                     tile.setVariable(AdvancedPipe.FILTER, AdvancedPipe.FILTER_MATCH_ORE)
                     tile.sendValueToServer(AdvancedPipe.FILTER, AdvancedPipe.FILTER_MATCH_ORE)
                 }
             }
 
-            components += new GuiComponentCheckBox(100, 55, StatCollector.translateToLocal("neotech.text.damage"), tile.matchDamage) {
+            components += new GuiComponentCheckBox(100, 55, I18n.translateToLocal("neotech.text.damage"), tile.matchDamage) {
                 override def setValue(bool: Boolean): Unit = {
                     tile.setVariable(AdvancedPipe.FILTER, AdvancedPipe.FILTER_MATCH_DAMAGE)
                     tile.sendValueToServer(AdvancedPipe.FILTER, AdvancedPipe.FILTER_MATCH_DAMAGE)
                 }
             }
 
-            components += new GuiComponentCheckBox(100, 70, StatCollector.translateToLocal("neotech.text.nbt"), tile.matchTag) {
+            components += new GuiComponentCheckBox(100, 70, I18n.translateToLocal("neotech.text.nbt"), tile.matchTag) {
                 override def setValue(bool: Boolean): Unit = {
                     tile.setVariable(AdvancedPipe.FILTER, AdvancedPipe.FILTER_MATCH_TAG)
                     tile.sendValueToServer(AdvancedPipe.FILTER, AdvancedPipe.FILTER_MATCH_TAG)
@@ -97,14 +98,14 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
 
             if(changeMotherboard) {
                 val motherBoardTag = new ArrayBuffer[BaseComponent]
-                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.motherboard"), 26, 6)
+                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.motherboard"), 26, 6)
                 tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.upgradeMBFull))
 
                 tabs.getTabs.head.addChild(new GuiComponentTabSlotHolder(41, 25, 18, 18, tabs.getTabs.head, container.motherboardSlot, 170 + 41, 27))
             }
 
             val selectorTab = new ArrayBuffer[BaseComponent]
-            selectorTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.ioConfig"), 29, 6)
+            selectorTab += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.ioConfig"), 29, 6)
             selectorTab += new GuiComponentSideSelector(15, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true, renderTile = false) {
                 override def setToggleController(): Unit = {
                     toggleableSidesController = new ToggleableSidesController {
@@ -122,9 +123,9 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
                     }
                 }
             }
-            selectorTab += new GuiComponentText(GuiColor.BLUE + StatCollector.translateToLocal("neotech.text.blue") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.insert"), 10, 90)
-            selectorTab += new GuiComponentText(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.orange") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.extract"), 10, 100)
-            selectorTab += new GuiComponentText(GuiColor.GREEN + StatCollector.translateToLocal("neotech.text.green") + ": " + GuiColor.WHITE + StatCollector.translateToLocal("neotech.text.both"), 10, 110)
+            selectorTab += new GuiComponentText(GuiColor.BLUE + I18n.translateToLocal("neotech.text.blue") + ": " + GuiColor.WHITE + I18n.translateToLocal("neotech.text.insert"), 10, 90)
+            selectorTab += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.orange") + ": " + GuiColor.WHITE + I18n.translateToLocal("neotech.text.extract"), 10, 100)
+            selectorTab += new GuiComponentText(GuiColor.GREEN + I18n.translateToLocal("neotech.text.green") + ": " + GuiColor.WHITE + I18n.translateToLocal("neotech.text.both"), 10, 110)
             tabs.addTab(selectorTab.toList, 100, 125, new Color(150, 150, 150), new ItemStack(Blocks.piston))
         }
     }
@@ -132,13 +133,13 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
     def addLeftTabs(tabs : GuiTabCollection, tileEntity : AdvancedPipe, container : ContainerAdvancedPipeMenu): Unit = {
         if (tileEntity != null) {
             val infoTab = new ArrayBuffer[BaseComponent]()
-            infoTab += new GuiComponentText(GuiColor.YELLOW + StatCollector.translateToLocal("neotech.text.information"), 10, 7)
+            infoTab += new GuiComponentText(GuiColor.YELLOW + I18n.translateToLocal("neotech.text.information"), 10, 7)
             infoTab += new GuiComponentLongText(10, 20, tileEntity.asInstanceOf[InterfacePipe[_, _]].getDescription, 100, 65, textScale = 50)
             tabs.addReverseTab(infoTab.toList, 120, 100, new Color(130, 0, 0), new ItemStack(Items.writable_book))
 
             if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasControl) {
                 var redstoneTab = new ArrayBuffer[BaseComponent]
-                redstoneTab += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.redstoneMode"), 5, 7)
+                redstoneTab += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.redstoneMode"), 5, 7)
                 redstoneTab += new GuiComponentButton(5, 20, 15, 20, "<") {
                     override def doAction(): Unit = {
                         tileEntity.moveRedstoneMode(-1)
@@ -162,7 +163,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
                 tabs.addReverseTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
 
                 var frequencyTab = new ArrayBuffer[BaseComponent]
-                frequencyTab += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.frequency"), 7, 7)
+                frequencyTab += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.frequency"), 7, 7)
 
                 frequencyTab += new GuiComponentSetNumber(20, 20, 60, tile.frequency, 0, 100) {
                     override def setValue(i: Int): Unit = {
@@ -177,7 +178,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
             if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
 
                 var extractionMode = new ArrayBuffer[BaseComponent]
-                extractionMode += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.extractionMode"), 7, 6)
+                extractionMode += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.extractionMode"), 7, 6)
 
                 extractionMode += new GuiComponentButton(5, 20, 15, 20, "<") {
                     override def doAction(): Unit = {

@@ -1,15 +1,22 @@
 package com.dyonovan.neotech.tools.tools
 
+import java.util
+
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
 import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
-import com.teambr.bookshelf.common.items.traits.ItemBattery
+import com.teambr.bookshelf.client.models.BakedDynItem
+import com.teambr.bookshelf.common.items.traits.{ItemBattery, ItemModelProvider}
+import com.teambr.bookshelf.loadables.CreatesTextures
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{EnumRarity, Item, ItemStack}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for Bookshelf API
@@ -21,10 +28,12 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 2/21/2016
   */
-trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
+trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem with ItemModelProvider with CreatesTextures {
 
     setCreativeTab(NeoTech.tabTools)
     setMaxStackSize(1)
+
+    ModelLoader.setCustomModelResourceLocation(this, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
 
     /**
       * The tool name of this tool, should be all lower case and used when getting the tool info
@@ -39,6 +48,37 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem {
       * @return The texture location, eg "neotech:items/tools/sword/sword
       */
     def getBaseTexture : String
+
+    /**
+      * Defines if this should be rendered as a tool
+      *
+      * @return Is a tool
+      */
+    override def isTool = true
+
+    /**
+      * Used to get a list of textures to render, order is important
+      *
+      * @return
+      */
+    override def getTextures(stack: ItemStack) : java.util.List[String] = {
+        val list = new util.ArrayList[String]()
+        list.add(getBaseTexture)
+
+        val modifierList = ToolHelper.getModifierTagList(stack)
+        if(modifierList != null) {
+            for(x <- 0 until modifierList.tagCount()) {
+                val tagCompound = modifierList.getCompoundTagAt(x)
+                if(!tagCompound.hasKey("Active") || (tagCompound.hasKey("Active") && tagCompound.getBoolean("Active"))) {
+                    list.add(tagCompound.getString("TextureLocation"))
+                }
+            }
+        }
+
+        list
+    }
+
+    def getTexturesToStitch : ArrayBuffer[String] =  ArrayBuffer(getBaseTexture)
 
     /*******************************************************************************************************************
       ****************************************** Item/Tool Functions ***************************************************

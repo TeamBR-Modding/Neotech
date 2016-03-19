@@ -1,13 +1,16 @@
 package com.dyonovan.neotech.universe.items
 
+import java.util
+
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.universe.entities.{EntitySun, EnumSunType}
 import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.common.items.traits.SimpleItemModelProvider
+import com.teambr.bookshelf.common.items.traits.ItemModelProvider
+import com.teambr.bookshelf.loadables.CreatesTextures
 import net.minecraft.entity.Entity
-import net.minecraft.item.ItemStack
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.world.World
 
 import scala.collection.mutable.ArrayBuffer
@@ -22,12 +25,12 @@ import scala.collection.mutable.ArrayBuffer
   * @author Paul Davis "pauljoda"
   * @since 3/14/2016
   */
-class SunItem(name : String) extends SimpleItemModelProvider {
+class SunItem(name : String) extends Item with ItemModelProvider with CreatesTextures {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
 
-    override def getTextures: ArrayBuffer[String] =
+    override def getTexturesToStitch: ArrayBuffer[String] =
         ArrayBuffer(
             ClientUtils.prefixResource("items/universe/inertSun"),
             ClientUtils.prefixResource("items/universe/blueDwarf"),
@@ -40,15 +43,17 @@ class SunItem(name : String) extends SimpleItemModelProvider {
       *
       * @return An ArrayBuffer of strings, order matters index == layer
       */
-    override def getTextures(stack : ItemStack) : ArrayBuffer[String] = {
+    override def getTextures(stack : ItemStack) : java.util.List[String] = {
+        val list = new util.ArrayList[String]()
         stack.getItem match {
-            case ItemManager.inertSun => ArrayBuffer(ClientUtils.prefixResource("items/universe/inertSun"))
-            case ItemManager.blueDwarf => ArrayBuffer(ClientUtils.prefixResource("items/universe/blueDwarf"))
-            case ItemManager.smallSun => ArrayBuffer(ClientUtils.prefixResource("items/universe/smallSun"))
-            case ItemManager.largeSun => ArrayBuffer(ClientUtils.prefixResource("items/universe/largeSun"))
-            case ItemManager.redGiant => ArrayBuffer(ClientUtils.prefixResource("items/universe/redGiant"))
-            case _ => ArrayBuffer()
+            case ItemManager.inertSun =>  list.add(ClientUtils.prefixResource("items/universe/inertSun"))
+            case ItemManager.blueDwarf => list.add(ClientUtils.prefixResource("items/universe/blueDwarf"))
+            case ItemManager.smallSun =>  list.add(ClientUtils.prefixResource("items/universe/smallSun"))
+            case ItemManager.largeSun =>  list.add(ClientUtils.prefixResource("items/universe/largeSun"))
+            case ItemManager.redGiant =>  list.add(ClientUtils.prefixResource("items/universe/redGiant"))
+            case _ =>
         }
+        list
     }
 
     /**
@@ -86,4 +91,6 @@ class SunItem(name : String) extends SimpleItemModelProvider {
         sun.setPosition(location.posX, location.posY, location.posZ)
         sun
     }
+
+    override def isTool: Boolean = false
 }

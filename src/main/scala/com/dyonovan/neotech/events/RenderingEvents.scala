@@ -7,11 +7,11 @@ import net.minecraft.block.material.Material
 import net.minecraft.block.{BlockSkull, BlockSign, BlockEnderChest, BlockChest}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.client.renderer.{GlStateManager, WorldRenderer, Tessellator}
+import net.minecraft.client.renderer.{VertexBuffer, GlStateManager, Tessellator}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.{IResourceManager, IResourceManagerReloadListener}
 import net.minecraft.entity.Entity
-import net.minecraft.util.{BlockPos, Vec3, MovingObjectPosition}
+import net.minecraft.util.math.{Vec3d, RayTraceResult, BlockPos}
 import net.minecraft.world.World
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -42,27 +42,28 @@ object RenderingEvents extends IResourceManagerReloadListener {
         var blockList : java.util.List[BlockPos] = null
 
         // Add Boxes
-        if(player.getCurrentEquippedItem != null && ModifierAOE.getAOELevel(player.getCurrentEquippedItem) > 0) {
+        if(player.getHeldItemMainhand != null && ModifierAOE.getAOELevel(player.getHeldItemMainhand) > 0) {
             val movingObjectPosition = player.rayTrace(controllerMP.getBlockReachDistance, event.partialTicks)
-            if(movingObjectPosition != null && world.getBlockState(movingObjectPosition.getBlockPos).getBlock.getMaterial != Material.air) {
-                val level = ModifierAOE.getAOELevel(player.getCurrentEquippedItem)
-                blockList = ToolHelper.getBlockList(level, movingObjectPosition, player, world, player.getHeldItem)
+            if(movingObjectPosition != null && world.getBlockState(movingObjectPosition.getBlockPos)
+                    .getBlock.getMaterial(world.getBlockState(movingObjectPosition.getBlockPos)) != Material.air) {
+                val level = ModifierAOE.getAOELevel(player.getHeldItemMainhand)
+                blockList = ToolHelper.getBlockList(level, movingObjectPosition, player, world, player.getHeldItemMainhand)
                 for(x <- blockList.toArray)
                     event.context.drawSelectionBox(player,
-                        new MovingObjectPosition(new Vec3(0, 0, 0), null, x.asInstanceOf[BlockPos]), 0, event.partialTicks)
+                        new RayTraceResult(new Vec3d(0, 0, 0), null, x.asInstanceOf[BlockPos]), 0, event.partialTicks)
             }
         }
 
         // Draw Breaking
         if(blockList != null && !blockList.isEmpty && controllerMP.isHittingBlock) {
             if(controllerMP.currentItemHittingBlock != null && ModifierAOE.getAOELevel(controllerMP.currentItemHittingBlock) > 0) {
-                drawDamageOnBlocks(Tessellator.getInstance(), Tessellator.getInstance().getWorldRenderer,
+                drawDamageOnBlocks(Tessellator.getInstance(), Tessellator.getInstance().getBuffer,
                     player, event.partialTicks, world, controllerMP.currentBlock, blockList)
             }
         }
     }
 
-    def drawDamageOnBlocks(tessellatorIn : Tessellator, worldRendererIn : WorldRenderer,
+    def drawDamageOnBlocks(tessellatorIn : Tessellator, worldRendererIn : VertexBuffer,
                            entityIn : Entity, partialTicks : Float, world : World, blockIn : BlockPos,
                            blocks : java.util.List[BlockPos]) : Unit = {
         // Interpolate to player movement
@@ -98,7 +99,7 @@ object RenderingEvents extends IResourceManagerReloadListener {
             if(!breaksSelf) breaksSelf = tile != null && tile.canRenderBreaking
             if(!breaksSelf && blockPosition != blockIn) {
                 val state = world.getBlockState(blockPosition)
-                if(state.getBlock.getMaterial != Material.air)
+                if(state.getBlock.getMaterial(world.getBlockState(blockPosition)) != Material.air)
                     Minecraft.getMinecraft.getBlockRendererDispatcher
                             .renderBlockDamage(state, blockPosition,  destroyIcons(progress), world)
             }

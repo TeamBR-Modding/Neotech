@@ -3,7 +3,7 @@ package com.dyonovan.neotech.client.renderers.tiles
 import com.dyonovan.neotech.common.tiles.storage.TileFlushableChest
 import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.BlockManager
-import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
+import com.teambr.bookshelf.common.blocks.properties.Properties
 import net.minecraft.client.model.ModelChest
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
@@ -31,7 +31,7 @@ class TileFlushableChestRenderer[T <: TileFlushableChest] extends TileEntitySpec
         var facing = 3
 
         if(tile.hasWorldObj && tile.getWorld.getBlockState(tile.getPos).getBlock == BlockManager.flushableChest) {
-            facing = tile.getWorld.getBlockState(tile.getPos).getValue(PropertyRotation.FOUR_WAY).getIndex
+            facing = tile.getWorld.getBlockState(tile.getPos).getValue(Properties.FOUR_WAY).getIndex
         }
 
         if(destroyStage >= 0) {

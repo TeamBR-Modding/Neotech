@@ -1,11 +1,16 @@
 package com.dyonovan.neotech.tools.upgradeitems
 
+import java.util
+
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
-import com.teambr.bookshelf.common.items.traits.SimpleItemModelProvider
+import com.teambr.bookshelf.client.models.BakedDynItem
+import com.teambr.bookshelf.common.items.traits.ItemModelProvider
+import com.teambr.bookshelf.loadables.CreatesTextures
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.ItemStack
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.client.model.ModelLoader
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -20,12 +25,14 @@ import scala.collection.mutable.ArrayBuffer
   * @since 2/23/2016
   */
 abstract class BaseUpgradeItem(name: String, stackSize: Int,
-                               tab : CreativeTabs = NeoTech.tabTools) extends SimpleItemModelProvider {
+                               tab : CreativeTabs = NeoTech.tabTools) extends Item with ItemModelProvider with CreatesTextures {
 
     setMaxStackSize(stackSize)
     if(tab != null)
         setCreativeTab(tab)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
+
+    ModelLoader.setCustomModelResourceLocation(this, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
 
     def getUpgradeName: String = name
 
@@ -38,9 +45,18 @@ abstract class BaseUpgradeItem(name: String, stackSize: Int,
 
     /**
       * Provide the manager with a list of upgrades to create
+      *
       * @return
       */
-    override def getTextures: ArrayBuffer[String] = ArrayBuffer("neotech:items/tools/upgrades/" + name + "Upgrade")
+    override def getTextures(stack : ItemStack): java.util.List[String] = {
+        val list = new util.ArrayList[String]()
+        list.add("neotech:items/tools/upgrades/" + name + "Upgrade")
+        list
+    }
+
+    override def isTool = false
+
+    override def getTexturesToStitch : ArrayBuffer[String] = ArrayBuffer("neotech:items/tools/upgrades/" + name + "Upgrade")
 
     /**
       * Can this upgrade item allow more to be applied to the item

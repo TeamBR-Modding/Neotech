@@ -1,12 +1,13 @@
 package com.dyonovan.neotech.common.items
 
 import com.teambr.bookshelf.client.gui.GuiTextFormat
+import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
 import net.minecraft.item.{EnumAction, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityMobSpawner
-import net.minecraft.util.MovingObjectPosition
+import net.minecraft.util.math.RayTraceResult
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -21,12 +22,12 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @since 2/2/2016
   */
 class ItemSpawnerMover extends BaseItem("spawnerMover", 1) {
-
+/*
     override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
         player.setItemInUse(stack, getMaxItemUseDuration(stack))
         stack
     }
-
+*/
     override def getItemUseAction(stack: ItemStack): EnumAction = {
         EnumAction.BOW
     }
@@ -37,11 +38,10 @@ class ItemSpawnerMover extends BaseItem("spawnerMover", 1) {
 
     override def hasEffect(stack : ItemStack) = stack.hasTagCompound
 
-    override def onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityPlayer, timeLeft: Int): Unit = {
-
-        if (timeLeft <= 7180) {
-            val mop = getMovingObjectPositionFromPlayer(world, player, false)
-            if (mop != null && mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+    override def onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityLivingBase, timeLeft: Int): Unit = {
+        if (timeLeft <= 7180 && player.isInstanceOf[EntityPlayer]) {
+            val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
+            if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
                 val pos = mop.getBlockPos
                 if (!stack.hasTagCompound) {
                     val tile = world.getTileEntity(pos)
@@ -51,7 +51,7 @@ class ItemSpawnerMover extends BaseItem("spawnerMover", 1) {
                             spawner.writeToNBT(tag)
                             stack.setTagCompound(tag)
                             world.setBlockToAir(pos)
-                            world.markBlockForUpdate(pos)
+                            world.setBlockState(pos, world.getBlockState(pos), 3)
                         case _ =>
                     }
                 } else {

@@ -1,5 +1,7 @@
 package com.dyonovan.neotech.tools.modifier
 
+import java.util
+
 import com.dyonovan.neotech.tools.UpgradeItemManager
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.teambr.bookshelf.client.gui.GuiTextFormat
@@ -88,17 +90,18 @@ object ModifierMiningLevel extends Modifier("miningLevel") {
 
     class ItemModifierMiningLevel(level : Int) extends BaseUpgradeItem("miningLevel" + level, 1) {
 
-        override def getTextures: ArrayBuffer[String] = ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade2",
+        override def getTexturesToStitch: ArrayBuffer[String] = ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade2",
             "neotech:items/tools/upgrades/miningLevelUpgrade3", "neotech:items/tools/upgrades/miningLevelUpgrade4")
 
-        override def getTextures(stack : ItemStack) : ArrayBuffer[String] = {
+        override def getTextures(stack : ItemStack) : java.util.List[String] = {
+            val list = new util.ArrayList[String]()
             stack.getItem match {
-                case item : UpgradeItemManager.upgradeMiningLevel2.type => ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade2")
-                case item : UpgradeItemManager.upgradeMiningLevel3.type => ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade3")
-                case item : UpgradeItemManager.upgradeMiningLevel4.type => ArrayBuffer("neotech:items/tools/upgrades/miningLevelUpgrade4")
-                case _ => ArrayBuffer("neotech:items/upgrades/miningLevelUpgrade2")
-
+                case item : UpgradeItemManager.upgradeMiningLevel2.type => list.add("neotech:items/tools/upgrades/miningLevelUpgrade2")
+                case item : UpgradeItemManager.upgradeMiningLevel3.type => list.add("neotech:items/tools/upgrades/miningLevelUpgrade3")
+                case item : UpgradeItemManager.upgradeMiningLevel4.type => list.add("neotech:items/tools/upgrades/miningLevelUpgrade4")
+                case _ => list.add("neotech:items/upgrades/miningLevelUpgrade2")
             }
+            list
         }
 
         /**

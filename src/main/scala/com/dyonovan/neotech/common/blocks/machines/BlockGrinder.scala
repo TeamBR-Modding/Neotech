@@ -10,9 +10,11 @@ import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import com.teambr.bookshelf.traits.HasToolTip
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Blocks
+import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import org.lwjgl.input.Keyboard
@@ -28,7 +30,7 @@ import org.lwjgl.input.Keyboard
   * @since 1/11/2016
   */
 class BlockGrinder extends BaseBlock(Material.rock, "grinder", classOf[TileGrinder]) with OpensGui with DropsItems with HasToolTip {
-    override def getRenderType : Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     override def onLanded(world : World, entity : Entity) : Unit = {
         super.onLanded(world, entity)

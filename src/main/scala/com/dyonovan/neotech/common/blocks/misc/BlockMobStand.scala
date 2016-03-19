@@ -7,7 +7,9 @@ import com.dyonovan.neotech.common.tiles.misc.TileMobStand
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.util.EnumBlockRenderType
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -24,14 +26,14 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   */
 class BlockMobStand extends BaseBlock(Material.iron, "mobStand", classOf[TileMobStand]) with OpensGui with DropsItems {
 
-    override def getRenderType: Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
-    override def isOpaqueCube : Boolean = false
+    override def isOpaqueCube(state : IBlockState) : Boolean = false
 
     @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean = true
+    override def isTranslucent(state : IBlockState) : Boolean = true
 
-    override def isFullCube = false
+    override def isFullCube(state : IBlockState) = false
 
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {

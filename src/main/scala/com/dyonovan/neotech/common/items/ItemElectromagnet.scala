@@ -11,13 +11,16 @@ import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.Entity
-import net.minecraft.entity.item.{EntityTNTPrimed, EntityXPOrb, EntityItem}
+import net.minecraft.entity.item.{EntityItem, EntityTNTPrimed, EntityXPOrb}
 import net.minecraft.entity.monster.EntityCreeper
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.projectile.{EntityLargeFireball, EntitySmallFireball, EntityArrow}
+import net.minecraft.entity.projectile.{EntityArrow, EntityLargeFireball, EntitySmallFireball}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{Vec3, StatCollector, AxisAlignedBB, ChatComponentText}
+import net.minecraft.util.math.{AxisAlignedBB, Vec3d}
+import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.translation.I18n
+import net.minecraft.util.{ActionResult, EnumActionResult, EnumHand}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -50,7 +53,7 @@ class ItemElectromagnet extends ItemBattery {
         }
     }
 
-    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
+    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand) : ActionResult[ItemStack] = {
         if(player.isSneaking) {
             if(!stack.hasTagCompound) {
                 val nbt = new NBTTagCompound
@@ -61,12 +64,12 @@ class ItemElectromagnet extends ItemBattery {
                 val active = stack.getTagCompound.getBoolean("Active")
                 stack.getTagCompound.setBoolean("Active", !active)
                 if(!world.isRemote)
-                    player.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("neotech.text.magnetism") + ": " +
-                            (if(!active) GuiColor.GREEN + StatCollector.translateToLocal("neotech.text.active")
-                            else GuiColor.RED + StatCollector.translateToLocal("neotech.text.disabled"))))
+                    player.addChatComponentMessage(new TextComponentString(I18n.translateToLocal("neotech.text.magnetism") + ": " +
+                            (if(!active) GuiColor.GREEN + I18n.translateToLocal("neotech.text.active")
+                            else GuiColor.RED + I18n.translateToLocal("neotech.text.disabled"))))
             }
         }
-        stack
+        new ActionResult[ItemStack](EnumActionResult.SUCCESS, stack)
     }
 
     override def onUpdate(stack: ItemStack, world: World, entityIn: Entity, itemSlot: Int, isSelected: Boolean): Unit = {
@@ -76,7 +79,7 @@ class ItemElectromagnet extends ItemBattery {
                 if(stack.hasTagCompound) {
                     val energy = stack.getTagCompound.getInteger("Energy")
                     if(stack.getTagCompound.getBoolean("Active") && energy > 0){
-                        val bb = AxisAlignedBB.fromBounds(
+                        val bb = new AxisAlignedBB(
                             player.posX - RANGE, player.posY - RANGE, player.posZ - RANGE,
                             player.posX + RANGE, player.posY + RANGE, player.posZ + RANGE)
 
@@ -99,7 +102,7 @@ class ItemElectromagnet extends ItemBattery {
                                 var speed = 0.075F
 
                                 var motionVector =
-                                    new Vec3(
+                                    new Vec3d(
                                         player.posX - entity.posX,
                                         player.posY - entity.posY,
                                         player.posZ - entity.posZ)
@@ -133,10 +136,10 @@ class ItemElectromagnet extends ItemBattery {
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if(stack.hasTagCompound) {
             val active = stack.getTagCompound.getBoolean("Active")
-            list.add(if (active) GuiColor.GREEN + StatCollector.translateToLocal("neotech.text.active")
-            else GuiColor.RED + StatCollector.translateToLocal("neotech.text.disabled"))
+            list.add(if (active) GuiColor.GREEN + I18n.translateToLocal("neotech.text.active")
+            else GuiColor.RED + I18n.translateToLocal("neotech.text.disabled"))
 
-            list.add(GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux"))
+            list.add(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneFlux"))
             list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
                     .format(getEnergyStored(stack)) +
                     " / " +

@@ -9,7 +9,9 @@ import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.command.{ICommandSender, CommandBase}
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{StatCollector, ChatComponentText}
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.oredict.OreDictionary
 
@@ -154,26 +156,26 @@ class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
 
             override def getCommandUsage(sender: ICommandSender): String = "commands.addCrucibleRecipe.usage"
 
-            override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
+            override def execute(server: MinecraftServer, sender: ICommandSender, args: Array[String]): Unit = {
                 if(args.length < 2)
-                    sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addCrucibleRecipe.usage")))
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addCrucibleRecipe.usage")))
                 else {
                     var inputStack : String = null
                     if(args(0).split(":").nonEmpty) {
                         inputStack = args(0)
                         if(getItemStackFromString(inputStack) != null && getFluidFromString(args(1)) != null) {
                             addRecipe(new CrucibleRecipe(inputStack, "", args(1)))
-                            sender.addChatMessage(new ChatComponentText(inputStack + " -> " + args(1) + " Added Successfully"))
+                            sender.addChatMessage(new TextComponentString(inputStack + " -> " + args(1) + " Added Successfully"))
                             saveToFile()
                         } else
-                            sender.addChatMessage(new ChatComponentText(inputStack + " -> " + args(1) + " Failed Adding"))
+                            sender.addChatMessage(new TextComponentString(inputStack + " -> " + args(1) + " Failed Adding"))
                     } else {
                         if(!OreDictionary.getOres(args(0)).isEmpty) {
                             addRecipe(new CrucibleRecipe(null, args(0), args(1)))
-                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + args(1) + " Added Successfully"))
+                            sender.addChatMessage(new TextComponentString(args(0) + " -> " + args(1) + " Added Successfully"))
                             saveToFile()
                         } else
-                            sender.addChatMessage(new ChatComponentText(args(0) + " -> " + args(1) + " Failed Adding"))
+                            sender.addChatMessage(new TextComponentString(args(0) + " -> " + args(1) + " Failed Adding"))
                     }
                 }
             }

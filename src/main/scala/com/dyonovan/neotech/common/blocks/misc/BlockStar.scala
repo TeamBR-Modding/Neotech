@@ -4,21 +4,19 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.states.NeoStates
 import com.dyonovan.neotech.common.tiles.misc.TileStar
-import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.BlockManager
 import com.dyonovan.neotech.pipes.blocks.PipeProperties
-import com.dyonovan.neotech.pipes.collections.WorldPipes
-import net.minecraft.block.Block
-import net.minecraft.block.material.{MapColor, Material}
-import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.block.material.Material
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
-import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{ItemDye, ItemStack, Item, EnumDyeColor}
+import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.item._
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{AxisAlignedBB, EnumFacing, BlockPos}
-import net.minecraft.world.{WorldServer, IBlockAccess, World}
+import net.minecraft.util.{EnumBlockRenderType, EnumHand, EnumFacing}
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
+import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.util.Random
@@ -44,11 +42,11 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
     setDefaultState(this.blockState.getBaseState
             .withProperty(NeoStates.ON_BLOCK, 6.asInstanceOf[Integer]))
 
-    override def isFullBlock: Boolean = false
+    override def isFullBlock(state : IBlockState): Boolean = false
 
-    override def isFullCube: Boolean = false
+    override def isFullCube(state : IBlockState): Boolean = false
 
-    override def isOpaqueCube: Boolean = false
+    override def isOpaqueCube(state : IBlockState): Boolean = false
 
     override def onBlockPlaced(world: World, pos: BlockPos, facing: EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
         var attachedSide = 6
@@ -60,13 +58,13 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
             case _ =>
         }
 
-        if (attachedSide == 6 && world.getBlockState(pos.offset(facing.getOpposite)) != null && world.getBlockState(pos.offset(facing.getOpposite)).getBlock.isSideSolid(world, pos.offset(facing.getOpposite), facing)) {
+        if (attachedSide == 6 && world.getBlockState(pos.offset(facing.getOpposite)) != null && world.getBlockState(pos.offset(facing.getOpposite)).getBlock.isSideSolid(world.getBlockState(pos.offset(facing.getOpposite)), world, pos.offset(facing.getOpposite), facing)) {
             attachedSide = facing.getOpposite.ordinal()
         }
 
         if(attachedSide == 6) {
             for (dir <- EnumFacing.values()) {
-                if (attachedSide == 6 && world.getBlockState(pos.offset(dir)) != null && world.getBlockState(pos.offset(dir)).getBlock.isSideSolid(world, pos.offset(dir), dir.getOpposite))
+                if (attachedSide == 6 && world.getBlockState(pos.offset(dir)) != null && world.getBlockState(pos.offset(dir)).getBlock.isSideSolid(world.getBlockState(pos.offset(dir)), world, pos.offset(dir), dir.getOpposite))
                     attachedSide = dir.ordinal()
             }
         }
@@ -77,16 +75,16 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack: ItemStack) : Unit = {
         if(!world.isRemote && world.getTileEntity(pos) != null) {
             world.getTileEntity(pos).asInstanceOf[TileStar].color = EnumDyeColor.byMetadata(stack.getItemDamage).getMetadata
-            world.markBlockForUpdate(pos)
+            world.setBlockState(pos, state, 3)
         }
     }
 
-    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
-        playerIn.getCurrentEquippedItem match {
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
+        playerIn.getHeldItemMainhand match {
             case stack: ItemStack if stack.getItem.isInstanceOf[ItemDye] =>
                 if (stack.getItemDamage != world.getBlockState(pos).getValue(PipeProperties.COLOR).getMetadata) {
                     world.getTileEntity(pos).asInstanceOf[TileStar].color = EnumDyeColor.byDyeDamage(stack.getItemDamage).getMetadata
-                    world.markBlockForUpdate(pos)
+                    world.setBlockState(pos, state, 3)
                     return true
                 }
                 false
@@ -136,15 +134,15 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
         }
     }
 
-    protected override def createBlockState: BlockState = {
-        new BlockState(this, PipeProperties.COLOR, NeoStates.ON_BLOCK)
+    protected override def createBlockState: BlockStateContainer = {
+        new BlockStateContainer(this, PipeProperties.COLOR, NeoStates.ON_BLOCK)
     }
 
-    override def setBlockBoundsBasedOnState(worldIn : IBlockAccess, pos : BlockPos): Unit = {
-        if(worldIn.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int] == 6) {
+    override def getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
+        if(source.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int] == 6) {
             this.setBlockBounds(6F / 16F, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F, 10F / 16F)
         } else {
-            EnumFacing.getFront(worldIn.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]) match {
+            EnumFacing.getFront(source.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int]) match {
                 case EnumFacing.UP =>
                     this.setBlockBounds(6F / 16F, 12F / 16F, 6F / 16F, 10F / 16F, 16F / 16F, 10F / 16F)
                 case EnumFacing.DOWN =>
@@ -165,12 +163,12 @@ class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[Til
 
     def facingToInt(facing : EnumFacing) : Int = facing.ordinal()
 
-    override def addCollisionBoxesToList(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
-        this.setBlockBoundsBasedOnState(worldIn, pos)
-        super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
+    override def addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) = {
+        this.getBoundingBox(state, worldIn, pos)
+        super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity)
     }
 
-    override def getRenderType : Int = 3
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     /***
       * Overwritten as we want to also drop the mother board

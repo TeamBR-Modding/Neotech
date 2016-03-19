@@ -6,7 +6,9 @@ import com.dyonovan.neotech.NeoTech
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.command.{CommandBase, ICommandSender}
-import net.minecraft.util.{StatCollector, ChatComponentText}
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.fluids.Fluid
 
 /**
@@ -64,12 +66,12 @@ class FluidFuelRecipeHandler extends AbstractRecipeHandler[FluidFuelRecipe, Flui
 
             override def getCommandUsage(sender: ICommandSender): String = "commands.addFluidFuelValue.usage"
 
-            override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
+            override def execute(server: MinecraftServer, sender: ICommandSender, args: Array[String]): Unit = {
                 if(args.length < 2)
-                    sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addFluidFuelValue.usage")))
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addFluidFuelValue.usage")))
                 else {
                     addRecipe(new FluidFuelRecipe(args(0), args(1).toInt))
-                    sender.addChatMessage(new ChatComponentText(args(0) + " -> " + args(1) + " Added Successfully"))
+                    sender.addChatMessage(new TextComponentString(args(0) + " -> " + args(1) + " Added Successfully"))
                     saveToFile()
                 }
             }

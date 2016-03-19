@@ -5,8 +5,10 @@ import java.util
 import com.dyonovan.neotech.NeoTech
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
-import net.minecraft.command.{ICommandSender, CommandBase}
-import net.minecraft.util.{StatCollector, ChatComponentText}
+import net.minecraft.command.{CommandBase, ICommandSender}
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.fluids.FluidStack
 
 /**
@@ -73,9 +75,9 @@ class AlloyerRecipeHandler extends AbstractRecipeHandler[AlloyerRecipe, (FluidSt
 
             override def getCommandUsage(sender: ICommandSender): String = "commands.addAlloyRecipe.usage"
 
-            override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
+            override def execute(server: MinecraftServer, sender: ICommandSender, args: Array[String]): Unit = {
                 if(args.length < 3)
-                    sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addAlloyRecipe.usage")))
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addAlloyRecipe.usage")))
                 else {
                     val input  = args(0)
                     val input2 = args(1)
@@ -83,10 +85,10 @@ class AlloyerRecipeHandler extends AbstractRecipeHandler[AlloyerRecipe, (FluidSt
 
                     if(getFluidFromString(input) != null && getFluidFromString(input2) != null && getFluidFromString(output) != null) {
                         addRecipe(new AlloyerRecipe(input, input2, output))
-                        sender.addChatMessage(new ChatComponentText(input + " " + input2 + " -> " + output + " Added Successfully"))
+                        sender.addChatMessage(new TextComponentString(input + " " + input2 + " -> " + output + " Added Successfully"))
                         saveToFile()
                     } else
-                        sender.addChatMessage(new ChatComponentText(input + " " + input2 + " -> " + output  + " Failed Adding"))
+                        sender.addChatMessage(new TextComponentString(input + " " + input2 + " -> " + output  + " Failed Adding"))
                 }
             }
         }

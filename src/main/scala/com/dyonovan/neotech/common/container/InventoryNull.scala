@@ -3,7 +3,7 @@ package com.dyonovan.neotech.common.container
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.util.IChatComponent
+import net.minecraft.util.text.ITextComponent
 
 /**
   * This file was created for NeoTech
@@ -31,7 +31,7 @@ class InventoryNull extends IInventory {
     override def getStackInSlot(index: Int): ItemStack = null
     override def removeStackFromSlot(index: Int): ItemStack = null
     override def setField(id: Int, value: Int): Unit = {}
-    override def getDisplayName: IChatComponent = null
     override def getName: String = "INVENTORYNULL"
     override def hasCustomName: Boolean = false
+    override def getDisplayName: ITextComponent = null
 }

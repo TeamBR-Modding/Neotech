@@ -7,7 +7,9 @@ import com.dyonovan.neotech.managers.MetalManager
 import com.google.gson.reflect.TypeToken
 import com.teambr.bookshelf.helper.LogHelper
 import net.minecraft.command.{ICommandSender, CommandBase}
-import net.minecraft.util.{StatCollector, ChatComponentText}
+import net.minecraft.server.MinecraftServer
+import net.minecraft.util.text.TextComponentString
+import net.minecraft.util.text.translation.I18n
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 
 /**
@@ -87,9 +89,9 @@ class CentrifugeRecipeHandler
 
             override def getCommandUsage(sender: ICommandSender): String = "commands.addCentrifugeRecipe.usage"
 
-            override def processCommand(sender: ICommandSender, args: Array[String]): Unit = {
+            override def execute(server: MinecraftServer, sender: ICommandSender, args: Array[String]): Unit = {
                 if (args.length < 3)
-                    sender.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("commands.addCentrifugeRecipe.usage")))
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addCentrifugeRecipe.usage")))
                 else {
                     val input = args(0)
                     val output1 = args(1)
@@ -97,10 +99,10 @@ class CentrifugeRecipeHandler
 
                     if (getFluidFromString(input) != null && getFluidFromString(output1) != null && getFluidFromString(output2) != null) {
                         addRecipe(new CentrifugeRecipe(input, output1, output2))
-                        sender.addChatMessage(new ChatComponentText(input + " -> " + output1 + " " + output2 + " Added Successfully"))
+                        sender.addChatMessage(new TextComponentString(input + " -> " + output1 + " " + output2 + " Added Successfully"))
                         saveToFile()
                     } else
-                        sender.addChatMessage(new ChatComponentText(input + " -> " + output1 + " " + output2 + " Failed Adding"))
+                        sender.addChatMessage(new TextComponentString(input + " -> " + output1 + " " + output2 + " Failed Adding"))
                 }
             }
         }

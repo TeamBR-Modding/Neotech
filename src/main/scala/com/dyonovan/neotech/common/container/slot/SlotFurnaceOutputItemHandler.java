@@ -6,12 +6,10 @@ import com.teambr.bookshelf.common.tiles.traits.Inventory;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.stats.AchievementList;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.items.SlotItemHandler;
 import scala.Enumeration;
 import scala.Tuple2;
@@ -108,11 +106,11 @@ public class SlotFurnaceOutputItemHandler extends SlotItemHandler implements ICu
         net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerSmeltedEvent(thePlayer, stack);
 
         if (stack.getItem() == Items.iron_ingot) {
-            this.thePlayer.triggerAchievement(AchievementList.acquireIron);
+            this.thePlayer.addStat(AchievementList.acquireIron);
         }
 
         if (stack.getItem() == Items.cooked_fish) {
-            this.thePlayer.triggerAchievement(AchievementList.cookFish);
+            this.thePlayer.addStat(AchievementList.cookFish);
         }
     }
 

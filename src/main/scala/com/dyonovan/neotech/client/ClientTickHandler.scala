@@ -39,9 +39,17 @@ object ClientTickHandler {
         val itemBuffer = new ArrayBuffer[(Int, ItemStack)]()
 
         // Get Held Item
-        if(player.getHeldItem != null && player.getHeldItem.getItem.isInstanceOf[BaseElectricTool]) {
+        if(player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem.isInstanceOf[BaseElectricTool]) {
             val id = player.inventory.currentItem
-            val stack =  player.getHeldItem
+            val stack =  player.getHeldItemMainhand
+            val tup = (id, stack)
+            itemBuffer += tup
+        }
+
+        // Get Held Offhand Item
+        if(player.getHeldItemOffhand != null && player.getHeldItemOffhand.getItem.isInstanceOf[BaseElectricTool]) {
+            val id = player.inventory.currentItem
+            val stack =  player.getHeldItemOffhand
             val tup = (id, stack)
             itemBuffer += tup
         }
