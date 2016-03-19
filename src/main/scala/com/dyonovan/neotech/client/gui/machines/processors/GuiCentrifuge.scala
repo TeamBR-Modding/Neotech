@@ -8,9 +8,10 @@ import com.dyonovan.neotech.common.container.machines.processors.ContainerCentri
 import com.dyonovan.neotech.common.tiles.machines.processors.TileCentrifuge
 import com.dyonovan.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
-import com.teambr.bookshelf.client.gui.component.display.{GuiComponentColoredZone, GuiComponentArrow, GuiComponentFluidTank, GuiComponentPowerBarGradient}
+import com.teambr.bookshelf.client.gui.component.display.{GuiComponentArrow, GuiComponentColoredZone, GuiComponentFluidTank, GuiComponentPowerBarGradient}
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.text.translation.I18n
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Breaks._
@@ -44,7 +45,7 @@ class GuiCentrifuge(player: EntityPlayer, tileEntity: TileCentrifuge) extends
             }
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
-                buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
+                buffer += GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneFlux")
                 buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
                         ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                 buffer

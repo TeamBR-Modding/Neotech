@@ -1,13 +1,7 @@
 package com.dyonovan.neotech.common.tiles.storage
 
-import java.text.NumberFormat
-import java.util.Locale
-
 import cofh.api.energy.{IEnergyContainerItem, IEnergyReceiver}
-import com.teambr.bookshelf.api.waila.Waila
-import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, Inventory, UpdatingTile}
-import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -22,7 +16,7 @@ import net.minecraft.util.EnumFacing
   * @author Dyonovan
   * @since August 15, 2015
   */
-class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with Waila {
+class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
 
     var tier = 0
     lazy final val DRAIN_SLOT = 1
@@ -61,7 +55,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
             case _ =>
         }
         if (worldObj != null)
-            worldObj.markBlockForUpdate(pos)
+            worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
     }
 
     /**
@@ -194,7 +188,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
       * ************************************************ Waila methods **************************************************
       * *****************************************************************************************************************/
 
-    override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
+    /*override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {
         var color = ""
         if (getEnergyStored(null) > 0)
             color = GuiColor.GREEN.toString
@@ -206,5 +200,5 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory with 
                 NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
                         .format(getMaxEnergyStored(null)) + " RF")
         tipList
-    }
+    }*/
 }

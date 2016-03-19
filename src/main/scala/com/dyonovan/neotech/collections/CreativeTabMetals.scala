@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.collections
 
-import com.dyonovan.neotech.managers.{FluidManager, MetalManager}
+import com.dyonovan.neotech.managers.MetalManager
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.common.ForgeModContainer
@@ -32,8 +32,8 @@ class CreativeTabMetals extends CreativeTabs("tabNeoTechMetals") {
     }
 
     @SideOnly(Side.CLIENT)
-    override def displayAllReleventItems(list : java.util.List[ItemStack]) : Unit = {
-        super.displayAllReleventItems(list)
+    override def displayAllRelevantItems(list : java.util.List[ItemStack]) : Unit = {
+        super.displayAllRelevantItems(list)
 
         val universalBucket = ForgeModContainer.getInstance().universalBucket
         if(universalBucket != null) {

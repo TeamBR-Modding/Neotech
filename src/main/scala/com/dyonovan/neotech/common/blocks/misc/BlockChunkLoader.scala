@@ -10,7 +10,8 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{BlockPos, EnumParticleTypes, EnumWorldBlockLayer}
+import net.minecraft.util.{BlockRenderLayer, EnumParticleTypes}
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -27,7 +28,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 class BlockChunkLoader extends BaseBlock(Material.rock, "chunkLoader", classOf[TileChunkLoader]) with OpensGui {
 
     @SideOnly(Side.CLIENT)
-    override def randomDisplayTick(world: World, pos: BlockPos, state: IBlockState, rand: java.util.Random): Unit = {
+    override def randomDisplayTick(state: IBlockState, world: World, pos: BlockPos, rand: java.util.Random): Unit = {
         world.spawnParticle(EnumParticleTypes.PORTAL, pos.getX + 0.5, pos.getY + 1, pos.getZ + 0.5, Math.sin(rand.nextInt(5)), 0, Math.sin(rand.nextInt(5)))
         world.spawnParticle(EnumParticleTypes.PORTAL, pos.getX + 0.5, pos.getY + 1, pos.getZ + 0.5, Math.sin(rand.nextInt(5)), 0, Math.sin(rand.nextInt(5)))
         world.spawnParticle(EnumParticleTypes.PORTAL, pos.getX + 0.5, pos.getY + 1, pos.getZ + 0.5, Math.sin(rand.nextInt(5)), 0, Math.sin(rand.nextInt(5)))
@@ -45,20 +46,20 @@ class BlockChunkLoader extends BaseBlock(Material.rock, "chunkLoader", classOf[T
     }
 
     setHardness(1.5F)
-    override def getRenderType: Int = 3
+    override def getRenderType(state: IBlockState): Int = 3
     setLightOpacity(0)
-    override def isOpaqueCube : Boolean = false
+    override def isOpaqueCube(state: IBlockState) : Boolean = false
 
     @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean = true
+    override def isTranslucent(state: IBlockState) : Boolean = true
 
-    override def isFullCube : Boolean = false
+    override def isFullCube(state: IBlockState) : Boolean = false
 
     @SideOnly(Side.CLIENT)
-    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
+    override def getBlockLayer : BlockRenderLayer = BlockRenderLayer.CUTOUT
 
-    override def canRenderInLayer(layer : EnumWorldBlockLayer) : Boolean =
-        layer == EnumWorldBlockLayer.TRANSLUCENT || layer == EnumWorldBlockLayer.CUTOUT
+    override def canRenderInLayer(layer : BlockRenderLayer) : Boolean =
+        layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         new ContainerGeneric

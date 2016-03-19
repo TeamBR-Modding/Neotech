@@ -11,9 +11,11 @@ import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.{EnumFacing, EnumHand}
 import net.minecraft.util.EnumFacing.Axis
-import net.minecraft.util.{EnumFacing, BlockPos}
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -31,7 +33,7 @@ class BlockRockWall extends BlockContainer(Material.rock) with BlockConnectedTex
     def rockWall = "rockWall"
 
     override def onBlockActivated(worldIn: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
-                                  side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
+                                  hand:EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
 
         if(side == EnumFacing.UP) {
             playerIn.setPosition(pos.getX + hitX, pos.getY + 1, pos.getZ + hitZ)

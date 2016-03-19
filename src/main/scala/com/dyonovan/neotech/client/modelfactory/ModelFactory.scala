@@ -4,9 +4,9 @@ import com.dyonovan.neotech.lib.Reference
 import com.google.common.collect.{ImmutableMap, Maps}
 import com.teambr.bookshelf.client.ModelHelper
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.client.model.{IFlexibleBakedModel, IPerspectiveAwareModel, TRSRTransformation}
+import net.minecraftforge.client.model.{IPerspectiveAwareModel, TRSRTransformation}
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.{EventPriority, SubscribeEvent}
 
@@ -36,14 +36,14 @@ class ModelFactory {
         val builder = Maps.newHashMap[TransformType, TRSRTransformation]()
         builder.putAll(IPerspectiveAwareModel.MapWrapper.getTransforms(ModelHelper.DEFAULT_TOOL_STATE))
 
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricPickaxe", "inventory"),
+        event.getModelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricPickaxe", "inventory"),
             new ToolModel(
-                event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricPickaxe", "inventory")).asInstanceOf[IFlexibleBakedModel],
+                event.getModelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricPickaxe", "inventory")).asInstanceOf[IFlexibleBakedModel],
                 ImmutableMap.copyOf(builder)))
 
-        event.modelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricSword", "inventory"),
+        event.getModelRegistry.putObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricSword", "inventory"),
             new ToolModel(
-                event.modelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricSword", "inventory")).asInstanceOf[IFlexibleBakedModel],
+                event.getModelRegistry.getObject(new ModelResourceLocation(Reference.MOD_ID + ":" + "electricSword", "inventory")).asInstanceOf[IFlexibleBakedModel],
                 ImmutableMap.copyOf(builder)))
     }
 }

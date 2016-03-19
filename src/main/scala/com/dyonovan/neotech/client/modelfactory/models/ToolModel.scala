@@ -8,10 +8,9 @@ import com.google.common.base.Function
 import com.google.common.collect.{ImmutableList, ImmutableMap}
 import com.teambr.bookshelf.client.ModelHelper
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.block.model.BakedQuad
+import net.minecraft.client.renderer.block.model.{BakedQuad, IBakedModel}
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
-import net.minecraft.client.resources.model.IBakedModel
 import net.minecraft.item.ItemStack
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.client.model.IPerspectiveAwareModel.MapWrapper

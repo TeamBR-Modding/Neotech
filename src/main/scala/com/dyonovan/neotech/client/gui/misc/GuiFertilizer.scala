@@ -2,11 +2,9 @@ package com.dyonovan.neotech.client.gui.misc
 
 import com.dyonovan.neotech.common.container.misc.ContainerFertilizer
 import com.dyonovan.neotech.common.tiles.misc.TileFertilizer
-import com.dyonovan.neotech.network.PacketDispatcher
 import com.teambr.bookshelf.client.gui.GuiBase
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentCheckBox, GuiComponentButton}
-import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
-import net.minecraft.util.StatCollector
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentCheckBox
+import net.minecraft.entity.player.InventoryPlayer
 
 /**
  * This file was created for NeoTech

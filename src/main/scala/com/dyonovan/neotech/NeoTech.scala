@@ -113,6 +113,6 @@ object NeoTech {
     }
 
     @EventHandler def serverLoad(event : FMLServerStartingEvent): Unit = {
-        RecipeManager.initCommands(MinecraftServer.getServer.getCommandManager.asInstanceOf[ServerCommandManager])
+        RecipeManager.initCommands(event.getServer.getCommandManager.asInstanceOf[ServerCommandManager])
     }
  }

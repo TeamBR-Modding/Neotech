@@ -4,7 +4,7 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.BlockManager
 import net.minecraft.block.Block
 import net.minecraft.client.renderer.ItemMeshDefinition
-import net.minecraft.client.resources.model.ModelResourceLocation
+import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.{EnumDyeColor, ItemStack}
 import net.minecraft.util.ResourceLocation
 

@@ -14,7 +14,8 @@ import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
 import com.teambr.bookshelf.client.gui.component.display._
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.text.translation.I18n
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Breaks._
@@ -44,7 +45,7 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
             }
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
-                buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
+                buffer += GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneFlux")
                 buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
                         ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                 buffer
@@ -231,8 +232,8 @@ class GuiThermalBinder (player: EntityPlayer, tileEntity: TileThermalBinder) ext
             }
         }
 
-        components += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.in"), 41, 63)
-        components += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.out"), 123, 63)
-        components += new GuiComponentText(GuiColor.BLACK + StatCollector.translateToLocal("neotech.text.upgrade"), 65, 87)
+        components += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.in"), 41, 63)
+        components += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.out"), 123, 63)
+        components += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.upgrade"), 65, 87)
     }
 }

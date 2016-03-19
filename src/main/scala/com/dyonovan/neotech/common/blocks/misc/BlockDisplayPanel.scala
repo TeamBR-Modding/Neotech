@@ -5,10 +5,11 @@ import com.dyonovan.neotech.common.tiles.misc.TileDisplayPanel
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.material.Material
-import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{BlockPos, EnumFacing, MathHelper}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.{BlockPos, MathHelper}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -24,14 +25,14 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   */
 class BlockDisplayPanel extends BaseBlock(Material.iron, "displayPanel", classOf[TileDisplayPanel]) {
 
-    override def getRenderType: Int = 3
+    override def getRenderType(state: IBlockState): Int = 3
 
-    override def isOpaqueCube : Boolean = false
+    override def isOpaqueCube(state: IBlockState) : Boolean = false
 
     @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean = true
+    override def isTranslucent(state: IBlockState) : Boolean = true
 
-    override def isFullCube = false
+    override def isFullCube(state: IBlockState) = false
 
     override def rotateBlock(world: World, pos: BlockPos, side: EnumFacing): Boolean = {
         val tag = new NBTTagCompound
@@ -52,8 +53,8 @@ class BlockDisplayPanel extends BaseBlock(Material.iron, "displayPanel", classOf
         this.getDefaultState.withProperty(PropertyRotation.FOUR_WAY, enumFacing)
     }
 
-    override def createBlockState(): BlockState = {
-        new BlockState(this, PropertyRotation.FOUR_WAY)
+    override def createBlockState(): BlockStateContainer = {
+        new BlockStateContainer(this, PropertyRotation.FOUR_WAY)
     }
 
     override def getStateFromMeta(meta: Int): IBlockState =

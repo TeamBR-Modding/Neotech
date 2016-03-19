@@ -13,7 +13,8 @@ import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display._
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{EnumFacing, StatCollector}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.text.translation.I18n
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.control.Breaks._
@@ -54,7 +55,7 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
             }
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 val buffer = new ArrayBuffer[String]()
-                buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
+                buffer += GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneFlux")
                 buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
                         ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                 buffer

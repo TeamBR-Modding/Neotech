@@ -7,10 +7,11 @@ import com.dyonovan.neotech.common.tiles.misc.TileAttractor
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.PropertyDirection
-import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{AxisAlignedBB, BlockPos, EnumFacing}
+import net.minecraft.util.EnumFacing
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -26,21 +27,21 @@ class BlockAttractor extends BaseBlock(Material.portal, "blockAttractor", classO
     setDefaultState(this.blockState.getBaseState
             .withProperty(BlockAttractor.DIR, EnumFacing.UP))
 
-    override def getRenderType: Int = 3
+    override def getRenderType(state: IBlockState): Int = 3
 
-    override def isOpaqueCube : Boolean = false
+    override def isOpaqueCube(state: IBlockState) : Boolean = false
 
     @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean = true
+    override def isTranslucent(state: IBlockState) : Boolean = true
 
-    override def isFullCube = false
+    override def isFullCube(state: IBlockState) = false
 
     override def onBlockPlaced(world: World, pos: BlockPos, facing: EnumFacing, hitX : Float, hitY : Float, hitZ : Float, meta : Int, placer : EntityLivingBase) : IBlockState = {
         getDefaultState.withProperty(BlockAttractor.DIR, facing)
     }
 
-    override def createBlockState: BlockState = {
-        new BlockState(this, BlockAttractor.DIR)
+    override def createBlockState: BlockStateContainer = {
+        new BlockStateContainer(this, BlockAttractor.DIR)
     }
 
     override def getStateFromMeta(meta: Int): IBlockState = {

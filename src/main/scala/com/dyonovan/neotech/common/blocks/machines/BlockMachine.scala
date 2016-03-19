@@ -1,31 +1,25 @@
 package com.dyonovan.neotech.common.blocks.machines
 
-import com.dyonovan.neotech.client.gui.machines.generators.{GuiFluidGenerator, GuiFurnaceGenerator}
-import com.dyonovan.neotech.client.gui.machines.processors.{GuiElectricCrusher, GuiElectricFurnace, GuiThermalBinder}
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
-import com.dyonovan.neotech.common.container.machines.generators.{ContainerFluidGenerator, ContainerFurnaceGenerator}
-import com.dyonovan.neotech.common.container.machines.processors.{ContainerElectricCrusher, ContainerElectricFurnace, ContainerThermalBinder}
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator, TileFurnaceGenerator}
-import com.dyonovan.neotech.common.tiles.machines.processors.{TileElectricCrusher, TileElectricFurnace, TileThermalBinder}
-import com.dyonovan.neotech.common.tiles.storage.TileTank
-import com.dyonovan.neotech.managers.{ItemManager, BlockManager}
+import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.utils.PlayerUtils
 import com.teambr.bookshelf.common.blocks.properties.PropertyRotation
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, OpensGui}
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.BlockPistonBase
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.{IProperty, PropertyBool}
-import net.minecraft.block.state.{BlockState, IBlockState}
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.Container
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{EnumWorldBlockLayer, MathHelper, BlockPos, EnumFacing}
+import net.minecraft.util.math.{BlockPos, MathHelper}
+import net.minecraft.util.{BlockRenderLayer, EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fluids.{FluidUtil, IFluidHandler}
@@ -48,7 +42,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
         extends BaseBlock(Material.iron, name, tileEntity) with OpensGui {
 
     @SideOnly(Side.CLIENT)
-    override def randomDisplayTick(world: World, pos: BlockPos, state: IBlockState, rand: java.util.Random): Unit = {
+    override def randomDisplayTick(state: IBlockState, world: World, pos: BlockPos, rand: java.util.Random): Unit = {
         if (activeState && getActualState(state, world, pos).getValue(this.PROPERTY_ACTIVE).asInstanceOf[Boolean]) {
             val enumFacing:EnumFacing = state.getValue(PropertyRotation.FOUR_WAY)
             val d0: Double = pos.getX + 0.5
@@ -86,9 +80,8 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
         false
     }
 
-    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, side: EnumFacing,
-                                  hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-        val heldItem = player.getHeldItem
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand,
+                                  heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
         val tank = world.getTileEntity(pos)
 
         if (heldItem != null && tank.isInstanceOf[IFluidHandler]) {
@@ -96,12 +89,12 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
                 return true
         }
 
-        super[OpensGui].onBlockActivated(world, pos, state, player, side, hitX, hitY, hitZ)
+        super[OpensGui].onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ)
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getTileEntity(new BlockPos(x, y, z)) match {
-            case abstractMachine : AbstractMachine if (player.getHeldItem != null && player.getHeldItem.getItem != ItemManager.wrench) || player.getHeldItem == null =>
+            case abstractMachine : AbstractMachine if PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench) =>
                 abstractMachine.getServerGuiElement(ID, player, world, x, y, z)
             case _ => null
         }
@@ -110,7 +103,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getTileEntity(new BlockPos(x, y, z)) match {
-            case abstractMachine : AbstractMachine if (player.getHeldItem != null && player.getHeldItem.getItem != ItemManager.wrench) || player.getHeldItem == null =>
+            case abstractMachine : AbstractMachine if PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench) =>
                 abstractMachine.getClientGuiElement(ID, player, world, x, y, z)
             case _ => null
         }
@@ -127,7 +120,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
             val enumFacing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite
             this.getDefaultState.withProperty(PropertyRotation.FOUR_WAY, enumFacing).withProperty(PROPERTY_ACTIVE, false.asInstanceOf[java.lang.Boolean])
         } else if(sixWayRotation)
-            this.getDefaultState.withProperty(PropertyRotation.SIX_WAY, BlockPistonBase.getFacingFromEntity(world, blockPos, placer))
+            this.getDefaultState.withProperty(PropertyRotation.SIX_WAY, BlockPistonBase.getFacingFromEntity(blockPos, placer))
         else
             getDefaultState
     }
@@ -135,7 +128,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     /**
       * Used to say what our block state is
       */
-    override def createBlockState() : BlockState = {
+    override def createBlockState() : BlockStateContainer = {
         val properties = new ArrayBuffer[IProperty[_]]()
         if(activeState) properties += PROPERTY_ACTIVE
         if(fourWayRotation) properties += PropertyRotation.FOUR_WAY
@@ -197,21 +190,21 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
             0
     }
 
-    override def hasComparatorInputOverride: Boolean =
+    override def hasComparatorInputOverride(state: IBlockState): Boolean =
         true
 
-    override def getComparatorInputOverride(worldIn: World, pos: BlockPos): Int =
+    override def getComparatorInputOverride(state: IBlockState, worldIn: World, pos: BlockPos): Int =
         worldIn.getTileEntity(pos).asInstanceOf[AbstractMachine].getRedstoneOutput
 
-    override def getRenderType : Int = 3
+    override def getRenderType(state: IBlockState) : Int = 3
 
-    override def isOpaqueCube : Boolean = false
-
-    @SideOnly(Side.CLIENT)
-    override def isTranslucent : Boolean = true
+    override def isOpaqueCube(state: IBlockState) : Boolean = false
 
     @SideOnly(Side.CLIENT)
-    override def getBlockLayer : EnumWorldBlockLayer = EnumWorldBlockLayer.CUTOUT
+    override def isTranslucent(state: IBlockState) : Boolean = true
+
+    @SideOnly(Side.CLIENT)
+    override def getBlockLayer : BlockRenderLayer = BlockRenderLayer.CUTOUT
 
     /***
       * Overwritten as we want to also drop the mother board

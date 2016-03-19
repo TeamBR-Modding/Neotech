@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.{AxisAlignedBB, BlockPos}
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.World
 
 /**
@@ -30,11 +30,11 @@ class BlockPhantomGlass extends BlockConnected("phantomGlass", Material.glass) w
     override def isClear: Boolean = true
 
 
-    override def addCollisionBoxesToList(worldIn: World, pos: BlockPos, state: IBlockState, mask: AxisAlignedBB,
+    override def addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, mask: AxisAlignedBB,
                                             list: java.util.List[AxisAlignedBB], collidingEntity: Entity) : Unit = {
         if(collidingEntity.isInstanceOf[EntityPlayer] && !collidingEntity.isSneaking) { /* NO OP */ }
         else
-            super.addCollisionBoxesToList(worldIn, pos, state, mask, list, collidingEntity)
+            super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity)
     }
 
     override def getToolTip(): List[String] = List(GuiTextFormat.ITALICS + ClientUtils.translate("neotech.phantomGlass.tip"))

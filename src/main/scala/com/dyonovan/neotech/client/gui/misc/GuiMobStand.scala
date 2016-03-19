@@ -3,10 +3,10 @@ package com.dyonovan.neotech.client.gui.misc
 import com.dyonovan.neotech.common.container.misc.ContainerMobStand
 import com.dyonovan.neotech.common.tiles.misc.TileMobStand
 import com.teambr.bookshelf.client.gui.GuiBase
-import com.teambr.bookshelf.client.gui.component.control.{GuiComponentCheckBox, GuiComponentSlider, GuiComponentScrollBar}
+import com.teambr.bookshelf.client.gui.component.control.{GuiComponentCheckBox, GuiComponentScrollBar, GuiComponentSlider}
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentText
 import net.minecraft.entity.player.InventoryPlayer
-import net.minecraft.util.StatCollector
+import net.minecraft.util.text.translation.I18n
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -40,7 +40,7 @@ class GuiMobStand(playerInv: InventoryPlayer, tile: TileMobStand) extends
             }
 
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
-                ArrayBuffer(StatCollector.translateToLocal("neotech.text.fitToBlockInfo"))
+                ArrayBuffer(I18n.translateToLocal("neotech.text.fitToBlockInfo"))
             }
         }
         components += new GuiComponentCheckBox(55, 35, "neotech.text.lookAtPlayer", tile.lookAtPlayer) {
@@ -50,7 +50,7 @@ class GuiMobStand(playerInv: InventoryPlayer, tile: TileMobStand) extends
                 tile.sendValueToServer(tile.LOOK, value)
             }
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
-                ArrayBuffer(StatCollector.translateToLocal("neotech.text.lookAtPlayerInfo"))
+                ArrayBuffer(I18n.translateToLocal("neotech.text.lookAtPlayerInfo"))
             }
         }
         components += new GuiComponentCheckBox(55, 45, "neotech.text.renderName", tile.renderName) {
@@ -60,10 +60,10 @@ class GuiMobStand(playerInv: InventoryPlayer, tile: TileMobStand) extends
                 tile.sendValueToServer(tile.NAME, value)
             }
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
-                ArrayBuffer(StatCollector.translateToLocal("neotech.text.renderNameInfo"))
+                ArrayBuffer(I18n.translateToLocal("neotech.text.renderNameInfo"))
             }
         }
-        components += new GuiComponentText(StatCollector.translateToLocal("neotech.text.facing"), 28, 70)
-        components += new GuiComponentText(StatCollector.translateToLocal("neotech.text.size"), 147, 73)
+        components += new GuiComponentText(I18n.translateToLocal("neotech.text.facing"), 28, 70)
+        components += new GuiComponentText(I18n.translateToLocal("neotech.text.size"), 147, 73)
     }
 }

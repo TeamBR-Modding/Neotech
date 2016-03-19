@@ -9,7 +9,7 @@ import com.teambr.bookshelf.client.gui.component.display.{GuiComponentPowerBarGr
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.util.StatCollector
+import net.minecraft.util.text.translation.I18n
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -40,14 +40,14 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                 }
                 override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                     val buffer = new ArrayBuffer[String]()
-                    buffer += GuiColor.ORANGE + StatCollector.translateToLocal("neotech.text.redstoneFlux")
+                    buffer += GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneFlux")
                     buffer += ClientUtils.formatNumber(tileEntity.getEnergyStored(null)) + " / " +
                             ClientUtils.formatNumber(tileEntity.getMaxEnergyStored(null)) + " RF"
                     buffer
                 }
             }
 
-            components += new GuiComponentText(StatCollector.translateToLocal("neotech.text.rfIn"), 55, 20, new Color(0, 0, 0))
+            components += new GuiComponentText(I18n.translateToLocal("neotech.text.rfIn"), 55, 20, new Color(0, 0, 0))
             val inputRate = tileEntity.getRFInPerTick
             val colorIn = {
                 if(inputRate > 0)
@@ -78,7 +78,7 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                 }
             }
 
-            components += new GuiComponentText(StatCollector.translateToLocal("neotech.text.rfOut"), 55, 50, new Color(0, 0, 0))
+            components += new GuiComponentText(I18n.translateToLocal("neotech.text.rfOut"), 55, 50, new Color(0, 0, 0))
             val outputRate = tileEntity.getRFOutPerTick
             val colorOut = {
                 if(outputRate > 0)

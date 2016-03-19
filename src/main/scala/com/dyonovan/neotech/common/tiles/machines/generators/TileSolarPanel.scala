@@ -1,13 +1,8 @@
 package com.dyonovan.neotech.common.tiles.machines.generators
 
-import java.text.NumberFormat
-import java.util.Locale
-
 import cofh.api.energy.IEnergyReceiver
 import com.dyonovan.neotech.collections.EnumInputOutputMode
 import com.dyonovan.neotech.common.tiles.MachineGenerator
-import com.teambr.bookshelf.api.waila.Waila
-import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -22,7 +17,7 @@ import net.minecraft.util.EnumFacing
   * @author Dyonovan
   * @since 2/3/2016
   */
-class TileSolarPanel extends MachineGenerator with Waila {
+class TileSolarPanel extends MachineGenerator {
 
     // Hold the current tier
     var tier = 0
@@ -55,7 +50,7 @@ class TileSolarPanel extends MachineGenerator with Waila {
             case _ =>
         }
         if (worldObj != null)
-            worldObj.markBlockForUpdate(pos)
+            worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
     }
 
     /**
@@ -151,7 +146,7 @@ class TileSolarPanel extends MachineGenerator with Waila {
             reset()
 
         if (didWork) {
-            worldObj.markBlockForUpdate(pos)
+            worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
         }
     }
 
@@ -244,7 +239,7 @@ class TileSolarPanel extends MachineGenerator with Waila {
     /**
       * Waila
       */
-    override def returnWailaBody(tipList: java.util.List[String]) : java.util.List[String] = {
+    /*override def returnWailaBody(tipList: java.util.List[String]) : java.util.List[String] = {
         tipList.add("Generating: " + generating() + " (" + (if (generating() == 0) 0 else (worldObj.getSunBrightnessFactor(1.0F) * 100).toInt) + "%)")
         tipList.add("Max: " + getEnergyProduced)
         val stored = NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
@@ -253,5 +248,5 @@ class TileSolarPanel extends MachineGenerator with Waila {
           .format(energyStorage.getMaxEnergyStored)
         tipList.add(stored + "/" + max)
         tipList
-    }
+    }*/
 }
