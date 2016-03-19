@@ -9,7 +9,6 @@
         "south": "#all",
         "west": "#all",
 
-        //We need to add these here since they don't use our models
         "fluidmetalStill" : "neotech:blocks/metal_still",
         "fluidmetalFlow" : "neotech:blocks/metal_flow",
         "metalIngot" : "neotech:items/metal_ingot",

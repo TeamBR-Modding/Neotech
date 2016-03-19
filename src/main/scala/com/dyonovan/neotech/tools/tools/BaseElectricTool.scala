@@ -6,14 +6,12 @@ import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.modifier.ModifierMiningLevel
 import com.dyonovan.neotech.tools.upgradeitems.ThermalBinderItem
-import com.teambr.bookshelf.client.models.BakedDynItem
 import com.teambr.bookshelf.common.items.traits.{ItemBattery, ItemModelProvider}
 import com.teambr.bookshelf.loadables.CreatesTextures
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{EnumRarity, Item, ItemStack}
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.mutable.ArrayBuffer
@@ -32,8 +30,6 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem with
 
     setCreativeTab(NeoTech.tabTools)
     setMaxStackSize(1)
-
-    ModelLoader.setCustomModelResourceLocation(this, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
 
     /**
       * The tool name of this tool, should be all lower case and used when getting the tool info
@@ -65,6 +61,9 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem with
         val list = new util.ArrayList[String]()
         list.add(getBaseTexture)
 
+        if(stack.getItem.isInstanceOf[ElectricPickaxe])
+            list.add("neotech:items/tools/pickaxe/miningLevel1")
+
         val modifierList = ToolHelper.getModifierTagList(stack)
         if(modifierList != null) {
             for(x <- 0 until modifierList.tagCount()) {
@@ -78,7 +77,16 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem with
         list
     }
 
-    def getTexturesToStitch : ArrayBuffer[String] =  ArrayBuffer(getBaseTexture)
+    def getTexturesToStitch : ArrayBuffer[String] =  ArrayBuffer(
+        "neotech:items/tools/sword/electricSword", "neotech:items/tools/pickaxe/electricPickaxe",
+        "neotech:items/tools/pickaxe/miningLevel1", "neotech:items/tools/pickaxe/miningLevel2",
+        "neotech:items/tools/pickaxe/miningLevel3", "neotech:items/tools/pickaxe/miningLevel4",
+        "neotech:items/tools/pickaxe/miningSpeed", "neotech:items/tools/pickaxe/silkTouch",
+        "neotech:items/tools/pickaxe/fortune", "neotech:items/tools/pickaxe/aoe",
+        "neotech:items/tools/pickaxe/shovelPick", "neotech:items/tools/pickaxe/lighting",
+        "neotech:items/tools/sword/sharpness", "neotech:items/tools/sword/smite",
+        "neotech:items/tools/sword/beheading", "neotech:items/tools/sword/spiderBane",
+        "neotech:items/tools/sword/looting")
 
     /*******************************************************************************************************************
       ****************************************** Item/Tool Functions ***************************************************
@@ -170,7 +178,7 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem with
       */
     @SideOnly(Side.CLIENT)
     override def hasEffect(stack: ItemStack): Boolean = false
-    
+
     /*******************************************************************************************************************
       *********************************************** Misc Functions ***************************************************
       ******************************************************************************************************************/

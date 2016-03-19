@@ -13,8 +13,10 @@ import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
 import com.dyonovan.neotech.events.{GuiEvents, RenderingEvents}
-import com.dyonovan.neotech.managers.{FluidManager, BlockManager, MetalManager}
+import com.dyonovan.neotech.managers.{ItemManager, FluidManager, BlockManager, MetalManager}
+import com.dyonovan.neotech.tools.UpgradeItemManager
 import com.dyonovan.neotech.universe.entities.EntitySun
+import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.color.{IItemColor, IBlockColor}
@@ -90,6 +92,27 @@ class ClientProxy extends CommonProxy {
             BlockManager.pipeEnergyInterface,
             "pipeEnergyBasicInterface",
             "down=2,east=0,north=0,south=0,up=1,west=0")
+
+        ModelLoader.setCustomModelResourceLocation(ItemManager.basicRFBattery, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.advancedRFBattery, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.eliteRFBattery, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+
+        ModelLoader.setCustomModelResourceLocation(ItemManager.inertSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.blueDwarf, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.smallSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.largeSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.redGiant, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.phantomGlass), 0, BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.voidGlass), 0, BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.rockWall), 0, BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
+
+        ModelLoader.setCustomModelResourceLocation(ItemManager.electricSword, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.electricPickaxe, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+
+        ModelLoader.setCustomModelResourceLocation(UpgradeItemManager.upgradeMiningLevel2, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(UpgradeItemManager.upgradeMiningLevel3, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(UpgradeItemManager.upgradeMiningLevel4, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
 
         ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricFurnace", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.grinder, "grinder", "normal")

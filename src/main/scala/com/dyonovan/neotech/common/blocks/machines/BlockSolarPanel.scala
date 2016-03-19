@@ -18,6 +18,8 @@ import net.minecraft.world.{IBlockAccess, World}
   * @since 2/3/2016
   */
 class BlockSolarPanel(name: String, tier: Int) extends BlockMachine(name, classOf[TileSolarPanel], fourWayRotation = false) {
+    BB = new AxisAlignedBB(0F, 0F, 0F, 1F, 4F / 16F, 1F)
+
     override def isFullCube(state: IBlockState) : Boolean = false
     def getTier: Int = tier
 

@@ -8,12 +8,14 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
+import com.teambr.bookshelf.client.models.BakedDynItem
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
+import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.collection.mutable.ArrayBuffer
@@ -34,6 +36,8 @@ class RFBattery(name: String, tier: Int) extends BaseUpgradeItem("battery", 1) w
     setCreativeTab(NeoTech.tabNeoTech)
     setMaxStackSize(maxStackSize)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
+
+    ModelLoader.setCustomModelResourceLocation(this, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
 
     override def getTexturesToStitch: ArrayBuffer[String] = ArrayBuffer("neotech:items/basicRFBattery",
         "neotech:items/advancedRFBattery", "neotech:items/eliteRFBattery")

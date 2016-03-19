@@ -5,7 +5,6 @@
         "front": "neotech:blocks/machine_side",
         "side": "neotech:blocks/machine_side",
 
-        //IO
         "input" : "neotech:blocks/inputFace",
         "output" : "neotech:blocks/outputFace",
         "inputOutputFace" : "neotech:blocks/inputOutputFace",
@@ -14,12 +13,5 @@
         "in2" : "neotech:blocks/inputFaceSecondary",
         "out1" : "neotech:blocks/outputFacePrimary",
         "out2" : "neotech:blocks/outputFaceSecondary"
-    },
-    "display": {
-        "thirdperson": {
-            "rotation": [ 10, -45, 170 ],
-            "translation": [ 0, 1.5, -2.75 ],
-            "scale": [ 0.375, 0.375, 0.375 ]
-        }
     }
 }

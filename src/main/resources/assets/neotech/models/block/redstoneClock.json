@@ -1,11 +1,12 @@
 {
+    "parent" : "block/block",
     "textures" : {
         "particle" : "blocks/redstone_block",
         "block" : "blocks/stone",
         "redstone" : "blocks/redstone_block"
     },
     "elements" : [
-        { //Bottom
+        {
             "from" : [ 0, 0, 0 ],
             "to" : [ 16, 1, 16 ],
             "faces" : {
@@ -17,7 +18,7 @@
                 "west"  : { "texture" : "#block"}
             }
         },
-        { //Top
+        {
             "from" : [ 16, 15, 16 ],
             "to" : [ 0, 16, 0 ],
             "faces" : {
@@ -29,7 +30,7 @@
                 "west"  : { "texture" : "#block"}
             }
         },
-        { //Poles
+        {
             "from" : [ 0.01, 0, 0.01 ],
             "to" : [ 0.99, 16, 0.99 ],
             "faces" : {
@@ -89,12 +90,5 @@
                 "west"  : { "uv" : [ 0, 0, 16, 16], "texture" : "#redstone"}
             }
         }
-    ],
-    "display": {
-        "thirdperson": {
-            "rotation": [ 10, -45, 170 ],
-            "translation": [ 0, 1.5, -2.75 ],
-            "scale": [ 0.375, 0.375, 0.375 ]
-        }
-    }
+    ]
 }

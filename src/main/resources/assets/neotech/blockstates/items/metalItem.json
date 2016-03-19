@@ -1,8 +1,7 @@
 {
     "forge_marker": 1,
-    "parent" : "item/generated",
     "defaults": {
-        "model": "item/generated",
+        "model": "neotech:item",
         "transform": "forge:default-item"
     },
     "variants": {

@@ -29,11 +29,6 @@ object ItemRenderManager {
         registerItem(ItemManager.mobGun)
         registerItem(ItemManager.mobNet)
         registerItem(ItemManager.electroMagnet)
-
-        registerItem(ItemManager.electricPickaxe)
-
-        registerItem(ItemManager.electricSword)
-
         registerItem(ItemManager.electricArmorHelmet)
         registerItem(ItemManager.electricArmorChestplate)
         registerItem(ItemManager.electricArmorLeggings)
@@ -42,7 +37,7 @@ object ItemRenderManager {
 
     def registerItem(item: Item): Unit = {
         ModelLoader.setCustomModelResourceLocation(item, 0,
-            new ModelResourceLocation(item.getUnlocalizedName.substring(5), "inventory"))
+            new ModelResourceLocation(new ResourceLocation(item.getUnlocalizedName.substring(5)), "inventory"))
     }
 
     def registerBlockModel(block : Block, name : String, variants : String, meta : Int = 0) : Unit = {
