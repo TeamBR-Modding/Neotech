@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.common.items
 
 import java.text.NumberFormat
-import java.util.Locale
+import java.util.{Locale, Random}
 
 import com.dyonovan.neotech.common.entities.EntityNet
 import com.dyonovan.neotech.managers.ItemManager
@@ -13,7 +13,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.SoundEvents
 import net.minecraft.item.{EnumAction, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.SoundCategory
+import net.minecraft.util.{ActionResult, EnumActionResult, EnumHand, SoundCategory}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.text.translation.I18n
 import net.minecraft.world.World
@@ -66,14 +66,17 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
     }
 
     //TODO figure this out
-/*
-    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
+
+    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand): ActionResult[ItemStack] = {
         if (hasAmmo(player, remove = false) && extractEnergy(stack, RF_PER_USE, simulate = true) == RF_PER_USE) {
-            player.setItemInUse(stack, getMaxItemUseDuration(stack))
+            val ret: ActionResult[ItemStack] = net.minecraftforge.event.ForgeEventFactory.onArrowNock(stack, world, player, hand, true)
+            if (ret != null) return ret
+            return new ActionResult[ItemStack](EnumActionResult.SUCCESS, stack)
         }
-        else world.playSoundAtEntity(player, "fire.ignite", 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
-        stack
-    }*/
+        else world.playSound(player, player.getPosition, SoundEvents.item_flintandsteel_use, SoundCategory.BLOCKS, 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
+        new ActionResult[ItemStack](EnumActionResult.FAIL, stack)
+    }
+
     private def hasAmmo(player: EntityPlayer, remove: Boolean): Boolean = {
         for (i <- 0 until player.inventory.getSizeInventory) {
             if (player.inventory.getStackInSlot(i) != null && !player.inventory.getStackInSlot(i).hasTagCompound &&
