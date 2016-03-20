@@ -7,13 +7,11 @@ import com.dyonovan.neotech.lib.Reference
 import com.dyonovan.neotech.managers.ItemManager
 import com.dyonovan.neotech.universe.entities.{EntitySun, EnumSunType}
 import com.dyonovan.neotech.utils.ClientUtils
-import com.teambr.bookshelf.client.models.BakedDynItem
 import com.teambr.bookshelf.common.items.traits.ItemModelProvider
 import com.teambr.bookshelf.loadables.CreatesTextures
 import net.minecraft.entity.Entity
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.world.World
-import net.minecraftforge.client.model.ModelLoader
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -31,8 +29,6 @@ class SunItem(name : String) extends Item with ItemModelProvider with CreatesTex
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
-
-    ModelLoader.setCustomModelResourceLocation(this, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
 
     override def getTexturesToStitch: ArrayBuffer[String] =
         ArrayBuffer(
