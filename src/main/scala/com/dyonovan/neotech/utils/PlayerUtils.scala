@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.utils
 
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.Item
+import net.minecraft.item.{ItemStack, Item}
+import net.minecraft.util.EnumHand
 
 /**
   * This file was created for NeoTech
@@ -22,4 +23,16 @@ object PlayerUtils {
         false
     }
 
+    /**
+      * Gets what hand this item is in, this does an object match so you must send the object, not match by values
+      * @param stack The object
+      * @return What hand its in
+      */
+    def getHandStackIsIn(player : EntityPlayer, stack : ItemStack) : EnumHand = {
+        if(player == null || stack == null) return EnumHand.MAIN_HAND
+        if(player.getHeldItemMainhand != null && player.getHeldItemMainhand.equals(stack))
+            EnumHand.MAIN_HAND
+        else
+            EnumHand.OFF_HAND
+    }
 }

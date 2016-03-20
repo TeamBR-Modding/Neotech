@@ -2,14 +2,14 @@ package com.dyonovan.neotech.common.container.misc
 
 import com.dyonovan.neotech.common.container.InventoryNull
 import com.dyonovan.neotech.common.container.slot.SlotNull
+import com.dyonovan.neotech.utils.PlayerUtils
 import com.teambr.bookshelf.common.container.BaseContainer
 import com.teambr.bookshelf.common.container.slots.{PhantomSlot, SLOT_SIZE}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
-import net.minecraft.entity.item.EntityPainting
 import net.minecraft.entity.player.{EntityPlayer, InventoryPlayer}
-import net.minecraft.inventory.IInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.EnumHand
 
 import scala.util.control.Breaks._
 /**
@@ -47,12 +47,18 @@ class ContainerTrashBag(inventory : Inventory, playerInventory : InventoryPlayer
     addSlotToContainer(new PhantomSlot(inventory, 0, 80, 35))
 
     override def onContainerClosed(player : EntityPlayer) : Unit = {
-        if(!bag.hasTagCompound)
-            bag.setTagCompound(new NBTTagCompound)
-        if(inventory.getStackInSlot(0) != null)
-            inventory.getStackInSlot(0).writeToNBT(bag.getTagCompound)
-        else
-            bag.setTagCompound(new NBTTagCompound)
-        player.inventory.setInventorySlotContents(player.inventory.currentItem, bag)
+        if(!player.worldObj.isRemote) {
+            val hand = PlayerUtils.getHandStackIsIn(player, bag)
+            if (!bag.hasTagCompound)
+                bag.setTagCompound(new NBTTagCompound)
+            if (inventory.getStackInSlot(0) != null)
+                inventory.getStackInSlot(0).writeToNBT(bag.getTagCompound)
+            else
+                bag.setTagCompound(new NBTTagCompound)
+            if (hand == EnumHand.MAIN_HAND)
+                player.inventory.setInventorySlotContents(player.inventory.currentItem, bag)
+            else
+                player.inventory.offHandInventory(0) = bag
+        }
     }
 }

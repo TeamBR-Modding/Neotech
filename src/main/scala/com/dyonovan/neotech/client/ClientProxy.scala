@@ -13,11 +13,15 @@ import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
 import com.dyonovan.neotech.events.{GuiEvents, RenderingEvents}
-import com.dyonovan.neotech.managers.{BlockManager, FluidManager, ItemManager, MetalManager}
-import com.dyonovan.neotech.tools.UpgradeItemManager
+import com.dyonovan.neotech.managers.{BlockManager, FluidManager, MetalManager}
+import com.dyonovan.neotech.tools.armor.ItemElectricArmor
+import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.universe.entities.EntitySun
+import com.dyonovan.neotech.universe.items.SunItem
 import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
+import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
+import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.color.{IBlockColor, IItemColor}
@@ -94,31 +98,30 @@ class ClientProxy extends CommonProxy {
             "pipeEnergyBasicInterface",
             "down=2,east=0,north=0,south=0,up=1,west=0")
 
+        // Item Models
         val itemIterator = Item.itemRegistry.iterator()
         while(itemIterator.hasNext) {
-            val itemLocal = itemIterator.next()
-            itemLocal match {
+            itemIterator.next() match {
                 case upgradeItem : BaseUpgradeItem =>
-                    ModelLoader.setCustomModelResourceLocation(upgradeItem, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)                case _ =>
+                    ModelLoader.setCustomModelResourceLocation(upgradeItem, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+                case tool : BaseElectricTool if !tool.isInstanceOf[ItemElectricArmor] =>
+                    ModelLoader.setCustomModelResourceLocation(tool, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+                case sunItem : SunItem =>
+                    ModelLoader.setCustomModelResourceLocation(sunItem, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+                case _ =>
             }
         }
 
-        ModelLoader.setCustomModelResourceLocation(ItemManager.inertSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.blueDwarf, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.smallSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.largeSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.redGiant, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.phantomGlass), 0, BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.voidGlass), 0, BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(BlockManager.rockWall), 0, BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
-
-        ModelLoader.setCustomModelResourceLocation(ItemManager.electricSword, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.electricPickaxe, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-
-        ModelLoader.setCustomModelResourceLocation(UpgradeItemManager.upgradeMiningLevel2, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(UpgradeItemManager.upgradeMiningLevel3, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(UpgradeItemManager.upgradeMiningLevel4, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        // Block Models, for items
+        val blockIterator = Block.blockRegistry.iterator()
+        while(blockIterator.hasNext) {
+            blockIterator.next() match {
+                case connectedTextures : BlockConnectedTextures =>
+                        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(connectedTextures), 0,
+                            BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
+                case _ =>
+            }
+        }
 
         ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricFurnace", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.grinder, "grinder", "normal")
@@ -154,7 +157,7 @@ class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.mobStand, "mobStand", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.blockAttractor, "blockAttractor", "attached_side=up")
         ItemRenderManager.registerBlockModel(BlockManager.flushableChest, "flushableChest", "facing=north")
-        ItemRenderManager.registerBlockModel(BlockManager.displayPanel, "displayPanel", "facing=north")
+        ItemRenderManager.registerBlockModel(BlockManager.displayPanel, "displayPanel", "facing=south")
 
         MetalManager.registerModels()
     }
