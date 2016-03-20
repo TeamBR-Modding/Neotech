@@ -79,7 +79,7 @@ abstract class MachineGenerator extends AbstractMachine {
             reset()
 
         if (didWork) {
-            worldObj.setBlockState(pos, worldObj.getBlockState(pos), 3)
+            worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
         }
     }
 

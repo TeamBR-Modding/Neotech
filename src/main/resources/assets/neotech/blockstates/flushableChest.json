@@ -5,10 +5,10 @@
     },
     "variants": {
         "facing": {
-            "north" : {},
-            "south" : {},
-            "east"  : {},
-            "west"  : {}
+            "north" : { "model" : "neotech:flushableChest" },
+            "south" : { "model" : "neotech:flushableChest" },
+            "east"  : { "model" : "neotech:flushableChest" },
+            "west"  : { "model" : "neotech:flushableChest" }
         }
     }
 }

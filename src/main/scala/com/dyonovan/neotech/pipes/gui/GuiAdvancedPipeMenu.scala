@@ -106,14 +106,19 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
 
             val selectorTab = new ArrayBuffer[BaseComponent]
             selectorTab += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.ioConfig"), 29, 6)
-            selectorTab += new GuiComponentSideSelector(15, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true, renderTile = false) {
+            selectorTab += new GuiComponentSideSelector(15, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos).getBlock.getActualState(tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity.getWorld, tileEntity.getPos), tileEntity, true, renderTile = false) {
                 override def setToggleController(): Unit = {
                     toggleableSidesController = new ToggleableSidesController {
 
                         override def onSideToggled(side: EnumFacing, modifier: Int): Unit = {
                             tileEntity.setVariable(AdvancedPipe.IO_FIELD_ID, side.ordinal())
                             tileEntity.sendValueToServer(AdvancedPipe.IO_FIELD_ID, side.ordinal())
-                            setBlockState(tileEntity.getWorld.getBlockState(tileEntity.getPos))
+                            setBlockState(tileEntity.getWorld.getBlockState(tileEntity.getPos)
+                                    .getBlock
+                                    .getActualState(
+                                        tileEntity.getWorld.getBlockState(tileEntity.getPos),
+                                        tileEntity.getWorld,
+                                tileEntity.getPos))
                         }
 
                         @Nullable

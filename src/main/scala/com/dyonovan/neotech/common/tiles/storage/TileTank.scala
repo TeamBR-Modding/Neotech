@@ -193,7 +193,7 @@ class TileTank extends UpdatingTile with IFluidHandler with RedstoneAware {
 
     def markForUpdate() = {
         if (worldObj != null)
-            worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
+            worldObj.notifyBlockUpdate(getPos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
     }
 
     /*override def returnWailaBody(tipList: java.util.List[String]): java.util.List[String] = {

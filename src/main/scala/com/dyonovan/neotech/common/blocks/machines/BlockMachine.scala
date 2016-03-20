@@ -94,7 +94,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getTileEntity(new BlockPos(x, y, z)) match {
-            case abstractMachine : AbstractMachine if PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench) =>
+            case abstractMachine : AbstractMachine if !PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench) =>
                 abstractMachine.getServerGuiElement(ID, player, world, x, y, z)
             case _ => null
         }
@@ -103,7 +103,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     @SideOnly(Side.CLIENT)
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
         world.getTileEntity(new BlockPos(x, y, z)) match {
-            case abstractMachine : AbstractMachine if PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench) =>
+            case abstractMachine : AbstractMachine if !PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench) =>
                 abstractMachine.getClientGuiElement(ID, player, world, x, y, z)
             case _ => null
         }

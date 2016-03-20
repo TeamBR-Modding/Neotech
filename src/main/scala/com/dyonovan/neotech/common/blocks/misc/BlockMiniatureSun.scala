@@ -97,6 +97,8 @@ class BlockMiniatureSun(name: String, tileEntity: Class[_ <: TileEntity]) extend
     }
 
     override def getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
+        if(source.isAirBlock(pos))
+            return new AxisAlignedBB(0, 0, 0, 1, 1, 1)
         if(source.getBlockState(pos).getValue(NeoStates.ON_BLOCK).asInstanceOf[Int] == 6) {
             this.setBlockBounds(6F / 16F, 6F / 16F, 6F / 16F, 10F / 16F, 10F / 16F, 10F / 16F)
         } else {

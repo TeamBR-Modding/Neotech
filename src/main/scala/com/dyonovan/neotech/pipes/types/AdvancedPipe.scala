@@ -173,11 +173,11 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
             case AdvancedPipe.IO_FIELD_ID =>
                 toggleMode(EnumFacing.getFront(value.toInt))
                 reRender = true
-                worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 3)
+                worldObj.notifyBlockUpdate(getPos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3)
                 WorldPipes.notifyPipes()
             case AdvancedPipe.FREQUENCY =>
                 frequency = value.toInt
-                worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 6)
+                worldObj.notifyBlockUpdate(getPos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
                 WorldPipes.notifyPipes()
             case AdvancedPipe.FILTER =>
                 value.toInt match {
@@ -187,7 +187,7 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
                     case AdvancedPipe.FILTER_BLACKLIST => blackList = !blackList
                     case _ =>
                 }
-                worldObj.setBlockState(getPos, worldObj.getBlockState(pos), 3)
+                worldObj.notifyBlockUpdate(getPos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3)
                 WorldPipes.notifyPipes()
             case _ =>
         }
