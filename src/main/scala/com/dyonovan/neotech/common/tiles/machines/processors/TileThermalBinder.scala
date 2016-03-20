@@ -375,8 +375,9 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
     /**
       * Called when something happens to the tank, you should mark the block for update here if a tile
       */
-    override def onTankChanged(tank: FluidTank): Unit = worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
-
+    override def onTankChanged(tank: FluidTank): Unit =
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+    
     /*******************************************************************************************************************
       *********************************************** Inventory methods ************************************************
       ******************************************************************************************************************/

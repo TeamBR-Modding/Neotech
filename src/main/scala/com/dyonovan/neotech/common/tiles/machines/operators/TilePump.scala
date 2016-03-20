@@ -146,7 +146,9 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler {
                     val fluidStack = new FluidStack(FluidRegistry.LAVA, 1000)
                     if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
+                        val oldState = worldObj.getBlockState(position)
                         worldObj.setBlockState(position, Blocks.stone.getDefaultState)
+                        worldObj.notifyBlockUpdate(position, oldState, Blocks.stone.getDefaultState, 3)
                         energyStorage.extractEnergy(costToOperate, false)
                         return true
                     }
@@ -209,7 +211,8 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler {
     /**
       * Called when something happens to the tank, you should mark the block for update here if a tile
       */
-    override def onTankChanged(tank: FluidTank): Unit = worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
+    override def onTankChanged(tank: FluidTank): Unit =
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
 
     /**
       * Returns true if the given fluid can be inserted into the given direction.

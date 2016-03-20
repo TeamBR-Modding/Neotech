@@ -34,7 +34,7 @@ class RenderSun (renderManager : RenderManager) extends Render[EntitySun](render
         val texture = new ResourceLocation("neotech", "blocks/metal_still")
         var tex : TextureAtlasSprite = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite(texture.toString)
 
-        val radius = entity.getDataManager.get[java.lang.Float](entity.DATA_WATCHER_RADIUS)
+        val radius = entity.getDataManager.get(entity.DATA_WATCHER_RADIUS)
         val sunType = EnumSunType.values()(entity.getDataManager.get(entity.DATA_WATCHER_TYPE))
 
         if(sunType == EnumSunType.INERT)
