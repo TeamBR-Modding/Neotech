@@ -44,7 +44,11 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
     @SideOnly(Side.CLIENT)
     override def randomDisplayTick(state: IBlockState, world: World, pos: BlockPos, rand: java.util.Random): Unit = {
         if (activeState && getActualState(state, world, pos).getValue(this.PROPERTY_ACTIVE).asInstanceOf[Boolean]) {
-            val enumFacing:EnumFacing = state.getValue(Properties.FOUR_WAY)
+            var enumFacing : EnumFacing = null
+            if(fourWayRotation)
+                enumFacing = state.getValue(Properties.FOUR_WAY)
+            else
+                enumFacing = EnumFacing.UP
             val d0: Double = pos.getX + 0.5
             val d1: Double = pos.getY + rand.nextDouble() * 6.0D / 16.0D
             val d2: Double = pos.getZ + 0.5D

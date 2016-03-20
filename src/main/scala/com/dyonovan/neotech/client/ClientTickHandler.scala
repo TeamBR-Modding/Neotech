@@ -45,7 +45,7 @@ object ClientTickHandler {
             val tup = (id, stack)
             itemBuffer += tup
         }
-
+/*
         // Get Held Offhand Item
         if(player.getHeldItemOffhand != null && player.getHeldItemOffhand.getItem.isInstanceOf[BaseElectricTool]) {
             val id = player.inventory.currentItem
@@ -53,7 +53,7 @@ object ClientTickHandler {
             val tup = (id, stack)
             itemBuffer += tup
         }
-
+*/
         // Get Armor Items
         for(i <- player.inventory.armorInventory.indices) {
             if(player.inventory.armorInventory(i) != null &&
