@@ -65,12 +65,9 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
         }
     }
 
-    //TODO figure this out
-
     override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand): ActionResult[ItemStack] = {
         if (hasAmmo(player, remove = false) && extractEnergy(stack, RF_PER_USE, simulate = true) == RF_PER_USE) {
-            val ret: ActionResult[ItemStack] = net.minecraftforge.event.ForgeEventFactory.onArrowNock(stack, world, player, hand, true)
-            if (ret != null) return ret
+            player.setActiveHand(hand)
             return new ActionResult[ItemStack](EnumActionResult.SUCCESS, stack)
         }
         else world.playSound(player, player.getPosition, SoundEvents.item_flintandsteel_use, SoundCategory.BLOCKS, 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
