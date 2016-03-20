@@ -97,6 +97,11 @@ class ClientProxy extends CommonProxy {
         ModelLoader.setCustomModelResourceLocation(ItemManager.advancedRFBattery, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
         ModelLoader.setCustomModelResourceLocation(ItemManager.eliteRFBattery, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
 
+        ModelLoader.setCustomModelResourceLocation(ItemManager.upgradeControl, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.upgradeExpansion, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.upgradeHardDrive, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        ModelLoader.setCustomModelResourceLocation(ItemManager.upgradeProcessor, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+
         ModelLoader.setCustomModelResourceLocation(ItemManager.inertSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
         ModelLoader.setCustomModelResourceLocation(ItemManager.blueDwarf, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
         ModelLoader.setCustomModelResourceLocation(ItemManager.smallSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
@@ -148,6 +153,7 @@ class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.mobStand, "mobStand", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.blockAttractor, "blockAttractor", "attached_side=up")
         ItemRenderManager.registerBlockModel(BlockManager.flushableChest, "flushableChest", "facing=north")
+        ItemRenderManager.registerBlockModel(BlockManager.displayPanel, "displayPanel", "facing=north")
 
         MetalManager.registerModels()
     }

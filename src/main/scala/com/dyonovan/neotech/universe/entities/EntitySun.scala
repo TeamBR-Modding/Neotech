@@ -42,8 +42,8 @@ class EntitySun(world : World) extends Entity(world) {
     }
 
     override def entityInit(): Unit = {
-        getDataManager.register[java.lang.Float](DATA_WATCHER_RADIUS, radius)
-        getDataManager.register[java.lang.Integer](DATA_WATCHER_TYPE, sunType.ordinal())
+        getDataManager.register[java.lang.Float](DATA_WATCHER_RADIUS, 0.23F)
+        getDataManager.register[java.lang.Integer](DATA_WATCHER_TYPE, 0)
     }
 
     override def onUpdate(): Unit = {
