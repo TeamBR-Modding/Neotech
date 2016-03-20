@@ -4,13 +4,11 @@ import java.util
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
-import com.teambr.bookshelf.client.models.BakedDynItem
 import com.teambr.bookshelf.common.items.traits.ItemModelProvider
 import com.teambr.bookshelf.loadables.CreatesTextures
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.client.model.ModelLoader
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -31,8 +29,6 @@ abstract class BaseUpgradeItem(name: String, stackSize: Int,
     if(tab != null)
         setCreativeTab(tab)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
-
-    ModelLoader.setCustomModelResourceLocation(this, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
 
     def getUpgradeName: String = name
 
