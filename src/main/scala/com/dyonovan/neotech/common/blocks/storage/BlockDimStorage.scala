@@ -62,7 +62,7 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
                     }
                 }
             }
-            world.setBlockState(pos, state, 6)
+            world.notifyBlockUpdate(pos, state, state, 6)
             time = world.getTotalWorldTime
         }
         true

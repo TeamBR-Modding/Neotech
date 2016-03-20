@@ -58,10 +58,10 @@ class BlockPlayerPlate extends BlockBasePressurePlate(Material.iron) {
     }
 
     override def playClickOnSound(worldIn: World, color: BlockPos): Unit =
-        worldIn.playSound(null.asInstanceOf[EntityPlayer], color, SoundEvents.block_stone_pressplate_click_on,
+        worldIn.playSound(null.asInstanceOf[EntityPlayer], color, SoundEvents.block_metal_pressplate_click_on,
             SoundCategory.BLOCKS, 0.3F, 0.6F)
 
     override def playClickOffSound(worldIn: World, pos: BlockPos): Unit =
-        worldIn.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_stone_pressplate_click_off,
+        worldIn.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_metal_pressplate_click_off,
             SoundCategory.BLOCKS, 0.3F, 0.5F)
 }

@@ -51,7 +51,7 @@ class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", cla
 
     override def isFullCube(state : IBlockState): Boolean = false
 
-    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
+    override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.ENTITYBLOCK_ANIMATED
 
     override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
         val tag = new NBTTagCompound

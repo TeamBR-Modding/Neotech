@@ -208,7 +208,7 @@ class TileDimStorage extends UpdatingTile with Inventory with Upgradeable {
             dropStacks(leftOver, getStackInSlot(0).copy())
             qty = maxStacks * getStackInSlot(0).getMaxStackSize
         }
-        worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos),6)
     }
 
     def compareOreDict(stack: ItemStack): Boolean = {

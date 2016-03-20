@@ -105,15 +105,19 @@ class GuiElectricCrusher(player: EntityPlayer, tileEntity: TileElectricCrusher) 
             override def getDynamicColor = {
                 var color = new Color(0, 0, 0, 0)
                 breakable {
-                    for(dir <- EnumFacing.values())
-                        if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
+                    for(dir <- EnumFacing.values()) {
+                        if (tileEntity.getModeForSide(dir) == EnumInputOutputMode.ALL_MODES) {
                             color = EnumInputOutputMode.ALL_MODES.getHighlightColor
                             break
-                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.OUTPUT_ALL) {
+                        }
+                        if (tileEntity.getModeForSide(dir) == EnumInputOutputMode.OUTPUT_ALL) {
                             color = EnumInputOutputMode.OUTPUT_ALL.getHighlightColor
-                            break
-                        } else if(tileEntity.getModeForSide(dir) == EnumInputOutputMode.OUTPUT_SECONDARY)
+                        }
+                        if (tileEntity.getModeForSide(dir) == EnumInputOutputMode.OUTPUT_SECONDARY) {
                             color = EnumInputOutputMode.OUTPUT_SECONDARY.getHighlightColor
+                            break
+                        }
+                    }
                 }
                 if(color.getAlpha != 0)
                     color = new Color(color.getRed, color.getGreen, color.getBlue, 80)

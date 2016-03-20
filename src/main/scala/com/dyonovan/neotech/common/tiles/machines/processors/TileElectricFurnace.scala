@@ -112,7 +112,7 @@ class TileElectricFurnace extends MachineProcessor[ItemStack, ItemStack] {
             getStackInSlot(1).stackSize += recipeResult.stackSize
         }
 
-        worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
     }
 
     /**

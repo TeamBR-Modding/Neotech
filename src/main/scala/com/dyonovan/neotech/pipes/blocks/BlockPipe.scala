@@ -16,6 +16,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.init.Blocks
 import net.minecraft.item._
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
@@ -146,7 +147,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
                                   hand: EnumHand, heldItem: ItemStack, side: EnumFacing,
                                   hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         heldItem match {
-            case stack : ItemStack if stack.getItem == ItemManager.wrench && playerIn.isSneaking =>
+            case stack : ItemStack if stack.getItem == ItemManager.wrench  =>
                 if(!world.isRemote) {
                     val random = new Random
                     val stack = new ItemStack(world.getBlockState(pos).getBlock.getItemDropped(world.getBlockState(pos), random, 0), 1, damageDropped(world.getBlockState(pos)))
@@ -170,7 +171,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
                         world.spawnEntityInWorld(itemEntity)
                     }
                     world.setBlockToAir(pos)
-                    world.setBlockState(pos, state, 3)
+                    world.setBlockState(pos, Blocks.air.getDefaultState, 3)
                     return true
                 } else
                     playerIn.swingArm(hand)

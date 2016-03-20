@@ -24,13 +24,13 @@ class TileGrinder extends UpdatingTile with Inventory {
 
     def activateGrinder(progressValue : Int, multiplier : Double): Unit = {
         updateCurrentItem()
-        worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
         if(getStackInSlot(3) != null && hasOutputAvailable) {
             progress += (progressValue * multiplier).toInt
             if(progress >= MAX_PROGRESS) {
                 progress = progress - MAX_PROGRESS
                 grindItem()
-                worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
+                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
                 if(progress >= MAX_PROGRESS)
                     activateGrinder(0, 0)
             }

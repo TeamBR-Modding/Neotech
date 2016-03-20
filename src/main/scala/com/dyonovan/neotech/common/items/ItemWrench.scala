@@ -20,11 +20,11 @@ import net.minecraft.world.{IBlockAccess, World}
 class ItemWrench extends BaseItem("wrench", 1) {
     override def isFull3D : Boolean = true
 
-    override def onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos,
-                           hand: EnumHand, facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : EnumActionResult = {
+    override def onItemUseFirst(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos,
+                                side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, hand: EnumHand) : EnumActionResult = {
         val block = world.getBlockState(pos).getBlock
-        if (!player.isSneaking && block != Blocks.bed && block.rotateBlock(world, pos, facing)) {
-            player.swingArm(EnumHand.MAIN_HAND)
+        if (!player.isSneaking && block != Blocks.bed && block.rotateBlock(world, pos, side)) {
+            player.swingArm(hand)
             return EnumActionResult.SUCCESS
         }
         EnumActionResult.PASS

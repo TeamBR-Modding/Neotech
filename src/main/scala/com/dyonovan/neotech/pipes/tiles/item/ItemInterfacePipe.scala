@@ -109,7 +109,7 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
                                 InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
                                     getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
                                 foundSource = null
-                                worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
+                                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
                                 shouldRecheck = true
                             }
                         }
