@@ -3,7 +3,8 @@
     "defaults" : {
         "textures" : {
             "base" : "neotech:blocks/pipes/basic_structure_pipe_white"
-        }
+        },
+        "model" : "neotech:pipe"
     },
     "variants" : {
         "color" : {

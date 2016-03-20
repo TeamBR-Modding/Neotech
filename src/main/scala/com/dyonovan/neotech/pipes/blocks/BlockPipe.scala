@@ -217,7 +217,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /*******************************************************************************************************************
       * Block Info Methods                                                                                             *
       ******************************************************************************************************************/
-    var BB = new AxisAlignedBB(4F / 16F, 0F, 4F / 16F, 12F / 16F, 1F, 12F / 16F)
+    var BB = new AxisAlignedBB(4F / 16F, 4F / 16F, 4F / 16F, 12F / 16F, 12F / 16F, 12F / 16F)
 
     /**
       * Used to set the bounding box based on the current state

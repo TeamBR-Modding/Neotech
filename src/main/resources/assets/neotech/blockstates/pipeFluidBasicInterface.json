@@ -4,7 +4,8 @@
         "textures" : {
             "base" : "neotech:blocks/pipes/basicFluidSource",
             "extra" : "neotech:blocks/pipes/basicFluidSourceExtras"
-        }
+        },
+        "model" : "neotech:pipe"
     },
     "variants" : {
         "up" : {
