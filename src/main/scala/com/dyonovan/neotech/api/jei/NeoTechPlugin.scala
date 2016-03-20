@@ -28,6 +28,8 @@ object NeoTechPlugin {
 class NeoTechPlugin extends IModPlugin {
 
     override def register(registry: IModRegistry): Unit = {
+        NeoTechPlugin.jeiHelpers = registry.getJeiHelpers
+
         //Crafter Shift Right Click
         registry.getRecipeTransferRegistry.addRecipeTransferHandler(classOf[ContainerCrafter], VanillaRecipeCategoryUid.CRAFTING,  2, 9, 20, 36)
         registry.addRecipeCategories(
