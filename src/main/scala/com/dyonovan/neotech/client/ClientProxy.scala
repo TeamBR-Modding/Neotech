@@ -2,7 +2,7 @@ package com.dyonovan.neotech.client
 
 import com.dyonovan.neotech.client.mesh.MeshDefinitions.{PipeModelMesh, PipeSpecialModelMesh, StarModelMesh}
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
-import com.dyonovan.neotech.client.renderers.entity.{RenderSun, RenderNet}
+import com.dyonovan.neotech.client.renderers.entity.{RenderNet, RenderSun}
 import com.dyonovan.neotech.client.renderers.tiles._
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.entities.EntityNet
@@ -13,16 +13,17 @@ import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
 import com.dyonovan.neotech.events.{GuiEvents, RenderingEvents}
-import com.dyonovan.neotech.managers.{ItemManager, FluidManager, BlockManager, MetalManager}
+import com.dyonovan.neotech.managers.{BlockManager, FluidManager, ItemManager, MetalManager}
 import com.dyonovan.neotech.tools.UpgradeItemManager
+import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.universe.entities.EntitySun
 import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.color.{IItemColor, IBlockColor}
+import net.minecraft.client.renderer.color.{IBlockColor, IItemColor}
 import net.minecraft.client.renderer.entity.{Render, RenderManager}
 import net.minecraft.client.resources.IReloadableResourceManager
-import net.minecraft.item.{ItemStack, EnumDyeColor, Item}
+import net.minecraft.item.{EnumDyeColor, Item, ItemStack}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.client.model.ModelLoader
@@ -93,14 +94,14 @@ class ClientProxy extends CommonProxy {
             "pipeEnergyBasicInterface",
             "down=2,east=0,north=0,south=0,up=1,west=0")
 
-        ModelLoader.setCustomModelResourceLocation(ItemManager.basicRFBattery, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.advancedRFBattery, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.eliteRFBattery, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-
-        ModelLoader.setCustomModelResourceLocation(ItemManager.upgradeControl, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.upgradeExpansion, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.upgradeHardDrive, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-        ModelLoader.setCustomModelResourceLocation(ItemManager.upgradeProcessor, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
+        val itemIterator = Item.itemRegistry.iterator()
+        while(itemIterator.hasNext) {
+            val itemLocal = itemIterator.next()
+            itemLocal match {
+                case upgradeItem : BaseUpgradeItem =>
+                    ModelLoader.setCustomModelResourceLocation(upgradeItem, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)                case _ =>
+            }
+        }
 
         ModelLoader.setCustomModelResourceLocation(ItemManager.inertSun, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
         ModelLoader.setCustomModelResourceLocation(ItemManager.blueDwarf, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
