@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks
 import net.minecraft.item.{EnumAction, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntityMobSpawner
+import net.minecraft.util.{ActionResult, EnumActionResult, EnumHand}
 import net.minecraft.util.math.RayTraceResult
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -22,12 +23,12 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @since 2/2/2016
   */
 class ItemSpawnerMover extends BaseItem("spawnerMover", 1) {
-/*
-    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
-        player.setItemInUse(stack, getMaxItemUseDuration(stack))
-        stack
+
+    override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand): ActionResult[ItemStack] = {
+        player.setActiveHand(hand)
+        new ActionResult[ItemStack](EnumActionResult.SUCCESS, stack)
     }
-*/
+
     override def getItemUseAction(stack: ItemStack): EnumAction = {
         EnumAction.BOW
     }
