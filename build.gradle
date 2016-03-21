@@ -126,6 +126,8 @@ artifacts {
 
 processResources
 {
+    exclude '**/Thumbs.db'
+
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -213,7 +215,7 @@ curseforge {
         id = '228643'
         changelog = 'Changelog: https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog'
         releaseType = 'beta'
-        addGameVersion '1.8.9'
+        addGameVersion '1.9'
         addArtifact devJar
         relations {
             requiredLibrary 'bookshelf-api-library'

@@ -1,27 +1,12 @@
 {
   "homepage": "http://minecraft.curseforge.com/projects/neotech/files",
   "promos": {
-    "1.8.9-latest": "2.4.1",
-    "1.8.9-recommended": "2.4.1",
-    "latest": "2.4.1",
-    "recommended": "2.4.1"
+    "1.9-latest": "3.0.0",
+    "1.9-recommended": "3.0.0",
+    "latest": "3.0.0",
+    "recommended": "3.0.0"
   },
-  "1.8.9": {
-    "2.2.3": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.2.4": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.0": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.1": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.2": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.3": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.4": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.5": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.6": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.7": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.8": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.8a": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.3.9": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.4.0": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.4.0a": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog",
-    "2.4.1": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog"
+  "1.9": {
+    "3.0.0": "See https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog"
   }
 }
