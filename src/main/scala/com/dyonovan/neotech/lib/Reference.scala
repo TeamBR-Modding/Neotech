@@ -14,7 +14,7 @@ object Reference {
     final val MOD_NAME     = "NeoTech"
     final val MOD_ID       = "neotech"
     final val VERSION      = "3.0.0"//@VERSION@"
-    final val DEPENDENCIES = "after:tconstruct;required-after:Forge@[11.16.0.1770,);required-after:bookshelfapi@[3.0.0,);" //required-after:mcmultipart@[1.0.7,)
+    final val DEPENDENCIES = "after:tconstruct;required-after:Forge@[11.16.0.1782,);required-after:bookshelfapi@[3.0.0,);" //required-after:mcmultipart@[1.0.7,)
     final val UPDATE_JSON  = "https://raw.githubusercontent.com/TeamBR-Modding/NeoTech/1.9/update.json"
 
     final val CONFIG_WORLD = "World Generation"

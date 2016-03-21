@@ -2,9 +2,12 @@ package com.dyonovan.neotech.chunkloader
 
 import java.util
 
+import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
-import gnu.trove.map.hash.THashMap
+import com.dyonovan.neotech.registries.ConfigRegistry
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import net.minecraftforge.common.ForgeChunkManager
 import net.minecraftforge.common.ForgeChunkManager.{LoadingCallback, Ticket}
 
 import scala.collection.JavaConversions._
@@ -21,13 +24,21 @@ import scala.collection.JavaConversions._
   */
 object ChunkLoaderManager extends LoadingCallback {
 
-    lazy val chunkList: THashMap[Integer, ChunkList] = new THashMap[Integer, ChunkList]()
-
     override def ticketsLoaded(tickets: util.List[Ticket], world: World): Unit = {
         for (ticket <- tickets) {
             if (ticket.getModId.equalsIgnoreCase(Reference.MOD_ID)) {
-
+                if (!ConfigRegistry.onlineOnly) {
+                    val chunkTicket = ForgeChunkManager.requestTicket(NeoTech, ticket.world, ticket.getType)
+                    val posX = chunkTicket.getModData.getInteger("neotech.loaderX")
+                    val posY = chunkTicket.getModData.getInteger("neotech.loaderY")
+                    val posZ = chunkTicket.getModData.getInteger("neotech.loaderZ")
+                    val tile = world.getTileEntity(new BlockPos(posX, posY, posZ)).asInstanceOf[TileChunkLoader]
+                    tile.forceChunkLoading(ticket)
+                } else {
+                    //TODO online only
+                }
             }
         }
     }
+
 }
