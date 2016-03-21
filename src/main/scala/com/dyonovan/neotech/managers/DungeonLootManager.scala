@@ -15,7 +15,7 @@ import net.minecraftforge.common.DungeonHooks
 object DungeonLootManager {
 
     def addToLootTable(): Unit = {
-        val chests = new ChestGenHooks()
+        //val chests = new ChestGenHooks()
     }
 
 }

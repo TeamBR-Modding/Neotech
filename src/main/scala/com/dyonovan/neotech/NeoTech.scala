@@ -86,6 +86,7 @@ object NeoTech {
         proxy.preInit()
         GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new ItemGuiManager)
+        ForgeChunkManager.setForcedChunkLoadingCallback(this, new ChunkLoaderManager)
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
