@@ -1,8 +1,7 @@
-package com.dyonovan.neotech.common.blocks.misc
+package com.dyonovan.neotech.chunkloader
 
 import com.dyonovan.neotech.client.gui.misc.GuiChunkLoader
 import com.dyonovan.neotech.common.blocks.BaseBlock
-import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
@@ -10,8 +9,8 @@ import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{EnumBlockRenderType, BlockRenderLayer, EnumParticleTypes}
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.{BlockRenderLayer, EnumBlockRenderType, EnumParticleTypes}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 

@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.managers
 
+import com.dyonovan.neotech.chunkloader.{BlockChunkLoader, TileChunkLoader}
 import com.dyonovan.neotech.common.blocks.connected.{BlockPhantomGlass, BlockRockWall, BlockVoidGlass}
 import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine, BlockSolarPanel}
 import com.dyonovan.neotech.common.blocks.misc._
