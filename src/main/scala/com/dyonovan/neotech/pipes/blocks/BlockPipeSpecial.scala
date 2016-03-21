@@ -10,22 +10,32 @@ import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.container.ContainerAdvancedPipeMenu
 import com.dyonovan.neotech.pipes.gui.GuiAdvancedPipeMenu
 import com.dyonovan.neotech.pipes.types.{AdvancedPipe, SimplePipe}
+import com.google.common.base.Predicate
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.loadables.ILoadActionProvider
 import com.teambr.bookshelf.traits.HasToolTip
+import mcmultipart.block.{BlockCoverable, BlockMultipartContainer, TileCoverable}
+import mcmultipart.client.multipart.ModelMultipartContainer
+import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
-import net.minecraft.block.{Block, BlockContainer}
+import net.minecraft.client.renderer.block.model.{IBakedModel, ModelResourceLocation}
+import net.minecraft.entity.Entity
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
+import net.minecraft.util.registry.RegistrySimple
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.client.event.ModelBakeEvent
+import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 import org.lwjgl.input.Keyboard
+
+import scala.collection.JavaConversions._
+import scala.collection.mutable.ArrayBuffer
 
 
 /**
@@ -38,7 +48,7 @@ import org.lwjgl.input.Keyboard
   * @author Paul Davis pauljoda
   * @since August 14, 2015
   */
-class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockContainer(mat)
+class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <: AdvancedPipe]) extends BlockCoverable(mat)
         with HasToolTip with ILoadActionProvider {
 
     /*******************************************************************************************************************
@@ -65,17 +75,16 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * Used to create the block state of the pipes
       */
     protected override def createBlockState: BlockStateContainer = {
-     /*   val listed = new ArrayBuffer[IProperty[_]]()
+        val listed = new ArrayBuffer[IProperty[_]]()
         listed += PipeProperties.SPECIAL_UP
         listed += PipeProperties.SPECIAL_DOWN
         listed += PipeProperties.SPECIAL_NORTH
         listed += PipeProperties.SPECIAL_SOUTH
         listed += PipeProperties.SPECIAL_EAST
-        listed += PipeProperties.SPECIAL_WEST*/
-        new BlockStateContainer(this,
-            PipeProperties.SPECIAL_UP, PipeProperties.SPECIAL_DOWN,
-            PipeProperties.SPECIAL_EAST, PipeProperties.SPECIAL_WEST,
-            PipeProperties.SPECIAL_NORTH, PipeProperties.SPECIAL_SOUTH) //, BlockMultipart.properties.asInstanceOf[Array[IUnlistedProperty[_]]])
+        listed += PipeProperties.SPECIAL_WEST
+        val unListed = new ArrayBuffer[IUnlistedProperty[_]]()
+        unListed += BlockMultipartContainer.PROPERTY_MULTIPART_CONTAINER
+        new ExtendedBlockState(this, listed.toArray, unListed.toArray)
     }
 
     override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): IBlockState = {
@@ -101,7 +110,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * Block Methods                                                                                                  *
       ******************************************************************************************************************/
 
-    override def createNewTileEntity(worldIn: World, meta: Int): TileEntity = tileClass.newInstance()
+    override def createNewTileEntity(worldIn: World, meta: Int): TileCoverable = tileClass.newInstance()
 
     override def breakBlock(worldIn: World, pos: BlockPos, state: IBlockState): Unit = {
         if(worldIn.getTileEntity(pos) != null) {
@@ -153,7 +162,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
       * If you want to override this but still call it, make sure you call
       *      super[OpensGui].onBlockActivated(...)
       */
-    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+    override def onBlockActivatedDefault(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
                                   hand: EnumHand, heldItem: ItemStack, side: EnumFacing,
                                   hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         heldItem match {
@@ -243,6 +252,14 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
     }
 
+    /**
+      * Add collision, allows player to get close to pipe bounds
+      */
+    override def addCollisionBoxToListDefault(state: IBlockState, worldIn: World, pos: BlockPos, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) = {
+        this.getBoundingBox(state, worldIn, pos)
+        super.addCollisionBoxToListDefault(state, worldIn, pos, mask, list, collidingEntity)
+    }
+
     def countConnections(world: IBlockAccess, pos: BlockPos, facing: EnumFacing): Int = {
         world.getTileEntity(pos) match {
             case pipe: AdvancedPipe =>
@@ -257,18 +274,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
     }
 
-    /*override def addCollisionBoxesToListDefault(worldIn : World, pos : BlockPos, state : IBlockState, mask : AxisAlignedBB,
-                                                list : java.util.List[AxisAlignedBB], collidingEntity : Entity) {
-        this.setBlockBoundsBasedOnStateDefault(worldIn, pos)
-        super.addCollisionBoxesToListDefault(worldIn, pos, state, mask, list, collidingEntity)
-    }
-
     override def onNeighborBlockChangeDefault(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
-        if (!world.isRemote)
-            WorldPipes.notifyPipes()
-    }*/
-
-    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
         if (!world.isRemote)
             WorldPipes.notifyPipes()
     }
@@ -299,7 +305,7 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def isFullCube(state: IBlockState): Boolean = false
     @SideOnly(Side.CLIENT)
     override def getBlockLayer: BlockRenderLayer = BlockRenderLayer.SOLID
-    override def canRenderInLayer(layer: BlockRenderLayer): Boolean =
+    override def canRenderInLayerDefault(layer: BlockRenderLayer): Boolean =
         layer == BlockRenderLayer.SOLID
 
     override def getToolTip() : List[String] = {
@@ -315,14 +321,17 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
     override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
         event match {
             case modelBake: ModelBakeEvent =>
-              /*  for(modelLocation <- modelBake.modelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
+                for(modelLocation <- modelBake.getModelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
                     if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
                             modelLocation.getResourcePath.contains("BasicInterface")) {
                         // Create Multipart world obj
-                        modelBake.modelRegistry.putObject(modelLocation,
-                            new ModelMultipartContainer(modelBake.modelRegistry.getObject(modelLocation)))
+                        modelBake.getModelRegistry.putObject(modelLocation,
+                            new ModelMultipartContainer(modelBake.getModelRegistry.getObject(modelLocation),
+                                new Predicate[BlockRenderLayer] {
+                                    override def apply(input: BlockRenderLayer): Boolean = true
+                                }))
                     }
-                }*/
+                }
             case _ =>
         }
     }

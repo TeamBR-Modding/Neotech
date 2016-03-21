@@ -16,6 +16,7 @@ import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
+import mcmultipart.item.MicroContainerPlacementWrapper
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
@@ -25,15 +26,15 @@ import net.minecraftforge.oredict.OreDictionary
 
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 12, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 12, 2015
+  */
 object BlockManager {
 
     //Machines
@@ -116,15 +117,15 @@ object BlockManager {
         registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockColored])
         for(color <- EnumDyeColor.values()) {
             OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
-          //  new MicroContainerPlacementWrapper(new ItemStack(pipeBasicStructure, 1, color.getMetadata)).register("neotech:pipeStructure")
+            //  new MicroContainerPlacementWrapper(new ItemStack(pipeBasicStructure, 1, color.getMetadata)).register("neotech:pipeStructure")
         }
 
         registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
-     //   new MicroContainerPlacementWrapper(new ItemStack(pipeItemInterface)).register("neotech:pipeItemBasicInterface")
+        new MicroContainerPlacementWrapper(new ItemStack(pipeItemInterface)).register("neotech:pipeItemBasicInterface")
         registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
-     //   new MicroContainerPlacementWrapper(new ItemStack(pipeEnergyInterface)).register("neotech:pipeEnergyBasicInterface")
+        new MicroContainerPlacementWrapper(new ItemStack(pipeEnergyInterface)).register("neotech:pipeEnergyBasicInterface")
         registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])
-     //   new MicroContainerPlacementWrapper(new ItemStack(pipeFluidInterface)).register("neotech:pipeFluidBasicInterface")
+        new MicroContainerPlacementWrapper(new ItemStack(pipeFluidInterface)).register("neotech:pipeFluidBasicInterface")
 
 
         //RF Storage
@@ -169,13 +170,13 @@ object BlockManager {
     }
 
     /**
-     * Helper method for registering block
-     *
-     * @param block      The block to register
-     * @param name       The name to register the block to
-     * @param tileEntity The tile entity, null if none
-     * @param oreDict    The ore dict tag, should it be needed
-     */
+      * Helper method for registering block
+      *
+      * @param block      The block to register
+      * @param name       The name to register the block to
+      * @param tileEntity The tile entity, null if none
+      * @param oreDict    The ore dict tag, should it be needed
+      */
     def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity], oreDict: String) : Block = {
         GameRegistry.registerBlock(block, name)
         if (tileEntity != null)
@@ -193,12 +194,12 @@ object BlockManager {
     }
 
     /**
-     * No ore dict helper method
-     *
-     * @param block      The block to add
-     * @param name       The name
-     * @param tileEntity The tile
-     */
+      * No ore dict helper method
+      *
+      * @param block      The block to add
+      * @param name       The name
+      * @param tileEntity The tile
+      */
     def registerBlock(block: Block, name: String, tileEntity: Class[_ <: TileEntity]) : Block = {
         val oreDict: String = null
         registerBlock(block, name, tileEntity, oreDict)

@@ -1,7 +1,5 @@
 package com.dyonovan.neotech.managers
 
-import net.minecraftforge.common.DungeonHooks
-
 /**
   * This file was created for NeoTech
   *
@@ -15,7 +13,7 @@ import net.minecraftforge.common.DungeonHooks
 object DungeonLootManager {
 
     def addToLootTable(): Unit = {
-        val chests = new ChestGenHooks()
+       // val chests = new ChestGenHooks()
     }
 
 }

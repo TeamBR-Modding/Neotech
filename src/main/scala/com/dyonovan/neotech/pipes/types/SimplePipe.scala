@@ -1,9 +1,14 @@
 package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.pipes.collections.WorldPipes
-import net.minecraft.tileentity.TileEntity
+import mcmultipart.block.TileCoverable
+import mcmultipart.microblock.IMicroblock.IFaceMicroblock
+import mcmultipart.microblock.IMicroblockContainerTile
+import mcmultipart.multipart.PartSlot
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
+
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -17,7 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB
   *
   * This is the base pipe and interface for all pipes. Every pipe should extend this
   */
-trait SimplePipe extends TileEntity {
+trait SimplePipe extends TileCoverable {
     WorldPipes.notifyPipes()
 
     override def invalidate() = WorldPipes.notifyPipes()
@@ -56,7 +61,7 @@ trait SimplePipe extends TileEntity {
             return true
 
         getWorld.getTileEntity(getPos) match {
-           /* case tileContainer: IMicroblockTile =>
+            case tileContainer: IMicroblockContainerTile =>
                 if(tileContainer.getMicroblockContainer != null && tileContainer.getMicroblockContainer.getPartContainer != null) {
                     val parts = tileContainer.getMicroblockContainer.getParts
                     for(part <- parts) {
@@ -70,12 +75,13 @@ trait SimplePipe extends TileEntity {
                             }
                         }
                     }
-
+                    //TODO: When amadornes fixes this put it back
+                    /*
                     // Occlusion Check
                     if(!OcclusionHelper.occlusionTest(parts, getAxisForFace(facing)))
                         return true
-
-                }*/
+                    */
+                }
             case _ => return false
         }
         false

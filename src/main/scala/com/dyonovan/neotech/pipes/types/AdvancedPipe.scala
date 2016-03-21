@@ -5,6 +5,8 @@ import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.collections.{Filter, WorldPipes}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.network.NetworkManager
+import net.minecraft.network.play.server.SPacketUpdateTileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -32,8 +34,8 @@ object AdvancedPipe {
     val FILTER_BLACKLIST = 3
 }
 
-abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
-        with SimplePipe with Filter with InputOutput {
+abstract class AdvancedPipe extends SimplePipe with Syncable with Upgradeable with RedstoneAware
+         with Filter with InputOutput {
 
     override def resetIO() : Unit = {
         for(dir <- EnumFacing.values()) {
@@ -117,17 +119,17 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
         if(tag.hasKey("ReRender") && tag.getBoolean("ReRender") && getWorld != null)
             worldObj.markBlockRangeForRenderUpdate(getPos, getPos)
     }
-/*
+
     /**
       * Used to identify the packet that will get called on update
       *
       * @return The packet to send
       */
-    override def getDescriptionPacket: S35PacketUpdateTileEntity = {
+    override def getDescriptionPacket: SPacketUpdateTileEntity = {
         val tag = new NBTTagCompound
         this.writeToNBT(tag)
         getMicroblockContainer.getPartContainer.writeDescription(tag)
-        new S35PacketUpdateTileEntity(getPos, 1, tag)
+        new SPacketUpdateTileEntity(getPos, 1, tag)
     }
 
     /**
@@ -136,11 +138,11 @@ abstract class AdvancedPipe extends Syncable with Upgradeable with RedstoneAware
       * @param net The manager sending
       * @param pkt The packet received
       */
-    override def onDataPacket(net : NetworkManager, pkt : S35PacketUpdateTileEntity) = {
+    override def onDataPacket(net : NetworkManager, pkt : SPacketUpdateTileEntity) = {
         this.readFromNBT(pkt.getNbtCompound)
         getMicroblockContainer.getPartContainer.readDescription(pkt.getNbtCompound)
     }
-*/
+
     /**
       * Used to mark for update
       */
