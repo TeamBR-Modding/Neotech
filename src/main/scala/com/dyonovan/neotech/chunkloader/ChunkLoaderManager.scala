@@ -1,6 +1,13 @@
 package com.dyonovan.neotech.chunkloader
 
-import java.io.DataOutput
+import java.util
+
+import com.dyonovan.neotech.lib.Reference
+import gnu.trove.map.hash.THashMap
+import net.minecraft.world.World
+import net.minecraftforge.common.ForgeChunkManager.{LoadingCallback, Ticket}
+
+import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -12,10 +19,15 @@ import java.io.DataOutput
   * @author Dyonovan
   * @since 3/21/2016
   */
-object ChunkLoaderManager {
+object ChunkLoaderManager extends LoadingCallback {
 
-    def save(loaderList: DataOutput): Unit = {
+    lazy val chunkList: THashMap[Integer, ChunkList] = new THashMap[Integer, ChunkList]()
 
+    override def ticketsLoaded(tickets: util.List[Ticket], world: World): Unit = {
+        for (ticket <- tickets) {
+            if (ticket.getModId.equalsIgnoreCase(Reference.MOD_ID)) {
+
+            }
+        }
     }
-
 }
