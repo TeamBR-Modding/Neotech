@@ -1,10 +1,11 @@
 package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.pipes.collections.WorldPipes
-import mcmultipart.block.TileCoverable
+import com.google.common.base.Predicate
 import mcmultipart.microblock.IMicroblock.IFaceMicroblock
 import mcmultipart.microblock.IMicroblockContainerTile
-import mcmultipart.multipart.PartSlot
+import mcmultipart.multipart.{IMultipart, OcclusionHelper, PartSlot}
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
 
@@ -22,7 +23,7 @@ import scala.collection.JavaConversions._
   *
   * This is the base pipe and interface for all pipes. Every pipe should extend this
   */
-trait SimplePipe extends TileCoverable {
+trait SimplePipe extends TileEntity {
     WorldPipes.notifyPipes()
 
     override def invalidate() = WorldPipes.notifyPipes()
@@ -44,6 +45,7 @@ trait SimplePipe extends TileCoverable {
             return false
 
         if (getWorld.getTileEntity(getPos) == null) return false
+
         getWorld.getTileEntity(getPos) match {
             case advanced : AdvancedPipe if advanced.isDisabled(facing) => return false
             case _ =>
@@ -75,16 +77,18 @@ trait SimplePipe extends TileCoverable {
                             }
                         }
                     }
-                    //TODO: When amadornes fixes this put it back
-                    /*
                     // Occlusion Check
-                    if(!OcclusionHelper.occlusionTest(parts, getAxisForFace(facing)))
+                    if(!OcclusionHelper.occlusionTest(parts, dontIgnore, getAxisForFace(facing)))
                         return true
-                    */
+
                 }
             case _ => return false
         }
         false
+    }
+
+    lazy val dontIgnore = new Predicate[IMultipart] {
+        override def apply(input: IMultipart): Boolean = false
     }
 
     lazy val AxisUp    = new AxisAlignedBB(5 / 16F, 11 / 16F, 5 / 16F,
