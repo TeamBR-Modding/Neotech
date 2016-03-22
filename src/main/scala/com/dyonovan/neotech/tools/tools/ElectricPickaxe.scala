@@ -19,6 +19,7 @@ import com.dyonovan.neotech.utils.ClientUtils
 import gnu.trove.map.hash.THashMap
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
+import net.minecraft.enchantment.{Enchantment, EnchantmentHelper}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item.{ItemPickaxe, ItemStack}
@@ -150,9 +151,12 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
                     val block = world.getBlockState(newPos).getBlock
                     if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) && ToolHelper.isToolEffective(world, newPos, stack)
                             || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
-                        if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
+                        if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
                             block.harvestBlock(world, player.asInstanceOf[EntityPlayer],
                                 newPos, world.getBlockState(newPos), world.getTileEntity(newPos))
+                            block.dropXpOnBlockBreak(world, newPos, block.getExpDrop(world, newPos,
+                                EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, stack)))
+                        }
                         world.setBlockToAir(newPos)
                         if (!world.isRemote && newPos != pos)
                             world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
