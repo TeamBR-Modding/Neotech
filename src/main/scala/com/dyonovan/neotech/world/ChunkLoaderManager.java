@@ -1,8 +1,7 @@
 package com.dyonovan.neotech.world;
 
-import com.dyonovan.neotech.chunkloader.TileChunkLoader;
+import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader;
 import com.dyonovan.neotech.managers.BlockManager;
-import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -20,7 +19,8 @@ import java.util.List;
  * @author Paul Davis <pauljoda>
  * @since 1/19/2016
  */
-public class ChunkLoaderManager implements ForgeChunkManager.OrderedLoadingCallback {
+public class ChunkLoaderManager implements ForgeChunkManager.LoadingCallback {
+
     @Override
     public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
         for (ForgeChunkManager.Ticket ticket : tickets) {
@@ -34,10 +34,10 @@ public class ChunkLoaderManager implements ForgeChunkManager.OrderedLoadingCallb
                 TileChunkLoader tq = (TileChunkLoader) world.getTileEntity(pos);
                 tq.forceChunkLoading(ticket);
             }
-        }
+        } //TODO add offline loading
     }
 
-    @Override
+    /*@Override
     public List<ForgeChunkManager.Ticket> ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world, int maxTicketCount) {
         List<ForgeChunkManager.Ticket> validTickets = Lists.newArrayList();
         for (ForgeChunkManager.Ticket ticket : tickets) {
@@ -52,5 +52,5 @@ public class ChunkLoaderManager implements ForgeChunkManager.OrderedLoadingCallb
             }
         }
         return validTickets;
-    }
+    }*/
 }

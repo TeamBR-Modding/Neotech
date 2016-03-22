@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.managers
 
-import com.dyonovan.neotech.chunkloader.{BlockChunkLoader, TileChunkLoader}
 import com.dyonovan.neotech.common.blocks.connected.{BlockPhantomGlass, BlockRockWall, BlockVoidGlass}
 import com.dyonovan.neotech.common.blocks.machines.{BlockGrinder, BlockMachine, BlockSolarPanel}
 import com.dyonovan.neotech.common.blocks.misc._
@@ -9,7 +8,7 @@ import com.dyonovan.neotech.common.tiles.machines._
 import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator, TileFurnaceGenerator, TileSolarPanel}
 import com.dyonovan.neotech.common.tiles.machines.operators.{TilePump, TileTreeFarm}
 import com.dyonovan.neotech.common.tiles.machines.processors._
-import com.dyonovan.neotech.common.tiles.misc._
+import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, _}
 import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileRFStorage, TileTank}
 import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockColored}
 import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe

@@ -1,4 +1,4 @@
-package com.dyonovan.neotech.chunkloader
+package com.dyonovan.neotech.common.tiles.misc
 
 import java.util.UUID
 

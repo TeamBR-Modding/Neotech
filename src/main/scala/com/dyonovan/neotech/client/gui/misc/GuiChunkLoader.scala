@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.client.gui.misc
 
-import com.dyonovan.neotech.chunkloader.TileChunkLoader
+import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentButton
 import com.teambr.bookshelf.common.container.ContainerGeneric

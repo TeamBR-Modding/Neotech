@@ -1,7 +1,8 @@
-package com.dyonovan.neotech.chunkloader
+package com.dyonovan.neotech.common.blocks.misc
 
 import com.dyonovan.neotech.client.gui.misc.GuiChunkLoader
 import com.dyonovan.neotech.common.blocks.BaseBlock
+import com.dyonovan.neotech.common.tiles.misc.TileChunkLoader
 import com.teambr.bookshelf.common.container.ContainerGeneric
 import com.teambr.bookshelf.common.tiles.traits.OpensGui
 import net.minecraft.block.material.Material
