@@ -155,11 +155,12 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
                             val block = world.getBlockState(newPos).getBlock
                             if (block.canHarvestBlock(world, newPos, player.asInstanceOf[EntityPlayer]) && ToolHelper.isToolEffective(world, newPos, stack)
                                     || player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
-                                if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode)
+                                if (!player.asInstanceOf[EntityPlayer].capabilities.isCreativeMode) {
                                     block.harvestBlock(world, player.asInstanceOf[EntityPlayer],
                                         newPos, world.getBlockState(newPos), world.getTileEntity(newPos), stack)
-                                block.dropXpOnBlockBreak(world, newPos, block.getExpDrop(world.getBlockState(newPos), world, newPos,
-                                    EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, stack)))
+                                    block.dropXpOnBlockBreak(world, newPos, block.getExpDrop(world.getBlockState(newPos), world, newPos,
+                                        EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, stack)))
+                                }
                                 world.setBlockToAir(newPos)
                                 if (!world.isRemote && newPos != pos)
                                     world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
