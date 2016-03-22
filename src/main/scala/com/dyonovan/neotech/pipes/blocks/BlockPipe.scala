@@ -1,10 +1,11 @@
 package com.dyonovan.neotech.pipes.blocks
 
+import java.util
 import java.util.Random
 
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.lib.Reference
-import com.dyonovan.neotech.managers.ItemManager
+import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.dyonovan.neotech.pipes.types.SimplePipe
@@ -45,7 +46,7 @@ import scala.collection.mutable.ArrayBuffer
   * @since August 14, 2015
   */
 class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: StructurePipe])
-            extends BlockCoverable(mat) with ILoadActionProvider {
+        extends BlockCoverable(mat) with ILoadActionProvider {
 
     /*******************************************************************************************************************
       * Constructor                                                                                                    *
@@ -81,7 +82,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Used to create the block state of the pipes
       */
-    protected override def createBlockState: BlockStateContainer = {
+    override def createBlockState : BlockStateContainer = {
         val listed = new ArrayBuffer[IProperty[_]]()
         if(colored)
             listed += PipeProperties.COLOR
@@ -152,13 +153,17 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       * Called when the block is clicked on, if we are colored or using a wrench perform relevant actions
       */
     override def onBlockActivatedDefault(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
-                                  hand: EnumHand, heldItem: ItemStack, side: EnumFacing,
-                                  hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
+                                         hand: EnumHand, heldItem: ItemStack, side: EnumFacing,
+                                         hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         heldItem match {
-            case stack : ItemStack if stack.getItem == ItemManager.wrench  =>
+            case stack : ItemStack if stack.getItem == ItemManager.wrench =>
                 if(!world.isRemote) {
                     val random = new Random
-                    val stack = new ItemStack(world.getBlockState(pos).getBlock.getItemDropped(world.getBlockState(pos), random, 0), 1, damageDropped(world.getBlockState(pos)))
+                    val stack = new ItemStack(world.getBlockState(pos)
+                            .getBlock.getItemDropped(
+                        world.getBlockState(pos), random, 0),
+                        1,
+                        world.getBlockState(pos).getValue(PipeProperties.COLOR).getMetadata)
                     if(stack != null && stack.stackSize > 0) {
                         val rx = random.nextFloat * 0.8F + 0.1F
                         val ry = random.nextFloat * 0.8F + 0.1F
@@ -213,6 +218,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
                 pipe.onPipeBroken()
             case _ =>
         }
+        super.breakBlock(worldIn, pos, state)
     }
 
     /**
@@ -277,14 +283,15 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         super.addCollisionBoxToListDefault(state, worldIn, pos, mask, list, collidingEntity)
     }
 
-    /**
-      * Get the damage value that this Block should drop
-      */
-    override def damageDropped (state: IBlockState) : Int = {
-        if(colored)
-            state.getValue(PipeProperties.COLOR).getMetadata
-        else
-            0
+    override def getDropsDefault(world: IBlockAccess, pos: BlockPos, state: IBlockState, fortune: Int): java.util.List[ItemStack] = {
+        val list = new util.ArrayList[ItemStack]()
+        if(colored) {
+            list.add(new ItemStack(
+                BlockManager.pipeBasicStructure,
+                1,
+                state.getValue(PipeProperties.COLOR).getMetadata))
+        }
+        list
     }
 
     /**
@@ -337,15 +344,15 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
         event match {
             case modelBake: ModelBakeEvent =>
-               for(modelLocation <- modelBake.getModelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
+                for(modelLocation <- modelBake.getModelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
                     if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
                             modelLocation.getResourcePath.contains("pipeStructure")) {
                         // Create Multipart world obj
                         modelBake.getModelRegistry.putObject(modelLocation,
                             new ModelMultipartContainer(modelBake.getModelRegistry.getObject(modelLocation),
-                            new Predicate[BlockRenderLayer] {
-                                override def apply(input: BlockRenderLayer): Boolean = true
-                            }))
+                                new Predicate[BlockRenderLayer] {
+                                    override def apply(input: BlockRenderLayer): Boolean = true
+                                }))
                     }
                 }
             case _ =>

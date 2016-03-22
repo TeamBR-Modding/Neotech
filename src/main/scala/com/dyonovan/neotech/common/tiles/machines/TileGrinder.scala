@@ -26,7 +26,10 @@ class TileGrinder extends UpdatingTile with Inventory {
         updateCurrentItem()
         worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
         if(getStackInSlot(3) != null && hasOutputAvailable) {
-            progress += (progressValue * multiplier).toInt
+            var movement = progressValue
+            if(progressValue == 1)
+                movement = 2
+            progress += (movement * multiplier).toInt
             if(progress >= MAX_PROGRESS) {
                 progress = progress - MAX_PROGRESS
                 grindItem()

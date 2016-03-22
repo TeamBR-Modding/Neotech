@@ -1,6 +1,7 @@
 package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.pipes.collections.WorldPipes
+import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.google.common.base.Predicate
 import mcmultipart.microblock.IMicroblock.IFaceMicroblock
 import mcmultipart.microblock.IMicroblockContainerTile
@@ -52,7 +53,7 @@ trait SimplePipe extends TileEntity {
         }
         getWorld.getTileEntity(getPos.offset(facing)) match {
             case advanced: AdvancedPipe => !advanced.isDisabled(facing.getOpposite) && !advanced.hasIntersect(facing.getOpposite)
-            case pipe: SimplePipe => !pipe.hasIntersect(facing.getOpposite)
+            case pipe: StructurePipe => !pipe.hasIntersect(facing.getOpposite)
             case _ => true
         }
     }
@@ -82,7 +83,8 @@ trait SimplePipe extends TileEntity {
                         return true
 
                 }
-            case _ => return false
+            case _ =>
+                return false
         }
         false
     }

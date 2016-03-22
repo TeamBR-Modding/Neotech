@@ -27,8 +27,8 @@ class StructurePipe extends TileCoverable with SimplePipe {
         worldObj.getBlockState(pos.offset(facing)).getBlock match {
             case block: BlockPipe  => //We are checking if it and us are colored
                 // Check for white
-                if(worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).ordinal() == 0 ||
-                    worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).ordinal() == 0)
+                if((worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).ordinal() == 0 ||
+                    worldObj.getBlockState(pos).getValue(PipeProperties.COLOR).ordinal() == 0) && super.canConnect(facing))
                     return true
                 if (worldObj.getBlockState(pos.offset(facing)).getBlock.asInstanceOf[BlockPipe].colored)
                     worldObj.getBlockState(pos.offset(facing)).getValue(PipeProperties.COLOR).ordinal() ==
