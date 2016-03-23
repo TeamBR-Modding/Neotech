@@ -215,7 +215,7 @@ curseforge {
     apiKey = APIToken
     project {
         id = '228643'
-        changelog = 'Changelog: https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog'
+        changelog = 'Changelog: https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog#minecraft-189'
         releaseType = 'release'
         addGameVersion '1.8.9'
         addArtifact devJar

@@ -13,8 +13,8 @@ package com.dyonovan.neotech.lib
 object Reference {
     final val MOD_NAME     = "NeoTech"
     final val MOD_ID       = "neotech"
-    final val VERSION      = "2.4.2"//@VERSION@"
-    final val DEPENDENCIES = "after:tconstruct;required-after:Forge@[11.15.1.1747,);required-after:bookshelfapi@[2.3.7,);required-after:mcmultipart@[1.0.7,)"
+    final val VERSION      = "2.4.3"//@VERSION@"
+    final val DEPENDENCIES = "after:tconstruct;required-after:Forge@[11.15.1.1747,);required-after:bookshelfapi@[2.3.7,);required-after:mcmultipart@[1.0.8,)"
     final val UPDATE_JSON  = "https://raw.githubusercontent.com/TeamBR-Modding/NeoTech/1.8.9/update.json"
 
     final val CONFIG_WORLD = "World Generation"

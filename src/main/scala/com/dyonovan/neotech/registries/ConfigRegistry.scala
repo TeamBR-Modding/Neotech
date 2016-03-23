@@ -45,10 +45,13 @@ object ConfigRegistry {
     var chunkLoaderMax = 3
     var totalRFEM = 25000
     var onlineOnly = false
+    var dimBlacklist: Array[Int] = _
 
 
     def preInit(): Unit = {
         config.load()
+
+        dimBlacklist    = config.get(Reference.CONFIG_WORLD, "dimBlacklist", Array(1, -1), "Dimensions not to spawn ore").getIntList
 
         genCopper       = config.get(Reference.CONFIG_WORLD, "copperEnable", true, "Generate Copper").getBoolean
         copperMin       = config.get(Reference.CONFIG_WORLD, "copperMin", 40, "Copper Min Level").getInt

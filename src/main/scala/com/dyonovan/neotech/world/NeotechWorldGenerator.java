@@ -1,6 +1,5 @@
 package com.dyonovan.neotech.world;
 
-import com.dyonovan.neotech.managers.BlockManager;
 import com.dyonovan.neotech.managers.MetalManager;
 import com.dyonovan.neotech.registries.ConfigRegistry;
 import net.minecraft.util.BlockPos;
@@ -25,10 +24,10 @@ public class NeotechWorldGenerator implements IWorldGenerator {
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider iChunkProvider, IChunkProvider iChunkProvider1) {
-        switch (world.provider.getDimensionId()) {
-            case 0:
-                generateOre(world, random, chunkX * 16, chunkZ * 16);
-        }
+        for (int i = 0; i < ConfigRegistry.dimBlacklist().length; i++)
+            if (ConfigRegistry.dimBlacklist()[i] == world.provider.getDimensionId()) return;
+
+        generateOre(world, random, chunkX * 16, chunkZ * 16);
     }
 
     private void generateOre(World world, Random random, int chunkX, int chunkZ) {
