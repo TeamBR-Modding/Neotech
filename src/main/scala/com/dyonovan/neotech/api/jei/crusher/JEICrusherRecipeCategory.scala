@@ -3,7 +3,7 @@ package com.dyonovan.neotech.api.jei.crusher
 import java.awt.Color
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
-import com.dyonovan.neotech.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentPowerBarJEI, SlotDrawable}
+import jei.drawables.{GuiComponentArrowJEI, GuiComponentPowerBarJEI, SlotDrawable}
 import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui._
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
@@ -18,8 +18,8 @@ import net.minecraft.util.text.translation.I18n
 class JEICrusherRecipeCategory extends IRecipeCategory {
 
     val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png")
-    val arrow = new GuiComponentArrowJEI(59, 21)
-    val power = new GuiComponentPowerBarJEI(3, 0, 18, 55, new Color(255, 0, 0)) {
+    val arrow = new GuiComponentArrowJEI(59, 21, NeoTechPlugin.jeiHelpers)
+    val power = new GuiComponentPowerBarJEI(3, 0, 18, 55, new Color(255, 0, 0), NeoTechPlugin.jeiHelpers) {
         addColor(new Color(255, 150, 0))
         addColor(new Color(255, 255, 0))
     }

@@ -1,7 +1,7 @@
 package com.dyonovan.neotech.api.jei.grinder
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
-import com.dyonovan.neotech.api.jei.drawables.SlotDrawable
+import jei.drawables.SlotDrawable
 import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui.{IDrawable, IGuiItemStackGroup, IRecipeLayout}
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}

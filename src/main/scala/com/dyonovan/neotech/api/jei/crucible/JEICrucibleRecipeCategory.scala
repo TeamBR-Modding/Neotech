@@ -3,7 +3,7 @@ package com.dyonovan.neotech.api.jei.crucible
 import java.awt.Color
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
-import com.dyonovan.neotech.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI, SlotDrawable}
+import jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI, SlotDrawable}
 import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.gui.{IDrawable, IRecipeLayout}
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
@@ -25,8 +25,8 @@ class JEICrucibleRecipeCategory extends IRecipeCategory {
 
     val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png")
     val input = new SlotDrawable(56, 17)
-    val arrow = new GuiComponentArrowJEI(81, 17)
-    val power = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0)) {
+    val arrow = new GuiComponentArrowJEI(81, 17, NeoTechPlugin.jeiHelpers)
+    val power = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0), NeoTechPlugin.jeiHelpers) {
         addColor(new Color(255, 150, 0))
         addColor(new Color(255, 255, 0))
     }
