@@ -205,6 +205,10 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
 
     var BB = new AxisAlignedBB(4F / 16F, 0F, 4F / 16F, 12F / 16F, 1F, 12F / 16F)
 
+    override def getSelectedBoundingBoxDefault(state: IBlockState, world: World, pos: BlockPos): AxisAlignedBB = {
+        state.getBoundingBox(world, pos)
+    }
+
     override def getBoundingBox(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
         var x1 = 5F / 16F
         var x2 = 1.0F - x1
