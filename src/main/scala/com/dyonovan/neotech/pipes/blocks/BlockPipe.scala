@@ -234,6 +234,10 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       ******************************************************************************************************************/
     var BB = new AxisAlignedBB(4F / 16F, 4F / 16F, 4F / 16F, 12F / 16F, 12F / 16F, 12F / 16F)
 
+    override def getSelectedBoundingBoxDefault(state: IBlockState, world: World, pos: BlockPos): AxisAlignedBB = {
+        state.getBoundingBox(world, pos)
+    }
+
     /**
       * Used to set the bounding box based on the current state
       */
