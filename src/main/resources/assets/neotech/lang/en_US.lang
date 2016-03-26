@@ -162,7 +162,7 @@ item.neotech:electricArmorBoots.name=Electric Boots
 
 item.neotech:jetpack.name=Jetpack Upgrade
 item.neotech:fallResist.name=Fall Resist Upgrade
-item.neotech:glide.name=Glide Upgrade
+item.neotech:glide.name=Elytra Upgrade
 item.neotech:nightVision.name=Night Vision Upgrade
 item.neotech:sprinting.name=Sprinting Upgrade
 item.neotech:protection.name=Protection Upgrade
@@ -409,7 +409,7 @@ neotech.text.beheading=Beheading
 
 neotech.text.jetpack=Jetpack Installed
 neotech.text.fallResist=Removes Fall Damage
-neotech.text.glide=Sneak to glide in the air
+neotech.text.glide=LMENU glide in the air
 neotech.text.nightVision=Has Night Vision
 neotech.text.sprinting=Sprinting
 neotech.text.hover=CTRL to Hover
@@ -420,7 +420,7 @@ neotech.text.radialMenuKey=Tool/Armor Menu
 aoe=Area of Effect
 lighting=Automatic Lighting
 jetpack=Jetpack
-glide=Gliding
+glide=Elytra
 nightVision=Night Vision
 sprinting=Speed
 hover=Hover

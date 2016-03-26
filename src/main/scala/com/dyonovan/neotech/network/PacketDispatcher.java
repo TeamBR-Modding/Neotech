@@ -26,6 +26,7 @@ public class PacketDispatcher {
         registerMessage(UpdateToolTag.class, UpdateToolTag.class);
         registerMessage(ResetFallDistance.class, ResetFallDistance.class);
         registerMessage(SpawnJetpackParticles.class, SpawnJetpackParticles.class);
+        registerMessage(RemoveFallDamage.class, RemoveFallDamage.class);
     }
 
     @SuppressWarnings("unchecked")

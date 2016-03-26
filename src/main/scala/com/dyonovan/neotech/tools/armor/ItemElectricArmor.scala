@@ -21,6 +21,7 @@ import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.dyonovan.neotech.utils.ClientUtils
 import net.minecraft.client.Minecraft
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.MobEffects
 import net.minecraft.inventory.EntityEquipmentSlot
@@ -29,6 +30,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.potion.{Potion, PotionEffect}
 import net.minecraft.world.World
 import net.minecraftforge.fml.client.FMLClientHandler
+import org.lwjgl.input.Keyboard
 
 /**
   * This file was created for NeoTech
@@ -123,6 +125,21 @@ class ItemElectricArmor(name : String, index : Int, armorType : EntityEquipmentS
                 }
                 PacketDispatcher.net.sendToServer(new SpawnJetpackParticles(player))
             }
+
+            // Glider
+            if (armorType == EntityEquipmentSlot.CHEST &&
+                    getEnergyStored(itemStack) > 5 && ModifierGlide.hasGlide(itemStack) &&
+                    Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
+                val b0 = player.getDataManager.get(Entity.FLAGS).asInstanceOf[Byte].byteValue
+                player.getDataManager.set(Entity.FLAGS, java.lang.Byte.valueOf((b0 | 1 << 7).toByte))
+                if (!player.capabilities.isCreativeMode) {
+                    PacketDispatcher.net.sendToServer(new DrainEnergyPacketArmor(armorType.getIndex, 1))
+                    PacketDispatcher.net.sendToServer(new ResetFallDistance)
+                }
+            } else if(armorType == EntityEquipmentSlot.CHEST) {
+                val b0 = player.getDataManager.get(Entity.FLAGS).asInstanceOf[Byte].byteValue
+                player.getDataManager.set(Entity.FLAGS, java.lang.Byte.valueOf((b0 & ~(1 << 7)).toByte))
+            }
         }
 
         // Night Vision
@@ -154,25 +171,8 @@ class ItemElectricArmor(name : String, index : Int, armorType : EntityEquipmentS
             player.removePotionEffect(MobEffects.moveSpeed)
         }
 
-        // Glider
-        if (getEnergyStored(itemStack) > 5 && ModifierGlide.hasGlide(itemStack) && player.motionY < -0.1 && player.isSneaking) {
-            var horizontalSpeed: Double = 0
-            var verticalSpeed: Double = 0
-
-            horizontalSpeed = 0.2 * (if(player.inventory.armorInventory(1) != null &&
-                    player.inventory.armorInventory(1).getItem == ItemManager.electricArmorLeggings)
-                    Math.max(ModifierSprinting.getSprintingLevel(player.inventory.armorInventory(1)) / 2, 1) else 1)
-            verticalSpeed = 0.7
-
-            player.motionY *= verticalSpeed
-            player.motionX += Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed
-            player.motionZ += Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed
+        if(player.isElytraFlying)
             player.fallDistance = 0
-            if (!player.capabilities.isCreativeMode) {
-                extractEnergy(itemStack, 5, simulate = false)
-                updateDamage(itemStack)
-            }
-        }
     }
 
     def addPotionToPlayer(player : EntityPlayer, potion : Potion, amplifier : Int): Unit = {

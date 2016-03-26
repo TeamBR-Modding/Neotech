@@ -37,10 +37,10 @@ class DrainEnergyPacketArmor extends IMessage with IMessageHandler[DrainEnergyPa
     override def onMessage(message: DrainEnergyPacketArmor, ctx: MessageContext): IMessage = {
         if(ctx.side.isServer && message.armorID != -1 && message.amount > 0) {
             val player = ctx.getServerHandler.playerEntity
-            if(player.inventory.armorInventory(3 - message.armorID) != null && player.inventory.armorInventory(3 - message.armorID).getItem.isInstanceOf[BaseElectricTool]) {
-                val armorItem = player.inventory.armorInventory(3 - message.armorID).getItem.asInstanceOf[BaseElectricTool]
-                armorItem.extractEnergy(player.inventory.armorInventory(3 - message.armorID), message.amount, simulate = false)
-                armorItem.updateDamage(player.inventory.armorInventory(3 - message.armorID))
+            if(player.inventory.armorInventory(message.armorID) != null && player.inventory.armorInventory(message.armorID).getItem.isInstanceOf[BaseElectricTool]) {
+                val armorItem = player.inventory.armorInventory(message.armorID).getItem.asInstanceOf[BaseElectricTool]
+                armorItem.extractEnergy(player.inventory.armorInventory(message.armorID), message.amount, simulate = false)
+                armorItem.updateDamage(player.inventory.armorInventory(message.armorID))
             }
         }
         null

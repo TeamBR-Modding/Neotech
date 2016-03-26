@@ -4,14 +4,14 @@ import com.dyonovan.neotech.tools.ToolHelper
 import com.dyonovan.neotech.tools.modifier.ModifierAOE
 import com.teambr.bookshelf.util.RenderUtils
 import net.minecraft.block.material.Material
-import net.minecraft.block.{BlockSkull, BlockSign, BlockEnderChest, BlockChest}
+import net.minecraft.block.{BlockChest, BlockEnderChest, BlockSign, BlockSkull}
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.client.renderer.{VertexBuffer, GlStateManager, Tessellator}
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraft.client.renderer.{GlStateManager, Tessellator, VertexBuffer}
 import net.minecraft.client.resources.{IResourceManager, IResourceManagerReloadListener}
-import net.minecraft.entity.Entity
-import net.minecraft.util.math.{Vec3d, RayTraceResult, BlockPos}
+import net.minecraft.entity.{Entity, EntityLivingBase}
+import net.minecraft.util.math.{BlockPos, RayTraceResult, Vec3d}
 import net.minecraft.world.World
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -33,6 +33,68 @@ import org.lwjgl.opengl.GL11
 @SideOnly(Side.CLIENT)
 object RenderingEvents extends IResourceManagerReloadListener {
     private val destroyIcons = new Array[TextureAtlasSprite](10)
+
+    // Doesn't seem to rotate
+    /*lazy val TEXTURE_ELYTRA = new ResourceLocation("textures/entity/elytra.png")
+
+    @SubscribeEvent
+    def renderPlayer(event : RenderPlayerEvent.Pre) : Unit = {
+        if(event.entityPlayer.inventory.armorInventory(EntityEquipmentSlot.CHEST.getIndex) != null &&
+                event.entityPlayer.inventory.armorInventory(EntityEquipmentSlot.CHEST.getIndex).getItem ==
+                        ItemManager.electricArmorChestplate) {
+            val entity = event.entityPlayer
+            var limbSwing = entity.limbSwing - entity.limbSwingAmount * (1.0F - event.partialRenderTick)
+            var limbSwingAmount = entity.prevLimbSwingAmount + (entity.limbSwingAmount - entity.prevLimbSwingAmount) * event.partialRenderTick
+            val ageInTicks = entity.ticksExisted + event.partialRenderTick
+
+            var f: Float = this.interpolateRotation(entity.prevRenderYawOffset, entity.renderYawOffset, event.partialRenderTick)
+            val f1: Float = this.interpolateRotation(entity.prevRotationYawHead, entity.rotationYawHead, event.partialRenderTick)
+            var netHeadYaw: Float = f1 - f
+
+            val headPitch: Float = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * event.partialRenderTick
+
+            if (entity.isChild) {
+                limbSwing *= 3.0F
+            }
+
+            if (limbSwingAmount > 1.0F) {
+                limbSwingAmount = 1.0F
+            }
+
+            val shouldSit: Boolean = entity.isRiding && (entity.getRidingEntity != null && entity.getRidingEntity.shouldRiderSit)
+            if (shouldSit && entity.getRidingEntity.isInstanceOf[EntityLivingBase]) {
+                val entitylivingbase: EntityLivingBase = entity.getRidingEntity.asInstanceOf[EntityLivingBase]
+                f = this.interpolateRotation(entitylivingbase.prevRenderYawOffset, entitylivingbase.renderYawOffset, event.partialRenderTick)
+                netHeadYaw = f1 - f
+            }
+
+            GL11.glPushMatrix()
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F)
+
+            if (Minecraft.getMinecraft.thePlayer.isPlayerInfoSet && Minecraft.getMinecraft.thePlayer.getLocationElytra != null) {
+                event.renderer.bindTexture(Minecraft.getMinecraft.thePlayer.getLocationElytra)
+            }
+            else if (Minecraft.getMinecraft.thePlayer.hasPlayerInfo && Minecraft.getMinecraft.thePlayer.getLocationCape != null
+                    && Minecraft.getMinecraft.thePlayer.isWearing(EnumPlayerModelParts.CAPE)) {
+                event.renderer.bindTexture(Minecraft.getMinecraft.thePlayer.getLocationCape)
+            }
+            else {
+                event.renderer.bindTexture(TEXTURE_ELYTRA)
+            }
+
+            val scale = prepareScale(entity, event.partialRenderTick)
+            GlStateManager.pushMatrix()
+            GlStateManager.translate(0.0F, 0.0F, 0.125F)
+
+            val modelElytra = event.renderer.layerRenderers.get(event.renderer.layerRenderers.size() - 1)
+                    .asInstanceOf[LayerElytra].modelElytra
+            modelElytra.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, Minecraft.getMinecraft.thePlayer)
+            modelElytra.render(Minecraft.getMinecraft.thePlayer, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale)
+
+            GlStateManager.popMatrix()
+            GlStateManager.popMatrix()
+        }
+    }*/
 
     @SubscribeEvent
     def renderBlockEvent(event : RenderWorldLastEvent): Unit = {
@@ -95,7 +157,7 @@ object RenderingEvents extends IResourceManagerReloadListener {
             val block = world.getBlockState(blockPosition).getBlock
             val tile = world.getTileEntity(blockPosition)
             var breaksSelf = block.isInstanceOf[BlockChest] || block.isInstanceOf[BlockEnderChest] ||
-                                block.isInstanceOf[BlockSign] || block.isInstanceOf[BlockSkull]
+                    block.isInstanceOf[BlockSign] || block.isInstanceOf[BlockSkull]
             if(!breaksSelf) breaksSelf = tile != null && tile.canRenderBreaking
             if(!breaksSelf && blockPosition != blockIn) {
                 val state = world.getBlockState(blockPosition)
@@ -119,5 +181,29 @@ object RenderingEvents extends IResourceManagerReloadListener {
         val textureMap = Minecraft.getMinecraft.getTextureMapBlocks
         for(x <- destroyIcons.indices)
             destroyIcons(x) = textureMap.getAtlasSprite("minecraft:blocks/destroy_stage_" + x)
+    }
+
+    def interpolateRotation (par1: Float, par2: Float, par3: Float) : Float = {
+        var f: Float = 0.0F
+
+        f = par2 - par1
+        while (f < -180.0F) {
+            {
+            }
+            f += 360.0F
+        }
+
+        while (f >= 180.0F) {
+            f -= 360.0F
+        }
+        par1 + par3 * f
+    }
+
+    def prepareScale(entity : EntityLivingBase, partialTicks : Float): Float = {
+        GlStateManager.enableRescaleNormal()
+        GlStateManager.scale(-1.0F, -1.0F, 1.0F)
+        val f: Float = 0.0625F
+        GlStateManager.translate(0.0F, -1.501F, 0.0F)
+        f
     }
 }
