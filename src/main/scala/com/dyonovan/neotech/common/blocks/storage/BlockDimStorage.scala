@@ -101,19 +101,21 @@ class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, class
         }
     }
 
-    override def onBlockHarvested(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer): Unit = {
-        world match {
+    override def canHarvestBlock(world: IBlockAccess, pos: BlockPos, player: EntityPlayer): Boolean = {
+        player.getEntityWorld match {
             case _: WorldServer =>
                 val tile = world.getTileEntity(pos).asInstanceOf[TileDimStorage]
                 if (tile.getQty > 0 && tile.getStackInSlot(0) != null)
                     tile.dropStacks(tile.getQty, tile.getStackInSlot(0))
                 if (tile.getUpgradeBoard != null)
-                    WorldUtils.dropStack(world, tile.upgradeInventory.getStackInSlot(0).copy(), pos)
-                WorldUtils.dropStack(world, new ItemStack(BlockManager.dimStorage), pos)
-                world.removeTileEntity(pos)
-                world.setBlockState(pos, state, 3)
+                    WorldUtils.dropStack(player.getEntityWorld, tile.upgradeInventory.getStackInSlot(0).copy(), pos)
+                WorldUtils.dropStack(player.getEntityWorld, new ItemStack(BlockManager.dimStorage), pos)
+                player.getEntityWorld.removeTileEntity(pos)
+                player.getEntityWorld.setBlockToAir(pos)
+                //player.getEntityWorld.setBlockState(pos, state, 3)
             case _ =>
         }
+        false
     }
 
     override def getItemDropped(state: IBlockState, rand: java.util.Random, fortune: Int): Item = {

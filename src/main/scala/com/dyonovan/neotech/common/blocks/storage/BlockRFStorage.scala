@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumBlockRenderType, EnumFacing}
-import net.minecraft.world.World
+import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
@@ -37,11 +37,11 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
     setCreativeTab(NeoTech.tabNeoTech)
     setHardness(2.0F)
 
-    override def onBlockHarvested(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer): Unit = {
+    override def canHarvestBlock(world: IBlockAccess, pos: BlockPos, player: EntityPlayer): Boolean = {
         if (!player.capabilities.isCreativeMode) {
             world.getTileEntity(pos) match {
                 case tile: TileRFStorage =>
-                    val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
+                    val item = new ItemStack(Item.getItemFromBlock(world.getBlockState(pos).getBlock), 1)
                     val tag = new NBTTagCompound
                     tile.writeToNBT(tag)
                     tag.setInteger("Energy", tile.getEnergyStored(EnumFacing.UP))
@@ -49,12 +49,13 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
                     val r = tile.getEnergyStored(null).toFloat / tile.getMaxEnergyStored(null)
                     val res = 16 - (r * 16).toInt
                     item.setItemDamage(res)
-                    WorldUtils.dropStack(world, item, pos) //Drop it
+                    WorldUtils.dropStack(player.getEntityWorld, item, pos) //Drop it
                 case _ =>
             }
         } else {
-            super.breakBlock(world, pos, state)
+            super.breakBlock(player.getEntityWorld, pos, world.getBlockState(pos))
         }
+        false
     }
 
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:

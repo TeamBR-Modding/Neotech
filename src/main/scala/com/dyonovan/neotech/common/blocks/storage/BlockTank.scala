@@ -14,8 +14,8 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.{EnumBlockRenderType, BlockRenderLayer, EnumFacing, EnumHand}
-import net.minecraft.world.World
+import net.minecraft.util.{BlockRenderLayer, EnumBlockRenderType, EnumFacing, EnumHand}
+import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.fluids.{FluidContainerRegistry, FluidUtil, IFluidContainerItem, IFluidHandler}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -89,12 +89,13 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.glass, name,
         }
     }
 
-    override def onBlockHarvested(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer): Unit = {
+    override def canHarvestBlock(world: IBlockAccess, pos: BlockPos, player: EntityPlayer): Boolean = {
         if (!player.capabilities.isCreativeMode) {
-            breakTank(world, pos, state)
+            breakTank(player.getEntityWorld, pos, world.getBlockState(pos))
         } else {
-            super.breakBlock(world, pos, state)
+            super.breakBlock(player.getEntityWorld, pos, world.getBlockState(pos))
         }
+        false
     }
 
     private def breakTank(world: World, pos: BlockPos, state: IBlockState): Boolean = {
@@ -131,10 +132,6 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.glass, name,
 
     override def getItemDropped(state: IBlockState, rand: java.util.Random, fortune: Int): Item = {
         null
-    }
-
-    override def quantityDropped(rnd: java.util.Random): Int = {
-        0
     }
 
     override def createNewTileEntity(world: World, meta: Int): TileEntity = {
