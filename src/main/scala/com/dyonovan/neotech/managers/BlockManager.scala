@@ -15,7 +15,6 @@ import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
-import mcmultipart.item.MicroContainerPlacementWrapper
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
@@ -120,11 +119,11 @@ object BlockManager {
         }
 
         registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
-        new MicroContainerPlacementWrapper(new ItemStack(pipeItemInterface)).register("neotech:pipeItemBasicInterface")
+        //new MicroContainerPlacementWrapper(new ItemStack(pipeItemInterface)).register("neotech:pipeItemBasicInterface")
         registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
-        new MicroContainerPlacementWrapper(new ItemStack(pipeEnergyInterface)).register("neotech:pipeEnergyBasicInterface")
+        //new MicroContainerPlacementWrapper(new ItemStack(pipeEnergyInterface)).register("neotech:pipeEnergyBasicInterface")
         registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])
-        new MicroContainerPlacementWrapper(new ItemStack(pipeFluidInterface)).register("neotech:pipeFluidBasicInterface")
+        //new MicroContainerPlacementWrapper(new ItemStack(pipeFluidInterface)).register("neotech:pipeFluidBasicInterface")
 
 
         //RF Storage

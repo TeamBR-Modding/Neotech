@@ -136,6 +136,7 @@ abstract class AbstractRecipeHandler[R <: AbstractRecipe[I, O], I, O] {
 
     /**
       * Used to get the recipe object for an input
+      *
       * @param input The input
       * @return The recipe object
       */
@@ -220,8 +221,8 @@ abstract class AbstractRecipeHandler[R <: AbstractRecipe[I, O], I, O] {
       * @return A string version of the stack in format MODID:ITEMID:META
       */
     def getItemStackString(itemStack: ItemStack): String = {
-        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
-        id.modId + ":" + id.name + ":" + itemStack.getItemDamage
+        val id = itemStack.getUnlocalizedName.substring(5).split(":")
+        id(0) + ":" + id(1) + ":" + itemStack.getItemDamage
     }
 
     /**

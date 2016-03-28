@@ -2,14 +2,11 @@ package com.dyonovan.neotech.events;
 
 import com.dyonovan.neotech.tools.armor.ItemElectricArmor;
 import com.dyonovan.neotech.tools.modifier.ModifierSprinting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 /**
  * This file was created for NeoTech
@@ -57,7 +54,7 @@ public class PlayerUpdateEvent {
     public void updateFOV(FOVUpdateEvent event) {
         if(dontChangeFOV) {
             dontChangeFOV = false;
-            event.newfov = 1.0F;
+            event.setNewfov(1.0F);
         }
     }
 }

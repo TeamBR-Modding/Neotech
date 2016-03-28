@@ -33,7 +33,7 @@ object GuiEvents {
     @SubscribeEvent
     def guiLoaded(event : GuiScreenEvent.InitGuiEvent): Unit = {
         loadedPipes.clear()
-        event.gui match {
+        event.getGui match {
             case containerGui: GuiContainer if !containerGui.isInstanceOf[GuiInventory] =>
                 val lookingAt = Minecraft.getMinecraft.objectMouseOver.getBlockPos
                 if(lookingAt != null) {
@@ -64,7 +64,7 @@ object GuiEvents {
     @SubscribeEvent
     def guiDraw(event : GuiScreenEvent.BackgroundDrawnEvent): Unit = {
         if(!loadedPipes.isEmpty) {
-            event.gui match {
+            event.getGui match {
                 case containerGui: GuiContainer =>
                     GlStateManager.pushMatrix()
                     GlStateManager.enableBlend()

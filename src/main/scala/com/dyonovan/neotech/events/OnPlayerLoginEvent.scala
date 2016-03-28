@@ -28,8 +28,8 @@ object OnPlayerLoginEvent {
     @SubscribeEvent
     def onPlayerLogin(event: EntityJoinWorldEvent): Unit = {
 
-        event.entity match {
-            case player: EntityPlayer if event.world.isRemote && ConfigRegistry.versionCheck && firstTime =>
+        event.getEntity match {
+            case player: EntityPlayer if event.getWorld.isRemote && ConfigRegistry.versionCheck && firstTime =>
                 val mod = Loader.instance().getModList.toArray()
                 var modContainer: FMLModContainer = null
                 for (m <- mod) {

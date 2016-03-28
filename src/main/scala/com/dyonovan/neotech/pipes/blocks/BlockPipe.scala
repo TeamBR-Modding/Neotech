@@ -9,15 +9,10 @@ import com.dyonovan.neotech.managers.{BlockManager, ItemManager}
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import com.dyonovan.neotech.pipes.types.SimplePipe
-import com.google.common.base.Predicate
 import com.teambr.bookshelf.loadables.ILoadActionProvider
-import mcmultipart.block.{BlockCoverable, BlockMultipartContainer, TileCoverable}
-import mcmultipart.client.multipart.ModelMultipartContainer
-import net.minecraft.block.Block
 import net.minecraft.block.material.{MapColor, Material}
-import net.minecraft.block.properties.IProperty
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
-import net.minecraft.client.renderer.block.model.{IBakedModel, ModelResourceLocation}
+import net.minecraft.block.{Block, BlockContainer}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer
@@ -26,14 +21,8 @@ import net.minecraft.init.Blocks
 import net.minecraft.item._
 import net.minecraft.util._
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
-import net.minecraft.util.registry.RegistrySimple
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
-
-import scala.collection.JavaConversions._
-import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -46,7 +35,7 @@ import scala.collection.mutable.ArrayBuffer
   * @since August 14, 2015
   */
 class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileClass : Class[_ <: StructurePipe])
-        extends BlockCoverable(mat) with ILoadActionProvider {
+        extends BlockContainer(mat) with ILoadActionProvider {
 
     /*******************************************************************************************************************
       * Constructor                                                                                                    *
@@ -83,7 +72,9 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       * Used to create the block state of the pipes
       */
     override def createBlockState : BlockStateContainer = {
-        val listed = new ArrayBuffer[IProperty[_]]()
+        new BlockStateContainer(this, PipeProperties.COLOR, PipeProperties.UP, PipeProperties.DOWN,
+            PipeProperties.EAST, PipeProperties.WEST, PipeProperties.NORTH, PipeProperties.SOUTH)
+        /*val listed = new ArrayBuffer[IProperty[_]]()
         if(colored)
             listed += PipeProperties.COLOR
         listed += PipeProperties.UP
@@ -94,7 +85,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         listed += PipeProperties.SOUTH
         val unListed = new ArrayBuffer[IUnlistedProperty[_]]()
         unListed += BlockMultipartContainer.PROPERTY_MULTIPART_CONTAINER
-        new ExtendedBlockState(this, listed.toArray, unListed.toArray)
+        new ExtendedBlockState(this, listed.toArray, unListed.toArray)*/
     }
 
     /**
@@ -136,7 +127,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Called when we need to create a new tile class
       */
-    override def createNewTileEntity(worldIn : World, meta : Int) : TileCoverable = tileClass.newInstance()
+    override def createNewTileEntity(worldIn : World, meta : Int) : StructurePipe = tileClass.newInstance()
 
     /**
       * Called the moment the block is placed, for us we need to set the property to the default values if colored
@@ -152,7 +143,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Called when the block is clicked on, if we are colored or using a wrench perform relevant actions
       */
-    override def onBlockActivatedDefault(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
+    override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer,
                                          hand: EnumHand, heldItem: ItemStack, side: EnumFacing,
                                          hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         heldItem match {
@@ -224,7 +215,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Send update to pipes in grid to reform their cache
       */
-    override def onNeighborBlockChangeDefault(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
+    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
         if (!world.isRemote)
             WorldPipes.notifyPipes()
     }
@@ -234,7 +225,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
       ******************************************************************************************************************/
     var BB = new AxisAlignedBB(4F / 16F, 4F / 16F, 4F / 16F, 12F / 16F, 12F / 16F, 12F / 16F)
 
-    override def getSelectedBoundingBoxDefault(state: IBlockState, world: World, pos: BlockPos): AxisAlignedBB = {
+    override def getSelectedBoundingBox(state: IBlockState, world: World, pos: BlockPos): AxisAlignedBB = {
         state.getBoundingBox(world, pos)
     }
 
@@ -282,12 +273,12 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Add collision, allows player to get close to pipe bounds
       */
-    override def addCollisionBoxToListDefault(state: IBlockState, worldIn: World, pos: BlockPos, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) = {
+    override def addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, mask : AxisAlignedBB, list : java.util.List[AxisAlignedBB], collidingEntity : Entity) = {
         this.getBoundingBox(state, worldIn, pos)
-        super.addCollisionBoxToListDefault(state, worldIn, pos, mask, list, collidingEntity)
+        super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity)
     }
 
-    override def getDropsDefault(world: IBlockAccess, pos: BlockPos, state: IBlockState, fortune: Int): java.util.List[ItemStack] = {
+    override def getDrops(world: IBlockAccess, pos: BlockPos, state: IBlockState, fortune: Int): java.util.List[ItemStack] = {
         val list = new util.ArrayList[ItemStack]()
         if(colored) {
             list.add(new ItemStack(
@@ -342,11 +333,11 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     override def isFullCube(state: IBlockState) : Boolean = false
     @SideOnly(Side.CLIENT)
     override def getBlockLayer : BlockRenderLayer = BlockRenderLayer.SOLID
-    override def canRenderInLayerDefault(layer : BlockRenderLayer) : Boolean =
+    override def canRenderInLayer(layer : BlockRenderLayer) : Boolean =
         layer == BlockRenderLayer.SOLID
 
     override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
-        event match {
+        /*event match {
             case modelBake: ModelBakeEvent =>
                 for(modelLocation <- modelBake.getModelRegistry.asInstanceOf[RegistrySimple[ModelResourceLocation, IBakedModel]].getKeys) {
                     if(modelLocation.getResourceDomain.equalsIgnoreCase(Reference.MOD_ID) &&
@@ -360,6 +351,6 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
                     }
                 }
             case _ =>
-        }
+        }*/
     }
 }

@@ -3,7 +3,6 @@ package com.dyonovan.neotech.registries
 import net.minecraft.item.ItemStack
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
 import net.minecraftforge.fml.common.registry.GameRegistry
-import net.minecraftforge.oredict.OreDictionary
 
 /**
   * This file was created for NeoTech
@@ -49,8 +48,10 @@ abstract class AbstractRecipe[I, O] {
       * @return A string version of the stack in format MODID:ITEMID:META
       */
     def getItemStackString(itemStack: ItemStack): String = {
-        val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
-        id.modId + ":" + id.name + ":" + itemStack.getItemDamage
+        /*val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
+        id.modId + ":" + id.name + ":" + itemStack.getItemDamage*/
+        val id = itemStack.getUnlocalizedName.substring(5).split(":")
+        id(0) + ":" + id(1) + ":" + itemStack.getItemDamage
     }
 
     /**

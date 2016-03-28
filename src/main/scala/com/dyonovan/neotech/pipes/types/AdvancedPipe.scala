@@ -4,10 +4,10 @@ import com.dyonovan.neotech.collections.{EnumInputOutputMode, InputOutput}
 import com.dyonovan.neotech.common.blocks.traits.Upgradeable
 import com.dyonovan.neotech.pipes.collections.{Filter, WorldPipes}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
-import mcmultipart.block.TileCoverable
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.play.server.SPacketUpdateTileEntity
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
@@ -35,7 +35,7 @@ object AdvancedPipe {
     val FILTER_BLACKLIST = 3
 }
 
-abstract class AdvancedPipe extends TileCoverable with SimplePipe with Syncable with Upgradeable with RedstoneAware
+abstract class AdvancedPipe extends TileEntity with SimplePipe with Syncable with Upgradeable with RedstoneAware
          with Filter with InputOutput {
 
     override def resetIO() : Unit = {
@@ -126,12 +126,12 @@ abstract class AdvancedPipe extends TileCoverable with SimplePipe with Syncable 
       *
       * @return The packet to send
       */
-    override def getDescriptionPacket: SPacketUpdateTileEntity = {
+    /*override def getDescriptionPacket: SPacketUpdateTileEntity = {
         val tag = new NBTTagCompound
         this.writeToNBT(tag)
         getMicroblockContainer.getPartContainer.writeDescription(tag)
         new SPacketUpdateTileEntity(getPos, 1, tag)
-    }
+    }*/
 
     /**
       * Called when a packet is received
@@ -139,10 +139,10 @@ abstract class AdvancedPipe extends TileCoverable with SimplePipe with Syncable 
       * @param net The manager sending
       * @param pkt The packet received
       */
-    override def onDataPacket(net : NetworkManager, pkt : SPacketUpdateTileEntity) = {
+    /*override def onDataPacket(net : NetworkManager, pkt : SPacketUpdateTileEntity) = {
         this.readFromNBT(pkt.getNbtCompound)
         getMicroblockContainer.getPartContainer.readDescription(pkt.getNbtCompound)
-    }
+    }*/
 
     /**
       * Used to mark for update

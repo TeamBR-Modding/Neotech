@@ -105,14 +105,14 @@ object RenderingEvents extends IResourceManagerReloadListener {
 
         // Add Boxes
         if(player.getHeldItemMainhand != null && ModifierAOE.getAOELevel(player.getHeldItemMainhand) > 0) {
-            val movingObjectPosition = player.rayTrace(controllerMP.getBlockReachDistance, event.partialTicks)
+            val movingObjectPosition = player.rayTrace(controllerMP.getBlockReachDistance, event.getPartialTicks)
             if(movingObjectPosition != null && world.getBlockState(movingObjectPosition.getBlockPos)
                     .getBlock.getMaterial(world.getBlockState(movingObjectPosition.getBlockPos)) != Material.air) {
                 val level = ModifierAOE.getAOELevel(player.getHeldItemMainhand)
                 blockList = ToolHelper.getBlockList(level, movingObjectPosition, player, world, player.getHeldItemMainhand)
                 for(x <- blockList.toArray)
-                    event.context.drawSelectionBox(player,
-                        new RayTraceResult(new Vec3d(0, 0, 0), null, x.asInstanceOf[BlockPos]), 0, event.partialTicks)
+                    event.getContext.drawSelectionBox(player,
+                        new RayTraceResult(new Vec3d(0, 0, 0), null, x.asInstanceOf[BlockPos]), 0, event.getPartialTicks)
             }
         }
 
@@ -120,7 +120,7 @@ object RenderingEvents extends IResourceManagerReloadListener {
         if(blockList != null && !blockList.isEmpty && controllerMP.isHittingBlock) {
             if(controllerMP.currentItemHittingBlock != null && ModifierAOE.getAOELevel(controllerMP.currentItemHittingBlock) > 0) {
                 drawDamageOnBlocks(Tessellator.getInstance(), Tessellator.getInstance().getBuffer,
-                    player, event.partialTicks, world, controllerMP.currentBlock, blockList)
+                    player, event.getPartialTicks, world, controllerMP.currentBlock, blockList)
             }
         }
     }

@@ -2,15 +2,9 @@ package com.dyonovan.neotech.pipes.types
 
 import com.dyonovan.neotech.pipes.collections.WorldPipes
 import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
-import com.google.common.base.Predicate
-import mcmultipart.microblock.IMicroblock.IFaceMicroblock
-import mcmultipart.microblock.IMicroblockContainerTile
-import mcmultipart.multipart.{IMultipart, OcclusionHelper, PartSlot}
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.AxisAlignedBB
-
-import scala.collection.JavaConversions._
 
 /**
   * This file was created for NeoTech
@@ -64,7 +58,7 @@ trait SimplePipe extends TileEntity {
             return true
 
         getWorld.getTileEntity(getPos) match {
-            case tileContainer: IMicroblockContainerTile =>
+            /*case tileContainer: IMicroblockContainerTile =>
                 if(tileContainer.getMicroblockContainer != null && tileContainer.getMicroblockContainer.getPartContainer != null) {
                     val parts = tileContainer.getMicroblockContainer.getParts
                     for(part <- parts) {
@@ -82,16 +76,16 @@ trait SimplePipe extends TileEntity {
                     if(!OcclusionHelper.occlusionTest(parts, dontIgnore, getAxisForFace(facing)))
                         return true
 
-                }
+                }*/
             case _ =>
                 return false
         }
         false
     }
 
-    lazy val dontIgnore = new Predicate[IMultipart] {
+    /*lazy val dontIgnore = new Predicate[IMultipart] {
         override def apply(input: IMultipart): Boolean = false
-    }
+    }*/
 
     lazy val AxisUp    = new AxisAlignedBB(5 / 16F, 11 / 16F, 5 / 16F,
         11 / 16F, 1.0F, 11 / 16F)

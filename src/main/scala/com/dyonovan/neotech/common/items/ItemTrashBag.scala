@@ -61,8 +61,8 @@ object ItemTrashBag {
 
     @SubscribeEvent
     def onItemPickUp(event : EntityItemPickupEvent): Unit = {
-        val player = event.entityPlayer
-        val pickedUp = event.item.getEntityItem
+        val player = event.getEntityPlayer
+        val pickedUp = event.getItem.getEntityItem
 
         if(pickedUp == null || player == null) return
 
@@ -77,8 +77,8 @@ object ItemTrashBag {
                         if (containedStack.getItem == pickedUp.getItem && containedStack.getItemDamage == pickedUp.getItemDamage &&
                                 ItemStack.areItemStackTagsEqual(containedStack, pickedUp)) {
                             pickedUp.stackSize = 0
-                            event.entity.worldObj.playSound(null.asInstanceOf[EntityPlayer],
-                                new BlockPos(event.entity.posX, event.entity.posY, event.entity.posZ),
+                            event.getEntity.worldObj.playSound(null.asInstanceOf[EntityPlayer],
+                                new BlockPos(event.getEntity.posX, event.getEntity.posY, event.getEntity.posZ),
                                 SoundEvents.entity_item_pickup,
                                 SoundCategory.BLOCKS, 0.3F, 0.5F)
                             break

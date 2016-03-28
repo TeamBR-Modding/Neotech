@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 object AttackEvent {
     @SubscribeEvent
     def entityAttacked(event : LivingAttackEvent) : Unit = {
-        event.source.getSourceOfDamage match {
+        event.getSource.getSourceOfDamage match {
             case player: EntityPlayer =>
                 if (player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem == ItemManager.electricSword) {
                     val sword = player.getHeldItemMainhand
@@ -38,16 +38,16 @@ object AttackEvent {
 
     @SubscribeEvent
     def onLivingDrop(event : LivingDropsEvent) : Unit = {
-        if(event.entityLiving == null) return
-        if(event.recentlyHit && event.source.damageType.equals("player")) {
-            if(event.entityLiving.isInstanceOf[EntitySkeleton] || event.entityLiving.isInstanceOf[EntityZombie] ||
-                    event.entityLiving.isInstanceOf[EntityCreeper] ||event.entityLiving.isInstanceOf[EntityPlayer]) {
-                val player = event.source.getEntity.asInstanceOf[EntityPlayer]
+        if(event.getEntityLiving == null) return
+        if(event.isRecentlyHit && event.getSource.damageType.equals("player")) {
+            if(event.getEntityLiving.isInstanceOf[EntitySkeleton] || event.getEntityLiving.isInstanceOf[EntityZombie] ||
+                    event.getEntityLiving.isInstanceOf[EntityCreeper] ||event.getEntityLiving.isInstanceOf[EntityPlayer]) {
+                val player = event.getSource.getEntity.asInstanceOf[EntityPlayer]
                 val stack = player.getHeldItemMainhand
                 if(stack != null && ModifierBeheading.getBeheadingLevel(stack) > 0) {
-                    val chance = event.entityLiving.worldObj.rand.nextInt(100) - ( ModifierBeheading.getBeheadingLevel(stack) * 25)
+                    val chance = event.getEntityLiving.worldObj.rand.nextInt(100) - ( ModifierBeheading.getBeheadingLevel(stack) * 25)
                     if(chance <= 0) {
-                        event.entityLiving match {
+                        event.getEntityLiving match {
                             case skeleton : EntitySkeleton =>
                                 addDrops(event, new ItemStack(Items.skull, 1, skeleton.getSkeletonType))
                             case zombie : EntityZombie =>
@@ -69,8 +69,8 @@ object AttackEvent {
     }
 
     def addDrops(event : LivingDropsEvent, stack : ItemStack) : Unit = {
-        val item = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entity.posZ, stack)
+        val item = new EntityItem(event.getEntityLiving.worldObj, event.getEntityLiving.posX, event.getEntityLiving.posY, event.getEntity.posZ, stack)
         item.setPickupDelay(10)
-        event.drops.add(item)
+        event.getDrops.add(item)
     }
 }

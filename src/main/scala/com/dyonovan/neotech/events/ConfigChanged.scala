@@ -19,7 +19,7 @@ object ConfigChanged {
 
     @SubscribeEvent
     def onConfigChange(event: ConfigChangedEvent.OnConfigChangedEvent): Unit = {
-        if (event.modID.equals(Reference.MOD_ID) && ConfigRegistry.config.hasChanged)
+        if (event.getModID.equals(Reference.MOD_ID) && ConfigRegistry.config.hasChanged)
             ConfigRegistry.config.save()
     }
 }
