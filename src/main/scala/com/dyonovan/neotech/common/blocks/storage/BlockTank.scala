@@ -133,6 +133,10 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.glass, name,
         null
     }
 
+    override def quantityDropped(rnd: java.util.Random): Int = {
+        0
+    }
+
     override def createNewTileEntity(world: World, meta: Int): TileEntity = {
         new TileTank(tier)
     }

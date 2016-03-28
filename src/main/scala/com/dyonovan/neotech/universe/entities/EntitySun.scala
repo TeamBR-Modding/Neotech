@@ -37,13 +37,13 @@ class EntitySun(world : World) extends Entity(world) {
         height = sunType.getDefaultRadius * 2
         radius = sunType.getDefaultRadius
 
-        dataManager.set(DATA_WATCHER_RADIUS, radius.asInstanceOf[java.lang.Float])
-        dataManager.set(DATA_WATCHER_TYPE, sunType.ordinal().asInstanceOf[java.lang.Integer])
+        dataWatcher.set(DATA_WATCHER_RADIUS, radius.asInstanceOf[java.lang.Float])
+        dataWatcher.set(DATA_WATCHER_TYPE, sunType.ordinal().asInstanceOf[java.lang.Integer])
     }
 
     override def entityInit(): Unit = {
-        dataManager.register(DATA_WATCHER_RADIUS, 0F.asInstanceOf[java.lang.Float])
-        dataManager.register(DATA_WATCHER_TYPE, 0.asInstanceOf[java.lang.Integer])
+        dataWatcher.register(DATA_WATCHER_RADIUS, 0F.asInstanceOf[java.lang.Float])
+        dataWatcher.register(DATA_WATCHER_TYPE, 0.asInstanceOf[java.lang.Integer])
     }
 
     override def onUpdate(): Unit = {
@@ -56,12 +56,12 @@ class EntitySun(world : World) extends Entity(world) {
         if(worldObj.isRemote) {
             this.setEntityBoundingBox(
                 new AxisAlignedBB(
-                    posX - dataManager.get(DATA_WATCHER_RADIUS),
-                    posY - dataManager.get(DATA_WATCHER_RADIUS),
-                    posZ - dataManager.get(DATA_WATCHER_RADIUS),
-                    posX + dataManager.get(DATA_WATCHER_RADIUS),
-                    posY + dataManager.get(DATA_WATCHER_RADIUS),
-                    posZ + dataManager.get(DATA_WATCHER_RADIUS)))
+                    posX - dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posY - dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posZ - dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posX + dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posY + dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posZ + dataWatcher.get(DATA_WATCHER_RADIUS)))
             width = radius * 2
             height = radius * 2
         }
@@ -74,19 +74,19 @@ class EntitySun(world : World) extends Entity(world) {
 
     override def readEntityFromNBT(tagCompound: NBTTagCompound): Unit = {
         radius = tagCompound.getFloat("Radius")
-        dataManager.set(DATA_WATCHER_RADIUS, radius.asInstanceOf[java.lang.Float])
+        dataWatcher.set(DATA_WATCHER_RADIUS, radius.asInstanceOf[java.lang.Float])
 
         sunType = sunType.getTypeFromTag(tagCompound)
-        dataManager.set(DATA_WATCHER_TYPE, sunType.ordinal().asInstanceOf[java.lang.Integer])
+        dataWatcher.set(DATA_WATCHER_TYPE, sunType.ordinal().asInstanceOf[java.lang.Integer])
 
         this.setEntityBoundingBox(
             new AxisAlignedBB(
-                posX - dataManager.get(DATA_WATCHER_RADIUS),
-                posY - dataManager.get(DATA_WATCHER_RADIUS),
-                posZ - dataManager.get(DATA_WATCHER_RADIUS),
-                posX + dataManager.get(DATA_WATCHER_RADIUS),
-                posY + dataManager.get(DATA_WATCHER_RADIUS),
-                posZ + dataManager.get(DATA_WATCHER_RADIUS)))
+                posX - dataWatcher.get(DATA_WATCHER_RADIUS),
+                posY - dataWatcher.get(DATA_WATCHER_RADIUS),
+                posZ - dataWatcher.get(DATA_WATCHER_RADIUS),
+                posX + dataWatcher.get(DATA_WATCHER_RADIUS),
+                posY + dataWatcher.get(DATA_WATCHER_RADIUS),
+                posZ + dataWatcher.get(DATA_WATCHER_RADIUS)))
         width = radius * 2
         height = radius * 2
     }
@@ -106,16 +106,16 @@ class EntitySun(world : World) extends Entity(world) {
     def drainPower() : Int = {
         if (sunType.ordinal() > 1) {
             radius -= BASE_RADIUS_DRAIN
-            dataManager.set(DATA_WATCHER_RADIUS, radius.asInstanceOf[java.lang.Float])
+            dataWatcher.set(DATA_WATCHER_RADIUS, radius.asInstanceOf[java.lang.Float])
 
             this.setEntityBoundingBox(
                 new AxisAlignedBB(
-                    posX - dataManager.get(DATA_WATCHER_RADIUS),
-                    posY - dataManager.get(DATA_WATCHER_RADIUS),
-                    posZ - dataManager.get(DATA_WATCHER_RADIUS),
-                    posX + dataManager.get(DATA_WATCHER_RADIUS),
-                    posY + dataManager.get(DATA_WATCHER_RADIUS),
-                    posZ + dataManager.get(DATA_WATCHER_RADIUS)))
+                    posX - dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posY - dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posZ - dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posX + dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posY + dataWatcher.get(DATA_WATCHER_RADIUS),
+                    posZ + dataWatcher.get(DATA_WATCHER_RADIUS)))
             width = radius * 2
             height = radius * 2
 
@@ -124,7 +124,7 @@ class EntitySun(world : World) extends Entity(world) {
                 val smallerSunType = EnumSunType.values()(sunType.ordinal() - 1)
                 if (radius <= smallerSunType.getDefaultRadius) {
                     sunType = smallerSunType
-                    dataManager.set(DATA_WATCHER_TYPE, sunType.ordinal().asInstanceOf[java.lang.Integer])
+                    dataWatcher.set(DATA_WATCHER_TYPE, sunType.ordinal().asInstanceOf[java.lang.Integer])
                 }
             }
 
