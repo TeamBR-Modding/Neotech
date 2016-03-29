@@ -48,10 +48,7 @@ abstract class AbstractRecipe[I, O] {
       * @return A string version of the stack in format MODID:ITEMID:META
       */
     def getItemStackString(itemStack: ItemStack): String = {
-        /*val id: GameRegistry.UniqueIdentifier = GameRegistry.findUniqueIdentifierFor(itemStack.getItem)
-        id.modId + ":" + id.name + ":" + itemStack.getItemDamage*/
-        val id = itemStack.getUnlocalizedName.substring(5).split(":")
-        id(0) + ":" + id(1) + ":" + itemStack.getItemDamage
+        itemStack.getItem.getRegistryName + ":" + itemStack.getItemDamage
     }
 
     /**

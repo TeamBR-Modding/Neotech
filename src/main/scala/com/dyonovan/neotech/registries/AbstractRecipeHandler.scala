@@ -10,7 +10,7 @@ import net.minecraft.command.CommandBase
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.fluids.{FluidRegistry, FluidStack}
-import net.minecraftforge.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.common.registry.{GameData, GameRegistry}
 
 /**
   * This file was created for NeoTech
@@ -221,8 +221,7 @@ abstract class AbstractRecipeHandler[R <: AbstractRecipe[I, O], I, O] {
       * @return A string version of the stack in format MODID:ITEMID:META
       */
     def getItemStackString(itemStack: ItemStack): String = {
-        val id = itemStack.getUnlocalizedName.substring(5).split(":")
-        id(0) + ":" + id(1) + ":" + itemStack.getItemDamage
+        itemStack.getItem.getRegistryName + ":" + itemStack.getItemDamage
     }
 
     /**
