@@ -3,8 +3,8 @@ package com.dyonovan.neotech.api.jei.crusher
 import java.awt.Color
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
-import jei.drawables.{GuiComponentArrowJEI, GuiComponentPowerBarJEI, SlotDrawable}
 import com.dyonovan.neotech.lib.Reference
+import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentPowerBarJEI, SlotDrawable}
 import mezz.jei.api.gui._
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft

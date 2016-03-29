@@ -3,8 +3,8 @@ package com.dyonovan.neotech.api.jei.centrifuge
 import java.awt.Color
 
 import com.dyonovan.neotech.api.jei.NeoTechPlugin
-import jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI}
 import com.dyonovan.neotech.lib.Reference
+import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI}
 import mezz.jei.api.gui.{IDrawable, IRecipeLayout}
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft

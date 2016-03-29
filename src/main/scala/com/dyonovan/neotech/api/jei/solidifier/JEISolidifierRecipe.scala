@@ -3,8 +3,8 @@ package com.dyonovan.neotech.api.jei.solidifier
 import java.util
 import java.util.Collections
 
-import jei.drawables.GuiComponentItemStackButtonJEI
 import com.dyonovan.neotech.managers.MetalManager
+import com.teambr.bookshelf.api.jei.drawables.GuiComponentItemStackButtonJEI
 import mezz.jei.api.recipe.BlankRecipeWrapper
 import net.minecraft.client.Minecraft
 import net.minecraft.init.{Blocks, Items}
