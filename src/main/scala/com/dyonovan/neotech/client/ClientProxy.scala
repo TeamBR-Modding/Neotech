@@ -176,14 +176,16 @@ class ClientProxy extends CommonProxy {
 
         // Register fluid colors
         for(metal <- MetalManager.metalRegistry.keySet()) {
-            Minecraft.getMinecraft.getBlockColors.registerBlockColorHandler(new IBlockColor {
-                override def colorMultiplier(state: IBlockState, world: IBlockAccess, pos: BlockPos, tintIndex: Int): Int = {
-                    state.getBlock match {
-                        case metal: BlockFluidMetal => metal.getBlockColor
-                        case _ => 0xFFFFFF
+            if(MetalManager.metalRegistry.get(metal).fluidBlock.isDefined) {
+                Minecraft.getMinecraft.getBlockColors.registerBlockColorHandler(new IBlockColor {
+                    override def colorMultiplier(state: IBlockState, world: IBlockAccess, pos: BlockPos, tintIndex: Int): Int = {
+                        state.getBlock match {
+                            case metal: BlockFluidMetal => metal.getBlockColor
+                            case _ => 0xFFFFFF
+                        }
                     }
-                }
-            }, MetalManager.metalRegistry.get(metal).fluidBlock.get)
+                }, MetalManager.metalRegistry.get(metal).fluidBlock.get)
+            }
         }
 
         Minecraft.getMinecraft.getBlockColors.registerBlockColorHandler(new IBlockColor {
