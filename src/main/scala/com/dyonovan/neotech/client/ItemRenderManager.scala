@@ -39,6 +39,8 @@ object ItemRenderManager {
     def registerItem(item: Item): Unit = {
         Minecraft.getMinecraft.getRenderItem.getItemModelMesher.register(item, 0,
             new ModelResourceLocation(item.getUnlocalizedName.substring(5), "inventory"))
+        ModelLoader.setCustomModelResourceLocation(item, 0,
+            new ModelResourceLocation(item.getUnlocalizedName.substring(5), "inventory"))
     }
 
     def registerBlockModel(block : Block, name : String, variants : String, meta : Int = 0) : Unit = {
