@@ -44,7 +44,7 @@ class CentrifugeRecipeHandler
       *
       * @return
       */
-    override def getVersion: Int = 4
+    override def getVersion: Int = 5
 
     /**
       * Called when the file is not found, add all default recipes here

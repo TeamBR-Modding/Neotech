@@ -39,7 +39,7 @@ class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
       *
       * @return
       */
-    override def getVersion: Int = 4
+    override def getVersion: Int = 5
 
     /**
       * Used to get the default folder location

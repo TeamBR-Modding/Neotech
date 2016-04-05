@@ -42,7 +42,7 @@ class FluidFuelRecipeHandler extends AbstractRecipeHandler[FluidFuelRecipe, Flui
       *
       * @return
       */
-    override def getVersion: Int = 1
+    override def getVersion: Int = 2
 
     /**
       * Called when the file is not found, add all default recipes here

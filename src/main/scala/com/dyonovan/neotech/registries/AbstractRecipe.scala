@@ -48,7 +48,7 @@ abstract class AbstractRecipe[I, O] {
       * @return A string version of the stack in format MODID:ITEMID:META
       */
     def getItemStackString(itemStack: ItemStack): String = {
-        itemStack.getItem.getRegistryName + ":" + itemStack.getItemDamage
+        itemStack.getItem.getRegistryName.toString + ":" + itemStack.getItemDamage
     }
 
     /**
