@@ -184,6 +184,18 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int =
         super.extractEnergy(from, maxExtract, if(tier == 4) true else simulate)
 
+    /**
+      * Used to output the redstone single from this structure
+      *
+      * Use a range from 0 - 16.
+      *
+      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
+      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
+      *
+      * @return int range 0 - 16
+      */
+    def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
+
     /** *****************************************************************************************************************
       * ************************************************ Waila methods **************************************************
       * *****************************************************************************************************************/

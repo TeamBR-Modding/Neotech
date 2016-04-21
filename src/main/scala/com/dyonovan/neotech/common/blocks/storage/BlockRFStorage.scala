@@ -3,6 +3,7 @@ package com.dyonovan.neotech.common.blocks.storage
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.client.gui.storage.GuiRFStorage
 import com.dyonovan.neotech.common.container.storage.ContainerRFStorage
+import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.storage.TileRFStorage
 import com.dyonovan.neotech.lib.Reference
 import com.teambr.bookshelf.common.blocks.traits.DropsItems
@@ -102,4 +103,10 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.ir
     def getName: String = name
 
     def getTier: Int = tier
+
+    override def hasComparatorInputOverride(state: IBlockState): Boolean =
+        true
+
+    override def getComparatorInputOverride(state: IBlockState, worldIn: World, pos: BlockPos): Int =
+        worldIn.getTileEntity(pos).asInstanceOf[TileRFStorage].getRedstoneOutput
 }
