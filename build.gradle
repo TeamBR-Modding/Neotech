@@ -96,7 +96,7 @@ configurations {
 
 dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
-    //compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
+    compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     //deobfCompile "MCMultiPart:MCMultiPart-experimental:${config.MCMultiPart_version}:universal"
     compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.9-+", classifier: "dev", changing: true
