@@ -125,9 +125,10 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
     /**
       * Write the tag
       */
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[AbstractMachine].writeToNBT(tag)
         tag.setInteger("CookTime", cookTime)
+        tag
     }
 
     /**

@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Paul Davis <pauljoda>
   * @since 1/19/2016
   */
-class BlockChunkLoader extends BaseBlock(Material.rock, "chunkLoader", classOf[TileChunkLoader]) with OpensGui {
+class BlockChunkLoader extends BaseBlock(Material.ROCK, "chunkLoader", classOf[TileChunkLoader]) with OpensGui {
 
     @SideOnly(Side.CLIENT)
     override def randomDisplayTick(state: IBlockState, world: World, pos: BlockPos, rand: java.util.Random): Unit = {

@@ -23,7 +23,7 @@ class ItemWrench extends BaseItem("wrench", 1) {
     override def onItemUseFirst(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos,
                                 side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, hand: EnumHand) : EnumActionResult = {
         val block = world.getBlockState(pos).getBlock
-        if (!player.isSneaking && block != Blocks.bed && block.rotateBlock(world, pos, side)) {
+        if (!player.isSneaking && block != Blocks.BED && block.rotateBlock(world, pos, side)) {
             player.swingArm(hand)
             return EnumActionResult.SUCCESS
         }

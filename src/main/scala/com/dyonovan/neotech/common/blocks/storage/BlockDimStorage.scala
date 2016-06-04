@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 /**
   * Created by Dyonovan on 1/23/2016.
   */
-class BlockDimStorage(name: String) extends BaseBlock(Material.iron, name, classOf[TileDimStorage]) {
+class BlockDimStorage(name: String) extends BaseBlock(Material.IRON, name, classOf[TileDimStorage]) {
 
     lazy val LOCKED = PropertyBool.create("locked")
     var time: Long = 0

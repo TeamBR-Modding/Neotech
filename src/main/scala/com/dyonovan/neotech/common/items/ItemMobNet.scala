@@ -27,7 +27,7 @@ object ItemMobNet {
 class ItemMobNet extends BaseItem("mobNet", 16) {
     override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer, hand: EnumHand) : ActionResult[ItemStack] = {
     if (stack.hasTagCompound && !world.isRemote) {
-            val mop = getMovingObjectPositionFromPlayer(world, player, false)
+            val mop = rayTrace(world, player, false)
             if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
                 val entity = EntityList.createEntityByName(stack.getTagCompound.getString("type"), world)
                 if (entity != null) {

@@ -46,7 +46,7 @@ object ModifierLooting extends Modifier("looting") {
       * Write info to the tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, looting: Int): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.looting, getLootingLevel(stack) + looting)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.LOOTING, getLootingLevel(stack) + looting)
         tag.setInteger(LOOTING, looting)
         super.writeToNBT(tag, stack)
         tag

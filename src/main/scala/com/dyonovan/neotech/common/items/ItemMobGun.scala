@@ -70,7 +70,7 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
             player.setActiveHand(hand)
             return new ActionResult[ItemStack](EnumActionResult.SUCCESS, stack)
         }
-        else world.playSound(player, player.getPosition, SoundEvents.item_flintandsteel_use, SoundCategory.BLOCKS, 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
+        else world.playSound(player, player.getPosition, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 0.5F, 0.4F / (new Random().nextFloat() * 0.4F + 0.8F))
         new ActionResult[ItemStack](EnumActionResult.FAIL, stack)
     }
 
@@ -104,7 +104,7 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
             val net = new EntityNet(world, player, f * 2.0F)
             world.spawnEntityInWorld(net)
             world.playSound(null.asInstanceOf[EntityPlayer],
-                new BlockPos(player.posX, player.posY, player.posZ), SoundEvents.entity_arrow_shoot,
+                new BlockPos(player.posX, player.posY, player.posZ), SoundEvents.ENTITY_ARROW_SHOOT,
                 SoundCategory.BLOCKS, 0.3F, 0.5F)
         }
     }

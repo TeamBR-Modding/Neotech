@@ -49,13 +49,13 @@ object AttackEvent {
                     if(chance <= 0) {
                         event.getEntityLiving match {
                             case skeleton : EntitySkeleton =>
-                                addDrops(event, new ItemStack(Items.skull, 1, skeleton.getSkeletonType))
+                                addDrops(event, new ItemStack(Items.SKULL, 1, skeleton.getSkeletonType))
                             case zombie : EntityZombie =>
-                                addDrops(event, new ItemStack(Items.skull, 1, 2))
+                                addDrops(event, new ItemStack(Items.SKULL, 1, 2))
                             case creeper : EntityCreeper =>
-                                addDrops(event, new ItemStack(Items.skull, 1, 4))
+                                addDrops(event, new ItemStack(Items.SKULL, 1, 4))
                             case player : EntityPlayer =>
-                                val stack = new ItemStack(Items.skull, 1, 3)
+                                val stack = new ItemStack(Items.SKULL, 1, 3)
                                 val tag = new NBTTagCompound
                                 tag.setString("SkullOwner", player.getName)
                                 stack.setTagCompound(tag)

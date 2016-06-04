@@ -45,7 +45,7 @@ object ModifierBaneOfArthropods extends Modifier("spiderBane") {
       * Write info to the tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.baneOfArthropods, getBaneLevel(stack) + count)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.BANE_OF_ARTHROPODS, getBaneLevel(stack) + count)
         tag.setInteger(BANE, getBaneLevel(stack) + count)
         super.writeToNBT(tag, stack)
         tag

@@ -40,7 +40,7 @@ class TileFlushableChest extends Syncable with Inventory {
         prevLidAngle = lidAngle
         val f = 0.1F
         if(numUsingPlayers > 0 && lidAngle == 0.0F)
-            worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_chest_open,
+            worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.BLOCK_CHEST_OPEN,
                 SoundCategory.BLOCKS, 0.3F, 0.5F)
         if((numUsingPlayers == 0 && lidAngle > 0.0F) || (numUsingPlayers > 0 && lidAngle < 1.0F)) {
             val f1 = lidAngle
@@ -54,7 +54,7 @@ class TileFlushableChest extends Syncable with Inventory {
 
             val f2 = 0.5F
             if(lidAngle < f2 && f1 > f2)
-                worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_chest_close,
+                worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.BLOCK_CHEST_CLOSE,
                     SoundCategory.BLOCKS, 0.3F, 0.5F)
             if(lidAngle < 0.0F)
                 lidAngle = 0.0F
@@ -84,14 +84,17 @@ class TileFlushableChest extends Syncable with Inventory {
         super[TileEntity].markDirty()
     }
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = super[Inventory].writeToNBT(tag)
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
+        super[Inventory].writeToNBT(tag)
+        tag
+    }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = super[Inventory].readFromNBT(tag)
 
     override def clear() = {
         super.clear()
         if(worldObj != null && !worldObj.isRemote) {
-            worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_lava_extinguish,
+            worldObj.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.BLOCK_LAVA_EXTINGUISH,
                 SoundCategory.BLOCKS, 0.3F, 0.5F)
             sendValueToClient(0, 0)
         }

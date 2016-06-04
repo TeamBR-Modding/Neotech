@@ -46,7 +46,7 @@ object ModifierFortune extends Modifier("fortune") {
       * Write info to the tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, fortune: Int): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.fortune, getFortuneLevel(stack) + fortune)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.FORTUNE, getFortuneLevel(stack) + fortune)
         tag.setInteger(FORTUNE, fortune)
         super.writeToNBT(tag, stack)
         tag

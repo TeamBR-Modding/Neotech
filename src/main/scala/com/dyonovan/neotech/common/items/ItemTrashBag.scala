@@ -79,7 +79,7 @@ object ItemTrashBag {
                             pickedUp.stackSize = 0
                             event.getEntity.worldObj.playSound(null.asInstanceOf[EntityPlayer],
                                 new BlockPos(event.getEntity.posX, event.getEntity.posY, event.getEntity.posZ),
-                                SoundEvents.entity_item_pickup,
+                                SoundEvents.ENTITY_ITEM_PICKUP,
                                 SoundCategory.BLOCKS, 0.3F, 0.5F)
                             break
                         }

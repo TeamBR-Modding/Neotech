@@ -5,8 +5,8 @@ import java.util.UUID
 import com.dyonovan.neotech.NeoTech
 import com.dyonovan.neotech.registries.ConfigRegistry
 import com.teambr.bookshelf.common.tiles.traits.Syncable
+import net.minecraft.util.math.ChunkPos
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.world.ChunkCoordIntPair
 import net.minecraftforge.common.ForgeChunkManager
 import net.minecraftforge.common.ForgeChunkManager.{Ticket, Type}
 
@@ -53,11 +53,11 @@ class TileChunkLoader extends Syncable {
             chunkTicket = ticket
 
         //Load Us
-        ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(pos.getX >> 4, pos.getY >> 4))
+        ForgeChunkManager.forceChunk(ticket, new ChunkPos(pos.getX >> 4, pos.getY >> 4))
 
         for (i <- (pos.getX >> 4) - diameter to (pos.getX >> 4) + diameter) {
             for (j <- (pos.getZ >> 4) - diameter to (pos.getZ >> 4) + diameter) {
-                val chunk = new ChunkCoordIntPair(i, j)
+                val chunk = new ChunkPos(i, j)
                 ForgeChunkManager.forceChunk(ticket, chunk)
             }
         }
@@ -71,12 +71,13 @@ class TileChunkLoader extends Syncable {
             owner = UUID.fromString(tag.getString("Owner"))
     }
 
-    override def writeToNBT(tag: NBTTagCompound) =
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound =
     {
         super.writeToNBT(tag)
         tag.setInteger("Diameter", diameter)
         if (owner != null)
             tag.setString("Owner", owner.toString)
+        tag
     }
 
     override def setVariable(id: Int, value: Double): Unit =

@@ -87,7 +87,7 @@ abstract class AdvancedPipe extends TileEntity with SimplePipe with Syncable wit
       *
       * @param tag
       */
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         super[Upgradeable].writeToNBT(tag)
         super[Filter].writeToNBT(tag)
         super[InputOutput].writeToNBT(tag)
@@ -97,6 +97,7 @@ abstract class AdvancedPipe extends TileEntity with SimplePipe with Syncable wit
         tag.setInteger("frequency", frequency)
         tag.setBoolean("ReRender", reRender)
         reRender = false
+        tag
     }
 
     /**

@@ -45,25 +45,26 @@ class TileDimStorage extends UpdatingTile with Inventory with Upgradeable {
         for (dir <- EnumFacing.HORIZONTALS) {
             val block = worldObj.getBlockState(pos.offset(dir)).getBlock
             block match {
-                case Blocks.lava => hasLava = true
-                case Blocks.water => hasWater = true
+                case Blocks.LAVA => hasLava = true
+                case Blocks.WATER => hasWater = true
                 case _ =>
             }
         }
         if (hasWater && hasLava) {
-            val stack = new ItemStack(Blocks.cobblestone, 1)
+            val stack = new ItemStack(Blocks.COBBLESTONE, 1)
             insertItem(0, stack, simulate = false)
         }
         cooldown = DEFAULT_COOLDOWN
     }
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         super[Upgradeable].writeToNBT(tag)
         tag.setInteger("Qty", qty)
         tag.setBoolean("Lock", lock)
         tag.setInteger("MaxStacks", maxStacks)
+        tag
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {

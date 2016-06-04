@@ -131,7 +131,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
             selectorTab += new GuiComponentText(GuiColor.BLUE + I18n.translateToLocal("neotech.text.blue") + ": " + GuiColor.WHITE + I18n.translateToLocal("neotech.text.insert"), 10, 90)
             selectorTab += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.orange") + ": " + GuiColor.WHITE + I18n.translateToLocal("neotech.text.extract"), 10, 100)
             selectorTab += new GuiComponentText(GuiColor.GREEN + I18n.translateToLocal("neotech.text.green") + ": " + GuiColor.WHITE + I18n.translateToLocal("neotech.text.both"), 10, 110)
-            tabs.addTab(selectorTab.toList, 100, 125, new Color(150, 150, 150), new ItemStack(Blocks.piston))
+            tabs.addTab(selectorTab.toList, 100, 125, new Color(150, 150, 150), new ItemStack(Blocks.PISTON))
         }
     }
 
@@ -140,7 +140,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
             val infoTab = new ArrayBuffer[BaseComponent]()
             infoTab += new GuiComponentText(GuiColor.YELLOW + I18n.translateToLocal("neotech.text.information"), 10, 7)
             infoTab += new GuiComponentLongText(10, 20, tileEntity.asInstanceOf[InterfacePipe[_, _]].getDescription, 100, 65, textScale = 50)
-            tabs.addReverseTab(infoTab.toList, 120, 100, new Color(130, 0, 0), new ItemStack(Items.writable_book))
+            tabs.addReverseTab(infoTab.toList, 120, 100, new Color(130, 0, 0), new ItemStack(Items.WRITABLE_BOOK))
 
             if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasControl) {
                 var redstoneTab = new ArrayBuffer[BaseComponent]
@@ -165,7 +165,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
                         tileEntity.sendValueToServer(AdvancedPipe.REDSTONE_FIELD_ID, tileEntity.redstone)
                     }
                 }
-                tabs.addReverseTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
+                tabs.addReverseTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.REDSTONE))
 
                 var frequencyTab = new ArrayBuffer[BaseComponent]
                 frequencyTab += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.frequency"), 7, 7)
@@ -177,7 +177,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
                     }
                 }
 
-                tabs.addReverseTab(frequencyTab.toList, 100, 50, new Color(255, 153, 0), new ItemStack(Items.paper))
+                tabs.addReverseTab(frequencyTab.toList, 100, 50, new Color(255, 153, 0), new ItemStack(Items.PAPER))
             }
 
             if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
@@ -204,7 +204,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
                         tile.sendValueToServer(AdvancedPipe.MODE_FIELD_ID, tile.mode)
                     }
                 }
-                tabs.addReverseTab(extractionMode.toList, 150, 50, new Color(255, 255, 0), new ItemStack(Items.book))
+                tabs.addReverseTab(extractionMode.toList, 150, 50, new Color(255, 255, 0), new ItemStack(Items.BOOK))
             }
         }
     }

@@ -28,7 +28,7 @@ import net.minecraft.world.World
   * @author Paul Davis "pauljoda"
   * @since 2/28/2016
   */
-class BlockRockWall extends BlockContainer(Material.rock) with BlockConnectedTextures with HasToolTip {
+class BlockRockWall extends BlockContainer(Material.ROCK) with BlockConnectedTextures with HasToolTip {
 
     def rockWall = "rockWall"
 

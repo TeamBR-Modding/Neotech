@@ -202,7 +202,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     def chopLog(logPosition : BlockPos) : Boolean = {
         if(getStackInSlot(AXE_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(logPosition).getBlock, 1, worldObj.getBlockState(logPosition).getBlock.damageDropped(worldObj.getBlockState(logPosition))), sapling = false)) {
             /*if(worldObj.getBlockState(logPosition).getBlock != null)
-                worldObj.playAuxSFX(2001, logPosition, Block.getIdFromBlock(worldObj.getBlockState(logPosition).getBlock))*/
+                worldObj.playEvent(2001, logPosition, Block.getIdFromBlock(worldObj.getBlockState(logPosition).getBlock))*/
             worldObj.setBlockToAir(logPosition)
             if(getStackInSlot(AXE_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(AXE_SLOT, null)
@@ -222,7 +222,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
     def chopLeave(leavePosition : BlockPos) : Boolean = {
         if(getStackInSlot(SHEARS_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(leavePosition).getBlock, 1, worldObj.getBlockState(leavePosition).getBlock.damageDropped(worldObj.getBlockState(leavePosition))), sapling = false)) {
             if(worldObj.getBlockState(leavePosition).getBlock != null)
-                worldObj.playAuxSFX(2001, leavePosition, Block.getIdFromBlock(worldObj.getBlockState(leavePosition).getBlock))
+                worldObj.playEvent(2001, leavePosition, Block.getIdFromBlock(worldObj.getBlockState(leavePosition).getBlock))
             worldObj.setBlockToAir(leavePosition)
             if(getStackInSlot(SHEARS_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(SHEARS_SLOT, null)
@@ -253,7 +253,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                     if(addHarvestToInventory(item.getEntityItem, sapling = true)) {
                         item.setDead()
                     }
-                case sapling : Items.apple.type =>
+                case sapling : Items.APPLE.type =>
                     if(addHarvestToInventory(item.getEntityItem, sapling = false)) {
                         item.setDead()
                     }
@@ -271,7 +271,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                 for (z <- pos.getZ - RANGE + 1 until pos.getZ + RANGE) {
                     val blockPos = new BlockPos(x, pos.getY, z)
                     if(worldObj.isAirBlock(blockPos) && worldObj.getBlockState(blockPos.down()) != null &&
-                            (worldObj.getBlockState(blockPos.down()).getBlock == Blocks.dirt || worldObj.getBlockState(blockPos.down()).getBlock == Blocks.grass)) {
+                            (worldObj.getBlockState(blockPos.down()).getBlock == Blocks.DIRT || worldObj.getBlockState(blockPos.down()).getBlock == Blocks.GRASS)) {
                         val blockState = getNextSaplingAndReduce
                         if(blockState != null) {
                             worldObj.setBlockState(blockPos, blockState)

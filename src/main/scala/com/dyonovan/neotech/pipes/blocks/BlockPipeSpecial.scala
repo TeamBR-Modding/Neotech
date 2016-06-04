@@ -273,8 +273,8 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
         }
     }
 
-    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
-        if (!world.isRemote)
+    override def neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block): Unit = {
+        if (!worldIn.isRemote)
             WorldPipes.notifyPipes()
     }
 

@@ -105,12 +105,12 @@ public class SlotFurnaceOutputItemHandler extends SlotItemHandler implements ICu
 
         net.minecraftforge.fml.common.FMLCommonHandler.instance().firePlayerSmeltedEvent(thePlayer, stack);
 
-        if (stack.getItem() == Items.iron_ingot) {
-            this.thePlayer.addStat(AchievementList.acquireIron);
+        if (stack.getItem() == Items.IRON_INGOT) {
+            this.thePlayer.addStat(AchievementList.ACQUIRE_IRON);
         }
 
-        if (stack.getItem() == Items.cooked_fish) {
-            this.thePlayer.addStat(AchievementList.cookFish);
+        if (stack.getItem() == Items.COOKED_FISH) {
+            this.thePlayer.addStat(AchievementList.COOK_FISH);
         }
     }
 

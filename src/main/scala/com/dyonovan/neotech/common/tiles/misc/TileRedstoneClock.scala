@@ -27,9 +27,10 @@ class TileRedstoneClock extends Syncable with RedstoneAware {
         delay = tag.getInteger("delay")
     }
 
-    override def writeToNBT(tag : NBTTagCompound) = {
+    override def writeToNBT(tag : NBTTagCompound): NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         tag.setInteger("delay", delay)
+        tag
     }
 
     override def setVariable(id: Int, value: Double): Unit = {

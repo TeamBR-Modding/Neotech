@@ -22,7 +22,7 @@ import net.minecraft.world.{IBlockAccess, World}
   * @author Paul Davis <pauljoda>
   * @since 2/8/2016
   */
-class BlockMechanicalPipe(name: String) extends Block(Material.rock) {
+class BlockMechanicalPipe(name: String) extends Block(Material.ROCK) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     //setCreativeTab(NeoTech.tabNeoTech)
@@ -37,15 +37,15 @@ class BlockMechanicalPipe(name: String) extends Block(Material.rock) {
 
     override def getItemDropped(state: IBlockState, rand: Random, fortune: Int) : Item = null
 
-    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
-        if (!world.isRemote) {
-            world.getTileEntity(pos.offset(EnumFacing.UP)) match {
+    override def neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block): Unit = {
+        if (!worldIn.isRemote) {
+            worldIn.getTileEntity(pos.offset(EnumFacing.UP)) match {
                 case pump : TilePump => return //We have something to attach to
                 case _ =>
             }
-            world.getBlockState(pos.offset(EnumFacing.UP)).getBlock match {
+            worldIn.getBlockState(pos.offset(EnumFacing.UP)).getBlock match {
                 case blockPipe : BlockMechanicalPipe => return //We have a brother to attach to
-                case _ => world.setBlockToAir(pos) //Break ourselves
+                case _ => worldIn.setBlockToAir(pos) //Break ourselves
             }
         }
     }

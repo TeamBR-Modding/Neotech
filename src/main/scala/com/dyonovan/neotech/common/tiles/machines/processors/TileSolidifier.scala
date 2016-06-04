@@ -183,10 +183,11 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
         }
     }
 
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         super[MachineProcessor].writeToNBT(tag)
         super[FluidHandler].writeToNBT(tag)
         tag.setInteger("ProcessMode", processModeToInt(currentMode))
+        tag
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {
@@ -387,10 +388,10 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
 
     def getDisplayStackForProcessMode(mode : SOLIDIFY_MODE) : ItemStack = {
         mode match {
-            case BLOCK_MODE  => new ItemStack(Blocks.iron_block)
-            case INGOT_MODE  => new ItemStack(Items.iron_ingot)
+            case BLOCK_MODE  => new ItemStack(Blocks.IRON_BLOCK)
+            case INGOT_MODE  => new ItemStack(Items.IRON_INGOT)
             case NUGGET_MODE => new ItemStack(MetalManager.getMetal("iron").get.nugget.get)
-            case _ => new ItemStack(Blocks.stone)
+            case _ => new ItemStack(Blocks.STONE)
         }
     }
 

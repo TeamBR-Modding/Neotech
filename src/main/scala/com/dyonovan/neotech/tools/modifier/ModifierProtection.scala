@@ -45,7 +45,7 @@ object ModifierProtection extends Modifier("protection") {
       * Write info to the tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.protection, getProtectionLevel(stack) + count)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.PROTECTION, getProtectionLevel(stack) + count)
         tag.setInteger(PROTECTION, getProtectionLevel(stack) + count)
         super.writeToNBT(tag, stack)
         tag

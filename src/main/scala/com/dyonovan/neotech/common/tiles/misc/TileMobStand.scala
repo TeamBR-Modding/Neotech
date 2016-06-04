@@ -74,7 +74,7 @@ class TileMobStand extends Syncable with Inventory {
         slot == 0 && stack.getItem.isInstanceOf[ItemManager.mobNet.type] && stack.hasTagCompound
     }
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[Syncable].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         if (entity != null)
@@ -84,6 +84,7 @@ class TileMobStand extends Syncable with Inventory {
         tag.setBoolean("Fit", fitToBlock)
         tag.setBoolean("Look", lookAtPlayer)
         tag.setBoolean("Name", renderName)
+        tag
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {

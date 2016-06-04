@@ -107,12 +107,13 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
         }
     }
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         super[UpdatingTile].writeToNBT(tag)
         super[EnergyHandler].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         tag.setInteger("Tier", tier)
+        tag
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {

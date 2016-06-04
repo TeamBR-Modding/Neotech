@@ -33,16 +33,16 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 1/23/2016
   */
-class BlockFlushableChest extends BaseBlock(Material.iron, "flushableChest", classOf[TileFlushableChest])
+class BlockFlushableChest extends BaseBlock(Material.IRON, "flushableChest", classOf[TileFlushableChest])
   with DropsItems with OpensGui {
 
     this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F)
 
-    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
-        if (!world.isRemote) {
-            if (world.isBlockPowered(pos)) {
-                world.getTileEntity(pos).asInstanceOf[TileFlushableChest].clear()
-                world.setBlockState(pos, state, 6)
+    override def neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block): Unit = {
+        if (!worldIn.isRemote) {
+            if (worldIn.isBlockPowered(pos)) {
+                worldIn.getTileEntity(pos).asInstanceOf[TileFlushableChest].clear()
+                worldIn.setBlockState(pos, state, 6)
             }
         }
     }

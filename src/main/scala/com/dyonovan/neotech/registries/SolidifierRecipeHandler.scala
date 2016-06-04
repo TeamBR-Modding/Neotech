@@ -86,27 +86,27 @@ class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, Fl
 
         // Iron
         addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.BLOCK_MB),
-            new ItemStack(Blocks.iron_block), "blockIron")
+            new ItemStack(Blocks.IRON_BLOCK), "blockIron")
         addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.INGOT_MB),
-            new ItemStack(Items.iron_ingot), "ingotIron")
+            new ItemStack(Items.IRON_INGOT), "ingotIron")
 
         // Gold
         addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.BLOCK_MB),
-            new ItemStack(Blocks.gold_block), "blockGold")
+            new ItemStack(Blocks.GOLD_BLOCK), "blockGold")
         addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.INGOT_MB),
-            new ItemStack(Items.gold_ingot), "ingotGold")
+            new ItemStack(Items.GOLD_INGOT), "ingotGold")
         addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.NUGGET_MB),
-            new ItemStack(Items.gold_nugget), "nuggetGold")
+            new ItemStack(Items.GOLD_NUGGET), "nuggetGold")
 
         // Carbon
         addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.INGOT_MB),
-            new ItemStack(Items.coal), "")
+            new ItemStack(Items.COAL), "")
         addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.BLOCK_MB),
-            new ItemStack(Blocks.coal_block), "")
+            new ItemStack(Blocks.COAL_BLOCK), "")
 
         // Obsidian
         addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("obsidian"), 36),
-            new ItemStack(Blocks.obsidian), "")
+            new ItemStack(Blocks.OBSIDIAN), "")
 
         saveToFile()
         LogHelper.info("Finished adding " + recipes.size + " Solidifier Recipes")

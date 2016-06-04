@@ -30,7 +30,7 @@ import net.minecraft.world.{IBlockAccess, World}
   */
 
 class BlockMiniatureSun(name: String, tileEntity: Class[_ <: TileEntity]) extends
-        BaseBlock(Material.iron, name, tileEntity) with OpensGui with DropsItems {
+        BaseBlock(Material.IRON, name, tileEntity) with OpensGui with DropsItems {
 
     setLightLevel(1.0F)
     setDefaultState(this.blockState.getBaseState

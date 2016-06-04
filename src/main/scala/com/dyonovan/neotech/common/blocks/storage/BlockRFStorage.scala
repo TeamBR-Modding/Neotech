@@ -32,7 +32,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
  * @author Dyonovan
  * @since August 15, 2015
  */
-class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.iron) with OpensGui with DropsItems {
+class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.IRON) with OpensGui with DropsItems {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)

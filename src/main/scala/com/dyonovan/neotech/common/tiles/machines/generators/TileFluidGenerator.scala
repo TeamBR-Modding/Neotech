@@ -137,9 +137,10 @@ class TileFluidGenerator extends MachineGenerator with FluidHandler {
       */
     override def tryOutput(): Unit = { /* No Op, no output */ }
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[MachineGenerator].writeToNBT(tag)
         super[FluidHandler].writeToNBT(tag)
+        tag
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {

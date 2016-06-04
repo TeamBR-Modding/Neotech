@@ -171,9 +171,10 @@ class TileSolarPanel extends MachineGenerator {
     /**
       * Write the tag
       */
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[MachineGenerator].writeToNBT(tag)
         tag.setInteger("Tier", tier)
+        tag
     }
 
     /**

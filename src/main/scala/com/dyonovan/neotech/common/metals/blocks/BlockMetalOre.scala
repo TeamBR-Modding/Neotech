@@ -16,7 +16,7 @@ import net.minecraft.util.BlockRenderLayer
  * @author Dyonovan
  * @since August 13, 2015
  */
-class BlockMetalOre(name: String, color : Int, miningLevel: Int) extends Block(Material.rock) {
+class BlockMetalOre(name: String, color : Int, miningLevel: Int) extends Block(Material.ROCK) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabMetals)

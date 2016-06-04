@@ -28,10 +28,10 @@ class JEISolidifierRecipe(fluid: FluidStack, output: ItemStack) extends BlankRec
     override def getOutputs: util.List[ItemStack] = Collections.singletonList(output)
 
     override def drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int): Unit = {
-        var item: Item = Item.getItemFromBlock(Blocks.iron_block)
+        var item: Item = Item.getItemFromBlock(Blocks.IRON_BLOCK)
         fluid.amount match {
-            case 1296 => item = Item.getItemFromBlock(Blocks.iron_block)
-            case 144 => item = Items.iron_ingot
+            case 1296 => item = Item.getItemFromBlock(Blocks.IRON_BLOCK)
+            case 144 => item = Items.IRON_INGOT
             case 16 => item = MetalManager.getMetal("iron").get.nugget.get
             case _ =>
         }
