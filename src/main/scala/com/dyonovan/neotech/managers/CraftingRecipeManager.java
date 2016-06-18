@@ -215,7 +215,7 @@ public class CraftingRecipeManager {
 
         //Control Upgrade
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.upgradeControl()),
-                Items.STICK, Items.REDSTONE);
+                Items.STICK, Items.REDSTONE, Items.STICK);
 
         //Processor
         GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeProcessor()),
