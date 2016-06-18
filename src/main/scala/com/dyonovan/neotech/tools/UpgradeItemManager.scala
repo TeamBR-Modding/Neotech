@@ -52,48 +52,48 @@ object UpgradeItemManager {
 
     def registerRecipes() : Unit = {
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSilkTouch])), ItemManager.upgradeMBEmpty,
-            Items.string, Items.writable_book)
+            Items.STRING, Items.WRITABLE_BOOK)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierFortune])), ItemManager.upgradeMBEmpty,
-            Items.emerald)
+            Items.EMERALD)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel2), ItemManager.upgradeMBEmpty,
-            Items.iron_ingot)
+            Items.IRON_INGOT)
         GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel3), ItemManager.upgradeMBEmpty,
-            Items.diamond)
+            Items.DIAMOND)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierMiningSpeed])), ItemManager.upgradeMBEmpty,
-            Items.feather, Blocks.redstone_block)
+            Items.FEATHER, Blocks.REDSTONE_BLOCK)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierAOE])), ItemManager.upgradeMBEmpty,
-            Blocks.piston, Blocks.piston)
+            Blocks.PISTON, Blocks.PISTON)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierShovel])), ItemManager.upgradeMBEmpty,
-            Items.iron_shovel)
+            Items.IRON_SHOVEL)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSharpness])), ItemManager.upgradeMBEmpty,
-            Items.flint, Items.iron_sword)
+            Items.FLINT, Items.IRON_SWORD)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSmite])), ItemManager.upgradeMBEmpty,
-            Items.rotten_flesh)
+            Items.ROTTEN_FLESH)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierBeheading])), ItemManager.upgradeMBEmpty,
-            new ItemStack(Items.skull, 1, OreDictionary.WILDCARD_VALUE))
+            new ItemStack(Items.SKULL, 1, OreDictionary.WILDCARD_VALUE))
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierBaneOfArthropods])), ItemManager.upgradeMBEmpty,
-            Items.spider_eye)
+            Items.SPIDER_EYE)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierLighting])), ItemManager.upgradeMBEmpty,
-            Items.blaze_rod, Items.blaze_rod)
+            Items.BLAZE_ROD, Items.BLAZE_ROD)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierLooting])), ItemManager.upgradeMBEmpty,
-            Items.spider_eye, Items.blaze_powder, Items.rotten_flesh, Items.bone, Items.gunpowder)
+            Items.SPIDER_EYE, Items.BLAZE_POWDER, Items.ROTTEN_FLESH, Items.BONE, Items.GUNPOWDER)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierJetpack])), ItemManager.upgradeMBEmpty,
-            Items.feather, Items.gunpowder)
+            Items.FEATHER, Items.GUNPOWDER)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierFallResist])), ItemManager.upgradeMBEmpty,
-            Blocks.slime_block)
+            Blocks.SLIME_BLOCK)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierGlide])), ItemManager.upgradeMBEmpty,
-            Items.leather, Items.feather)
+            Items.LEATHER, Items.FEATHER)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierNightVision])), ItemManager.upgradeMBEmpty,
-            Items.glowstone_dust, Items.glowstone_dust)
+            Items.GLOWSTONE_DUST, Items.GLOWSTONE_DUST)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSprinting])), ItemManager.upgradeMBEmpty,
-            Items.feather, Blocks.piston)
+            Items.FEATHER, Blocks.PISTON)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierProtection])), ItemManager.upgradeMBEmpty,
-            Blocks.iron_block, Blocks.iron_block, Blocks.iron_block, Blocks.iron_block)
+            Blocks.IRON_BLOCK, Blocks.IRON_BLOCK, Blocks.IRON_BLOCK, Blocks.IRON_BLOCK)
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierHover])), ItemManager.upgradeMBEmpty,
-            Items.gunpowder, Items.gunpowder, Blocks.glass)
+            Items.GUNPOWDER, Items.GUNPOWDER, Blocks.GLASS)
         if(Loader.isModLoaded("tconstruct")) {
             GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,
-                Blocks.obsidian)
+                Blocks.OBSIDIAN)
         }
     }
 

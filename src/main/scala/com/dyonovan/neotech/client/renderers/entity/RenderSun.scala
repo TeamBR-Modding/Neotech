@@ -55,5 +55,5 @@ class RenderSun (renderManager : RenderManager) extends Render[EntitySun](render
         RenderUtils.restoreRenderState()
     }
 
-    override def getEntityTexture(entity: EntitySun): ResourceLocation = TextureMap.locationBlocksTexture
+    override def getEntityTexture(entity: EntitySun): ResourceLocation = TextureMap.LOCATION_BLOCKS_TEXTURE
 }

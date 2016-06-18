@@ -15,7 +15,7 @@ import net.minecraft.block.material.Material
   * @author Paul Davis "pauljoda"
   * @since 2/27/2016
   */
-class BlockVoidGlass extends BlockConnected("voidGlass", Material.glass) with HasToolTip {
+class BlockVoidGlass extends BlockConnected("voidGlass", Material.GLASS) with HasToolTip {
     setLightOpacity(1000)
 
     override def isClear: Boolean = true

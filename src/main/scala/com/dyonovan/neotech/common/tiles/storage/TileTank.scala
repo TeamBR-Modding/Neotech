@@ -171,12 +171,13 @@ class TileTank extends UpdatingTile with IFluidHandler with RedstoneAware {
 
     override def getTankInfo(from: EnumFacing): Array[FluidTankInfo] = Array(tank.getInfo)
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super.writeToNBT(tag)
         if (tank != null) {
             tank.writeToNBT(tag)
         }
         tag.setInteger("Tier", tier)
+        tag
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {

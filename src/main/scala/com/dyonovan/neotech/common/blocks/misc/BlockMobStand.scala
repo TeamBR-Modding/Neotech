@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 2/13/2016
   */
-class BlockMobStand extends BaseBlock(Material.iron, "mobStand", classOf[TileMobStand]) with OpensGui with DropsItems {
+class BlockMobStand extends BaseBlock(Material.IRON, "mobStand", classOf[TileMobStand]) with OpensGui with DropsItems {
 
     override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 

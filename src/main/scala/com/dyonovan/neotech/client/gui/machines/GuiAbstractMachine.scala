@@ -91,7 +91,7 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
                         tileEntity.sendValueToServer(tileEntity.REDSTONE_FIELD_ID, tileEntity.redstone)
                     }
                 }
-                tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.redstone))
+                tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.REDSTONE))
             }
 
             if (tileEntity.shouldHandleIO && tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {

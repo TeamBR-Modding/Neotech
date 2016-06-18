@@ -180,9 +180,10 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
         }
     }
 
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         super[MachineProcessor].writeToNBT(tag)
         super[FluidHandler].writeToNBT(tag)
+        tag
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {

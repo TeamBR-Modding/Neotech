@@ -35,7 +35,7 @@ class RenderNet(renderManager : RenderManager) extends Render[EntityNet](renderM
         GlStateManager.scale(0.5F, 0.5F, 0.5F)
         GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
         GlStateManager.rotate(this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-        this.bindTexture(TextureMap.locationBlocksTexture)
+        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE)
 
         val size = Math.min(Math.max(entity.ticksExisted * 10.0F / 20, 0.3F), 10.0F)
 
@@ -51,5 +51,5 @@ class RenderNet(renderManager : RenderManager) extends Render[EntityNet](renderM
         new ItemStack(ItemManager.mobNet, 1, 0)
     }
 
-    override def getEntityTexture(entity: EntityNet): ResourceLocation = TextureMap.locationBlocksTexture
+    override def getEntityTexture(entity: EntityNet): ResourceLocation = TextureMap.LOCATION_BLOCKS_TEXTURE
 }

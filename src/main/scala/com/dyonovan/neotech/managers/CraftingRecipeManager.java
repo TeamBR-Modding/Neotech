@@ -29,87 +29,87 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.grinder()),
                 "SSS",
                 "CsC",
-                "SSS", 'S', Blocks.stone, 'C', Blocks.cobblestone, 's', Items.stick);
+                "SSS", 'S', Blocks.STONE, 'C', Blocks.COBBLESTONE, 's', Items.STICK);
 
         //Electric Furnace
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricFurnace()),
                 "ACA",
                 "BDB",
-                "ACA", 'A', "ingotCopper", 'B', Items.redstone, 'C', Blocks.furnace, 'D', Blocks.redstone_block));
+                "ACA", 'A', "ingotCopper", 'B', Items.REDSTONE, 'C', Blocks.FURNACE, 'D', Blocks.REDSTONE_BLOCK));
 
         //Electric Crusher
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCrusher()),
                 "ABA",
                 "DCD",
-                "ABA", 'A', "ingotTin", 'B', Items.flint, 'C', Blocks.piston, 'D', Items.redstone));
+                "ABA", 'A', "ingotTin", 'B', Items.FLINT, 'C', Blocks.PISTON, 'D', Items.REDSTONE));
 
         //Electric Solidifier
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricSolidifier()),
                 "SRS",
                 "BTB",
-                "SRS", 'T', BlockManager.ironTank(), 'S', "ingotLead", 'B', Items.snowball, 'R', Items.redstone));
+                "SRS", 'T', BlockManager.ironTank(), 'S', "ingotLead", 'B', Items.SNOWBALL, 'R', Items.REDSTONE));
 
         //Electric Crucible
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCrucible()),
                 "SRS",
                 "BCB",
-                "SRS", 'C', Items.cauldron, 'S', "ingotCopper", 'B', Items.bucket, 'R', Items.redstone));
+                "SRS", 'C', Items.CAULDRON, 'S', "ingotCopper", 'B', Items.BUCKET, 'R', Items.REDSTONE));
 
         //Electric Alloyer
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricAlloyer()),
                 "BLB",
                 "TRT",
-                "BLB", 'B', "ingotBronze", 'L', "ingotSilver", 'T', BlockManager.ironTank(), 'R', Blocks.redstone_block));
+                "BLB", 'B', "ingotBronze", 'L', "ingotSilver", 'T', BlockManager.ironTank(), 'R', Blocks.REDSTONE_BLOCK));
 
         //Electric Centrifuge
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCentrifuge()),
                 "SRS",
                 "TIT",
-                "SRS", 'S', "ingotSteel", 'R', Blocks.redstone_block, 'T', BlockManager.ironTank(), 'I', Blocks.iron_block));
+                "SRS", 'S', "ingotSteel", 'R', Blocks.REDSTONE_BLOCK, 'T', BlockManager.ironTank(), 'I', Blocks.IRON_BLOCK));
 
         //Furnace Generator
         GameRegistry.addRecipe(new ItemStack(BlockManager.furnaceGenerator()),
                 "ABA",
                 "CDC",
-                "ABA", 'A', Items.iron_ingot, 'B', Items.redstone, 'C', Blocks.furnace, 'D', Blocks.chest);
+                "ABA", 'A', Items.IRON_INGOT, 'B', Items.REDSTONE, 'C', Blocks.FURNACE, 'D', Blocks.CHEST);
 
         //Fluid Generator
         GameRegistry.addRecipe(new ItemStack(BlockManager.fluidGenerator()),
                 "ABA",
                 "CDC",
-                "ABA", 'A', Items.gold_ingot, 'B', Items.glowstone_dust, 'C', BlockManager.furnaceGenerator(), 'D', BlockManager.ironTank());
+                "ABA", 'A', Items.GOLD_INGOT, 'B', Items.GLOWSTONE_DUST, 'C', BlockManager.furnaceGenerator(), 'D', BlockManager.ironTank());
 
         //Solar Panels
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT1()),
                 "CCC",
                 "RRR",
-                "ABA", 'A', Items.iron_ingot, 'B', BlockManager.basicRFStorage(), 'C', Blocks.glass, 'R', Items.redstone);
+                "ABA", 'A', Items.IRON_INGOT, 'B', BlockManager.basicRFStorage(), 'C', Blocks.GLASS, 'R', Items.REDSTONE);
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT2()),
                 "CCC",
                 "BSB",
-                "gsg", 'C', Blocks.glass, 'B', Items.blaze_powder, 'S', BlockManager.solarPanelT1(), 's', BlockManager.advancedRFStorage(), 'g', Items.gold_ingot);
+                "gsg", 'C', Blocks.GLASS, 'B', Items.BLAZE_POWDER, 'S', BlockManager.solarPanelT1(), 's', BlockManager.advancedRFStorage(), 'g', Items.GOLD_INGOT);
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT3()),
                 "CCC",
                 "PSP",
-                "DED", 'D', Items.diamond, 'P', Items.ender_pearl, 'C', Blocks.glass, 'S', BlockManager.solarPanelT2(), 'E', BlockManager.eliteRFStorage());
+                "DED", 'D', Items.DIAMOND, 'P', Items.ENDER_PEARL, 'C', Blocks.GLASS, 'S', BlockManager.solarPanelT2(), 'E', BlockManager.eliteRFStorage());
 
         //Thermal Binder
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.thermalBinder()),
                 "ACA",
                 "BDB",
-                "ACA", 'A', "ingotGold", 'B', Items.slime_ball, 'C', Blocks.furnace, 'D', Blocks.redstone_block));
+                "ACA", 'A', "ingotGold", 'B', Items.SLIME_BALL, 'C', Blocks.FURNACE, 'D', Blocks.REDSTONE_BLOCK));
 
         //Electric Logger
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.treeFarm()),
                 "ACA",
                 "BDB",
-                "ACA", 'A', "ingotBronze", 'B', Items.iron_axe, 'C', Items.shears, 'D', Blocks.redstone_block));
+                "ACA", 'A', "ingotBronze", 'B', Items.IRON_AXE, 'C', Items.SHEARS, 'D', Blocks.REDSTONE_BLOCK));
 
         //RF Storage
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage())),
                 "ALA",
                 "DCD",
-                "ALA", 'A', "ingotIron", 'L', "ingotLead", 'C', Blocks.redstone_block, 'D', new ItemStack(ItemManager.basicRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
+                "ALA", 'A', "ingotIron", 'L', "ingotLead", 'C', Blocks.REDSTONE_BLOCK, 'D', new ItemStack(ItemManager.basicRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage())),
                 "ALA",
                 "DCD",
@@ -123,63 +123,63 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.ironTank()),
                 "ABA",
                 "BCB",
-                "ABA", 'A', Items.iron_ingot, 'B', "blockGlass", 'C', Items.bucket));
+                "ABA", 'A', Items.IRON_INGOT, 'B', "blockGlass", 'C', Items.BUCKET));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.goldTank()),
                 "ABA",
                 "BCB",
-                "ABA", 'A', Items.gold_ingot, 'B', "blockGlass", 'C', BlockManager.ironTank()));
+                "ABA", 'A', Items.GOLD_INGOT, 'B', "blockGlass", 'C', BlockManager.ironTank()));
         GameRegistry.addRecipe(new ShapedOreRecipe(Item.getItemFromBlock(BlockManager.diamondTank()),
                 "ABA",
                 "BCB",
-                "ABA", 'A', Items.diamond, 'B', "blockGlass", 'C', BlockManager.goldTank()));
+                "ABA", 'A', Items.DIAMOND, 'B', "blockGlass", 'C', BlockManager.goldTank()));
         GameRegistry.addRecipe(new ShapedOreRecipe(Item.getItemFromBlock(BlockManager.voidTank()),
                 "ABA",
                 "BCB",
-                "ABA", 'A', Blocks.obsidian, 'B', "blockGlass", 'C', Items.ender_pearl));
+                "ABA", 'A', Blocks.OBSIDIAN, 'B', "blockGlass", 'C', Items.ENDER_PEARL));
 
         //Pipes
         //Basic
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 8),
                 "AAA",
                 "BBB",
-                "AAA", 'A', Items.iron_ingot, 'B', "blockGlass"));
+                "AAA", 'A', Items.IRON_INGOT, 'B', "blockGlass"));
 
         //Colors!!
         for(EnumDyeColor color : EnumDyeColor.values()) {
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 1, color.ordinal()),
-                    "pipeStructure", new ItemStack(Items.dye, 1, color.getDyeDamage())));
+                    "pipeStructure", new ItemStack(Items.DYE, 1, color.getDyeDamage())));
         }
 
         //Power
         GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergyInterface())),
-                Blocks.redstone_block, BlockManager.pipeBasicStructure());
+                Blocks.REDSTONE_BLOCK, BlockManager.pipeBasicStructure());
 
         //Item
         GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeItemInterface())),
-                Blocks.chest, BlockManager.pipeBasicStructure());
+                Blocks.CHEST, BlockManager.pipeBasicStructure());
 
 
         //Liquid
         GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeFluidInterface())),
-                Items.bucket, BlockManager.pipeBasicStructure());
+                Items.BUCKET, BlockManager.pipeBasicStructure());
 
         //Crafter
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockCrafter()),
-                new ItemStack(Blocks.crafting_table), new ItemStack(Blocks.chest), new ItemStack(Blocks.crafting_table));
+                new ItemStack(Blocks.CRAFTING_TABLE), new ItemStack(Blocks.CHEST), new ItemStack(Blocks.CRAFTING_TABLE));
 
 
         //Miniature Sun
         GameRegistry.addRecipe(new ItemStack(BlockManager.blockMiniatureSun()),
                 "ABA",
                 "BCB",
-                "ABA", 'A', Items.gold_ingot, 'B', Items.glowstone_dust, 'C', Items.nether_star);
+                "ABA", 'A', Items.GOLD_INGOT, 'B', Items.GLOWSTONE_DUST, 'C', Items.NETHER_STAR);
 
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockMiniatureStar()),
-                Items.glowstone_dust, Item.getItemFromBlock(Blocks.torch));
+                Items.GLOWSTONE_DUST, Item.getItemFromBlock(Blocks.TORCH));
 
         for(EnumDyeColor color : EnumDyeColor.values()) {
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.blockMiniatureStar()), 1, color.ordinal()),
-                    "blockMiniatureStar", new ItemStack(Items.dye, 1, color.getDyeDamage())));
+                    "blockMiniatureStar", new ItemStack(Items.DYE, 1, color.getDyeDamage())));
         }
 
         //Player Plate
@@ -190,54 +190,54 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.chunkLoader()),
                 "GIG",
                 "IRI",
-                "GIG", 'G', Blocks.gold_block, 'I', Blocks.iron_block, 'R', Blocks.redstone_block);
+                "GIG", 'G', Blocks.GOLD_BLOCK, 'I', Blocks.IRON_BLOCK, 'R', Blocks.REDSTONE_BLOCK);
 
         //Flushable Chest
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.flushableChest()),
-                Blocks.chest, Items.flint_and_steel);
+                Blocks.CHEST, Items.FLINT_AND_STEEL);
 
         GameRegistry.addRecipe(new ItemStack(BlockManager.redstoneClock()),
                 "SRS",
                 "SBS",
-                "SRS", 'S', Blocks.stone, 'R', Items.redstone, 'B', Blocks.redstone_block);
+                "SRS", 'S', Blocks.STONE, 'R', Items.REDSTONE, 'B', Blocks.REDSTONE_BLOCK);
 
         //Empty Motherboard
         GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeMBEmpty()),
                 "RRR",
                 "RIR",
-                "RRR", 'R', Items.redstone, 'I', Items.iron_ingot);
+                "RRR", 'R', Items.REDSTONE, 'I', Items.IRON_INGOT);
 
         //Hard Drive
         GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeHardDrive()),
                 "II ",
                 "II ",
-                "RG ", 'I', Items.iron_ingot, 'R', Items.redstone, 'G', Items.gold_ingot);
+                "RG ", 'I', Items.IRON_INGOT, 'R', Items.REDSTONE, 'G', Items.GOLD_INGOT);
 
         //Control Upgrade
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.upgradeControl()),
-                Items.stick, Items.redstone);
+                Items.STICK, Items.REDSTONE);
 
         //Processor
         GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeProcessor()),
                 "RRR",
                 "RDR",
-                "RRR", 'R', Items.redstone, 'D', Items.diamond);
+                "RRR", 'R', Items.REDSTONE, 'D', Items.DIAMOND);
 
         //Expansion Card
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.upgradeExpansion()),
-                Items.redstone, Items.iron_ingot, Items.paper);
+                Items.REDSTONE, Items.IRON_INGOT, Items.PAPER);
 
         //Wrench
         GameRegistry.addRecipe(new ItemStack(ItemManager.wrench()),
                 " I ",
                 " II",
-                "I  ", 'I', Items.iron_ingot);
+                "I  ", 'I', Items.IRON_INGOT);
 
         //Trash Bag
         GameRegistry.addRecipe(new ItemStack(ItemManager.trashBag(), 1),
                 "S S",
                 "L L",
-                "LLL", 'L', Items.leather, 'S', Items.string);
+                "LLL", 'L', Items.LEATHER, 'S', Items.STRING);
 
         //Magnet
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electroMagnet()),
@@ -249,19 +249,19 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.dimStorage(), 1),
                 "WWW",
                 "CLC",
-                "WWW", 'C', Blocks.chest, 'W', "plankWood", 'L', "logWood"));
+                "WWW", 'C', Blocks.CHEST, 'W', "plankWood", 'L', "logWood"));
 
         //Spawmer Mover Thinggy
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.spawnerMover(),1),
                 "  E",
                 " S ",
-                "S  ", 'E', Items.emerald, 'S', "stickWood"));
+                "S  ", 'E', Items.EMERALD, 'S', "stickWood"));
 
         //Pump
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.pump(),1),
                 "BTB",
                 "PRP",
-                "BTB", 'B', "ingotBronze", 'R', Items.redstone, 'P', BlockManager.pipeFluidInterface(), 'T', BlockManager.ironTank()));
+                "BTB", 'B', "ingotBronze", 'R', Items.REDSTONE, 'P', BlockManager.pipeFluidInterface(), 'T', BlockManager.ironTank()));
 
         //Mob Gun
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.mobGun(), 1),
@@ -273,18 +273,18 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(ItemManager.mobNet(), 1),
                 "S S",
                 " E ",
-                "S S", 'E', Items.ender_pearl, 'S', Items.string);
+                "S S", 'E', Items.ENDER_PEARL, 'S', Items.STRING);
 
         //Mob Stand
         GameRegistry.addRecipe(new ItemStack(BlockManager.mobStand(), 4),
                 "QQQ",
                 "Q Q",
-                "Q Q", 'Q', Items.quartz);
+                "Q Q", 'Q', Items.QUARTZ);
 
         //Add in Iron nugget - ingot
         MetalManager.Metal metal = MetalManager.getMetal("iron").get();
-        GameRegistry.addShapelessRecipe(new ItemStack(metal.nugget().get(), 9), Items.iron_ingot);
-        GameRegistry.addRecipe(new ItemStack(Items.iron_ingot, 1),
+        GameRegistry.addShapelessRecipe(new ItemStack(metal.nugget().get(), 9), Items.IRON_INGOT);
+        GameRegistry.addRecipe(new ItemStack(Items.IRON_INGOT, 1),
                 "III",
                 "III",
                 "III", 'I', metal.nugget().get());
@@ -297,11 +297,11 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.advancedRFBattery()),
                 "S S",
                 "GBG",
-                "GLG", 'S', "ingotSilver", 'L', "ingotLead", 'G', Items.gold_ingot, 'B', new ItemStack(ItemManager.basicRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
+                "GLG", 'S', "ingotSilver", 'L', "ingotLead", 'G', Items.GOLD_INGOT, 'B', new ItemStack(ItemManager.basicRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.eliteRFBattery()),
                 "S S",
                 "DBD",
-                "DLD", 'S', "ingotSilver", 'L', "ingotLead", 'D', Items.diamond, 'B', new ItemStack(ItemManager.advancedRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
+                "DLD", 'S', "ingotSilver", 'L', "ingotLead", 'D', Items.DIAMOND, 'B', new ItemStack(ItemManager.advancedRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
 
 
 
@@ -339,7 +339,7 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.phantomGlass(), 8),
                 "GGG",
                 "GDG",
-                "GGG", 'G', "blockGlass", 'D', Items.oak_door));
+                "GGG", 'G', "blockGlass", 'D', Items.OAK_DOOR));
 
         // Void Glass
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.voidGlass(), 8),
@@ -351,11 +351,11 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.rockWall(), 8),
                 "GGG",
                 "TGT",
-                "GGG", 'G', Blocks.cobblestone, 'T', "ingotTin"));
+                "GGG", 'G', Blocks.COBBLESTONE, 'T', "ingotTin"));
 
         //Smelting Recipes
-        GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.gold_ingot), 2.0F);
-        GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.iron_ingot), 1.0F);
+        GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.GOLD_INGOT), 2.0F);
+        GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.IRON_INGOT), 1.0F);
 
         UpgradeItemManager.registerRecipes();
     }

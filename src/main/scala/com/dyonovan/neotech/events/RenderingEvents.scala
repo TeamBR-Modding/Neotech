@@ -107,7 +107,7 @@ object RenderingEvents extends IResourceManagerReloadListener {
         if(player.getHeldItemMainhand != null && ModifierAOE.getAOELevel(player.getHeldItemMainhand) > 0) {
             val movingObjectPosition = player.rayTrace(controllerMP.getBlockReachDistance, event.getPartialTicks)
             if(movingObjectPosition != null && world.getBlockState(movingObjectPosition.getBlockPos)
-                    .getBlock.getMaterial(world.getBlockState(movingObjectPosition.getBlockPos)) != Material.air) {
+                    .getBlock.getMaterial(world.getBlockState(movingObjectPosition.getBlockPos)) != Material.AIR) {
                 val level = ModifierAOE.getAOELevel(player.getHeldItemMainhand)
                 blockList = ToolHelper.getBlockList(level, movingObjectPosition, player, world, player.getHeldItemMainhand)
                 for(x <- blockList.toArray)
@@ -161,7 +161,7 @@ object RenderingEvents extends IResourceManagerReloadListener {
             if(!breaksSelf) breaksSelf = tile != null && tile.canRenderBreaking
             if(!breaksSelf && blockPosition != blockIn) {
                 val state = world.getBlockState(blockPosition)
-                if(state.getBlock.getMaterial(world.getBlockState(blockPosition)) != Material.air)
+                if(state.getBlock.getMaterial(world.getBlockState(blockPosition)) != Material.AIR)
                     Minecraft.getMinecraft.getBlockRendererDispatcher
                             .renderBlockDamage(state, blockPosition,  destroyIcons(progress), world)
             }

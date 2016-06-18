@@ -109,9 +109,10 @@ class TileAttractor extends UpdatingTile with InventorySided {
 
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean = false
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         super[InventorySided].writeToNBT(tag)
+        tag
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {

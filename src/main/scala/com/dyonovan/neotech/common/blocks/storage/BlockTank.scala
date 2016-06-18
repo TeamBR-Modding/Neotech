@@ -32,7 +32,7 @@ import scala.util.Random
   * @author Dyonovan
   * @since August 16, 2015
   */
-class BlockTank(name: String, tier: Int) extends BaseBlock(Material.glass, name, classOf[TileTank]) with ILoadActionProvider {
+class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name, classOf[TileTank]) with ILoadActionProvider {
 
     setHardness(2.0F)
     setBlockBounds(1F / 16F, 0F, 1F / 16F, 15F / 16F, 1F,  15F/ 16F)

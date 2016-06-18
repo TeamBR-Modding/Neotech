@@ -28,7 +28,7 @@ import scala.collection.mutable.ArrayBuffer
  * @author Dyonovan
  * @since August 18, 2015
  */
-class BlockCrafter(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.wood, name, tileEntity)
+class BlockCrafter(name: String, tileEntity: Class[_ <: TileEntity]) extends BaseBlock(Material.WOOD, name, tileEntity)
         with OpensGui with DropsItems with CreatesTextures {
 
     setHardness(1.5F)

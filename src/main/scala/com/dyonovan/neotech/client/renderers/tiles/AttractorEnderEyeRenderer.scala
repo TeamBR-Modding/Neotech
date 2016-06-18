@@ -30,7 +30,7 @@ class AttractorEnderEyeRenderer extends TileEntitySpecialRenderer[TileAttractor]
         GlStateManager.translate(x + 0.5, y + 0.5, z + 0.5)
         GlStateManager.scale(0.25F, 0.25F, 0.25F)
 
-        val entity = new EntityItem(getWorld, 0, 0, 0, new ItemStack(Items.ender_eye, 1))
+        val entity = new EntityItem(getWorld, 0, 0, 0, new ItemStack(Items.ENDER_EYE, 1))
 
         val player = Minecraft.getMinecraft.thePlayer
         var angle = Math.toDegrees(Math.atan2(te.getPos.getZ + 0.5 - player.posZ, te.getPos.getX + 0.5 - player.posX))

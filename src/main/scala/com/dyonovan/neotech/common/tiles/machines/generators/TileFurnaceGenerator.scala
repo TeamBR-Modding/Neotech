@@ -132,9 +132,10 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
     /**
       * Write the tag
       */
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[MachineGenerator].writeToNBT(tag)
         super[FluidHandler].writeToNBT(tag)
+        tag
     }
 
     /**

@@ -118,10 +118,11 @@ class TileGrinder extends UpdatingTile with Inventory {
             false
     }
 
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
         tag.setInteger("progress", progress)
+        tag
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {

@@ -41,7 +41,7 @@ class ItemSpawnerMover extends BaseItem("spawnerMover", 1) {
 
     override def onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityLivingBase, timeLeft: Int): Unit = {
         if (timeLeft <= 7180 && player.isInstanceOf[EntityPlayer]) {
-            val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
+            val mop = rayTrace(world, player.asInstanceOf[EntityPlayer], false)
             if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
                 val pos = mop.getBlockPos
                 if (!stack.hasTagCompound) {
@@ -63,7 +63,7 @@ class ItemSpawnerMover extends BaseItem("spawnerMover", 1) {
                     tag.setInteger("x", newPos.getX)
                     tag.setInteger("y", newPos.getY)
                     tag.setInteger("z", newPos.getZ)
-                    world.setBlockState(newPos, Blocks.mob_spawner.getDefaultState)
+                    world.setBlockState(newPos, Blocks.MOB_SPAWNER.getDefaultState)
                     val tile = world.getTileEntity(newPos).asInstanceOf[TileEntityMobSpawner]
                     tile.readFromNBT(tag)
                     stack.setTagCompound(null)

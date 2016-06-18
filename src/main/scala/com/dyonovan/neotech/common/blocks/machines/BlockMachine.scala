@@ -39,7 +39,7 @@ import scala.util.Random
   * @since August 11, 2015
   */
 class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState : Boolean = true, fourWayRotation : Boolean = true, sixWayRotation : Boolean = false)
-        extends BaseBlock(Material.iron, name, tileEntity) with OpensGui {
+        extends BaseBlock(Material.IRON, name, tileEntity) with OpensGui {
 
     @SideOnly(Side.CLIENT)
     override def randomDisplayTick(state: IBlockState, world: World, pos: BlockPos, rand: java.util.Random): Unit = {

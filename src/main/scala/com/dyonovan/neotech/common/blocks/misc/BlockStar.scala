@@ -31,7 +31,7 @@ import scala.util.Random
   * @author Paul Davis <pauljoda>
   * @since 1/23/2016
   */
-class BlockStar(name: String) extends BaseBlock(Material.rock, name, classOf[TileStar]) {
+class BlockStar(name: String) extends BaseBlock(Material.ROCK, name, classOf[TileStar]) {
 
     setCreativeTab(NeoTech.tabDecorations)
     setHardness(1.5F)

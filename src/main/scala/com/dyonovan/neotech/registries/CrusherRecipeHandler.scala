@@ -37,33 +37,33 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
         LogHelper.info("Json not found. Creating Dynamic Crusher Recipe List...")
 
         addCrusherRecipes("oreRedstone",
-            getItemStackString(new ItemStack(Items.redstone)), 12, getItemStackString(new ItemStack(Items.redstone)), 20)
+            getItemStackString(new ItemStack(Items.REDSTONE)), 12, getItemStackString(new ItemStack(Items.REDSTONE)), 20)
         addCrusherRecipes("oreLapis",
-            getItemStackString(new ItemStack(Items.dye, 1, 4)), 8, getItemStackString(new ItemStack(Items.dye, 1, 4)), 20)
-        addCrusherRecipes(getOreDict(new ItemStack(Items.blaze_rod)),
-            getItemStackString(new ItemStack(Items.blaze_powder)), 4, getItemStackString(new ItemStack(Items.blaze_powder)), 15)
+            getItemStackString(new ItemStack(Items.DYE, 1, 4)), 8, getItemStackString(new ItemStack(Items.DYE, 1, 4)), 20)
+        addCrusherRecipes(getOreDict(new ItemStack(Items.BLAZE_ROD)),
+            getItemStackString(new ItemStack(Items.BLAZE_POWDER)), 4, getItemStackString(new ItemStack(Items.BLAZE_POWDER)), 15)
         addCrusherRecipes("cobblestone",
-            getItemStackString(new ItemStack(Blocks.sand)), 1, getItemStackString(new ItemStack(Blocks.gravel)), 10)
-        addCrusherRecipes(getOreDict(new ItemStack(Items.bone)),
-            getItemStackString(new ItemStack(Items.dye, 1, 15)), 8, getItemStackString(new ItemStack(Items.dye, 1, 15)), 10)
+            getItemStackString(new ItemStack(Blocks.SAND)), 1, getItemStackString(new ItemStack(Blocks.GRAVEL)), 10)
+        addCrusherRecipes(getOreDict(new ItemStack(Items.BONE)),
+            getItemStackString(new ItemStack(Items.DYE, 1, 15)), 8, getItemStackString(new ItemStack(Items.DYE, 1, 15)), 10)
         addCrusherRecipes("oreQuartz",
-            getItemStackString(new ItemStack(Items.quartz)), 3, getItemStackString(new ItemStack(Items.quartz)), 50)
-        addCrusherRecipes(getOreDict(new ItemStack(Blocks.clay)),
-            getItemStackString(new ItemStack(Items.clay_ball)), 4, "", 0)
+            getItemStackString(new ItemStack(Items.QUARTZ)), 3, getItemStackString(new ItemStack(Items.QUARTZ)), 50)
+        addCrusherRecipes(getOreDict(new ItemStack(Blocks.CLAY)),
+            getItemStackString(new ItemStack(Items.CLAY_BALL)), 4, "", 0)
         addCrusherRecipes("oreDiamond",
-            getItemStackString(new ItemStack(Items.diamond)), 2, getItemStackString(new ItemStack(Items.diamond)), 5)
+            getItemStackString(new ItemStack(Items.DIAMOND)), 2, getItemStackString(new ItemStack(Items.DIAMOND)), 5)
         addCrusherRecipes("oreEmerald",
-            getItemStackString(new ItemStack(Items.emerald)), 2, getItemStackString(new ItemStack(Items.emerald)), 5)
+            getItemStackString(new ItemStack(Items.EMERALD)), 2, getItemStackString(new ItemStack(Items.EMERALD)), 5)
         addCrusherRecipes("glowstone",
-            getItemStackString(new ItemStack(Items.glowstone_dust)), 4, getItemStackString(new ItemStack(Items.glowstone_dust)), 5)
+            getItemStackString(new ItemStack(Items.GLOWSTONE_DUST)), 4, getItemStackString(new ItemStack(Items.GLOWSTONE_DUST)), 5)
         addCrusherRecipes("oreCoal",
-            getItemStackString(new ItemStack(Items.coal, 1, 0)), 3, getItemStackString(new ItemStack(Items.diamond, 1, 0)), 1)
+            getItemStackString(new ItemStack(Items.COAL, 1, 0)), 3, getItemStackString(new ItemStack(Items.DIAMOND, 1, 0)), 1)
         addCrusherRecipes("minecraft:wool:" + OreDictionary.WILDCARD_VALUE ,
-            getItemStackString(new ItemStack(Items.string)), 4, "", 0)
+            getItemStackString(new ItemStack(Items.STRING)), 4, "", 0)
         addCrusherRecipes("blockGlass",
-            getItemStackString(new ItemStack(Blocks.sand)), 1, "", 0)
-        addCrusherRecipes(getOreDict(new ItemStack(Blocks.gravel)),
-            getItemStackString(new ItemStack(Items.flint)), 2, getItemStackString(new ItemStack(Items.flint)), 10)
+            getItemStackString(new ItemStack(Blocks.SAND)), 1, "", 0)
+        addCrusherRecipes(getOreDict(new ItemStack(Blocks.GRAVEL)),
+            getItemStackString(new ItemStack(Items.FLINT)), 2, getItemStackString(new ItemStack(Items.FLINT)), 10)
 
         val oreDict = OreDictionary.getOreNames
 

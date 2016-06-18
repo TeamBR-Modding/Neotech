@@ -20,7 +20,7 @@ import net.minecraft.world.World
   * @author Paul Davis "pauljoda"
   * @since 2/26/2016
   */
-class BlockPhantomGlass extends BlockConnected("phantomGlass", Material.glass) with HasToolTip {
+class BlockPhantomGlass extends BlockConnected("phantomGlass", Material.GLASS) with HasToolTip {
 
     /**
       * Define true if you are a clear texture

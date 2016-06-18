@@ -29,7 +29,7 @@ import org.lwjgl.input.Keyboard
   * @author Paul Davis <pauljoda>
   * @since 1/11/2016
   */
-class BlockGrinder extends BaseBlock(Material.rock, "grinder", classOf[TileGrinder]) with OpensGui with DropsItems with HasToolTip {
+class BlockGrinder extends BaseBlock(Material.ROCK, "grinder", classOf[TileGrinder]) with OpensGui with DropsItems with HasToolTip {
     override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
     override def onLanded(world : World, entity : Entity) : Unit = {
@@ -37,19 +37,19 @@ class BlockGrinder extends BaseBlock(Material.rock, "grinder", classOf[TileGrind
         if(entity.isInstanceOf[EntityPlayer] && entity.fallDistance > 0.0 &&
                 !world.isAirBlock(new BlockPos(entity.posX, entity.posY, entity.posZ))) {
             world.getBlockState(new BlockPos(entity.posX, entity.posY, entity.posZ)).getBlock match {
-                case Blocks.wooden_pressure_plate =>
+                case Blocks.WOODEN_PRESSURE_PLATE =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder]
                             .activateGrinder(entity.fallDistance.toInt, 1.00)
-                case Blocks.stone_pressure_plate =>
+                case Blocks.STONE_PRESSURE_PLATE =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder]
                             .activateGrinder(entity.fallDistance.toInt, 1.25)
                 case BlockManager.playerPlate =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder]
                             .activateGrinder(entity.fallDistance.toInt, 1.50)
-                case Blocks.heavy_weighted_pressure_plate =>
+                case Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder]
                             .activateGrinder(entity.fallDistance.toInt, 1.75)
-                case Blocks.light_weighted_pressure_plate =>
+                case Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE =>
                     world.getTileEntity(new BlockPos(entity.posX, entity.posY - 1, entity.posZ)).asInstanceOf[TileGrinder]
                             .activateGrinder(entity.fallDistance.toInt, 2.00)
                 case _ =>

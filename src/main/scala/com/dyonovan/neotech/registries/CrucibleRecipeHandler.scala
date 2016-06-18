@@ -102,17 +102,17 @@ class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
         addCrucibleRecipe(null, "blockGold", new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.BLOCK_MB))
 
         // Carbon
-        addCrucibleRecipe(new ItemStack(Items.coal, 1, 1),  "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.INGOT_MB * 2))
-        addCrucibleRecipe(new ItemStack(Items.coal),        "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.INGOT_MB))
-        addCrucibleRecipe(new ItemStack(Blocks.coal_block), "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.BLOCK_MB))
+        addCrucibleRecipe(new ItemStack(Items.COAL, 1, 1),  "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.INGOT_MB * 2))
+        addCrucibleRecipe(new ItemStack(Items.COAL),        "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.INGOT_MB))
+        addCrucibleRecipe(new ItemStack(Blocks.COAL_BLOCK), "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.BLOCK_MB))
 
         // Obsidian
-        addCrucibleRecipe(new ItemStack(Blocks.obsidian),  "", new FluidStack(FluidRegistry.getFluid("obsidian"), 36))
+        addCrucibleRecipe(new ItemStack(Blocks.OBSIDIAN),  "", new FluidStack(FluidRegistry.getFluid("obsidian"), 36))
 
         // Ice/Snowball to Water
-        addCrucibleRecipe(new ItemStack(Items.snowball), "", new FluidStack(FluidRegistry.WATER, 144))
-        addCrucibleRecipe(new ItemStack(Blocks.ice), "", new FluidStack(FluidRegistry.WATER, 1296))
-        addCrucibleRecipe(new ItemStack(Blocks.packed_ice), "", new FluidStack(FluidRegistry.WATER, 1296))
+        addCrucibleRecipe(new ItemStack(Items.SNOWBALL), "", new FluidStack(FluidRegistry.WATER, 144))
+        addCrucibleRecipe(new ItemStack(Blocks.ICE), "", new FluidStack(FluidRegistry.WATER, 1296))
+        addCrucibleRecipe(new ItemStack(Blocks.PACKED_ICE), "", new FluidStack(FluidRegistry.WATER, 1296))
 
         // Stones to lava
         addCrucibleRecipe(null, "cobblestone", new FluidStack(FluidRegistry.LAVA, 20))

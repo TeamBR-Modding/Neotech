@@ -22,9 +22,10 @@ class TileCrafter extends TileEntity with Inventory {
         super[Inventory].readFromNBT(tag)
     }
 
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         super[Inventory].writeToNBT(tag)
+        tag
     }
 
     override def markDirty(): Unit = {

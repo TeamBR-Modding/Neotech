@@ -187,9 +187,10 @@ trait InputOutput extends NBTSavable {
       * Write information to the tag
       * @param tag The data to write to
       */
-    override def writeToNBT(tag : NBTTagCompound)= {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         tag.setBoolean("NewVersion", true)
         for(side <- EnumFacing.values())
             tag.setInteger("Side: " + side.ordinal(), sideModes.get(side).getIntValue)
+        tag
     }
 }

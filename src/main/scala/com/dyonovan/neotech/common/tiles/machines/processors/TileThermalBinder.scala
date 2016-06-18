@@ -186,10 +186,11 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
     /**
       * Write the tag
       */
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[MachineProcessor].writeToNBT(tag)
         super[FluidHandler].writeToNBT(tag)
         tag.setInteger("Count", count)
+        tag
     }
 
     /**

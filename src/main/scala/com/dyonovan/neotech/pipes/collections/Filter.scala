@@ -35,12 +35,13 @@ trait Filter {
         blackList = tag.getBoolean("blackList")
     }
 
-    def writeToNBT(tag : NBTTagCompound) = {
+    def writeToNBT(tag : NBTTagCompound): NBTTagCompound = {
         filterInventory.writeToNBT(tag, "filter")
         tag.setBoolean("matchTag", matchTag)
         tag.setBoolean("matchDamage", matchDamage)
         tag.setBoolean("matchOreDict", matchOreDict)
         tag.setBoolean("blackList", blackList)
+        tag
     }
 
     def isResourceValidForFilter(resource : AnyRef) : Boolean = {

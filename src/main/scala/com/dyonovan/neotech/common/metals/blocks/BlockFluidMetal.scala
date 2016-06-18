@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.{BlockFluidClassic, Fluid}
   * @author Paul Davis <pauljoda>
   * @since 2/16/2016
   */
-class BlockFluidMetal(fluidMetal: Fluid) extends BlockFluidClassic(fluidMetal, Material.lava) {
+class BlockFluidMetal(fluidMetal: Fluid) extends BlockFluidClassic(fluidMetal, Material.LAVA) {
     setUnlocalizedName(Reference.MOD_ID + "." + fluidMetal.getName)
 
 

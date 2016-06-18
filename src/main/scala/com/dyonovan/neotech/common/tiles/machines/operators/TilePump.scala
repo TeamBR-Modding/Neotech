@@ -87,9 +87,9 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler {
                     return fluid.canDrain(worldObj, position) && fluid.drain(worldObj, position, false) != null &&
                             fluid.drain(worldObj, position, false).amount > 0 &&
                             (if(shouldMatch) tanks(INPUT_TANK).getFluid.getFluid == fluid.getFluid else true)
-                case water: Blocks.water.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
+                case water: Blocks.WATER.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
                     return if (shouldMatch) tanks(INPUT_TANK).getFluid.getFluid == FluidRegistry.WATER else true
-                case lava: Blocks.lava.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
+                case lava: Blocks.LAVA.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
                     return if (shouldMatch) tanks(INPUT_TANK).getFluid.getFluid == FluidRegistry.LAVA else true
                 case _ =>
             }
@@ -131,24 +131,24 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler {
                     if (drained != null && drained.amount > 0) {
                         val fluidStack =  fluid.drain(worldObj, position, true)
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
-                        worldObj.setBlockState(position, Blocks.stone.getDefaultState)
+                        worldObj.setBlockState(position, Blocks.STONE.getDefaultState)
                         energyStorage.extractEnergy(costToOperate, false)
                         return true
                     }
-                case water: Blocks.water.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
+                case water: Blocks.WATER.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
                     val fluidStack = new FluidStack(FluidRegistry.WATER, 1000)
                     if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
                         energyStorage.extractEnergy(costToOperate / 4, false)
                         return true
                     }
-                case lava: Blocks.lava.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
+                case lava: Blocks.LAVA.type if worldObj.getBlockState(position).getValue(BlockLiquid.LEVEL).intValue == 0 =>
                     val fluidStack = new FluidStack(FluidRegistry.LAVA, 1000)
                     if (fill(EnumFacing.DOWN, fluidStack, doFill = false) >= 1000) {
                         fill(EnumFacing.DOWN, fluidStack, doFill = true)
                         val oldState = worldObj.getBlockState(position)
-                        worldObj.setBlockState(position, Blocks.stone.getDefaultState)
-                        worldObj.notifyBlockUpdate(position, oldState, Blocks.stone.getDefaultState, 3)
+                        worldObj.setBlockState(position, Blocks.STONE.getDefaultState)
+                        worldObj.notifyBlockUpdate(position, oldState, Blocks.STONE.getDefaultState, 3)
                         energyStorage.extractEnergy(costToOperate, false)
                         return true
                     }
@@ -171,10 +171,11 @@ class TilePump extends UpdatingTile with FluidHandler with EnergyHandler {
 
     }
 
-    override def writeToNBT(tag : NBTTagCompound) : Unit = {
+    override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
         super[TileEntity].writeToNBT(tag)
         super[FluidHandler].writeToNBT(tag)
         super[EnergyHandler].writeToNBT(tag)
+        tag
     }
 
     override def readFromNBT(tag : NBTTagCompound) : Unit = {

@@ -196,7 +196,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     /**
       * Write the tag
       */
-    override def writeToNBT(tag: NBTTagCompound): Unit = {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super[Upgradeable].writeToNBT(tag)
         super[TileEntity].writeToNBT(tag)
         super[InventorySided].writeToNBT(tag)
@@ -207,6 +207,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             tag.setBoolean("UpdateEnergy", true)
             updateClient = false
         }
+        tag
     }
 
     /**

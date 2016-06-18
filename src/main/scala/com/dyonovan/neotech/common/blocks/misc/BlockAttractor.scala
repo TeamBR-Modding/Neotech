@@ -22,7 +22,7 @@ object BlockAttractor {
     lazy val DIR = PropertyDirection.create("attached_side")
 }
 
-class BlockAttractor extends BaseBlock(Material.portal, "blockAttractor", classOf[TileAttractor]) with OpensGui {
+class BlockAttractor extends BaseBlock(Material.PORTAL, "blockAttractor", classOf[TileAttractor]) with OpensGui {
 
     setDefaultState(this.blockState.getBaseState
             .withProperty(BlockAttractor.DIR, EnumFacing.UP))

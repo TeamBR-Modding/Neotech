@@ -45,7 +45,7 @@ object ModifierSmite extends Modifier("smite") {
       * Write info to tag
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, count: Int): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.smite, getSmiteLevel(stack) + count)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.SMITE, getSmiteLevel(stack) + count)
         tag.setInteger(SMITE, getSmiteLevel(stack) + count)
         super.writeToNBT(tag, stack)
         tag

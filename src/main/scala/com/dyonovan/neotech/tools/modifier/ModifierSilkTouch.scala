@@ -40,7 +40,7 @@ object ModifierSilkTouch extends Modifier("silkTouch") {
       * @return
       */
     def writeToNBT(tag: NBTTagCompound, stack: ItemStack, hasSilkTouch: Boolean): NBTTagCompound = {
-        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.silkTouch, 1)
+        ToolHelper.writeVanillaEnchantment(tag, stack, Enchantments.SILK_TOUCH, 1)
         tag.setBoolean(SILK, hasSilkTouch)
         super.writeToNBT(tag, stack)
         tag

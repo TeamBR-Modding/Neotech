@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since 3/10/2016
   */
-class BlockDisplayPanel extends BaseBlock(Material.iron, "displayPanel", classOf[TileDisplayPanel]) {
+class BlockDisplayPanel extends BaseBlock(Material.IRON, "displayPanel", classOf[TileDisplayPanel]) {
 
     override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 

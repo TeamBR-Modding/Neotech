@@ -53,10 +53,10 @@ object BlockManager {
     val mechanicalPipe = new BlockMechanicalPipe("mechanicalPipe")
 
     //Pipes
-    val pipeBasicStructure = new BlockPipe("pipeStructure", Material.glass, true, classOf[StructurePipe])
-    val pipeItemInterface = new BlockPipeSpecial("pipeItemBasicInterface", Material.rock, classOf[ItemInterfacePipe])
-    val pipeEnergyInterface = new BlockPipeSpecial("pipeEnergyBasicInterface", Material.rock, classOf[EnergyInterfacePipe])
-    val pipeFluidInterface = new BlockPipeSpecial("pipeFluidBasicInterface", Material.rock, classOf[FluidInterfacePipe])
+    val pipeBasicStructure = new BlockPipe("pipeStructure", Material.GLASS, true, classOf[StructurePipe])
+    val pipeItemInterface = new BlockPipeSpecial("pipeItemBasicInterface", Material.ROCK, classOf[ItemInterfacePipe])
+    val pipeEnergyInterface = new BlockPipeSpecial("pipeEnergyBasicInterface", Material.ROCK, classOf[EnergyInterfacePipe])
+    val pipeFluidInterface = new BlockPipeSpecial("pipeFluidBasicInterface", Material.ROCK, classOf[FluidInterfacePipe])
 
     //RF Storage
     val basicRFStorage = new BlockRFStorage("basicRFStorage", 1)

@@ -21,7 +21,7 @@ import net.minecraft.world.World
   * @author Paul Davis <pauljoda>
   * @since 1/16/2016
   */
-class BlockPlayerPlate extends BlockBasePressurePlate(Material.iron) {
+class BlockPlayerPlate extends BlockBasePressurePlate(Material.IRON) {
 
     this.setDefaultState(this.blockState.getBaseState.withProperty(BlockPressurePlate.POWERED, false.asInstanceOf[java.lang.Boolean]))
     setUnlocalizedName(Reference.MOD_ID + ":" + "playerPlate")
@@ -58,10 +58,10 @@ class BlockPlayerPlate extends BlockBasePressurePlate(Material.iron) {
     }
 
     override def playClickOnSound(worldIn: World, color: BlockPos): Unit =
-        worldIn.playSound(null.asInstanceOf[EntityPlayer], color, SoundEvents.block_metal_pressplate_click_on,
+        worldIn.playSound(null.asInstanceOf[EntityPlayer], color, SoundEvents.BLOCK_METAL_PRESSPLATE_CLICK_ON,
             SoundCategory.BLOCKS, 0.3F, 0.6F)
 
     override def playClickOffSound(worldIn: World, pos: BlockPos): Unit =
-        worldIn.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.block_metal_pressplate_click_off,
+        worldIn.playSound(null.asInstanceOf[EntityPlayer], pos, SoundEvents.BLOCK_METAL_PRESSPLATE_CLICK_OFF,
             SoundCategory.BLOCKS, 0.3F, 0.5F)
 }

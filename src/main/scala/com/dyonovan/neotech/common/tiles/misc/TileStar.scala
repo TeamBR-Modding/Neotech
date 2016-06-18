@@ -16,9 +16,10 @@ import net.minecraft.nbt.{NBTTagCompound, NBTTagByte}
   */
 class TileStar extends UpdatingTile {
     var color = EnumDyeColor.ORANGE.getMetadata
-    override def writeToNBT(tag : NBTTagCompound) = {
+    override def writeToNBT(tag : NBTTagCompound): NBTTagCompound = {
         super.writeToNBT(tag)
         tag.setInteger("color", color)
+        tag
     }
     override def readFromNBT(tag : NBTTagCompound) = {
         super.readFromNBT(tag)

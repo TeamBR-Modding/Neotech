@@ -103,7 +103,7 @@ object ClientUtils {
     def isCtrlPressed : Boolean = {
         var standardControl = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)
         //Check for Macs
-        if(!standardControl && Minecraft.isRunningOnMac) standardControl = Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA)
+        if(!standardControl && Minecraft.IS_RUNNING_ON_MAC) standardControl = Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA)
         standardControl
     }
 

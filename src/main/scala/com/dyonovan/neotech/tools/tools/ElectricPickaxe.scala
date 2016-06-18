@@ -125,7 +125,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
             return getEnergyStored(stack) < RF_COST(stack)
         else if (player.capabilities.isCreativeMode) {
             val world = player.worldObj
-            val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
+            val mop = rayTrace(world, player.asInstanceOf[EntityPlayer], false)
             if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
                 val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack), mop, player.asInstanceOf[EntityPlayer], world, stack)
                 for (b <- 0 until blockList.size) {
@@ -133,7 +133,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
                     val block = world.getBlockState(newPos).getBlock
                     world.setBlockToAir(newPos)
                     if(newPos != pos)
-                        world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
+                        world.playEvent(2001, newPos, Block.getIdFromBlock(block))
                 }
             }
         }
@@ -147,7 +147,7 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
         entityLiving match {
             case player: EntityPlayer =>
                 if (ModifierAOE.getAOELevel(stack) > 0 && player.isInstanceOf[EntityPlayer] && ModifierAOE.isAOEActive(stack)) {
-                    val mop = getMovingObjectPositionFromPlayer(world, player.asInstanceOf[EntityPlayer], false)
+                    val mop = rayTrace(world, player.asInstanceOf[EntityPlayer], false)
                     if (mop != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
                         val blockList = ToolHelper.getBlockList(ModifierAOE.getAOELevel(stack),
                             mop, player.asInstanceOf[EntityPlayer], world, stack)
@@ -159,11 +159,11 @@ class ElectricPickaxe extends ItemPickaxe(ToolHelper.NEOTECH_TOOLS) with BaseEle
                                     block.harvestBlock(world, player.asInstanceOf[EntityPlayer],
                                         newPos, world.getBlockState(newPos), world.getTileEntity(newPos), stack)
                                     block.dropXpOnBlockBreak(world, newPos, block.getExpDrop(world.getBlockState(newPos), world, newPos,
-                                        EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, stack)))
+                                        EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack)))
                                 }
                                 world.setBlockToAir(newPos)
                                 if (!world.isRemote && newPos != pos)
-                                    world.playAuxSFX(2001, newPos, Block.getIdFromBlock(block))
+                                    world.playEvent(2001, newPos, Block.getIdFromBlock(block))
                             }
                             rfCost(player.asInstanceOf[EntityPlayer], stack)
                         }

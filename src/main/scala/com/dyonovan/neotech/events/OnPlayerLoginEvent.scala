@@ -47,9 +47,9 @@ object OnPlayerLoginEvent {
                       versionCheck.target + GuiColor.WHITE
                     player.addChatComponentMessage(new TextComponentString(msg))
                     val clickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, versionCheck.url)
-                    val chatStyle = new Style().setChatClickEvent(clickEvent)
+                    val chatStyle = new Style().setClickEvent(clickEvent)
                     val update = new TextComponentString("Update at " + versionCheck.url)
-                    update.setChatStyle(chatStyle)
+                    update.setStyle(chatStyle)
                     player.addChatComponentMessage(update)
                 }
                 firstTime = false

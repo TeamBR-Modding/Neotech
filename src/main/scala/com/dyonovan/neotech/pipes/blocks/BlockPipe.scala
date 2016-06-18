@@ -175,7 +175,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
                         world.spawnEntityInWorld(itemEntity)
                     }
                     world.setBlockToAir(pos)
-                    world.setBlockState(pos, Blocks.air.getDefaultState, 3)
+                    world.setBlockState(pos, Blocks.AIR.getDefaultState, 3)
                     return true
                 } else
                     playerIn.swingArm(hand)
@@ -215,8 +215,8 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
     /**
       * Send update to pipes in grid to reform their cache
       */
-    override def onNeighborBlockChange(world: World, pos: BlockPos, state: IBlockState, block: Block): Unit = {
-        if (!world.isRemote)
+    override def neighborChanged(state: IBlockState, worldIn: World, pos: BlockPos, blockIn: Block): Unit = {
+        if (!worldIn.isRemote)
             WorldPipes.notifyPipes()
     }
 
@@ -313,7 +313,7 @@ class BlockPipe(val name : String, mat : Material, val colored : Boolean, tileCl
         if(colored)
             state.getValue(PipeProperties.COLOR).getMapColor
         else
-            MapColor.grayColor
+            MapColor.GRAY
     }
 
     /**

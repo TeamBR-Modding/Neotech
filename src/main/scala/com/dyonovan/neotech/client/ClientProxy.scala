@@ -99,7 +99,7 @@ class ClientProxy extends CommonProxy {
             "down=2,east=0,north=0,south=0,up=1,west=0")
 
         // Item Models
-        val itemIterator = Item.itemRegistry.iterator()
+        val itemIterator = Item.REGISTRY.iterator()
         while(itemIterator.hasNext) {
             itemIterator.next() match {
                 case upgradeItem : BaseUpgradeItem =>
@@ -113,7 +113,7 @@ class ClientProxy extends CommonProxy {
         }
 
         // Block Models, for items
-        val blockIterator = Block.blockRegistry.iterator()
+        val blockIterator = Block.REGISTRY.iterator()
         while(blockIterator.hasNext) {
             blockIterator.next() match {
                 case connectedTextures : BlockConnectedTextures =>

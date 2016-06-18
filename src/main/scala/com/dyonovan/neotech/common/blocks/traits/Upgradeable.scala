@@ -57,8 +57,8 @@ trait Upgradeable {
             upgradeInventory.addInventorySlot(null)
     }
 
-    def writeToNBT(tag : NBTTagCompound): Unit = {
-        upgradeInventory.writeToNBT(tag, "upgrade")
+    def writeToNBT(tag : NBTTagCompound): NBTTagCompound = {
+        return upgradeInventory.writeToNBT(tag, "upgrade")
     }
 
     /**
