@@ -212,7 +212,7 @@ curseforge {
         id = '228643'
         changelog = 'Changelog: https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog'
         releaseType = 'beta'
-        addGameVersion '1.9'
+        addGameVersion '1.9.4'
         addArtifact devJar
         relations {
             requiredLibrary 'bookshelf-api-library'
