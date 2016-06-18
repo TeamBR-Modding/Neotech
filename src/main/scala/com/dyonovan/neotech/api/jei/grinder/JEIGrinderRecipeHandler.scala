@@ -1,5 +1,6 @@
 package com.dyonovan.neotech.api.jei.grinder
 
+import com.dyonovan.neotech.api.jei.NeotechRecipeCategoryUID
 import com.dyonovan.neotech.lib.Reference
 import mezz.jei.api.recipe.{IRecipeHandler, IRecipeWrapper}
 
@@ -15,4 +16,6 @@ class JEIGrinderRecipeHandler extends IRecipeHandler[JEIGrinderRecipe] {
     override def isRecipeValid(recipe: JEIGrinderRecipe): Boolean = true
 
     override def getRecipeClass: Class[JEIGrinderRecipe] = classOf[JEIGrinderRecipe]
+
+    override def getRecipeCategoryUid(recipe: JEIGrinderRecipe): String = NeotechRecipeCategoryUID.GRINDER
 }

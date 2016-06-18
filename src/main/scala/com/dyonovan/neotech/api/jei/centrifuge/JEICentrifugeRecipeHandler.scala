@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.api.jei.centrifuge
 
+import com.dyonovan.neotech.api.jei.NeotechRecipeCategoryUID
 import com.dyonovan.neotech.lib.Reference
-import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeHandler}
+import mezz.jei.api.recipe.{IRecipeHandler, IRecipeWrapper}
 
 /**
   * This file was created for NeoTech
@@ -22,4 +23,6 @@ class JEICentrifugeRecipeHandler extends IRecipeHandler[JEICentrifugeRecipe]{
     override def isRecipeValid(recipe: JEICentrifugeRecipe): Boolean = true
 
     override def getRecipeClass: Class[JEICentrifugeRecipe] = classOf[JEICentrifugeRecipe]
+
+    override def getRecipeCategoryUid(recipe: JEICentrifugeRecipe): String = NeotechRecipeCategoryUID.CENTRIFUGE
 }

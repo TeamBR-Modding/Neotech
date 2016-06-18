@@ -2,7 +2,7 @@ package com.dyonovan.neotech.api.jei.crusher
 
 import java.awt.Color
 
-import com.dyonovan.neotech.api.jei.NeoTechPlugin
+import com.dyonovan.neotech.api.jei.{NeoTechPlugin, NeotechRecipeCategoryUID}
 import com.dyonovan.neotech.lib.Reference
 import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentPowerBarJEI, SlotDrawable}
 import mezz.jei.api.gui._
@@ -15,7 +15,7 @@ import net.minecraft.util.text.translation.I18n
 /**
   * Created by Dyonovan on 1/13/2016.
   */
-class JEICrusherRecipeCategory extends IRecipeCategory {
+class JEICrusherRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
 
     val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png")
     val arrow = new GuiComponentArrowJEI(59, 21, NeoTechPlugin.jeiHelpers)
@@ -67,5 +67,5 @@ class JEICrusherRecipeCategory extends IRecipeCategory {
 
     override def getTitle: String = I18n.translateToLocal("tile.neotech:electricCrusher.name")
 
-    override def getUid: String = Reference.MOD_ID + ":electricCrusher"
+    override def getUid: String = NeotechRecipeCategoryUID.CRUSHER
 }

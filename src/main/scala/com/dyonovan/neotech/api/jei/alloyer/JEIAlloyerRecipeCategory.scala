@@ -2,7 +2,7 @@ package com.dyonovan.neotech.api.jei.alloyer
 
 import java.awt.Color
 
-import com.dyonovan.neotech.api.jei.NeoTechPlugin
+import com.dyonovan.neotech.api.jei.{NeoTechPlugin, NeotechRecipeCategoryUID}
 import com.dyonovan.neotech.lib.Reference
 import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI}
 import mezz.jei.api.gui.{IDrawable, IRecipeLayout}
@@ -21,7 +21,7 @@ import net.minecraft.util.text.translation.I18n
   * @author Dyonovan
   * @since 2/22/2016
   */
-class JEIAlloyerRecipeCategory extends IRecipeCategory {
+class JEIAlloyerRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
 
     val location = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png")
     val arrow = new GuiComponentArrowJEI(81, 17, NeoTechPlugin.jeiHelpers)
@@ -62,5 +62,5 @@ class JEIAlloyerRecipeCategory extends IRecipeCategory {
 
     override def getTitle: String = I18n.translateToLocal("tile.neotech:alloyer.name")
 
-    override def getUid: String = Reference.MOD_ID + ":alloyer"
+    override def getUid: String = NeotechRecipeCategoryUID.ALLOYER
 }

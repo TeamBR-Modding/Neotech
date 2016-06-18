@@ -13,15 +13,15 @@ buildscript {
 
 plugins {
     id 'com.matthewprenger.cursegradle' version '1.0.7'
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
+    //id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 
 repositories {
-//    maven {
-//        name 'BR Repo'
-//        url "http://www.teambrmodding.com/maven2/"
-//    }
-    maven { url "https://jitpack.io" }
+    maven {
+        name 'BR Repo'
+        url "http://www.teambrmodding.com/maven2/"
+    }
+    //maven { url "https://jitpack.io" }
     maven { // The repo from which to get waila
         name "Mobius Repo"
         url "http://mobiusstrip.eu/maven"
@@ -100,8 +100,7 @@ dependencies {
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     //deobfCompile "MCMultiPart:MCMultiPart-experimental:${config.MCMultiPart_version}:universal"
-    //compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.9-+", classifier: "dev", changing: true
-    compile "com.github.vpzomtrrfrt:Bookshelf:1.9.4-SNAPSHOT"
+    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.9.4-+", classifier: "dev", changing: true
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {

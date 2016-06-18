@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.api.jei.solidifier
 
+import com.dyonovan.neotech.api.jei.NeotechRecipeCategoryUID
 import com.dyonovan.neotech.lib.Reference
-import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeHandler}
+import mezz.jei.api.recipe.{IRecipeHandler, IRecipeWrapper}
 
 /**
   * This file was created for NeoTech
@@ -22,4 +23,6 @@ class JEISolidifierRecipeHandler extends IRecipeHandler[JEISolidifierRecipe] {
     override def isRecipeValid(recipe: JEISolidifierRecipe): Boolean = true
 
     override def getRecipeClass: Class[JEISolidifierRecipe] = classOf[JEISolidifierRecipe]
+
+    override def getRecipeCategoryUid(recipe: JEISolidifierRecipe): String = NeotechRecipeCategoryUID.SOLIDIFIER
 }

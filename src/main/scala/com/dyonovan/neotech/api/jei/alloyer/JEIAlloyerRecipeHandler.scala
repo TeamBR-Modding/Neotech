@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.api.jei.alloyer
 
+import com.dyonovan.neotech.api.jei.NeotechRecipeCategoryUID
 import com.dyonovan.neotech.lib.Reference
-import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeHandler}
+import mezz.jei.api.recipe.{IRecipeHandler, IRecipeWrapper}
 
 /**
   * This file was created for NeoTech
@@ -22,4 +23,6 @@ class JEIAlloyerRecipeHandler extends IRecipeHandler[JEIAlloyerRecipe]{
     override def isRecipeValid(recipe: JEIAlloyerRecipe): Boolean = true
 
     override def getRecipeClass: Class[JEIAlloyerRecipe] = classOf[JEIAlloyerRecipe]
+
+    override def getRecipeCategoryUid(recipe: JEIAlloyerRecipe): String = NeotechRecipeCategoryUID.ALLOYER
 }

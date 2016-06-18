@@ -1,7 +1,8 @@
 package com.dyonovan.neotech.api.jei.crucible
 
+import com.dyonovan.neotech.api.jei.NeotechRecipeCategoryUID
 import com.dyonovan.neotech.lib.Reference
-import mezz.jei.api.recipe.{IRecipeWrapper, IRecipeHandler}
+import mezz.jei.api.recipe.{IRecipeHandler, IRecipeWrapper}
 
 /**
   * This file was created for NeoTech
@@ -22,4 +23,6 @@ class JEICrucibleRecipeHandler extends IRecipeHandler[JEICrucibleRecipe]{
     override def isRecipeValid(recipe: JEICrucibleRecipe): Boolean = true
 
     override def getRecipeClass: Class[JEICrucibleRecipe] = classOf[JEICrucibleRecipe]
+
+    override def getRecipeCategoryUid(recipe: JEICrucibleRecipe): String = NeotechRecipeCategoryUID.CRUCIBLE
 }
