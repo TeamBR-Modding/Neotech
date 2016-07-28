@@ -77,7 +77,7 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
     private def hasAmmo(player: EntityPlayer, remove: Boolean): Boolean = {
         for (i <- 0 until player.inventory.getSizeInventory) {
             if (player.inventory.getStackInSlot(i) != null && !player.inventory.getStackInSlot(i).hasTagCompound &&
-              player.inventory.getStackInSlot(i).getItem.isInstanceOf[ItemManager.mobNet.type]) {
+                    player.inventory.getStackInSlot(i).getItem.isInstanceOf[ItemManager.mobNet.type]) {
                 if (remove) player.inventory.decrStackSize(i, 1)
                 return true
             }
@@ -92,20 +92,25 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
     override def getMaxItemUseDuration(stack: ItemStack): Int = 72000
 
     override def onPlayerStoppedUsing(stack: ItemStack, world: World, player: EntityLivingBase, timeLeft: Int) : Unit = {
-    if (!world.isRemote && player.isInstanceOf[EntityPlayer]) {
-            hasAmmo(player.asInstanceOf[EntityPlayer], remove = true)
-            extractEnergy(stack, RF_PER_USE, simulate = false)
-            val heldTime = this.getMaxItemUseDuration(stack) - timeLeft
-            var f: Float = heldTime.toFloat / 20.0F
-            f = (f * f + f * 2.0F) / 3.0F
-            if (f < 0.1D) return
-            else if (f > 1.0F) f = 1.0F
+        if (!world.isRemote && player.isInstanceOf[EntityPlayer]) {
 
-            val net = new EntityNet(world, player, f * 2.0F)
-            world.spawnEntityInWorld(net)
-            world.playSound(null.asInstanceOf[EntityPlayer],
-                new BlockPos(player.posX, player.posY, player.posZ), SoundEvents.ENTITY_ARROW_SHOOT,
-                SoundCategory.BLOCKS, 0.3F, 0.5F)
+            val heldTime = this.getMaxItemUseDuration(stack) - timeLeft
+
+            if (heldTime > 5) {
+                hasAmmo(player.asInstanceOf[EntityPlayer], remove = true)
+                extractEnergy(stack, RF_PER_USE, simulate = false)
+
+                var f: Float = heldTime.toFloat / 20.0F
+                f = (f * f + f * 2.0F) / 3.0F
+                if (f < 0.1D) return
+                else if (f > 1.0F) f = 1.0F
+
+                val net = new EntityNet(world, player, f * 2.0F)
+                world.spawnEntityInWorld(net)
+                world.playSound(null.asInstanceOf[EntityPlayer],
+                    new BlockPos(player.posX, player.posY, player.posZ), SoundEvents.ENTITY_ARROW_SHOOT,
+                    SoundCategory.BLOCKS, 0.3F, 0.5F)
+            }
         }
     }
 
@@ -114,10 +119,10 @@ class ItemMobGun extends BaseItem("mobGun", 1) with ItemBattery {
         if (stack.hasTagCompound) {
             list.add(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneFlux"))
             list.add(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-              .format(getEnergyStored(stack)) +
-              " / " +
-              NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                .format(getMaxEnergyStored(stack)) + " RF")
+                    .format(getEnergyStored(stack)) +
+                    " / " +
+                    NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
+                            .format(getMaxEnergyStored(stack)) + " RF")
         }
     }
 }
