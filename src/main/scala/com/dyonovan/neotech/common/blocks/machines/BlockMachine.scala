@@ -94,6 +94,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
         }
 
         super[OpensGui].onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ)
+        heldItem != null && heldItem.getItem != ItemManager.wrench
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
