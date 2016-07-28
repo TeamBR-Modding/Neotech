@@ -156,7 +156,7 @@ class TileTank extends UpdatingTile with IFluidHandler with RedstoneAware {
                 }
             }
             else return fillAbove(from, resource, doFill)
-        } else if (tier == 5) return resource.amount
+        } else if (tier == 5 && resource != null) return resource.amount
         0
     }
 
