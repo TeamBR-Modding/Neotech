@@ -39,13 +39,14 @@ abstract class BaseUpgradeItem(name: String, stackSize: Int,
       */
     def getMaximumLevel : Int = stackSize
 
+    val list = new util.ArrayList[String]()
     /**
       * Provide the manager with a list of upgrades to create
       *
       * @return
       */
     override def getTextures(stack : ItemStack): java.util.List[String] = {
-        val list = new util.ArrayList[String]()
+        list.clear()
         list.add("neotech:items/tools/upgrades/" + name + "Upgrade")
         list
     }
