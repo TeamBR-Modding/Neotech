@@ -99,7 +99,8 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
             didWork = true
         } else {
             val update = cookTime > 0
-            reset()
+            if(update)
+                cookTime -= 1
             if(update) worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
         }
 
@@ -147,7 +148,7 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
       */
     @SideOnly(Side.CLIENT)
     def getCookProgressScaled(scaleVal: Int): Int =
-        Math.min(((cookTime * scaleVal) / Math.max(getCookTime, 0.001)).toInt, scaleVal)
+    Math.min(((cookTime * scaleVal) / Math.max(getCookTime, 0.001)).toInt, scaleVal)
 
     /*******************************************************************************************************************
       ************************************************ Inventory methods ***********************************************
@@ -198,7 +199,7 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
       * @return True if you can put this there
       */
     override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean =
-        slot == 0 && getOutputForStack(itemStackIn) != null
+    slot == 0 && getOutputForStack(itemStackIn) != null
 
     /*******************************************************************************************************************
       ************************************************ Energy methods **************************************************
