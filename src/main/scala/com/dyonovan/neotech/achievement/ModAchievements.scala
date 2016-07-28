@@ -13,7 +13,7 @@ import net.minecraft.util.text.translation.I18n
   * @author Paul Davis <pauljoda>
   * @since 2/8/2016
   */
-class ModAchievements extends AchievementList(I18n. translateToLocal("achievement.neotech.title")) {
+class ModAchievements extends AchievementList(I18n.translateToLocal("achievement.neotech.title")) {
     lazy val CRAFT_FURNACE = "craftFurnace"
     lazy val CRAFT_CRUSHER = "craftCrusher"
     lazy val CRAFT_FURNACE_GENERATOR = "craftFurnaceGenerator"
