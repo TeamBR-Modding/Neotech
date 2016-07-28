@@ -6,6 +6,7 @@ import com.teambr.bookshelf.traits.HasToolTip
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.Entity
+import net.minecraft.entity.passive.EntityHorse
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.World
@@ -32,7 +33,8 @@ class BlockPhantomGlass extends BlockConnected("phantomGlass", Material.GLASS) w
 
     override def addCollisionBoxToList(state: IBlockState, worldIn: World, pos: BlockPos, mask: AxisAlignedBB,
                                             list: java.util.List[AxisAlignedBB], collidingEntity: Entity) : Unit = {
-        if(collidingEntity.isInstanceOf[EntityPlayer] && !collidingEntity.isSneaking) { /* NO OP */ }
+        if((collidingEntity.isInstanceOf[EntityPlayer] && !collidingEntity.isSneaking) ||
+            collidingEntity.isInstanceOf[EntityHorse] && collidingEntity.asInstanceOf[EntityHorse].isBeingRidden) { /* NO OP */ }
         else
             super.addCollisionBoxToList(state, worldIn, pos, mask, list, collidingEntity)
     }
