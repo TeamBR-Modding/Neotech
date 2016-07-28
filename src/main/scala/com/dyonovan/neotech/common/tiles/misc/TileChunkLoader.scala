@@ -63,16 +63,14 @@ class TileChunkLoader extends Syncable {
         }
     }
 
-    override def readFromNBT(tag: NBTTagCompound) =
-    {
+    override def readFromNBT(tag: NBTTagCompound) = {
         super.readFromNBT(tag)
         diameter = tag.getInteger("Diameter")
         if (tag.hasKey("Owner"))
             owner = UUID.fromString(tag.getString("Owner"))
     }
 
-    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound =
-    {
+    override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
         super.writeToNBT(tag)
         tag.setInteger("Diameter", diameter)
         if (owner != null)
@@ -80,8 +78,7 @@ class TileChunkLoader extends Syncable {
         tag
     }
 
-    override def setVariable(id: Int, value: Double): Unit =
-    {
+    override def setVariable(id: Int, value: Double): Unit = {
         diameter = value.toInt
         if (diameter > ConfigRegistry.chunkLoaderMax)
             diameter = ConfigRegistry.chunkLoaderMax
@@ -90,8 +87,7 @@ class TileChunkLoader extends Syncable {
         worldObj.setBlockState(pos, worldObj.getBlockState(pos), 6)
     }
 
-    override def getVariable(id: Int): Double =
-    {
+    override def getVariable(id: Int): Double = {
         0.0
     }
 

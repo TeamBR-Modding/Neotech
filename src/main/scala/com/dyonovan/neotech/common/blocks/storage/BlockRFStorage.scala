@@ -19,50 +19,50 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{EnumBlockRenderType, EnumFacing}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 /**
- * This file was created for NeoTech
- *
- * NeoTech is licensed under the
- * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
- * http://creativecommons.org/licenses/by-nc-sa/4.0/
- *
- * @author Dyonovan
- * @since August 15, 2015
- */
+  * This file was created for NeoTech
+  *
+  * NeoTech is licensed under the
+  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
+  * http://creativecommons.org/licenses/by-nc-sa/4.0/
+  *
+  * @author Dyonovan
+  * @since August 15, 2015
+  */
 class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.IRON) with OpensGui with DropsItems {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)
     setHardness(2.0F)
 
-    override def canHarvestBlock(world: IBlockAccess, pos: BlockPos, player: EntityPlayer): Boolean = {
-        if (!player.capabilities.isCreativeMode) {
-            world.getTileEntity(pos) match {
-                case tile: TileRFStorage =>
-                    val item = new ItemStack(Item.getItemFromBlock(world.getBlockState(pos).getBlock), 1)
-                    val tag = new NBTTagCompound
-                    tile.writeToNBT(tag)
-                    tag.setInteger("Energy", tile.getEnergyStored(EnumFacing.UP))
-                    item.setTagCompound(tag)
-                    val r = tile.getEnergyStored(null).toFloat / tile.getMaxEnergyStored(null)
-                    val res = 16 - (r * 16).toInt
-                    item.setItemDamage(res)
-                    WorldUtils.dropStack(player.getEntityWorld, item, pos) //Drop it
-                case _ =>
-            }
-        } else {
-            super.breakBlock(player.getEntityWorld, pos, world.getBlockState(pos))
+    override def breakBlock(world: World, pos: BlockPos, state : IBlockState): Unit = {
+        world match {
+            case _: WorldServer => //We are on a server
+                world.getTileEntity(pos) match {
+                    case tile: TileRFStorage =>
+                        val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
+                        val tag = new NBTTagCompound
+                        tile.writeToNBT(tag)
+                        tag.setInteger("Energy", tile.getEnergyStored(EnumFacing.UP))
+                        item.setTagCompound(tag)
+                        val r = tile.getEnergyStored(null).toFloat / tile.getMaxEnergyStored(null)
+                        val res = 16 - (r * 16).toInt
+                        item.setItemDamage(res)
+                        WorldUtils.dropStack(world, item, pos)
+                    case _ =>
+                }
+            case _ =>
         }
-        false
+        super.breakBlock(world, pos, state)
     }
 
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:
     ItemStack): Unit = {
         if(stack.hasTagCompound && !world.isRemote) { //If there is a tag and is on the server
-            val tile = world.getTileEntity(pos).asInstanceOf[TileRFStorage]
+        val tile = world.getTileEntity(pos).asInstanceOf[TileRFStorage]
             tile.writeToNBT(stack.getTagCompound)
             if (stack.getTagCompound.hasKey("Energy"))
                 tile.energyStorage.setEnergyStored(stack.getTagCompound.getInteger("Energy"))
