@@ -42,7 +42,7 @@ class AlloyerRecipeHandler extends AbstractRecipeHandler[AlloyerRecipe, (FluidSt
       *
       * @return
       */
-    override def getVersion: Int = 4
+    override def getVersion: Int = 5
 
     /**
       * Called when the file is not found, add all default recipes here
@@ -51,7 +51,7 @@ class AlloyerRecipeHandler extends AbstractRecipeHandler[AlloyerRecipe, (FluidSt
         LogHelper.info("Loading Default Alloyer Recipes...")
 
         // Obsidian
-        addRecipe(new AlloyerRecipe("water:125", "lava:125", "obsidian:36"))
+        addRecipe(new AlloyerRecipe("water:1000", "lava:1000", "obsidian:288"))
 
         // Steel
         addRecipe(new AlloyerRecipe("iron:144", "carbon:144", "steel:144"))

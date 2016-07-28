@@ -39,7 +39,7 @@ class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, Fl
       *
       * @return
       */
-    override def getVersion: Int = 5
+    override def getVersion: Int = 6
 
     /**
       * Used to get the default folder location
@@ -105,7 +105,7 @@ class SolidifierRecipeHandler extends AbstractRecipeHandler[SolidifierRecipe, Fl
             new ItemStack(Blocks.COAL_BLOCK), "")
 
         // Obsidian
-        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("obsidian"), 36),
+        addSolidifierRecipe(new FluidStack(FluidRegistry.getFluid("obsidian"), 288),
             new ItemStack(Blocks.OBSIDIAN), "")
 
         saveToFile()

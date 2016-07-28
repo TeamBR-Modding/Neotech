@@ -39,7 +39,7 @@ class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
       *
       * @return
       */
-    override def getVersion: Int = 5
+    override def getVersion: Int = 6
 
     /**
       * Used to get the default folder location
@@ -107,7 +107,7 @@ class CrucibleRecipeHandler extends AbstractRecipeHandler[CrucibleRecipe, ItemSt
         addCrucibleRecipe(new ItemStack(Blocks.COAL_BLOCK), "", new FluidStack(FluidRegistry.getFluid("carbon"), MetalManager.BLOCK_MB))
 
         // Obsidian
-        addCrucibleRecipe(new ItemStack(Blocks.OBSIDIAN),  "", new FluidStack(FluidRegistry.getFluid("obsidian"), 36))
+        addCrucibleRecipe(new ItemStack(Blocks.OBSIDIAN),  "", new FluidStack(FluidRegistry.getFluid("obsidian"), 288))
 
         // Ice/Snowball to Water
         addCrucibleRecipe(new ItemStack(Items.SNOWBALL), "", new FluidStack(FluidRegistry.WATER, 144))
