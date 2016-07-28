@@ -40,10 +40,12 @@ class TileChunkLoader extends Syncable {
         } else {
             if (chunkTicket == null) {
                 chunkTicket = ForgeChunkManager.requestTicket(NeoTech, worldObj, Type.NORMAL)
-                chunkTicket.getModData.setInteger("neotech.loaderX", pos.getX)
-                chunkTicket.getModData.setInteger("neotech.loaderY", pos.getY)
-                chunkTicket.getModData.setInteger("neotech.loaderZ", pos.getZ)
-                forceChunkLoading(chunkTicket)
+                if(chunkTicket != null) {
+                    chunkTicket.getModData.setInteger("neotech.loaderX", pos.getX)
+                    chunkTicket.getModData.setInteger("neotech.loaderY", pos.getY)
+                    chunkTicket.getModData.setInteger("neotech.loaderZ", pos.getZ)
+                    forceChunkLoading(chunkTicket)
+                }
             }
         }
     }
