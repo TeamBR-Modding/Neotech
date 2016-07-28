@@ -1,8 +1,8 @@
 package com.dyonovan.neotech.client
 
-import com.dyonovan.neotech.client.mesh.MeshDefinitions.{PipeModelMesh, PipeSpecialModelMesh, StarModelMesh}
+import com.dyonovan.neotech.client.mesh.MeshDefinitions.StarModelMesh
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
-import com.dyonovan.neotech.client.renderers.entity.{RenderNet, RenderSun}
+import com.dyonovan.neotech.client.renderers.entity.RenderNet
 import com.dyonovan.neotech.client.renderers.tiles._
 import com.dyonovan.neotech.common.CommonProxy
 import com.dyonovan.neotech.common.entities.EntityNet
@@ -10,15 +10,13 @@ import com.dyonovan.neotech.common.fluids.FluidBlockGas
 import com.dyonovan.neotech.common.metals.blocks.BlockFluidMetal
 import com.dyonovan.neotech.common.metals.items.ItemMetal
 import com.dyonovan.neotech.common.tiles.AbstractMachine
-import com.dyonovan.neotech.common.tiles.misc.{TileAttractor, TileMobStand}
-import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileTank}
+import com.dyonovan.neotech.common.tiles.misc.TileMobStand
+import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileTank}
 import com.dyonovan.neotech.events.{GuiEvents, RenderingEvents}
 import com.dyonovan.neotech.managers.{BlockManager, FluidManager, MetalManager}
 import com.dyonovan.neotech.tools.armor.ItemElectricArmor
 import com.dyonovan.neotech.tools.tools.BaseElectricTool
 import com.dyonovan.neotech.tools.upgradeitems.BaseUpgradeItem
-import com.dyonovan.neotech.universe.entities.EntitySun
-import com.dyonovan.neotech.universe.items.SunItem
 import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
 import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
 import net.minecraft.block.Block
@@ -60,43 +58,11 @@ class ClientProxy extends CommonProxy {
             override def createRenderFor(manager: RenderManager): Render[_ >: EntityNet] = new RenderNet(manager)
         })
 
-        RenderingRegistry.registerEntityRenderingHandler(classOf[EntitySun], new IRenderFactory[EntitySun] {
-            override def createRenderFor(manager: RenderManager): Render[_ >: EntitySun] = new RenderSun(manager)
-        })
-
         ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.blockMiniatureStar), new StarModelMesh)
         for(dye <- EnumDyeColor.values())
             ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.blockMiniatureStar),
                 "blockMiniatureStar",
                 "attached_side=6,color=" + dye.getName)
-
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeBasicStructure), new PipeModelMesh)
-        for(dye <- EnumDyeColor.values())
-            ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.pipeBasicStructure),
-                "pipeStructure",
-                "color=" + dye.getName + ",down=true,east=false,north=false,south=false,up=true,west=false")
-
-
-        //Item Stuff
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeItemInterface), new PipeSpecialModelMesh)
-        ItemRenderManager.registerBlockModel(
-            BlockManager.pipeItemInterface,
-            "pipeItemBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0")
-
-        //Fluid Stuff
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeFluidInterface), new PipeSpecialModelMesh)
-        ItemRenderManager.registerBlockModel(
-            BlockManager.pipeFluidInterface,
-            "pipeFluidBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0")
-
-        //Energy
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeEnergyInterface), new PipeSpecialModelMesh)
-        ItemRenderManager.registerBlockModel(
-            BlockManager.pipeEnergyInterface,
-            "pipeEnergyBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0")
 
         // Item Models
         val itemIterator = Item.REGISTRY.iterator()
@@ -106,8 +72,6 @@ class ClientProxy extends CommonProxy {
                     ModelLoader.setCustomModelResourceLocation(upgradeItem, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
                 case tool : BaseElectricTool if !tool.isInstanceOf[ItemElectricArmor] =>
                     ModelLoader.setCustomModelResourceLocation(tool, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-                case sunItem : SunItem =>
-                    ModelLoader.setCustomModelResourceLocation(sunItem, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
                 case _ =>
             }
         }
@@ -152,12 +116,9 @@ class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.blockMiniatureSun, "blockMiniatureSun", "attached_side=6")
         ItemRenderManager.registerBlockModel(BlockManager.playerPlate, "playerPlate", "powered=false")
         ItemRenderManager.registerBlockModel(BlockManager.chunkLoader, "chunkLoader", "normal")
-        ItemRenderManager.registerBlockModel(BlockManager.dimStorage, "dimStorage", "facing=north,locked=false")
         ItemRenderManager.registerBlockModel(BlockManager.redstoneClock, "redstoneClock", "powered=false")
         ItemRenderManager.registerBlockModel(BlockManager.mobStand, "mobStand", "normal")
-        ItemRenderManager.registerBlockModel(BlockManager.blockAttractor, "blockAttractor", "attached_side=up")
         ItemRenderManager.registerBlockModel(BlockManager.flushableChest, "flushableChest", "facing=north")
-        ItemRenderManager.registerBlockModel(BlockManager.displayPanel, "displayPanel", "facing=south")
 
         MetalManager.registerModels()
     }
@@ -249,9 +210,7 @@ class ClientProxy extends CommonProxy {
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[AbstractMachine], new TileMachineIORenderer)
 
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileDimStorage], new TileDimStorageRenderer)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileMobStand], new MobStandEntityRenderer[TileMobStand])
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileAttractor], new AttractorEnderEyeRenderer)
     }
 
     /**

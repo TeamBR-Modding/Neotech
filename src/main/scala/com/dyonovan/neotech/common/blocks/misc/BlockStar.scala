@@ -5,8 +5,8 @@ import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.blocks.states.NeoStates
 import com.dyonovan.neotech.common.tiles.misc.TileStar
 import com.dyonovan.neotech.managers.BlockManager
-import com.dyonovan.neotech.pipes.blocks.PipeProperties
 import net.minecraft.block.material.Material
+import net.minecraft.block.properties.PropertyEnum
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.item.EntityItem
@@ -14,7 +14,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.entity.{Entity, EntityLivingBase}
 import net.minecraft.item._
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.{EnumBlockRenderType, EnumHand, EnumFacing}
+import net.minecraft.util.{EnumBlockRenderType, EnumFacing, EnumHand}
 import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
@@ -32,6 +32,7 @@ import scala.util.Random
   * @since 1/23/2016
   */
 class BlockStar(name: String) extends BaseBlock(Material.ROCK, name, classOf[TileStar]) {
+    lazy val COLOR  = PropertyEnum.create("color", classOf[EnumDyeColor])
 
     setCreativeTab(NeoTech.tabDecorations)
     setHardness(1.5F)
@@ -82,7 +83,7 @@ class BlockStar(name: String) extends BaseBlock(Material.ROCK, name, classOf[Til
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, playerIn: EntityPlayer, hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
         playerIn.getHeldItemMainhand match {
             case stack: ItemStack if stack.getItem.isInstanceOf[ItemDye] =>
-                if (stack.getItemDamage != world.getBlockState(pos).getValue(PipeProperties.COLOR).getMetadata) {
+                if (stack.getItemDamage != world.getBlockState(pos).getValue(COLOR).getMetadata) {
                     world.getTileEntity(pos).asInstanceOf[TileStar].color = EnumDyeColor.byDyeDamage(stack.getItemDamage).getMetadata
                     world.setBlockState(pos, state, 3)
                     return true
@@ -121,7 +122,7 @@ class BlockStar(name: String) extends BaseBlock(Material.ROCK, name, classOf[Til
     }
 
     override def getActualState (state: IBlockState, worldIn: IBlockAccess, pos: BlockPos) : IBlockState = {
-        state.withProperty(PipeProperties.COLOR, EnumDyeColor.byMetadata(worldIn.getTileEntity(pos).asInstanceOf[TileStar].color))
+        state.withProperty(COLOR, EnumDyeColor.byMetadata(worldIn.getTileEntity(pos).asInstanceOf[TileStar].color))
     }
 
     /**
@@ -135,7 +136,7 @@ class BlockStar(name: String) extends BaseBlock(Material.ROCK, name, classOf[Til
     }
 
     protected override def createBlockState: BlockStateContainer = {
-        new BlockStateContainer(this, PipeProperties.COLOR, NeoStates.ON_BLOCK)
+        new BlockStateContainer(this, COLOR, NeoStates.ON_BLOCK)
     }
 
     override def getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB = {

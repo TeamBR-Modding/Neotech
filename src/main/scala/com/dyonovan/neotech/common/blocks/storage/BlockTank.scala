@@ -49,13 +49,14 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
         }
 
         //Wrench
-        if (player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
+        if (hand == EnumHand.MAIN_HAND && player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem.isInstanceOf[ItemWrench] && player.isSneaking) {
             if (breakTank(world, pos, state)) {
                 world.setBlockToAir(pos)
                 world.removeTileEntity(pos)
-                world.setBlockState(pos, state, 3)
+                world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 6)
+                return true
             }
-        } else if (world.isRemote && tank != null) {
+        } else if (hand == EnumHand.MAIN_HAND && world.isRemote && tank != null) {
             var fluidName: String = ""
             var fluidAmount: String = ""
             if (tank.getCurrentFluid != null) {

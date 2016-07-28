@@ -1,3 +1,4 @@
+
 package com.dyonovan.neotech.client.renderers.tiles;
 
 import com.teambr.bookshelf.util.RenderUtils;
@@ -59,58 +60,6 @@ public abstract class TileRenderHelper<T extends TileEntity> extends TileEntityS
         int var7 = ambientLight / 65536;
         float var8 = 1.0F;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var6 * var8, var7 * var8);
-    }
-
-    protected void renderTextOnBlock(String renderString, EnumFacing side, EnumFacing orientation, LocationDouble location, float size, double posx, double posy, int color, byte align) {
-        this.renderTextOnBlock(renderString, side, orientation, location, size, posx, posy, 0F, color, align);
-    }
-
-    protected void renderTextOnBlock(String renderString, EnumFacing side, EnumFacing orientation, LocationDouble location, float size, double posx, double posy, float angle, int color, byte align){
-        if (renderString == null || renderString.equals("")) { return; }
-
-        int stringWidth = this.renderFont.getStringWidth(renderString);
-
-        GL11.glPushMatrix();
-
-        this.alignRendering(side, orientation, location);
-        this.moveRendering(size, posx, posy, -0.001);
-
-        GL11.glRotatef(angle, 0.0f, 0.0f, 1.0f);
-
-        GL11.glDepthMask(false);
-        GL11.glDisable(GL11.GL_LIGHTING);
-
-        switch (align){
-            case 0:
-                this.renderFont.drawString(renderString, 0, 0, color);
-                break;
-            case 1:
-                this.renderFont.drawString(renderString, -stringWidth / 2, 0, color);
-                break;
-            case 2:
-                this.renderFont.drawString(renderString, -stringWidth, 0, color);
-                break;
-        }
-
-        GL11.glDepthMask(true);
-        GL11.glPopMatrix();
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
-    protected void renderStackOnBlock(ItemStack stack, EnumFacing side, EnumFacing orientation, LocationDouble location, float size, double posx, double posy) {
-        if (stack == null) { return; }
-
-        int[][] savedGLState = saveGLState(new int[]{ GL11.GL_ALPHA_TEST, GL11.GL_LIGHTING });
-        GL11.glPushMatrix();
-
-        this.alignRendering(side, orientation, location);
-        this.moveRendering(size, posx, posy, -0.001);
-
-        this.renderItem.renderItemAndEffectIntoGUI(stack, 0, 0);
-        this.renderItem.renderItemOverlayIntoGUI(renderFont, stack, 0, 0, null);
-
-        GL11.glPopMatrix();
-        restoreGlState(savedGLState);
     }
 
     protected void renderIconOnBlock(TextureAtlasSprite icon, int sheet, EnumFacing side, EnumFacing orientation, LocationDouble barrelPos, float size, double posx, double posy, double zdepth){

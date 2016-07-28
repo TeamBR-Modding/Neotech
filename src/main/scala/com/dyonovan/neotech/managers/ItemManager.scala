@@ -5,7 +5,6 @@ import com.dyonovan.neotech.common.items._
 import com.dyonovan.neotech.tools.UpgradeItemManager
 import com.dyonovan.neotech.tools.armor.ItemElectricArmor
 import com.dyonovan.neotech.tools.tools.{ElectricPickaxe, ElectricSword}
-import com.dyonovan.neotech.universe.items.SunItem
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.helper.LogHelper
 import gnu.trove.map.hash.THashMap
@@ -60,13 +59,6 @@ object ItemManager {
     val electricArmorLeggings = new ItemElectricArmor("electricArmorLeggings", 2, EntityEquipmentSlot.LEGS)
     val electricArmorBoots = new ItemElectricArmor("electricArmorBoots", 1, EntityEquipmentSlot.FEET)
 
-    // Universe Items
-    val inertSun = new SunItem("inertSun")
-    val blueDwarf = new SunItem("blueDwarf")
-    val smallSun = new SunItem("smallSun")
-    val largeSun = new SunItem("largeSun")
-    val redGiant = new SunItem("redGiant")
-
     def preInit(): Unit = {
         registerItem(upgradeMBEmpty, "upgradeMBEmpty")
         registerItem(upgradeMBFull, "upgradeMBFull")
@@ -93,12 +85,6 @@ object ItemManager {
         registerItem(electricArmorChestplate, "electricArmorChestplate")
         registerItem(electricArmorLeggings, "electricArmorLeggings")
         registerItem(electricArmorBoots, "electricArmorBoots")
-
-        registerItem(inertSun, "inertSun")
-        registerItem(blueDwarf, "blueDwarf")
-        registerItem(smallSun, "smallSun")
-        registerItem(largeSun, "largeSun")
-        registerItem(redGiant, "redGiant")
 
         for (data <- Bookshelf.itemsToRegister) {
             if (data.getAnnotationInfo.get("modid") != null &&

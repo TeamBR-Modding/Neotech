@@ -137,32 +137,6 @@ public class CraftingRecipeManager {
                 "BCB",
                 "ABA", 'A', Blocks.OBSIDIAN, 'B', "blockGlass", 'C', Items.ENDER_PEARL));
 
-        //Pipes
-        //Basic
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 8),
-                "AAA",
-                "BBB",
-                "AAA", 'A', Items.IRON_INGOT, 'B', "blockGlass"));
-
-        //Colors!!
-        for(EnumDyeColor color : EnumDyeColor.values()) {
-            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 1, color.ordinal()),
-                    "pipeStructure", new ItemStack(Items.DYE, 1, color.getDyeDamage())));
-        }
-
-        //Power
-        GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergyInterface())),
-                Blocks.REDSTONE_BLOCK, BlockManager.pipeBasicStructure());
-
-        //Item
-        GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeItemInterface())),
-                Blocks.CHEST, BlockManager.pipeBasicStructure());
-
-
-        //Liquid
-        GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeFluidInterface())),
-                Items.BUCKET, BlockManager.pipeBasicStructure());
-
         //Crafter
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockCrafter()),
                 new ItemStack(Blocks.CRAFTING_TABLE), new ItemStack(Blocks.CHEST), new ItemStack(Blocks.CRAFTING_TABLE));
@@ -245,12 +219,6 @@ public class CraftingRecipeManager {
                 "L L",
                 " L ", 'I', "ingotIron", 'L', "ingotLead"));
 
-        //Dim Storage
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.dimStorage(), 1),
-                "WWW",
-                "CLC",
-                "WWW", 'C', Blocks.CHEST, 'W', "plankWood", 'L', "logWood"));
-
         //Spawmer Mover Thinggy
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.spawnerMover(),1),
                 "  E",
@@ -261,7 +229,7 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.pump(),1),
                 "BTB",
                 "PRP",
-                "BTB", 'B', "ingotBronze", 'R', Items.REDSTONE, 'P', BlockManager.pipeFluidInterface(), 'T', BlockManager.ironTank()));
+                "BTB", 'B', "ingotBronze", 'R', Items.REDSTONE, 'P', Items.BUCKET, 'T', BlockManager.ironTank()));
 
         //Mob Gun
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.mobGun(), 1),
@@ -302,8 +270,6 @@ public class CraftingRecipeManager {
                 "S S",
                 "DBD",
                 "DLD", 'S', "ingotSilver", 'L', "ingotLead", 'D', Items.DIAMOND, 'B', new ItemStack(ItemManager.advancedRFBattery(), 1, OreDictionary.WILDCARD_VALUE)));
-
-
 
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(MetalManager.getMetal("bronze").get().dust().get(), 4),
                 "dustCopper", "dustCopper", "dustCopper", "dustTin"));

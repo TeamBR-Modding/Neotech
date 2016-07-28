@@ -9,12 +9,7 @@ import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator
 import com.dyonovan.neotech.common.tiles.machines.operators.{TilePump, TileTreeFarm}
 import com.dyonovan.neotech.common.tiles.machines.processors._
 import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, _}
-import com.dyonovan.neotech.common.tiles.storage.{TileDimStorage, TileFlushableChest, TileRFStorage, TileTank}
-import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial, ItemBlockColored}
-import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
-import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
-import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
-import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
+import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileRFStorage, TileTank}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
@@ -52,12 +47,6 @@ object BlockManager {
     val treeFarm = new BlockMachine("treeFarm", classOf[TileTreeFarm], fourWayRotation = false)
     val mechanicalPipe = new BlockMechanicalPipe("mechanicalPipe")
 
-    //Pipes
-    val pipeBasicStructure = new BlockPipe("pipeStructure", Material.GLASS, true, classOf[StructurePipe])
-    val pipeItemInterface = new BlockPipeSpecial("pipeItemBasicInterface", Material.ROCK, classOf[ItemInterfacePipe])
-    val pipeEnergyInterface = new BlockPipeSpecial("pipeEnergyBasicInterface", Material.ROCK, classOf[EnergyInterfacePipe])
-    val pipeFluidInterface = new BlockPipeSpecial("pipeFluidBasicInterface", Material.ROCK, classOf[FluidInterfacePipe])
-
     //RF Storage
     val basicRFStorage = new BlockRFStorage("basicRFStorage", 1)
     val advancedRFStorage = new BlockRFStorage("advancedRFStorage", 2)
@@ -83,15 +72,12 @@ object BlockManager {
     val playerPlate = new BlockPlayerPlate
     val chunkLoader = new BlockChunkLoader
     val flushableChest = new BlockFlushableChest
-    val dimStorage = new BlockDimStorage("dimStorage")
     val redstoneClock = new BlockRedstoneClock
     val mobStand = new BlockMobStand
-    val blockAttractor = new BlockAttractor
     val lightSource = new BlockLightSource
     val phantomGlass = new BlockPhantomGlass
     val voidGlass = new BlockVoidGlass
     val rockWall = new BlockRockWall
-    val displayPanel = new BlockDisplayPanel
 
     def preInit(): Unit = {
         //Machines
@@ -110,21 +96,6 @@ object BlockManager {
         registerBlock(pump, "pump", classOf[TilePump])
         registerBlock(treeFarm, "treeFarm", classOf[TileTreeFarm])
         registerBlock(mechanicalPipe, "mechanicalPipe", null)
-
-        //Pipes
-        registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockColored])
-        for(color <- EnumDyeColor.values()) {
-            OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
-            //  new MicroContainerPlacementWrapper(new ItemStack(pipeBasicStructure, 1, color.getMetadata)).register("neotech:pipeStructure")
-        }
-
-        registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
-        //new MicroContainerPlacementWrapper(new ItemStack(pipeItemInterface)).register("neotech:pipeItemBasicInterface")
-        registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
-        //new MicroContainerPlacementWrapper(new ItemStack(pipeEnergyInterface)).register("neotech:pipeEnergyBasicInterface")
-        registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])
-        //new MicroContainerPlacementWrapper(new ItemStack(pipeFluidInterface)).register("neotech:pipeFluidBasicInterface")
-
 
         //RF Storage
         registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])
@@ -153,10 +124,8 @@ object BlockManager {
         registerBlock(playerPlate, "playerPlate", null)
         registerBlock(chunkLoader, "chunkLoader", classOf[TileChunkLoader])
         registerBlock(flushableChest, "flushableChest", classOf[TileFlushableChest])
-        registerBlock(dimStorage, "dimStorage", classOf[TileDimStorage], classOf[ItemBlockDimStorage])
         registerBlock(redstoneClock, "redstoneClock", classOf[TileRedstoneClock])
         registerBlock(mobStand, "mobStand", classOf[TileMobStand])
-        registerBlock(blockAttractor, "blockAttractor", classOf[TileAttractor])
 
         registerBlock(lightSource, "lightSource", null)
 
@@ -164,7 +133,6 @@ object BlockManager {
         registerBlock(voidGlass, "voidGlass", null)
         registerBlock(rockWall, "rockWall", classOf[TileRockWall])
 
-        registerBlock(displayPanel, "displayPanel", classOf[TileDisplayPanel])
     }
 
     /**
