@@ -41,7 +41,13 @@ class TileTank extends UpdatingTile with IFluidHandler with RedstoneAware {
         markForUpdate()
     }
 
+    var needsFirstLoad = true
     override def onServerTick(): Unit = {
+        if(needsFirstLoad && tank != null) {
+            needsFirstLoad = false
+            if(tank.getFluid != null)
+                markForUpdate(3)
+        }
         if (!isPowered && tank != null && tank.getFluid != null && worldObj.getWorldTime % 20 == 0 && tier != 5) {
             worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
                 case otherTank: IFluidHandler =>
@@ -172,7 +178,7 @@ class TileTank extends UpdatingTile with IFluidHandler with RedstoneAware {
     override def getTankInfo(from: EnumFacing): Array[FluidTankInfo] = Array(tank.getInfo)
 
     override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
-        super.writeToNBT(tag)
+        super[TileEntity].writeToNBT(tag)
         if (tank != null) {
             tank.writeToNBT(tag)
         }
@@ -181,15 +187,17 @@ class TileTank extends UpdatingTile with IFluidHandler with RedstoneAware {
     }
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
-        super.readFromNBT(tag)
-        tier = tag.getInteger("Tier")
-        if(tank == null)
-            initTank()
+        super[TileEntity].readFromNBT(tag)
+        if(tag.hasKey("Tier")) {
+            tier = tag.getInteger("Tier")
+            if (tank == null)
+                initTank()
 
-        tank.setCapacity(getTierInfo(tier)._2)
+            tank.setCapacity(getTierInfo(tier)._2)
 
-        if(tank != null)
-            tank.readFromNBT(tag)
+            if (tank != null)
+                tank.readFromNBT(tag)
+        }
     }
 
     def markForUpdate() = {

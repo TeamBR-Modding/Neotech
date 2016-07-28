@@ -49,7 +49,7 @@ object AttackEvent {
                     if(chance <= 0) {
                         event.getEntityLiving match {
                             case skeleton : EntitySkeleton =>
-                                addDrops(event, new ItemStack(Items.SKULL, 1, skeleton.getSkeletonType))
+                                addDrops(event, new ItemStack(Items.SKULL, 1, skeleton.func_189771_df().ordinal()))
                             case zombie : EntityZombie =>
                                 addDrops(event, new ItemStack(Items.SKULL, 1, 2))
                             case creeper : EntityCreeper =>
