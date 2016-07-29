@@ -2,7 +2,7 @@ package com.dyonovan.neotech.common.blocks.storage
 
 import com.dyonovan.neotech.common.blocks.BaseBlock
 import com.dyonovan.neotech.common.items.ItemWrench
-import com.dyonovan.neotech.common.tiles.storage.TileTank
+import com.dyonovan.neotech.common.tiles.storage.tanks._
 import com.teambr.bookshelf.loadables.ILoadActionProvider
 import com.teambr.bookshelf.notification.{Notification, NotificationHelper}
 import net.minecraft.block.material.Material
@@ -17,7 +17,8 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{BlockRenderLayer, EnumBlockRenderType, EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.client.event.ModelBakeEvent
-import net.minecraftforge.fluids.{FluidContainerRegistry, FluidUtil, IFluidContainerItem, IFluidHandler}
+import net.minecraftforge.fluids.capability.IFluidHandler
+import net.minecraftforge.fluids.{FluidContainerRegistry, FluidStack, FluidUtil, IFluidContainerItem}
 import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 
 import scala.util.Random
@@ -32,7 +33,7 @@ import scala.util.Random
   * @author Dyonovan
   * @since August 16, 2015
   */
-class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name, classOf[TileTank]) with ILoadActionProvider {
+class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name, classOf[TileIronTank]) with ILoadActionProvider {
 
     setHardness(2.0F)
     setBlockBounds(1F / 16F, 0F, 1F / 16F, 15F / 16F, 1F,  15F/ 16F)
@@ -41,10 +42,10 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
                                   hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
 
         val heldItem = player.getHeldItemMainhand
-        val tank = world.getTileEntity(pos).asInstanceOf[TileTank]
+        val tank = world.getTileEntity(pos).asInstanceOf[TileIronTank]
 
-        if(heldItem != null && tank.isInstanceOf[IFluidHandler]) {
-            if(FluidUtil.interactWithTank(heldItem, player, tank, side.getOpposite))
+        if(heldItem != null && tank.isInstanceOf[IFluidHandler] && !heldItem.getItem.isInstanceOf[ItemBlockTank]) {
+            if(FluidUtil.interactWithFluidHandler(heldItem, tank, player))
                 return true
         }
 
@@ -59,12 +60,12 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
         } else if (hand == EnumHand.MAIN_HAND && world.isRemote && tank != null) {
             var fluidName: String = ""
             var fluidAmount: String = ""
-            if (tank.getCurrentFluid != null) {
-                fluidName = tank.tank.getFluid.getLocalizedName
-                fluidAmount = tank.tank.getFluid.amount.toString + " / " + tank.tank.getCapacity + " mb"
+            if (tank.tanks(tank.TANK).getFluid != null) {
+                fluidName = tank.tanks(tank.TANK).getFluid.getLocalizedName
+                fluidAmount = tank.tanks(tank.TANK).getFluid.amount.toString + " / " + tank.tanks(tank.TANK).getCapacity + " mb"
             } else {
                 fluidName = "Empty"
-                fluidAmount = "0 / " + tank.tank.getCapacity + " mb"
+                fluidAmount = "0 / " + tank.tanks(tank.TANK).getCapacity + " mb"
             }
 
             val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
@@ -102,19 +103,19 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
     private def breakTank(world: World, pos: BlockPos, state: IBlockState): Boolean = {
         if (world.isRemote) return false
         world.getTileEntity(pos) match {
-            case tile: TileTank =>
+            case tile: TileIronTank =>
                 val item = new ItemStack(Item.getItemFromBlock(state.getBlock), 1)
                 val tag = new NBTTagCompound
                 val tileTag = new NBTTagCompound
                 tile.writeToNBT(tileTag)
-                tag.setTag("Fluid", tileTag)
-                item.setTagCompound(tag)
-                if (tile.tank.getFluid != null) {
-                    val r = tile.tank.getFluid.amount.toFloat / tile.tank.getCapacity
+                if (tile.tanks(tile.TANK).getFluid != null) {
+                    val r = tile.tanks(tile.TANK).getFluid.amount.toFloat / tile.tanks(tile.TANK).getCapacity
                     val res = 16 - (r * 16).toInt
                     item.setItemDamage(res)
+                    tileTag.setTag("Fluid", tile.tanks(tile.TANK).getFluid.writeToNBT(tag))
                 } else
                     item.setItemDamage(16)
+                item.setTagCompound(tileTag)
                 dropItem(world, item, pos) //Drop it
                 return true
             case _ =>
@@ -125,7 +126,7 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
     override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, placer: EntityLivingBase, stack:
     ItemStack): Unit = {
         if(stack.hasTagCompound && !world.isRemote) { //If there is a tag and is on the server
-            world.getTileEntity(pos).readFromNBT(stack.getTagCompound.getCompoundTag("Fluid")) //Set the tag
+            world.getTileEntity(pos).readFromNBT(stack.getTagCompound) //Set the tag
             world.getTileEntity(pos).setPos(pos) //Set the saved tag to here
             world.setBlockState(pos, state, 3) //Mark for update to client
         }
@@ -136,7 +137,14 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
     }
 
     override def createNewTileEntity(world: World, meta: Int): TileEntity = {
-        new TileTank(tier)
+        tier match {
+            case 1 => new TileIronTank
+            case 2 => new TileGoldTank
+            case 3 => new TileDiamondTank
+            case 4 => new TileCreativeTank
+            case 5 => new TileVoidTank
+            case _ => new TileIronTank
+        }
     }
 
     def getName: String = name
@@ -187,7 +195,7 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
     override def performLoadAction(event: AnyRef, isClient: Boolean): Unit = {
         event match {
             case modelBake : ModelBakeEvent =>
-             case _ =>
+            case _ =>
         }
     }
 }

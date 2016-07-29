@@ -49,8 +49,8 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
                 setMaxReceive(100000)
             case 4 =>
                 setMaxEnergyStored(amountEnergy(t))
-                setMaxExtract(1000000)
-                setMaxReceive(1000000)
+                setMaxExtract(4096000)
+                setMaxReceive(4096000)
                 energyStorage.setEnergyStored(energyStorage.getMaxEnergyStored)
             case _ =>
         }
@@ -69,7 +69,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
             case 1 => 32000
             case 2 => 512000
             case 3 => 4096000
-            case 4 => 100000000
+            case 4 => 4096000
             case _ => 0
         }
     }

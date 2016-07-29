@@ -11,7 +11,8 @@ import com.dyonovan.neotech.common.metals.blocks.BlockFluidMetal
 import com.dyonovan.neotech.common.metals.items.ItemMetal
 import com.dyonovan.neotech.common.tiles.AbstractMachine
 import com.dyonovan.neotech.common.tiles.misc.TileMobStand
-import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileTank}
+import com.dyonovan.neotech.common.tiles.storage.TileFlushableChest
+import com.dyonovan.neotech.common.tiles.storage.tanks.TileIronTank
 import com.dyonovan.neotech.events.{GuiEvents, RenderingEvents}
 import com.dyonovan.neotech.managers.{BlockManager, FluidManager, MetalManager}
 import com.dyonovan.neotech.tools.armor.ItemElectricArmor
@@ -206,7 +207,7 @@ class ClientProxy extends CommonProxy {
         Minecraft.getMinecraft.getRenderItem.getItemModelMesher.getModelManager.getBlockModelShapes.registerBuiltInBlocks(BlockManager.flushableChest)
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileFlushableChest], new TileFlushableChestRenderer[TileFlushableChest])
 
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileTank], new TileTankFluidRenderer)
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileIronTank], new TileTankFluidRenderer)
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[AbstractMachine], new TileMachineIORenderer)
 

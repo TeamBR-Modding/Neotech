@@ -108,9 +108,11 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
         }
         val fluidTag: NBTTagCompound = container.getTagCompound.getCompoundTag("Fluid")
         val stack: FluidStack = FluidStack.loadFluidStackFromNBT(fluidTag)
+
         if (stack != null && !stack.isFluidEqual(resource)) {
             return 0
         }
+
         var filled: Int = getTankInfo._2 - stack.amount
         if (resource.amount < filled) {
             stack.amount += resource.amount

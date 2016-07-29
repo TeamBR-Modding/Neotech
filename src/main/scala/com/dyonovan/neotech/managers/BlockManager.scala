@@ -9,7 +9,8 @@ import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator
 import com.dyonovan.neotech.common.tiles.machines.operators.{TilePump, TileTreeFarm}
 import com.dyonovan.neotech.common.tiles.machines.processors._
 import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, _}
-import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileRFStorage, TileTank}
+import com.dyonovan.neotech.common.tiles.storage.tanks._
+import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileRFStorage}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
@@ -104,11 +105,11 @@ object BlockManager {
         registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])
 
         //Tanks
-        registerBlock(ironTank, "ironTank", classOf[TileTank], classOf[ItemBlockTank])
-        registerBlock(goldTank, "goldTank", classOf[TileTank], classOf[ItemBlockTank])
-        registerBlock(diamondTank, "diamondTank", classOf[TileTank], classOf[ItemBlockTank])
-        registerBlock(creativeTank, "creativeTank", classOf[TileTank], classOf[ItemBlockTank])
-        registerBlock(voidTank, "voidTank", classOf[TileTank], classOf[ItemBlockTank])
+        registerBlock(ironTank, "ironTank", classOf[TileIronTank], classOf[ItemBlockTank])
+        registerBlock(goldTank, "goldTank", classOf[TileGoldTank], classOf[ItemBlockTank])
+        registerBlock(diamondTank, "diamondTank", classOf[TileDiamondTank], classOf[ItemBlockTank])
+        registerBlock(creativeTank, "creativeTank", classOf[TileCreativeTank], classOf[ItemBlockTank])
+        registerBlock(voidTank, "voidTank", classOf[TileVoidTank], classOf[ItemBlockTank])
 
         //Solar Panels
         registerBlock(solarPanelT1, "solarPanelT1", classOf[TileSolarPanel])
