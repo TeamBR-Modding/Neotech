@@ -225,12 +225,6 @@ public class CraftingRecipeManager {
                 " S ",
                 "S  ", 'E', Items.EMERALD, 'S', "stickWood"));
 
-        //Pump
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.pump(),1),
-                "BTB",
-                "PRP",
-                "BTB", 'B', "ingotBronze", 'R', Items.REDSTONE, 'P', Items.BUCKET, 'T', BlockManager.ironTank()));
-
         //Mob Gun
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.mobGun(), 1),
                 "   ",

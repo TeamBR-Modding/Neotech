@@ -68,7 +68,6 @@ class NeoTechPlugin extends IModPlugin {
 
         //Blacklists
         NeoTechPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(ItemManager.upgradeMBFull))
-        NeoTechPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(BlockManager.mechanicalPipe))
     }
 
     override def onRuntimeAvailable(iJeiRuntime: IJeiRuntime): Unit = { }

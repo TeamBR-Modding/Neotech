@@ -6,7 +6,7 @@ import com.dyonovan.neotech.common.blocks.misc._
 import com.dyonovan.neotech.common.blocks.storage._
 import com.dyonovan.neotech.common.tiles.machines._
 import com.dyonovan.neotech.common.tiles.machines.generators.{TileFluidGenerator, TileFurnaceGenerator, TileSolarPanel}
-import com.dyonovan.neotech.common.tiles.machines.operators.{TilePump, TileTreeFarm}
+import com.dyonovan.neotech.common.tiles.machines.operators.TileTreeFarm
 import com.dyonovan.neotech.common.tiles.machines.processors._
 import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, _}
 import com.dyonovan.neotech.common.tiles.storage.tanks._
@@ -44,9 +44,7 @@ object BlockManager {
     val electricAlloyer = new BlockMachine("alloyer", classOf[TileAlloyer])
     val electricCentrifuge = new BlockMachine("centrifuge", classOf[TileCentrifuge])
 
-    val pump = new BlockMachine("pump", classOf[TilePump], fourWayRotation = false)
     val treeFarm = new BlockMachine("treeFarm", classOf[TileTreeFarm], fourWayRotation = false)
-    val mechanicalPipe = new BlockMechanicalPipe("mechanicalPipe")
 
     //RF Storage
     val basicRFStorage = new BlockRFStorage("basicRFStorage", 1)
@@ -94,9 +92,7 @@ object BlockManager {
         registerBlock(electricAlloyer, "alloyer", classOf[TileAlloyer])
         registerBlock(electricCentrifuge, "centrifuge", classOf[TileCentrifuge])
 
-        registerBlock(pump, "pump", classOf[TilePump])
         registerBlock(treeFarm, "treeFarm", classOf[TileTreeFarm])
-        registerBlock(mechanicalPipe, "mechanicalPipe", null)
 
         //RF Storage
         registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])

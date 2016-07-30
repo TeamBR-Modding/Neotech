@@ -204,7 +204,6 @@ tile.neotech:solarPanelT2.name=Advanced Solar Panel
 tile.neotech:solarPanelT3.name=Elite Solar Panel
 
 # Operators
-tile.neotech:pump.name=Electric Pump
 tile.neotech:treeFarm.name=Electric Logger
 
 # Storage
@@ -225,7 +224,6 @@ tile.neotech:blockMiniatureSun.name=Miniature Sun
 tile.neotech:playerPlate.name=Player Sensitive Pressure Plate
 tile.neotech:chunkLoader.name=Chunk Loader
 tile.neotech:redstoneClock.name=Redstone Clock
-tile.neotech:mechanicalPipe.name=Mechanical Pipe
 tile.neotech:mobStand.name=Mob Stand
 
 #######################
