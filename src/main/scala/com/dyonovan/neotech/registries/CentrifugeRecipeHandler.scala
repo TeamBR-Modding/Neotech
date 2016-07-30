@@ -44,7 +44,7 @@ class CentrifugeRecipeHandler
       *
       * @return
       */
-    override def getVersion: Int = 5
+    override def getVersion: Int = 6
 
     /**
       * Called when the file is not found, add all default recipes here
@@ -53,7 +53,7 @@ class CentrifugeRecipeHandler
         LogHelper.info("Loading Default Alloyer Recipes...")
 
         // Obsidian
-        addRecipe(new CentrifugeRecipe("obsidian:36", "water:125", "lava:125"))
+        addRecipe(new CentrifugeRecipe("obsidian:288", "water:1000", "lava:1000"))
 
         // Steel
         addRecipe(new CentrifugeRecipe("steel:144", "iron:144", "carbon:144"))
