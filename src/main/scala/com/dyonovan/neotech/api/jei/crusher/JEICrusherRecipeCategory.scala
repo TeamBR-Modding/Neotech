@@ -27,7 +27,7 @@ class JEICrusherRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
     val slotOutput = new SlotDrawable(96, 20, isLarge = true)
     val slotOutput2 = new SlotDrawable(125, 20, isLarge = true)
 
-    val background = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 10, 15, 150, 50)
+    val background = NeoTechPlugin.jeiHelpers.getGuiHelper.createDrawable(location, 10, 15, 150, 60)
 
     override def getBackground: IDrawable = background
 
