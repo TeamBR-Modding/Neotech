@@ -34,23 +34,6 @@ public class ChunkLoaderManager implements ForgeChunkManager.LoadingCallback {
                 TileChunkLoader tq = (TileChunkLoader) world.getTileEntity(pos);
                 tq.forceChunkLoading(ticket);
             }
-        } //TODO add offline loading
-    }
-
-    /*@Override
-    public List<ForgeChunkManager.Ticket> ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world, int maxTicketCount) {
-        List<ForgeChunkManager.Ticket> validTickets = Lists.newArrayList();
-        for (ForgeChunkManager.Ticket ticket : tickets) {
-            int quarryX = ticket.getModData().getInteger("neotech.loaderX");
-            int quarryY = ticket.getModData().getInteger("neotech.loaderY");
-            int quarryZ = ticket.getModData().getInteger("neotech.loaderZ");
-            BlockPos pos = new BlockPos(quarryX, quarryY, quarryZ);
-
-            Block block = world.getBlockState(pos).getBlock();
-            if (block == BlockManager.chunkLoader()) {
-                validTickets.add(ticket);
-            }
         }
-        return validTickets;
-    }*/
+    }
 }
