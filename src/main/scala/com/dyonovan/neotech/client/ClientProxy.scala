@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.client
 
-import com.dyonovan.neotech.client.mesh.MeshDefinitions.StarModelMesh
+import com.dyonovan.neotech.client.mesh.MeshDefinitions.{PipeModelMesh, PipeSpecialModelMesh, StarModelMesh}
 import com.dyonovan.neotech.client.modelfactory.ModelFactory
 import com.dyonovan.neotech.client.renderers.entity.RenderNet
 import com.dyonovan.neotech.client.renderers.tiles._
@@ -65,6 +65,34 @@ class ClientProxy extends CommonProxy {
                 "blockMiniatureStar",
                 "attached_side=6,color=" + dye.getName)
 
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeBasicStructure), new PipeModelMesh)
+        for(dye <- EnumDyeColor.values())
+            ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.pipeBasicStructure),
+                "pipeStructure",
+                "color=" + dye.getName + ",down=true,east=false,north=false,south=false,up=true,west=false")
+
+
+        //Item Stuff
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeItemInterface), new PipeSpecialModelMesh)
+        ItemRenderManager.registerBlockModel(
+            BlockManager.pipeItemInterface,
+            "pipeItemBasicInterface",
+            "down=2,east=0,north=0,south=0,up=1,west=0")
+
+        //Fluid Stuff
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeFluidInterface), new PipeSpecialModelMesh)
+        ItemRenderManager.registerBlockModel(
+            BlockManager.pipeFluidInterface,
+            "pipeFluidBasicInterface",
+            "down=2,east=0,north=0,south=0,up=1,west=0")
+
+        //Energy
+        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeEnergyInterface), new PipeSpecialModelMesh)
+        ItemRenderManager.registerBlockModel(
+            BlockManager.pipeEnergyInterface,
+            "pipeEnergyBasicInterface",
+            "down=2,east=0,north=0,south=0,up=1,west=0")
+
         // Item Models
         val itemIterator = Item.REGISTRY.iterator()
         while(itemIterator.hasNext) {
@@ -82,8 +110,8 @@ class ClientProxy extends CommonProxy {
         while(blockIterator.hasNext) {
             blockIterator.next() match {
                 case connectedTextures : BlockConnectedTextures =>
-                        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(connectedTextures), 0,
-                            BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
+                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(connectedTextures), 0,
+                        BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
                 case _ =>
             }
         }

@@ -36,12 +36,12 @@ import scala.collection.JavaConversions._
   * @since August 07, 2015
   */
 @Mod(modid          = Reference.MOD_ID,
-     name           = Reference.MOD_NAME,
-     version        = Reference.VERSION,
-     dependencies   = Reference.DEPENDENCIES,
-     modLanguage    = "scala",
-     updateJSON     = Reference.UPDATE_JSON,
-     guiFactory     = "com.dyonovan.neotech.client.ingameconfig.GuiFactoryNeoTech")
+    name           = Reference.MOD_NAME,
+    version        = Reference.VERSION,
+    dependencies   = Reference.DEPENDENCIES,
+    modLanguage    = "scala",
+    updateJSON     = Reference.UPDATE_JSON,
+    guiFactory     = "com.dyonovan.neotech.client.ingameconfig.GuiFactoryNeoTech")
 object NeoTech {
 
     //Lets us make some buckets
@@ -53,11 +53,15 @@ object NeoTech {
     var configFolderLocation : String = ""
 
     @SidedProxy(clientSide = "com.dyonovan.neotech.client.ClientProxy",
-                serverSide = "com.dyonovan.neotech.common.CommonProxy")
+        serverSide = "com.dyonovan.neotech.common.CommonProxy")
     var proxy : CommonProxy = null
 
     val tabNeoTech: CreativeTabs = new CreativeTabs("tabNeoTech") {
         override def getTabIconItem: Item = Item.getItemFromBlock(BlockManager.eliteRFStorage)
+    }
+
+    val tabPipes = new CreativeTabs("tabNeoTechPipes") {
+        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemInterface)
     }
 
     val tabDecorations = new CreativeTabs("tabNeoTechDecorations") {
@@ -110,4 +114,4 @@ object NeoTech {
     @EventHandler def serverLoad(event : FMLServerStartingEvent): Unit = {
         RecipeManager.initCommands(event.getServer.getCommandManager.asInstanceOf[ServerCommandManager])
     }
- }
+}

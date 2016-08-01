@@ -11,6 +11,11 @@ import com.dyonovan.neotech.common.tiles.machines.processors._
 import com.dyonovan.neotech.common.tiles.misc.{TileChunkLoader, _}
 import com.dyonovan.neotech.common.tiles.storage.tanks._
 import com.dyonovan.neotech.common.tiles.storage.{TileFlushableChest, TileRFStorage}
+import com.dyonovan.neotech.pipes.blocks.{BlockPipe, BlockPipeSpecial}
+import com.dyonovan.neotech.pipes.tiles.energy.EnergyInterfacePipe
+import com.dyonovan.neotech.pipes.tiles.fluid.FluidInterfacePipe
+import com.dyonovan.neotech.pipes.tiles.item.ItemInterfacePipe
+import com.dyonovan.neotech.pipes.tiles.structure.StructurePipe
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
@@ -45,6 +50,12 @@ object BlockManager {
     val electricCentrifuge = new BlockMachine("centrifuge", classOf[TileCentrifuge])
 
     val treeFarm = new BlockMachine("treeFarm", classOf[TileTreeFarm], fourWayRotation = false)
+
+    //Pipes
+    val pipeBasicStructure = new BlockPipe("pipeStructure", Material.GLASS, true, classOf[StructurePipe])
+    val pipeItemInterface = new BlockPipeSpecial("pipeItemBasicInterface", Material.ROCK, classOf[ItemInterfacePipe])
+    val pipeEnergyInterface = new BlockPipeSpecial("pipeEnergyBasicInterface", Material.ROCK, classOf[EnergyInterfacePipe])
+    val pipeFluidInterface = new BlockPipeSpecial("pipeFluidBasicInterface", Material.ROCK, classOf[FluidInterfacePipe])
 
     //RF Storage
     val basicRFStorage = new BlockRFStorage("basicRFStorage", 1)
@@ -93,6 +104,22 @@ object BlockManager {
         registerBlock(electricCentrifuge, "centrifuge", classOf[TileCentrifuge])
 
         registerBlock(treeFarm, "treeFarm", classOf[TileTreeFarm])
+
+        //Pipes
+        registerBlock(pipeBasicStructure, "pipeStructure", classOf[StructurePipe], classOf[ItemBlockColored])
+        for(color <- EnumDyeColor.values()) {
+            OreDictionary.registerOre("pipeStructure", new ItemStack(pipeBasicStructure, 1, color.getMetadata))
+            //  new MicroContainerPlacementWrapper(new ItemStack(pipeBasicStructure, 1, color.getMetadata)).register("neotech:pipeStructure")
+        }
+
+        registerBlock(pipeItemInterface, "pipeItemBasicInterface", classOf[ItemInterfacePipe])
+        //new MicroContainerPlacementWrapper(new ItemStack(pipeItemInterface)).register("neotech:pipeItemBasicInterface")
+        registerBlock(pipeEnergyInterface, "pipeEnergyBasicInterface", classOf[EnergyInterfacePipe])
+        //new MicroContainerPlacementWrapper(new ItemStack(pipeEnergyInterface)).register("neotech:pipeEnergyBasicInterface")
+        registerBlock(pipeFluidInterface, "pipeFluidBasicInterface", classOf[FluidInterfacePipe])
+        //new MicroContainerPlacementWrapper(new ItemStack(pipeFluidInterface)).register("neotech:pipeFluidBasicInterface")
+
+
 
         //RF Storage
         registerBlock(basicRFStorage, "basicRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])

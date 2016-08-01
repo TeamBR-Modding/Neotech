@@ -100,7 +100,7 @@ dependencies {
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     //deobfCompile "MCMultiPart:MCMultiPart-experimental:${config.MCMultiPart_version}:universal"
-    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.10.2-3.2.1-B50", classifier: "dev", changing: true
+    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.10.2-3.2.1-B52", classifier: "dev", changing: true
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
