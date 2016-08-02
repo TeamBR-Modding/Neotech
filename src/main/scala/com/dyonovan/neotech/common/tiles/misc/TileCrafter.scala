@@ -1,6 +1,6 @@
 package com.dyonovan.neotech.common.tiles.misc
 
-import com.teambr.bookshelf.common.tiles.traits.Inventory
+import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity
  * @author Dyonovan
  * @since August 18, 2015
  */
-class TileCrafter extends TileEntity with Inventory {
+class TileCrafter extends UpdatingTile with Inventory {
 
     override def readFromNBT(tag: NBTTagCompound): Unit = {
         super[TileEntity].readFromNBT(tag)
