@@ -125,7 +125,7 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
         // Add Dyes
         addCrusherRecipes(getItemStackString(new ItemStack(Blocks.YELLOW_FLOWER, 1)), getItemStackString(new ItemStack(Items.DYE, 1, 11)), 3, "", 0)
 
-        val listOfFlowers = new util.ArrayList[ItemStack]()
+        /*val listOfFlowers = new util.ArrayList[ItemStack]()
         Blocks.RED_FLOWER.getSubBlocks(Item.getItemFromBlock(Blocks.RED_FLOWER), CreativeTabs.DECORATIONS, listOfFlowers)
         for(x <- 0 until listOfFlowers.size()) {
             val inputStack = listOfFlowers.get(x)
@@ -134,7 +134,7 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
             val outputStack = CraftingManager.getInstance().findMatchingRecipe(craftingMatrix, null)
             if(inputStack != null && outputStack != null)
                 addCrusherRecipes(getItemStackString(inputStack), getItemStackString(outputStack), 3, "", 0)
-        }
+        }*/
 
         saveToFile()
         LogHelper.info("Finished adding " + recipes.size() + " Crusher Recipes")
