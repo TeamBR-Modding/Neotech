@@ -1,11 +1,15 @@
 package com.dyonovan.neotech.common.tiles.storage.tanks
 
+import com.dyonovan.neotech.utils.TimeUtils
 import com.teambr.bookshelf.common.tiles.traits.{FluidHandler, UpdatingTile}
 import net.minecraft.block.state.IBlockState
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.{EnumSkyBlock, World}
 import net.minecraftforge.fluids.FluidTank
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler
 
 /**
   * This file was created for NeoTech
@@ -80,6 +84,25 @@ class TileIronTank extends UpdatingTile with FluidHandler {
         if (lastLightLevel != getBrightness) {
             lastLightLevel = light
             worldObj.setLightFor(EnumSkyBlock.BLOCK, pos, light)
+        }
+    }
+
+    override def onServerTick(): Unit = {
+        if(TimeUtils.onSecond(10) && tanks(TANK).getFluid != null) {
+            worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
+                case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP) =>
+                    val tank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP)
+                    for(tankInfo <- tank.getTankProperties) {
+                        if(tankInfo.canFillFluidType(tanks(TANK).getFluid)) {
+                            if(tank.fill(tanks(TANK).drain(1000, true), true) > 0) {
+                                markForUpdate(3)
+                                markForUpdate(3)
+                                return
+                            }
+                        }
+                    }
+                case _ =>
+            }
         }
     }
 

@@ -96,7 +96,7 @@ trait BaseElectricTool extends Item with ItemBattery with ThermalBinderItem with
       *
       * @return How much energy to drain
       */
-    def RF_COST(stack : ItemStack) : Int = 250
+    def RF_COST(stack : ItemStack) : Int = 50
 
     /**
       * Extracts the energy, if in creative it won't

@@ -100,48 +100,68 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
                             fromObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
                         else return
 
-                    var x = slotMap.get(dir)
+                    if (fromInventory.getSlots > 5) {
 
-                    if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
-                        if (fromInventory.getStackInSlot(x) != null &&
-                                findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
-                            if (foundSource != null) {
-                                InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
-                                    getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
-                                foundSource = null
-                                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
-                                shouldRecheck = true
-                            }
-                        }
-                    }
+                        var x = slotMap.get(dir)
 
-                    if(!shouldRecheck && TimeUtils.onSecond(5))
-                        shouldRecheck = true
-
-                    if (shouldRecheck) {
-                        // Move up
-                        x += 1
-
-                        // Check for above list
-                        if (x >= fromInventory.getSlots)
-                            x = 0
-
-                        // Look for next stack if nothing in next slot
-                        if (fromInventory.getStackInSlot(x) == null) {
-                            var foundSomething = false
-                            for (i <- 0 until fromInventory.getSlots) {
-                                if (!foundSomething && fromInventory.getStackInSlot(i) != null) {
-                                    x = i
-                                    foundSomething = true
+                        if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
+                            if (fromInventory.getStackInSlot(x) != null &&
+                                    findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
+                                if (foundSource != null) {
+                                    InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
+                                        getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
+                                    foundSource = null
+                                    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+                                    shouldRecheck = true
                                 }
                             }
-                            if (!foundSomething)
-                                x = 0
                         }
 
-                        // Update client, for rendering in chests
-                        sendValueToClient(dir.ordinal() + 30, x)
-                        slotMap.put(dir, x)
+                        if (!shouldRecheck && TimeUtils.onSecond(getDelay))
+                            shouldRecheck = true
+
+                        if (shouldRecheck) {
+                            // Move up
+                            x += 1
+
+                            // Check for above list
+                            if (x >= fromInventory.getSlots)
+                                x = 0
+
+                            // Look for next stack if nothing in next slot
+                            if (fromInventory.getStackInSlot(x) == null) {
+                                var foundSomething = false
+                                for (i <- 0 until fromInventory.getSlots) {
+                                    if (!foundSomething && fromInventory.getStackInSlot(i) != null) {
+                                        x = i
+                                        foundSomething = true
+                                    }
+                                }
+                                if (!foundSomething)
+                                    x = 0
+                            }
+
+                            // Update client, for rendering in chests
+                            sendValueToClient(dir.ordinal() + 30, x)
+                            slotMap.put(dir, x)
+                        }
+                    }
+                    else {
+                        for (x <- 0 until fromInventory.getSlots) {
+                            if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
+                                if (fromInventory.getStackInSlot(x) != null &&
+                                        findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
+                                    if (foundSource != null) {
+                                        InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
+                                            getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
+                                        foundSource = null
+                                        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+                                        shouldRecheck = true
+                                        return
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
