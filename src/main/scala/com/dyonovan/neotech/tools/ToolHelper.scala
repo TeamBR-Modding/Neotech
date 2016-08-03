@@ -40,8 +40,8 @@ object ToolHelper {
         val Pickaxe, Axe, Shovel, Hoe, Sword, ARMOR, Empty_MB, Filled_MB = Value
     }
 
-    lazy val NEOTECH_TOOLS   = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 1.0F, 0)
-    lazy val NEOTECH_ARMOR   = EnumHelper.addArmorMaterial("NEOTECH_ARMOR", Reference.MOD_ID + ":electricArmor", 1, Array(2, 6, 5, 2), 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F) //@FIXME toughness equivalent to diamond armor
+    lazy val NEOTECH_TOOLS   = EnumHelper.addToolMaterial("NEOTECH", 1, 1, 4.0F, 2.5F, 0)
+    lazy val NEOTECH_ARMOR   = EnumHelper.addArmorMaterial("NEOTECH_ARMOR", Reference.MOD_ID + ":electricArmor", 1, Array(3, 6, 8, 3), 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F)
     lazy val ModifierListTag = "ModifierList"
 
     /**
