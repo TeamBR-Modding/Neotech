@@ -94,8 +94,8 @@ class TileIronTank extends UpdatingTile with FluidHandler {
                     val tank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP)
                     for(tankInfo <- tank.getTankProperties) {
                         if(tankInfo.canFillFluidType(tanks(TANK).getFluid)) {
-                            if(tank.fill(tanks(TANK).drain(1000, true), true) > 0) {
-                                markForUpdate(3)
+                            if(tank.fill(tanks(TANK).drain(1000, false), false) > 0) {
+                                tank.fill(tanks(TANK).drain(1000, true), true)
                                 markForUpdate(3)
                                 return
                             }
