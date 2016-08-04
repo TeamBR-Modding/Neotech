@@ -139,8 +139,7 @@ object ToolHelper {
       * Used to check if a tool is effective, not using silly Forge/Minecraft no Redstone stuff
       */
     def isToolEffective(world: IBlockAccess, pos: BlockPos, stack: ItemStack) : Boolean = {
-        var state = world.getBlockState(pos)
-        state = state.getBlock.getActualState(state, world, pos)
+        val state = world.getBlockState(pos)
         for (toolType <- stack.getItem.getToolClasses(stack)) {
             if (toolType != null && (toolType == state.getBlock.getHarvestTool(state)))
                 return true
