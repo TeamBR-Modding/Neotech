@@ -117,7 +117,7 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
                             }
                         }
 
-                        if (!shouldRecheck && TimeUtils.onSecond(getDelay))
+                        if (!shouldRecheck && TimeUtils.onSecond(1))
                             shouldRecheck = true
 
                         if (shouldRecheck) {
