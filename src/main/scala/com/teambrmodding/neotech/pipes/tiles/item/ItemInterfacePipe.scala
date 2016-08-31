@@ -96,26 +96,18 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
             if (canConnectExtract(dir)) {
                 val fromObject = worldObj.getTileEntity(pos.offset(dir))
                 if (fromObject != null) {
-                    var fromInventory =
+                    val fromInventory =
                         if (fromObject.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite))
                             fromObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
                         else return
 
                     var x = slotMap.get(dir)
 
-                    var check = x
-                    fromInventory match {
-                        case sidedInvUs : SidedInventoryWrapper =>
-                            check = SidedInventoryWrapper.getSlot(fromObject.asInstanceOf[InventorySided], x, dir)
-                            fromInventory = fromObject.asInstanceOf[InventorySided]
-                        case _ =>
-                    }
-
-                    if (fromInventory.extractItem(check, getMaxStackExtract, true) != null) {
-                        if (fromInventory.getStackInSlot(check) != null &&
-                                findSourceOnMode(fromInventory.getStackInSlot(check).copy(), pos.offset(dir))) {
+                    if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
+                        if (fromInventory.getStackInSlot(x) != null &&
+                                findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
                             if (foundSource != null) {
-                                InventoryUtils.moveItemInto(fromInventory, check, foundSource._1, -1,
+                                InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
                                     getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
                                 foundSource = null
                                 worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
