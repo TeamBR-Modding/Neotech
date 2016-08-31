@@ -145,7 +145,7 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
         }
 
         if(destination != null) {
-            foundSource = (getWorld.getTileEntity(destination).asInstanceOf[T], fromSide)
+            foundSource = (convertFoundSource(getWorld.getTileEntity(destination), fromSide), fromSide)
             return true
         }
         false
@@ -189,7 +189,7 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
         }
 
         if(destination != null) {
-            foundSource = (getWorld.getTileEntity(destination).asInstanceOf[T], fromSide)
+            foundSource = (convertFoundSource(getWorld.getTileEntity(destination), fromSide), fromSide)
             return true
         }
         false
@@ -256,9 +256,11 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
             return false
         }
 
-        foundSource = (getWorld.getTileEntity(destination).asInstanceOf[T], fromSide)
+        foundSource = (convertFoundSource(getWorld.getTileEntity(destination), fromSide), fromSide)
         true
     }
+
+    def convertFoundSource(found : AnyRef, facing: EnumFacing) : T = found.asInstanceOf[T]
 
     def rebuildMap() : Unit = {
         sinkPipes.clear()

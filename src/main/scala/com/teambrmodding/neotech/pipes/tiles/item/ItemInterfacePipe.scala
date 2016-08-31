@@ -5,7 +5,8 @@ import java.util
 import com.teambrmodding.neotech.pipes.types.{AdvancedPipe, InterfacePipe, SimplePipe}
 import com.teambrmodding.neotech.utils.TimeUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
-import com.teambr.bookshelf.common.tiles.traits.Inventory
+import com.teambr.bookshelf.collections.SidedInventoryWrapper
+import com.teambr.bookshelf.common.tiles.traits.{Inventory, InventorySided}
 import com.teambr.bookshelf.util.InventoryUtils
 import gnu.trove.map.hash.THashMap
 import net.minecraft.inventory.IInventory
@@ -51,7 +52,7 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
         slotMap.put(face, 0)
 
     override def canConnect(facing: EnumFacing): Boolean =
-        if(super.canConnect(facing)) {
+        if(super.canConnect(facing) && !isDisabled(facing)) {
             getWorld.getTileEntity(pos.offset(facing)) match {
                 case tile : TileEntity if tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite) => true
                 case advanced: AdvancedPipe => !advanced.isDisabled(facing.getOpposite) && !advanced.hasIntersect(facing.getOpposite)
@@ -95,78 +96,68 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
             if (canConnectExtract(dir)) {
                 val fromObject = worldObj.getTileEntity(pos.offset(dir))
                 if (fromObject != null) {
-                    val fromInventory =
+                    var fromInventory =
                         if (fromObject.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite))
                             fromObject.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite)
                         else return
 
-                    if (fromInventory.getSlots > 5) {
+                    var x = slotMap.get(dir)
 
-                        var x = slotMap.get(dir)
+                    var check = x
+                    fromInventory match {
+                        case sidedInvUs : SidedInventoryWrapper =>
+                            check = SidedInventoryWrapper.getSlot(fromObject.asInstanceOf[InventorySided], x, dir)
+                            fromInventory = fromObject.asInstanceOf[InventorySided]
+                        case _ =>
+                    }
 
-                        if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
-                            if (fromInventory.getStackInSlot(x) != null &&
-                                    findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
-                                if (foundSource != null) {
-                                    InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
-                                        getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
-                                    foundSource = null
-                                    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
-                                    shouldRecheck = true
-                                }
+                    if (fromInventory.extractItem(check, getMaxStackExtract, true) != null) {
+                        if (fromInventory.getStackInSlot(check) != null &&
+                                findSourceOnMode(fromInventory.getStackInSlot(check).copy(), pos.offset(dir))) {
+                            if (foundSource != null) {
+                                InventoryUtils.moveItemInto(fromInventory, check, foundSource._1, -1,
+                                    getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
+                                foundSource = null
+                                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+                                shouldRecheck = true
                             }
-                        }
-
-                        if (!shouldRecheck && TimeUtils.onSecond(1))
-                            shouldRecheck = true
-
-                        if (shouldRecheck) {
-                            // Move up
-                            x += 1
-
-                            // Check for above list
-                            if (x >= fromInventory.getSlots)
-                                x = 0
-
-                            // Look for next stack if nothing in next slot
-                            if (fromInventory.getStackInSlot(x) == null) {
-                                var foundSomething = false
-                                for (i <- 0 until fromInventory.getSlots) {
-                                    if (!foundSomething && fromInventory.getStackInSlot(i) != null) {
-                                        x = i
-                                        foundSomething = true
-                                    }
-                                }
-                                if (!foundSomething)
-                                    x = 0
-                            }
-
-                            // Update client, for rendering in chests
-                            sendValueToClient(dir.ordinal() + 30, x)
-                            slotMap.put(dir, x)
                         }
                     }
-                    else {
-                        for (x <- 0 until fromInventory.getSlots) {
-                            if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
-                                if (fromInventory.getStackInSlot(x) != null &&
-                                        findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
-                                    if (foundSource != null) {
-                                        InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
-                                            getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
-                                        foundSource = null
-                                        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
-                                        shouldRecheck = true
-                                        return
-                                    }
+
+                    if (!shouldRecheck && TimeUtils.onSecond(1))
+                        shouldRecheck = true
+
+                    if (shouldRecheck) {
+                        // Move up
+                        x += 1
+
+                        // Check for above list
+                        if (x >= fromInventory.getSlots)
+                            x = 0
+
+                        // Look for next stack if nothing in next slot
+                        if (fromInventory.getStackInSlot(x) == null) {
+                            var foundSomething = false
+                            for (i <- 0 until fromInventory.getSlots) {
+                                if (!foundSomething && fromInventory.getStackInSlot(i) != null) {
+                                    x = i
+                                    foundSomething = true
                                 }
                             }
+                            if (!foundSomething)
+                                x = 0
                         }
+
+                        // Update client, for rendering in chests
+                        sendValueToClient(dir.ordinal() + 30, x)
+                        slotMap.put(dir, x)
                     }
                 }
             }
         }
     }
+
+    override def convertFoundSource(found : AnyRef, facing: EnumFacing) : IItemHandler = found.asInstanceOf[TileEntity].getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing)
 
     /*******************************************************************************************************************
       *************************************** Insertion Methods ********************************************************

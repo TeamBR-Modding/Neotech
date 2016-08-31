@@ -10,6 +10,7 @@ import net.minecraft.util.text.translation.I18n
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids._
 import net.minecraftforge.fluids.capability.{CapabilityFluidHandler, IFluidHandler}
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandler}
 
 /**
   * This file was created for NeoTech
@@ -118,6 +119,8 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
             }
         }
     }
+
+    override def convertFoundSource(found : AnyRef, facing: EnumFacing) : IFluidHandler = found.asInstanceOf[TileEntity].getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)
 
     /*******************************************************************************************************************
       *************************************** Insertion Methods ********************************************************

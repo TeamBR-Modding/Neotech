@@ -42,7 +42,8 @@ trait SimplePipe extends TileEntity {
         if (getWorld.getTileEntity(getPos) == null) return false
 
         getWorld.getTileEntity(getPos) match {
-            case advanced : AdvancedPipe if advanced.isDisabled(facing) => return false
+            case advanced : AdvancedPipe if advanced.isDisabled(facing) =>
+                return false
             case _ =>
         }
         getWorld.getTileEntity(getPos.offset(facing)) match {
