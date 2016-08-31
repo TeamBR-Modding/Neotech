@@ -85,7 +85,7 @@ class TileElectricFurnace extends MachineProcessor[ItemStack, ItemStack] {
             else if(!getStackInSlot(OUTPUT_SLOT).isItemEqual(getOutput(getStackInSlot(INPUT_SLOT))))
                 return false
             else {
-                val minStackSize = getStackInSlot(OUTPUT_SLOT).stackSize - getOutput(getStackInSlot(INPUT_SLOT)).stackSize
+                val minStackSize = getStackInSlot(OUTPUT_SLOT).stackSize + getOutput(getStackInSlot(INPUT_SLOT)).stackSize
                 return minStackSize <= getInventoryStackLimit && minStackSize <= getOutput(getStackInSlot(INPUT_SLOT)).getMaxStackSize
             }
         }

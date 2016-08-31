@@ -103,21 +103,21 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
 
                     var x = slotMap.get(dir)
 
+                    shouldRecheck = true
+
                     if (fromInventory.extractItem(x, getMaxStackExtract, true) != null) {
                         if (fromInventory.getStackInSlot(x) != null &&
                                 findSourceOnMode(fromInventory.getStackInSlot(x).copy(), pos.offset(dir))) {
                             if (foundSource != null) {
-                                InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
-                                    getMaxStackExtract, foundSource._2.getOpposite, doMove = true)
-                                foundSource = null
-                                worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
-                                shouldRecheck = true
+                                if(InventoryUtils.moveItemInto(fromInventory, x, foundSource._1, -1,
+                                    getMaxStackExtract, foundSource._2.getOpposite, doMove = true)) {
+                                    foundSource = null
+                                    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+                                    shouldRecheck = false
+                                }
                             }
                         }
                     }
-
-                    if (!shouldRecheck && TimeUtils.onSecond(1))
-                        shouldRecheck = true
 
                     if (shouldRecheck) {
                         // Move up
@@ -126,19 +126,6 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
                         // Check for above list
                         if (x >= fromInventory.getSlots)
                             x = 0
-
-                        // Look for next stack if nothing in next slot
-                        if (fromInventory.getStackInSlot(x) == null) {
-                            var foundSomething = false
-                            for (i <- 0 until fromInventory.getSlots) {
-                                if (!foundSomething && fromInventory.getStackInSlot(i) != null) {
-                                    x = i
-                                    foundSomething = true
-                                }
-                            }
-                            if (!foundSomething)
-                                x = 0
-                        }
 
                         // Update client, for rendering in chests
                         sendValueToClient(dir.ordinal() + 30, x)

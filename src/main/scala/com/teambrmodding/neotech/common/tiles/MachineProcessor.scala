@@ -177,10 +177,7 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
         if(isDisabled(direction)) return false
         if (slot == 0 && getOutputForStack(itemStackIn) != null) {
             if (getStackInSlot(0) == null) return true
-            if (getStackInSlot(0).isItemEqual(itemStackIn)) {
-                if (getStackInSlot(0).getMaxStackSize >= getStackInSlot(0).stackSize + itemStackIn.stackSize)
-                    return true
-            }
+            if (getStackInSlot(0).isItemEqual(itemStackIn)) return true
         }
         false
     }
