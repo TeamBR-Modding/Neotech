@@ -2,9 +2,12 @@ package com.teambrmodding.neotech.common.tiles.machines
 
 import com.teambrmodding.neotech.managers.RecipeManager
 import com.teambrmodding.neotech.registries.CrusherRecipeHandler
-import com.teambr.bookshelf.common.tiles.traits.{Inventory, UpdatingTile}
+import com.teambr.bookshelf.common.tiles.traits.{Inventory, Syncable, UpdatingTile}
+import net.minecraft.block.Block
+import net.minecraft.init.{Blocks, SoundEvents}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.{EnumParticleTypes, SoundCategory}
 
 /**
   * This file was created for NeoTech
@@ -16,7 +19,7 @@ import net.minecraft.nbt.NBTTagCompound
   * @author Paul Davis <pauljoda>
   * @since 1/11/2016
   */
-class TileGrinder extends UpdatingTile with Inventory {
+class TileGrinder extends Syncable with Inventory {
     override def initialSize: Int = 7
 
     var progress : Int = 0
@@ -27,12 +30,16 @@ class TileGrinder extends UpdatingTile with Inventory {
         worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
         if(getStackInSlot(3) != null && hasOutputAvailable) {
             var movement = progressValue
+            sendValueToClient(0, 0)
             if(progressValue == 1)
                 movement = 2
             progress += (movement * multiplier).toInt
             if(progress >= MAX_PROGRESS) {
                 progress = progress - MAX_PROGRESS
                 grindItem()
+                //worldObj.playSound(null, pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, SoundEvents.BLOCK_GRAVEL_BREAK, SoundCategory.BLOCKS, 0.6F, 1.1F)
+                worldObj.playSound(null, pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, SoundEvents.BLOCK_SAND_BREAK, SoundCategory.BLOCKS,  0.6F, 1.1F)
+                worldObj.playSound(null, pos.getX + 0.5, pos.getY + 0.5, pos.getZ + 0.5, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 0.1F, 0.4F)
                 if(getStackInSlot(3) == null)
                     progress = 0
                 worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
@@ -136,4 +143,16 @@ class TileGrinder extends UpdatingTile with Inventory {
     override def markDirty(): Unit = {
         super[TileEntity].markDirty()
     }
+
+    override def setVariable(id: Int, value: Double): Unit = {
+        id match {
+            case 0 =>
+                for(x <- 0 until 4)
+                worldObj.spawnParticle(EnumParticleTypes.FALLING_DUST, pos.getX + 0.5D, pos.getY + 0.3D, pos.getZ + 0.5, 0D, 0D, 0D,
+                    Block.getStateId(Blocks.GRAVEL.getDefaultState))
+            case _ =>
+        }
+    }
+
+    override def getVariable(id: Int): Double = { 0.0 }
 }

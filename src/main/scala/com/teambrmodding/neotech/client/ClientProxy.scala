@@ -20,6 +20,7 @@ import com.teambrmodding.neotech.tools.tools.BaseElectricTool
 import com.teambrmodding.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
 import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
+import com.teambrmodding.neotech.common.tiles.machines.TileGrinder
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -238,6 +239,8 @@ class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[AbstractMachine], new TileMachineIORenderer)
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileMobStand], new MobStandEntityRenderer[TileMobStand])
+
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileGrinder], new TileGrinderRenderer[TileGrinder])
     }
 
     /**
