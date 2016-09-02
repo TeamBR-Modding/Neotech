@@ -199,10 +199,8 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       * @param logPosition The log position
       * @return True if able to chop
       */
-    def chopLog(logPosition : BlockPos) : Boolean = {
+    def chopLog(logPosition : BlockPos, isLast : Boolean = false) : Boolean = {
         if(getStackInSlot(AXE_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(logPosition).getBlock, 1, worldObj.getBlockState(logPosition).getBlock.damageDropped(worldObj.getBlockState(logPosition))), sapling = false)) {
-            /*if(worldObj.getBlockState(logPosition).getBlock != null)
-                worldObj.playEvent(2001, logPosition, Block.getIdFromBlock(worldObj.getBlockState(logPosition).getBlock))*/
             worldObj.setBlockToAir(logPosition)
             if(getStackInSlot(AXE_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(AXE_SLOT, null)
@@ -219,7 +217,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       * @param leavePosition The leave position
       * @return True if something happened
       */
-    def chopLeave(leavePosition : BlockPos) : Boolean = {
+    def chopLeave(leavePosition : BlockPos, isLast : Boolean = false) : Boolean = {
         if(getStackInSlot(SHEARS_SLOT) != null && addHarvestToInventory(new ItemStack(worldObj.getBlockState(leavePosition).getBlock, 1, worldObj.getBlockState(leavePosition).getBlock.damageDropped(worldObj.getBlockState(leavePosition))), sapling = false)) {
             if(worldObj.getBlockState(leavePosition).getBlock != null)
                 worldObj.playEvent(2001, leavePosition, Block.getIdFromBlock(worldObj.getBlockState(leavePosition).getBlock))

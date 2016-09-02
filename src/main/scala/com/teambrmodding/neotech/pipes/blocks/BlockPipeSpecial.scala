@@ -185,7 +185,6 @@ class BlockPipeSpecial(val name : String, mat : Material, tileClass : Class[_ <:
                         world.spawnEntityInWorld(itemEntity)
                     }
                     world.setBlockToAir(pos)
-                    world.setBlockState(pos, state, 3)
                     return true
                 } else if(!playerIn.isSneaking) {
                     playerIn.openGui(NeoTech, 0, world, pos.getX, pos.getY, pos.getZ)
