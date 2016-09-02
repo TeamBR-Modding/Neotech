@@ -1,11 +1,6 @@
 package com.teambrmodding.neotech.common.items
 
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.init.Blocks
-import net.minecraft.item.ItemStack
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.{ActionResult, EnumActionResult, EnumFacing, EnumHand}
-import net.minecraft.world.{IBlockAccess, World}
+import com.teambr.bookshelf.common.items.traits.IToolWrench
 
 /**
   * This file was created for NeoTech
@@ -17,18 +12,6 @@ import net.minecraft.world.{IBlockAccess, World}
   * @author Paul Davis <pauljoda>
   * @since 1/9/2016
   */
-class ItemWrench extends BaseItem("wrench", 1) {
+class ItemWrench extends BaseItem("wrench", 1) with IToolWrench {
     override def isFull3D: Boolean = true
-
-    override  def  onItemUse(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos,
-                             hand: EnumHand, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): EnumActionResult = {
-        val block = world.getBlockState(pos).getBlock
-        if (!player.isSneaking && block != Blocks.BED && block.rotateBlock(world, pos, side)) {
-            player.swingArm(hand)
-            return EnumActionResult.SUCCESS
-        }
-        EnumActionResult.PASS
-    }
-
-    override def doesSneakBypassUse(stack: ItemStack, world: IBlockAccess, pos: BlockPos, player: EntityPlayer) : Boolean = true
 }

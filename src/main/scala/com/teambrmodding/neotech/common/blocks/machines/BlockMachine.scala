@@ -6,6 +6,7 @@ import com.teambrmodding.neotech.common.tiles.AbstractMachine
 import com.teambrmodding.neotech.managers.ItemManager
 import com.teambrmodding.neotech.utils.PlayerUtils
 import com.teambr.bookshelf.common.blocks.properties.Properties
+import com.teambr.bookshelf.common.blocks.traits.IToolable
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, OpensGui}
 import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.BlockPistonBase
@@ -19,7 +20,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.{BlockPos, MathHelper}
-import net.minecraft.util.{EnumBlockRenderType, BlockRenderLayer, EnumFacing, EnumHand}
+import net.minecraft.util.{BlockRenderLayer, EnumBlockRenderType, EnumFacing, EnumHand}
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.common.property.{ExtendedBlockState, IUnlistedProperty}
 import net.minecraftforge.fluids.{FluidUtil, IFluidHandler}
@@ -39,7 +40,7 @@ import scala.util.Random
   * @since August 11, 2015
   */
 class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState : Boolean = true, fourWayRotation : Boolean = true, sixWayRotation : Boolean = false)
-        extends BaseBlock(Material.IRON, name, tileEntity) with OpensGui {
+        extends BaseBlock(Material.IRON, name, tileEntity) with OpensGui with IToolable {
 
     @SideOnly(Side.CLIENT)
     override def randomDisplayTick(state: IBlockState, world: World, pos: BlockPos, rand: java.util.Random): Unit = {
@@ -94,7 +95,7 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
         }
 
         super[OpensGui].onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ)
-        heldItem != null && heldItem.getItem != ItemManager.wrench
+        true
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
