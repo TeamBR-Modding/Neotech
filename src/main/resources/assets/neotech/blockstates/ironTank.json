@@ -2,7 +2,7 @@
     "forge_marker" : 1,
     "defaults": {
         "textures" : {
-            "block" : "blocks/iron_block"
+            "block" : "neotech:blocks/basicRFStorage"
         }
     },
     "variants" : { "normal" : { "model": "neotech:tank" } }

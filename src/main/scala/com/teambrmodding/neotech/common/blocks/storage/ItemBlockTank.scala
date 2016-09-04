@@ -66,10 +66,11 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
     }
 
     def getFluid(container: ItemStack): FluidStack = {
-        if (!container.hasTagCompound || !container.getTagCompound.hasKey("Fluid")) {
+        if (!container.hasTagCompound || !container.getTagCompound.hasKey("Tanks")) {
             return null
         }
-        FluidStack.loadFluidStackFromNBT(container.getTagCompound.getCompoundTag("Fluid"))
+        val tagList = container.getTagCompound.getTagList("Tanks", 10)
+        FluidStack.loadFluidStackFromNBT(tagList.getCompoundTagAt(0))
     }
 
     def getCapacity(container: ItemStack): Int = {
