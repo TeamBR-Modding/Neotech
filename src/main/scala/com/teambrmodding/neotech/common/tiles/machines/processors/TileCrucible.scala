@@ -86,7 +86,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
             else {
                 if(getOutput(getStackInSlot(ITEM_INPUT_SLOT)) != null) {
                     val recipeOutput = getOutput(getStackInSlot(0))
-                    if(recipeOutput.getFluid != null) {
+                    if(recipeOutput.getFluid != null  && tanks(OUTPUT_TANK).drain(1000, false) != null) {
                         if(tanks(OUTPUT_TANK).getFluid == null && recipeOutput.amount <= tanks(OUTPUT_TANK).getCapacity)
                             return true
                         else if(tanks(OUTPUT_TANK).getFluid.getFluid == recipeOutput.getFluid &&

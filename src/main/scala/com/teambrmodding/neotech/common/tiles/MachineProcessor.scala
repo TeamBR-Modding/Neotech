@@ -94,7 +94,7 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
             }
             if(canProcess) { //For those moments where we completeCook and then are reset, can change this result
                 cook()
-                energyStorage.extractEnergy(getEnergyCostPerTick, false)
+                energyStorage.providePower(getEnergyCostPerTick, true)
             }
             didWork = true
         } else {

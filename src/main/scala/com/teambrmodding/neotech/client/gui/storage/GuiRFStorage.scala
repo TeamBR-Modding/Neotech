@@ -47,8 +47,8 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                 }
             }
 
-            components += new GuiComponentText(I18n.translateToLocal("neotech.text.rfIn"), 55, 20, new Color(0, 0, 0))
-            val inputRate = tileEntity.getRFInPerTick
+            components += new GuiComponentText(I18n.translateToLocal("neotech.text.rfDiff"), 55, 20, new Color(0, 0, 0))
+            val inputRate = tileEntity.energyStorage.getMaxInsert
             val colorIn = {
                 if(inputRate > 0)
                     new Color(0, 150, 0)
@@ -63,7 +63,7 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                   * Called after base render, is already translated to guiLeft and guiTop, just move offset
                   */
                 override def renderOverlay(guiLeft: Int, guiTop: Int, mouseX : Int, mouseY : Int): Unit ={
-                    val inputRate = tileEntity.getRFInPerTick
+                    val inputRate = tileEntity.currentDifference
                     val colorIn = {
                         if(inputRate > 0)
                             new Color(0, 150, 0)
@@ -74,36 +74,6 @@ class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: Strin
                     }
                     setText("   " + inputRate.toString + " RF/tick")
                     color = colorIn
-                    super.renderOverlay(guiLeft, guiTop, mouseX, mouseY)
-                }
-            }
-
-            components += new GuiComponentText(I18n.translateToLocal("neotech.text.rfOut"), 55, 50, new Color(0, 0, 0))
-            val outputRate = tileEntity.getRFOutPerTick
-            val colorOut = {
-                if(outputRate > 0)
-                    new Color(0, 150, 0)
-                else if(outputRate < 0)
-                    new Color(150, 0, 0)
-                else
-                    new Color(0, 0, 0)
-            }
-            components += new GuiComponentText("   " + inputRate.toString + " RF/tick", 55, 60, colorOut) {
-                /**
-                  * Called after base render, is already translated to guiLeft and guiTop, just move offset
-                  */
-                override def renderOverlay(guiLeft: Int, guiTop: Int, mouseX : Int, mouseY : Int): Unit ={
-                    val outputRate = tileEntity.getRFOutPerTick
-                    val colorOut = {
-                        if(outputRate > 0)
-                            new Color(0, 150, 0)
-                        else if(outputRate < 0)
-                            new Color(150, 0, 0)
-                        else
-                            new Color(0, 0, 0)
-                    }
-                    setText("   " + outputRate.toString + " RF/tick")
-                    color = colorOut
                     super.renderOverlay(guiLeft, guiTop, mouseX, mouseY)
                 }
             }

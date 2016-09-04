@@ -370,8 +370,7 @@ neotech.text.hardDrives=Hard Drives
 neotech.text.control=Control
 neotech.text.expansion=Expansion
 
-neotech.text.rfIn=Current RF In
-neotech.text.rfOut=Current RF Out
+neotech.text.rfDiff=Energy Change
 
 neotech.text.processMode=Solidify Mode
 neotech.text.blockMode=Block Mode

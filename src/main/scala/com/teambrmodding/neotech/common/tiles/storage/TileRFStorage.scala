@@ -27,7 +27,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
         tier = t
         initEnergy(t)
     }
-    
+
     /**
       * Sets the energy based on tier
       *
@@ -36,22 +36,22 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
     def initEnergy(t: Int): Unit = {
         t match {
             case 1 =>
-                setMaxEnergyStored(amountEnergy(t))
-                setMaxExtract(2000)
-                setMaxReceive(2000)
+                energyStorage.setMaxStored(amountEnergy(t))
+                energyStorage.setMaxExtract(2000)
+                energyStorage.setMaxInsert(2000)
             case 2 =>
-                setMaxEnergyStored(amountEnergy(t))
-                setMaxExtract(10000)
-                setMaxReceive(10000)
+                energyStorage.setMaxStored(amountEnergy(t))
+                energyStorage.setMaxExtract(10000)
+                energyStorage.setMaxInsert(10000)
             case 3 =>
-                setMaxEnergyStored(amountEnergy(t))
-                setMaxExtract(100000)
-                setMaxReceive(100000)
+                energyStorage.setMaxStored(amountEnergy(t))
+                energyStorage.setMaxExtract(100000)
+                energyStorage.setMaxInsert(100000)
             case 4 =>
-                setMaxEnergyStored(amountEnergy(t))
-                setMaxExtract(4096000)
-                setMaxReceive(4096000)
-                energyStorage.setEnergyStored(energyStorage.getMaxEnergyStored)
+                energyStorage.setMaxStored(amountEnergy(t))
+                energyStorage.setMaxExtract(4096000)
+                energyStorage.setMaxInsert(4096000)
+                energyStorage.setCurrentStored(energyStorage.getMaxStored)
             case _ =>
         }
         if (worldObj != null)
@@ -77,34 +77,35 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
     def getTier: Int = tier
 
     override def onServerTick(): Unit = {
+        super[EnergyHandler].onServerTick()
         //Transfer
-        if (energyStorage != null) {
-            if (energyStorage.getEnergyStored > 0) {
-                for (i <- EnumFacing.values()) {
-                    worldObj.getTileEntity(pos.offset(i)) match {
-                        case tile: IEnergyReceiver =>
-                            val want = tile.receiveEnergy(i.getOpposite, energyStorage.getEnergyStored, true)
-                            if (want > 0) {
-                                val actual = extractEnergy(i.getOpposite, want, simulate = false)
-                                tile.receiveEnergy(i.getOpposite, actual, false)
-                            }
-                        case _ =>
-                    }
+        if (energyStorage.getEnergyStored > 0) {
+            for (i <- EnumFacing.values()) {
+                worldObj.getTileEntity(pos.offset(i)) match {
+                    case tile: IEnergyReceiver =>
+                        val want = tile.receiveEnergy(i.getOpposite, energyStorage.getEnergyStored, true)
+                        if (want > 0) {
+                            val actual = extractEnergy(i.getOpposite, want, simulate = false)
+                            tile.receiveEnergy(i.getOpposite, actual, false)
+                        }
+                    case _ =>
                 }
             }
-
-            if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
-                val drainItem = getStackInSlot(DRAIN_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
-                val amount = receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxReceive, true), simulate = true)
-                if(amount > 0)
-                    receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), amount, false), simulate = false)
-            }
-
-            if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
-                val fillItem = getStackInSlot(FILL_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
-                extractEnergy(EnumFacing.UP, fillItem.receiveEnergy(getStackInSlot(FILL_SLOT), Math.min(energyStorage.getMaxExtract, if (tier == 4) energyStorage.getMaxExtract else energyStorage.getEnergyStored), false), simulate = false)
-            }
         }
+
+        if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
+            val drainItem = getStackInSlot(DRAIN_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
+            val amount = receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxInsert, true), simulate = true)
+            if(amount > 0)
+                receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), amount, false), simulate = false)
+        }
+
+        if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
+            val fillItem = getStackInSlot(FILL_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
+            extractEnergy(EnumFacing.UP, fillItem.receiveEnergy(getStackInSlot(FILL_SLOT), Math.min(energyStorage.getMaxExtract, if (tier == 4)
+                energyStorage.getMaxExtract else energyStorage.getEnergyStored), false), simulate = false)
+        }
+
     }
 
     override def writeToNBT(tag: NBTTagCompound): NBTTagCompound = {
@@ -183,7 +184,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
       * @return How much energy was/should be drained
       */
     override def extractEnergy(from: EnumFacing, maxExtract: Int, simulate: Boolean): Int =
-        super.extractEnergy(from, maxExtract, if(tier == 4) true else simulate)
+    super.extractEnergy(from, maxExtract, if(tier == 4) true else simulate)
 
     /**
       * Used to output the redstone single from this structure
@@ -195,7 +196,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
       *
       * @return int range 0 - 16
       */
-    def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
+    def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxStored
 
     /** *****************************************************************************************************************
       * ************************************************ Waila methods **************************************************

@@ -134,8 +134,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * We want to make sure the client knows what to render
       */
     override def onClientTick() : Unit = {
-        super[EnergyHandler].onClientTick()
-        if(getSupposedEnergy != energyStorage.getMaxEnergyStored)
+        if(getSupposedEnergy != energyStorage.getMaxStored)
             sendValueToServer(UPDATE_CLIENT, 0)
         //Mark for render update if needed
         if(working != isActive)
@@ -145,8 +144,9 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
 
     var timeTicker = 0
     override def onServerTick(): Unit = {
+        super[EnergyHandler].onServerTick()
         //Make sure our energy storage is correct
-        if(getSupposedEnergy != energyStorage.getMaxEnergyStored)
+        if(getSupposedEnergy != energyStorage.getMaxStored)
             changeEnergy(energyStorage.getEnergyStored)
 
         //If redstone mode is not matched, break out of the method
@@ -246,13 +246,15 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       */
     def changeEnergy(initial : Int): Unit = {
         if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
-            setMaxEnergyStored(BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10))
+            energyStorage.setMaxStored(BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10))
         }
         else {
-            setMaxEnergyStored(BASE_ENERGY)
+            energyStorage.setMaxStored(BASE_ENERGY)
         }
         updateClient = true
-        worldObj.setBlockState(pos, getWorld.getBlockState(getPos), 6)
+        if(energyStorage.getCurrentStored > energyStorage.getMaxEnergyStored)
+            energyStorage.setCurrentStored(energyStorage.getMaxEnergyStored)
+        markForUpdate(3)
     }
 
     /**
@@ -282,8 +284,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             case REDSTONE_FIELD_ID => redstone = value.toInt
             case IO_FIELD_ID       => toggleMode(EnumFacing.getFront(value.toInt))
             case UPDATE_CLIENT     => updateClient = true
-            case ENERGY_UPDATE     => energyStorage.setEnergyStored(value.toInt)
-            case _ => //No Operation, not defined ID
+            case ENERGY_UPDATE     => setStored(value.toInt)
+            case _ => super[EnergyHandler].setVariable(id, value)
         }
     }
 

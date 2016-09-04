@@ -36,17 +36,17 @@ class TileSolarPanel extends MachineGenerator {
     def initEnergy(t: Int): Unit = {
         t match {
             case 1 =>
-                setMaxEnergyStored(amountEnergy(t))
-                setMaxExtract(2000)
-                setMaxReceive(2000)
+                energyStorage.setMaxStored(amountEnergy(t))
+                energyStorage.setMaxExtract(2000)
+                energyStorage.setMaxInsert(2000)
             case 2 =>
-                setMaxEnergyStored(amountEnergy(t))
-                setMaxExtract(10000)
-                setMaxReceive(10000)
+                energyStorage.setMaxStored(amountEnergy(t))
+                energyStorage.setMaxExtract(10000)
+                energyStorage.setMaxInsert(10000)
             case 3 =>
-                setMaxEnergyStored(amountEnergy(t))
-                setMaxExtract(100000)
-                setMaxReceive(100000)
+                energyStorage.setMaxStored(amountEnergy(t))
+                energyStorage.setMaxExtract(100000)
+                energyStorage.setMaxInsert(100000)
             case _ =>
         }
         if (worldObj != null)
@@ -102,7 +102,7 @@ class TileSolarPanel extends MachineGenerator {
     /**
       * Called to tick generation. This is where you add power to the generator
       */
-    override def generate(): Unit = energyStorage.receiveEnergy(generating(), false)
+    override def generate(): Unit = energyStorage.receivePower(generating(), true)
 
     /**
       * Called per tick to manage burn time. You can do nothing here if there is nothing to generate. You should decrease burn time here
@@ -230,7 +230,7 @@ class TileSolarPanel extends MachineGenerator {
       *
       * @return int range 0 - 16
       */
-    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
+    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxStored
 
     /**
       * Used to get what particles to spawn. This will be called when the tile is active

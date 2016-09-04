@@ -186,7 +186,7 @@ class TileCentrifuge extends MachineProcessor[FluidStack, (FluidStack, FluidStac
 
                         if(canOutputFromSide(dir))
                             if ((if (fluid == null) true
-                            else if (tanks(OUTPUT_TANK_1).getFluid != null)
+                            else if (tanks(OUTPUT_TANK_1).getFluid != null && tanks(OUTPUT_TANK_1).drain(1000, false) != null)
                                 otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK_1).getFluid.getFluid
                             else false)
                                     && canDrain(dir.getOpposite, if (fluid != null) fluid.getFluid else null)) {
@@ -197,7 +197,7 @@ class TileCentrifuge extends MachineProcessor[FluidStack, (FluidStack, FluidStac
 
                         if(canOutputFromSide(dir, isPrimary = false)) {
                             if ((if (fluid == null) true
-                            else if (tanks(OUTPUT_TANK_2).getFluid != null)
+                            else if (tanks(OUTPUT_TANK_2).getFluid != null && tanks(OUTPUT_TANK_2).drain(1000, false) != null)
                                 otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK_2).getFluid.getFluid
                             else false)
                                     && canDrain(dir.getOpposite, if (fluid != null) fluid.getFluid else null)) {

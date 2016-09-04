@@ -31,6 +31,14 @@ repositories {
         url "http://dvs1.progwml6.com/files/maven"
     }
     maven { url "http://maven.amadornes.com/" }
+    maven {
+        url 'http://maven.epoxide.xyz'
+    }
+
+    maven {
+        name 'Player Maven FS'
+        url 'http://maven.ic2.player.to/'
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -101,6 +109,8 @@ dependencies {
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
     //deobfCompile "MCMultiPart:MCMultiPart-experimental:${config.MCMultiPart_version}:universal"
     compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.10.2-3+", classifier: "dev", changing: true
+    compile "net.darkhax.tesla:Tesla:${config.TESLA_version}"
+    deobfCompile "net.industrial-craft:industrialcraft-2:${config.IC2_version}:dev"
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {

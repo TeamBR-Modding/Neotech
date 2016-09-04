@@ -181,7 +181,7 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
                     case otherTank : IFluidHandler =>
                         val fluid = otherTank.getTankInfo(dir.getOpposite)(0).fluid
                         if((if(fluid == null) true else
-                        if (tanks(OUTPUT_TANK).getFluid != null)
+                        if (tanks(OUTPUT_TANK).getFluid != null  && tanks(OUTPUT_TANK).drain(1000, false) != null)
                             otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK).getFluid.getFluid
                         else false)
                                 && canDrain(dir.getOpposite, if(fluid != null) fluid.getFluid else null)) {

@@ -65,9 +65,9 @@ class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.IR
         val tile = world.getTileEntity(pos).asInstanceOf[TileRFStorage]
             tile.writeToNBT(stack.getTagCompound)
             if (stack.getTagCompound.hasKey("Energy"))
-                tile.energyStorage.setEnergyStored(stack.getTagCompound.getInteger("Energy"))
+                tile.setStored(stack.getTagCompound.getInteger("Energy"))
             if (tile.tier == 4)
-                tile.energyStorage.setEnergyStored(tile.amountEnergy(tile.tier))
+                tile.setStored(tile.amountEnergy(tile.tier))
             world.setBlockState(pos, state, 3)
         }
     }

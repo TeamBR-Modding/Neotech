@@ -67,7 +67,7 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
       * Called to tick generation. This is where you add power to the generator
       */
     override def generate(): Unit = {
-        energyStorage.receiveEnergy(getEnergyProduced, false)
+        energyStorage.receivePower(getEnergyProduced, true)
         if(tanks(OXYGEN_TANK).getFluid != null)
             tanks(OXYGEN_TANK).drain(1, true)
     }
@@ -79,7 +79,7 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
       * @return True if able to continue generating
       */
     override def manageBurnTime(): Boolean = {
-        if(energyStorage.getEnergyStored < energyStorage.getMaxEnergyStored && burnTime <= 1) {
+        if(energyStorage.getEnergyStored < energyStorage.getMaxStored && burnTime <= 1) {
             if (getStackInSlot(INPUT_SLOT) != null) {
                 burnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(INPUT_SLOT))
 
@@ -284,7 +284,7 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
       *
       * @return int range 0 - 16
       */
-    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
+    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxStored
 
     /**
       * Used to get what particles to spawn. This will be called when the tile is active

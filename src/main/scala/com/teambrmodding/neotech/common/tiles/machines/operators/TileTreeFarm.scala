@@ -104,7 +104,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       * Called per tick, does the work
       */
     override def doWork() : Unit = {
-        if (!isBuildingCache && TimeUtils.onSecond(2) && energyStorage.getEnergyStored > costToOperate) {
+        if (!isBuildingCache && TimeUtils.onSecond(2) && energyStorage.getEnergyStored() > costToOperate) {
             if(cache.isEmpty)
                 findNextTree()
             else
@@ -204,8 +204,8 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             worldObj.setBlockToAir(logPosition)
             if(getStackInSlot(AXE_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(AXE_SLOT, null)
-            energyStorage.extractEnergy(costToOperate, false)
-            sendValueToClient(ENERGY_UPDATE, energyStorage.getEnergyStored)
+            energyStorage. providePower(costToOperate, true)
+            sendValueToClient(ENERGY_UPDATE, energyStorage.getEnergyStored())
             return true
         }
         false
@@ -224,7 +224,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
             worldObj.setBlockToAir(leavePosition)
             if(getStackInSlot(SHEARS_SLOT).attemptDamageItem(1, worldObj.rand))
                 setStackInSlot(SHEARS_SLOT, null)
-            energyStorage.extractEnergy(costToOperate, false)
+            energyStorage.providePower(costToOperate, true)
             sendValueToClient(ENERGY_UPDATE, energyStorage.getEnergyStored)
             return true
         } else {
@@ -513,7 +513,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       *
       * @return int range 0 - 16
       */
-    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
+    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxStored
 
     /**
       * Used to get what particles to spawn. This will be called when the tile is active

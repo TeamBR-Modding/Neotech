@@ -63,7 +63,7 @@ class TileFluidGenerator extends MachineGenerator with FluidHandler {
       * Called to tick generation. This is where you add power to the generator
       */
     override def generate(): Unit =
-        energyStorage.receiveEnergy(getEnergyProduced, false)
+    energyStorage.receivePower(getEnergyProduced, true)
 
     /**
       * Called per tick to manage burn time. You can do nothing here if there is nothing to generate. You should decrease burn time here
@@ -88,7 +88,7 @@ class TileFluidGenerator extends MachineGenerator with FluidHandler {
         }
 
         //Do burntime
-        if(energyStorage.getEnergyStored < energyStorage.getMaxEnergyStored  && burnTime <= 1) {
+        if(energyStorage.getEnergyStored < energyStorage.getMaxStored && burnTime <= 1) {
             if (tanks == null || tanks.size <= 0 || tanks(INPUT_TANK) == null) return false
             val fluidDrained = tanks(INPUT_TANK).drain(FluidContainerRegistry.BUCKET_VOLUME / 10, true)
             if (fluidDrained == null || fluidDrained.getFluid == null || fluidDrained.amount <= 0)
@@ -311,7 +311,7 @@ class TileFluidGenerator extends MachineGenerator with FluidHandler {
       *
       * @return int range 0 - 16
       */
-    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxEnergyStored
+    override def getRedstoneOutput: Int = (energyStorage.getEnergyStored * 16) / energyStorage.getMaxStored
 
     /**
       * Used to get what particles to spawn. This will be called when the tile is active

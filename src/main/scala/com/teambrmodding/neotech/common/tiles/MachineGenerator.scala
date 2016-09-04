@@ -57,11 +57,11 @@ abstract class MachineGenerator extends AbstractMachine {
         didWork = burnTime == 1
 
         //Transfer
-        if (energyStorage.getEnergyStored > 0) {
+        if (energyStorage.getEnergyStored() > 0) {
             for (i <- EnumFacing.values()) {
                 worldObj.getTileEntity(pos.offset(i)) match {
                     case tile: IEnergyReceiver =>
-                        val want = tile.receiveEnergy(i.getOpposite, energyStorage.getEnergyStored, true)
+                        val want = tile.receiveEnergy(i.getOpposite, energyStorage.getEnergyStored(), true)
                         if (want > 0) {
                             val actual = extractEnergy(i, want, simulate = false)
                             tile.receiveEnergy(i.getOpposite, actual, false)
