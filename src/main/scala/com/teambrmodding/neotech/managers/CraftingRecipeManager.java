@@ -28,8 +28,8 @@ public class CraftingRecipeManager {
         //Grinder
         GameRegistry.addRecipe(new ItemStack(BlockManager.grinder()),
                 "SSS",
-                "CsC",
-                "SSS", 'S', Blocks.STONE, 'C', Blocks.COBBLESTONE, 's', Items.STICK);
+                "IHI",
+                "SSS", 'S', Blocks.STONE_SLAB, 'H', Blocks.HOPPER, 'I', Items.IRON_INGOT);
 
         //Electric Furnace
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricFurnace()),
@@ -83,15 +83,15 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT1()),
                 "CCC",
                 "RRR",
-                "ABA", 'A', Items.IRON_INGOT, 'B', BlockManager.basicRFStorage(), 'C', Blocks.GLASS, 'R', Items.REDSTONE);
+                "ABA", 'A', Items.IRON_INGOT, 'B', ItemManager.basicRFBattery(), 'C', Blocks.GLASS, 'R', Items.REDSTONE);
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT2()),
                 "CCC",
                 "BSB",
-                "gsg", 'C', Blocks.GLASS, 'B', Items.BLAZE_POWDER, 'S', BlockManager.solarPanelT1(), 's', BlockManager.advancedRFStorage(), 'g', Items.GOLD_INGOT);
+                "gsg", 'C', Blocks.GLASS, 'B', Items.BLAZE_POWDER, 'S', BlockManager.solarPanelT1(), 's', ItemManager.advancedRFBattery(), 'g', Items.GOLD_INGOT);
         GameRegistry.addRecipe(new ItemStack(BlockManager.solarPanelT3()),
                 "CCC",
                 "PSP",
-                "DED", 'D', Items.DIAMOND, 'P', Items.ENDER_PEARL, 'C', Blocks.GLASS, 'S', BlockManager.solarPanelT2(), 'E', BlockManager.eliteRFStorage());
+                "DED", 'D', Items.DIAMOND, 'P', Items.ENDER_PEARL, 'C', Blocks.GLASS, 'S', BlockManager.solarPanelT2(), 'E', ItemManager.eliteRFBattery());
 
         //Thermal Binder
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.thermalBinder()),
