@@ -4,6 +4,7 @@ import com.teambrmodding.neotech.managers.BlockManager
 import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.items.traits.ItemBattery
+import com.teambr.bookshelf.energy.implementations.EnergyBank
 import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.{ItemBlock, ItemStack}
@@ -30,9 +31,9 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with ItemBattery
     override def addInformation(stack: ItemStack, player: EntityPlayer, list: java.util.List[String], boolean: Boolean): Unit = {
         if (getEnergyInfo._1 != 4) {
             if (stack.hasTagCompound) {
-                if (stack.getTagCompound.getInteger("Energy") != 0) {
+                if (stack.getTagCompound.getInteger(EnergyBank.CURRENT_ENERGY) != 0) {
                     list.asInstanceOf[java.util.List[String]].add(GuiColor.ORANGE + (
-                            ClientUtils.formatNumber(stack.getTagCompound.getInteger("Energy")) + " / " +
+                            ClientUtils.formatNumber(stack.getTagCompound.getInteger(EnergyBank.CURRENT_ENERGY)) + " / " +
                                     ClientUtils.formatNumber(getEnergyInfo._2) + " RF"))
                 } else list.asInstanceOf[java.util.List[String]].add(GuiColor.RED + "0 / " +
                         ClientUtils.formatNumber(getEnergyInfo._2) + " RF")
@@ -53,8 +54,8 @@ class ItemBlockRFStorage(block: Block) extends ItemBlock(block) with ItemBattery
 
     override def setDefaultTags(stack: ItemStack): Unit = {
         var energy = 0
-        if (stack.hasTagCompound && stack.getTagCompound.hasKey("Energy"))
-            energy = stack.getTagCompound.getInteger("Energy")
+        if (stack.hasTagCompound && stack.getTagCompound.hasKey(EnergyBank.CURRENT_ENERGY))
+            energy = stack.getTagCompound.getInteger(EnergyBank.CURRENT_ENERGY)
         val amount = getEnergyInfo
         val tag = new NBTTagCompound
         tag.setInteger("EnergyCapacity", amount._2)
