@@ -33,7 +33,7 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
 
     lazy val OUTPUT_SLOT      = 0
 
-    val BASE_ENERGY_TICK      = 100
+    val BASE_ENERGY_TICK      = 300
     lazy val UPDATE_MODE      = 4
 
     var currentMode : SOLIDIFY_MODE = BLOCK_MODE

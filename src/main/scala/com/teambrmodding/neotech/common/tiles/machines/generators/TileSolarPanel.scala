@@ -92,9 +92,9 @@ class TileSolarPanel extends MachineGenerator {
       */
     override def getEnergyProduced: Int = {
         tier match {
-            case 1 => 8
-            case 2 => 32
-            case 3 => 128
+            case 1 => 16
+            case 2 => 64
+            case 3 => 256
             case _ => 0
         }
     }

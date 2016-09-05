@@ -32,7 +32,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
 
     lazy val ITEM_INPUT_SLOT   = 0
 
-    val BASE_ENERGY_TICK = 100
+    val BASE_ENERGY_TICK = 300
 
     /**
       * The initial size of the inventory

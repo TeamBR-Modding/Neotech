@@ -29,7 +29,7 @@ import net.minecraftforge.fluids._
   */
 class TileFluidGenerator extends MachineGenerator with FluidHandler {
 
-    lazy val BASE_ENERGY_TICK = 80
+    lazy val BASE_ENERGY_TICK = 175
     lazy val INPUT_SLOT       = 0
     lazy val OUTPUT_SLOT      = 1
 
@@ -54,7 +54,7 @@ class TileFluidGenerator extends MachineGenerator with FluidHandler {
       */
     override def getEnergyProduced: Int = {
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 10)
+            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 50)
         else
             BASE_ENERGY_TICK
     }

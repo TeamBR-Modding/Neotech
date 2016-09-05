@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank, IFluidHandler}
   */
 class TileCentrifuge extends MachineProcessor[FluidStack, (FluidStack, FluidStack)] with FluidHandler {
 
-    lazy val BASE_ENERGY_TICK = 100
+    lazy val BASE_ENERGY_TICK = 300
 
     /**
       * The initial size of the inventory

@@ -30,7 +30,7 @@ import net.minecraftforge.fluids.{Fluid, FluidContainerRegistry, FluidTank, IFlu
   */
 class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
 
-    lazy val BASE_ENERGY_TICK = 20
+    lazy val BASE_ENERGY_TICK = 100
     lazy val INPUT_SLOT       = 0
 
     /**
@@ -58,7 +58,7 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
         val oxygenModifier = if(tanks(OXYGEN_TANK).getFluid != null && tanks(OXYGEN_TANK).getFluid.getFluid == FluidManager.oxygen)
             5 else 1
         if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 10) * oxygenModifier
+            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 25) * oxygenModifier
         else
             BASE_ENERGY_TICK * oxygenModifier
     }

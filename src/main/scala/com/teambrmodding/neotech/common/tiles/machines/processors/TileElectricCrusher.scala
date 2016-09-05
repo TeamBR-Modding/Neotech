@@ -33,7 +33,7 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
     val OUTPUT_SLOT_1 : Int = 1
     val OUTPUT_SLOT_2  : Int = 2
 
-    val BASE_ENERGY_TICK = 20
+    val BASE_ENERGY_TICK = 100
 
     /**
       * The initial size of the inventory

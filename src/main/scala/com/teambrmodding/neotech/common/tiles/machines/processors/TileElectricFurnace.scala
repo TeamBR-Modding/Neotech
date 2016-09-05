@@ -29,7 +29,7 @@ class TileElectricFurnace extends MachineProcessor[ItemStack, ItemStack] {
     val INPUT_SLOT = 0
     val OUTPUT_SLOT = 1
 
-    val BASE_ENERGY_TICK = 20
+    val BASE_ENERGY_TICK = 100
 
     /**
       * The initial size of the inventory
