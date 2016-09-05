@@ -53,7 +53,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       */
     def RANGE : Int = {
         if(hardDriveCount > 0)
-            return 4 + hardDriveCount
+            return 4 * hardDriveCount
         4
     }
 
