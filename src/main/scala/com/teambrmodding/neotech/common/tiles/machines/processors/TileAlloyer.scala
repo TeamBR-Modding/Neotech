@@ -12,9 +12,11 @@ import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.text.translation.I18n
 import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraft.world.World
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler
 import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank, IFluidHandler}
 
 /**
@@ -55,10 +57,10 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
       * @return How much energy to drain per tick
       */
     override def getEnergyCostPerTick: Int =
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
-        else
-            BASE_ENERGY_TICK
+    if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
+        BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
+    else
+        BASE_ENERGY_TICK
 
     /**
       * Used to get how long it takes to cook things, you should check for upgrades at this point
@@ -123,10 +125,10 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
       * @return The output
       */
     override def getOutput(input: (FluidStack, FluidStack)): FluidStack =
-        if(RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).getOutput(input).isDefined)
-            RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).getOutput(input).get
-        else
-            null
+    if(RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).getOutput(input).isDefined)
+        RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).getOutput(input).get
+    else
+        null
 
     /**
       * Get the output of the recipe (used in insert options)
@@ -146,25 +148,54 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
     override def tryInput() : Unit = {
         for(dir <- EnumFacing.values) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case otherTank : IFluidHandler =>
+                case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite) =>
+                    val otherTank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite)
 
-                    if(canInputFromSide(dir)) // Left Tank
-                        if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
-                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null &&
-                                canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
-                            val amount = tanks(INPUT_TANK_1).fill(otherTank.drain(dir.getOpposite, 1000, false), false)
-                            if (amount > 0)
-                                tanks(INPUT_TANK_1).fill(otherTank.drain(dir.getOpposite, amount, true), true)
+                    if(canInputFromSide(dir)) { // Left Tank
+                        // If we have something, try to match and fill
+                        if(tanks(INPUT_TANK_1).getFluid != null && otherTank.drain(tanks(INPUT_TANK_1).getFluid, false) != null) {
+                            val amount = fill(otherTank.drain(1000, false), doFill = false)
+                            if(amount > 0) {
+                                fill(otherTank.drain(amount, true), doFill = true)
+                                markForUpdate()
+                            }
                         }
+                        // Check our tank, if we can take fluid, do so
+                        else if(tanks(INPUT_TANK_1).getFluid == null && otherTank.drain(1000, false) != null) {
+                            val otherFluid = otherTank.drain(1000, false)
+                            val hasOther = tanks(INPUT_TANK_2).getFluid != null
+                            val amount = tanks(INPUT_TANK_1).fill(otherFluid, false)
+                            if(amount > 0 &&
+                                    (if(hasOther) RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer)
+                                            .isValidInput(otherFluid, tanks(INPUT_TANK_2).getFluid) else true)) {
+                                tanks(INPUT_TANK_1).fill(otherTank.drain(amount, true), true)
+                                markForUpdate()
+                            }
+                        }
+                    }
 
-                    if(canInputFromSide(dir, isPrimary = false)) // Right Tank
-                        if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
-                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null &&
-                                canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
-                            val amount = tanks(INPUT_TANK_2).fill(otherTank.drain(dir.getOpposite, 1000, false), false)
-                            if (amount > 0)
-                                tanks(INPUT_TANK_2).fill(otherTank.drain(dir.getOpposite, amount, true), true)
+                    if(canInputFromSide(dir, isPrimary = false)) { // Right Tank
+                        // If we have something, try to match and fill
+                        if(tanks(INPUT_TANK_2).getFluid != null && otherTank.drain(tanks(INPUT_TANK_2).getFluid, false) != null) {
+                            val amount = fill(otherTank.drain(1000, false), doFill = false)
+                            if(amount > 0) {
+                                fill(otherTank.drain(amount, true), doFill = true)
+                                markForUpdate()
+                            }
                         }
+                        // Check our tank, if we can take fluid, do so
+                        else if(tanks(INPUT_TANK_2).getFluid == null && otherTank.drain(1000, false) != null) {
+                            val otherFluid = otherTank.drain(1000, false)
+                            val hasOther = tanks(INPUT_TANK_1).getFluid != null
+                            val amount = tanks(INPUT_TANK_2).fill(otherFluid, false)
+                            if(amount > 0 &&
+                                    (if(hasOther) RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer)
+                                            .isValidInput(otherFluid, tanks(INPUT_TANK_1).getFluid) else true)) {
+                                tanks(INPUT_TANK_2).fill(otherTank.drain(amount, true), true)
+                                markForUpdate()
+                            }
+                        }
+                    }
 
                 case _ =>
             }
@@ -178,16 +209,14 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
         for(dir <- EnumFacing.values) {
             if(canOutputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case otherTank : IFluidHandler =>
-                        val fluid = otherTank.getTankInfo(dir.getOpposite)(0).fluid
-                        if((if(fluid == null) true else
-                        if (tanks(OUTPUT_TANK).getFluid != null  && tanks(OUTPUT_TANK).drain(1000, false) != null)
-                            otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK).getFluid.getFluid
-                        else false)
-                                && canDrain(dir.getOpposite, if(fluid != null) fluid.getFluid else null)) {
-                            val amount = otherTank.fill(dir.getOpposite, drain(dir, 1000, doDrain = false), false)
-                            if (amount > 0)
-                                otherTank.fill(dir, drain(dir.getOpposite, amount, doDrain = true),  true)
+                    case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite) =>
+                        val otherTank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite)
+
+                        // If we have something, try to match and fill
+                        if(tanks(OUTPUT_TANK).getFluid != null && otherTank.fill(tanks(OUTPUT_TANK).getFluid, false) > 0) {
+                            val amount = drain(otherTank.fill(tanks(OUTPUT_TANK).getFluid, false), doDrain = false)
+                            if(amount != null)
+                                drain(otherTank.fill(amount, true), doDrain = true)
                         }
                     case _ =>
                 }
@@ -259,7 +288,7 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
       * Called when something happens to the tank, you should mark the block for update here if a tile
       */
     override def onTankChanged(tank: FluidTank): Unit =
-        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
     /**
       * Returns true if the given fluid can be inserted into the given direction.
       *
@@ -298,7 +327,7 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
       * @return The container to open
       */
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new ContainerAlloyer(player.inventory, this)
+    new ContainerAlloyer(player.inventory, this)
 
     /**
       * Return the gui for this tile
@@ -312,7 +341,7 @@ class TileAlloyer extends MachineProcessor[(FluidStack, FluidStack), FluidStack]
       * @return The gui to open
       */
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new GuiAlloyer(player, this)
+    new GuiAlloyer(player, this)
 
     override def getDescription : String = {
         "" +

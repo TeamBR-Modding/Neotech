@@ -4,7 +4,7 @@ import com.teambrmodding.neotech.client.gui.machines.processors.GuiCrucible
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerCrucible
 import com.teambrmodding.neotech.common.tiles.MachineProcessor
-import com.teambrmodding.neotech.managers.{RecipeManager, MetalManager}
+import com.teambrmodding.neotech.managers.{MetalManager, RecipeManager}
 import com.teambrmodding.neotech.registries.CrucibleRecipeHandler
 import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
@@ -13,9 +13,11 @@ import com.teambr.bookshelf.util.InventoryUtils
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.text.translation.I18n
-import net.minecraft.util.{EnumParticleTypes, EnumFacing}
+import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraft.world.World
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler
 import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank, IFluidHandler}
 
 /**
@@ -86,7 +88,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
             else {
                 if(getOutput(getStackInSlot(ITEM_INPUT_SLOT)) != null) {
                     val recipeOutput = getOutput(getStackInSlot(0))
-                    if(recipeOutput.getFluid != null  && tanks(OUTPUT_TANK).drain(1000, false) != null) {
+                    if(recipeOutput.getFluid != null) {
                         if(tanks(OUTPUT_TANK).getFluid == null && recipeOutput.amount <= tanks(OUTPUT_TANK).getCapacity)
                             return true
                         else if(tanks(OUTPUT_TANK).getFluid.getFluid == recipeOutput.getFluid &&
@@ -163,16 +165,14 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
         for(dir <- EnumFacing.values) {
             if(canOutputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case otherTank : IFluidHandler =>
-                        val fluid = otherTank.getTankInfo(dir.getOpposite)(0).fluid
-                        if((if(fluid == null) true else
-                        if (tanks(OUTPUT_TANK).getFluid != null)
-                            otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK).getFluid.getFluid
-                        else false)
-                                && canDrain(dir.getOpposite, if(fluid != null) fluid.getFluid else null)) {
-                            val amount = otherTank.fill(dir.getOpposite, drain(dir, 1000, doDrain = false), false)
-                            if (amount > 0)
-                                otherTank.fill(dir, drain(dir.getOpposite, amount, doDrain = true),  true)
+                    case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite) =>
+                        val otherTank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite)
+
+                        // If we have something, try to match and fill
+                        if(tanks(OUTPUT_TANK).getFluid != null && otherTank.fill(tanks(OUTPUT_TANK).getFluid, false) > 0) {
+                            val amount = drain(otherTank.fill(tanks(OUTPUT_TANK).getFluid, false), doDrain = false)
+                            if(amount != null)
+                                drain(otherTank.fill(amount, true), doDrain = true)
                         }
                     case _ =>
                 }

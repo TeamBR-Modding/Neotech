@@ -12,9 +12,11 @@ import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.text.translation.I18n
 import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraft.world.World
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler
 import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank, IFluidHandler}
 
 /**
@@ -161,12 +163,20 @@ class TileCentrifuge extends MachineProcessor[FluidStack, (FluidStack, FluidStac
         for(dir <- EnumFacing.values) {
             if(canInputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case otherTank : IFluidHandler =>
-                        if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
-                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
-                            val amount = fill(dir, otherTank.drain(dir.getOpposite, 1000, false), doFill = false)
-                            if (amount > 0)
-                                fill(dir, otherTank.drain(dir.getOpposite, amount, true), doFill = true)
+                    case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite) =>
+                        val otherTank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite)
+
+                        // If we have something, try to match and fill
+                        if(tanks(INPUT_TANK).getFluid != null && otherTank.drain(tanks(INPUT_TANK).getFluid, false) != null) {
+                            val amount = fill(otherTank.drain(1000, false), doFill = false)
+                            if(amount > 0)
+                                fill(otherTank.drain(amount, true), doFill = true)
+                        }
+                        // Check our tank, if we can take fluid, do so
+                        else if(tanks(INPUT_TANK).getFluid == null && otherTank.drain(1000, false) != null) { // If we are empty, and they are not
+                        val amount = fill(otherTank.drain(1000, false), doFill = false)
+                            if(amount > 0)
+                                fill(otherTank.drain(amount, true), doFill = true)
                         }
                     case _ =>
                 }
@@ -180,33 +190,31 @@ class TileCentrifuge extends MachineProcessor[FluidStack, (FluidStack, FluidStac
     override def tryOutput() : Unit = {
         for(dir <- EnumFacing.values) {
             worldObj.getTileEntity(pos.offset(dir)) match {
-                case otherTank: IFluidHandler =>
-                    if (otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty) {
-                        val fluid = otherTank.getTankInfo(dir.getOpposite)(0).fluid
+                case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite) =>
+                    val otherTank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite)
 
-                        if(canOutputFromSide(dir))
-                            if ((if (fluid == null) true
-                            else if (tanks(OUTPUT_TANK_1).getFluid != null && tanks(OUTPUT_TANK_1).drain(1000, false) != null)
-                                otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK_1).getFluid.getFluid
-                            else false)
-                                    && canDrain(dir.getOpposite, if (fluid != null) fluid.getFluid else null)) {
-                                val amount1 = otherTank.fill(dir.getOpposite, tanks(OUTPUT_TANK_1).drain(1000, false), false)
-                                if (amount1 > 0)
-                                    otherTank.fill(dir, tanks(OUTPUT_TANK_1).drain(amount1, true), true)
-                            }
-
-                        if(canOutputFromSide(dir, isPrimary = false)) {
-                            if ((if (fluid == null) true
-                            else if (tanks(OUTPUT_TANK_2).getFluid != null && tanks(OUTPUT_TANK_2).drain(1000, false) != null)
-                                otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid == tanks(OUTPUT_TANK_2).getFluid.getFluid
-                            else false)
-                                    && canDrain(dir.getOpposite, if (fluid != null) fluid.getFluid else null)) {
-                                val amount = otherTank.fill(dir.getOpposite, tanks(OUTPUT_TANK_2).drain(1000, false), false)
-                                if (amount > 0)
-                                    otherTank.fill(dir, tanks(OUTPUT_TANK_2).drain(amount, true), true)
+                        if(canOutputFromSide(dir)) {
+                            // If we have something, try to match and fill
+                            if(tanks(OUTPUT_TANK_1).getFluid != null && otherTank.fill(tanks(OUTPUT_TANK_1).getFluid, false) > 0) {
+                                val amount = tanks(OUTPUT_TANK_1).drain(otherTank.fill(tanks(OUTPUT_TANK_1).getFluid, false), false)
+                                if(amount != null) {
+                                    tanks(OUTPUT_TANK_1).drain(otherTank.fill(amount, true), true)
+                                    markForUpdate()
+                                }
                             }
                         }
-                    }
+
+                        if(canOutputFromSide(dir, isPrimary = false)) {
+                            if(tanks(OUTPUT_TANK_2).getFluid != null && otherTank.fill(tanks(OUTPUT_TANK_2).getFluid, false) > 0) {
+                                val amount = tanks(OUTPUT_TANK_2).drain(otherTank.fill(tanks(OUTPUT_TANK_2).getFluid, false), false)
+                                if(amount != null) {
+                                    tanks(OUTPUT_TANK_2).drain(otherTank.fill(amount, true), true)
+                                    markForUpdate()
+                                }
+                            }
+                        }
+
+
                 case _ =>
             }
         }

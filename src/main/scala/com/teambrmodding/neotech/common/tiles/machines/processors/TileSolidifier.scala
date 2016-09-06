@@ -4,7 +4,7 @@ import com.teambrmodding.neotech.client.gui.machines.processors.GuiSolidifier
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerSolidifier
 import com.teambrmodding.neotech.common.tiles.MachineProcessor
-import com.teambrmodding.neotech.managers.{RecipeManager, MetalManager}
+import com.teambrmodding.neotech.managers.{MetalManager, RecipeManager}
 import com.teambrmodding.neotech.registries.SolidifierRecipeHandler
 import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
@@ -14,10 +14,12 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.text.translation.I18n
 import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraft.world.World
-import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank, IFluidHandler}
+import net.minecraftforge.fluids.capability.{CapabilityFluidHandler, IFluidHandler}
+import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank}
 
 /**
   * This file was created for NeoTech
@@ -159,12 +161,20 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
         for(dir <- EnumFacing.values) {
             if(canInputFromSide(dir)) {
                 worldObj.getTileEntity(pos.offset(dir)) match {
-                    case otherTank : IFluidHandler =>
-                        if(otherTank.getTankInfo(dir.getOpposite) != null && otherTank.getTankInfo(dir.getOpposite).nonEmpty &&
-                                otherTank.getTankInfo(dir.getOpposite)(0) != null && otherTank.getTankInfo(dir.getOpposite)(0).fluid != null && canFill(dir, otherTank.getTankInfo(dir.getOpposite)(0).fluid.getFluid)) {
-                            val amount = fill(dir, otherTank.drain(dir.getOpposite, 1000, false), doFill = false)
-                            if (amount > 0)
-                                fill(dir, otherTank.drain(dir.getOpposite, amount, true), doFill = true)
+                    case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite) =>
+                        val otherTank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite)
+
+                        // If we have something, try to match and fill
+                        if(tanks(INPUT_TANK).getFluid != null && otherTank.drain(tanks(INPUT_TANK).getFluid, false) != null) {
+                            val amount = fill(otherTank.drain(tanks(INPUT_TANK).getFluid, false), doFill = false)
+                            if(amount > 0)
+                                fill(otherTank.drain(tanks(INPUT_TANK).getFluid, true), doFill = true)
+                        }
+                        // Check our tank, if we can take fluid, do so
+                        else if(tanks(INPUT_TANK).getFluid == null && otherTank.drain(1000, false) != null) { // If we are empty, and they are not
+                        val amount = fill(otherTank.drain(1000, false), doFill = false)
+                            if(amount > 0)
+                                fill(otherTank.drain(amount, true), doFill = true)
                         }
                     case _ =>
                 }
