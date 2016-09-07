@@ -1,7 +1,6 @@
 package com.teambrmodding.neotech.common.blocks.machines
 
 import com.teambrmodding.neotech.common.blocks.BaseBlock
-import com.teambrmodding.neotech.common.blocks.traits.Upgradeable
 import com.teambrmodding.neotech.common.tiles.AbstractMachine
 import com.teambrmodding.neotech.managers.ItemManager
 import com.teambrmodding.neotech.utils.PlayerUtils
@@ -9,6 +8,7 @@ import com.teambr.bookshelf.common.blocks.properties.Properties
 import com.teambr.bookshelf.common.blocks.traits.IToolable
 import com.teambr.bookshelf.common.tiles.traits.{Inventory, OpensGui}
 import com.teambr.bookshelf.util.WorldUtils
+import com.teambrmodding.neotech.common.tiles.traits.Upgradeable
 import net.minecraft.block.BlockPistonBase
 import net.minecraft.block.material.Material
 import net.minecraft.block.properties.{IProperty, PropertyBool}

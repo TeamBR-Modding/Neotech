@@ -1,7 +1,6 @@
 package com.teambrmodding.neotech.client
 
 import com.teambrmodding.neotech.client.mesh.MeshDefinitions.{PipeModelMesh, PipeSpecialModelMesh, StarModelMesh}
-import com.teambrmodding.neotech.client.modelfactory.ModelFactory
 import com.teambrmodding.neotech.client.renderers.entity.RenderNet
 import com.teambrmodding.neotech.client.renderers.tiles._
 import com.teambrmodding.neotech.common.CommonProxy
@@ -157,7 +156,6 @@ class ClientProxy extends CommonProxy {
       * Now that the items and such are loaded, use this chance to use them
       */
     override def init() = {
-        ModelFactory.register()
         ItemRenderManager.registerItemRenderer()
 
         KeybindHandler.registerBindings()

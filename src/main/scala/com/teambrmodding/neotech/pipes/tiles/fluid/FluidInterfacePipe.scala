@@ -96,20 +96,15 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
                 worldObj.getTileEntity(pos.offset(dir)) match {
                     case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite) =>
                         val tank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite)
-                        if(tank.getTankProperties != null) {
-                            for (tankInfoSlot <- tank.getTankProperties.indices) {
-                                if (tank.getTankProperties()(tankInfoSlot).getContents != null) {
-                                    if (findSourceOnMode(tank.getTankProperties()(tankInfoSlot).getContents.copy(), pos.offset(dir))) {
-                                        if (foundSource != null &&
-                                                tank.drain(getMaxFluidDrain, false) != null &&
-                                                foundSource._1.getTankProperties()(tankInfoSlot).canFillFluidType(tank.drain(getMaxFluidDrain, false))) {
-                                            val amount = foundSource._1.fill(tank.drain(getMaxFluidDrain, false), false)
-                                            if (amount > 0) {
-                                                foundSource._1.fill(tank.drain(amount, true), true)
-                                                foundSource = null
-                                                return
-                                            }
-                                        }
+                        if(tank != null) {
+                            val drained = tank.drain(getMaxFluidDrain, false)
+                            if(drained != null && findSourceOnMode(drained.copy(), pos.offset(dir))) {
+                                if(foundSource != null && foundSource._1.fill(drained, false) > 0) {
+                                    val amount = foundSource._1.fill(tank.drain(getMaxFluidDrain, false), false)
+                                    if(amount > 0) {
+                                        foundSource._1.fill(tank.drain(amount, true), true)
+                                        foundSource = null
+                                        return
                                     }
                                 }
                             }

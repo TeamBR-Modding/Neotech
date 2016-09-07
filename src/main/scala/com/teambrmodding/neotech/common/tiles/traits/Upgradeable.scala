@@ -1,9 +1,9 @@
-package com.teambrmodding.neotech.common.blocks.traits
+package com.teambrmodding.neotech.common.tiles.traits
 
-import com.teambrmodding.neotech.collections.UpgradeBoard
-import com.teambrmodding.neotech.managers.ItemManager
 import com.teambr.bookshelf.common.container.InventoryCallback
 import com.teambr.bookshelf.common.tiles.traits.Inventory
+import com.teambrmodding.neotech.collections.UpgradeBoard
+import com.teambrmodding.neotech.managers.ItemManager
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.items.IItemHandler
@@ -20,7 +20,7 @@ import net.minecraftforge.items.IItemHandler
   */
 trait Upgradeable {
     lazy val upgradeInventory = new Inventory {
-        override def initialSize: Int = 1
+        override def initialSize: Int = 6
 
         /**
           * Used to define if an item is valid for a slot, we only want full MotherBoards
@@ -29,7 +29,7 @@ trait Upgradeable {
           * @param stack The stack to check
           * @return True if you can put this there
           */
-        override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = stack.getItem == ItemManager.upgradeMBFull
+        override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = true
 
         addCallback(new InventoryCallback {
             override def onInventoryChanged(inventory: IItemHandler, slotNumber: Int): Unit = {

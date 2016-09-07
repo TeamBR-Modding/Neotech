@@ -75,6 +75,7 @@ object NeoTech {
     val tabMetals = new CreativeTabMetals
 
     @EventHandler def preInit(event : FMLPreInitializationEvent) = {
+        CapabilityLoadManager.registerCapabilities()
         configFolderLocation = event.getModConfigurationDirectory.getAbsolutePath + File.separator + "NeoTech"
         ConfigRegistry.preInit()
         BlockManager.preInit()

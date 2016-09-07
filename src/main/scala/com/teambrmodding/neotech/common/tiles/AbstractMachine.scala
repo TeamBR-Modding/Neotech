@@ -1,8 +1,8 @@
 package com.teambrmodding.neotech.common.tiles
 
 import com.teambrmodding.neotech.collections.{EnumInputOutputMode, InputOutput}
-import com.teambrmodding.neotech.common.blocks.traits.Upgradeable
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, InventorySided, RedstoneAware, Syncable}
+import com.teambrmodding.neotech.common.tiles.traits.Upgradeable
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing

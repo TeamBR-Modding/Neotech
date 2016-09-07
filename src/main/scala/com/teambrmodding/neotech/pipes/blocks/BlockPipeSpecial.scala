@@ -3,7 +3,6 @@ package com.teambrmodding.neotech.pipes.blocks
 import java.util.Random
 
 import com.teambrmodding.neotech.NeoTech
-import com.teambrmodding.neotech.common.blocks.traits.Upgradeable
 import com.teambrmodding.neotech.lib.Reference
 import com.teambrmodding.neotech.managers.ItemManager
 import com.teambrmodding.neotech.pipes.collections.WorldPipes
@@ -13,6 +12,7 @@ import com.teambrmodding.neotech.pipes.types.{AdvancedPipe, SimplePipe}
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.loadables.ILoadActionProvider
 import com.teambr.bookshelf.traits.HasToolTip
+import com.teambrmodding.neotech.common.tiles.traits.Upgradeable
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.block.{Block, BlockContainer}

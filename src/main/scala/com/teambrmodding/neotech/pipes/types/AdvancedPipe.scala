@@ -1,9 +1,9 @@
 package com.teambrmodding.neotech.pipes.types
 
 import com.teambrmodding.neotech.collections.{EnumInputOutputMode, InputOutput}
-import com.teambrmodding.neotech.common.blocks.traits.Upgradeable
 import com.teambrmodding.neotech.pipes.collections.{Filter, WorldPipes}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
+import com.teambrmodding.neotech.common.tiles.traits.Upgradeable
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.play.server.SPacketUpdateTileEntity
