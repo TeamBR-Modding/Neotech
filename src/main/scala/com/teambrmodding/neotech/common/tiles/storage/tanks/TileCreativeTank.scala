@@ -29,6 +29,7 @@ class TileCreativeTank extends TileIronTank {
     override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = {
         if(tanks(TANK).getFluid == null && resource != null) {
             tanks(TANK).setFluid(new FluidStack(resource.getFluid, 8000))
+            markForUpdate()
             8000
         }
         else
