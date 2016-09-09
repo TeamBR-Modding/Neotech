@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since August 16, 2015
   */
-class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerItem {
+class ItemBlockTank(block: Block) extends ItemBlock(block){
 
     setNoRepair()
     setMaxStackSize(1)
@@ -75,84 +75,6 @@ class ItemBlockTank(block: Block) extends ItemBlock(block) with IFluidContainerI
 
     def getCapacity(container: ItemStack): Int = {
         getTankInfo._2
-    }
-
-    def fill(container: ItemStack, resource: FluidStack, doFill: Boolean): Int = {
-        if (resource == null) {
-            return 0
-        }
-        if (!doFill) {
-            if (!container.hasTagCompound || !container.getTagCompound.hasKey("Fluid")) {
-                return Math.min(getTankInfo._2, resource.amount)
-            }
-            val stack: FluidStack = FluidStack.loadFluidStackFromNBT(container.getTagCompound.getCompoundTag("Fluid"))
-            if (stack == null) {
-                return Math.min(getTankInfo._2, resource.amount)
-            }
-            if (!stack.isFluidEqual(resource)) {
-                return 0
-            }
-            return Math.min(getTankInfo._2 - stack.amount, resource.amount)
-        }
-        if (!container.hasTagCompound) {
-            container.setTagCompound(new NBTTagCompound)
-        }
-        if (!container.getTagCompound.hasKey("Fluid")) {
-            val fluidTag: NBTTagCompound = resource.writeToNBT(new NBTTagCompound)
-            if (getTankInfo._2 < resource.amount) {
-                fluidTag.setInteger("Amount", getTankInfo._2)
-                container.getTagCompound.setTag("Fluid", fluidTag)
-                return getTankInfo._2
-            }
-            container.getTagCompound.setTag("Fluid", fluidTag)
-            return resource.amount
-        }
-        val fluidTag: NBTTagCompound = container.getTagCompound.getCompoundTag("Fluid")
-        val stack: FluidStack = FluidStack.loadFluidStackFromNBT(fluidTag)
-
-        if (stack != null && !stack.isFluidEqual(resource)) {
-            return 0
-        }
-
-        var filled: Int = getTankInfo._2 - stack.amount
-        if (resource.amount < filled) {
-            stack.amount += resource.amount
-            filled = resource.amount
-        }
-        else {
-            stack.amount = getTankInfo._2
-        }
-        container.getTagCompound.setTag("Fluid", stack.writeToNBT(fluidTag))
-        if(doFill)
-            updateDamage(container)
-        filled
-    }
-
-    def drain(container: ItemStack, maxDrain: Int, doDrain: Boolean): FluidStack = {
-        if (!container.hasTagCompound || !container.getTagCompound.hasKey("Fluid")) {
-            return null
-        }
-        val stack: FluidStack = FluidStack.loadFluidStackFromNBT(container.getTagCompound.getCompoundTag("Fluid"))
-        if (stack == null) {
-            return null
-        }
-        val currentAmount: Int = stack.amount
-        stack.amount = Math.min(stack.amount, maxDrain)
-        if (doDrain) {
-            if (currentAmount == stack.amount) {
-                container.getTagCompound.removeTag("Fluid")
-                if (container.getTagCompound.hasNoTags) {
-                    container.setTagCompound(null)
-                }
-                return stack
-            }
-            val fluidTag: NBTTagCompound = container.getTagCompound.getCompoundTag("Fluid")
-            fluidTag.setInteger("Amount", currentAmount - stack.amount)
-            container.getTagCompound.setTag("Fluid", fluidTag)
-        }
-        if(doDrain)
-            updateDamage(container)
-        stack
     }
 
     private def getTankInfo: (Int, Int) = {

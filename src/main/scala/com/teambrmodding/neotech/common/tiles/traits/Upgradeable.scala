@@ -29,7 +29,7 @@ trait Upgradeable {
           * @param stack The stack to check
           * @return True if you can put this there
           */
-        override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = true
+        override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = stack.getItem == ItemManager.upgradeMBFull
 
         addCallback(new InventoryCallback {
             override def onInventoryChanged(inventory: IItemHandler, slotNumber: Int): Unit = {
@@ -53,8 +53,11 @@ trait Upgradeable {
     //NBT, must overwrite
     def readFromNBT(tag: NBTTagCompound): Unit = {
         upgradeInventory.readFromNBT(tag, "upgrade")
-        if(upgradeInventory.getSizeInventory == 0)
-            upgradeInventory.addInventorySlot(null)
+        if(upgradeInventory.getSizeInventory != 6) {
+            upgradeInventory.inventoryContents.clear()
+            for(x <- 0 until 6)
+                upgradeInventory.addInventorySlot(null)
+        }
     }
 
     def writeToNBT(tag : NBTTagCompound): NBTTagCompound = {

@@ -1,11 +1,15 @@
 package com.teambrmodding.neotech.common.blocks.storage
 
+import javax.annotation.Nullable
+
 import com.teambr.bookshelf.common.blocks.traits.IToolable
+import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambrmodding.neotech.common.blocks.BaseBlock
 import com.teambrmodding.neotech.common.items.ItemWrench
 import com.teambrmodding.neotech.common.tiles.storage.tanks._
 import com.teambr.bookshelf.loadables.ILoadActionProvider
 import com.teambr.bookshelf.notification.{Notification, NotificationHelper}
+import com.teambr.bookshelf.util.WorldUtils
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
@@ -16,7 +20,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.{BlockRenderLayer, EnumBlockRenderType, EnumFacing, EnumHand}
-import net.minecraft.world.{IBlockAccess, World}
+import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.fluids.capability.IFluidHandler
 import net.minecraftforge.fluids.{FluidContainerRegistry, FluidStack, FluidUtil, IFluidContainerItem}
@@ -73,6 +77,15 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
         FluidContainerRegistry.isFilledContainer(heldItem) || heldItem.getItem.isInstanceOf[IFluidContainerItem]
     }
 
+    override def breakBlock(world: World, pos: BlockPos, state : IBlockState): Unit = {
+        world match {
+            case _: WorldServer => //We are on a server
+                WorldUtils.dropStack(world, new ItemStack(state.getBlock), pos)
+            case _ => //Not on the server
+        }
+        super.breakBlock(world, pos, state)
+    }
+
     def consumeItem(stack: ItemStack): ItemStack = {
         if (stack.stackSize == 1) {
             if (FluidContainerRegistry.isContainer(stack))
@@ -111,31 +124,6 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
     def getName: String = name
 
     def getTier: Int = tier
-
-    private def dropItem(world: World, stack: ItemStack, pos: BlockPos): Unit = {
-        val random = new Random
-        if (stack != null && stack.stackSize > 0) {
-            val rx = random.nextFloat * 0.8F + 0.1F
-            val ry = random.nextFloat * 0.8F + 0.1F
-            val rz = random.nextFloat * 0.8F + 0.1F
-
-            val itemEntity = new EntityItem(world,
-                pos.getX + rx, pos.getY + ry, pos.getZ + rz,
-                new ItemStack(stack.getItem, stack.stackSize, stack.getItemDamage))
-
-            if (stack.hasTagCompound)
-                itemEntity.getEntityItem.setTagCompound(stack.getTagCompound)
-
-            val factor = 0.05F
-
-            itemEntity.motionX = random.nextGaussian * factor
-            itemEntity.motionY = random.nextGaussian * factor + 0.2F
-            itemEntity.motionZ = random.nextGaussian * factor
-            world.spawnEntityInWorld(itemEntity)
-
-            stack.stackSize = 0
-        }
-    }
 
     override def getRenderType(state : IBlockState) : EnumBlockRenderType = EnumBlockRenderType.MODEL
 
