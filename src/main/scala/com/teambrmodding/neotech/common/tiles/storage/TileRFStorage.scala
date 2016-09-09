@@ -1,5 +1,7 @@
 package com.teambrmodding.neotech.common.tiles.storage
 
+import java.util
+
 import cofh.api.energy.{IEnergyContainerItem, IEnergyReceiver}
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, Inventory, UpdatingTile}
 import net.minecraft.item.ItemStack
@@ -121,6 +123,10 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
         super[TileEntity].readFromNBT(tag)
         super[UpdatingTile].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
+        if(inventoryContents.size() != initialSize) {
+            inventoryContents = new util.Stack[ItemStack]()
+            inventoryContents.setSize(initialSize)
+        }
         if (tag.hasKey("Tier")) {
             if (tier == 0) initEnergy(tag.getInteger("Tier"))
             tier = tag.getInteger("Tier")
