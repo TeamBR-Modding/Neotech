@@ -162,7 +162,7 @@ class ItemElectricArmor(name : String, index : Int, armorType : EntityEquipmentS
                 PlayerUpdateEvent.previousFOV = Minecraft.getMinecraft.gameSettings.fovSetting
             }
             player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 20,
-                ModifierSprinting.getSprintingLevel(itemStack) * 10 - 1, false, false))
+                ModifierSprinting.getSprintingLevel(itemStack) * 3 - 1, false, false))
             if (!player.capabilities.isCreativeMode && !world.isRemote) {
                 extractEnergy(itemStack, 1, simulate = false)
                 updateDamage(itemStack)
