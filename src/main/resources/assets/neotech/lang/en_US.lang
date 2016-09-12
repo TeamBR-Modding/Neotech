@@ -121,13 +121,36 @@ item.neotech:dustSilver.name=Silver Dust
 item.neotech:ingotSilver.name=Silver Ingot
 item.neotech:nuggetSilver.name=Silver Nugget
 
-# Motherboard
+# Upgrades
 item.neotech:upgradeMBFull.name=Filled Motherboard
 item.neotech:upgradeMBEmpty.name=Empty Motherboard
 item.neotech:upgradeHardDrive.name=HardDrive Upgrade
 item.neotech:upgradeControl.name=Control Upgrade
 item.neotech:upgradeProcessor.name=Processor Upgrade
 item.neotech:upgradeExpansion.name=Expansion Upgrade
+
+item.neotech:CPU_1.name=Single Core Processor
+item.neotech:CPU_2.name=Dual Core Processor
+item.neotech:CPU_3.name=Quad Core Processor
+item.neotech:CPU_4.name=Octa Core Processor
+
+item.neotech:DDR1.name=DDR1 Memory Module
+item.neotech:DDR2.name=DDR2 Memory Module
+item.neotech:DDR3.name=DDR3 Memory Module
+item.neotech:DDR4.name=DDR4 Memory Module
+
+item.neotech:HDD_64.name=64G Hard Drive
+item.neotech:HDD_256.name=256G Hard Drive
+item.neotech:HDD_512.name=512G Hard Drive
+item.neotech:HDD_1T.name=1T Hard Drive
+
+item.neotech:PSU_250.name=250W Power Supply
+item.neotech:PSU_500.name=500W Power Supply
+item.neotech:PSU_750.name=750W Power Supply
+item.neotech:PSU_960.name=960W Power Supply
+
+item.neotech.Transformer.name=IC2 Transformer
+
 
 # Tools
 item.neotech:wrench.name=Wrench

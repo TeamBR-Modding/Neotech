@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.client
 
-import com.teambrmodding.neotech.client.mesh.MeshDefinitions.{PipeModelMesh, PipeSpecialModelMesh, StarModelMesh}
+import com.teambrmodding.neotech.client.mesh.MeshDefinitions.{PipeModelMesh, PipeSpecialModelMesh, SimpleItemMeshDefinition, StarModelMesh}
 import com.teambrmodding.neotech.client.renderers.entity.RenderNet
 import com.teambrmodding.neotech.client.renderers.tiles._
 import com.teambrmodding.neotech.common.CommonProxy
@@ -13,13 +13,14 @@ import com.teambrmodding.neotech.common.tiles.misc.TileMobStand
 import com.teambrmodding.neotech.common.tiles.storage.TileFlushableChest
 import com.teambrmodding.neotech.common.tiles.storage.tanks.TileIronTank
 import com.teambrmodding.neotech.events.{GuiEvents, RenderingEvents}
-import com.teambrmodding.neotech.managers.{BlockManager, FluidManager, MetalManager}
+import com.teambrmodding.neotech.managers.{BlockManager, FluidManager, ItemManager, MetalManager}
 import com.teambrmodding.neotech.tools.armor.ItemElectricArmor
 import com.teambrmodding.neotech.tools.tools.BaseElectricTool
 import com.teambrmodding.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
 import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
 import com.teambrmodding.neotech.common.tiles.machines.TileGrinder
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -32,6 +33,7 @@ import net.minecraft.world.IBlockAccess
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.{ClientRegistry, IRenderFactory, RenderingRegistry}
+import net.minecraftforge.fml.common.Loader
 
 import scala.collection.JavaConversions._
 
@@ -60,13 +62,13 @@ class ClientProxy extends CommonProxy {
         })
 
         ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.blockMiniatureStar), new StarModelMesh)
-        for(dye <- EnumDyeColor.values())
+        for (dye <- EnumDyeColor.values())
             ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.blockMiniatureStar),
                 "blockMiniatureStar",
                 "attached_side=6,color=" + dye.getName)
 
         ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeBasicStructure), new PipeModelMesh)
-        for(dye <- EnumDyeColor.values())
+        for (dye <- EnumDyeColor.values())
             ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.pipeBasicStructure),
                 "pipeStructure",
                 "color=" + dye.getName + ",down=true,east=false,north=false,south=false,up=true,west=false")
@@ -95,11 +97,11 @@ class ClientProxy extends CommonProxy {
 
         // Item Models
         val itemIterator = Item.REGISTRY.iterator()
-        while(itemIterator.hasNext) {
+        while (itemIterator.hasNext) {
             itemIterator.next() match {
-                case upgradeItem : BaseUpgradeItem =>
+                case upgradeItem: BaseUpgradeItem =>
                     ModelLoader.setCustomModelResourceLocation(upgradeItem, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-                case tool : BaseElectricTool if !tool.isInstanceOf[ItemElectricArmor] =>
+                case tool: BaseElectricTool if !tool.isInstanceOf[ItemElectricArmor] =>
                     ModelLoader.setCustomModelResourceLocation(tool, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
                 case _ =>
             }
@@ -107,9 +109,9 @@ class ClientProxy extends CommonProxy {
 
         // Block Models, for items
         val blockIterator = Block.REGISTRY.iterator()
-        while(blockIterator.hasNext) {
+        while (blockIterator.hasNext) {
             blockIterator.next() match {
-                case connectedTextures : BlockConnectedTextures =>
+                case connectedTextures: BlockConnectedTextures =>
                     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(connectedTextures), 0,
                         BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
                 case _ =>
@@ -148,6 +150,100 @@ class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.flushableChest, "flushableChest", "facing=north")
 
         MetalManager.registerModels()
+
+        // Upgrades
+
+        // CPUS
+        // Single Core
+        ModelLoader.setCustomMeshDefinition(ItemManager.processorSingleCore,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.CPU_SINGLE_CORE.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.processorSingleCore, "items/upgrades", "type=" + IUpgradeItem.CPU_SINGLE_CORE.toLowerCase)
+
+        // Dual Core
+        ModelLoader.setCustomMeshDefinition(ItemManager.processorDualCore,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.CPU_DUAL_CORE.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.processorDualCore, "items/upgrades", "type=" + IUpgradeItem.CPU_DUAL_CORE.toLowerCase)
+
+        // Quad Core
+        ModelLoader.setCustomMeshDefinition(ItemManager.processorQuadCore,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.CPU_QUAD_CORE.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.processorQuadCore, "items/upgrades", "type=" + IUpgradeItem.CPU_QUAD_CORE.toLowerCase)
+
+        // Octa Core
+        ModelLoader.setCustomMeshDefinition(ItemManager.processorOctCore,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.CPU_OCT_CORE.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.processorOctCore, "items/upgrades", "type=" + IUpgradeItem.CPU_OCT_CORE.toLowerCase)
+
+
+        // Memory
+        // DDR1
+        ModelLoader.setCustomMeshDefinition(ItemManager.memoryDDR1,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.MEMORY_DDR1.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.memoryDDR1, "items/upgrades", "type=" + IUpgradeItem.MEMORY_DDR1.toLowerCase)
+
+        // DDR2
+        ModelLoader.setCustomMeshDefinition(ItemManager.memoryDDR2,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.MEMORY_DDR2.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.memoryDDR2, "items/upgrades", "type=" + IUpgradeItem.MEMORY_DDR2.toLowerCase)
+
+        //DDR3
+        ModelLoader.setCustomMeshDefinition(ItemManager.memoryDDR3,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.MEMORY_DDR3.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.memoryDDR3, "items/upgrades", "type=" + IUpgradeItem.MEMORY_DDR3.toLowerCase)
+
+        //DDR4
+        ModelLoader.setCustomMeshDefinition(ItemManager.memoryDDR4,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.MEMORY_DDR4.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.memoryDDR4, "items/upgrades", "type=" + IUpgradeItem.MEMORY_DDR4.toLowerCase)
+
+        // Hard Drive
+        // 64
+        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive64G,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_64G.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.hardDrive64G, "items/upgrades", "type=" + IUpgradeItem.HDD_64G.toLowerCase)
+
+        // 254
+        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive254G,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_256G.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.hardDrive254G, "items/upgrades", "type=" + IUpgradeItem.HDD_256G.toLowerCase)
+
+        // 512
+        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive512G,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_512G.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.hardDrive512G, "items/upgrades", "type=" + IUpgradeItem.HDD_512G.toLowerCase)
+
+        // 1t
+        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive1T,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_1T.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.hardDrive1T, "items/upgrades", "type=" + IUpgradeItem.HDD_1T.toLowerCase)
+
+        // PSU
+        // 250
+        ModelLoader.setCustomMeshDefinition(ItemManager.psu250W,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.PSU_250W.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.psu250W, "items/upgrades", "type=" + IUpgradeItem.PSU_250W.toLowerCase)
+
+        // 500
+        ModelLoader.setCustomMeshDefinition(ItemManager.psu500W,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.PSU_500W.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.psu500W, "items/upgrades", "type=" + IUpgradeItem.PSU_500W.toLowerCase)
+
+        // 750
+        ModelLoader.setCustomMeshDefinition(ItemManager.psu750W,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.PSU_750W.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.psu750W, "items/upgrades", "type=" + IUpgradeItem.PSU_750W.toLowerCase)
+
+        // 960
+        ModelLoader.setCustomMeshDefinition(ItemManager.psu960W,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.PSU_960W.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.psu960W, "items/upgrades", "type=" + IUpgradeItem.PSU_960W.toLowerCase)
+
+        // Transformer
+        if (Loader.isModLoaded("IC2")) {
+            ModelLoader.setCustomMeshDefinition(ItemManager.transformer,
+                new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.TRANSFORMER.toLowerCase))
+            ModelLoaderHelper.registerItem(ItemManager.transformer, "items/upgrades", "type=" + IUpgradeItem.TRANSFORMER.toLowerCase)
+        }
     }
 
     /**

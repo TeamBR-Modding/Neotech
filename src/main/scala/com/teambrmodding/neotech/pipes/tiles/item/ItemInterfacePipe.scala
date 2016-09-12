@@ -155,6 +155,8 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
         if(checkingResource == null || !checkingResource.isInstanceOf[ItemStack] || !super.willAcceptResource(checkingResource, tilePos, facing))
             return false
 
+        System.out.println(checkingResource)
+
         if(tempInventory == null) {
             tempInventory = new Inventory() {
                 override def initialSize: Int = 1

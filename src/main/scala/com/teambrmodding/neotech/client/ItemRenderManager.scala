@@ -1,5 +1,7 @@
 package com.teambrmodding.neotech.client
 
+import com.teambrmodding.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefinition
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import com.teambrmodding.neotech.lib.Reference
 import com.teambrmodding.neotech.managers.ItemManager
 import net.minecraft.block.Block

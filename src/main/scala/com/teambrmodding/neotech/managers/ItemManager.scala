@@ -7,9 +7,11 @@ import com.teambrmodding.neotech.tools.armor.ItemElectricArmor
 import com.teambrmodding.neotech.tools.tools.{ElectricPickaxe, ElectricSword}
 import com.teambr.bookshelf.Bookshelf
 import com.teambr.bookshelf.helper.LogHelper
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import gnu.trove.map.hash.THashMap
 import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.{Item, ItemStack}
+import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -36,6 +38,28 @@ object ItemManager {
     val upgradeControl = new MotherBoardUpgradeItem("upgradeControl", 1, NeoTech.tabNeoTech)
     val upgradeProcessor = new MotherBoardUpgradeItem("upgradeProcessor", 8, NeoTech.tabNeoTech)
     val upgradeExpansion = new MotherBoardUpgradeItem("upgradeExpansion", 1, NeoTech.tabNeoTech)
+
+    val processorSingleCore = new UpgradeItem(IUpgradeItem.CPU_SINGLE_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 8)
+    val processorDualCore = new UpgradeItem(IUpgradeItem.CPU_DUAL_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 8)
+    val processorQuadCore = new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 8)
+    val processorOctCore = new UpgradeItem(IUpgradeItem.CPU_OCT_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 8)
+
+    val memoryDDR1 = new UpgradeItem(IUpgradeItem.MEMORY_DDR1, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4)
+    val memoryDDR2 = new UpgradeItem(IUpgradeItem.MEMORY_DDR2, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4)
+    val memoryDDR3 = new UpgradeItem(IUpgradeItem.MEMORY_DDR3, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4)
+    val memoryDDR4 = new UpgradeItem(IUpgradeItem.MEMORY_DDR4, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4)
+
+    val hardDrive64G = new UpgradeItem(IUpgradeItem.HDD_64G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1)
+    val hardDrive254G = new UpgradeItem(IUpgradeItem.HDD_256G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1)
+    val hardDrive512G = new UpgradeItem(IUpgradeItem.HDD_512G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1)
+    val hardDrive1T = new UpgradeItem(IUpgradeItem.HDD_1T, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1)
+
+    val psu250W = new UpgradeItem(IUpgradeItem.PSU_250W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1)
+    val psu500W = new UpgradeItem(IUpgradeItem.PSU_500W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1)
+    val psu750W = new UpgradeItem(IUpgradeItem.PSU_750W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1)
+    val psu960W = new UpgradeItem(IUpgradeItem.PSU_960W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1)
+
+    val transformer = new UpgradeItem(IUpgradeItem.TRANSFORMER, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MISC, 4)
 
     //Utils
     val wrench = new ItemWrench
@@ -66,6 +90,30 @@ object ItemManager {
         registerItem(upgradeControl, "upgradeControl")
         registerItem(upgradeProcessor, "upgradeProcessor")
         registerItem(upgradeExpansion, "upgradeExpansion")
+
+        registerItem(processorSingleCore, "processorSingleCore")
+        registerItem(processorDualCore, "processorDualCore")
+        registerItem(processorQuadCore, "processorQuadCore")
+        registerItem(processorOctCore, "processorOctCore")
+
+        registerItem(memoryDDR1, "memoryDDR1")
+        registerItem(memoryDDR2, "memoryDDR2")
+        registerItem(memoryDDR3, "memoryDDR3")
+        registerItem(memoryDDR4, "memoryDDR4")
+
+        registerItem(hardDrive64G, "hardDrive64G")
+        registerItem(hardDrive254G, "hardDrive254G")
+        registerItem(hardDrive512G, "hardDrive512G")
+        registerItem(hardDrive1T, "hardDrive1T")
+
+        registerItem(psu250W, "psu250W")
+        registerItem(psu500W, "psu500W")
+        registerItem(psu750W, "psu750W")
+        registerItem(psu960W, "psu960W")
+
+        // Check for IC2
+        if(Loader.isModLoaded("IC2"))
+            registerItem(transformer, "transformer")
 
         registerItem(wrench, "wrench")
         registerItem(trashBag, "trashBag")

@@ -1,0 +1,96 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "neotech:item",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "type": {
+      "cpu_1": {
+        "textures": {
+          "layer0": "neotech:items/cpu1"
+        }
+      },
+      "cpu_2": {
+        "textures": {
+          "layer0": "neotech:items/cpu2"
+        }
+      },
+      "cpu_3": {
+        "textures": {
+          "layer0": "neotech:items/cpu3"
+        }
+      },
+      "cpu_4": {
+        "textures": {
+          "layer0": "neotech:items/cpu4"
+        }
+      },
+      "ddr1": {
+        "textures": {
+          "layer0": "neotech:items/ram1"
+        }
+      },
+      "ddr2": {
+        "textures": {
+          "layer0": "neotech:items/ram2"
+        }
+      },
+      "ddr3": {
+        "textures": {
+          "layer0": "neotech:items/ram3"
+        }
+      },
+      "ddr4": {
+        "textures": {
+          "layer0": "neotech:items/ram4"
+        }
+      },
+      "hdd_64": {
+        "textures": {
+          "layer0": "neotech:items/hdd1"
+        }
+      },
+      "hdd_256": {
+        "textures": {
+          "layer0": "neotech:items/hdd2"
+        }
+      },
+      "hdd_512": {
+        "textures": {
+          "layer0": "neotech:items/hdd3"
+        }
+      },
+      "hdd_1t": {
+        "textures": {
+          "layer0": "neotech:items/hdd4"
+        }
+      },
+      "psu_250": {
+        "textures": {
+          "layer0": "neotech:items/psu1"
+        }
+      },
+      "psu_500": {
+        "textures": {
+          "layer0": "neotech:items/psu2"
+        }
+      },
+      "psu_750": {
+        "textures": {
+          "layer0": "neotech:items/psu3"
+        }
+      },
+      "psu_960": {
+        "textures": {
+          "layer0": "neotech:items/psu4"
+        }
+      },
+      "transformer": {
+        "textures": {
+          "layer0": "neotech:items/transformer"
+        }
+      }
+    }
+  }
+}

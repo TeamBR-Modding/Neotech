@@ -36,7 +36,6 @@ public class CapabilityLoadManager {
     @SubscribeEvent
     public void onItemLoaded(AttachCapabilitiesEvent.Item event) {
         if(event.getItem() instanceof IUpgradeItem) {
-            System.out.println("Attaching capability to :" + event.getItem());
             event.addCapability(UPGRADE_ITEM_KEY, new IUpgradeItem.UpgradeItem((IUpgradeItem) event.getItem()));
         }
     }
