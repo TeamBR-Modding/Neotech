@@ -7,6 +7,7 @@ import com.teambr.bookshelf.common.container.BaseContainer
 import com.teambr.bookshelf.common.container.slots.{ICustomSlot, SLOT_SIZE}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.entity.player.InventoryPlayer
+import net.minecraft.item.ItemStack
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -27,7 +28,6 @@ class ContainerAbstractMachine(playerInventory: InventoryPlayer, tile: AbstractM
 
     class UpgradeSlot(inventory : Inventory, id : Int, x : Int, y : Int)
             extends RestrictedSlot(inventory, id, x, y) with ICustomSlot {
-
         override def getSlotSize: SLOT_SIZE.Value = SLOT_SIZE.STANDARD
         override def getPoint: (Integer, Integer) = (xDisplayPosition - 1, yDisplayPosition - 1)
         override def hasColor = true
@@ -40,5 +40,5 @@ class ContainerAbstractMachine(playerInventory: InventoryPlayer, tile: AbstractM
         addSlotToContainer(slot)
     }
 
-    override def getInventorySizeNotPlayer : Int = tile.getSizeInventory + 1
+    override def getInventorySizeNotPlayer : Int = tile.getSizeInventory + 6
 }

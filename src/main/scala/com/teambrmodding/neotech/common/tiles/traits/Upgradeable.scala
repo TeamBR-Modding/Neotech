@@ -29,7 +29,7 @@ trait Upgradeable {
           * @param stack The stack to check
           * @return True if you can put this there
           */
-        override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = !hasUpgradeAlready(stack)
+        override def isItemValidForSlot(index: Int, stack: ItemStack): Boolean = !hasUpgradeAlready(stack) && stack.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)
 
         addCallback(new InventoryCallback {
             override def onInventoryChanged(inventory: IItemHandler, slotNumber: Int): Unit = {
