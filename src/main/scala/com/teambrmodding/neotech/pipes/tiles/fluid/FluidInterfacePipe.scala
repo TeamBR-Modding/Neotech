@@ -59,9 +59,7 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
       * @return
       */
     def getMaxFluidDrain : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
-            getUpgradeBoard.getHardDriveCount * 2000
-        else
+
             1000
     }
 
@@ -71,9 +69,7 @@ class FluidInterfacePipe extends InterfacePipe[IFluidHandler, FluidStack] {
       * @return 20 = 1 second
       */
     override def getDelay: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            20 - getUpgradeBoard.getProcessorCount * 2
-        else
+
             20
     }
     /**

@@ -122,13 +122,6 @@ item.neotech:ingotSilver.name=Silver Ingot
 item.neotech:nuggetSilver.name=Silver Nugget
 
 # Upgrades
-item.neotech:upgradeMBFull.name=Filled Motherboard
-item.neotech:upgradeMBEmpty.name=Empty Motherboard
-item.neotech:upgradeHardDrive.name=HardDrive Upgrade
-item.neotech:upgradeControl.name=Control Upgrade
-item.neotech:upgradeProcessor.name=Processor Upgrade
-item.neotech:upgradeExpansion.name=Expansion Upgrade
-
 item.neotech:CPU_1.name=Single Core Processor
 item.neotech:CPU_2.name=Dual Core Processor
 item.neotech:CPU_3.name=Quad Core Processor
@@ -149,8 +142,11 @@ item.neotech:PSU_500.name=500W Power Supply
 item.neotech:PSU_750.name=750W Power Supply
 item.neotech:PSU_960.name=960W Power Supply
 
-item.neotech.Transformer.name=IC2 Transformer
+item.neotech:Transformer.name=IC2 Transformer
 
+item.neotech:Expansion_Card.name=Expansion Card
+item.neotech:Redstone_Circuit.name=Redstone Control
+item.neotech:Network_Card.name=Network Card
 
 # Tools
 item.neotech:wrench.name=Wrench

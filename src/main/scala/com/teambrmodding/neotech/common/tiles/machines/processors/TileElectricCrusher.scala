@@ -9,6 +9,7 @@ import com.teambrmodding.neotech.registries.CrusherRecipeHandler
 import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.util.InventoryUtils
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.text.translation.I18n
@@ -59,9 +60,6 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
       * @return How much energy to drain per tick
       */
     override def getEnergyCostPerTick: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
-        else
             BASE_ENERGY_TICK
     }
 
@@ -71,9 +69,6 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
       * @return The time it takes in ticks to cook the current item
       */
     override def getCookTime : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            200 - (getUpgradeBoard.getProcessorCount * 24)
-        else
             200
     }
 
@@ -119,7 +114,7 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
         else {
             getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize
         }
-        if (getUpgradeBoard != null && getUpgradeBoard.hasExpansion) extraOutput(input)
+        if (hasUpgradeByID(IUpgradeItem.EXPANSION_CARD)) extraOutput(input)
     }
 
     /**

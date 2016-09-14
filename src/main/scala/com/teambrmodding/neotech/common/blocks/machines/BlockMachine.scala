@@ -231,8 +231,9 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
 
                         tile match {
                             case upgradeable: Upgradeable =>
-                                if (upgradeable.upgradeInventory.getStackInSlot(0) != null)
-                                    items.add(upgradeable.upgradeInventory.getStackInSlot(0))
+                                for(x <- 0 until upgradeable.upgradeInventory.initialSize)
+                                    if(upgradeable.upgradeInventory.getStackInSlot(x) != null)
+                                        items.add(upgradeable.upgradeInventory.getStackInSlot(x))
                             case _ =>
                         }
 

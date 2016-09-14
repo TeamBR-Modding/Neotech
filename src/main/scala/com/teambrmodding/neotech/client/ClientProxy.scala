@@ -244,6 +244,21 @@ class ClientProxy extends CommonProxy {
                 new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.TRANSFORMER.toLowerCase))
             ModelLoaderHelper.registerItem(ItemManager.transformer, "items/upgrades", "type=" + IUpgradeItem.TRANSFORMER.toLowerCase)
         }
+
+        // Expansion
+        ModelLoader.setCustomMeshDefinition(ItemManager.expansion,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.EXPANSION_CARD.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.expansion, "items/upgrades", "type=" + IUpgradeItem.EXPANSION_CARD.toLowerCase)
+
+        // Redstone Control
+        ModelLoader.setCustomMeshDefinition(ItemManager.redstoneControl,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.REDSTONE_CIRCUIT.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.redstoneControl, "items/upgrades", "type=" + IUpgradeItem.REDSTONE_CIRCUIT.toLowerCase)
+
+        // Network Card
+        ModelLoader.setCustomMeshDefinition(ItemManager.networkCard,
+            new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.NETWORK_CARD.toLowerCase))
+        ModelLoaderHelper.registerItem(ItemManager.networkCard, "items/upgrades", "type=" + IUpgradeItem.NETWORK_CARD.toLowerCase)
     }
 
     /**

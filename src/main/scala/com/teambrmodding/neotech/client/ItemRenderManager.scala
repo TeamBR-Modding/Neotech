@@ -24,8 +24,6 @@ import net.minecraftforge.client.model.ModelLoader
 object ItemRenderManager {
 
     def registerItemRenderer(): Unit = {
-        registerItem(ItemManager.upgradeMBFull)
-        registerItem(ItemManager.upgradeMBEmpty)
         registerItem(ItemManager.wrench)
         registerItem(ItemManager.trashBag)
         registerItem(ItemManager.spawnerMover)

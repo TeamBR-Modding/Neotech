@@ -1,6 +1,7 @@
 package com.teambrmodding.neotech.common.tiles.traits;
 
 import com.teambrmodding.neotech.managers.CapabilityLoadManager;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -60,9 +61,9 @@ public interface IUpgradeItem {
     String TRANSFORMER = "Transformer";
 
     // Misc
-    String EXPANSION_CARD  = "ExpansionCard";
-    String REDSTONE_CIRUIT = "RedstoneCircuit";
-    String WIRELESS_CARD   = "WirelessCard";
+    String EXPANSION_CARD  = "Expansion_Card";
+    String REDSTONE_CIRCUIT = "Redstone_Circuit";
+    String NETWORK_CARD = "Network_Card";
 
     /**
      * Get the id of this upgrade item
@@ -75,6 +76,13 @@ public interface IUpgradeItem {
      * @return Category based of standard set, use NONE if not needed
      */
     ENUM_UPGRADE_CATEGORY getCategory();
+
+    /**
+     * Specify the multiplier for this object. Used commonly with tiered objects
+     * @param stack The stack this object is in, to access stack size etc.
+     * @return The multiplier for this object, machines can use differently
+     */
+    int getMultiplier(ItemStack stack);
 
     // Storage implementations are required, tho there is some flexibility here.
     // If you are the API provider you can also say that in order to use the default storage
@@ -108,6 +116,11 @@ public interface IUpgradeItem {
         @Override
         public ENUM_UPGRADE_CATEGORY getCategory() {
             return host.getCategory();
+        }
+
+        @Override
+        public int getMultiplier(ItemStack stack) {
+            return host.getMultiplier(stack);
         }
 
         @Override

@@ -6,16 +6,19 @@ import javax.annotation.Nullable
 import com.teambrmodding.neotech.managers.ItemManager
 import com.teambrmodding.neotech.pipes.container.ContainerAdvancedPipeMenu
 import com.teambrmodding.neotech.pipes.tiles.item.ItemInterfacePipe
-import com.teambrmodding.neotech.pipes.types.{InterfacePipe, AdvancedPipe}
+import com.teambrmodding.neotech.pipes.types.{AdvancedPipe, InterfacePipe}
 import com.teambr.bookshelf.client.gui.component.BaseComponent
 import com.teambr.bookshelf.client.gui.component.control._
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentLongText, GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
+import com.teambr.bookshelf.common.container.InventoryCallback
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.text.translation.I18n
+import net.minecraftforge.items.IItemHandler
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -32,22 +35,16 @@ import scala.collection.mutable.ArrayBuffer
 class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
         GuiBase[ContainerAdvancedPipeMenu](new ContainerAdvancedPipeMenu(player.inventory, tile), 175, 165, "neotech.interfacePipe.title") {
 
-    var hasUpgrade = tile.getUpgradeBoard != null
-
     override def drawGuiContainerBackgroundLayer(f: Float, i: Int, j:Int): Unit = {
-
-        val oldValue = hasUpgrade
-        hasUpgrade = tile.getUpgradeBoard != null
-
-        if(oldValue != hasUpgrade) {
-            val motherBoardTab = rightTabs.getTabs.head
-            rightTabs.getTabs.clear()
-            rightTabs.getTabs += motherBoardTab
-            addRightTabs(rightTabs, tile, inventory, changeMotherboard = false)
-            leftTabs.getTabs.clear()
-            addLeftTabs(leftTabs, tile, inventory)
-        }
-
+        this.tile.upgradeInventory.addCallback(new InventoryCallback {
+            override def onInventoryChanged(handler: IItemHandler, slotNumber: Int): Unit = {
+                val motherBoardTab = rightTabs.getTabs.head
+                rightTabs.getTabs.clear()
+                rightTabs.getTabs += motherBoardTab
+                addRightTabsLocal(rightTabs, tile, inventory, addUpgradeTab = false)
+                leftTabs.getTabs.clear()
+                addLeftTabs(leftTabs)
+            }})
         super[GuiBase].drawGuiContainerBackgroundLayer(f, i, j)
     }
 
@@ -89,19 +86,27 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
     }
 
 
-    override def addRightTabs(tabs : GuiTabCollection) = addRightTabs(tabs, tile, inventory, changeMotherboard = true)
+    override def addRightTabs(tabs : GuiTabCollection) = addRightTabsLocal(tabs, tile, inventory, addUpgradeTab = true)
 
     override def addLeftTabs(tabs : GuiTabCollection) = addLeftTabs(tabs, tile, inventory)
 
-    def addRightTabs(tabs : GuiTabCollection, tileEntity : AdvancedPipe, container : ContainerAdvancedPipeMenu, changeMotherboard : Boolean): Unit = {
+    def addRightTabsLocal(tabs : GuiTabCollection, tileEntity : AdvancedPipe, container : ContainerAdvancedPipeMenu, addUpgradeTab : Boolean): Unit = {
         if (tileEntity != null) {
 
-            if(changeMotherboard) {
+            if(addUpgradeTab) {
                 val motherBoardTag = new ArrayBuffer[BaseComponent]
                 motherBoardTag += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.motherboard"), 26, 6)
-                tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.upgradeMBFull))
+                tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.processorOctCore))
 
-                tabs.getTabs.head.addChild(new GuiComponentTabSlotHolder(41, 25, 18, 18, tabs.getTabs.head, container.motherboardSlot, 170 + 41, 27))
+                var slotID = 0
+                val xStart = 25
+                val yStart = 15
+                for(x <- 0 until 3) {
+                    for(y <- 0 until 2) {
+                        tabs.getTabs.head.addChild(new GuiComponentTabSlotHolder(xStart + (x * 18), yStart + (y * 18), 18, 18, tabs.getTabs.head, container.upgradeSlots(slotID), 170 + xStart + (x * 18), (yStart + 2) + (y * 18)))
+                        slotID += 1
+                    }
+                }
             }
 
             val selectorTab = new ArrayBuffer[BaseComponent]
@@ -118,7 +123,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
                                     .getActualState(
                                         tileEntity.getWorld.getBlockState(tileEntity.getPos),
                                         tileEntity.getWorld,
-                                tileEntity.getPos))
+                                        tileEntity.getPos))
                         }
 
                         @Nullable
@@ -142,7 +147,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
             infoTab += new GuiComponentLongText(10, 20, tileEntity.asInstanceOf[InterfacePipe[_, _]].getDescription, 100, 65, textScale = 50)
             tabs.addReverseTab(infoTab.toList, 120, 100, new Color(130, 0, 0), new ItemStack(Items.WRITABLE_BOOK))
 
-            if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasControl) {
+            if (tileEntity.hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT)) {
                 var redstoneTab = new ArrayBuffer[BaseComponent]
                 redstoneTab += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.redstoneMode"), 5, 7)
                 redstoneTab += new GuiComponentButton(5, 20, 15, 20, "<") {
@@ -180,7 +185,7 @@ class GuiAdvancedPipeMenu(player : EntityPlayer, tile : AdvancedPipe) extends
                 tabs.addReverseTab(frequencyTab.toList, 100, 50, new Color(255, 153, 0), new ItemStack(Items.PAPER))
             }
 
-            if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
+            if (tileEntity.hasUpgradeByID(IUpgradeItem.EXPANSION_CARD)) {
 
                 var extractionMode = new ArrayBuffer[BaseComponent]
                 extractionMode += new GuiComponentText(GuiColor.BLACK + I18n.translateToLocal("neotech.text.extractionMode"), 7, 6)

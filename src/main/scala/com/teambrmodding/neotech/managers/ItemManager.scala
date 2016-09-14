@@ -32,34 +32,31 @@ object ItemManager {
     lazy val itemRegistry = new THashMap[Class[_ <: Item], Item]()
 
     //Upgrade System
-    val upgradeMBEmpty = new MotherBoardItem("upgradeMBEmpty", 1, true)
-    val upgradeMBFull = new MotherBoardItem("upgradeMBFull", 1, false)
-    val upgradeHardDrive = new MotherBoardUpgradeItem("upgradeHardDrive", 8, NeoTech.tabNeoTech)
-    val upgradeControl = new MotherBoardUpgradeItem("upgradeControl", 1, NeoTech.tabNeoTech)
-    val upgradeProcessor = new MotherBoardUpgradeItem("upgradeProcessor", 8, NeoTech.tabNeoTech)
-    val upgradeExpansion = new MotherBoardUpgradeItem("upgradeExpansion", 1, NeoTech.tabNeoTech)
+    val processorSingleCore = new UpgradeItem(IUpgradeItem.CPU_SINGLE_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 1, 2)
+    val processorDualCore   = new UpgradeItem(IUpgradeItem.CPU_DUAL_CORE,  IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 1, 4)
+    val processorQuadCore   = new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE,  IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 1, 8)
+    val processorOctCore    = new UpgradeItem(IUpgradeItem.CPU_OCT_CORE,   IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 1, 16)
 
-    val processorSingleCore = new UpgradeItem(IUpgradeItem.CPU_SINGLE_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 8)
-    val processorDualCore = new UpgradeItem(IUpgradeItem.CPU_DUAL_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 8)
-    val processorQuadCore = new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 8)
-    val processorOctCore = new UpgradeItem(IUpgradeItem.CPU_OCT_CORE, IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 8)
+    val memoryDDR1 = new UpgradeItem(IUpgradeItem.MEMORY_DDR1, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4, 2,  true)
+    val memoryDDR2 = new UpgradeItem(IUpgradeItem.MEMORY_DDR2, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4, 4,  true)
+    val memoryDDR3 = new UpgradeItem(IUpgradeItem.MEMORY_DDR3, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4, 8,  true)
+    val memoryDDR4 = new UpgradeItem(IUpgradeItem.MEMORY_DDR4, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4, 16, true)
 
-    val memoryDDR1 = new UpgradeItem(IUpgradeItem.MEMORY_DDR1, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4)
-    val memoryDDR2 = new UpgradeItem(IUpgradeItem.MEMORY_DDR2, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4)
-    val memoryDDR3 = new UpgradeItem(IUpgradeItem.MEMORY_DDR3, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4)
-    val memoryDDR4 = new UpgradeItem(IUpgradeItem.MEMORY_DDR4, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4)
+    val hardDrive64G  = new UpgradeItem(IUpgradeItem.HDD_64G,  IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1, 2)
+    val hardDrive254G = new UpgradeItem(IUpgradeItem.HDD_256G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1, 4)
+    val hardDrive512G = new UpgradeItem(IUpgradeItem.HDD_512G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1, 8)
+    val hardDrive1T   = new UpgradeItem(IUpgradeItem.HDD_1T,   IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1, 16)
 
-    val hardDrive64G = new UpgradeItem(IUpgradeItem.HDD_64G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1)
-    val hardDrive254G = new UpgradeItem(IUpgradeItem.HDD_256G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1)
-    val hardDrive512G = new UpgradeItem(IUpgradeItem.HDD_512G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1)
-    val hardDrive1T = new UpgradeItem(IUpgradeItem.HDD_1T, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1)
+    val psu250W = new UpgradeItem(IUpgradeItem.PSU_250W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1, 2)
+    val psu500W = new UpgradeItem(IUpgradeItem.PSU_500W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1, 4)
+    val psu750W = new UpgradeItem(IUpgradeItem.PSU_750W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1, 8)
+    val psu960W = new UpgradeItem(IUpgradeItem.PSU_960W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1, 16)
 
-    val psu250W = new UpgradeItem(IUpgradeItem.PSU_250W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1)
-    val psu500W = new UpgradeItem(IUpgradeItem.PSU_500W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1)
-    val psu750W = new UpgradeItem(IUpgradeItem.PSU_750W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1)
-    val psu960W = new UpgradeItem(IUpgradeItem.PSU_960W, IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU, 1)
+    val transformer = new UpgradeItem(IUpgradeItem.TRANSFORMER, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MISC, 4, 1)
 
-    val transformer = new UpgradeItem(IUpgradeItem.TRANSFORMER, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MISC, 4)
+    val expansion = new UpgradeItem(IUpgradeItem.EXPANSION_CARD, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MISC, 1, 1)
+    val redstoneControl = new UpgradeItem(IUpgradeItem.REDSTONE_CIRCUIT, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MISC, 1, 1)
+    val networkCard = new UpgradeItem(IUpgradeItem.NETWORK_CARD, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MISC, 1, 1)
 
     //Utils
     val wrench = new ItemWrench
@@ -84,13 +81,6 @@ object ItemManager {
     val electricArmorBoots = new ItemElectricArmor("electricArmorBoots", 1, EntityEquipmentSlot.FEET)
 
     def preInit(): Unit = {
-        registerItem(upgradeMBEmpty, "upgradeMBEmpty")
-        registerItem(upgradeMBFull, "upgradeMBFull")
-        registerItem(upgradeHardDrive, "upgradeHardDrive")
-        registerItem(upgradeControl, "upgradeControl")
-        registerItem(upgradeProcessor, "upgradeProcessor")
-        registerItem(upgradeExpansion, "upgradeExpansion")
-
         registerItem(processorSingleCore, "processorSingleCore")
         registerItem(processorDualCore, "processorDualCore")
         registerItem(processorQuadCore, "processorQuadCore")
@@ -114,6 +104,10 @@ object ItemManager {
         // Check for IC2
         if(Loader.isModLoaded("IC2"))
             registerItem(transformer, "transformer")
+
+        registerItem(expansion, "expansion")
+        registerItem(redstoneControl, "redstoneControl")
+        registerItem(networkCard, "networkCard")
 
         registerItem(wrench, "wrench")
         registerItem(trashBag, "trashBag")

@@ -69,9 +69,7 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
       * @return
       */
     def getMaxStackExtract : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
-            getUpgradeBoard.getHardDriveCount * 8
-        } else
+
             1
     }
 
@@ -81,9 +79,7 @@ class ItemInterfacePipe extends InterfacePipe[IItemHandler, ItemStack] {
       * @return 20 = 1 second
       */
     override def getDelay: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            20 - getUpgradeBoard.getProcessorCount * 2
-        else
+ 
             20
     }
 

@@ -4,9 +4,11 @@ import java.awt.Color
 
 import com.teambrmodding.neotech.pipes.types.AdvancedPipe
 import com.teambr.bookshelf.common.container.BaseContainer
-import com.teambr.bookshelf.common.container.slots.{SLOT_SIZE, ICustomSlot, PhantomSlot}
+import com.teambr.bookshelf.common.container.slots.{ICustomSlot, PhantomSlot, SLOT_SIZE}
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.inventory.IInventory
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -20,7 +22,9 @@ import net.minecraft.inventory.IInventory
   */
 class ContainerAdvancedPipeMenu(playerInventory : IInventory, tile : AdvancedPipe) extends BaseContainer(playerInventory, tile.filterInventory) {
 
-    class MotherboardSlot(inventory : Inventory, id : Int, x : Int, y : Int)
+    lazy val upgradeSlots = new ArrayBuffer[UpgradeSlot]()
+
+    class UpgradeSlot(inventory : Inventory, id : Int, x : Int, y : Int)
             extends RestrictedSlot(inventory, id, x, y) with ICustomSlot {
 
         override def getSlotSize: SLOT_SIZE.Value = SLOT_SIZE.STANDARD
@@ -29,8 +33,11 @@ class ContainerAdvancedPipeMenu(playerInventory : IInventory, tile : AdvancedPip
         override def getColor : Color = new Color(0, 255, 0)
     }
 
-    val motherboardSlot = new MotherboardSlot(tile.upgradeInventory, 0, -10000, -1000)
-    addSlotToContainer(motherboardSlot)
+    for(z <- 0 until tile.upgradeInventory.inventoryContents.size()) {
+        val slot = new UpgradeSlot(tile.upgradeInventory, z, -10000, -1000)
+        upgradeSlots += slot
+        addSlotToContainer(slot)
+    }
 
     addPhantomInventoryLine(8, 25, 0, 9, 0)
     addPlayerInventorySlots(85)

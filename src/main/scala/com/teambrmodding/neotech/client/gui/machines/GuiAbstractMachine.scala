@@ -10,11 +10,15 @@ import com.teambr.bookshelf.client.gui.component.BaseComponent
 import com.teambr.bookshelf.client.gui.component.control.{GuiComponentButton, GuiComponentSideSelector, GuiComponentTabSlotHolder}
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentLongText, GuiComponentText, GuiTabCollection}
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
+import com.teambr.bookshelf.common.container.InventoryCallback
+import com.teambr.bookshelf.common.tiles.traits.Inventory
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.init.Items
 import net.minecraft.item.ItemStack
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.text.translation.I18n
+import net.minecraftforge.items.IItemHandler
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -28,28 +32,29 @@ import scala.collection.mutable.ArrayBuffer
   * @author Paul Davis <pauljoda>
   * @since 1/31/2016
   */
-abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, x : Int, y : Int, title : String, player: EntityPlayer, tileEntity: AbstractMachine) extends
+abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, x : Int, y : Int, title : String, player: EntityPlayer, var tileEntity: AbstractMachine) extends
         GuiBase[C](container, x, y, title) {
 
-    var hasUpgrade = tileEntity.getUpgradeBoard != null
+    var lastInventory : Inventory = new Inventory {
+        override def initialSize: Int = 6
+    }
+    lastInventory.copyFrom(tileEntity.upgradeInventory)
 
     override def drawGuiContainerBackgroundLayer(f: Float, i: Int, j:Int): Unit = {
-        val oldValue = hasUpgrade
-        hasUpgrade = tileEntity.getUpgradeBoard != null
-
-        if(oldValue != hasUpgrade) {
+        if(tileEntity.hasChangedFromLast(lastInventory)) {
             val motherBoardTab = rightTabs.getTabs.head
             rightTabs.getTabs.clear()
             rightTabs.getTabs += motherBoardTab
-            addRightTabs(rightTabs, tileEntity, inventory, updateMotherBoard = false)
+            addRightTabsLocal(rightTabs, tileEntity, inventory, addUpgradeTab = false)
             leftTabs.getTabs.clear()
             addLeftTabs(leftTabs)
         }
+        lastInventory.copyFrom(tileEntity.upgradeInventory)
 
         super[GuiBase].drawGuiContainerBackgroundLayer(f, i, j)
     }
 
-    override def addRightTabs(tabs : GuiTabCollection) = addRightTabs(tabs, tileEntity, inventory, updateMotherBoard = true)
+    override def addRightTabs(tabs : GuiTabCollection) = addRightTabsLocal(tabs, tileEntity, inventory, addUpgradeTab = true)
 
     override def addLeftTabs(tabs : GuiTabCollection) = {
         val infoTab = new ArrayBuffer[BaseComponent]()
@@ -58,17 +63,28 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
         tabs.addReverseTab(infoTab.toList, 120, 100, new Color(130, 0, 0), new ItemStack(tileEntity.getBlockType))
     }
 
-    def addRightTabs(tabs : GuiTabCollection, tileEntity : AbstractMachine, container : ContainerAbstractMachine, updateMotherBoard : Boolean = true): Unit = {
+    def addRightTabsLocal(tabs : GuiTabCollection, tileEntity : AbstractMachine, container : ContainerAbstractMachine, addUpgradeTab : Boolean = true): Unit = {
         if (tileEntity != null) {
 
-            if(updateMotherBoard) {
+            // Add Upgrade Tab
+            if(addUpgradeTab) {
                 val motherBoardTag = new ArrayBuffer[BaseComponent]
-                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.motherboard"), 26, 6)
-                tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.upgradeMBFull))
+                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.upgrades"), 26, 6)
+                tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.processorOctCore))
 
-                tabs.getTabs.head.addChild(new GuiComponentTabSlotHolder(41, 25, 18, 18, tabs.getTabs.head, container.motherboardSlot, 170 + 41, 27))
+                var slotID = 0
+                val xStart = 25
+                val yStart = 20
+                for(x <- 0 until 3) {
+                    for(y <- 0 until 2) {
+                        tabs.getTabs.head.addChild(new GuiComponentTabSlotHolder(xStart + (x * 18), yStart + (y * 18), 18, 18, tabs.getTabs.head, container.upgradeSlots(slotID), 170 + xStart + (x * 18), (yStart + 2) + (y * 18)))
+                        slotID += 1
+                    }
+                }
             }
-            if (tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasControl) {
+
+            // Add Restone Control Tab
+            if (tileEntity != null && tileEntity.hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT)) {
                 var redstoneTab = new ArrayBuffer[BaseComponent]
                 redstoneTab += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.redstoneMode"), 20, 7)
                 redstoneTab += new GuiComponentButton(5, 20, 15, 20, "<") {
@@ -94,7 +110,8 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
                 tabs.addTab(redstoneTab.toList, 100, 50, new Color(255, 0, 0), new ItemStack(Items.REDSTONE))
             }
 
-            if (tileEntity.shouldHandleIO && tileEntity.getUpgradeBoard != null && tileEntity.getUpgradeBoard.hasExpansion) {
+            // Add IO Config tab
+            if (tileEntity.shouldHandleIO && tileEntity != null && tileEntity.hasUpgradeByID(IUpgradeItem.NETWORK_CARD)) {
                 val selectorTab = new ArrayBuffer[BaseComponent]
                 selectorTab += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.ioConfig"), 29, 6)
                 selectorTab += new GuiComponentSideSelector(15, 20, 40, tileEntity.getWorld.getBlockState(tileEntity.getPos), tileEntity, true) {

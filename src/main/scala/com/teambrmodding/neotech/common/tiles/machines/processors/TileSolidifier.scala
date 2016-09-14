@@ -62,9 +62,7 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
       * @return How much energy to drain per tick
       */
     override def getEnergyCostPerTick: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
-        else
+
             BASE_ENERGY_TICK
     }
 
@@ -74,9 +72,7 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
       * @return The time it takes in ticks to cook the current item
       */
     override def getCookTime : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            1000 - (getUpgradeBoard.getProcessorCount * 112)
-        else
+
             1000
     }
 

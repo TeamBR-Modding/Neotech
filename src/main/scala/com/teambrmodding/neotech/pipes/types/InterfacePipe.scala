@@ -2,6 +2,7 @@ package com.teambrmodding.neotech.pipes.types
 
 import java.util
 
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import com.teambrmodding.neotech.pipes.collections.WorldPipes
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.EnumFacing
@@ -90,7 +91,7 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
     override def onServerTick() : Unit = {
         coolDown -= 1
         if(coolDown <= 0) {
-            if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
+            if(hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT)) {
                 if(redstone == -1 && isPowered)
                     return
                 if(redstone == 1 && !isPowered)
@@ -361,7 +362,7 @@ trait InterfacePipe[T, S <: AnyRef] extends AdvancedPipe {
       * @return
       */
     def willAcceptResource(resource: S, pos : BlockPos, side : EnumFacing) : Boolean = {
-        if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
+        if(hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT)) {
             if(redstone == -1 && isPowered)
                 return false
             if(redstone == 1 && !isPowered)

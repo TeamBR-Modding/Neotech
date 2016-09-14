@@ -51,48 +51,48 @@ object UpgradeItemManager {
     }
 
     def registerRecipes() : Unit = {
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSilkTouch])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSilkTouch])), ItemManager.processorSingleCore,
             Items.STRING, Items.WRITABLE_BOOK)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierFortune])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierFortune])), ItemManager.processorSingleCore,
             Items.EMERALD)
-        GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel2), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel2), ItemManager.processorSingleCore,
             Items.IRON_INGOT)
-        GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel3), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel3), ItemManager.processorSingleCore,
             Items.DIAMOND)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierMiningSpeed])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierMiningSpeed])), ItemManager.processorSingleCore,
             Items.FEATHER, Blocks.REDSTONE_BLOCK)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierAOE])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierAOE])), ItemManager.processorSingleCore,
             Blocks.PISTON, Blocks.PISTON)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierShovel])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierShovel])), ItemManager.processorSingleCore,
             Items.IRON_SHOVEL)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSharpness])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSharpness])), ItemManager.processorSingleCore,
             Items.FLINT, Items.IRON_SWORD)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSmite])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSmite])), ItemManager.processorSingleCore,
             Items.ROTTEN_FLESH)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierBeheading])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierBeheading])), ItemManager.processorSingleCore,
             new ItemStack(Items.SKULL, 1, OreDictionary.WILDCARD_VALUE))
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierBaneOfArthropods])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierBaneOfArthropods])), ItemManager.processorSingleCore,
             Items.SPIDER_EYE)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierLighting])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierLighting])), ItemManager.processorSingleCore,
             Items.BLAZE_ROD, Items.BLAZE_ROD)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierLooting])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierLooting])), ItemManager.processorSingleCore,
             Items.SPIDER_EYE, Items.BLAZE_POWDER, Items.ROTTEN_FLESH, Items.BONE, Items.GUNPOWDER)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierJetpack])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierJetpack])), ItemManager.processorSingleCore,
             Items.FEATHER, Items.GUNPOWDER)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierFallResist])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierFallResist])), ItemManager.processorSingleCore,
             Blocks.SLIME_BLOCK)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierGlide])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierGlide])), ItemManager.processorSingleCore,
             Items.LEATHER, Items.FEATHER)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierNightVision])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierNightVision])), ItemManager.processorSingleCore,
             Items.GLOWSTONE_DUST, Items.GLOWSTONE_DUST)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSprinting])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierSprinting])), ItemManager.processorSingleCore,
             Items.FEATHER, Blocks.PISTON)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierProtection])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierProtection])), ItemManager.processorSingleCore,
             Blocks.IRON_BLOCK, Blocks.IRON_BLOCK, Blocks.IRON_BLOCK, Blocks.IRON_BLOCK)
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierHover])), ItemManager.upgradeMBEmpty,
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.itemRegistry.get(classOf[ItemModifierHover])), ItemManager.processorSingleCore,
             Items.GUNPOWDER, Items.GUNPOWDER, Blocks.GLASS)
         if(Loader.isModLoaded("tconstruct")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.upgradeMBEmpty,
+            GameRegistry.addShapelessRecipe(new ItemStack(upgradeMiningLevel4), ItemManager.processorSingleCore,
                 Blocks.OBSIDIAN)
         }
     }
@@ -106,6 +106,6 @@ object UpgradeItemManager {
       * better be less than 9
       */
     def addUpgradeRecipe(item : Item, craftingComponent : Object*) : Unit = {
-        GameRegistry.addShapelessRecipe(new ItemStack(item), ItemManager.upgradeMBEmpty, craftingComponent.toArray)
+        GameRegistry.addShapelessRecipe(new ItemStack(item), ItemManager.processorSingleCore, craftingComponent.toArray)
     }
 }

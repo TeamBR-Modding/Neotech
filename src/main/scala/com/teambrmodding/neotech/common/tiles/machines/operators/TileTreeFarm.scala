@@ -9,9 +9,10 @@ import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.operators.ContainerTreeFarm
 import com.teambrmodding.neotech.common.tiles.AbstractMachine
 import com.teambrmodding.neotech.utils.{ClientUtils, TimeUtils}
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.util.InventoryUtils
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.block.state.IBlockState
 import net.minecraft.block.{Block, BlockLeaves, BlockSapling}
 import net.minecraft.entity.item.EntityItem
@@ -52,18 +53,15 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       * Used to get the range of this machines operation, includes upgrades
       */
     def RANGE : Int = {
-        if(hardDriveCount > 0)
-            return 4 * hardDriveCount
-        4
+        4 * Math.max(1, getUpgradeCountByID(IUpgradeItem.MEMORY_DDR1))
     }
 
     /**
       * Used to get the cost to operate, includes upgrades
       */
     def costToOperate : Int = {
-        if(processorCount > 0)
-            return 200 * processorCount
-        200
+        200 * Math.max(1, getUpgradeCountByID(IUpgradeItem.CPU_SINGLE_CORE))
+
     }
 
     /**
@@ -72,10 +70,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       * @return
       */
     def getChopCount : Int = {
-        if(processorCount > 0)
-            processorCount * 16
-        else
-            2
+        2 * Math.max(1, getUpgradeCountByID(IUpgradeItem.CPU_SINGLE_CORE) * 16)
     }
 
     /**

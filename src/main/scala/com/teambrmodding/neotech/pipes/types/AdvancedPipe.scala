@@ -3,7 +3,7 @@ package com.teambrmodding.neotech.pipes.types
 import com.teambrmodding.neotech.collections.{EnumInputOutputMode, InputOutput}
 import com.teambrmodding.neotech.pipes.collections.{Filter, WorldPipes}
 import com.teambr.bookshelf.common.tiles.traits.{RedstoneAware, Syncable}
-import com.teambrmodding.neotech.common.tiles.traits.Upgradeable
+import com.teambrmodding.neotech.common.tiles.traits.{IUpgradeItem, Upgradeable}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.network.NetworkManager
 import net.minecraft.network.play.server.SPacketUpdateTileEntity
@@ -137,8 +137,6 @@ abstract class AdvancedPipe extends TileEntity with SimplePipe with Syncable wit
     /**
       * Called when a packet is received
       *
-      * @param net The manager sending
-      * @param pkt The packet received
       */
     /*override def onDataPacket(net : NetworkManager, pkt : SPacketUpdateTileEntity) = {
         this.readFromNBT(pkt.getNbtCompound)
@@ -163,9 +161,9 @@ abstract class AdvancedPipe extends TileEntity with SimplePipe with Syncable wit
     @SideOnly(Side.CLIENT)
     def getGUIHeight : Int = {
         var baseHeight = 71
-        if(getUpgradeBoard != null && getUpgradeBoard.hasControl)
+        if(hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT))
             baseHeight += 60
-        if(getUpgradeBoard != null && getUpgradeBoard.hasExpansion)
+        if(hasUpgradeByID(IUpgradeItem.EXPANSION_CARD))
             baseHeight += 60
         baseHeight
     }

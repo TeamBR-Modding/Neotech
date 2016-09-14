@@ -90,6 +90,21 @@
         "textures": {
           "layer0": "neotech:items/transformer"
         }
+      },
+      "expansion_card": {
+        "textures": {
+          "layer0": "neotech:items/expansion"
+        }
+      },
+      "redstone_circuit": {
+        "textures": {
+          "layer0": "neotech:items/redstoneControl"
+        }
+      },
+      "network_card": {
+        "textures": {
+          "layer0": "neotech:items/networkCard"
+        }
       }
     }
   }

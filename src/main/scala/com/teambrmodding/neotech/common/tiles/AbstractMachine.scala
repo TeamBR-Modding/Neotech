@@ -2,7 +2,7 @@ package com.teambrmodding.neotech.common.tiles
 
 import com.teambrmodding.neotech.collections.{EnumInputOutputMode, InputOutput}
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, InventorySided, RedstoneAware, Syncable}
-import com.teambrmodding.neotech.common.tiles.traits.Upgradeable
+import com.teambrmodding.neotech.common.tiles.traits.{IUpgradeItem, Upgradeable}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -150,7 +150,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             changeEnergy(energyStorage.getEnergyStored)
 
         //If redstone mode is not matched, break out of the method
-        if(getUpgradeBoard != null && getUpgradeBoard.hasControl) {
+        if(hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT)) {
             if(redstone == -1 && isPowered)
                 return
             if(redstone == 1 && !isPowered)
@@ -158,7 +158,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
         }
 
         //We want to try automatic IO if we are able to once a tick
-        if(shouldHandleIO && timeTicker <= 0 && getUpgradeBoard != null && getUpgradeBoard.hasExpansion) {
+        if(shouldHandleIO && timeTicker <= 0 && hasUpgradeByID(IUpgradeItem.NETWORK_CARD)) {
             timeTicker = 20
             tryInput()
             tryOutput()
@@ -228,8 +228,10 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * Called when the board is removed, reset to default values for any upgrades
       */
     override def resetValues(): Unit = {
-        resetIO()
-        redstone = 0
+        if(!hasUpgradeByID(IUpgradeItem.NETWORK_CARD))
+            resetIO()
+        if(!hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT))
+            redstone = 0
     }
 
     /*******************************************************************************************************************
@@ -245,8 +247,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * @param initial How much was in the old storage
       */
     def changeEnergy(initial : Int): Unit = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0) {
-            energyStorage.setMaxStored(BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10))
+        if(getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) > 0) {
+            energyStorage.setMaxStored(BASE_ENERGY * (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) * 20))
         }
         else {
             energyStorage.setMaxStored(BASE_ENERGY)
@@ -263,8 +265,8 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * @return How much energy should be available
       */
     def getSupposedEnergy : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getHardDriveCount > 0)
-            BASE_ENERGY * (getUpgradeBoard.getHardDriveCount * 10)
+        if(getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) > 0)
+            BASE_ENERGY * (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) * 20)
         else
             BASE_ENERGY
     }

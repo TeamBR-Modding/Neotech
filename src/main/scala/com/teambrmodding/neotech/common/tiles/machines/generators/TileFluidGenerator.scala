@@ -7,13 +7,14 @@ import com.teambrmodding.neotech.common.tiles.MachineGenerator
 import com.teambrmodding.neotech.managers.RecipeManager
 import com.teambrmodding.neotech.registries.FluidFuelRecipeHandler
 import com.teambrmodding.neotech.utils.ClientUtils
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.text.translation.I18n
-import net.minecraft.util.{EnumFacing}
+import net.minecraft.util.EnumFacing
 import net.minecraft.world.World
 import net.minecraftforge.fluids._
 
@@ -53,8 +54,8 @@ class TileFluidGenerator extends MachineGenerator with FluidHandler {
       * @return How much energy to produce per tick
       */
     override def getEnergyProduced: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 50)
+        if(hasUpgradeByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU))
+            BASE_ENERGY_TICK + (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * 100)
         else
             BASE_ENERGY_TICK
     }

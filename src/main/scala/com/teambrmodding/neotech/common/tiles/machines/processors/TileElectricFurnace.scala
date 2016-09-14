@@ -53,9 +53,6 @@ class TileElectricFurnace extends MachineProcessor[ItemStack, ItemStack] {
       * @return How much energy to drain per tick
       */
     override def getEnergyCostPerTick: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
-        else
             BASE_ENERGY_TICK
     }
 
@@ -65,9 +62,6 @@ class TileElectricFurnace extends MachineProcessor[ItemStack, ItemStack] {
       * @return The time it takes in ticks to cook the current item
       */
     override def getCookTime : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            200 - (getUpgradeBoard.getProcessorCount * 24)
-        else
             200
     }
 

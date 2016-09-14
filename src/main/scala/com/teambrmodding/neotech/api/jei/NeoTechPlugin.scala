@@ -65,9 +65,6 @@ class NeoTechPlugin extends IModPlugin {
         registry.addDescription(new ItemStack(BlockManager.flushableChest), "neotech.flushableChest.description")
         registry.addDescription(new ItemStack(BlockManager.playerPlate), "neotech.playerPlate.description")
         registry.addDescription(new ItemStack(ItemManager.trashBag), "neotech.trashBag.description")
-
-        //Blacklists
-        NeoTechPlugin.jeiHelpers.getItemBlacklist.addItemToBlacklist(new ItemStack(ItemManager.upgradeMBFull))
     }
 
     override def onRuntimeAvailable(iJeiRuntime: IJeiRuntime): Unit = { }

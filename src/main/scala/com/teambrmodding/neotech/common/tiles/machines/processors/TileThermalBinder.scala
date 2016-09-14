@@ -11,13 +11,14 @@ import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambr.bookshelf.util.InventoryUtils
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.text.translation.I18n
 import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraft.world.World
-import net.minecraftforge.fluids.{IFluidHandler, Fluid, FluidTank}
+import net.minecraftforge.fluids.{Fluid, FluidTank, IFluidHandler}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -75,8 +76,8 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * @return How much energy to drain per tick
       */
     override def getEnergyCostPerTick: Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK * getUpgradeBoard.getProcessorCount
+        if(getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) > 0)
+            BASE_ENERGY_TICK * getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU)
         else
             BASE_ENERGY_TICK
     }
@@ -87,8 +88,8 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * @return The time it takes in ticks to cook the current item
       */
     override def getCookTime : Int = {
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            (200 * getCount) - (getCount * (getUpgradeBoard.getProcessorCount * 20))
+        if(getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) > 0)
+            (200 * getCount) - (getCount * (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * 20))
         else
             200 * getCount
     }
@@ -126,10 +127,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * @return The output
       */
     override def getOutputForStack(stack: ItemStack): ItemStack = {
-        if (stack != null && stack.getItem.isInstanceOf[ThermalBinderItem])
-            new ItemStack(ItemManager.upgradeMBFull) //Just used to tell the Sided inventory that we have something, not actual output
-        else
-            null
+        null
     }
 
     /**
@@ -288,13 +286,8 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
                 getStackInSlot(OBJECT_INPUT).setTagCompound(tag)
 
                 // Moves stacks
-                if(getStackInSlot(OBJECT_INPUT).getItem != ItemManager.upgradeMBEmpty)
-                    setStackInSlot(OBJECT_OUTPUT, getStackInSlot(OBJECT_INPUT).copy())
-                else {
-                    val stack = new ItemStack(ItemManager.upgradeMBFull)
-                    stack.setTagCompound(tag)
-                    setStackInSlot(OBJECT_OUTPUT, stack)
-                }
+                setStackInSlot(OBJECT_OUTPUT, getStackInSlot(OBJECT_INPUT).copy())
+
                 setStackInSlot(OBJECT_INPUT, null)
                 for(x <- INPUT_SLOTS)
                     setStackInSlot(x, null)
@@ -371,14 +364,14 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * More formally, this should return true if fluid is able to enter from the given direction.
       */
     override def canFill(from: EnumFacing, fluid: Fluid): Boolean =
-        !isDisabled(from) && fluid.getName.equals("tin")
+    !isDisabled(from) && fluid.getName.equals("tin")
 
     /**
       * Called when something happens to the tank, you should mark the block for update here if a tile
       */
     override def onTankChanged(tank: FluidTank): Unit =
-        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
-    
+    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+
     /*******************************************************************************************************************
       *********************************************** Inventory methods ************************************************
       ******************************************************************************************************************/
@@ -402,7 +395,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * side
       */
     override def canInsertItem(slot: Int, itemStackIn: ItemStack, direction: EnumFacing): Boolean =
-        isItemValidForSlot(slot, itemStackIn)
+    isItemValidForSlot(slot, itemStackIn)
 
     /**
       * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
@@ -459,7 +452,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * @return The container to open
       */
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new ContainerThermalBinder(player.inventory, this)
+    new ContainerThermalBinder(player.inventory, this)
 
     /**
       * Return the gui for this tile
@@ -473,7 +466,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       * @return The gui to open
       */
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new GuiThermalBinder(player, this)
+    new GuiThermalBinder(player, this)
 
     override def getDescription : String = {
         "" +

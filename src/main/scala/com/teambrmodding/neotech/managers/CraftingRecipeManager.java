@@ -202,32 +202,6 @@ public class CraftingRecipeManager {
                 "SBS",
                 "SRS", 'S', Blocks.STONE, 'R', Items.REDSTONE, 'B', Blocks.REDSTONE_BLOCK);
 
-        //Empty Motherboard
-        GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeMBEmpty()),
-                "RRR",
-                "RIR",
-                "RRR", 'R', Items.REDSTONE, 'I', Items.IRON_INGOT);
-
-        //Hard Drive
-        GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeHardDrive()),
-                "II ",
-                "II ",
-                "RG ", 'I', Items.IRON_INGOT, 'R', Items.REDSTONE, 'G', Items.GOLD_INGOT);
-
-        //Control Upgrade
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.upgradeControl()),
-                Item.getItemFromBlock(Blocks.LEVER), Items.REDSTONE);
-
-        //Processor
-        GameRegistry.addRecipe(new ItemStack(ItemManager.upgradeProcessor()),
-                "RRR",
-                "RDR",
-                "RRR", 'R', Items.REDSTONE, 'D', Items.DIAMOND);
-
-        //Expansion Card
-        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.upgradeExpansion()),
-                Items.REDSTONE, Items.IRON_INGOT, Items.PAPER);
-
         //Wrench
         GameRegistry.addRecipe(new ItemStack(ItemManager.wrench()),
                 " I ",

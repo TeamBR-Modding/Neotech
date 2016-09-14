@@ -6,9 +6,10 @@ import com.teambrmodding.neotech.common.container.machines.generators.ContainerF
 import com.teambrmodding.neotech.common.tiles.MachineGenerator
 import com.teambrmodding.neotech.managers.FluidManager
 import com.teambrmodding.neotech.utils.ClientUtils
-import com.teambr.bookshelf.client.gui.{GuiTextFormat, GuiColor}
+import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambr.bookshelf.util.InventoryUtils
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -57,8 +58,8 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
     override def getEnergyProduced: Int = {
         val oxygenModifier = if(tanks(OXYGEN_TANK).getFluid != null && tanks(OXYGEN_TANK).getFluid.getFluid == FluidManager.oxygen)
             5 else 1
-        if(getUpgradeBoard != null && getUpgradeBoard.getProcessorCount > 0)
-            BASE_ENERGY_TICK + (getUpgradeBoard.getProcessorCount * 25) * oxygenModifier
+        if(hasUpgradeByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU))
+            BASE_ENERGY_TICK + (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * 50) * oxygenModifier
         else
             BASE_ENERGY_TICK * oxygenModifier
     }

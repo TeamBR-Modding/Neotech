@@ -60,10 +60,7 @@ class EnergyInterfacePipe extends InterfacePipe[IEnergyReceiver, Integer] {
       */
     def getMaxRFDrain : Int = {
         var rate = 200
-        if(processorCount > 0)
-            rate *= (processorCount * 400)
-        if(hardDriveCount > 0)
-            rate *= (processorCount * 400)
+
         rate
     }
 
