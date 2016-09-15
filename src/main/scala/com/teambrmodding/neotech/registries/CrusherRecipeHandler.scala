@@ -2,18 +2,14 @@ package com.teambrmodding.neotech.registries
 
 import java.util
 
+import com.google.gson.reflect.TypeToken
+import com.teambr.bookshelf.helper.LogHelper
 import com.teambrmodding.neotech.NeoTech
 import com.teambrmodding.neotech.managers.RecipeManager
-import com.google.gson.reflect.TypeToken
-import com.teambr.bookshelf.common.container.ContainerGeneric
-import com.teambr.bookshelf.common.tiles.traits.Inventory
-import com.teambr.bookshelf.helper.LogHelper
-import net.minecraft.command.CommandBase
-import net.minecraft.creativetab.CreativeTabs
+import net.minecraft.command.{CommandBase, ICommandSender, WrongUsageException}
 import net.minecraft.init.{Blocks, Items}
-import net.minecraft.inventory.InventoryCrafting
-import net.minecraft.item.crafting.CraftingManager
-import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.item.ItemStack
+import net.minecraft.server.MinecraftServer
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
 
@@ -34,13 +30,6 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
       * @return
       */
     override def getBaseName: String = "crusher"
-
-    /**
-      * Get the command to add values to the registry
-      *
-      * @return A new command
-      */
-    override def getCommand: CommandBase = { null }
 
     /**
       * Used to get the default folder location
@@ -165,6 +154,34 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
             if (stack.equalsIgnoreCase(recipe.input)) return true
         }
         false
+    }
+
+    /**
+      * Get the command to add values to the registry
+      *
+      * @return A new command
+      */
+    override def getCommand: CommandBase = {
+        new CommandBase {
+            override def getCommandName: String = "addCrusherRecipe"
+
+            override def getRequiredPermissionLevel : Int = 3
+
+            override def getCommandUsage(sender: ICommandSender): String = "commands.addCrusherRecipe.usage"
+
+            override def execute(server: MinecraftServer, sender: ICommandSender, args: Array[String]): Unit = {
+                if(args.length < 3 || args.length > 5)
+                    throw new WrongUsageException("commands.addCrusherRecipe.usage")
+                else {
+                    if (args.length == 3)
+                        addCrusherRecipes(args(0), args(1), args(2).toInt, "", 0)
+                    else if (args.length == 5)
+                        addCrusherRecipes(args(0), args(1), args(2).toInt, args(3), args(4).toInt)
+                    else throw new WrongUsageException("commands.addCrusherRecipe.usage")
+                }
+                saveToFile()
+            }
+        }
     }
 }
 

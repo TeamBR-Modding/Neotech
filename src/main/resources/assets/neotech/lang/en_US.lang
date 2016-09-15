@@ -444,6 +444,8 @@ commands.addSolidifierRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AM
 commands.addFluidFuelValue.usage=§cUsage: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
 commands.addAlloyRecipe.usage=§cUsage: input1<FluidStack (format : FLUID:AMOUNT)> input2<FluidStack (format : FLUID:AMOUNT)> output<FluidStack (format : FLUID:AMOUNT)>
 commands.addCentrifugeRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output1<FluidStack (format : FLUID:AMOUNT)> output2<FluidStack (format : FLUID:AMOUNT)>
+commands.addCrusherRecipe.usage=§cUsage: <input> <output> <outputAmount> <secondaryOutput(Optional)> <secondaryOuputChance(Optional)>
+
 
 #######################
 # Descriptions
