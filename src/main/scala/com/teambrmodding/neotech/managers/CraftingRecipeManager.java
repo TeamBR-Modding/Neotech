@@ -7,6 +7,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -317,6 +319,70 @@ public class CraftingRecipeManager {
         //Smelting Recipes
         GameRegistry.addSmelting(MetalManager.getMetal("gold").get().dust().get(), new ItemStack(Items.GOLD_INGOT), 2.0F);
         GameRegistry.addSmelting(MetalManager.getMetal("iron").get().dust().get(), new ItemStack(Items.IRON_INGOT), 1.0F);
+
+        // Upgrades
+        GameRegistry.addRecipe(new ItemStack(ItemManager.processorSingleCore()),
+                "RSR",
+                "RIR",
+                "RSR", 'R', Items.REDSTONE, 'S', Items.STRING, 'I', Items.IRON_INGOT);
+        GameRegistry.addRecipe(new ItemStack(ItemManager.processorDualCore()),
+                "RGR",
+                "PgP",
+                "RGR", 'R', Items.REDSTONE, 'G', Items.GLOWSTONE_DUST, 'P', ItemManager.processorSingleCore(), 'g', Items.GOLD_INGOT);
+        GameRegistry.addRecipe(new ItemStack(ItemManager.processorQuadCore()),
+                "RGR",
+                "PgP",
+                "RGR", 'R', Items.REDSTONE, 'G', Items.GOLD_INGOT, 'P', ItemManager.processorDualCore(), 'g', new ItemStack(Items.DYE, 1, 11));
+        GameRegistry.addRecipe(new ItemStack(ItemManager.processorOctCore()),
+                "RGR",
+                "PgP",
+                "RGR", 'R', Items.REDSTONE, 'G', Items.DIAMOND, 'P', ItemManager.processorQuadCore(), 'g', Items.DIAMOND);
+
+        GameRegistry.addRecipe(new ItemStack(ItemManager.memoryDDR1()),
+                "SSS",
+                "RRR",
+                "   ", 'S', Blocks.STONE_SLAB, 'R', Items.IRON_INGOT);
+        GameRegistry.addRecipe(new ItemStack(ItemManager.memoryDDR2()),
+                "SSS",
+                "RRR",
+                "M M", 'S', Blocks.STONE_SLAB, 'R', Items.REDSTONE, 'M', ItemManager.memoryDDR1());
+        GameRegistry.addRecipe(new ItemStack(ItemManager.memoryDDR3()),
+                "SSS",
+                "RRR",
+                "M M", 'S', Blocks.STONE_SLAB, 'R', Items.GOLD_INGOT, 'M', ItemManager.memoryDDR2());
+        GameRegistry.addRecipe(new ItemStack(ItemManager.memoryDDR4()),
+                "SSS",
+                "RRR",
+                "M M", 'S', Blocks.STONE_SLAB, 'R', Items.DIAMOND, 'M', ItemManager.memoryDDR3());
+
+        //TODO: HDD
+
+        GameRegistry.addRecipe(new ItemStack(ItemManager.psu250W()),
+                "RRR",
+                "R R",
+                "RRR", 'R', Blocks.REDSTONE_BLOCK);
+        GameRegistry.addRecipe(new ItemStack(ItemManager.psu500W()),
+                "RRR",
+                "RTR",
+                "RRR", 'R', Blocks.REDSTONE_BLOCK, 'T', ItemManager.psu250W());
+        GameRegistry.addRecipe(new ItemStack(ItemManager.psu750W()),
+                "RRR",
+                "RTR",
+                "RRR", 'R', Blocks.REDSTONE_BLOCK, 'T', ItemManager.psu500W());
+        GameRegistry.addRecipe(new ItemStack(ItemManager.psu960W()),
+                "RRR",
+                "RTR",
+                "RRR", 'R', Blocks.REDSTONE_BLOCK, 'T', ItemManager.psu750W());
+
+        if(Loader.isModLoaded("IC2"))
+            GameRegistry.addRecipe(new ItemStack(ItemManager.transformer()),
+                    "R  ",
+                    "RSR",
+                    "R  ", 'R', Blocks.REDSTONE_BLOCK, 'S', Items.STRING);
+
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.expansion()), Items.PAPER, ItemManager.processorSingleCore());
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.redstoneControl()), Items.REDSTONE, ItemManager.processorSingleCore());
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.networkCard()), Items.ENDER_PEARL, ItemManager.processorSingleCore());
 
         UpgradeItemManager.registerRecipes();
     }

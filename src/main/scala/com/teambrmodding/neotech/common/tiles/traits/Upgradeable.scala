@@ -1,5 +1,7 @@
 package com.teambrmodding.neotech.common.tiles.traits
 
+import java.util
+
 import com.teambr.bookshelf.common.container.InventoryCallback
 import com.teambr.bookshelf.common.tiles.traits.Inventory
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem.ENUM_UPGRADE_CATEGORY
@@ -7,6 +9,8 @@ import com.teambrmodding.neotech.managers.{CapabilityLoadManager, ItemManager}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.items.IItemHandler
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
   * This file was created for NeoTech
@@ -51,6 +55,12 @@ trait Upgradeable {
     def resetValues(): Unit = { }
 
     /**
+      * Return the list of upgrades by their id that are allowed in this machine
+      * @return A list of valid upgrades
+      */
+    def getAcceptableUpgrades: util.ArrayList[String] = { new util.ArrayList[String]() }
+
+    /**
       * Checks the inventory for existing cases of a tiered upgrade, also checks for existing by ID
       * @param stack The stack to check
       * @return True if we have this already
@@ -60,6 +70,11 @@ trait Upgradeable {
         if(stack.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
             // Cast to our data object
             val upgradeItem = stack.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)
+
+            // Check if valid
+            if(!getAcceptableUpgrades.contains(upgradeItem.getID))
+                return true // Well, doesn't have but can't have anyway so fail
+
             // Check against slots
             for(x <- 0 until upgradeInventory.getSizeInventory) {
                 // Grab item in slot
@@ -72,19 +87,19 @@ trait Upgradeable {
                     slottedUpgrade.getCategory match {
                         case IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU =>
                             if(upgradeItem.getCategory == IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU)
-                                return true
+                                return slottedItem.stackSize == slottedItem.getMaxStackSize
                         case IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD =>
                             if(upgradeItem.getCategory == IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD)
-                                return true
+                                return slottedItem.stackSize == slottedItem.getMaxStackSize
                         case IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY =>
                             if(upgradeItem.getCategory == IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)
-                                return true
+                                return slottedItem.stackSize == slottedItem.getMaxStackSize
                         case IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU =>
                             if(upgradeItem.getCategory == IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU)
-                                return true
+                                return slottedItem.stackSize == slottedItem.getMaxStackSize
                         case _ =>
                             if(upgradeItem.getID.equalsIgnoreCase(slottedUpgrade.getID))
-                                return true
+                                return slottedItem.stackSize == slottedItem.getMaxStackSize
                     }
                 }
             }
@@ -186,6 +201,28 @@ trait Upgradeable {
       * @return The modifier to apply
       */
     def getModifierForCategory(category: ENUM_UPGRADE_CATEGORY) : Int = {
+        // Cycle Inventory
+        for(x <- 0 until upgradeInventory.getSizeInventory) {
+            // Grab item in slot
+            val slottedItem = upgradeInventory.getStackInSlot(x)
+            // If we have an item here, and for type cast security it is valid
+            if (slottedItem != null && slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
+                // Cast to our data object
+                val slottedUpgrade = slottedItem.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)
+                // If we find what we need, return the stack size
+                if(slottedUpgrade.getCategory == category)
+                    return slottedUpgrade.getMultiplier(slottedItem)
+            }
+        }
+        1
+    }
+
+    /**
+      * Used to check if this upgrade exists by category
+      * @param category The category
+      * @return Shouldn't really be using this, categories are made for numbered upgrades
+      */
+    def getMultiplierByCategory(category : IUpgradeItem.ENUM_UPGRADE_CATEGORY) : Int = {
         // Cycle Inventory
         for(x <- 0 until upgradeInventory.getSizeInventory) {
             // Grab item in slot

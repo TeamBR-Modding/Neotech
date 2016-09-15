@@ -69,7 +69,7 @@ abstract class GuiAbstractMachine[C <: ContainerAbstractMachine](container : C, 
             // Add Upgrade Tab
             if(addUpgradeTab) {
                 val motherBoardTag = new ArrayBuffer[BaseComponent]
-                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.upgrades"), 26, 6)
+                motherBoardTag += new GuiComponentText(GuiColor.ORANGE + I18n.translateToLocal("neotech.text.upgrade"), 26, 6)
                 tabs.addTab(motherBoardTag.toList, 100, 65, new Color(0, 155, 0), new ItemStack(ItemManager.processorOctCore))
 
                 var slotID = 0

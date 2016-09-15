@@ -1,5 +1,7 @@
 package com.teambrmodding.neotech.common.tiles.machines.processors
 
+import java.util
+
 import com.teambrmodding.neotech.client.gui.machines.processors.GuiElectricCrusher
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerElectricCrusher
@@ -17,6 +19,7 @@ import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraft.world.World
 
 import scala.util.Random
+import scala.util.control.Breaks._
 
 /**
   * This file was created for NeoTech
@@ -55,12 +58,38 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
     }
 
     /**
+      * Return the list of upgrades by their id that are allowed in this machine
+      * @return A list of valid upgrades
+      */
+    override def getAcceptableUpgrades: util.ArrayList[String] = {
+        val list = new util.ArrayList[String]()
+        list.add(IUpgradeItem.CPU_SINGLE_CORE)
+        list.add(IUpgradeItem.CPU_DUAL_CORE)
+        list.add(IUpgradeItem.CPU_QUAD_CORE)
+        list.add(IUpgradeItem.CPU_OCT_CORE)
+        list.add(IUpgradeItem.MEMORY_DDR1)
+        list.add(IUpgradeItem.MEMORY_DDR2)
+        list.add(IUpgradeItem.MEMORY_DDR3)
+        list.add(IUpgradeItem.MEMORY_DDR4)
+        list.add(IUpgradeItem.PSU_250W)
+        list.add(IUpgradeItem.PSU_500W)
+        list.add(IUpgradeItem.PSU_750W)
+        list.add(IUpgradeItem.PSU_960W)
+        list.add(IUpgradeItem.TRANSFORMER)
+        list.add(IUpgradeItem.REDSTONE_CIRCUIT)
+        list.add(IUpgradeItem.NETWORK_CARD)
+        list.add(IUpgradeItem.EXPANSION_CARD)
+        list
+    }
+
+    /**
       * Used to get how much energy to drain per tick, you should check for upgrades at this point
       *
       * @return How much energy to drain per tick
       */
     override def getEnergyCostPerTick: Int = {
-            BASE_ENERGY_TICK
+        BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) *
+                getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU)
     }
 
     /**
@@ -69,7 +98,7 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
       * @return The time it takes in ticks to cook the current item
       */
     override def getCookTime : Int = {
-            200
+        200 - (12 * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU))
     }
 
     /**
@@ -103,18 +132,27 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
       * Called when the tile has completed the cook process
       */
     override def completeCook() {
-        val input = getStackInSlot(INPUT_SLOT)
-        var recipeResult: ItemStack = getOutput(getStackInSlot(INPUT_SLOT))
-        decrStackSize(INPUT_SLOT, 1)
-        if (getStackInSlot(OUTPUT_SLOT_1) == null) {
-            recipeResult = recipeResult.copy
-            recipeResult.stackSize = recipeResult.stackSize
-            setInventorySlotContents(OUTPUT_SLOT_1, recipeResult)
+        breakable {
+            for (cook <- 0 until getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)) {
+                if (canProcess) {
+                    val input = getStackInSlot(INPUT_SLOT)
+                    var recipeResult: ItemStack = getOutput(getStackInSlot(INPUT_SLOT))
+                    decrStackSize(INPUT_SLOT, 1)
+                    if (getStackInSlot(OUTPUT_SLOT_1) == null) {
+                        recipeResult = recipeResult.copy
+                        recipeResult.stackSize = recipeResult.stackSize
+                        setInventorySlotContents(OUTPUT_SLOT_1, recipeResult)
+                    }
+                    else
+                        getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize
+
+                    if (hasUpgradeByID(IUpgradeItem.EXPANSION_CARD))
+                        extraOutput(input)
+                } else break
+            }
         }
-        else {
-            getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize
-        }
-        if (hasUpgradeByID(IUpgradeItem.EXPANSION_CARD)) extraOutput(input)
+
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
     }
 
     /**
@@ -253,7 +291,7 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
       * @return The container to open
       */
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new ContainerElectricCrusher(player.inventory, this)
+    new ContainerElectricCrusher(player.inventory, this)
 
     /**
       * Return the gui for this tile
@@ -267,22 +305,29 @@ class TileElectricCrusher extends MachineProcessor[ItemStack, ItemStack] {
       * @return The gui to open
       */
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new GuiElectricCrusher(player, this)
+    new GuiElectricCrusher(player, this)
 
     override def getDescription : String = {
         "" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
-                GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
+                GuiColor.WHITE + "  " + ClientUtils.formatNumber(getEnergyCostPerTick) + " RF/tick\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
-                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" + GuiColor.WHITE + I18n.translateToLocal("neotech.electricCrusher.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + "  " + getCookTime + " ticks\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.operations") + ":\n" +
+                GuiColor.WHITE + "  " + getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) + "\n\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricCrusher.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrade") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processors") + ":\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.memory") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.memoryUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.psu") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.psuUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.network") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.networkUpgrade.desc")  + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
                 GuiColor.WHITE +  I18n.translateToLocal("neotech.electricCrusher.expansionUpgrade.desc")
     }

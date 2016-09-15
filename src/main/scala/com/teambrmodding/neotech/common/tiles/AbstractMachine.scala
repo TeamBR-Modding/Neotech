@@ -2,12 +2,14 @@ package com.teambrmodding.neotech.common.tiles
 
 import com.teambrmodding.neotech.collections.{EnumInputOutputMode, InputOutput}
 import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, InventorySided, RedstoneAware, Syncable}
+import com.teambr.bookshelf.manager.ConfigManager
 import com.teambrmodding.neotech.common.tiles.traits.{IUpgradeItem, Upgradeable}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.text.translation.I18n
 import net.minecraft.world.World
+import net.minecraftforge.fml.common.Optional
 
 /**
   * This file was created for NeoTech
@@ -247,12 +249,7 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * @param initial How much was in the old storage
       */
     def changeEnergy(initial : Int): Unit = {
-        if(getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) > 0) {
-            energyStorage.setMaxStored(BASE_ENERGY * (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) * 20))
-        }
-        else {
-            energyStorage.setMaxStored(BASE_ENERGY)
-        }
+        energyStorage.setMaxStored(getSupposedEnergy)
         updateClient = true
         if(energyStorage.getCurrentStored > energyStorage.getMaxEnergyStored)
             energyStorage.setCurrentStored(energyStorage.getMaxEnergyStored)
@@ -265,11 +262,35 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
       * @return How much energy should be available
       */
     def getSupposedEnergy : Int = {
-        if(getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) > 0)
-            BASE_ENERGY * (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) * 20)
-        else
-            BASE_ENERGY
+        BASE_ENERGY * (getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) *
+                (if(getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.PSU) == 1) 1 else 20))
     }
+
+    /**
+      * Used to get how much power maxed by tier
+      * @param tier Tier
+      * @return Max output
+      */
+    override def lookupMaxByTier(tier : Int) : Int = {
+        getUpgradeCountByID(IUpgradeItem.TRANSFORMER) + 1 match {
+            case 1 => 32
+            case 2 => 128
+            case 3 => 512
+            case 4 => 2048
+            case 5 => 8192
+            case _ => 32
+        }
+    }
+
+    /**
+      * Determine the tier of this energy source.
+      * 1 = LV, 2 = MV, 3 = MHV, 4 = HV, 5 = EV etc.
+      *
+      * @note Modifying the energy net from this method is disallowed.
+      * @return tier of this energy source
+      */
+    @Optional.Method(modid = "IC2")
+    override def getSourceTier: Int = getUpgradeCountByID(IUpgradeItem.TRANSFORMER) + 1
 
     /*******************************************************************************************************************
       ********************************************** Syncable methods **************************************************

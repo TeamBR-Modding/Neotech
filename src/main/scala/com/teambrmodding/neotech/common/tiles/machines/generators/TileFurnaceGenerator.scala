@@ -1,5 +1,7 @@
 package com.teambrmodding.neotech.common.tiles.machines.generators
 
+import java.util
+
 import com.teambrmodding.neotech.client.gui.machines.generators.GuiFurnaceGenerator
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.generators.ContainerFurnaceGenerator
@@ -51,6 +53,30 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
     }
 
     /**
+      * Return the list of upgrades by their id that are allowed in this machine
+      * @return A list of valid upgrades
+      */
+    override def getAcceptableUpgrades: util.ArrayList[String] = {
+        val list = new util.ArrayList[String]()
+        list.add(IUpgradeItem.CPU_SINGLE_CORE)
+        list.add(IUpgradeItem.CPU_DUAL_CORE)
+        list.add(IUpgradeItem.CPU_QUAD_CORE)
+        list.add(IUpgradeItem.CPU_OCT_CORE)
+        list.add(IUpgradeItem.MEMORY_DDR1)
+        list.add(IUpgradeItem.MEMORY_DDR2)
+        list.add(IUpgradeItem.MEMORY_DDR3)
+        list.add(IUpgradeItem.MEMORY_DDR4)
+        list.add(IUpgradeItem.PSU_250W)
+        list.add(IUpgradeItem.PSU_500W)
+        list.add(IUpgradeItem.PSU_750W)
+        list.add(IUpgradeItem.PSU_960W)
+        list.add(IUpgradeItem.TRANSFORMER)
+        list.add(IUpgradeItem.REDSTONE_CIRCUIT)
+        list.add(IUpgradeItem.NETWORK_CARD)
+        list
+    }
+
+    /**
       * This method handles how much energy to produce per tick
       *
       * @return How much energy to produce per tick
@@ -58,10 +84,8 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
     override def getEnergyProduced: Int = {
         val oxygenModifier = if(tanks(OXYGEN_TANK).getFluid != null && tanks(OXYGEN_TANK).getFluid.getFluid == FluidManager.oxygen)
             5 else 1
-        if(hasUpgradeByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU))
-            BASE_ENERGY_TICK + (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * 50) * oxygenModifier
-        else
-            BASE_ENERGY_TICK * oxygenModifier
+        BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) *
+                getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * oxygenModifier
     }
 
     /**
@@ -70,7 +94,7 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
     override def generate(): Unit = {
         energyStorage.receivePower(getEnergyProduced, true)
         if(tanks(OXYGEN_TANK).getFluid != null)
-            tanks(OXYGEN_TANK).drain(1, true)
+            tanks(OXYGEN_TANK).drain(getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY), true)
     }
 
     /**
@@ -85,10 +109,10 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
                 burnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(INPUT_SLOT))
 
                 if (burnTime > 0) {
-                    if (getStackInSlot(INPUT_SLOT).getItem().getContainerItem(getStackInSlot(INPUT_SLOT)) == null)
+                    if (getStackInSlot(INPUT_SLOT).getItem.getContainerItem(getStackInSlot(INPUT_SLOT)) == null)
                         getStackInSlot(INPUT_SLOT).stackSize -= 1
                     else
-                        setInventorySlotContents(INPUT_SLOT, getStackInSlot(INPUT_SLOT).getItem().getContainerItem(getStackInSlot(INPUT_SLOT)))
+                        setInventorySlotContents(INPUT_SLOT, getStackInSlot(INPUT_SLOT).getItem.getContainerItem(getStackInSlot(INPUT_SLOT)))
                     if (getStackInSlot(INPUT_SLOT).stackSize <= 0)
                         setInventorySlotContents(INPUT_SLOT, null)
                     currentObjectBurnTime = burnTime
@@ -96,7 +120,7 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
                 }
             }
         }
-        burnTime -= 1
+        burnTime -= getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)
         burnTime > 0
     }
 
@@ -263,16 +287,21 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.generating") + ":\n" +
                 GuiColor.WHITE + "  " + getEnergyProduced + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.operations") + ":\n" +
+                GuiColor.WHITE + "  " + getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) + "\n\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.furnaceGenerator.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrade") + ":\n" + GuiTextFormat.RESET +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.furnaceGenerator.processorUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.memory") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.memoryUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.psu") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.psuUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.network") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.networkUpgrade.desc")
     }
 
     /**

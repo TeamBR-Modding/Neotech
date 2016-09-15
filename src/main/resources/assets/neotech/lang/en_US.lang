@@ -352,7 +352,12 @@ neotech.text.out=Out
 neotech.text.upgrade=Upgrades
 neotech.text.start=Start
 
-neotech.text.motherboard=Motherboard
+neotech.text.processors=Processors
+neotech.text.memory=Memory
+neotech.text.control=Redstone Control
+neotech.text.network=Network Card
+neotech.text.psu=Power Supply
+neotech.text.expansion=Expansion
 
 neotech.text.frequency=Frequency
 neotech.text.extractionMode=Extraction Mode
@@ -383,12 +388,6 @@ neotech.text.magnetism=Magnetism
 neotech.text.active=Active
 neotech.text.disabled=Disabled
 
-neotech.text.upgrades=Upgrades
-neotech.text.processors=Processors
-neotech.text.hardDrives=Hard Drives
-neotech.text.control=Control
-neotech.text.expansion=Expansion
-
 neotech.text.rfDiff=Energy Change
 
 neotech.text.processMode=Solidify Mode
@@ -409,6 +408,7 @@ neotech.text.stats=Current Stats
 neotech.text.energyUsage=Energy Usage
 neotech.text.processTime=Process Time
 neotech.text.generating=Energy Generating
+neotech.text.operations=Operations
 
 neotech.text.rangeTree=Range
 neotech.text.chopCount=Chop Count
@@ -451,10 +451,11 @@ commands.addCentrifugeRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AM
 
 # Electric Furnace
 neotech.electricFurnace.desc=The Electric Furnace is simply a furnace that runs on RF. It will smelt anything a vanilla furnace would.
-neotech.electricFurnace.processorUpgrade.desc=Each processor removes 24 ticks (a little over a second) from the cook time.
-neotech.electricFurnace.hardDriveUpgrade.desc=Each hard drive multiplies the max energy stored by 10 multiplied by the number of hard drives.
+neotech.electricFurnace.processorUpgrade.desc=Processors increase the speed of the machine, adding slight energy cost
+neotech.electricFurnace.memoryUpgrade.desc=Memory allows the machine to do multiple operations at once
 neotech.electricFurnace.controlUpgrade.desc=The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals.
-neotech.electricFurnace.expansionUpgrade.desc=The expansion upgrade allows you to configure the automatic input and output of the machine.
+neotech.electricFurnace.networkUpgrade.desc=The expansion upgrade allows you to configure the automatic input and output of the machine.
+neotech.electricFurnace.psuUpgrade.desc=The power supply allows the machine to store more energy
 
 # Electric Crusher
 neotech.electricCrusher.desc=The Electric Crusher smashes items put into it. If you put an ore block into the input, you can get two ore dust as an output. It can also crush things like cobblestone into sand. As more ores and mods are added, the crusher will adapt by adding recipes based on ore dict and other factors.
@@ -478,8 +479,8 @@ neotech.alloyer.desc=The Electric Alloyer will take two input fluids and combine
 neotech.centrifuge.desc=The Electric Centrifuge will separate a fluid into the two components it is made of. Useful for separating the stone from molten metal.
 
 # Furnace Generator
-neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would. By default, the Furnace Generator generates 100 RF/tick
-neotech.furnaceGenerator.processorUpgrade.desc=Each processor adds 25 RF/tick to the amount produced per tick
+neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would
+neotech.furnaceGenerator.processorUpgrade.desc=Each processor increases the amount of energy produced per tick
 
 # Fluid Generator
 neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces Redstone Flux. By default, the Fluid Generator generates 175 RF/tick. You can add more liquid fuels via the config file

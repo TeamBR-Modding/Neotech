@@ -11,6 +11,7 @@ import com.teambrmodding.neotech.common.tiles.machines.generators.TileFurnaceGen
 import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display._
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.client.Minecraft
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumFacing
@@ -40,7 +41,7 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
 
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 ArrayBuffer(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                        .format(tileEntity.burnTime) + " ticks left.")
+                        .format(tileEntity.burnTime / tileEntity.getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)) + " ticks left.")
             }
         }
 
