@@ -24,6 +24,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler
 class TileIronTank extends UpdatingTile with FluidHandler {
 
     lazy val TANK = 0
+    // Lazy around break block
+    var dropItem = true
 
     // Changed in child classes to have larger capacity
     def CAPACITY  = 8000

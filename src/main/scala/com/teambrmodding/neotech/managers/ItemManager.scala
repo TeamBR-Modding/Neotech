@@ -37,10 +37,10 @@ object ItemManager {
     val processorQuadCore   = new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE,  IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 1, 8)
     val processorOctCore    = new UpgradeItem(IUpgradeItem.CPU_OCT_CORE,   IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU, 1, 16)
 
-    val memoryDDR1 = new UpgradeItem(IUpgradeItem.MEMORY_DDR1, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4, 2,  true)
-    val memoryDDR2 = new UpgradeItem(IUpgradeItem.MEMORY_DDR2, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4, 4,  true)
-    val memoryDDR3 = new UpgradeItem(IUpgradeItem.MEMORY_DDR3, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4, 8,  true)
-    val memoryDDR4 = new UpgradeItem(IUpgradeItem.MEMORY_DDR4, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 4, 16, true)
+    val memoryDDR1 = new UpgradeItem(IUpgradeItem.MEMORY_DDR1, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 1, 2,  true)
+    val memoryDDR2 = new UpgradeItem(IUpgradeItem.MEMORY_DDR2, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 1, 4,  true)
+    val memoryDDR3 = new UpgradeItem(IUpgradeItem.MEMORY_DDR3, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 1, 8,  true)
+    val memoryDDR4 = new UpgradeItem(IUpgradeItem.MEMORY_DDR4, IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY, 1, 16, true)
 
     val hardDrive64G  = new UpgradeItem(IUpgradeItem.HDD_64G,  IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1, 2)
     val hardDrive254G = new UpgradeItem(IUpgradeItem.HDD_256G, IUpgradeItem.ENUM_UPGRADE_CATEGORY.HDD, 1, 4)

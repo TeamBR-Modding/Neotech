@@ -19,7 +19,7 @@ import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.{BlockRenderLayer, EnumBlockRenderType, EnumFacing, EnumHand}
+import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World, WorldServer}
 import net.minecraftforge.client.event.ModelBakeEvent
 import net.minecraftforge.fluids.capability.IFluidHandler
@@ -77,10 +77,57 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
         FluidContainerRegistry.isFilledContainer(heldItem) || heldItem.getItem.isInstanceOf[IFluidContainerItem]
     }
 
+
+    /**
+      * Called when a wrench clicks on this block
+      * @param stack The stack clicking on this block, an instance of IToolWrench
+      * @param playerIn The player clicking
+      * @param worldIn The world
+      * @param pos The block pos (us)
+      * @param hand The player's hand
+      * @param facing Which face was clicked
+      * @param hitX X hit
+      * @param hitY Y hit
+      * @param hitZ Z hit
+      * @return The result, pass to send to next, success to end
+      */
+    override def onWrench(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand,
+                 facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : EnumActionResult = {
+        worldIn.getTileEntity(pos).asInstanceOf[TileIronTank].dropItem = false
+        if(playerIn.isSneaking && breakSavingNBT(worldIn, pos))
+            EnumActionResult.SUCCESS
+        else
+            EnumActionResult.PASS
+    }
+
+    /**
+      * Breaks the block and saves the NBT to the tag, calls getStackDropped to drop (just item)
+      * @param world The world
+      * @param pos The block pos
+      * @return True if successful
+      */
+    override def breakSavingNBT(world : World, pos : BlockPos): Boolean = {
+        if(world.isRemote) return false
+        world.getTileEntity(pos) match {
+            case savable =>
+                val tag = savable.writeToNBT(new NBTTagCompound)
+                val stack = getStackDroppedByWrench(world, pos)
+                stack.setTagCompound(tag)
+                WorldUtils.dropStack(world, stack, pos)
+                //world.removeTileEntity(pos) // Remove to prevent drop code from triggering
+                world.setBlockToAir(pos)
+                return true
+            case _ =>
+        }
+        false
+    }
+
     override def breakBlock(world: World, pos: BlockPos, state : IBlockState): Unit = {
         world match {
             case _: WorldServer => //We are on a server
-                WorldUtils.dropStack(world, new ItemStack(state.getBlock), pos)
+                val tile = world.getTileEntity(pos)
+                if(world.getTileEntity(pos) != null && !world.getTileEntity(pos).isInvalid && world.getTileEntity(pos).asInstanceOf[TileIronTank].dropItem)
+                    WorldUtils.dropStack(world, new ItemStack(state.getBlock), pos)
             case _ => //Not on the server
         }
         super.breakBlock(world, pos, state)
