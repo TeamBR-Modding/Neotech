@@ -42,13 +42,14 @@ class FluidFuelRecipeHandler extends AbstractRecipeHandler[FluidFuelRecipe, Flui
       *
       * @return
       */
-    override def getVersion: Int = 2
+    override def getVersion: Int = 3
 
     /**
       * Called when the file is not found, add all default recipes here
       */
     override def generateDefaultRecipes(): Unit = {
         addRecipe(new FluidFuelRecipe("lava", 6400))
+        addRecipe(new FluidFuelRecipe("hydrogen", 2400))
         LogHelper.info("Fluid Fuel Values Generated!")
         saveToFile()
     }

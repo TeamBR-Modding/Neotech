@@ -1,5 +1,7 @@
 package com.teambrmodding.neotech.common.tiles.machines.processors
 
+import java.util
+
 import com.teambrmodding.neotech.client.gui.machines.processors.GuiCrucible
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerCrucible
@@ -10,6 +12,7 @@ import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambr.bookshelf.util.InventoryUtils
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
@@ -18,7 +21,9 @@ import net.minecraft.util.text.translation.I18n
 import net.minecraft.util.{EnumFacing, EnumParticleTypes}
 import net.minecraft.world.World
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler
-import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank, IFluidHandler}
+import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank}
+
+import scala.util.control.Breaks._
 
 /**
   * This file was created for NeoTech
@@ -53,13 +58,37 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
     }
 
     /**
+      * Return the list of upgrades by their id that are allowed in this machine
+      * @return A list of valid upgrades
+      */
+    override def getAcceptableUpgrades: util.ArrayList[String] = {
+        val list = new util.ArrayList[String]()
+        list.add(IUpgradeItem.CPU_SINGLE_CORE)
+        list.add(IUpgradeItem.CPU_DUAL_CORE)
+        list.add(IUpgradeItem.CPU_QUAD_CORE)
+        list.add(IUpgradeItem.CPU_OCT_CORE)
+        list.add(IUpgradeItem.MEMORY_DDR1)
+        list.add(IUpgradeItem.MEMORY_DDR2)
+        list.add(IUpgradeItem.MEMORY_DDR3)
+        list.add(IUpgradeItem.MEMORY_DDR4)
+        list.add(IUpgradeItem.PSU_250W)
+        list.add(IUpgradeItem.PSU_500W)
+        list.add(IUpgradeItem.PSU_750W)
+        list.add(IUpgradeItem.PSU_960W)
+        list.add(IUpgradeItem.TRANSFORMER)
+        list.add(IUpgradeItem.REDSTONE_CIRCUIT)
+        list.add(IUpgradeItem.NETWORK_CARD)
+        list
+    }
+
+    /**
       * Used to get how much energy to drain per tick, you should check for upgrades at this point
       *
       * @return How much energy to drain per tick
       */
-    override def getEnergyCostPerTick: Int = {
-            BASE_ENERGY_TICK
-    }
+    override def getEnergyCostPerTick: Int =
+    BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
+            ((getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 62)
 
     /**
       * Used to get how long it takes to cook things, you should check for upgrades at this point
@@ -67,7 +96,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * @return The time it takes in ticks to cook the current item
       */
     override def getCookTime : Int = {
-            1000
+        1000 - (62 * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU))
     }
 
     /**
@@ -108,16 +137,24 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * Called when the tile has completed the cook process
       */
     override def completeCook(): Unit = {
-        val recipeOutput = getOutput(getStackInSlot(0))
-        if(recipeOutput != null) {
-            val drain = tanks(OUTPUT_TANK).fill(recipeOutput, false)
-            if(drain == recipeOutput.amount) {
-                tanks(OUTPUT_TANK).fill(recipeOutput, true)
-                getStackInSlot(ITEM_INPUT_SLOT).stackSize -= 1
-                if(getStackInSlot(ITEM_INPUT_SLOT).stackSize <= 0)
-                    setStackInSlot(ITEM_INPUT_SLOT, null)
+        breakable {
+            for (x <- 0 until getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)) {
+                if (canProcess) {
+                    val recipeOutput = getOutput(getStackInSlot(0))
+                    if (recipeOutput != null) {
+                        val drain = tanks(OUTPUT_TANK).fill(recipeOutput, false)
+                        if (drain == recipeOutput.amount) {
+                            tanks(OUTPUT_TANK).fill(recipeOutput, true)
+                            getStackInSlot(ITEM_INPUT_SLOT).stackSize -= 1
+                            if (getStackInSlot(ITEM_INPUT_SLOT).stackSize <= 0)
+                                setStackInSlot(ITEM_INPUT_SLOT, null)
+                        }
+                    }
+                } else break
             }
         }
+
+        markForUpdate(6)
     }
 
     /**
@@ -216,7 +253,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * Called when something happens to the tank, you should mark the block for update here if a tile
       */
     override def onTankChanged(tank: FluidTank): Unit =
-        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+    worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
     /**
       * Returns true if the given fluid can be inserted into the given direction.
       *
@@ -271,7 +308,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * @return True if you can put this there
       */
     override def isItemValidForSlot(slot: Int, itemStackIn: ItemStack): Boolean =
-        slot == ITEM_INPUT_SLOT && getOutput(itemStackIn) != null
+    slot == ITEM_INPUT_SLOT && getOutput(itemStackIn) != null
 
     /*******************************************************************************************************************
       ***************************************************** Misc methods ***********************************************
@@ -289,7 +326,7 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * @return The container to open
       */
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new ContainerCrucible(player.inventory, this)
+    new ContainerCrucible(player.inventory, this)
 
     /**
       * Return the gui for this tile
@@ -303,24 +340,29 @@ class TileCrucible extends MachineProcessor[ItemStack, FluidStack] with FluidHan
       * @return The gui to open
       */
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef =
-        new GuiCrucible(player, this)
+    new GuiCrucible(player, this)
 
     override def getDescription : String = {
         "" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
-                GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
+                GuiColor.WHITE + "  " + ClientUtils.formatNumber(getEnergyCostPerTick) + " RF/tick\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
-                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" + GuiColor.WHITE + I18n.translateToLocal("neotech.electricCrucible.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + I18n.translateToLocal("neotech.electricCrucible.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.WHITE + "  " + getCookTime + " ticks\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.operations") + ":\n" +
+                GuiColor.WHITE + "  " + getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) + "\n\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricCrucible.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrade") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.memory") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.memoryUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.psu") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.psuUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.network") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.networkUpgrade.desc")
     }
 
     /**

@@ -81,8 +81,8 @@ class TileElectricFurnace extends MachineProcessor[ItemStack, ItemStack] {
       * @return How much energy to drain per tick
       */
     override def getEnergyCostPerTick: Int = {
-        BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) *
-                getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU)
+        BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
+                ((getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 12)
     }
 
     /**

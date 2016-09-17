@@ -1,7 +1,10 @@
 package com.teambrmodding.neotech.common.tiles.storage.tanks
 
+import com.teambrmodding.neotech.utils.TimeUtils
+import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.FluidStack
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler
 
 /**
   * This file was created for NeoTech
@@ -80,5 +83,25 @@ class TileCreativeTank extends TileIronTank {
             }
         }
         fluidAmount
+    }
+
+    override def onServerTick(): Unit = {
+        if(TimeUtils.onSecond(10) && tanks(TANK).getFluid != null) {
+            worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) match {
+                case tile : TileEntity if tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP) =>
+                    val tank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP)
+                    for(tankInfo <- tank.getTankProperties) {
+                        if(tankInfo.canFillFluidType(tanks(TANK).getFluid)) {
+                            val actualDrain = tank.fill(tanks(TANK).drain(1000, false), false)
+                            if(actualDrain > 0) {
+                                tank.fill(tanks(TANK).drain(actualDrain, false), true)
+                                markForUpdate(3)
+                                return
+                            }
+                        }
+                    }
+                case _ =>
+            }
+        }
     }
 }

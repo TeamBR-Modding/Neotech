@@ -1,5 +1,7 @@
 package com.teambrmodding.neotech.common.tiles.machines.processors
 
+import java.util
+
 import com.teambrmodding.neotech.client.gui.machines.processors.GuiThermalBinder
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerThermalBinder
@@ -71,15 +73,32 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
     }
 
     /**
+      * Return the list of upgrades by their id that are allowed in this machine
+      * @return A list of valid upgrades
+      */
+    override def getAcceptableUpgrades: util.ArrayList[String] = {
+        val list = new util.ArrayList[String]()
+        list.add(IUpgradeItem.CPU_SINGLE_CORE)
+        list.add(IUpgradeItem.CPU_DUAL_CORE)
+        list.add(IUpgradeItem.CPU_QUAD_CORE)
+        list.add(IUpgradeItem.CPU_OCT_CORE)
+        list.add(IUpgradeItem.PSU_250W)
+        list.add(IUpgradeItem.PSU_500W)
+        list.add(IUpgradeItem.PSU_750W)
+        list.add(IUpgradeItem.PSU_960W)
+        list.add(IUpgradeItem.TRANSFORMER)
+        list.add(IUpgradeItem.REDSTONE_CIRCUIT)
+        list.add(IUpgradeItem.NETWORK_CARD)
+        list
+    }
+
+    /**
       * Used to get how much energy to drain per tick, you should check for upgrades at this point
       *
       * @return How much energy to drain per tick
       */
     override def getEnergyCostPerTick: Int = {
-        if(getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) > 0)
-            BASE_ENERGY_TICK * getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU)
-        else
-            BASE_ENERGY_TICK
+        BASE_ENERGY_TICK * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU)
     }
 
     /**
@@ -89,7 +108,7 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
       */
     override def getCookTime : Int = {
         if(getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) > 0)
-            (200 * getCount) - (getCount * (getUpgradeCountByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * 20))
+            (200 * getCount) - (getCount * (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * 20))
         else
             200 * getCount
     }
@@ -472,18 +491,23 @@ class TileThermalBinder extends MachineProcessor[ItemStack, ItemStack] with Flui
         "" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
-                GuiColor.WHITE + "  " + getEnergyCostPerTick + " RF/tick\n" +
+                GuiColor.WHITE + "  " + ClientUtils.formatNumber(getEnergyCostPerTick) + " RF/tick\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processTime") + ":\n" +
-                GuiColor.WHITE + "  " + getCookTime + " ticks\n\n" + GuiColor.WHITE + I18n.translateToLocal("neotech.thermalBinder.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
-                GuiColor.WHITE + I18n.translateToLocal("neotech.thermalBinder.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.WHITE + "  " + getCookTime + " ticks\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.operations") + ":\n" +
+                GuiColor.WHITE + "  " + getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) + "\n\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.thermalBinder.desc") + "\n\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrade") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processors") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.processorUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.memory") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.memoryUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.psu") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.psuUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.network") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.networkUpgrade.desc")
     }
 
     /**

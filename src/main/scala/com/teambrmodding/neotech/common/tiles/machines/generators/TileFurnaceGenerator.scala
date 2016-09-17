@@ -84,8 +84,8 @@ class TileFurnaceGenerator extends MachineGenerator with FluidHandler {
     override def getEnergyProduced: Int = {
         val oxygenModifier = if(tanks(OXYGEN_TANK).getFluid != null && tanks(OXYGEN_TANK).getFluid.getFluid == FluidManager.oxygen)
             5 else 1
-        BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) *
-                getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * oxygenModifier
+        (BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
+                ((getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 12)) * oxygenModifier
     }
 
     /**

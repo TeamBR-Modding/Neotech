@@ -80,8 +80,8 @@ class TileFluidGenerator extends MachineGenerator with FluidHandler {
       * @return How much energy to produce per tick
       */
     override def getEnergyProduced: Int = {
-        BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) *
-                getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU)
+        BASE_ENERGY_TICK * getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
+                ((getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 12)
     }
 
     /**

@@ -53,14 +53,14 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       * Used to get the range of this machines operation, includes upgrades
       */
     def RANGE : Int = {
-        4 * Math.max(1, getUpgradeCountByID(IUpgradeItem.MEMORY_DDR1))
+        4 * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)
     }
 
     /**
       * Used to get the cost to operate, includes upgrades
       */
     def costToOperate : Int = {
-        200 * Math.max(1, getUpgradeCountByID(IUpgradeItem.CPU_SINGLE_CORE))
+        200 * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)
 
     }
 
@@ -70,7 +70,7 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
       * @return
       */
     def getChopCount : Int = {
-        2 * Math.max(1, getUpgradeCountByID(IUpgradeItem.CPU_SINGLE_CORE) * 16)
+        2 * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU)
     }
 
     /**
@@ -89,6 +89,30 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
         validModes += EnumInputOutputMode.INPUT_SECONDARY
         validModes += EnumInputOutputMode.OUTPUT_ALL
         validModes += EnumInputOutputMode.ALL_MODES
+    }
+
+    /**
+      * Return the list of upgrades by their id that are allowed in this machine
+      * @return A list of valid upgrades
+      */
+    override def getAcceptableUpgrades: util.ArrayList[String] = {
+        val list = new util.ArrayList[String]()
+        list.add(IUpgradeItem.CPU_SINGLE_CORE)
+        list.add(IUpgradeItem.CPU_DUAL_CORE)
+        list.add(IUpgradeItem.CPU_QUAD_CORE)
+        list.add(IUpgradeItem.CPU_OCT_CORE)
+        list.add(IUpgradeItem.MEMORY_DDR1)
+        list.add(IUpgradeItem.MEMORY_DDR2)
+        list.add(IUpgradeItem.MEMORY_DDR3)
+        list.add(IUpgradeItem.MEMORY_DDR4)
+        list.add(IUpgradeItem.PSU_250W)
+        list.add(IUpgradeItem.PSU_500W)
+        list.add(IUpgradeItem.PSU_750W)
+        list.add(IUpgradeItem.PSU_960W)
+        list.add(IUpgradeItem.TRANSFORMER)
+        list.add(IUpgradeItem.REDSTONE_CIRCUIT)
+        list.add(IUpgradeItem.NETWORK_CARD)
+        list
     }
 
     /*******************************************************************************************************************
@@ -487,15 +511,17 @@ class TileTreeFarm extends AbstractMachine with IEnergyReceiver {
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.chopCount") + ":\n" +
                 GuiColor.WHITE + "  " + getChopCount + "  \n\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.treeFarm.desc") + "\n\n" +
-                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrades") + ":\n" + GuiTextFormat.RESET +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.processors") + ":\n" +
+                GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + I18n.translateToLocal("neotech.text.upgrade") + ":\n" + GuiTextFormat.RESET +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processors") + ":\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.treeFarm.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.hardDrives") + ":\n" +
-                GuiColor.WHITE + I18n.translateToLocal("neotech.treeFarm.hardDriveUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.memory") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.treeFarm.memoryUpgrade.desc") + "\n\n" +
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.psu") + ":\n" +
+                GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.psuUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.control") + ":\n" +
                 GuiColor.WHITE + I18n.translateToLocal("neotech.electricFurnace.controlUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.expansion") + ":\n" +
-                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.expansionUpgrade.desc")
+                GuiColor.YELLOW + GuiTextFormat.BOLD + I18n.translateToLocal("neotech.text.network") + ":\n" +
+                GuiColor.WHITE +  I18n.translateToLocal("neotech.electricFurnace.networkUpgrade.desc")
     }
 
     /**
