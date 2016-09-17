@@ -135,13 +135,17 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
     /**
       * We want to make sure the client knows what to render
       */
+    var updateCooldown = 60
     override def onClientTick() : Unit = {
         if(getSupposedEnergy != energyStorage.getMaxStored)
             sendValueToServer(UPDATE_CLIENT, 0)
         //Mark for render update if needed
-        if(working != isActive)
-            worldObj.markBlockRangeForRenderUpdate(pos, pos)
-        working = isActive
+        updateCooldown -= 1
+        if(updateCooldown < 0 && working != isActive) {
+            markForUpdate(3)
+            working = isActive
+            updateCooldown = 60
+        }
     }
 
     var timeTicker = 0
