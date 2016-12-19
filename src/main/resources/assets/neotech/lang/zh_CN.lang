@@ -44,6 +44,7 @@ tile.neotech:blockMiniatureStar_yellow.name=§e黄色§r星光
 # Connected
 tile.neotech:phantomGlass.name=幽影玻璃
 tile.neotech:voidGlass.name=虚无玻璃
+tile.neotech:rockWall.name=攀爬岩墙
 
 # Misc
 tile.neotech:lightSource.name=光源
@@ -87,6 +88,12 @@ fluid.carbon.name=液态碳
 # Obsidian
 fluid.obsidian.name=熔融黑曜石
 
+# Hydrogen
+fluid.hydrogen.name=液氢
+
+# Oxygen
+fluid.oxygen.name=液氧
+
 #######################
 # Items
 #######################
@@ -114,13 +121,32 @@ item.neotech:dustSilver.name=银粉
 item.neotech:ingotSilver.name=银锭
 item.neotech:nuggetSilver.name=银粒
 
-# Motherboard
-item.neotech:upgradeMBFull.name=主板
-item.neotech:upgradeMBEmpty.name=空主板
-item.neotech:upgradeHardDrive.name=硬盘升级
-item.neotech:upgradeControl.name=控制升级
-item.neotech:upgradeProcessor.name=处理器升级
-item.neotech:upgradeExpansion.name=扩展升级
+# Upgrades
+item.neotech:CPU_1.name=单核处理器
+item.neotech:CPU_2.name=双核处理器
+item.neotech:CPU_3.name=四核处理器
+item.neotech:CPU_4.name=八核处理器
+
+item.neotech:DDR1.name=DDR1内存条
+item.neotech:DDR2.name=DDR2内存条
+item.neotech:DDR3.name=DDR3内存条
+item.neotech:DDR4.name=DDR4内存条
+
+item.neotech:HDD_64.name=64G硬盘
+item.neotech:HDD_256.name=256G硬盘
+item.neotech:HDD_512.name=512G硬盘
+item.neotech:HDD_1T.name=1T硬盘
+
+item.neotech:PSU_250.name=250W电源
+item.neotech:PSU_500.name=500W电源
+item.neotech:PSU_750.name=750W电源
+item.neotech:PSU_960.name=960W电源
+
+item.neotech:Transformer.name=IC2变压器
+
+item.neotech:Expansion_Card.name=扩展卡
+item.neotech:Redstone_Circuit.name=红石控制
+item.neotech:Network_Card.name=网卡
 
 # Tools
 item.neotech:wrench.name=扳手
@@ -146,11 +172,33 @@ item.neotech:sharpness.name=锋利升级
 item.neotech:smite.name=重击升级
 item.neotech:beheading.name=斩首升级
 item.neotech:spiderBane.name=节肢杀手升级
+item.neotech:looting.name=抢夺升级
+
+item.neotech:electricArmorHelmet.name=电力头盔
+item.neotech:electricArmorChestplate.name=电力胸甲
+item.neotech:electricArmorLeggings.name=电力护腿
+item.neotech:electricArmorBoots.name=电力靴
+
+item.neotech:jetpack.name=喷气背包升级
+item.neotech:fallResist.name=摔落保护升级
+item.neotech:glide.name=滑翔升级
+item.neotech:nightVision.name=夜视升级
+item.neotech:sprinting.name=疾跑升级
+item.neotech:protection.name=防护升级
+item.neotech:hover.name=悬浮升级
 
 # Batteries
 item.neotech:basicRFBattery.name=基础RF能量单元
 item.neotech:advancedRFBattery.name=高级RF能量单元
 item.neotech:eliteRFBattery.name=精制RF能量单元
+
+# Universe
+entity.neotech.sun.name=太阳
+item.neotech:inertSun.name=Inert Sun
+item.neotech:blueDwarf.name=Blue Dwarf
+item.neotech:smallSun.name=Small Sun
+item.neotech:largeSun.name=Large Sun
+item.neotech:redGiant.name=Red Giant
 
 #######################
 # Tile Entities
@@ -175,7 +223,6 @@ tile.neotech:solarPanelT2.name=高级太阳能板
 tile.neotech:solarPanelT3.name=精制太阳能板
 
 # Operators
-tile.neotech:pump.name=电动泵
 tile.neotech:treeFarm.name=电力伐木机
 
 # Storage
@@ -195,11 +242,8 @@ tile.neotech:blockCrafter.name=双联合成台
 tile.neotech:blockMiniatureSun.name=微型太阳
 tile.neotech:playerPlate.name=玩家感应压力板
 tile.neotech:chunkLoader.name=区块加载器
-tile.neotech:dimStorage.name=维度箱
 tile.neotech:redstoneClock.name=红石钟
-tile.neotech:mechanicalPipe.name=机械管道
 tile.neotech:mobStand.name=怪物展示台
-tile.neotech:blockAttractor.name=Attractor(WIP)
 
 #######################
 # Pipes
@@ -222,11 +266,6 @@ tile.neotech:pipeStructure_red.name=§c红色§r结构管
 tile.neotech:pipeStructure_silver.name=§7银白色§r结构管
 tile.neotech:pipeStructure_white.name=白色结构管
 tile.neotech:pipeStructure_yellow.name=§e黄色§r结构管
-
-# Acceleration
-tile.neotech:pipeBasicSpeedStructure.name=基础加速管道
-tile.neotech:pipeAdvancedSpeedStructure.name=高级加速管道
-tile.neotech:pipeEliteSpeedStructure.name=精制加速管道
 
 # Interfaces
 tile.neotech:pipeItemBasicInterface.name=物品交互管道
@@ -303,9 +342,6 @@ neotech.button.disable=禁用?
 # Mob Stand
 neotech.mobStand.title=怪物展示台
 
-# Dim Storage
-neotech.dimStorage.title=维度箱
-
 #######################
 # Common Text
 #######################
@@ -314,9 +350,15 @@ neotech.text.error=错误
 neotech.text.in=输入
 neotech.text.out=输出
 neotech.text.upgrade=升级
+neotech.text.upgrades=升级
 neotech.text.start=开始
 
-neotech.text.motherboard=主板
+neotech.text.processors=处理器
+neotech.text.memory=内存条
+neotech.text.control=红石控制
+neotech.text.network=网卡
+neotech.text.psu=电源
+neotech.text.expansion=扩展
 
 neotech.text.frequency=频率
 neotech.text.extractionMode=抽取模式
@@ -347,14 +389,7 @@ neotech.text.magnetism=磁力
 neotech.text.active=激活
 neotech.text.disabled=禁用
 
-neotech.text.upgrades=升级
-neotech.text.processors=处理器
-neotech.text.hardDrives=硬盘
-neotech.text.control=控制
-neotech.text.expansion=扩展
-
-neotech.text.rfIn=当前输入RF
-neotech.text.rfOut=当前输出RF
+neotech.text.rfDiff=能量差
 
 neotech.text.processMode=成型模式
 neotech.text.blockMode=方块模式
@@ -370,9 +405,37 @@ neotech.text.lookAtPlayerInfo=使怪物一直注视玩家方向
 neotech.text.renderName=名称
 neotech.text.renderNameInfo=显示怪物名字(命名标签/铁砧命名捕怪网)
 
-neotech.text.placeInBinder=在热力组装机中进行升级
+neotech.text.stats=当前状况
+neotech.text.energyUsage=能量使用
+neotech.text.processTime=处理时间
+neotech.text.generating=能量生成
+neotech.text.operations=运行
+
+neotech.text.rangeTree=范围
+neotech.text.chopCount=砍伐计数
+
+neotech.text.placeInBinder=在热能组装机中升级
 
 neotech.text.lighting=自动放置光源
+neotech.text.beheading=斩首
+
+neotech.text.jetpack=喷气背包已安装
+neotech.text.fallResist=Removes Fall Damage
+neotech.text.glide=按LMENU在天空中滑翔
+neotech.text.nightVision=具有夜视
+neotech.text.sprinting=疾跑
+neotech.text.hover=按CTRL悬浮
+
+neotech.text.modName=Neotech
+neotech.text.radialMenuKey=工具/护甲页面
+
+aoe=影响范围
+lighting=自动照明
+jetpack=喷气背包
+glide=Elytra
+nightVision=夜视
+sprinting=速度
+hover=悬浮
 
 #######################
 # Commands
@@ -382,6 +445,8 @@ commands.addSolidifierRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AM
 commands.addFluidFuelValue.usage=§cUsage: input<FluidName (format : FLUID)> output<BurnTime (format : INTEGER)>
 commands.addAlloyRecipe.usage=§cUsage: input1<FluidStack (format : FLUID:AMOUNT)> input2<FluidStack (format : FLUID:AMOUNT)> output<FluidStack (format : FLUID:AMOUNT)>
 commands.addCentrifugeRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output1<FluidStack (format : FLUID:AMOUNT)> output2<FluidStack (format : FLUID:AMOUNT)>
+commands.addCrusherRecipe.usage=§cUsage: <input> <output> <outputAmount> <secondaryOutput(Optional)> <secondaryOuputChance(Optional)>
+
 
 #######################
 # Descriptions
@@ -390,9 +455,10 @@ commands.addCentrifugeRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AM
 # Electric Furnace
 neotech.electricFurnace.desc=电炉是一个使用RF的简易熔炉.它会烧炼原版熔炉能烧炼的所有东西.
 neotech.electricFurnace.processorUpgrade.desc=每个处理器会减少24ticks(大约一秒)的烧炼时间.
-neotech.electricFurnace.hardDriveUpgrade.desc=硬盘能够将最大能量存储增大 硬盘数*10 倍.
+neotech.electricFurnace.memoryUpgrade.desc=内存升级能够让机器同时处理多个物品.
 neotech.electricFurnace.controlUpgrade.desc=控制升级能够让你设置红石信号.高意味着你需要一个红石信号激活,低意味着无需红石信号激活,禁用则会忽视红石信号.
-neotech.electricFurnace.expansionUpgrade.desc=扩展升级会让你能够配置机器的自动输入输出.
+neotech.electricFurnace.networkUpgrade.desc=扩展升级会让你能够配置机器的自动输入输出.
+neotech.electricFurnace.psuUpgrade.desc=电源能够让机器存储更多电量.
 
 # Electric Crusher
 neotech.electricCrusher.desc=粉碎机会将放入其中的东西进行自动研磨.如果你放入一个矿石,你会得到两个矿石粉.它也能够将石头研磨成沙子.当更多的矿物或模组被添加时,粉碎机会兼容并根据矿物词典添加相应的合成表.
@@ -400,11 +466,9 @@ neotech.electricCrusher.expansionUpgrade.desc=扩展升级会让粉碎机能够�
 
 # Thermal Binder
 neotech.thermalBinder.desc=热能组装机能够让你将各种升级安装到主板上.将空主板放置在左侧空栏然后将其他升级按任意顺序放置在中间空栏中:处理器升级(上限8),硬盘升级(上限8),控制升级(上限1),扩展升级(上限1),将液态锡输入右侧槽中并点击开始进行制作.电力不足将会导致制作失败.你也可以将一个已安装升级的主板放在左侧并空置中间栏,它会分拆主板并归还升级组件.
-neotech.thermalBinder.processorUpgrade.desc=每个处理器会减少24ticks(大约一秒)的烧炼时间,减少时间会根据你安装的升级数量而进行变化.
 
 # Electric Crucible
 neotech.electricCrucible.desc=电力熔炼炉能够熔炼金属至熔融状态.只需简单的将金属(方块,锭,等等)放入输入栏,它就会开始将其熔炼.默认情况下,该过程将持续1000ticks.电力熔炼炉还能够将石头烧成岩浆,冰烧成水.
-neotech.electricCrucible.processorUpgrade.desc=每个处理器会减少112ticks的烧炼时间.
 
 # Solidifier
 neotech.electricSolidifier.desc=流体成型机会将输入液体进行冷却凝固并最终成型至选定形状.成型模式包括不同的冷却形状.
@@ -417,7 +481,6 @@ neotech.centrifuge.desc=离心机能够将混合液体中的不同成分分离�
 
 # Furnace Generator
 neotech.furnaceGenerator.desc=熔炉发电机会燃烧固态燃料来产生红石通量.它能够使用任何原版世界的燃料.默认情况下,熔炉发电机的发电量为20RF/tick
-neotech.furnaceGenerator.processorUpgrade.desc=每个处理器会增加发电量10RF/tick
 
 # Fluid Generator
 neotech.fluidGenerator.desc=流体发电机会燃烧液态燃料来产生红石通量.默认情况下,流体发电机的发电量为80RF/tick.你可以通过配置文件来添加其它液态燃料.
@@ -425,6 +488,7 @@ neotech.fluidGenerator.desc=流体发电机会燃烧液态燃料来产生红石�
 # Tree Farm
 neotech.treeFarm.desc=电力伐木机可用于自动伐木.默认情况下,伐木机的范围是其周围三格以内,耗电量为200RF/方块.伐木机会砍伐与其同水平面的树木.提供一把斧头来进行伐木,你也可以提供一把剪刀来获取树叶.添加剪刀后,树叶将不会掉落树苗.树苗将会被放置在右上角的三个格子中并会被种植下去.多余的树苗将会被放置主储存空间当中.自动化以及管道无法从树苗栏抽取物品,所以不必担心它会被抽空.
 neotech.treeFarm.processorUpgrade.desc=处理器会增加其工作范围以及效率.默认情况下,它会每两秒破坏两个方块,当安装处理器后,每个处理器每两秒会增加16个额外破坏方块.因此四个处理器将会在两秒内破坏64个方块(包括树叶).
+neotech.treeFarm.memoryUpgrade.desc=增加砍伐范围
 
 # Energy Interface Pipe
 neotech.energyInterfacePipe.name=能量交互
@@ -451,6 +515,15 @@ neotech.flushableChest.description=当你把物品放入可清空箱子并给它
 neotech.playerPlate.description=玩家感应压力板和其他的压力板类似，但它只会在玩家走上去时被触发.
 neotech.trashBag.description=垃圾袋是一个自动清空物品系统.右键打开界面之后可以将特定物品放入格子来自动清除之后捡到的同种物品.你也可以通过打开界面将物品放入来手动清除.
 
+# Phantom Glass
+neotech.phantomGlass.tip=玩家在未潜行的状态下可以通过
+
+# Void Glass
+neotech.voidGlass.tip=隔绝光照
+
+# Rock Wall Tip
+neotech.rockWall.tip=潜行右键攀爬墙壁
+
 #######################
 # JEI
 #######################
@@ -459,3 +532,5 @@ neotech.nei.name=NeoTech
 neotech.nei.furnacerecipes=电炉
 neotech.nei.crusherrecipes=粉碎机
 neotech.nei.ecrusher.outputchance=每次升级10%概率
+Contact GitHub API Training Shop Blog About
+© 2016 GitHub, Inc. Terms Privacy Security Status Help
