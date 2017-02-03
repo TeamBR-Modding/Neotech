@@ -3,7 +3,6 @@ package com.teambrmodding.neotech.managers
 import com.teambrmodding.neotech.client.gui.misc.GuiTrashBag
 import com.teambrmodding.neotech.common.container.misc.ContainerTrashBag
 import com.teambrmodding.neotech.common.items.ItemTrashBag
-import com.teambrmodding.neotech.pipes.blocks.BlockPipeSpecial
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -25,12 +24,6 @@ object ItemGuiManager {
 
 class ItemGuiManager extends IGuiHandler {
     override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
-            case block : BlockPipeSpecial =>
-                return block.getClientGuiElement(ID, player, world, x, y, z)
-            case _ =>
-        }
-
         ID match {
             case ItemGuiManager.TRASH_BAG_GUI_ID =>
                 if(player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem == ItemManager.trashBag)
@@ -44,12 +37,6 @@ class ItemGuiManager extends IGuiHandler {
     }
 
     override def getServerGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
-        world.getBlockState(new BlockPos(x, y, z)).getBlock match {
-            case block : BlockPipeSpecial =>
-                return block.getServerGuiElement(ID, player, world, x, y, z)
-            case _ =>
-        }
-
         ID match {
             case ItemGuiManager.TRASH_BAG_GUI_ID =>
                 if(player.getHeldItemMainhand != null && player.getHeldItemMainhand.getItem == ItemManager.trashBag)

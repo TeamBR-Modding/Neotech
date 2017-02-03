@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.client
 
-import com.teambrmodding.neotech.client.mesh.MeshDefinitions.{PipeModelMesh, PipeSpecialModelMesh, SimpleItemMeshDefinition, StarModelMesh}
+import com.teambrmodding.neotech.client.mesh.MeshDefinitions.{SimpleItemMeshDefinition, StarModelMesh}
 import com.teambrmodding.neotech.client.renderers.entity.RenderNet
 import com.teambrmodding.neotech.client.renderers.tiles._
 import com.teambrmodding.neotech.common.CommonProxy
@@ -12,7 +12,7 @@ import com.teambrmodding.neotech.common.tiles.AbstractMachine
 import com.teambrmodding.neotech.common.tiles.misc.TileMobStand
 import com.teambrmodding.neotech.common.tiles.storage.TileFlushableChest
 import com.teambrmodding.neotech.common.tiles.storage.tanks.TileIronTank
-import com.teambrmodding.neotech.events.{GuiEvents, RenderingEvents}
+import com.teambrmodding.neotech.events.RenderingEvents
 import com.teambrmodding.neotech.managers.{BlockManager, FluidManager, ItemManager, MetalManager}
 import com.teambrmodding.neotech.tools.armor.ItemElectricArmor
 import com.teambrmodding.neotech.tools.tools.BaseElectricTool
@@ -55,7 +55,6 @@ class ClientProxy extends CommonProxy {
       * This is where you would register blocks and such
       */
     override def preInit() = {
-        MinecraftForge.EVENT_BUS.register(GuiEvents)
 
         RenderingRegistry.registerEntityRenderingHandler(classOf[EntityNet], new IRenderFactory[EntityNet] {
             override def createRenderFor(manager: RenderManager): Render[_ >: EntityNet] = new RenderNet(manager)
@@ -66,34 +65,6 @@ class ClientProxy extends CommonProxy {
             ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.blockMiniatureStar),
                 "blockMiniatureStar",
                 "attached_side=6,color=" + dye.getName)
-
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeBasicStructure), new PipeModelMesh)
-        for (dye <- EnumDyeColor.values())
-            ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.pipeBasicStructure),
-                "pipeStructure",
-                "color=" + dye.getName + ",down=true,east=false,north=false,south=false,up=true,west=false")
-
-
-        //Item Stuff
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeItemInterface), new PipeSpecialModelMesh)
-        ItemRenderManager.registerBlockModel(
-            BlockManager.pipeItemInterface,
-            "pipeItemBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0")
-
-        //Fluid Stuff
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeFluidInterface), new PipeSpecialModelMesh)
-        ItemRenderManager.registerBlockModel(
-            BlockManager.pipeFluidInterface,
-            "pipeFluidBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0")
-
-        //Energy
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.pipeEnergyInterface), new PipeSpecialModelMesh)
-        ItemRenderManager.registerBlockModel(
-            BlockManager.pipeEnergyInterface,
-            "pipeEnergyBasicInterface",
-            "down=2,east=0,north=0,south=0,up=1,west=0")
 
         // Item Models
         val itemIterator = Item.REGISTRY.iterator()
