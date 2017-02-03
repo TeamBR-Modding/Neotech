@@ -174,6 +174,7 @@ class CrusherRecipeHandler extends AbstractRecipeHandler[CrusherRecipes, ItemSta
                     throw new WrongUsageException("commands.addCrusherRecipe.usage")
                 else {
                     if (args.length == 3)
+                        //TODO check and make sure there is a metadata number if not add 0
                         addCrusherRecipes(args(0), args(1), args(2).toInt, "", 0)
                     else if (args.length == 5)
                         addCrusherRecipes(args(0), args(1), args(2).toInt, args(3), args(4).toInt)
@@ -214,6 +215,7 @@ class CrusherRecipes(val input: String, val output: String, val qty: Int, val ou
                     case 1 =>
                         if (checkOreDict(i.input, input))
                             return Some((new ItemStack(stackOut.getItem, i.qty, stackOut.getItemDamage), stackExtra, i.percentChance))
+                    case _ =>
                 }
             }
         }
