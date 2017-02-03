@@ -39,6 +39,10 @@ repositories {
         name 'Player Maven FS'
         url 'http://maven.ic2.player.to/'
     }
+    maven {
+        name 'forge'
+        url 'http://files.minecraftforge.net/maven'
+    }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -106,9 +110,9 @@ configurations {
 dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
-    deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
+    deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.jei_version}"
     //deobfCompile "MCMultiPart:MCMultiPart-experimental:${config.MCMultiPart_version}:universal"
-    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.10.2-3+", classifier: "dev", changing: true
+    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.10.2-4.+", classifier: "dev", changing: true
     compile "net.darkhax.tesla:Tesla:${config.TESLA_version}"
     deobfCompile "net.industrial-craft:industrialcraft-2:${config.IC2_version}:dev"
 }
