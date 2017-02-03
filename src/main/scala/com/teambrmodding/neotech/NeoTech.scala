@@ -60,6 +60,10 @@ object NeoTech {
         override def getTabIconItem: Item = Item.getItemFromBlock(BlockManager.eliteRFStorage)
     }
 
+    val tabPipes = new CreativeTabs("tabNeoTechPipes") {
+        override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.pipeItemInterface)
+    }
+
     val tabDecorations = new CreativeTabs("tabNeoTechDecorations") {
         override def getTabIconItem : Item = Item.getItemFromBlock(BlockManager.blockMiniatureStar)
     }

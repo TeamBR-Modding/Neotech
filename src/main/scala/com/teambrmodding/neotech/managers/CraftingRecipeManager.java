@@ -139,6 +139,33 @@ public class CraftingRecipeManager {
                 "BCB",
                 "ABA", 'A', Blocks.OBSIDIAN, 'B', "blockGlass", 'C', Items.ENDER_PEARL));
 
+        //Pipes
+        //Basic
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 8),
+                "AAA",
+                "BBB",
+                "AAA", 'A', Items.IRON_INGOT, 'B', "blockGlass"));
+
+        //Colors!!
+        for(EnumDyeColor color : EnumDyeColor.values()) {
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeBasicStructure()), 1, color.ordinal()),
+                    "pipeStructure", new ItemStack(Items.DYE, 1, color.getDyeDamage())));
+        }
+
+        //Power
+        GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeEnergyInterface())),
+                Blocks.REDSTONE_BLOCK, BlockManager.pipeBasicStructure());
+
+        //Item
+        GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeItemInterface())),
+                Blocks.CHEST, BlockManager.pipeBasicStructure());
+
+
+        //Liquid
+        GameRegistry.addShapelessRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.pipeFluidInterface())),
+                Items.BUCKET, BlockManager.pipeBasicStructure());
+
+
         //Crafter
         GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockCrafter()),
                 new ItemStack(Blocks.CRAFTING_TABLE), new ItemStack(Blocks.CHEST), new ItemStack(Blocks.CRAFTING_TABLE));
