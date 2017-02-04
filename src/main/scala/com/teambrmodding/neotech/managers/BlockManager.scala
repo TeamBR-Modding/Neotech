@@ -1,7 +1,7 @@
 package com.teambrmodding.neotech.managers
 
 import com.teambrmodding.neotech.common.blocks.connected.{BlockPhantomGlass, BlockRockWall, BlockVoidGlass}
-import com.teambrmodding.neotech.common.blocks.machines.{BlockGrinder, BlockMachine, BlockSolarPanel}
+import com.teambrmodding.neotech.common.blocks.machines.{BlockMachine, BlockSolarPanel}
 import com.teambrmodding.neotech.common.blocks.misc._
 import com.teambrmodding.neotech.common.blocks.storage._
 import com.teambrmodding.neotech.common.tiles.machines._
@@ -10,7 +10,7 @@ import com.teambrmodding.neotech.common.tiles.machines.operators.TileTreeFarm
 import com.teambrmodding.neotech.common.tiles.machines.processors._
 import com.teambrmodding.neotech.common.tiles.misc.{TileChunkLoader, _}
 import com.teambrmodding.neotech.common.tiles.storage.tanks._
-import com.teambrmodding.neotech.common.tiles.storage.{TileFlushableChest, TileRFStorage}
+import com.teambrmodding.neotech.common.tiles.storage.TileRFStorage
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
@@ -32,8 +32,6 @@ import net.minecraftforge.oredict.OreDictionary
 object BlockManager {
 
     //Machines
-    val grinder = new BlockGrinder()
-
     val electricFurnace = new BlockMachine("electricFurnace", classOf[TileElectricFurnace])
     val electricCrusher = new BlockMachine("electricCrusher", classOf[TileElectricCrusher])
     val furnaceGenerator = new BlockMachine("furnaceGenerator", classOf[TileFurnaceGenerator])
@@ -65,13 +63,9 @@ object BlockManager {
     val solarPanelT3 = new BlockSolarPanel("solarPanelT3", 3)
 
     //Misc
-    val blockCrafter = new BlockCrafter("blockCrafter", classOf[TileCrafter])
     val blockMiniatureSun = new BlockMiniatureSun("blockMiniatureSun", classOf[TileFertilizer])
     val blockMiniatureStar = new BlockStar("blockMiniatureStar")
-    val playerPlate = new BlockPlayerPlate
     val chunkLoader = new BlockChunkLoader
-    val flushableChest = new BlockFlushableChest
-    val redstoneClock = new BlockRedstoneClock
     val mobStand = new BlockMobStand
     val lightSource = new BlockLightSource
     val phantomGlass = new BlockPhantomGlass
@@ -80,8 +74,6 @@ object BlockManager {
 
     def preInit(): Unit = {
         //Machines
-        registerBlock(grinder, "grinder", classOf[TileGrinder])
-
         registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace])
         registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher])
         registerBlock(furnaceGenerator, "furnaceGenerator", classOf[TileFurnaceGenerator])
@@ -113,15 +105,11 @@ object BlockManager {
         registerBlock(solarPanelT3, "solarPanelT3", classOf[TileSolarPanel])
 
         //misc
-        registerBlock(blockCrafter, "blockCrafter", classOf[TileCrafter])
         registerBlock(blockMiniatureSun, "blockMiniatureSun", classOf[TileFertilizer])
         registerBlock(blockMiniatureStar, "blockMiniatureStar", classOf[TileStar], classOf[ItemBlockColored])
         for(color <- EnumDyeColor.values())
             OreDictionary.registerOre("blockMiniatureStar", new ItemStack(blockMiniatureStar, 1, color.getMetadata))
-        registerBlock(playerPlate, "playerPlate", null)
         registerBlock(chunkLoader, "chunkLoader", classOf[TileChunkLoader])
-        registerBlock(flushableChest, "flushableChest", classOf[TileFlushableChest])
-        registerBlock(redstoneClock, "redstoneClock", classOf[TileRedstoneClock])
         registerBlock(mobStand, "mobStand", classOf[TileMobStand])
 
         registerBlock(lightSource, "lightSource", null)

@@ -25,11 +25,8 @@ object ItemRenderManager {
 
     def registerItemRenderer(): Unit = {
         registerItem(ItemManager.wrench)
-        registerItem(ItemManager.trashBag)
-        registerItem(ItemManager.spawnerMover)
         registerItem(ItemManager.mobGun)
         registerItem(ItemManager.mobNet)
-        registerItem(ItemManager.electroMagnet)
         registerItem(ItemManager.electricArmorHelmet)
         registerItem(ItemManager.electricArmorChestplate)
         registerItem(ItemManager.electricArmorLeggings)

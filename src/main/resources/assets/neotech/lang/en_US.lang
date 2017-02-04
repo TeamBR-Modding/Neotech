@@ -150,11 +150,8 @@ item.neotech:Network_Card.name=Network Card
 
 # Tools
 item.neotech:wrench.name=Wrench
-item.neotech:trashBag.name=Trash Bag
-item.neotech:spawnerMover.name=Spawner Relocator
 item.neotech:mobGun.name=Net Launcher
 item.neotech:mobNet.name=Mob Net
-item.neotech:electroMagnet.name=Electromagnet
 
 item.neotech:electricPickaxe.name=Electric Pickaxe
 item.neotech:miningLevel2.name=Redstone Mining Level Upgrade
@@ -192,24 +189,14 @@ item.neotech:basicRFBattery.name=Basic RF Battery
 item.neotech:advancedRFBattery.name=Advanced RF Battery
 item.neotech:eliteRFBattery.name=Elite RF Battery
 
-# Universe
-entity.neotech.sun.name=Sun
-item.neotech:inertSun.name=Inert Sun
-item.neotech:blueDwarf.name=Blue Dwarf
-item.neotech:smallSun.name=Small Sun
-item.neotech:largeSun.name=Large Sun
-item.neotech:redGiant.name=Red Giant
-
 #######################
 # Tile Entities
 #######################
-tile.neotech:grinder.name=Grinder
 
 # Processors
 tile.neotech:electricFurnace.name=Electric Furnace
 tile.neotech:electricCrusher.name=Electric Crusher
 tile.neotech:thermalBinder.name=Thermal Binder
-tile.neotech:grinder.name=Grinder
 tile.neotech:electricCrucible.name=Electric Crucible
 tile.neotech:electricSolidifier.name=Electric Solidifier
 tile.neotech:alloyer.name=Electric Alloyer
@@ -226,7 +213,6 @@ tile.neotech:solarPanelT3.name=Elite Solar Panel
 tile.neotech:treeFarm.name=Electric Logger
 
 # Storage
-tile.neotech:flushableChest.name=Flushable Chest
 tile.neotech:basicRFStorage.name=Basic RF Storage
 tile.neotech:advancedRFStorage.name=Advanced RF Storage
 tile.neotech:eliteRFStorage.name=Elite RF Storage
@@ -238,49 +224,13 @@ tile.neotech:creativeTank.name=Creative Fluid Tank
 tile.neotech:voidTank.name=Void Tank
 
 # Misc
-tile.neotech:blockCrafter.name=Duel Crafter
 tile.neotech:blockMiniatureSun.name=Miniature Sun
-tile.neotech:playerPlate.name=Player Sensitive Pressure Plate
 tile.neotech:chunkLoader.name=Chunk Loader
-tile.neotech:redstoneClock.name=Redstone Clock
 tile.neotech:mobStand.name=Mob Stand
-
-#######################
-# Pipes
-#######################
-
-# Structure
-tile.neotech:pipeStructure_black.name=§8Black §rStructure Pipe
-tile.neotech:pipeStructure_blue.name=§1Blue §rStructure Pipe
-tile.neotech:pipeStructure_brown.name=§6Brown §rStructure Pipe
-tile.neotech:pipeStructure_cyan.name=§bCyan §rStructure Pipe
-tile.neotech:pipeStructure_gray.name=§8Gray §rStructure Pipe
-tile.neotech:pipeStructure_green.name=§2Green §rStructure Pipe
-tile.neotech:pipeStructure_lightBlue.name=§9Light Blue §rStructure Pipe
-tile.neotech:pipeStructure_lime.name=§aLime §rStructure Pipe
-tile.neotech:pipeStructure_magenta.name=§5Magenta §rStructure Pipe
-tile.neotech:pipeStructure_orange.name=§6Orange §rStructure Pipe
-tile.neotech:pipeStructure_pink.name=§dPink §rStructure Pipe
-tile.neotech:pipeStructure_purple.name=§5Purple §rStructure Pipe
-tile.neotech:pipeStructure_red.name=§cRed §rStructure Pipe
-tile.neotech:pipeStructure_silver.name=§7Silver §rStructure Pipe
-tile.neotech:pipeStructure_white.name=White Structure Pipe
-tile.neotech:pipeStructure_yellow.name=§eYellow §rStructure Pipe
-
-# Interfaces
-tile.neotech:pipeItemBasicInterface.name=Item Interface Pipe
-tile.neotech:pipeEnergyBasicInterface.name=Energy Interface Pipe
-tile.neotech:pipeFluidBasicInterface.name=Fluid Interface Pipe
 
 #######################
 # GUI
 #######################
-
-# Grinder
-neotech.grinder.title=Grinder
-neotech.grinder.input=Input
-neotech.grinder.grinding=Grinding
-neotech.grinder.output=Output
 
 # Furnace
 neotech.furnace.title=Electric Furnace
@@ -318,23 +268,11 @@ neotech.rfstoragecreative.title=Creative RF Storage
 # Tree Farm
 neotech.treeFarm.title=Electric Logger
 
-# Interface Pipe
-neotech.interfacePipe.title=Interface Pipe
-
-# Crafter
-neotech.crafter.title=Dual Crafter
-
 # Minature Sun
 neotech.fertilizer.title=Miniature Sun
 
 # Chunk Loader
 neotech.chunkLoader.title=Chunk Loader Range
-
-# Flushable Chest
-neotech.flushchest.title=Flushable Chest
-
-# Trash Bag
-inventory.trashBag.title=Trash Bag
 
 # Buttons
 neotech.button.disable=Disabled?
@@ -359,14 +297,6 @@ neotech.text.control=Redstone Control
 neotech.text.network=Network Card
 neotech.text.psu=Power Supply
 neotech.text.expansion=Expansion
-
-neotech.text.frequency=Frequency
-neotech.text.extractionMode=Extraction Mode
-neotech.text.whitelist=Whitelist
-neotech.text.blacklist=Blacklist
-neotech.text.oredict=Ore Dict
-neotech.text.damage=Damage
-neotech.text.nbt=NBT
 
 neotech.text.redstoneMode=Redstone Mode
 neotech.text.low=Low
@@ -489,31 +419,6 @@ neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces R
 neotech.treeFarm.desc=The Electric Logger is an automated tree farm. By default, the range is 3 blocks around the farm and a cost of 200 RF/block. The logger will chop trees that start on the same Y plane as the logger. Provide an axe to chop the wood, and you can optionally add shears to shear leaves. If you add shears, the leaves will not drop saplings. Saplings will be placed in the top right three slots. These are the ones that will be planted. Excess saplings will go to the main inventory. Automation and pipes will not pull from the sapling slots so you don't have to worry about those being emptied.
 neotech.treeFarm.processorUpgrade.desc=Processors will increase the count of blocks broken.
 neotech.treeFarm.memoryUpgrade.desc=Increases the range of the farm
-
-# Energy Interface Pipe
-neotech.energyInterfacePipe.name=Energy Interface
-neotech.energyInterfacePipe.desc=The Energy Interface Pipe allows Redstone Flux to be transmitted through your pipe network. This pipe will extract on Round Robin by default. The base extraction is 2000 RF per packet with a delay of 20 ticks per extraction and a speed of 0.5 blocks/tick. This pipe can not use a filter.
-neotech.energyInterfacePipe.processorUpgrade.desc=Processors reduce the delay between extraction by the processor count multiplied by 2. They also increase the speed the resource is extracted by 0.5 blocks/tick per processor.
-neotech.energyInterfacePipe.hardDriveUpgrade.desc=Hard drives multiply how much is extracted by the number of processors multiplied by 4.
-neotech.energyInterfacePipe.controlUpgrade.desc=The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals. It also gives you the ability to change what frequency this pipe is set two. Only two pipes with the same frequency will interact.
-neotech.energyInterfacePipe.expansionUpgrade.desc=The expansion upgrade gives you the ability to change the extraction mode. First available will send to the first accepting pipe, last available will send to the last available pipe, and round robin will cycle through all available pipes.
-
-# Fluid Interface Pipe
-neotech.fluidInterfacePipe.name=Fluid Interface
-neotech.fluidInterfacePipe.desc=The Fluid Interface Pipe allows fluids to be transmitted through your pipe network. This pipe will extract on First Available by default. The base extraction is 1000mb per packet with a delay of 20 ticks per extraction and a speed of 0.05 blocks/tick. You can filter fluids accepted and extracted by setting a filter slot with a fluid container (like a bucket).
-neotech.fluidInterfacePipe.processorUpgrade.desc=Processors reduce the delay between extractions by the processor count multiplied by 2. They also increase the speed the resource is extracted by 0.05 blocks/tick per processor
-neotech.fluidInterfacePipe.hardDriveUpgrade.desc=Hard drives change the max extraction to the hard drive count multiplied by 2000mb
-
-# Item Interface Pipe
-neotech.itemInterfacePipe.name=Item Interface
-neotech.itemInterfacePipe.desc=The Item Interface Pipe allows items to be transmitted through your pipe network. This pipe will extract on First Available by default. The base extraction is 1 item per packet with a delay of 20 ticks per extraction and a speed of 0.05 blocks/tick. You can filter items accepted and extracted by putting an item into the filter slots. To match nbt, ore dict, and damage enable the check boxes.
-neotech.itemInterfacePipe.processorUpgrade.desc=Processors reduce the delay between extractions by the processor count multiplied by 2. They also increase the speed the resource is extracted by 0.05 blocks/tick per processor
-neotech.itemInterfacePipe.hardDriveUpgrade.desc=Hard drives change the max extraction by the hard drive count multiplied by 8 items
-
-neotech.grinder.description=The grinder is an early game ore doubling mechanic. To use, place ores in the top three slots. Then, place any vanilla pressure plate on top. The better the plate, the faster it goes. Jump on the pressure plate to make the grinder start grinding ores. The higher you jump, the more it progresses. Ores will move into the center slot once you start the grinding process. You can automate placing items into the inventory, but you can not pull items out of the output slots.
-neotech.flushableChest.description=The flushable chest allows you to put items into the inventory and when a redstone signal is applied, it will destroy all items inside. It will output a redstone signal based on how full the inventory is.
-neotech.playerPlate.description=The Player Sensitive Plate is like any other pressure plate, except it will only activate when a player entity is on the plate
-neotech.trashBag.description=The Trash Bag is an automatic item removal system. Right click with it to open the inventory and place an item in the slot to automatically trash that item on pickup. You can also trash items manually by opening the GUI and placing items on the trash bag icon.
 
 # Phantom Glass
 neotech.phantomGlass.tip=Players pass through if not sneaky

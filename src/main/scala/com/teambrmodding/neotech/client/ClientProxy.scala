@@ -10,7 +10,6 @@ import com.teambrmodding.neotech.common.metals.blocks.BlockFluidMetal
 import com.teambrmodding.neotech.common.metals.items.ItemMetal
 import com.teambrmodding.neotech.common.tiles.AbstractMachine
 import com.teambrmodding.neotech.common.tiles.misc.TileMobStand
-import com.teambrmodding.neotech.common.tiles.storage.TileFlushableChest
 import com.teambrmodding.neotech.common.tiles.storage.tanks.TileIronTank
 import com.teambrmodding.neotech.events.RenderingEvents
 import com.teambrmodding.neotech.managers.{BlockManager, FluidManager, ItemManager, MetalManager}
@@ -19,7 +18,6 @@ import com.teambrmodding.neotech.tools.tools.BaseElectricTool
 import com.teambrmodding.neotech.tools.upgradeitems.BaseUpgradeItem
 import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
 import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
-import com.teambrmodding.neotech.common.tiles.machines.TileGrinder
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
@@ -90,7 +88,6 @@ class ClientProxy extends CommonProxy {
         }
 
         ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricFurnace", "facing=north,isactive=false")
-        ItemRenderManager.registerBlockModel(BlockManager.grinder, "grinder", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.electricCrusher, "electricCrusher", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.furnaceGenerator, "furnaceGenerator", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.fluidGenerator, "fluidGenerator", "facing=north,isactive=false")
@@ -112,13 +109,9 @@ class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.diamondTank, "diamondTank", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.creativeTank, "creativeTank", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.voidTank, "voidTank", "normal")
-        ItemRenderManager.registerBlockModel(BlockManager.blockCrafter, "blockCrafter", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.blockMiniatureSun, "blockMiniatureSun", "attached_side=6")
-        ItemRenderManager.registerBlockModel(BlockManager.playerPlate, "playerPlate", "powered=false")
         ItemRenderManager.registerBlockModel(BlockManager.chunkLoader, "chunkLoader", "normal")
-        ItemRenderManager.registerBlockModel(BlockManager.redstoneClock, "redstoneClock", "powered=false")
         ItemRenderManager.registerBlockModel(BlockManager.mobStand, "mobStand", "normal")
-        ItemRenderManager.registerBlockModel(BlockManager.flushableChest, "flushableChest", "facing=north")
 
         MetalManager.registerModels()
 
@@ -311,16 +304,11 @@ class ClientProxy extends CommonProxy {
                 }, MetalManager.metalRegistry.get(metal).nugget.get)
         }
 
-        Minecraft.getMinecraft.getRenderItem.getItemModelMesher.getModelManager.getBlockModelShapes.registerBuiltInBlocks(BlockManager.flushableChest)
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileFlushableChest], new TileFlushableChestRenderer[TileFlushableChest])
-
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileIronTank], new TileTankFluidRenderer)
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[AbstractMachine], new TileMachineIORenderer)
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileMobStand], new MobStandEntityRenderer[TileMobStand])
-
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileGrinder], new TileGrinderRenderer[TileGrinder])
     }
 
     /**

@@ -27,12 +27,6 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 public class CraftingRecipeManager {
 
     public static void preInit() {
-        //Grinder
-        GameRegistry.addRecipe(new ItemStack(BlockManager.grinder()),
-                "SSS",
-                "IHI",
-                "SSS", 'S', Blocks.STONE_SLAB, 'H', Blocks.HOPPER, 'I', Items.IRON_INGOT);
-
         //Electric Furnace
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricFurnace()),
                 "ACA",
@@ -139,11 +133,6 @@ public class CraftingRecipeManager {
                 "BCB",
                 "ABA", 'A', Blocks.OBSIDIAN, 'B', "blockGlass", 'C', Items.ENDER_PEARL));
 
-        //Crafter
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.blockCrafter()),
-                new ItemStack(Blocks.CRAFTING_TABLE), new ItemStack(Blocks.CHEST), new ItemStack(Blocks.CRAFTING_TABLE));
-
-
         //Miniature Sun
         GameRegistry.addRecipe(new ItemStack(BlockManager.blockMiniatureSun()),
                 "ABA",
@@ -158,48 +147,17 @@ public class CraftingRecipeManager {
                     "blockMiniatureStar", new ItemStack(Items.DYE, 1, color.getDyeDamage())));
         }
 
-        //Player Plate
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BlockManager.playerPlate()),
-                "ingotCopper", "ingotCopper"));
-
         //Chunk Loader
         GameRegistry.addRecipe(new ItemStack(BlockManager.chunkLoader()),
                 "GIG",
                 "IRI",
                 "GIG", 'G', Blocks.GOLD_BLOCK, 'I', Blocks.IRON_BLOCK, 'R', Blocks.REDSTONE_BLOCK);
 
-        //Flushable Chest
-        GameRegistry.addShapelessRecipe(new ItemStack(BlockManager.flushableChest()),
-                Blocks.CHEST, Items.FLINT_AND_STEEL);
-
-        GameRegistry.addRecipe(new ItemStack(BlockManager.redstoneClock()),
-                "SRS",
-                "SBS",
-                "SRS", 'S', Blocks.STONE, 'R', Items.REDSTONE, 'B', Blocks.REDSTONE_BLOCK);
-
         //Wrench
         GameRegistry.addRecipe(new ItemStack(ItemManager.wrench()),
                 " I ",
                 " II",
                 "I  ", 'I', Items.IRON_INGOT);
-
-        //Trash Bag
-        GameRegistry.addRecipe(new ItemStack(ItemManager.trashBag(), 1),
-                "S S",
-                "L L",
-                "LLL", 'L', Items.LEATHER, 'S', Items.STRING);
-
-        //Magnet
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.electroMagnet()),
-                "I I",
-                "L L",
-                " L ", 'I', "ingotIron", 'L', "ingotLead"));
-
-        //Spawmer Mover Thinggy
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.spawnerMover(),1),
-                "  E",
-                " S ",
-                "S  ", 'E', Items.EMERALD, 'S', "stickWood"));
 
         //Mob Gun
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.mobGun(), 1),

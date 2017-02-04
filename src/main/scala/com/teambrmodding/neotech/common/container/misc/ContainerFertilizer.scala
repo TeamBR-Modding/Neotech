@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.common.container.misc
 
-import com.teambrmodding.neotech.common.tiles.misc.{TileFertilizer, TileCrafter}
+import com.teambrmodding.neotech.common.tiles.misc.TileFertilizer
 import com.teambr.bookshelf.common.container.BaseContainer
 import net.minecraft.entity.player.InventoryPlayer
 

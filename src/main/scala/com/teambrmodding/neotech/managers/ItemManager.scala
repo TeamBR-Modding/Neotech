@@ -60,11 +60,8 @@ object ItemManager {
 
     //Utils
     val wrench = new ItemWrench
-    val trashBag = new ItemTrashBag
-    val spawnerMover = new ItemSpawnerMover
     val mobGun = new ItemMobGun
     val mobNet = new ItemMobNet
-    val electroMagnet = new ItemElectromagnet
 
     val basicRFBattery = new RFBattery("basicRFBattery", 1)
     val advancedRFBattery = new RFBattery("advancedRFBattery", 2)
@@ -110,11 +107,8 @@ object ItemManager {
         registerItem(networkCard, "networkCard")
 
         registerItem(wrench, "wrench")
-        registerItem(trashBag, "trashBag")
-        registerItem(spawnerMover, "spawnerMover")
         registerItem(mobGun, "mobGun")
         registerItem(mobNet, "mobNet")
-        registerItem(electroMagnet, "electroMagnet")
 
         registerItem(basicRFBattery, "basicRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
         registerItem(advancedRFBattery, "advancedRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)

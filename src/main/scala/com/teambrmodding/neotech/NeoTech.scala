@@ -82,7 +82,6 @@ object NeoTech {
         RecipeManager.preInit()
         proxy.preInit()
         GameRegistry.registerWorldGenerator(new NeotechWorldGenerator, 2)
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, new ItemGuiManager)
     }
 
     @EventHandler def init(event : FMLInitializationEvent) =  {
