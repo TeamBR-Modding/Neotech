@@ -3,6 +3,7 @@ package com.teambrmodding.neotech.api.jei.crusher
 import java.util
 import java.util.Collections
 
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.BlankRecipeWrapper
 import net.minecraft.item.ItemStack
 
@@ -16,7 +17,7 @@ class JEICrusherRecipe(in: ItemStack, out: ItemStack, sec: ItemStack, per: Int) 
     var secondary: ItemStack = sec
     var secPercent: Int = per
 
-    override def getInputs: java.util.List[ItemStack] = Collections.singletonList(input)
+    override def getInputs: java.util.List[ItemStack] = util.Arrays.asList(input)
 
     override def getOutputs: java.util.List[ItemStack] = {
         val outputs = new util.ArrayList[ItemStack]()
@@ -24,4 +25,6 @@ class JEICrusherRecipe(in: ItemStack, out: ItemStack, sec: ItemStack, per: Int) 
         outputs.add(secondary)
         outputs
     }
+
+    override def getIngredients(ingredients: IIngredients): Unit = {}
 }

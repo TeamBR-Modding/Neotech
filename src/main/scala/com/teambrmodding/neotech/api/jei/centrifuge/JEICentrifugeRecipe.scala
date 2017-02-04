@@ -3,6 +3,7 @@ package com.teambrmodding.neotech.api.jei.centrifuge
 import java.util
 import java.util.Collections
 
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.BlankRecipeWrapper
 import net.minecraftforge.fluids.FluidStack
 
@@ -18,8 +19,9 @@ import net.minecraftforge.fluids.FluidStack
   */
 class JEICentrifugeRecipe(fluidIn: FluidStack, fluidOut1: FluidStack, fluidOut2: FluidStack) extends BlankRecipeWrapper {
 
-    override def getFluidInputs: java.util.List[FluidStack] = Collections.singletonList(fluidIn)
+    override def getFluidInputs: java.util.List[FluidStack] = util.Arrays.asList(fluidIn)
 
     override def getFluidOutputs: java.util.List[FluidStack] = util.Arrays.asList(fluidOut1, fluidOut2)
 
+    override def getIngredients(ingredients: IIngredients): Unit = {}
 }

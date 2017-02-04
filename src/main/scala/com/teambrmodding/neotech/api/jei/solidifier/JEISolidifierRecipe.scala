@@ -5,6 +5,7 @@ import java.util.Collections
 
 import com.teambrmodding.neotech.managers.MetalManager
 import com.teambr.bookshelf.api.jei.drawables.GuiComponentItemStackButtonJEI
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.BlankRecipeWrapper
 import net.minecraft.client.Minecraft
 import net.minecraft.init.{Blocks, Items}
@@ -23,9 +24,9 @@ import net.minecraftforge.fluids.FluidStack
   */
 class JEISolidifierRecipe(fluid: FluidStack, output: ItemStack) extends BlankRecipeWrapper {
 
-    override def getFluidInputs: util.List[FluidStack] = Collections.singletonList(fluid)
+    override def getFluidInputs: util.List[FluidStack] = util.Arrays.asList(fluid)
 
-    override def getOutputs: util.List[ItemStack] = Collections.singletonList(output)
+    override def getOutputs: util.List[ItemStack] = util.Arrays.asList(output)
 
     override def drawInfo(minecraft: Minecraft, recipeWidth: Int, recipeHeight: Int, mouseX: Int, mouseY: Int): Unit = {
         var item: Item = Item.getItemFromBlock(Blocks.IRON_BLOCK)
@@ -38,4 +39,5 @@ class JEISolidifierRecipe(fluid: FluidStack, output: ItemStack) extends BlankRec
         new GuiComponentItemStackButtonJEI(97, 37, new ItemStack(item)).draw(minecraft)
     }
 
+    override def getIngredients(ingredients: IIngredients): Unit = {}
 }

@@ -3,6 +3,7 @@ package com.teambrmodding.neotech.api.jei.alloyer
 import java.util
 import java.util.Collections
 
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.BlankRecipeWrapper
 import net.minecraftforge.fluids.FluidStack
 
@@ -20,5 +21,7 @@ class JEIAlloyerRecipe(fluidIn1: FluidStack, fluidIn2: FluidStack, fluidOut: Flu
 
     override def getFluidInputs: java.util.List[FluidStack] = util.Arrays.asList(fluidIn1, fluidIn2)
 
-    override def getFluidOutputs: java.util.List[FluidStack] = Collections.singletonList(fluidOut)
+    override def getFluidOutputs: java.util.List[FluidStack] = util.Arrays.asList(fluidOut)
+
+    override def getIngredients(ingredients: IIngredients): Unit = {}
 }

@@ -6,6 +6,7 @@ import com.teambrmodding.neotech.api.jei.{NeoTechPlugin, NeotechRecipeCategoryUI
 import com.teambrmodding.neotech.lib.Reference
 import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentPowerBarJEI, SlotDrawable}
 import mezz.jei.api.gui._
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
@@ -39,7 +40,7 @@ class JEICrusherRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
 
         recipeWrapper match {
             case crusherRecipeWrapper: JEICrusherRecipe =>
-                recipeLayout.getItemStacks.set(0, crusherRecipeWrapper.getInputs)
+                recipeLayout.getItemStacks.set(0, crusherRecipeWrapper.getInputs.get(0))
                 recipeLayout.getItemStacks.set(1, crusherRecipeWrapper.getOutputs.get(0))
                 recipeLayout.getItemStacks.set(2, crusherRecipeWrapper.getOutputs.get(1))
                 val tip = new ITooltipCallback[ItemStack] {
@@ -68,4 +69,8 @@ class JEICrusherRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
     override def getTitle: String = I18n.translateToLocal("tile.neotech:electricCrusher.name")
 
     override def getUid: String = NeotechRecipeCategoryUID.CRUSHER
+
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {}
+
+    override def getIcon: IDrawable = null
 }

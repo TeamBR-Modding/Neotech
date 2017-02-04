@@ -6,6 +6,7 @@ import com.teambrmodding.neotech.api.jei.{NeoTechPlugin, NeotechRecipeCategoryUI
 import com.teambrmodding.neotech.lib.Reference
 import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI, SlotDrawable}
 import mezz.jei.api.gui._
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
 import net.minecraft.util.ResourceLocation
@@ -43,8 +44,8 @@ class JEISolidifierRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
 
         recipeWrapper match {
             case solidifierRecipeWrapper: JEISolidifierRecipe =>
-                recipeLayout.getFluidStacks.set(0, solidifierRecipeWrapper.getFluidInputs)
-                recipeLayout.getItemStacks.set(0, solidifierRecipeWrapper.getOutputs)
+                recipeLayout.getFluidStacks.set(0, solidifierRecipeWrapper.getFluidInputs.get(0))
+                recipeLayout.getItemStacks.set(0, solidifierRecipeWrapper.getOutputs.get(0))
             case _ =>
         }
     }
@@ -62,4 +63,8 @@ class JEISolidifierRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
     override def getTitle: String = I18n.translateToLocal("tile.neotech:electricSolidifier.name")
 
     override def getUid: String = NeotechRecipeCategoryUID.SOLIDIFIER
+
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {}
+
+    override def getIcon: IDrawable = null
 }

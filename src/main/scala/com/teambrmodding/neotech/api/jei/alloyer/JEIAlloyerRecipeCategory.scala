@@ -6,10 +6,12 @@ import com.teambrmodding.neotech.api.jei.{NeoTechPlugin, NeotechRecipeCategoryUI
 import com.teambrmodding.neotech.lib.Reference
 import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI}
 import mezz.jei.api.gui.{IDrawable, IRecipeLayout}
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
 import net.minecraft.util.ResourceLocation
 import net.minecraft.util.text.translation.I18n
+import net.minecraftforge.fluids.FluidStack
 
 /**
   * This file was created for NeoTech
@@ -45,7 +47,7 @@ class JEIAlloyerRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
             case alloyer: JEIAlloyerRecipe =>
                 recipeLayout.getFluidStacks.set(0, alloyer.getFluidInputs.get(0))
                 recipeLayout.getFluidStacks.set(1, alloyer.getFluidInputs.get(1))
-                recipeLayout.getFluidStacks.set(2, alloyer.getFluidOutputs)
+                recipeLayout.getFluidStacks.set(2, alloyer.getFluidOutputs.get(0))
         }
     }
 
@@ -63,4 +65,8 @@ class JEIAlloyerRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
     override def getTitle: String = I18n.translateToLocal("tile.neotech:alloyer.name")
 
     override def getUid: String = NeotechRecipeCategoryUID.ALLOYER
+
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {}
+
+    override def getIcon: IDrawable = {null}
 }

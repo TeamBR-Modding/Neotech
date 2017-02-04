@@ -6,6 +6,7 @@ import com.teambrmodding.neotech.api.jei.{NeoTechPlugin, NeotechRecipeCategoryUI
 import com.teambrmodding.neotech.lib.Reference
 import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI}
 import mezz.jei.api.gui.{IDrawable, IRecipeLayout}
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
 import net.minecraft.util.ResourceLocation
@@ -43,7 +44,7 @@ class JEICentrifugeRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
 
         recipeWrapper match {
             case centrifuge: JEICentrifugeRecipe =>
-                recipeLayout.getFluidStacks.set(0, centrifuge.getFluidInputs)
+                recipeLayout.getFluidStacks.set(0, centrifuge.getFluidInputs.get(0))
                 recipeLayout.getFluidStacks.set(1, centrifuge.getFluidOutputs.get(0))
                 recipeLayout.getFluidStacks.set(2, centrifuge.getFluidOutputs.get(1))
             case _ =>
@@ -64,4 +65,8 @@ class JEICentrifugeRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
     override def getTitle: String = I18n.translateToLocal("tile.neotech:centrifuge.name")
 
     override def getUid: String = NeotechRecipeCategoryUID.CENTRIFUGE
+
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {}
+
+    override def getIcon: IDrawable = null
 }

@@ -6,6 +6,7 @@ import com.teambrmodding.neotech.api.jei.{NeoTechPlugin, NeotechRecipeCategoryUI
 import com.teambrmodding.neotech.lib.Reference
 import com.teambr.bookshelf.api.jei.drawables.{GuiComponentArrowJEI, GuiComponentBox, GuiComponentPowerBarJEI, SlotDrawable}
 import mezz.jei.api.gui.{IDrawable, IRecipeLayout}
+import mezz.jei.api.ingredients.IIngredients
 import mezz.jei.api.recipe.{IRecipeCategory, IRecipeWrapper}
 import net.minecraft.client.Minecraft
 import net.minecraft.util.ResourceLocation
@@ -42,8 +43,8 @@ class JEICrucibleRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
 
         recipeWrapper match {
             case crucible: JEICrucibleRecipe =>
-                recipeLayout.getFluidStacks.set(0, crucible.getFluidOutputs)
-                recipeLayout.getItemStacks.set(0, crucible.getInputs)
+                recipeLayout.getFluidStacks.set(0, crucible.getFluidOutputs.get(0))
+                recipeLayout.getItemStacks.set(0, crucible.getInputs.get(0))
             case _ =>
         }
     }
@@ -61,4 +62,8 @@ class JEICrucibleRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
     override def getTitle: String = I18n.translateToLocal("tile.neotech:electricCrucible.name")
 
     override def getUid: String = NeotechRecipeCategoryUID.CRUCIBLE
+
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {}
+
+    override def getIcon: IDrawable = null
 }
