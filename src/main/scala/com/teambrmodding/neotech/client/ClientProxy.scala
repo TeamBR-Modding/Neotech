@@ -1,24 +1,17 @@
 package com.teambrmodding.neotech.client
 
-import com.teambrmodding.neotech.client.mesh.MeshDefinitions.{SimpleItemMeshDefinition, StarModelMesh}
-import com.teambrmodding.neotech.client.renderers.entity.RenderNet
+import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
+import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
+import com.teambrmodding.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefinition
 import com.teambrmodding.neotech.client.renderers.tiles._
 import com.teambrmodding.neotech.common.CommonProxy
-import com.teambrmodding.neotech.common.entities.EntityNet
 import com.teambrmodding.neotech.common.fluids.FluidBlockGas
 import com.teambrmodding.neotech.common.metals.blocks.BlockFluidMetal
 import com.teambrmodding.neotech.common.metals.items.ItemMetal
 import com.teambrmodding.neotech.common.tiles.AbstractMachine
-import com.teambrmodding.neotech.common.tiles.misc.TileMobStand
 import com.teambrmodding.neotech.common.tiles.storage.tanks.TileIronTank
-import com.teambrmodding.neotech.events.RenderingEvents
-import com.teambrmodding.neotech.managers.{BlockManager, FluidManager, ItemManager, MetalManager}
-import com.teambrmodding.neotech.tools.armor.ItemElectricArmor
-import com.teambrmodding.neotech.tools.tools.BaseElectricTool
-import com.teambrmodding.neotech.tools.upgradeitems.BaseUpgradeItem
-import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
-import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
+import com.teambrmodding.neotech.managers.{BlockManager, FluidManager, ItemManager, MetalManager}
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
@@ -53,29 +46,6 @@ class ClientProxy extends CommonProxy {
       * This is where you would register blocks and such
       */
     override def preInit() = {
-
-        RenderingRegistry.registerEntityRenderingHandler(classOf[EntityNet], new IRenderFactory[EntityNet] {
-            override def createRenderFor(manager: RenderManager): Render[_ >: EntityNet] = new RenderNet(manager)
-        })
-
-        ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(BlockManager.blockMiniatureStar), new StarModelMesh)
-        for (dye <- EnumDyeColor.values())
-            ModelLoaderHelper.registerItem(Item.getItemFromBlock(BlockManager.blockMiniatureStar),
-                "blockMiniatureStar",
-                "attached_side=6,color=" + dye.getName)
-
-        // Item Models
-        val itemIterator = Item.REGISTRY.iterator()
-        while (itemIterator.hasNext) {
-            itemIterator.next() match {
-                case upgradeItem: BaseUpgradeItem =>
-                    ModelLoader.setCustomModelResourceLocation(upgradeItem, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-                case tool: BaseElectricTool if !tool.isInstanceOf[ItemElectricArmor] =>
-                    ModelLoader.setCustomModelResourceLocation(tool, 0, BakedDynItem.MODEL_RESOURCE_LOCATION)
-                case _ =>
-            }
-        }
-
         // Block Models, for items
         val blockIterator = Block.REGISTRY.iterator()
         while (blockIterator.hasNext) {
@@ -91,7 +61,6 @@ class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.electricCrusher, "electricCrusher", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.furnaceGenerator, "furnaceGenerator", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.fluidGenerator, "fluidGenerator", "facing=north,isactive=false")
-        ItemRenderManager.registerBlockModel(BlockManager.thermalBinder, "thermalBinder", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.electricCrucible, "electricCrucible", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.electricSolidifier, "electricSolidifier", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.electricAlloyer, "alloyer", "facing=north,isactive=false")
@@ -109,9 +78,6 @@ class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.diamondTank, "diamondTank", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.creativeTank, "creativeTank", "normal")
         ItemRenderManager.registerBlockModel(BlockManager.voidTank, "voidTank", "normal")
-        ItemRenderManager.registerBlockModel(BlockManager.blockMiniatureSun, "blockMiniatureSun", "attached_side=6")
-        ItemRenderManager.registerBlockModel(BlockManager.chunkLoader, "chunkLoader", "normal")
-        ItemRenderManager.registerBlockModel(BlockManager.mobStand, "mobStand", "normal")
 
         MetalManager.registerModels()
 
@@ -233,8 +199,6 @@ class ClientProxy extends CommonProxy {
     override def init() = {
         ItemRenderManager.registerItemRenderer()
 
-        KeybindHandler.registerBindings()
-        MinecraftForge.EVENT_BUS.register(ClientTickHandler)
 
         // Register fluid colors
         for(metal <- MetalManager.metalRegistry.keySet()) {
@@ -308,7 +272,6 @@ class ClientProxy extends CommonProxy {
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[AbstractMachine], new TileMachineIORenderer)
 
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileMobStand], new MobStandEntityRenderer[TileMobStand])
     }
 
     /**
@@ -316,8 +279,5 @@ class ClientProxy extends CommonProxy {
       *
       * Usually used to close things opened to load and check for conditions
       */
-    override def postInit() = {
-        MinecraftForge.EVENT_BUS.register(RenderingEvents)
-        Minecraft.getMinecraft.getResourceManager.asInstanceOf[IReloadableResourceManager].registerReloadListener(RenderingEvents)
-    }
+    override def postInit() = { }
 }

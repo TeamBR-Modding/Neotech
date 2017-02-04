@@ -1,19 +1,14 @@
 package com.teambrmodding.neotech.managers
 
-import com.teambrmodding.neotech.common.blocks.connected.{BlockPhantomGlass, BlockRockWall, BlockVoidGlass}
 import com.teambrmodding.neotech.common.blocks.machines.{BlockMachine, BlockSolarPanel}
-import com.teambrmodding.neotech.common.blocks.misc._
 import com.teambrmodding.neotech.common.blocks.storage._
-import com.teambrmodding.neotech.common.tiles.machines._
 import com.teambrmodding.neotech.common.tiles.machines.generators.{TileFluidGenerator, TileFurnaceGenerator, TileSolarPanel}
 import com.teambrmodding.neotech.common.tiles.machines.operators.TileTreeFarm
 import com.teambrmodding.neotech.common.tiles.machines.processors._
-import com.teambrmodding.neotech.common.tiles.misc.{TileChunkLoader, _}
-import com.teambrmodding.neotech.common.tiles.storage.tanks._
 import com.teambrmodding.neotech.common.tiles.storage.TileRFStorage
+import com.teambrmodding.neotech.common.tiles.storage.tanks._
 import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.item.{EnumDyeColor, ItemBlock, ItemStack}
+import net.minecraft.item.ItemBlock
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
@@ -36,7 +31,6 @@ object BlockManager {
     val electricCrusher = new BlockMachine("electricCrusher", classOf[TileElectricCrusher])
     val furnaceGenerator = new BlockMachine("furnaceGenerator", classOf[TileFurnaceGenerator])
     val fluidGenerator = new BlockMachine("fluidGenerator", classOf[TileFluidGenerator])
-    val thermalBinder = new BlockMachine("thermalBinder", classOf[TileThermalBinder])
     val electricCrucible = new BlockMachine("electricCrucible", classOf[TileCrucible])
     val electricSolidifier = new BlockMachine("electricSolidifier", classOf[TileSolidifier])
     val electricAlloyer = new BlockMachine("alloyer", classOf[TileAlloyer])
@@ -62,23 +56,12 @@ object BlockManager {
     val solarPanelT2 = new BlockSolarPanel("solarPanelT2", 2)
     val solarPanelT3 = new BlockSolarPanel("solarPanelT3", 3)
 
-    //Misc
-    val blockMiniatureSun = new BlockMiniatureSun("blockMiniatureSun", classOf[TileFertilizer])
-    val blockMiniatureStar = new BlockStar("blockMiniatureStar")
-    val chunkLoader = new BlockChunkLoader
-    val mobStand = new BlockMobStand
-    val lightSource = new BlockLightSource
-    val phantomGlass = new BlockPhantomGlass
-    val voidGlass = new BlockVoidGlass
-    val rockWall = new BlockRockWall
-
     def preInit(): Unit = {
         //Machines
         registerBlock(electricFurnace, "electricFurnace", classOf[TileElectricFurnace])
         registerBlock(electricCrusher, "electricCrusher", classOf[TileElectricCrusher])
         registerBlock(furnaceGenerator, "furnaceGenerator", classOf[TileFurnaceGenerator])
         registerBlock(fluidGenerator, "fluidGenerator", classOf[TileFluidGenerator])
-        registerBlock(thermalBinder, "thermalBinder", classOf[TileThermalBinder])
         registerBlock(electricCrucible, "electricCrucible", classOf[TileCrucible])
         registerBlock(electricSolidifier, "electricSolidifier", classOf[TileSolidifier])
         registerBlock(electricAlloyer, "alloyer", classOf[TileAlloyer])
@@ -103,21 +86,6 @@ object BlockManager {
         registerBlock(solarPanelT1, "solarPanelT1", classOf[TileSolarPanel])
         registerBlock(solarPanelT2, "solarPanelT2", classOf[TileSolarPanel])
         registerBlock(solarPanelT3, "solarPanelT3", classOf[TileSolarPanel])
-
-        //misc
-        registerBlock(blockMiniatureSun, "blockMiniatureSun", classOf[TileFertilizer])
-        registerBlock(blockMiniatureStar, "blockMiniatureStar", classOf[TileStar], classOf[ItemBlockColored])
-        for(color <- EnumDyeColor.values())
-            OreDictionary.registerOre("blockMiniatureStar", new ItemStack(blockMiniatureStar, 1, color.getMetadata))
-        registerBlock(chunkLoader, "chunkLoader", classOf[TileChunkLoader])
-        registerBlock(mobStand, "mobStand", classOf[TileMobStand])
-
-        registerBlock(lightSource, "lightSource", null)
-
-        registerBlock(phantomGlass, "phantomGlass", null)
-        registerBlock(voidGlass, "voidGlass", null)
-        registerBlock(rockWall, "rockWall", classOf[TileRockWall])
-
     }
 
     /**

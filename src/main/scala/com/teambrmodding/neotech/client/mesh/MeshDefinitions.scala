@@ -19,14 +19,6 @@ import net.minecraft.util.ResourceLocation
   * @since 3/6/2016
   */
 object MeshDefinitions {
-
-    class StarModelMesh extends ItemMeshDefinition {
-        override def getModelLocation(stack: ItemStack): ModelResourceLocation = {
-            new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID + ":blockMiniatureStar"),
-                "attached_side=6," + "color=" + EnumDyeColor.byMetadata(stack.getItemDamage).getName)
-        }
-    }
-
     class SimpleItemMeshDefinition(modelName : String, variants : String) extends ItemMeshDefinition {
         override def getModelLocation(stack: ItemStack): ModelResourceLocation =
             new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID +  ":items/" + modelName), variants)

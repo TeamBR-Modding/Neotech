@@ -25,12 +25,6 @@ object ItemRenderManager {
 
     def registerItemRenderer(): Unit = {
         registerItem(ItemManager.wrench)
-        registerItem(ItemManager.mobGun)
-        registerItem(ItemManager.mobNet)
-        registerItem(ItemManager.electricArmorHelmet)
-        registerItem(ItemManager.electricArmorChestplate)
-        registerItem(ItemManager.electricArmorLeggings)
-        registerItem(ItemManager.electricArmorBoots)
     }
 
     def registerItem(item: Item): Unit = {

@@ -1,21 +1,12 @@
 package com.teambrmodding.neotech.managers
 
-import com.teambrmodding.neotech.NeoTech
 import com.teambrmodding.neotech.common.items._
-import com.teambrmodding.neotech.tools.UpgradeItemManager
-import com.teambrmodding.neotech.tools.armor.ItemElectricArmor
-import com.teambrmodding.neotech.tools.tools.{ElectricPickaxe, ElectricSword}
-import com.teambr.bookshelf.Bookshelf
-import com.teambr.bookshelf.helper.LogHelper
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import gnu.trove.map.hash.THashMap
-import net.minecraft.inventory.EntityEquipmentSlot
 import net.minecraft.item.{Item, ItemStack}
 import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.registry.GameRegistry
 import net.minecraftforge.oredict.OreDictionary
-
-import scala.collection.JavaConversions._
 
 /**
  * This file was created for NeoTech
@@ -60,22 +51,6 @@ object ItemManager {
 
     //Utils
     val wrench = new ItemWrench
-    val mobGun = new ItemMobGun
-    val mobNet = new ItemMobNet
-
-    val basicRFBattery = new RFBattery("basicRFBattery", 1)
-    val advancedRFBattery = new RFBattery("advancedRFBattery", 2)
-    val eliteRFBattery = new RFBattery("eliteRFBattery", 3)
-
-    //Electric Tools
-    val electricPickaxe = new ElectricPickaxe
-    val electricSword = new ElectricSword
-
-    //Electric Armor
-    val electricArmorHelmet = new ItemElectricArmor("electricArmorHelmet", 1, EntityEquipmentSlot.HEAD)
-    val electricArmorChestplate = new ItemElectricArmor("electricArmorChestplate", 1, EntityEquipmentSlot.CHEST)
-    val electricArmorLeggings = new ItemElectricArmor("electricArmorLeggings", 2, EntityEquipmentSlot.LEGS)
-    val electricArmorBoots = new ItemElectricArmor("electricArmorBoots", 1, EntityEquipmentSlot.FEET)
 
     def preInit(): Unit = {
         registerItem(processorSingleCore, "processorSingleCore")
@@ -107,40 +82,6 @@ object ItemManager {
         registerItem(networkCard, "networkCard")
 
         registerItem(wrench, "wrench")
-        registerItem(mobGun, "mobGun")
-        registerItem(mobNet, "mobNet")
-
-        registerItem(basicRFBattery, "basicRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
-        registerItem(advancedRFBattery, "advancedRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
-        registerItem(eliteRFBattery, "eliteRFBattery", "rfBattery", OreDictionary.WILDCARD_VALUE)
-
-        registerItem(electricPickaxe, "electricPickaxe")
-        registerItem(electricSword, "electricSword")
-
-        registerItem(electricArmorHelmet, "electricArmorHelmet")
-        registerItem(electricArmorChestplate, "electricArmorChestplate")
-        registerItem(electricArmorLeggings, "electricArmorLeggings")
-        registerItem(electricArmorBoots, "electricArmorBoots")
-
-        for (data <- Bookshelf.itemsToRegister) {
-            if (data.getAnnotationInfo.get("modid") != null &&
-                    data.getAnnotationInfo.get("modid").equals("neotech")) {
-                try {
-                    val asmClass = Class.forName(data.getClassName)
-                    val itemClass = asmClass.asSubclass(classOf[Item])
-
-                    val modItem = itemClass.newInstance()
-
-                    GameRegistry.registerItem(modItem, modItem.getUnlocalizedName.split(":")(1))
-                    itemRegistry.put(itemClass, modItem)
-                } catch {
-                    case e: Exception =>
-                        LogHelper.severe(String.format("Could not register item class %s", data.getClassName))
-                }
-            }
-        }
-
-        UpgradeItemManager.preInit()
     }
     /**
      * Helper method to register items

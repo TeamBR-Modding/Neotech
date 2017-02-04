@@ -40,10 +40,7 @@ object ConfigRegistry {
     var silverMax = 20
     var silverSize = 8
     var silverPerChunk = 3
-    var fertBlacklist: Array[String] = _
     var versionCheck = true
-    var chunkLoaderMax = 3
-    var totalRFEM = 25000
     var onlineOnly = false
     var dimBlacklist: Array[Int] = _
 
@@ -77,18 +74,7 @@ object ConfigRegistry {
         silverSize      = config.get(Reference.CONFIG_WORLD, "silverVeinSize", 12, "Silver Vein Size").getInt
         silverPerChunk  = config.get(Reference.CONFIG_WORLD, "silverVeinsPerChunk", 6, "Silver Veins per Chunk").getInt
 
-        fertBlacklist= config.get(Reference.CONFIG_FERT_BLACKLIST, "Blocks to Blacklist from Being Fertilized",
-                        Array(""),"Format MODID:BLOCKNAME 1 per Line").getStringList
-
         versionCheck = config.get(Reference.CONFIG_CLIENT, "versionCheck", true, "Enable Version Check?").getBoolean()
-
-        chunkLoaderMax = config.get(Reference.CONFIG_CHUNKLOADER, "chunkLoaderMax", 3,
-                            "Max Chunks (squared) to keep loaded per Chunk Loader").getInt
-        onlineOnly     = config.get(Reference.CONFIG_CHUNKLOADER, "onlineOnly", false,
-                            "Only chunkload if player is online?").getBoolean
-
-        totalRFEM = config.get(Reference.CONFIG_ELECTROMAGNET, "EMrfTotal", 25000,
-                            "Total RF ElectroMagnet Stores").getInt()
 
         config.save()
 

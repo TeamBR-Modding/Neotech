@@ -8,8 +8,6 @@ object EventManager {
         MinecraftForge.EVENT_BUS.register(OnCraftedEvent)
         MinecraftForge.EVENT_BUS.register(TimeUtils)
         MinecraftForge.EVENT_BUS.register(OnPlayerLoginEvent)
-        MinecraftForge.EVENT_BUS.register(AttackEvent)
-        MinecraftForge.EVENT_BUS.register(new PlayerUpdateEvent)
         MinecraftForge.EVENT_BUS.register(ConfigChanged)
     }
 }

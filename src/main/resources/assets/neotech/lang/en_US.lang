@@ -2,10 +2,7 @@ PARSE_ESCAPES
 
 # Creative Tabs
 itemGroup.tabNeoTech=NeoTech
-itemGroup.tabNeoTechPipes=NeoTech: Transport Pipes
 itemGroup.tabNeoTechMetals=NeoTech: Metals
-itemGroup.tabNeoTechDecorations=NeoTech: §4D§6e§ec§2o§9r§5a§4t§6i§ev§2e
-itemGroup.tabNeoTechTools=NeoTech: Tools
 
 #######################
 # Blocks
@@ -22,32 +19,6 @@ tile.neotech:blockLead.name=Block of Lead
 tile.neotech:blockBronze.name=Block of Bronze
 tile.neotech:blockSteel.name=Block of Steel
 tile.neotech:blockSilver.name=Block of Silver
-
-# Stars
-tile.neotech:blockMiniatureStar_black.name=§8Black §rStar Light
-tile.neotech:blockMiniatureStar_blue.name=§1Blue §rStar Light
-tile.neotech:blockMiniatureStar_brown.name=§6Brown §rStar Light
-tile.neotech:blockMiniatureStar_cyan.name=§bCyan §rStar Light
-tile.neotech:blockMiniatureStar_gray.name=§8Gray §rStar Light
-tile.neotech:blockMiniatureStar_green.name=§2Green §rStar Light
-tile.neotech:blockMiniatureStar_lightBlue.name=§9Light Blue §rStar Light
-tile.neotech:blockMiniatureStar_lime.name=§aLime §rStar Light
-tile.neotech:blockMiniatureStar_magenta.name=§5Magenta §rStar Light
-tile.neotech:blockMiniatureStar_orange.name=§6Orange §rStar Light
-tile.neotech:blockMiniatureStar_pink.name=§dPink §rStar Light
-tile.neotech:blockMiniatureStar_purple.name=§5Purple §rStar Light
-tile.neotech:blockMiniatureStar_red.name=§cRed §rStar Light
-tile.neotech:blockMiniatureStar_silver.name=§7Silver §rStar Light
-tile.neotech:blockMiniatureStar_white.name=White Star Light
-tile.neotech:blockMiniatureStar_yellow.name=§eYellow §rStar Light
-
-# Connected
-tile.neotech:phantomGlass.name=Phantom Glass
-tile.neotech:voidGlass.name=Void Glass
-tile.neotech:rockWall.name=Rock Climbing Wall
-
-# Misc
-tile.neotech:lightSource.name=Light Source
 
 #######################
 # Fluids
@@ -150,39 +121,6 @@ item.neotech:Network_Card.name=Network Card
 
 # Tools
 item.neotech:wrench.name=Wrench
-item.neotech:mobGun.name=Net Launcher
-item.neotech:mobNet.name=Mob Net
-
-item.neotech:electricPickaxe.name=Electric Pickaxe
-item.neotech:miningLevel2.name=Redstone Mining Level Upgrade
-item.neotech:miningLevel3.name=Obsidian Mining Level Upgrade
-item.neotech:miningLevel4.name=Cobalt Mining Level Upgrade
-item.neotech:silkTouch.name=Silk Touch Upgrade
-item.neotech:fortune.name=Fortune Upgrade
-item.neotech:miningSpeed.name=Mining Speed Upgrade
-item.neotech:aoe.name=Area of Effect Upgrade
-item.neotech:shovelPick.name=Shovel Upgrade
-item.neotech:lighting.name=Lighting Upgrade
-
-item.neotech:electricSword.name=Electric Sword
-item.neotech:sharpness.name=Sharpness Upgrade
-item.neotech:smite.name=Smite Upgrade
-item.neotech:beheading.name=Beheading Upgrade
-item.neotech:spiderBane.name=Bane of Arthropods Upgrade
-item.neotech:looting.name=Looting Upgrade
-
-item.neotech:electricArmorHelmet.name=Electric Helmet
-item.neotech:electricArmorChestplate.name=Electric Chestplate
-item.neotech:electricArmorLeggings.name=Electric Leggings
-item.neotech:electricArmorBoots.name=Electric Boots
-
-item.neotech:jetpack.name=Jetpack Upgrade
-item.neotech:fallResist.name=Fall Resist Upgrade
-item.neotech:glide.name=Elytra Upgrade
-item.neotech:nightVision.name=Night Vision Upgrade
-item.neotech:sprinting.name=Sprinting Upgrade
-item.neotech:protection.name=Protection Upgrade
-item.neotech:hover.name=Hover Upgrade
 
 # Batteries
 item.neotech:basicRFBattery.name=Basic RF Battery
@@ -196,7 +134,6 @@ item.neotech:eliteRFBattery.name=Elite RF Battery
 # Processors
 tile.neotech:electricFurnace.name=Electric Furnace
 tile.neotech:electricCrusher.name=Electric Crusher
-tile.neotech:thermalBinder.name=Thermal Binder
 tile.neotech:electricCrucible.name=Electric Crucible
 tile.neotech:electricSolidifier.name=Electric Solidifier
 tile.neotech:alloyer.name=Electric Alloyer
@@ -222,11 +159,6 @@ tile.neotech:goldTank.name=Advanced Fluid Tank
 tile.neotech:diamondTank.name=Elite Fluid Tank
 tile.neotech:creativeTank.name=Creative Fluid Tank
 tile.neotech:voidTank.name=Void Tank
-
-# Misc
-tile.neotech:blockMiniatureSun.name=Miniature Sun
-tile.neotech:chunkLoader.name=Chunk Loader
-tile.neotech:mobStand.name=Mob Stand
 
 #######################
 # GUI
@@ -268,18 +200,6 @@ neotech.rfstoragecreative.title=Creative RF Storage
 # Tree Farm
 neotech.treeFarm.title=Electric Logger
 
-# Minature Sun
-neotech.fertilizer.title=Miniature Sun
-
-# Chunk Loader
-neotech.chunkLoader.title=Chunk Loader Range
-
-# Buttons
-neotech.button.disable=Disabled?
-
-# Mob Stand
-neotech.mobStand.title=Mob Stand
-
 #######################
 # Common Text
 #######################
@@ -315,25 +235,12 @@ neotech.text.information=Information
 
 neotech.text.redstoneFlux=Redstone Flux
 
-neotech.text.magnetism=Magnetism
-neotech.text.active=Active
-neotech.text.disabled=Disabled
-
 neotech.text.rfDiff=Energy Change
 
 neotech.text.processMode=Solidify Mode
 neotech.text.blockMode=Block Mode
 neotech.text.ingotMode=Ingot Mode
 neotech.text.nuggetMode=Nugget Mode
-
-neotech.text.size=Size
-neotech.text.facing=Rotation
-neotech.text.fitToBlock=Fit
-neotech.text.fitToBlockInfo=Fit the mob render to one block
-neotech.text.lookAtPlayer=Follow
-neotech.text.lookAtPlayerInfo=Have the mob look at the player
-neotech.text.renderName=Name
-neotech.text.renderNameInfo=Display Mob Name (Nametag Mob / Anvil Net)
 
 neotech.text.stats=Current Stats
 neotech.text.energyUsage=Energy Usage
@@ -344,28 +251,7 @@ neotech.text.operations=Operations
 neotech.text.rangeTree=Range
 neotech.text.chopCount=Chop Count
 
-neotech.text.placeInBinder=Upgrade In Thermal Binder
-
-neotech.text.lighting=Places Light Sources Automatically
-neotech.text.beheading=Beheading
-
-neotech.text.jetpack=Jetpack Installed
-neotech.text.fallResist=Removes Fall Damage
-neotech.text.glide=LMENU glide in the air
-neotech.text.nightVision=Has Night Vision
-neotech.text.sprinting=Sprinting
-neotech.text.hover=CTRL to Hover
-
 neotech.text.modName=Neotech
-neotech.text.radialMenuKey=Tool/Armor Menu
-
-aoe=Area of Effect
-lighting=Automatic Lighting
-jetpack=Jetpack
-glide=Elytra
-nightVision=Night Vision
-sprinting=Speed
-hover=Hover
 
 #######################
 # Commands
@@ -394,9 +280,6 @@ neotech.electricFurnace.psuUpgrade.desc=The power supply allows the machine to s
 neotech.electricCrusher.desc=The Electric Crusher smashes items put into it. If you put an ore block into the input, you can get two ore dust as an output. It can also crush things like cobblestone into sand. As more ores and mods are added, the crusher will adapt by adding recipes based on ore dict and other factors.
 neotech.electricCrusher.expansionUpgrade.desc=The expansion upgrade will enable the crusher to have a possible secondary output, it also allows you to configure the automatic input and output of the machine.
 
-# Thermal Binder
-neotech.thermalBinder.desc=The Thermal Binder is the machine that allows you to install upgrades to tools and motherboard components to motherboards. Once upgrades are installed, they can not be removed. The binding process requires 20mb of Molten Tin
-
 # Electric Crucible
 neotech.electricCrucible.desc=The Electric Crucible allows you to melt down metals into their molten form. Simply put a metal (block, ingot, etc) into the input slot and it will begin to melt the item. By default, the operation takes 1000 ticks. The Electric Crucible can also melt stone into lava and ice into water.
 
@@ -419,15 +302,6 @@ neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces R
 neotech.treeFarm.desc=The Electric Logger is an automated tree farm. By default, the range is 3 blocks around the farm and a cost of 200 RF/block. The logger will chop trees that start on the same Y plane as the logger. Provide an axe to chop the wood, and you can optionally add shears to shear leaves. If you add shears, the leaves will not drop saplings. Saplings will be placed in the top right three slots. These are the ones that will be planted. Excess saplings will go to the main inventory. Automation and pipes will not pull from the sapling slots so you don't have to worry about those being emptied.
 neotech.treeFarm.processorUpgrade.desc=Processors will increase the count of blocks broken.
 neotech.treeFarm.memoryUpgrade.desc=Increases the range of the farm
-
-# Phantom Glass
-neotech.phantomGlass.tip=Players pass through if not sneaky
-
-# Void Glass
-neotech.voidGlass.tip=Blocks light
-
-# Rock Wall Tip
-neotech.rockWall.tip=Sneak and right-click to scale wall
 
 #######################
 # JEI

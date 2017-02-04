@@ -22,11 +22,6 @@ public class PacketDispatcher {
         net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID().toUpperCase());
 
         registerMessage(OpenContainerGui.class, OpenContainerGui.class);
-        registerMessage(DrainEnergyPacketArmor.class, DrainEnergyPacketArmor.class);
-        registerMessage(UpdateToolTag.class, UpdateToolTag.class);
-        registerMessage(ResetFallDistance.class, ResetFallDistance.class);
-        registerMessage(SpawnJetpackParticles.class, SpawnJetpackParticles.class);
-        registerMessage(RemoveFallDamage.class, RemoveFallDamage.class);
     }
 
     @SuppressWarnings("unchecked")
