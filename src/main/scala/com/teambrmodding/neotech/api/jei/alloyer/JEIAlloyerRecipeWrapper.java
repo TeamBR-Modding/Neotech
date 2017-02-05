@@ -8,7 +8,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraftforge.fluids.FluidStack;
 import scala.actors.threadpool.Arrays;
-import sun.rmi.log.LogHandler;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -35,7 +34,12 @@ public class JEIAlloyerRecipeWrapper extends BlankRecipeWrapper {
      * Constructor                                                                                                     *
      *******************************************************************************************************************/
 
-
+    /**
+     * Recipe Wrapper
+     * @param inputOne The first fluid
+     * @param inputTwo The second fluid
+     * @param output The fluid output
+     */
     public JEIAlloyerRecipeWrapper(FluidStack inputOne, FluidStack inputTwo, FluidStack output) {
         fluidInputOne = inputOne;
         fluidInputTwo = inputTwo;
