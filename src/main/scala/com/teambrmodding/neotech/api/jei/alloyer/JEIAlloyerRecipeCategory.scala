@@ -51,6 +51,20 @@ class JEIAlloyerRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
         }
     }
 
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, iIngredients: IIngredients): Unit = {
+        val fluids = recipeLayout.getFluidStacks
+        fluids.init(0, true, 39, 0, 16, 59, 2000, false, null)
+        fluids.init(1, true, 61, 0, 16, 59, 2000, false, null)
+        fluids.init(2, false, 116, 0, 48, 59, 2000, false, null)
+
+        recipeWrapper match {
+            case alloyer: JEIAlloyerRecipe =>
+                recipeLayout.getFluidStacks.set(0, alloyer.getFluidInputs.get(0))
+                recipeLayout.getFluidStacks.set(1, alloyer.getFluidInputs.get(1))
+                recipeLayout.getFluidStacks.set(2, alloyer.getFluidOutputs.get(0))
+        }
+    }
+
     override def drawAnimations(minecraft: Minecraft): Unit = {
         arrow.draw(minecraft, 0, 0)
         power.draw(minecraft, 0, 0)
@@ -65,8 +79,6 @@ class JEIAlloyerRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
     override def getTitle: String = I18n.translateToLocal("tile.neotech:alloyer.name")
 
     override def getUid: String = NeotechRecipeCategoryUID.ALLOYER
-
-    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {}
 
     override def getIcon: IDrawable = {null}
 }

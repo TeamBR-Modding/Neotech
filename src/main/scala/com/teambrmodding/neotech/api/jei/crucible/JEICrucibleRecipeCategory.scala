@@ -63,7 +63,9 @@ class JEICrucibleRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
 
     override def getUid: String = NeotechRecipeCategoryUID.CRUCIBLE
 
-    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {}
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {
+        setRecipe(recipeLayout, recipeWrapper)
+    }
 
     override def getIcon: IDrawable = null
 }

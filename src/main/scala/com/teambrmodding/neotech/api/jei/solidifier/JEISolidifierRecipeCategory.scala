@@ -64,7 +64,9 @@ class JEISolidifierRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
 
     override def getUid: String = NeotechRecipeCategoryUID.SOLIDIFIER
 
-    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {}
+    override def setRecipe(recipeLayout: IRecipeLayout, recipeWrapper: IRecipeWrapper, ingredients: IIngredients): Unit = {
+        setRecipe(recipeLayout, recipeWrapper)
+    }
 
     override def getIcon: IDrawable = null
 }
