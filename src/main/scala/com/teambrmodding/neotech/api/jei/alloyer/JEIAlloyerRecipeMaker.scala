@@ -20,15 +20,15 @@ import scala.collection.JavaConversions._
   */
 object JEIAlloyerRecipeMaker {
 
-    def getRecipes: util.List[JEIAlloyerRecipe] = {
-        val recipes = new util.ArrayList[JEIAlloyerRecipe]()
+    def getRecipes: util.List[JEIAlloyerRecipeWrapper] = {
+        val recipes = new util.ArrayList[JEIAlloyerRecipeWrapper]()
         val alloyer = RecipeManager.getHandler[AlloyerRecipeHandler](RecipeManager.Alloyer).recipes
         for (recipe <- alloyer) {
             val fluid1 = recipe.getFluidFromString(recipe.fluidOne)
             val fluid2 = recipe.getFluidFromString(recipe.fluidTwo)
             val fluidOut = recipe.getFluidFromString(recipe.fluidOut)
             if (fluid1 != null && fluid2 != null && fluidOut != null)
-                recipes.add(new JEIAlloyerRecipe(fluid1, fluid2, fluidOut))
+                recipes.add(new JEIAlloyerRecipeWrapper(fluid1, fluid2, fluidOut))
             else LogHelper.severe("[NeoTech] AlloyerRecipe json is corrupt! Please delete and recreate!")
         }
         recipes

@@ -4,7 +4,7 @@ import java.awt.Rectangle
 import java.util
 
 import com.teambr.bookshelf.client.gui.GuiBase
-import com.teambrmodding.neotech.api.jei.alloyer.{JEIAlloyerRecipeCategory, JEIAlloyerRecipeHandler, JEIAlloyerRecipeMaker}
+import com.teambrmodding.neotech.api.jei.alloyer.{JEIAlloyerRecipeCategory, JEIAlloyerRecipeHandler, JEIAlloyerRecipeMaker, JEIAlloyerRecipeWrapper}
 import com.teambrmodding.neotech.api.jei.centrifuge.{JEICentrifugeRecipeCategory, JEICentrifugeRecipeHandler, JEICentrifugeRecipeMaker}
 import com.teambrmodding.neotech.api.jei.crucible.{JEICrucibleRecipeCategory, JEICrucibleRecipeHandler, JEICrucibleRecipeMaker}
 import com.teambrmodding.neotech.api.jei.crusher.{JEICrusherRecipeCategory, JEICrusherRecipeHandler, JEICrusherRecipeMaker}
@@ -43,10 +43,11 @@ class NeoTechPlugin extends IModPlugin {
             new JEIAlloyerRecipeHandler,
             new JEICentrifugeRecipeHandler)
 
+        registry.addRecipes(JEIAlloyerRecipeWrapper.buildRecipeList())
+
         registry.addRecipes(JEICrusherRecipeMaker.getRecipes)
         registry.addRecipes(JEISolidifierRecipeMaker.getRecipes)
         registry.addRecipes(JEICrucibleRecipeMaker.getRecipes)
-        registry.addRecipes(JEIAlloyerRecipeMaker.getRecipes)
         registry.addRecipes(JEICentrifugeRecipeMaker.getRecipes)
 
         // Furnace

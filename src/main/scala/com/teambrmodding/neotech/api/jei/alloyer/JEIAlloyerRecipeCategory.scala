@@ -44,7 +44,7 @@ class JEIAlloyerRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
         fluids.init(2, false, 116, 0, 48, 59, 2000, false, null)
 
         recipeWrapper match {
-            case alloyer: JEIAlloyerRecipe =>
+            case alloyer: JEIAlloyerRecipeWrapper =>
                 recipeLayout.getFluidStacks.set(0, alloyer.getFluidInputs.get(0))
                 recipeLayout.getFluidStacks.set(1, alloyer.getFluidInputs.get(1))
                 recipeLayout.getFluidStacks.set(2, alloyer.getFluidOutputs.get(0))
@@ -58,10 +58,10 @@ class JEIAlloyerRecipeCategory extends IRecipeCategory[IRecipeWrapper] {
         fluids.init(2, false, 116, 0, 48, 59, 2000, false, null)
 
         recipeWrapper match {
-            case alloyer: JEIAlloyerRecipe =>
-                recipeLayout.getFluidStacks.set(0, alloyer.getFluidInputs.get(0))
-                recipeLayout.getFluidStacks.set(1, alloyer.getFluidInputs.get(1))
-                recipeLayout.getFluidStacks.set(2, alloyer.getFluidOutputs.get(0))
+            case alloyer: JEIAlloyerRecipeWrapper =>
+                recipeLayout.getFluidStacks.set(0, iIngredients.getInputs(classOf[FluidStack]).get(0).get(0))
+                recipeLayout.getFluidStacks.set(1, iIngredients.getInputs(classOf[FluidStack]).get(1).get(0))
+                recipeLayout.getFluidStacks.set(2, iIngredients.getOutputs(classOf[FluidStack]).get(0))
         }
     }
 
