@@ -47,6 +47,18 @@ public class JEIAlloyerRecipeWrapper extends BlankRecipeWrapper {
     }
 
     /*******************************************************************************************************************
+     * Helper Methods                                                                                                  *
+     *******************************************************************************************************************/
+
+    /**
+     * Used to make sure this recipe has been created correctly
+     * @return True if recipe can be displayed
+     */
+    public boolean isValid() {
+        return fluidInputOne != null && fluidInputTwo != null && fluidOutput != null;
+    }
+
+    /*******************************************************************************************************************
      * BlankRecipeWrapper                                                                                              *
      *******************************************************************************************************************/
 

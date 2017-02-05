@@ -38,6 +38,6 @@ public class JEIAlloyerRecipeHandler implements IRecipeHandler<JEIAlloyerRecipeW
 
     @Override
     public boolean isRecipeValid(JEIAlloyerRecipeWrapper recipe) {
-        return true;
+        return recipe.isValid();
     }
 }
