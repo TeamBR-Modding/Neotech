@@ -1,11 +1,9 @@
-package com.teambrmodding.neotech.api.jei.alloyer;
+package com.teambrmodding.neotech.api.jei.centrifuge;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraftforge.fluids.FluidStack;
 import scala.actors.threadpool.Arrays;
-
-import javax.annotation.Nonnull;
 
 /**
  * This file was created for NeoTech
@@ -15,14 +13,14 @@ import javax.annotation.Nonnull;
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author Paul Davis - pauljoda
- * @since 2/4/2017
+ * @since 2/5/2017
  */
-public class JEIAlloyerRecipeWrapper extends BlankRecipeWrapper {
+public class JEICentrifugeRecipeWrapper extends BlankRecipeWrapper {
 
     // Variables
-    private FluidStack fluidInputOne;
-    private FluidStack fluidInputTwo;
-    private FluidStack fluidOutput;
+    private FluidStack fluidInput;
+    private FluidStack fluidOutputOne;
+    private FluidStack fluidOutputTwo;
 
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
@@ -30,26 +28,26 @@ public class JEIAlloyerRecipeWrapper extends BlankRecipeWrapper {
 
     /**
      * Recipe Wrapper
-     * @param inputOne The first fluid
-     * @param inputTwo The second fluid
-     * @param output The fluid output
+     * @param fluidIn The input fluid
+     * @param fluidOutOne The first output
+     * @param fluidOutTwo The second output
      */
-    public JEIAlloyerRecipeWrapper(FluidStack inputOne, FluidStack inputTwo, FluidStack output) {
-        fluidInputOne = inputOne;
-        fluidInputTwo = inputTwo;
-        fluidOutput   = output;
+    public JEICentrifugeRecipeWrapper(FluidStack fluidIn, FluidStack fluidOutOne, FluidStack fluidOutTwo) {
+        fluidInput     = fluidIn;
+        fluidOutputOne = fluidOutOne;
+        fluidOutputTwo = fluidOutTwo;
     }
 
     /*******************************************************************************************************************
      * Helper Methods                                                                                                  *
-     *******************************************************************************************************************/
+     ******************************************************************************************************************/
 
     /**
      * Used to make sure this recipe has been created correctly
      * @return True if recipe can be displayed
      */
     public boolean isValid() {
-        return fluidInputOne != null && fluidInputTwo != null && fluidOutput != null;
+        return fluidInput != null && fluidOutputOne != null && fluidOutputTwo != null;
     }
 
     /*******************************************************************************************************************
@@ -61,11 +59,11 @@ public class JEIAlloyerRecipeWrapper extends BlankRecipeWrapper {
      * @param ingredients The ingredients object
      */
     @Override
-    public void getIngredients(@Nonnull IIngredients ingredients) {
-        // Add the inputs
-        ingredients.setInputs(FluidStack.class, Arrays.asList(new FluidStack[] {fluidInputOne, fluidInputTwo}));
+    public void getIngredients(IIngredients ingredients) {
+        // Add input
+        ingredients.setInput(FluidStack.class, fluidInput);
 
-        // Add the output
-        ingredients.setOutput(FluidStack.class, fluidOutput);
+        // Add outputs
+        ingredients.setOutputs(FluidStack.class, Arrays.asList(new FluidStack[] {fluidOutputOne, fluidOutputTwo}));
     }
 }
