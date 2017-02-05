@@ -151,12 +151,12 @@ public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifug
 
     /**
      * Used to generate a list of all recipes for this category
-     * @return
+     * @return The completed list of recipes
      */
     public static java.util.List<JEICentrifugeRecipeWrapper> buildRecipeList() {
         ArrayList<JEICentrifugeRecipeWrapper> recipes = new ArrayList<>();
-        CentrifugeRecipeHandler alloyerRecipeHandler = (CentrifugeRecipeHandler) RecipeManager.getHandler("centrifuge").get();
-        for(CentrifugeRecipe recipe : alloyerRecipeHandler.recipes()) {
+        CentrifugeRecipeHandler centrifugeRecipeHandler = (CentrifugeRecipeHandler) RecipeManager.getHandler("centrifuge").get();
+        for(CentrifugeRecipe recipe : centrifugeRecipeHandler.recipes()) {
             FluidStack fluidInput = recipe.getFluidFromString(recipe.fluidIn());
             FluidStack fluidOutputOne = recipe.getFluidFromString(recipe.fluidOne());
             FluidStack fluidOutputTwo   = recipe.getFluidFromString(recipe.fluidTwo());

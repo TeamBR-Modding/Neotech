@@ -6,7 +6,7 @@ import java.util
 import com.teambr.bookshelf.client.gui.GuiBase
 import com.teambrmodding.neotech.api.jei.alloyer.{JEIAlloyerRecipeCategory, JEIAlloyerRecipeHandler, JEIAlloyerRecipeWrapper}
 import com.teambrmodding.neotech.api.jei.centrifuge.{JEICentrifugeRecipeCategory, JEICentrifugeRecipeHandler}
-import com.teambrmodding.neotech.api.jei.crucible.{JEICrucibleRecipeCategory, JEICrucibleRecipeHandler, JEICrucibleRecipeMaker}
+import com.teambrmodding.neotech.api.jei.crucible.{JEICrucibleRecipeCategory, JEICrucibleRecipeHandler}
 import com.teambrmodding.neotech.api.jei.crusher.{JEICrusherRecipeCategory, JEICrusherRecipeHandler, JEICrusherRecipeMaker}
 import com.teambrmodding.neotech.api.jei.solidifier.{JEISolidifierRecipeCategory, JEISolidifierRecipeHandler, JEISolidifierRecipeMaker}
 import com.teambrmodding.neotech.managers.BlockManager
@@ -45,10 +45,10 @@ class NeoTechPlugin extends IModPlugin {
 
         registry.addRecipes(JEIAlloyerRecipeCategory.buildRecipeList())
         registry.addRecipes(JEICentrifugeRecipeCategory.buildRecipeList())
+        registry.addRecipes(JEICrucibleRecipeCategory.buildRecipeList())
 
         registry.addRecipes(JEICrusherRecipeMaker.getRecipes)
         registry.addRecipes(JEISolidifierRecipeMaker.getRecipes)
-        registry.addRecipes(JEICrucibleRecipeMaker.getRecipes)
 
         // Furnace
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricFurnace), VanillaRecipeCategoryUid.SMELTING)

@@ -1,29 +1,33 @@
-package com.teambrmodding.neotech.api.jei.alloyer;
+package com.teambrmodding.neotech.api.jei.crucible;
 
 import com.teambr.bookshelf.api.jei.drawables.GuiComponentArrowJEI;
 import com.teambr.bookshelf.api.jei.drawables.GuiComponentBox;
 import com.teambr.bookshelf.api.jei.drawables.GuiComponentPowerBarJEI;
+import com.teambr.bookshelf.api.jei.drawables.SlotDrawable;
 import com.teambr.bookshelf.helper.LogHelper;
 import com.teambrmodding.neotech.api.jei.NeoTechPlugin;
 import com.teambrmodding.neotech.api.jei.NeotechRecipeCategoryUID;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AlloyerRecipe;
-import com.teambrmodding.neotech.registries.AlloyerRecipeHandler;
+import com.teambrmodding.neotech.registries.CrucibleRecipe;
+import com.teambrmodding.neotech.registries.CrucibleRecipeHandler;
 import com.teambrmodding.neotech.utils.ClientUtils;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
+import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.*;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * This file was created for NeoTech
@@ -35,26 +39,20 @@ import java.util.List;
  * @author Paul Davis - pauljoda
  * @since 2/5/2017
  */
-public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecipeWrapper> {
+public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRecipeWrapper> {
 
-    // Display
+    // Variables
     private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID(), "textures/gui/jei/jei.png");
-    private GuiComponentArrowJEI progressArrow = new GuiComponentArrowJEI(81, 17, NeoTechPlugin.jeiHelpers());
+    private SlotDrawable inputSlot              = new SlotDrawable(56, 17, false);
+    private GuiComponentArrowJEI progressArrow  = new GuiComponentArrowJEI(81, 17, NeoTechPlugin.jeiHelpers());
     private GuiComponentPowerBarJEI powerBar    = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0), NeoTechPlugin.jeiHelpers());
-
-    // Tanks
-    private GuiComponentBox tankInputOne = new GuiComponentBox(38, 0, 18, 60);
-    private GuiComponentBox tankInputTwo = new GuiComponentBox(60, 0, 18, 60);
-    private GuiComponentBox tankOutput   = new GuiComponentBox(115, 0, 50, 60);
+    private GuiComponentBox tank                = new GuiComponentBox(115, 0, 50, 60);
 
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
      *******************************************************************************************************************/
 
-    /**
-     * Constructor, we want to add the colors to our powerBar here
-     */
-    public JEIAlloyerRecipeCategory() {
+    public JEICrucibleRecipeCategory() {
         powerBar.addColor(new Color(255, 150, 0));
         powerBar.addColor(new Color(255, 255, 0));
     }
@@ -64,12 +62,12 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
      *******************************************************************************************************************/
 
     /**
-     * Get the unique ID of this category
-     * @return The alloyer string
+     * The unique string for this category
+     * @return The string
      */
     @Override
     public String getUid() {
-        return NeotechRecipeCategoryUID.ALLOYER();
+        return NeotechRecipeCategoryUID.CRUCIBLE();
     }
 
     /**
@@ -78,7 +76,7 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
      */
     @Override
     public String getTitle() {
-        return ClientUtils.translate("tile.neotech:alloyer.name");
+        return ClientUtils.translate("tile.neotech:electricCrucible.name");
     }
 
     /**
@@ -100,15 +98,12 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
         return null;
     }
 
-    /**
-     * The main draw call, display generic stuff here
-     */
+
     @Override
     public void drawExtras(Minecraft minecraft) {
-        // Draw Tank Backgrounds
-        tankInputOne.draw(minecraft);
-        tankInputTwo.draw(minecraft);
-        tankOutput.draw(minecraft);
+        // Draw Backgrounds
+        inputSlot.draw(minecraft);
+        tank.draw(minecraft);
 
         // Draw Animations
         progressArrow.draw(minecraft);
@@ -121,7 +116,7 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, JEIAlloyerRecipeWrapper recipeWrapper) {
+    public void setRecipe(IRecipeLayout recipeLayout, JEICrucibleRecipeWrapper recipeWrapper) {
         // Deprecated
     }
 
@@ -132,20 +127,18 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
      * @param ingredients What holds the ingredients
      */
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, JEIAlloyerRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, JEICrucibleRecipeWrapper recipeWrapper, IIngredients ingredients) {
+        IGuiItemStackGroup itemStackGroup  = recipeLayout.getItemStacks();
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
 
-        // Load the fluids
-        fluidStackGroup.init(0, true,  39, 0, 16, 59, 2000, false, null);
-        fluidStackGroup.init(1, true,  61, 0, 16, 59, 2000, false, null);
-        fluidStackGroup.init(2, false, 116, 0, 48, 59, 2000, false, null);
+        // Init components
+        itemStackGroup.init(0, true, 56, 17);
+        fluidStackGroup.init(0, false, 116, 0, 48, 59, 2000, false, null);
 
-        // Set into layout
-        recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));
-        recipeLayout.getFluidStacks().set(1, ingredients.getInputs(FluidStack.class).get(1));
-        recipeLayout.getFluidStacks().set(2, ingredients.getOutputs(FluidStack.class).get(0));
+        // Fill layout
+        recipeLayout.getItemStacks().set(0,  ingredients.getInputs(ItemStack.class).get(0));
+        recipeLayout.getFluidStacks().set(0, ingredients.getOutputs(FluidStack.class).get(0));
     }
-
 
     /*******************************************************************************************************************
      * Class Methods                                                                                                   *
@@ -155,19 +148,23 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
      * Used to generate a list of all recipes for this category
      * @return The completed list of recipes
      */
-    public static List<JEIAlloyerRecipeWrapper> buildRecipeList() {
-        ArrayList<JEIAlloyerRecipeWrapper> recipes = new ArrayList<>();
-        AlloyerRecipeHandler alloyerRecipeHandler = (AlloyerRecipeHandler) RecipeManager.getHandler("alloyer").get();
-        for(AlloyerRecipe recipe : alloyerRecipeHandler.recipes()) {
-            FluidStack fluidInputOne = recipe.getFluidFromString(recipe.fluidOne());
-            FluidStack fluidInputTwo = recipe.getFluidFromString(recipe.fluidTwo());
-            FluidStack fluidOutput   = recipe.getFluidFromString(recipe.fluidOut());
-            if(fluidInputOne != null && fluidInputTwo != null && fluidOutput != null)
-                recipes.add(new JEIAlloyerRecipeWrapper(fluidInputOne, fluidInputTwo, fluidOutput));
-            else
-                LogHelper.severe("[Neotech] Alloyer Recipe json is corrupt! Please delete and run again.");
+    public static java.util.List<JEICrucibleRecipeWrapper> buildRecipeList() {
+        ArrayList<JEICrucibleRecipeWrapper> recipes = new ArrayList<>();
+        CrucibleRecipeHandler crucibleRecipeHandler = (CrucibleRecipeHandler) RecipeManager.getHandler("crucible").get();
+        for(CrucibleRecipe recipe : crucibleRecipeHandler.recipes()) {
+            java.util.List<ItemStack> inputList = OreDictionary.getOres(recipe.ore());
+            FluidStack output = recipe.getFluidFromString(recipe.output());
+            if(output != null) {
+                if(!inputList.isEmpty()) {
+                    recipes.add(new JEICrucibleRecipeWrapper(inputList, output));
+                } else {
+                    ItemStack input = recipe.getItemStackFromString(recipe.input());
+                    if(input != null) {
+                        recipes.add(new JEICrucibleRecipeWrapper(Collections.singletonList(input), output));
+                    } else LogHelper.severe("[NeoTech] Crucible json is corrupt! Please delete and recreate!");
+                }
+            } else LogHelper.severe("[NeoTech] Crucible json is corrupt! Please delete and recreate!");
         }
-
         return recipes;
     }
 }
