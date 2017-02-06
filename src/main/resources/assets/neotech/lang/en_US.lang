@@ -307,7 +307,4 @@ neotech.treeFarm.memoryUpgrade.desc=Increases the range of the farm
 # JEI
 #######################
 
-neotech.nei.name=NeoTech
-neotech.nei.furnacerecipes=Electric Furnace
-neotech.nei.crusherrecipes=Electric Crusher
-neotech.nei.ecrusher.outputchance=10% Chance per Upgrade
+jei.text.requiresExpansion=Requires Expansion Upgrade
