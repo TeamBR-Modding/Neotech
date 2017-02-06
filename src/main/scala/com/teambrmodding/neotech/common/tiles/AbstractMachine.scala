@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.text.translation.I18n
 import net.minecraft.world.World
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.fml.common.Optional
 
 /**
@@ -238,6 +239,16 @@ abstract class AbstractMachine extends Syncable with Upgradeable with InventoryS
             resetIO()
         if(!hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT))
             redstone = 0
+    }
+
+    /**
+      * We don't want to pass anything if this side is disabled
+      */
+    override def hasCapability(capability: Capability[_], facing: EnumFacing): Boolean = {
+        if(isDisabled(facing))
+            false
+        else
+            super.hasCapability(capability, facing)
     }
 
     /*******************************************************************************************************************
