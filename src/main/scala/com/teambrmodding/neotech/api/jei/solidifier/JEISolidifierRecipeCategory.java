@@ -4,12 +4,8 @@ import com.teambr.bookshelf.api.jei.drawables.GuiComponentArrowJEI;
 import com.teambr.bookshelf.api.jei.drawables.GuiComponentBox;
 import com.teambr.bookshelf.api.jei.drawables.GuiComponentPowerBarJEI;
 import com.teambr.bookshelf.api.jei.drawables.SlotDrawable;
-import com.teambr.bookshelf.helper.LogHelper;
-import com.teambrmodding.neotech.api.jei.NeoTechPlugin;
-import com.teambrmodding.neotech.api.jei.NeotechRecipeCategoryUID;
-import com.teambrmodding.neotech.common.tiles.machines.processors.TileSolidifier;
+import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
-import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.managers.RecipeManager;
 import com.teambrmodding.neotech.registries.SolidifierRecipe;
 import com.teambrmodding.neotech.registries.SolidifierRecipeHandler;
@@ -23,7 +19,6 @@ import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -44,8 +39,8 @@ public class JEISolidifierRecipeCategory implements IRecipeCategory<JEISolidifie
 
     // Variables
     private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID(), "textures/gui/jei/jei.png");
-    private GuiComponentArrowJEI progressArrow  = new GuiComponentArrowJEI(97, 17, NeoTechPlugin.jeiHelpers());
-    private GuiComponentPowerBarJEI powerBar    = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0), NeoTechPlugin.jeiHelpers());
+    private GuiComponentArrowJEI progressArrow  = new GuiComponentArrowJEI(97, 17, NeotechJEIPlugin.jeiHelpers);
+    private GuiComponentPowerBarJEI powerBar    = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0), NeotechJEIPlugin.jeiHelpers);
     private GuiComponentBox inputTank           = new GuiComponentBox(35, 0, 50, 60);
     private SlotDrawable slotOutput             = new SlotDrawable(133, 17, false);
 
@@ -71,7 +66,7 @@ public class JEISolidifierRecipeCategory implements IRecipeCategory<JEISolidifie
      */
     @Override
     public String getUid() {
-        return NeotechRecipeCategoryUID.SOLIDIFIER();
+        return NeotechJEIPlugin.SOLIDIFIER_UUID;
     }
 
     /**
@@ -89,11 +84,11 @@ public class JEISolidifierRecipeCategory implements IRecipeCategory<JEISolidifie
      */
     @Override
     public IDrawable getBackground() {
-        return NeoTechPlugin.jeiHelpers().getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 60);
+        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 60);
     }
 
     /**
-     * We will use the default one registered in the NeotechPlugin class
+     * We will use the default one registered in the NeotechJEIPlugin class
      * @return Null, don't worry about it here
      */
     @Nullable

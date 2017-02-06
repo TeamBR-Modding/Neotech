@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.api.jei.alloyer;
 
-import com.teambrmodding.neotech.api.jei.NeotechRecipeCategoryUID;
+import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -23,12 +23,12 @@ public class JEIAlloyerRecipeHandler implements IRecipeHandler<JEIAlloyerRecipeW
 
     @Override
     public String getRecipeCategoryUid() {
-        return NeotechRecipeCategoryUID.ALLOYER();
+        return NeotechJEIPlugin.ALLOYER_UUID;
     }
 
     @Override
     public String getRecipeCategoryUid(JEIAlloyerRecipeWrapper recipe) {
-        return NeotechRecipeCategoryUID.ALLOYER();
+        return NeotechJEIPlugin.ALLOYER_UUID;
     }
 
     @Override

@@ -4,8 +4,7 @@ import com.teambr.bookshelf.api.jei.drawables.GuiComponentArrowJEI;
 import com.teambr.bookshelf.api.jei.drawables.GuiComponentBox;
 import com.teambr.bookshelf.api.jei.drawables.GuiComponentPowerBarJEI;
 import com.teambr.bookshelf.helper.LogHelper;
-import com.teambrmodding.neotech.api.jei.NeoTechPlugin;
-import com.teambrmodding.neotech.api.jei.NeotechRecipeCategoryUID;
+import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
 import com.teambrmodding.neotech.registries.AlloyerRecipe;
@@ -39,8 +38,8 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
 
     // Display
     private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID(), "textures/gui/jei/jei.png");
-    private GuiComponentArrowJEI progressArrow = new GuiComponentArrowJEI(81, 17, NeoTechPlugin.jeiHelpers());
-    private GuiComponentPowerBarJEI powerBar    = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0), NeoTechPlugin.jeiHelpers());
+    private GuiComponentArrowJEI progressArrow = new GuiComponentArrowJEI(81, 17, NeotechJEIPlugin.jeiHelpers);
+    private GuiComponentPowerBarJEI powerBar    = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0), NeotechJEIPlugin.jeiHelpers);
 
     // Tanks
     private GuiComponentBox tankInputOne = new GuiComponentBox(38, 0, 18, 60);
@@ -69,7 +68,7 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
      */
     @Override
     public String getUid() {
-        return NeotechRecipeCategoryUID.ALLOYER();
+        return NeotechJEIPlugin.ALLOYER_UUID;
     }
 
     /**
@@ -87,11 +86,11 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
      */
     @Override
     public IDrawable getBackground() {
-        return NeoTechPlugin.jeiHelpers().getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 60);
+        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 60);
     }
 
     /**
-     * We will use the default one registered in the NeotechPlugin class
+     * We will use the default one registered in the NeotechJEIPlugin class
      * @return Null, don't worry about it here
      */
     @Nullable

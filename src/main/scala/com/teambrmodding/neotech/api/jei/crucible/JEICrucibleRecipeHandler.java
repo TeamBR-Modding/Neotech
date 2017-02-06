@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.api.jei.crucible;
 
-import com.teambrmodding.neotech.api.jei.NeotechRecipeCategoryUID;
+import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -23,12 +23,12 @@ public class JEICrucibleRecipeHandler implements IRecipeHandler<JEICrucibleRecip
 
     @Override
     public String getRecipeCategoryUid() {
-        return NeotechRecipeCategoryUID.CRUCIBLE();
+        return NeotechJEIPlugin.CRUCIBLE_UUID;
     }
 
     @Override
     public String getRecipeCategoryUid(JEICrucibleRecipeWrapper recipe) {
-        return NeotechRecipeCategoryUID.CRUCIBLE();
+        return NeotechJEIPlugin.CRUCIBLE_UUID;
     }
 
     @Override

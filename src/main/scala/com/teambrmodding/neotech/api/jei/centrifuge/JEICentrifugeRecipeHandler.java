@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.api.jei.centrifuge;
 
-import com.teambrmodding.neotech.api.jei.NeotechRecipeCategoryUID;
+import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -23,12 +23,12 @@ public class JEICentrifugeRecipeHandler implements IRecipeHandler<JEICentrifugeR
 
     @Override
     public String getRecipeCategoryUid() {
-        return NeotechRecipeCategoryUID.CENTRIFUGE();
+        return NeotechJEIPlugin.CENTRIFUGE_UUID;
     }
 
     @Override
     public String getRecipeCategoryUid(JEICentrifugeRecipeWrapper recipe) {
-        return NeotechRecipeCategoryUID.CENTRIFUGE();
+        return NeotechJEIPlugin.CENTRIFUGE_UUID;
     }
 
     @Override

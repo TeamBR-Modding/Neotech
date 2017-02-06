@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.api.jei.crusher;
 
-import com.teambrmodding.neotech.api.jei.NeotechRecipeCategoryUID;
+import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -23,12 +23,12 @@ public class JEICrusherRecipeHandler implements IRecipeHandler<JEICrusherRecipeW
 
     @Override
     public String getRecipeCategoryUid() {
-        return NeotechRecipeCategoryUID.CRUSHER();
+        return NeotechJEIPlugin.CRUSHER_UUID;
     }
 
     @Override
     public String getRecipeCategoryUid(JEICrusherRecipeWrapper recipe) {
-        return NeotechRecipeCategoryUID.CRUSHER();
+        return NeotechJEIPlugin.CRUSHER_UUID;
     }
 
     @Override

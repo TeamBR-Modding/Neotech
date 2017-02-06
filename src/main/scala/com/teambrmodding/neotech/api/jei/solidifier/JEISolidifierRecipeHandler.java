@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.api.jei.solidifier;
 
-import com.teambrmodding.neotech.api.jei.NeotechRecipeCategoryUID;
+import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import mezz.jei.api.recipe.IRecipeHandler;
 import mezz.jei.api.recipe.IRecipeWrapper;
 
@@ -23,12 +23,12 @@ public class JEISolidifierRecipeHandler implements IRecipeHandler<JEISolidifierR
 
     @Override
     public String getRecipeCategoryUid() {
-        return NeotechRecipeCategoryUID.SOLIDIFIER();
+        return NeotechJEIPlugin.SOLIDIFIER_UUID;
     }
 
     @Override
     public String getRecipeCategoryUid(JEISolidifierRecipeWrapper recipe) {
-        return  NeotechRecipeCategoryUID.SOLIDIFIER();
+        return  NeotechJEIPlugin.SOLIDIFIER_UUID;
     }
 
     @Override
