@@ -176,11 +176,6 @@ trait InputOutput extends NBTSavable {
     override def readFromNBT(tag : NBTTagCompound) = {
         for(side <- EnumFacing.values())
             sideModes.put(side, EnumInputOutputMode.getModeFromInt(tag.getInteger("Side: " + side.ordinal())))
-
-        //TODO: Remove this in the future, just for smooth updating
-        // To prevent old tags from getting messed up when updating, keep this around a few versions
-        if(!tag.hasKey("NewVersion"))
-            resetIO()
     }
 
     /**
@@ -188,7 +183,6 @@ trait InputOutput extends NBTSavable {
       * @param tag The data to write to
       */
     override def writeToNBT(tag : NBTTagCompound) : NBTTagCompound = {
-        tag.setBoolean("NewVersion", true)
         for(side <- EnumFacing.values())
             tag.setInteger("Side: " + side.ordinal(), sideModes.get(side).getIntValue)
         tag
