@@ -8,7 +8,7 @@ import com.teambrmodding.neotech.api.jei.alloyer.{JEIAlloyerRecipeCategory, JEIA
 import com.teambrmodding.neotech.api.jei.centrifuge.{JEICentrifugeRecipeCategory, JEICentrifugeRecipeHandler}
 import com.teambrmodding.neotech.api.jei.crucible.{JEICrucibleRecipeCategory, JEICrucibleRecipeHandler}
 import com.teambrmodding.neotech.api.jei.crusher.{JEICrusherRecipeCategory, JEICrusherRecipeHandler}
-import com.teambrmodding.neotech.api.jei.solidifier.{JEISolidifierRecipeCategory, JEISolidifierRecipeHandler, JEISolidifierRecipeMaker}
+import com.teambrmodding.neotech.api.jei.solidifier.{JEISolidifierRecipeCategory, JEISolidifierRecipeHandler}
 import com.teambrmodding.neotech.managers.BlockManager
 import mezz.jei.api._
 import mezz.jei.api.gui.IAdvancedGuiHandler
@@ -47,8 +47,8 @@ class NeoTechPlugin extends IModPlugin {
         registry.addRecipes(JEICentrifugeRecipeCategory.buildRecipeList())
         registry.addRecipes(JEICrucibleRecipeCategory.buildRecipeList())
         registry.addRecipes(JEICrusherRecipeCategory.buildRecipeList())
+        registry.addRecipes(JEISolidifierRecipeCategory.buildRecipeList())
 
-        registry.addRecipes(JEISolidifierRecipeMaker.getRecipes)
 
         // Furnace
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricFurnace), VanillaRecipeCategoryUid.SMELTING)
