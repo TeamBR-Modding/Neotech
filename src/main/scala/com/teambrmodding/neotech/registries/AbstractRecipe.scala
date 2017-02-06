@@ -87,6 +87,4 @@ abstract class AbstractRecipe[I, O] {
     def getFluidFromString(string : String) : FluidStack = {
         FluidRegistry.getFluidStack(string.split(":")(0), string.split(":")(1).toInt)
     }
-
-
 }

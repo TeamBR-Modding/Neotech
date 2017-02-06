@@ -9,8 +9,12 @@ import com.teambrmodding.neotech.api.jei.crucible.JEICrucibleRecipeCategory;
 import com.teambrmodding.neotech.api.jei.crucible.JEICrucibleRecipeHandler;
 import com.teambrmodding.neotech.api.jei.crusher.JEICrusherRecipeCategory;
 import com.teambrmodding.neotech.api.jei.crusher.JEICrusherRecipeHandler;
+import com.teambrmodding.neotech.api.jei.fluidGenerator.JEIFluidGeneratorCategory;
+import com.teambrmodding.neotech.api.jei.fluidGenerator.JEIFluidGeneratorHandler;
+import com.teambrmodding.neotech.api.jei.fluidGenerator.JEIFluidGeneratorRecipeWrapper;
 import com.teambrmodding.neotech.api.jei.solidifier.JEISolidifierRecipeCategory;
 import com.teambrmodding.neotech.api.jei.solidifier.JEISolidifierRecipeHandler;
+import com.teambrmodding.neotech.client.gui.machines.generators.GuiFluidGenerator;
 import com.teambrmodding.neotech.client.gui.machines.generators.GuiFurnaceGenerator;
 import com.teambrmodding.neotech.client.gui.machines.processors.*;
 import com.teambrmodding.neotech.managers.BlockManager;
@@ -44,6 +48,7 @@ public class NeotechJEIPlugin implements IModPlugin {
     public static final String CRUCIBLE_UUID   = "neotech.crucible";
     public static final String CRUSHER_UUID    = "neotech.crusher";
     public static final String SOLIDIFIER_UUID = "neotech.solidifier";
+    public static final String FLUID_GEN_UUID  = "neotech.fluidGenerator";
 
     @Override
     public void register(IModRegistry registry) {
@@ -55,7 +60,8 @@ public class NeotechJEIPlugin implements IModPlugin {
                 new JEISolidifierRecipeCategory(),
                 new JEICrucibleRecipeCategory(),
                 new JEIAlloyerRecipeCategory(),
-                new JEICentrifugeRecipeCategory());
+                new JEICentrifugeRecipeCategory(),
+                new JEIFluidGeneratorCategory());
 
         // Add Handlers
         registry.addRecipeHandlers(
@@ -63,7 +69,8 @@ public class NeotechJEIPlugin implements IModPlugin {
                 new JEISolidifierRecipeHandler(),
                 new JEICrucibleRecipeHandler(),
                 new JEIAlloyerRecipeHandler(),
-                new JEICentrifugeRecipeHandler());
+                new JEICentrifugeRecipeHandler(),
+                new JEIFluidGeneratorHandler());
 
         // Fill in recipes
         registry.addRecipes(JEIAlloyerRecipeCategory.buildRecipeList());
@@ -71,7 +78,7 @@ public class NeotechJEIPlugin implements IModPlugin {
         registry.addRecipes(JEICrucibleRecipeCategory.buildRecipeList());
         registry.addRecipes(JEICrusherRecipeCategory.buildRecipeList());
         registry.addRecipes(JEISolidifierRecipeCategory.buildRecipeList());
-
+        registry.addRecipes(JEIFluidGeneratorCategory.buildRecipeList());
 
         // Furnace
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricFurnace()), VanillaRecipeCategoryUid.SMELTING);
@@ -80,6 +87,10 @@ public class NeotechJEIPlugin implements IModPlugin {
         // Furnace Generator
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.furnaceGenerator()), VanillaRecipeCategoryUid.FUEL);
         registry.addRecipeClickArea(GuiFurnaceGenerator.class, 78, 55, 14, 14, VanillaRecipeCategoryUid.FUEL);
+
+        // Fluid Generator
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.fluidGenerator()), FLUID_GEN_UUID);
+        registry.addRecipeClickArea(GuiFluidGenerator.class, 78, 55, 14, 14, FLUID_GEN_UUID);
 
         // Crusher
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCrusher()), CRUSHER_UUID);
