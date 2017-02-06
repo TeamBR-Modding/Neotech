@@ -73,7 +73,7 @@ public class JEIFluidGeneratorRecipeWrapper extends BlankRecipeWrapper {
      */
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        flame.draw(minecraft, 40, 40);
-        minecraft.fontRendererObj.drawString(String.valueOf(burnTime) + " ticks", 58, 47, Color.gray.getRGB());
+        flame.draw(minecraft, 40, 10);
+        minecraft.fontRendererObj.drawString(String.valueOf(burnTime) + " ticks", 58, 17, Color.gray.getRGB());
     }
 }

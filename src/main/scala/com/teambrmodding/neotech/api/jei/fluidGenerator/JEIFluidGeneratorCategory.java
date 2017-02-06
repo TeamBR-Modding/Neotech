@@ -36,7 +36,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
 
     // Display
     private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID(), "textures/gui/jei/jei.png");
-    private GuiComponentBox tank = new GuiComponentBox(14, 0, 18, 60);
+    private GuiComponentBox tank = new GuiComponentBox(14, 0, 18, 30);
 
     /*******************************************************************************************************************
      * IRecipeCategory                                                                                                 *
@@ -66,7 +66,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
      */
     @Override
     public IDrawable getBackground() {
-        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 60);
+        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 30);
     }
 
     /**
@@ -108,7 +108,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
 
         // Load
-        fluidStackGroup.init(0, true, 15, 0, 16, 59, 2000, false, null);
+        fluidStackGroup.init(0, true, 15, 0, 16, 29, 2000, false, null);
 
         // Set to layout
         recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));
@@ -127,7 +127,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
         FluidFuelRecipeHandler fluidFuelRecipeHandler = (FluidFuelRecipeHandler) RecipeManager.getHandler("fluidfuels").get();
         for(FluidFuelRecipe recipe : fluidFuelRecipeHandler.recipes()) {
             Fluid fluid = FluidRegistry.getFluid(recipe.fluid());
-            recipes.add(new JEIFluidGeneratorRecipeWrapper(new FluidStack(fluid, 1000), recipe.burnTime()));
+            recipes.add(new JEIFluidGeneratorRecipeWrapper(new FluidStack(fluid, 100), recipe.burnTime()));
         }
         return recipes;
     }
