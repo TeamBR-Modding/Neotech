@@ -101,11 +101,11 @@ abstract class MachineProcessor[I, O] extends AbstractMachine {
             val update = cookTime > 0
             if(update)
                 cookTime -= 1
-            if(update) worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+            if(update) world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 6)
         }
 
         if (didWork) {
-            worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 6)
         }
     }
 

@@ -117,7 +117,8 @@ trait InputOutput extends NBTSavable {
                     sideModes.get(dir) == EnumInputOutputMode.INPUT_PRIMARY
         else
             sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
-                    sideModes.get(dir) == EnumInputOutputMode.INPUT_SECONDARY    }
+                    sideModes.get(dir) == EnumInputOutputMode.INPUT_SECONDARY
+    }
 
     /**
       * Used to check if the side has been set to disabled

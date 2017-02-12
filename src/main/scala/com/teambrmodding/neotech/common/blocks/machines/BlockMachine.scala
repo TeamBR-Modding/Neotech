@@ -69,21 +69,6 @@ class BlockMachine(name: String, tileEntity: Class[_ <: TileEntity], activeState
         }
     }
 
-    override def rotateBlock(world : World, pos : BlockPos, side : EnumFacing) : Boolean = {
-        if(fourWayRotation) {
-            val tag = new NBTTagCompound
-            world.getTileEntity(pos).writeToNBT(tag)
-            if (side != EnumFacing.UP && side != EnumFacing.DOWN)
-                world.setBlockState(pos, world.getBlockState(pos).withProperty(Properties.FOUR_WAY, side))
-            else
-                world.setBlockState(pos, world.getBlockState(pos).withProperty(Properties.FOUR_WAY, WorldUtils.rotateRight(world.getBlockState(pos).getValue(Properties.FOUR_WAY))))
-            if (tag != null) {
-                world.getTileEntity(pos).readFromNBT(tag)
-            }
-            return true
-        }
-        false
-    }
 
     override def onBlockActivated(world: World, pos: BlockPos, state: IBlockState, player: EntityPlayer, hand: EnumHand,
                                   heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float): Boolean = {

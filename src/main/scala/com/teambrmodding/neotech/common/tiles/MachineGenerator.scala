@@ -23,7 +23,7 @@ abstract class MachineGenerator extends AbstractMachine {
     var currentObjectBurnTime = 0
     var didWork               = false
 
-    override def BASE_ENERGY  = 32000
+    baseEnergySize  = 32000
 
     /**
       * Called to tick generation. This is where you add power to the generator
@@ -59,11 +59,11 @@ abstract class MachineGenerator extends AbstractMachine {
         //Transfer
         if (energyStorage.getEnergyStored > 0) {
             for (i <- EnumFacing.values()) {
-                worldObj.getTileEntity(pos.offset(i)) match {
+                world.getTileEntity(pos.offset(i)) match {
                     case tile: IEnergyReceiver =>
                         val want = tile.receiveEnergy(i.getOpposite, energyStorage.getEnergyStored, true)
                         if (want > 0) {
-                            val actual = extractEnergy(i, want, simulate = false)
+                            val actual = extractEnergy(i, want, false)
                             tile.receiveEnergy(i.getOpposite, actual, false)
                             didWork = true
                         }
@@ -79,7 +79,7 @@ abstract class MachineGenerator extends AbstractMachine {
             reset()
 
         if (didWork) {
-            worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 6)
         }
     }
 

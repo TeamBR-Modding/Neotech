@@ -39,7 +39,7 @@ import scala.collection.JavaConversions._
     dependencies   = Reference.DEPENDENCIES,
     modLanguage    = "scala",
     updateJSON     = Reference.UPDATE_JSON,
-    guiFactory     = "com.teambrmodding.neotech.client.ingameconfig.GuiFactoryNeoTech")
+    guiFactory     = "com.teambrmodding.neotech.client.ingameconfig.GuiFactoryNeotech")
 object NeoTech {
 
     //Lets us make some buckets

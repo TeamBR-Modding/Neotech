@@ -38,7 +38,7 @@ import scala.util.Random
   * @author Dyonovan
   * @since August 16, 2015
   */
-class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name, classOf[TileIronTank]) with ILoadActionProvider with IToolable {
+class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name, classOf[TileBasicTank]) with ILoadActionProvider with IToolable {
 
     setHardness(2.0F)
     setBlockBounds(1F / 16F, 0F, 1F / 16F, 15F / 16F, 1F,  15F/ 16F)
@@ -47,7 +47,7 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
                                   hand: EnumHand, heldItem: ItemStack, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : Boolean = {
 
         val heldItem = player.getHeldItemMainhand
-        val tank = world.getTileEntity(pos).asInstanceOf[TileIronTank]
+        val tank = world.getTileEntity(pos).asInstanceOf[TileBasicTank]
 
         if(heldItem != null && tank.isInstanceOf[IFluidHandler] && !heldItem.getItem.isInstanceOf[ItemBlockTank]) {
             if(FluidUtil.interactWithFluidHandler(heldItem, tank, player))
@@ -93,7 +93,7 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
       */
     override def onWrench(stack: ItemStack, playerIn: EntityPlayer, worldIn: World, pos: BlockPos, hand: EnumHand,
                  facing: EnumFacing, hitX: Float, hitY: Float, hitZ: Float) : EnumActionResult = {
-        worldIn.getTileEntity(pos).asInstanceOf[TileIronTank].dropItem = false
+        worldIn.getTileEntity(pos).asInstanceOf[TileBasicTank].dropItem = false
         if(playerIn.isSneaking && breakSavingNBT(worldIn, pos))
             EnumActionResult.SUCCESS
         else
@@ -126,7 +126,7 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
         world match {
             case _: WorldServer => //We are on a server
                 val tile = world.getTileEntity(pos)
-                if(world.getTileEntity(pos) != null && !world.getTileEntity(pos).isInvalid && world.getTileEntity(pos).asInstanceOf[TileIronTank].dropItem)
+                if(world.getTileEntity(pos) != null && !world.getTileEntity(pos).isInvalid && world.getTileEntity(pos).asInstanceOf[TileBasicTank].dropItem)
                     WorldUtils.dropStack(world, new ItemStack(state.getBlock), pos)
             case _ => //Not on the server
         }
@@ -159,12 +159,12 @@ class BlockTank(name: String, tier: Int) extends BaseBlock(Material.GLASS, name,
 
     override def createNewTileEntity(world: World, meta: Int): TileEntity = {
         tier match {
-            case 1 => new TileIronTank
-            case 2 => new TileGoldTank
-            case 3 => new TileDiamondTank
+            case 1 => new TileBasicTank
+            case 2 => new TileAdvancedTank
+            case 3 => new TileEliteTank
             case 4 => new TileCreativeTank
             case 5 => new TileVoidTank
-            case _ => new TileIronTank
+            case _ => new TileBasicTank
         }
     }
 

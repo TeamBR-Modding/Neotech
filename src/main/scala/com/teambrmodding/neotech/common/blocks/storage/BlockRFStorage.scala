@@ -1,7 +1,7 @@
 package com.teambrmodding.neotech.common.blocks.storage
 
-import com.teambr.bookshelf.common.blocks.traits.{DropsItems, IToolable}
-import com.teambr.bookshelf.common.tiles.traits.OpensGui
+import com.teambr.bookshelf.common.IOpensGui
+import com.teambr.bookshelf.common.blocks.IToolable
 import com.teambrmodding.neotech.NeoTech
 import com.teambrmodding.neotech.client.gui.storage.GuiRFStorage
 import com.teambrmodding.neotech.common.container.storage.ContainerRFStorage
@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
   * @author Dyonovan
   * @since August 15, 2015
   */
-class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.IRON) with OpensGui with DropsItems with IToolable {
+class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.IRON) with IOpensGui with IToolable {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(NeoTech.tabNeoTech)

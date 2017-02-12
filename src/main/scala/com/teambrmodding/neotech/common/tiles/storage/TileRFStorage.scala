@@ -3,7 +3,7 @@ package com.teambrmodding.neotech.common.tiles.storage
 import java.util
 
 import cofh.api.energy.{IEnergyContainerItem, IEnergyReceiver}
-import com.teambr.bookshelf.common.tiles.traits.{EnergyHandler, Inventory, UpdatingTile}
+import com.teambr.bookshelf.common.tiles.{EnergyHandler, InventoryHandler}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.EnumFacing
@@ -18,7 +18,7 @@ import net.minecraft.util.EnumFacing
   * @author Dyonovan
   * @since August 15, 2015
   */
-class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
+class TileRFStorage extends EnergyHandler with InventoryHandler {
 
     var tier = 0
     lazy final val DRAIN_SLOT = 1
@@ -56,8 +56,8 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
                 energyStorage.setCurrentStored(energyStorage.getMaxStored)
             case _ =>
         }
-        if (worldObj != null)
-            worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 6)
+        if (world != null)
+            world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 6)
     }
 
     /**
@@ -83,7 +83,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
         //Transfer
         if (energyStorage.getEnergyStored > 0) {
             for (i <- EnumFacing.values()) {
-                worldObj.getTileEntity(pos.offset(i)) match {
+                world.getTileEntity(pos.offset(i)) match {
                     case tile: IEnergyReceiver =>
                         val want = tile.receiveEnergy(i.getOpposite, energyStorage.getEnergyStored, true)
                         if (want > 0) {
@@ -97,9 +97,9 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
 
         if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
             val drainItem = getStackInSlot(DRAIN_SLOT).getItem.asInstanceOf[IEnergyContainerItem]
-            val amount = receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxInsert, true), simulate = true)
+            val amount = receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxInsert, true), true)
             if(amount > 0)
-                receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), amount, false), simulate = false)
+                receiveEnergy(EnumFacing.UP, drainItem.extractEnergy(getStackInSlot(DRAIN_SLOT), amount, false), false)
         }
 
         if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).getItem.isInstanceOf[IEnergyContainerItem]) {
@@ -123,9 +123,9 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
         super[TileEntity].readFromNBT(tag)
         super[UpdatingTile].readFromNBT(tag)
         super[Inventory].readFromNBT(tag)
-        if(inventoryContents.size() != initialSize) {
+        if(inventoryContents.size() != getInitialSize) {
             inventoryContents = new util.Stack[ItemStack]()
-            inventoryContents.setSize(initialSize)
+            inventoryContents.setSize(getInitialSize)
         }
         if (tag.hasKey("Tier")) {
             if (tier == 0) initEnergy(tag.getInteger("Tier"))
@@ -140,12 +140,12 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
       ***************************************** Inventory Methods ******************************************************
       ******************************************************************************************************************/
 
-    /***
+    /** *
       * The initial size of the inventory
       *
       * @return How big to make the inventory on creation
       */
-    override def initialSize: Int = 2
+    override def getInitialSize : Int = 2
 
     /**
       * Used to define if an item is valid for a slot
@@ -165,7 +165,7 @@ class TileRFStorage extends UpdatingTile with EnergyHandler with Inventory {
       *
       * @return
       */
-    def defaultEnergyStorageSize : Int = 25000
+    def getDefaultEnergyStorageSize : Int = 25000
 
     /**
       * Return true if you want this to be able to provide energy

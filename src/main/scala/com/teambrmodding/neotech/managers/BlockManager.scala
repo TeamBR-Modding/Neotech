@@ -76,9 +76,9 @@ object BlockManager {
         registerBlock(creativeRFStorage, "creativeRFStorage", classOf[TileRFStorage], classOf[ItemBlockRFStorage])
 
         //Tanks
-        registerBlock(ironTank, "ironTank", classOf[TileIronTank], classOf[ItemBlockTank])
-        registerBlock(goldTank, "goldTank", classOf[TileGoldTank], classOf[ItemBlockTank])
-        registerBlock(diamondTank, "diamondTank", classOf[TileDiamondTank], classOf[ItemBlockTank])
+        registerBlock(ironTank, "ironTank", classOf[TileBasicTank], classOf[ItemBlockTank])
+        registerBlock(goldTank, "goldTank", classOf[TileAdvancedTank], classOf[ItemBlockTank])
+        registerBlock(diamondTank, "diamondTank", classOf[TileEliteTank], classOf[ItemBlockTank])
         registerBlock(creativeTank, "creativeTank", classOf[TileCreativeTank], classOf[ItemBlockTank])
         registerBlock(voidTank, "voidTank", classOf[TileVoidTank], classOf[ItemBlockTank])
 

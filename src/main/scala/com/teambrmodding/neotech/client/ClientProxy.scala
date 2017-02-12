@@ -1,7 +1,5 @@
 package com.teambrmodding.neotech.client
 
-import com.teambr.bookshelf.client.models.{BakedConnectedTextures, BakedDynItem}
-import com.teambr.bookshelf.common.blocks.BlockConnectedTextures
 import com.teambrmodding.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefinition
 import com.teambrmodding.neotech.client.renderers.tiles._
 import com.teambrmodding.neotech.common.CommonProxy
@@ -9,21 +7,18 @@ import com.teambrmodding.neotech.common.fluids.FluidBlockGas
 import com.teambrmodding.neotech.common.metals.blocks.BlockFluidMetal
 import com.teambrmodding.neotech.common.metals.items.ItemMetal
 import com.teambrmodding.neotech.common.tiles.AbstractMachine
-import com.teambrmodding.neotech.common.tiles.storage.tanks.TileIronTank
+import com.teambrmodding.neotech.common.tiles.storage.tanks.TileBasicTank
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
 import com.teambrmodding.neotech.managers.{BlockManager, FluidManager, ItemManager, MetalManager}
 import net.minecraft.block.Block
 import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.color.{IBlockColor, IItemColor}
-import net.minecraft.client.renderer.entity.{Render, RenderManager}
-import net.minecraft.client.resources.IReloadableResourceManager
-import net.minecraft.item.{EnumDyeColor, Item, ItemStack}
+import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.IBlockAccess
 import net.minecraftforge.client.model.ModelLoader
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fml.client.registry.{ClientRegistry, IRenderFactory, RenderingRegistry}
+import net.minecraftforge.fml.client.registry.ClientRegistry
 import net.minecraftforge.fml.common.Loader
 
 import scala.collection.JavaConversions._
@@ -46,17 +41,6 @@ class ClientProxy extends CommonProxy {
       * This is where you would register blocks and such
       */
     override def preInit() = {
-        // Block Models, for items
-        val blockIterator = Block.REGISTRY.iterator()
-        while (blockIterator.hasNext) {
-            blockIterator.next() match {
-                case connectedTextures: BlockConnectedTextures =>
-                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(connectedTextures), 0,
-                        BakedConnectedTextures.MODEL_RESOURCE_LOCATION_NORMAL)
-                case _ =>
-            }
-        }
-
         ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricFurnace", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.electricCrusher, "electricCrusher", "facing=north,isactive=false")
         ItemRenderManager.registerBlockModel(BlockManager.furnaceGenerator, "furnaceGenerator", "facing=north,isactive=false")
@@ -268,7 +252,7 @@ class ClientProxy extends CommonProxy {
                 }, MetalManager.metalRegistry.get(metal).nugget.get)
         }
 
-        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileIronTank], new TileTankFluidRenderer)
+        ClientRegistry.bindTileEntitySpecialRenderer(classOf[TileBasicTank], new TileTankFluidRenderer)
 
         ClientRegistry.bindTileEntitySpecialRenderer(classOf[AbstractMachine], new TileMachineIORenderer)
 
