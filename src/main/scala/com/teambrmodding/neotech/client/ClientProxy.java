@@ -1,15 +1,33 @@
 package com.teambrmodding.neotech.client;
 
 import com.teambr.bookshelf.common.CommonProxy;
-import com.teambrmodding.neotech.client.mesh.MeshDefinitions;
 import com.teambrmodding.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefinition;
+import com.teambrmodding.neotech.client.renderers.tiles.TileMachineIORenderer;
+import com.teambrmodding.neotech.client.renderers.tiles.TileTankFluidRenderer;
+import com.teambrmodding.neotech.common.fluids.FluidBlockGas;
+import com.teambrmodding.neotech.common.metals.blocks.BlockFluidMetal;
+import com.teambrmodding.neotech.common.metals.items.ItemMetal;
+import com.teambrmodding.neotech.common.tiles.AbstractMachine;
+import com.teambrmodding.neotech.common.tiles.storage.tanks.TileBasicTank;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.BlockManager;
+import com.teambrmodding.neotech.managers.FluidManager;
 import com.teambrmodding.neotech.managers.ItemManager;
 import com.teambrmodding.neotech.managers.MetalManager;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import javax.annotation.Nullable;
 
 /**
  * This file was created for NeoTech
@@ -47,7 +65,7 @@ public class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.creativeTank, "creativeTank", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.voidTank, "voidTank", "normal");
 
-        MetalManager.registerModels()
+        MetalManager.registerModels();
 
         // Upgrades
 
@@ -101,9 +119,9 @@ public class ClientProxy extends CommonProxy {
         ModelLoaderHelper.registerItem(ItemManager.hardDrive64G, "items/upgrades", "type=" + IUpgradeItem.HDD_64G.toLowerCase());
 
         // 254
-        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive254G,
+        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive256G,
                 new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_256G.toLowerCase()));
-        ModelLoaderHelper.registerItem(ItemManager.hardDrive254G, "items/upgrades", "type=" + IUpgradeItem.HDD_256G.toLowerCase());
+        ModelLoaderHelper.registerItem(ItemManager.hardDrive256G, "items/upgrades", "type=" + IUpgradeItem.HDD_256G.toLowerCase());
 
         // 512
         ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive512G,
@@ -158,4 +176,93 @@ public class ClientProxy extends CommonProxy {
                 new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.NETWORK_CARD.toLowerCase()));
         ModelLoaderHelper.registerItem(ItemManager.networkCard, "items/upgrades", "type=" + IUpgradeItem.NETWORK_CARD.toLowerCase());
     }
+
+    /**
+     * Called during the init phase of the mod loading
+     *
+     * Now that the items and such are loaded, use this chance to use them
+     */
+    public static void init() {
+        ItemRenderManager.registerItemRenderer();
+
+        // Tile Renders
+        ClientRegistry.bindTileEntitySpecialRenderer(TileBasicTank.class, new TileTankFluidRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(AbstractMachine.class, new TileMachineIORenderer());
+
+        // Register Fluid Colors
+        for(String metalString : MetalManager.metalRegistry().keySet()) {
+            if(MetalManager.metalRegistry().get(metalString).fluidBlock().isDefined()) {
+                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
+                    @Override
+                    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+                        if(state.getBlock() instanceof BlockFluidMetal) {
+                            BlockFluidMetal metal = (BlockFluidMetal) state.getBlock();
+                            return metal.getBlockColor();
+                        }
+                        return 0xFFFFFF;
+                    }
+                }, MetalManager.metalRegistry().get(metalString).fluidBlock().get());
+            }
+        }
+
+        // Gas Colors
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
+            @Override
+            public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
+                if(state.getBlock() instanceof FluidBlockGas) {
+                    FluidBlockGas gas = (FluidBlockGas) state.getBlock();
+                    return gas.getBlockColor();
+                }
+                return 0xFFFFFF;
+            }
+        }, FluidManager.blockOxygen(), FluidManager.blockHydrogen());
+
+        // Metal Items
+        for(String metal : MetalManager.metalRegistry().keySet()) {
+            // Dusts
+            if(MetalManager.metalRegistry().get(metal).dust().isDefined()) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+                    @Override
+                    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+                        if(stack.getItem() instanceof ItemMetal) {
+                            ItemMetal itemMetal = (ItemMetal) stack.getItem();
+                            return itemMetal.getColorFromItemStack(stack);
+                        }
+                        return 0xFFFFFF;
+                    }
+                }, MetalManager.metalRegistry().get(metal).dust().get());
+            }
+
+            // Ingots
+            if(MetalManager.metalRegistry().get(metal).ingot().isDefined()) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+                    @Override
+                    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+                        if(stack.getItem() instanceof ItemMetal) {
+                            ItemMetal itemMetal = (ItemMetal) stack.getItem();
+                            return itemMetal.getColorFromItemStack(stack);
+                        }
+                        return 0xFFFFFF;
+                    }
+                }, MetalManager.metalRegistry().get(metal).ingot().get());
+            }
+
+            // Nuggets
+            if(MetalManager.metalRegistry().get(metal).nugget().isDefined()) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+                    @Override
+                    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+                        if(stack.getItem() instanceof ItemMetal) {
+                            ItemMetal itemMetal = (ItemMetal) stack.getItem();
+                            return itemMetal.getColorFromItemStack(stack);
+                        }
+                        return 0xFFFFFF;
+                    }
+                }, MetalManager.metalRegistry().get(metal).nugget().get());
+            }
+        }
+    }
+
+    @Override
+    public void postInit(FMLPostInitializationEvent event) {}
 }

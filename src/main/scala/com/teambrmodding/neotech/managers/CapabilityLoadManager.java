@@ -30,13 +30,13 @@ public class CapabilityLoadManager {
         MinecraftForge.EVENT_BUS.register(new CapabilityLoadManager());
 
         // Register Upgrade Item Capability
-        CapabilityManager.INSTANCE.register(IUpgradeItem.class, new IUpgradeItem.Storage(), IUpgradeItem.UpgradeItem.class);
+        CapabilityManager.INSTANCE.register(IUpgradeItem.class, new IUpgradeItem.Storage(), IUpgradeItem.UpgradeItemDefaultImp.class);
     }
 
     @SubscribeEvent
     public void onItemLoaded(AttachCapabilitiesEvent.Item event) {
         if(event.getItem() instanceof IUpgradeItem) {
-            event.addCapability(UPGRADE_ITEM_KEY, new IUpgradeItem.UpgradeItem((IUpgradeItem) event.getItem()));
+            event.addCapability(UPGRADE_ITEM_KEY, new IUpgradeItem.UpgradeItemDefaultImp((IUpgradeItem) event.getItem()));
         }
     }
 }

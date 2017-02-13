@@ -21,9 +21,9 @@ import java.util.List;
  * @author Dyonovan
  * @since 3/17/2016
  */
-public class GuiConfigNeoTech extends GuiConfig {
+public class GuiConfigNeotech extends GuiConfig {
 
-    public GuiConfigNeoTech(GuiScreen parent) {
+    public GuiConfigNeotech(GuiScreen parent) {
         super(parent, getConfigElements(), Reference.MOD_ID(), false, false, "NeoTech Config Options");
     }
 

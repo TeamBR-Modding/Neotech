@@ -1,7 +1,6 @@
 package com.teambrmodding.neotech.common.tiles;
 
 import com.teambr.bookshelf.common.container.IInventoryCallback;
-import com.teambr.bookshelf.common.container.SidedInventoryWrapper;
 import com.teambr.bookshelf.common.tiles.EnergyHandler;
 import com.teambr.bookshelf.common.tiles.IRedstoneAware;
 import com.teambr.bookshelf.common.tiles.InventoryHandler;
@@ -15,12 +14,19 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +44,7 @@ import static com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem.ENUM_UP
  * @author Paul Davis - pauljoda
  * @since 2/11/2017
  */
-public abstract class AbstractMachine extends EnergyHandler implements IRedstoneAware, IItemHandlerModifiable {
+public abstract class AbstractMachine extends EnergyHandler implements IRedstoneAware, IItemHandlerModifiable, IFluidHandler {
 
     /*******************************************************************************************************************
      * AbstractMachine Variables                                                                                       *
@@ -77,6 +83,11 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     // List of Inventory contents
     public Stack<ItemStack> inventoryContents = new Stack<>();
 
+    // NBT Tags
+    protected static final String SIZE_INVENTORY_NBT_TAG = "Size:";
+    protected static final String SLOT_INVENTORY_NBT_TAG = "Slot:";
+    protected static final String ITEMS_NBT_TAG          = "Items:";
+
     // Side Handlers
     private IItemHandler handlerTop    = new AbstractMachineSidedWrapper(this, EnumFacing.UP);
     private IItemHandler handlerDown   = new AbstractMachineSidedWrapper(this, EnumFacing.DOWN);
@@ -84,6 +95,18 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     private IItemHandler handlerSouth  = new AbstractMachineSidedWrapper(this, EnumFacing.SOUTH);
     private IItemHandler handlerEast   = new AbstractMachineSidedWrapper(this, EnumFacing.EAST);
     private IItemHandler handlerWest   = new AbstractMachineSidedWrapper(this, EnumFacing.WEST);
+
+    /*******************************************************************************************************************
+     * FluidHandler Variables                                                                                          *
+     *******************************************************************************************************************/
+
+    // NBT Tags
+    protected static final String SIZE_FLUID_NBT_TAG = "Size";
+    protected static final String TANK_ID_NBT_TAG = "TankID";
+    protected static final String TANKS_NBT_TAG   = "Tanks";
+
+    // Tanks
+    public FluidTank[] tanks;
 
     /*******************************************************************************************************************
      * Upgradeable Variables                                                                                           *
@@ -120,6 +143,9 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
         // Input Output
         setupValidModes();
         resetIO();
+
+        // FluidHandler
+        setupTanks();
 
         // Upgradeable
         // Add callback for our upgrade inventory
@@ -326,19 +352,36 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
         // Inventory
         String inventoryName = "";
         // Set the size
-        compound.setInteger("Size:" + inventoryName, inventoryContents.size());
+        compound.setInteger(SIZE_INVENTORY_NBT_TAG + inventoryName, inventoryContents.size());
 
         // Write the inventory
         NBTTagList tagList = new NBTTagList();
         for(int i = 0; i < inventoryContents.size(); i++) {
             if(inventoryContents.get(i) != null) {
                 NBTTagCompound stackTag = new NBTTagCompound();
-                stackTag.setByte("Slot:" + inventoryName, (byte) i);
+                stackTag.setByte(SLOT_INVENTORY_NBT_TAG + inventoryName, (byte) i);
                 inventoryContents.get(i).writeToNBT(stackTag);
                 tagList.appendTag(stackTag);
             }
         }
-        compound.setTag("Items:" + inventoryName, tagList);
+        compound.setTag(ITEMS_NBT_TAG + inventoryName, tagList);
+
+        // FluidHandler
+        if(isFluidHandler()) {
+            int id = 0;
+            compound.setInteger(SIZE_FLUID_NBT_TAG, tanks.length);
+            NBTTagList tagListFluid = new NBTTagList();
+            for(FluidTank tank : tanks) {
+                if(tank != null) {
+                    NBTTagCompound tankCompound = new NBTTagCompound();
+                    tankCompound.setByte(TANK_ID_NBT_TAG, (byte) id);
+                    id += 1;
+                    tank.writeToNBT(tankCompound);
+                    tagListFluid.appendTag(tankCompound);
+                }
+            }
+            compound.setTag(TANKS_NBT_TAG, tagListFluid);
+        }
 
         // Input Output
         for(EnumFacing side : EnumFacing.values())
@@ -362,15 +405,28 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
         // Inventory
         String inventoryName = "";
         // Read Items
-        NBTTagList tagList = compound.getTagList("Items:" + inventoryName, 10);
+        NBTTagList tagList = compound.getTagList(ITEMS_NBT_TAG + inventoryName, 10);
         inventoryContents = new Stack<>();
-        if(compound.hasKey("Size:" + inventoryName))
-            inventoryContents.setSize(compound.getInteger("Size:" + inventoryName));
+        if(compound.hasKey(SIZE_INVENTORY_NBT_TAG + inventoryName))
+            inventoryContents.setSize(compound.getInteger(SIZE_INVENTORY_NBT_TAG + inventoryName));
         for(int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
-            int slot = stackTag.getByte("Slot:" + inventoryName);
+            int slot = stackTag.getByte(SLOT_INVENTORY_NBT_TAG + inventoryName);
             if(slot >= 0 && slot < inventoryContents.size())
                 inventoryContents.set(slot, ItemStack.loadItemStackFromNBT(stackTag));
+        }
+
+        // FluidHandler
+        if(isFluidHandler()) {
+            NBTTagList tagListFluid = compound.getTagList(TANKS_NBT_TAG, 10);
+            int size = compound.getInteger(SIZE_FLUID_NBT_TAG);
+            if(size != tanks.length && compound.hasKey(SIZE_FLUID_NBT_TAG)) tanks = new FluidTank[size];
+            for(int x = 0; x < tagListFluid.tagCount(); x++) {
+                NBTTagCompound tankCompound = tagListFluid.getCompoundTagAt(x);
+                byte position = tankCompound.getByte(TANK_ID_NBT_TAG);
+                if(position < tanks.length)
+                    tanks[position].readFromNBT(tankCompound);
+            }
         }
 
         // Input Output
@@ -386,7 +442,9 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         return !isDisabled(facing) &&
-                (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing));
+                (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+                        (!isFluidHandler() || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) ||
+                        super.hasCapability(capability, facing));
     }
 
     @Override
@@ -408,6 +466,9 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
                 default :
             }
         }
+        if(isFluidHandler() && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return (T) this;
+        }
         return super.getCapability(capability, facing);
     }
 
@@ -426,6 +487,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     public void changeEnergy(int initial) {
         energyStorage.setMaxStored(getSupposedEnergy());
         updateClient = true;
+        energyStorage.setCurrentStored(initial);
         if(energyStorage.getCurrentStored() > energyStorage.getMaxEnergyStored())
             energyStorage.setCurrentStored(energyStorage.getMaxEnergyStored());
         markForUpdate(3);
@@ -620,6 +682,204 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
                 return "neotech:blocks/disabled";
             default : return null;
         }
+    }
+
+    /*******************************************************************************************************************
+     * FluidHandler Methods                                                                                            *
+     *******************************************************************************************************************/
+
+    /**
+     * Method to define if this tile is a fluid handler
+     * @return False by default, override in child classes to enable fluid handling
+     */
+    public boolean isFluidHandler() {
+        return false;
+    }
+
+    /**
+     * Used to set up the tanks needed. You can insert any number of tanks
+     *
+     * MUST OVERRIDE IN CHILD CLASSES IF isFluidHandler RETURNS TRUE
+     */
+    protected void setupTanks() {}
+
+    /**
+     * Which tanks can input
+     *
+     * MUST OVERRIDE IN CHILD CLASSES IF isFluidHandler RETURNS TRUE
+     *
+     * @return An array with the indexes of the input tanks
+     */
+    protected int[] getInputTanks() {
+        return new int[0];
+    }
+
+    /**
+     * Which tanks can output
+     *
+     * MUST OVERRIDE IN CHILD CLASSES IF isFluidHandler RETURNS TRUE
+     *
+     * @return An array with the indexes of the output tanks
+     */
+    protected int[] getOutputTanks() {
+        return new int[0];
+    }
+
+    /**
+     * Called when something happens to the tank, you should mark the block for update here if a tile
+     */
+    public void onTankChanged(FluidTank tank) {
+        markForUpdate(3);
+    }
+
+    /**
+     * Used to convert a number of buckets into MB
+     *
+     * @param buckets How many buckets
+     * @return The amount of buckets in MB
+     */
+    public int bucketsToMB(int buckets) {
+        return Fluid.BUCKET_VOLUME * buckets;
+    }
+
+    /**
+     * Returns true if the given fluid can be inserted
+     *
+     * More formally, this should return true if fluid is able to enter
+     */
+    protected boolean canFill(Fluid fluid) {
+        for(Integer x : getInputTanks()) {
+            if(x < tanks.length)
+                if((tanks[x].getFluid() == null || tanks[x].getFluid().getFluid() == null) ||
+                        (tanks[x].getFluid() != null && tanks[x].getFluid().getFluid() == fluid))
+                    return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the given fluid can be extracted
+     *
+     * More formally, this should return true if fluid is able to leave
+     */
+    protected boolean canDrain(Fluid fluid) {
+        for(Integer x : getOutputTanks()) {
+            if(x < tanks.length)
+                if(tanks[x].getFluid() != null && tanks[x].getFluid().getFluid() != null)
+                    return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns an array of objects which represent the internal tanks.
+     * These objects cannot be used to manipulate the internal tanks.
+     *
+     * @return Properties for the relevant internal tanks.
+     */
+    @Override
+    public IFluidTankProperties[] getTankProperties() {
+        IFluidTankProperties[] properties = new IFluidTankProperties[tanks.length];
+        for(int x = 0; x < tanks.length; x++) {
+            FluidTank tank = tanks[x];
+            properties[x] = new IFluidTankProperties() {
+                @Nullable
+                @Override
+                public FluidStack getContents() {
+                    return tank.getFluid();
+                }
+
+                @Override
+                public int getCapacity() {
+                    return tank.getCapacity();
+                }
+
+                @Override
+                public boolean canFill() {
+                    return tank.canFill();
+                }
+
+                @Override
+                public boolean canDrain() {
+                    return tank.canDrain();
+                }
+
+                @Override
+                public boolean canFillFluidType(FluidStack fluidStack) {
+                    return tank.canFillFluidType(fluidStack);
+                }
+
+                @Override
+                public boolean canDrainFluidType(FluidStack fluidStack) {
+                    return tank.canDrainFluidType(fluidStack);
+                }
+            };
+        }
+        return properties;
+    }
+
+    /**
+     * Fills fluid into internal tanks, distribution is left entirely to the IFluidHandler.
+     *
+     * @param resource FluidStack representing the Fluid and maximum amount of fluid to be filled.
+     * @param doFill   If false, fill will only be simulated.
+     * @return Amount of resource that was (or would have been, if simulated) filled.
+     */
+    @Override
+    public int fill(FluidStack resource, boolean doFill) {
+        if(resource != null && resource.getFluid() != null && canFill(resource.getFluid())) {
+            for(Integer x : getInputTanks()) {
+                if(x < tanks.length) {
+                    if(tanks[x].fill(resource, false) > 0) {
+                        int actual = tanks[x].fill(resource, doFill);
+                        if(doFill) onTankChanged(tanks[x]);
+                        return actual;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
+     * <p/>
+     * This method is not Fluid-sensitive.
+     *
+     * @param maxDrain Maximum amount of fluid to drain.
+     * @param doDrain  If false, drain will only be simulated.
+     * @return FluidStack representing the Fluid and amount that was (or would have been, if
+     * simulated) drained.
+     */
+    @Nullable
+    @Override
+    public FluidStack drain(int maxDrain, boolean doDrain) {
+        FluidStack fluidStack = null;
+        for(Integer x : getOutputTanks()) {
+            if(x < tanks.length) {
+                fluidStack = tanks[x].drain(maxDrain, false);
+                if(fluidStack != null) {
+                    tanks[x].drain(maxDrain, doDrain);
+                    if(doDrain) onTankChanged(tanks[x]);
+                    return fluidStack;
+                }
+            }
+        }
+        return fluidStack;
+    }
+
+    /**
+     * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
+     *
+     * @param resource FluidStack representing the Fluid and maximum amount of fluid to be drained.
+     * @param doDrain  If false, drain will only be simulated.
+     * @return FluidStack representing the Fluid and amount that was (or would have been, if
+     * simulated) drained.
+     */
+    @Nullable
+    @Override
+    public FluidStack drain(FluidStack resource, boolean doDrain) {
+        return drain(resource.amount, doDrain);
     }
 
     /*******************************************************************************************************************

@@ -1,9 +1,15 @@
 package com.teambrmodding.neotech.common.blocks.machines;
 
+import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.common.IOpensGui;
 import com.teambr.bookshelf.common.blocks.IToolable;
+import com.teambr.bookshelf.util.WorldUtils;
 import com.teambrmodding.neotech.common.blocks.BaseBlock;
+import com.teambrmodding.neotech.common.tiles.AbstractMachine;
+import com.teambrmodding.neotech.managers.ItemManager;
+import com.teambrmodding.neotech.utils.PlayerUtils;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -11,12 +17,22 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This file was created for NeoTech
@@ -32,6 +48,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
     // Instance of the property for rotation
     public static PropertyDirection FOUR_WAY =
             PropertyDirection.create("facing", Arrays.asList(EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST));
+    public static PropertyBool PROPERTY_ACTIVE = PropertyBool.create("isactive");
 
 
     /**
@@ -39,6 +56,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
      */
     public BlockMachine(String name, Class<? extends TileEntity> tileEntity) {
         super(Material.IRON, name, tileEntity);
+        setDefaultState(getDefaultState().withProperty(FOUR_WAY, EnumFacing.NORTH).withProperty(PROPERTY_ACTIVE, false));
     }
 
     /*******************************************************************************************************************
@@ -60,6 +78,147 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
         worldIn.setBlockState(pos, getDefaultState().withProperty(FOUR_WAY, facing));
     }
 
+    /**
+     * Called when the block is clicked on
+     * @return True to prevent future logic
+     */
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state,
+                                    EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side,
+                                    float hitX, float hitY, float hitZ) {
+        // Make sure our machine is reachable
+        if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof AbstractMachine) {
+            AbstractMachine machine = (AbstractMachine) worldIn.getTileEntity(pos);
+
+            // First interact with fluid handlers
+            if(machine.isFluidHandler()) {
+                IFluidHandler fluidHandler = machine.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                if(FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn)) {
+                    return true;
+                }
+            }
+
+            // Open a GUI
+            if(!playerIn.isSneaking())
+                playerIn.openGui(Bookshelf.INSTANCE, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+    }
+
+    /**
+     * Called when the block is broken, allows us to drop items from inventory
+     * @param worldIn The world
+     * @param pos The pos
+     * @param state The state
+     */
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        if(!worldIn.isRemote) {
+            if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof AbstractMachine) {
+                AbstractMachine machine = (AbstractMachine) worldIn.getTileEntity(pos);
+
+                // Drop Upgrade Inventory
+                List<ItemStack> upgradeItems = new ArrayList<>();
+                for(ItemStack stack : machine.upgradeInventory.inventoryContents) {
+                    if(stack != null)
+                        upgradeItems.add(stack);
+                }
+                WorldUtils.dropStacks(worldIn, upgradeItems, pos);
+
+                // Drop the inventory
+                WorldUtils.dropStacksInInventory(machine, worldIn, pos);
+            }
+        }
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    /**
+     * Used to define if we have a comparator output
+     * @param state The state
+     * @return If we have an output
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean hasComparatorInputOverride(IBlockState state) {
+        return true;
+    }
+
+    /**
+     * Get the comparator output value
+     * @param blockState The block state
+     * @param worldIn The world
+     * @param pos The pos
+     * @return Redstone strength output
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
+        if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof AbstractMachine) {
+            AbstractMachine machine = (AbstractMachine) worldIn.getTileEntity(pos);
+            return machine.getRedstoneOutput();
+        }
+        return super.getComparatorInputOverride(blockState, worldIn, pos);
+    }
+
+    /**
+     * Block container changes this, we still want a normal model
+     * @return The model type
+     */
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
+    /**
+     * The following enable transparent textures to be rendered on top of the model
+     */
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public boolean isTranslucent(IBlockState state) {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    /**
+     * Called to display particles
+     * @param stateIn The state
+     * @param worldIn The world
+     * @param pos The pos
+     * @param rand An instance or Random
+     */
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        if(worldIn.getBlockState(pos).getValue(PROPERTY_ACTIVE)) {
+            EnumFacing facing = stateIn.getValue(FOUR_WAY);
+            double d0 = pos.getX() + 0.5;
+            double d1 = pos.getY() + rand.nextDouble() * 6.0 / 16.0;
+            double d2 = pos.getZ() + 0.5;
+            double d3 = 0.52;
+            double d4 = rand.nextDouble() * 0.6 - 0.3;
+            if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof AbstractMachine) {
+                AbstractMachine machine = (AbstractMachine) worldIn.getTileEntity(pos);
+                switch (facing) {
+                    case WEST:  machine.spawnActiveParticles(d0 - d3, d1, d2 + d4);
+                    case EAST:  machine.spawnActiveParticles(d0 + d3, d1, d2 + d4);
+                    case NORTH: machine.spawnActiveParticles(d0 + d4, d1, d2 - d3);
+                    case SOUTH: machine.spawnActiveParticles(d0 + d4, d1, d2 + d3);
+                    default :
+                }
+            }
+        }
+    }
+
     /*******************************************************************************************************************
      * BlockState Methods                                                                                              *
      *******************************************************************************************************************/
@@ -78,7 +237,28 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
      */
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FOUR_WAY);
+        return new BlockStateContainer(this, FOUR_WAY, PROPERTY_ACTIVE);
+    }
+
+    /**
+     * We want to get the actual state, passes info to the model not present in meta
+     *
+     * This is listed deprecated but vanilla still uses it for fences. When this is gone, do what they are doing
+     * to get this info at that point
+     *
+     * @param state The incoming state
+     * @param worldIn The world
+     * @param pos The position
+     * @return A state that represents the actual state, not just what was stored
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof AbstractMachine) {
+            AbstractMachine machine = (AbstractMachine) worldIn.getTileEntity(pos);
+            return state.withProperty(PROPERTY_ACTIVE, machine.isActive());
+        }
+        return state;
     }
 
     /*******************************************************************************************************************
@@ -99,8 +279,44 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         if(world.getTileEntity(new BlockPos(x, y, z)) instanceof AbstractMachine) {
             AbstractMachine abstractMachine = (AbstractMachine) world.getTileEntity(new BlockPos(x, y, z));
-            if(!PlayerUtils.isPlayerHoldingeither(player, ItemManager.wrench()))
+            if(!PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench()))
+                abstractMachine.getServerGuiElement(id, player, world, x, y, z);
         }
+        return null;
     }
 
+    /**
+     * Return the container for this tile
+     *
+     * @param id Id, probably not needed but could be used for multiple guis
+     * @param player The player that is opening the gui
+     * @param world The world
+     * @param x X Pos
+     * @param y Y Pos
+     * @param z Z Pos
+     * @return The container to open
+     */
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        if(world.getTileEntity(new BlockPos(x, y, z)) instanceof AbstractMachine) {
+            AbstractMachine abstractMachine = (AbstractMachine) world.getTileEntity(new BlockPos(x, y, z));
+            if(!PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench()))
+                abstractMachine.getClientGuiElement(id, player, world, x, y, z);
+        }
+        return null;
+    }
+
+    /*******************************************************************************************************************
+     * IToolable                                                                                                       *
+     *******************************************************************************************************************/
+
+    /**
+     * Called to get what stack should be dropped on wrench
+     * @param world The world
+     * @param pos The position of the block
+     * @return The stack to drop in the world
+     */
+    @Override
+    public ItemStack getStackDroppedByWrench(World world, BlockPos pos) {
+        return new ItemStack(this);
+    }
 }

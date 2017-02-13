@@ -101,10 +101,10 @@ public interface IUpgradeItem {
 
     // You MUST also supply a default implementation.
     // This is to make life easier on consumers.
-    class UpgradeItem implements IUpgradeItem, ICapabilityProvider {
+    class UpgradeItemDefaultImp implements IUpgradeItem, ICapabilityProvider {
         private IUpgradeItem host;
 
-        public UpgradeItem(IUpgradeItem in) {
+        public UpgradeItemDefaultImp(IUpgradeItem in) {
             host = in;
         }
 

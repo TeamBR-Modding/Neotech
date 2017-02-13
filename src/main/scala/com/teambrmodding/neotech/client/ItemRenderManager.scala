@@ -34,6 +34,10 @@ object ItemRenderManager {
             new ModelResourceLocation(item.getUnlocalizedName.substring(5), "inventory"))
     }
 
+    def registerBlockModel(block : Block, name : String, variants : String): Unit = {
+        registerBlockModel(block, name, variants, 0)
+    }
+
     def registerBlockModel(block : Block, name : String, variants : String, meta : Int = 0) : Unit = {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
             meta, new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, name), variants))
