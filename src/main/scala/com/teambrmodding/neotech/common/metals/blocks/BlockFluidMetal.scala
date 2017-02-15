@@ -1,7 +1,6 @@
 package com.teambrmodding.neotech.common.metals.blocks
 
 import com.teambrmodding.neotech.lib.Reference
-import com.teambrmodding.neotech.utils.ClientUtils
 import net.minecraft.block.material.Material
 import net.minecraft.util.EnumFacing
 import net.minecraft.util.math.BlockPos

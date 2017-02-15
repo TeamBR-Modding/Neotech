@@ -2,7 +2,7 @@ package com.teambrmodding.neotech.registries
 
 import java.io.File
 
-import com.teambrmodding.neotech.NeoTech
+import com.teambrmodding.neotech.Neotech
 import com.teambrmodding.neotech.lib.Reference
 import net.minecraftforge.common.config.Configuration
 
@@ -18,7 +18,7 @@ import net.minecraftforge.common.config.Configuration
  */
 object ConfigRegistry {
 
-    var config = new Configuration(new File(NeoTech.configFolderLocation + File.separator + "NeoTech.cfg"))
+    var config = new Configuration(new File(Neotech.configFolderLocation + File.separator + "NeoTech.cfg"))
 
     var genTin = true
     var genCopper = true
@@ -79,7 +79,7 @@ object ConfigRegistry {
         config.save()
 
         //Check to make sure Registry Directory is made
-        val path: File = new File(NeoTech.configFolderLocation + File.separator + "Registries")
+        val path: File = new File(Neotech.configFolderLocation + File.separator + "Registries")
         if (!path.exists) path.mkdirs
     }
 }

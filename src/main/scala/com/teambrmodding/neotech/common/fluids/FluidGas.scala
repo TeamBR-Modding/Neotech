@@ -1,7 +1,6 @@
 package com.teambrmodding.neotech.common.fluids
 
 import com.teambrmodding.neotech.lib.Reference
-import com.teambrmodding.neotech.utils.ClientUtils
 import net.minecraft.util.ResourceLocation
 import net.minecraftforge.fluids.{FluidStack, Fluid}
 

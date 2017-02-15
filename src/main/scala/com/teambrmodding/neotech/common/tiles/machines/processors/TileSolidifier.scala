@@ -8,7 +8,6 @@ import com.teambrmodding.neotech.common.container.machines.processors.ContainerS
 import com.teambrmodding.neotech.common.tiles.MachineProcessor
 import com.teambrmodding.neotech.managers.{MetalManager, RecipeManager}
 import com.teambrmodding.neotech.registries.SolidifierRecipeHandler
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambr.bookshelf.util.InventoryUtils
@@ -406,32 +405,7 @@ class TileSolidifier extends MachineProcessor[FluidStack, ItemStack] with FluidH
     case object INGOT_MODE  extends SOLIDIFY_MODE { val name = "INGOT_MODE" }
     case object NUGGET_MODE extends SOLIDIFY_MODE { val name = "NUGGET_MODE" }
 
-    def processModeToInt(mode : SOLIDIFY_MODE) : Int = {
-        mode match {
-            case BLOCK_MODE  => 0
-            case INGOT_MODE  => 1
-            case NUGGET_MODE => 2
-            case _ => -1
-        }
-    }
 
-    def processModeFromInt(value : Int) : SOLIDIFY_MODE = {
-        value match {
-            case 0 => BLOCK_MODE
-            case 1 => INGOT_MODE
-            case 2 => NUGGET_MODE
-            case _ => BLOCK_MODE
-        }
-    }
-
-    def getDisplayNameForProcessMode(mode : SOLIDIFY_MODE) : String = {
-        mode match {
-            case BLOCK_MODE  => I18n.translateToLocal("neotech.text.blockMode")
-            case INGOT_MODE  => I18n.translateToLocal("neotech.text.ingotMode")
-            case NUGGET_MODE => I18n.translateToLocal("neotech.text.nuggetMode")
-            case _ => "ERROR"
-        }
-    }
 
     def getDisplayStackForProcessMode(mode : SOLIDIFY_MODE) : ItemStack = {
         mode match {

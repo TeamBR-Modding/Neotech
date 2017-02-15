@@ -156,9 +156,9 @@ public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifug
         ArrayList<JEICentrifugeRecipeWrapper> recipes = new ArrayList<>();
         CentrifugeRecipeHandler centrifugeRecipeHandler = (CentrifugeRecipeHandler) RecipeManager.getHandler("centrifuge").get();
         for(CentrifugeRecipe recipe : centrifugeRecipeHandler.recipes()) {
-            FluidStack fluidInput = recipe.getFluidFromString(recipe.fluidIn());
-            FluidStack fluidOutputOne = recipe.getFluidFromString(recipe.fluidOne());
-            FluidStack fluidOutputTwo   = recipe.getFluidFromString(recipe.fluidTwo());
+            FluidStack fluidInput = recipe.getFluidStackFromString(recipe.fluidIn());
+            FluidStack fluidOutputOne = recipe.getFluidStackFromString(recipe.fluidOne());
+            FluidStack fluidOutputTwo   = recipe.getFluidStackFromString(recipe.fluidTwo());
             if(fluidInput != null && fluidOutputOne != null && fluidOutputTwo != null)
                 recipes.add(new JEICentrifugeRecipeWrapper(fluidInput, fluidOutputOne, fluidOutputTwo));
             else

@@ -1,7 +1,6 @@
 package com.teambrmodding.neotech.common.blocks.storage
 
 import com.teambrmodding.neotech.managers.BlockManager
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.common.items.traits.ItemBattery
 import com.teambr.bookshelf.energy.implementations.EnergyBank

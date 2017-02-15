@@ -8,7 +8,6 @@ import com.teambrmodding.neotech.common.container.machines.processors.ContainerE
 import com.teambrmodding.neotech.common.tiles.MachineProcessor
 import com.teambrmodding.neotech.managers.RecipeManager
 import com.teambrmodding.neotech.registries.CrusherRecipeHandler
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.util.InventoryUtils
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem

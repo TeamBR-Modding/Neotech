@@ -5,7 +5,6 @@ import java.awt.Color
 import com.teambrmodding.neotech.common.tiles.AbstractMachine
 import com.teambr.bookshelf.common.container.BaseContainer
 import com.teambr.bookshelf.common.container.slots.{ICustomSlot, SLOT_SIZE}
-import com.teambr.bookshelf.common.tiles.traits.Inventory
 import net.minecraft.entity.player.InventoryPlayer
 import net.minecraft.item.ItemStack
 
@@ -40,5 +39,5 @@ class ContainerAbstractMachine(playerInventory: InventoryPlayer, tile: AbstractM
         addSlotToContainer(slot)
     }
 
-    override def getInventorySizeNotPlayer : Int = tile.getSizeInventory + 6
+    override def getInventorySizeNotPlayer : Int = tile.getInitialSize + 6
 }

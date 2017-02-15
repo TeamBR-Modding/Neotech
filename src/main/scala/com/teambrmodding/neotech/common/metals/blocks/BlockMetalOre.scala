@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.common.metals.blocks
 
-import com.teambrmodding.neotech.NeoTech
+import com.teambrmodding.neotech.Neotech
 import com.teambrmodding.neotech.lib.Reference
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
@@ -19,7 +19,7 @@ import net.minecraft.util.BlockRenderLayer
 class BlockMetalOre(name: String, color : Int, miningLevel: Int) extends Block(Material.ROCK) {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
-    setCreativeTab(NeoTech.tabMetals)
+    setCreativeTab(Neotech.tabMetals)
     setHardness(3.0F)
     setHarvestLevel("pickaxe", miningLevel)
 

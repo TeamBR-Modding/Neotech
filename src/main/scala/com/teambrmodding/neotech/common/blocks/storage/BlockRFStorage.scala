@@ -2,7 +2,7 @@ package com.teambrmodding.neotech.common.blocks.storage
 
 import com.teambr.bookshelf.common.IOpensGui
 import com.teambr.bookshelf.common.blocks.IToolable
-import com.teambrmodding.neotech.NeoTech
+import com.teambrmodding.neotech.Neotech
 import com.teambrmodding.neotech.client.gui.storage.GuiRFStorage
 import com.teambrmodding.neotech.common.container.storage.ContainerRFStorage
 import com.teambrmodding.neotech.common.tiles.storage.TileRFStorage
@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.{Side, SideOnly}
 class BlockRFStorage(name: String, tier: Int) extends BlockContainer(Material.IRON) with IOpensGui with IToolable {
 
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
-    setCreativeTab(NeoTech.tabNeoTech)
+    setCreativeTab(Neotech.tabNeoTech)
     setHardness(2.0F)
 
     override def createNewTileEntity(world: World, meta: Int): TileEntity = {

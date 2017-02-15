@@ -8,7 +8,7 @@ import com.teambrmodding.neotech.client.gui.machines.operators.GuiTreeFarm
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.operators.ContainerTreeFarm
 import com.teambrmodding.neotech.common.tiles.AbstractMachine
-import com.teambrmodding.neotech.utils.{ClientUtils, TimeUtils}
+import com.teambrmodding.neotech.utils.TimeUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.collections.Location
 import com.teambr.bookshelf.util.InventoryUtils

@@ -4,6 +4,7 @@ import com.teambr.bookshelf.common.container.IInventoryCallback;
 import com.teambr.bookshelf.common.tiles.EnergyHandler;
 import com.teambr.bookshelf.common.tiles.IRedstoneAware;
 import com.teambr.bookshelf.common.tiles.InventoryHandler;
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.CapabilityLoadManager;
@@ -194,6 +195,10 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      */
     public abstract int getRedstoneOutput();
 
+    /**
+     * Used to define the base energy storage size
+     * @return Starting energy size
+     */
     public abstract int getBaseEnergySize();
 
     /**
@@ -267,6 +272,12 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      * This will try to take things from our inventory and try to place them in others
      */
     public abstract void tryOutput();
+
+    /**
+     * Used to get the description to display on the tab
+     * @return The long string with the description
+     */
+    public abstract String getDescription();
 
     /**
      * Return the container for this tile
@@ -1282,5 +1293,85 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
             if(!ItemStack.areItemStacksEqual(upgradeInventory.getStackInSlot(x), inventory.getStackInSlot(x)))
                 return true;
         return false;
+    }
+
+    /*******************************************************************************************************************
+     * Syncable Methods                                                                                                *
+     *******************************************************************************************************************/
+
+    /**
+     * Used to set the variable for this tile, the Syncable will use this when you send a value to the server
+     *
+     * @param id The ID of the variable to send
+     * @param value The new value to set to (you can use this however you want, eg using the ordinal of EnumFacing)
+     */
+    @Override
+    public void setVariable(int id, double value) {
+        switch (id) {
+            case REDSTONE_FIELD_ID:
+                redstone = (int) value;
+                break;
+            case IO_FIELD_ID:
+                toggleMode(EnumFacing.getFront((int) value));
+                break;
+            case UPDATE_CLIENT_ID:
+                updateClient = true;
+                break;
+            default :
+                super.setVariable(id, value);
+        }
+    }
+
+    /**
+     * Used to get the variable
+     *
+     * @param id The variable ID
+     * @return The value of the variable
+     */
+    @Override
+    public Double getVariable(int id) {
+        return super.getVariable(id);
+    }
+
+    /**
+     * Moves the current redstone mode in either direction
+     *
+     * @param mod The direction to move. This will move it in that direction as many as provided, usually 1
+     *            Positive : To the right
+     *            Negative : To the left
+     */
+    public void moveRedstoneMode(int mod) {
+        redstone += mod;
+        if(redstone < -1)
+            redstone = 1;
+        else if (redstone > 1)
+            redstone = -1;
+    }
+
+    /**
+     * Get's the display name for the current mode
+     *
+     * @return The translated name to display
+     */
+    public String getRedstoneModeName() {
+        switch (redstone) {
+            case -1:
+                return ClientUtils.translate("neotech.text.low");
+            case 0:
+                return ClientUtils.translate("neotech.text.disabled");
+            case 1:
+                return ClientUtils.translate("neotech.text.high");
+            default:
+                return ClientUtils.translate("neotech.text.error");
+        }
+    }
+
+    /**
+     * Set the mode manually
+     *
+     * @param newMode The new mode to set to
+     */
+    public void setRedstoneMode(int newMode) {
+        redstone = newMode;
     }
 }

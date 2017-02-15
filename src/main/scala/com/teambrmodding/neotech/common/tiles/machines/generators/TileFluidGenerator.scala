@@ -8,7 +8,6 @@ import com.teambrmodding.neotech.common.container.machines.generators.ContainerF
 import com.teambrmodding.neotech.common.tiles.MachineGenerator
 import com.teambrmodding.neotech.managers.RecipeManager
 import com.teambrmodding.neotech.registries.FluidFuelRecipeHandler
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem

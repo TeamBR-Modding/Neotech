@@ -8,7 +8,6 @@ import com.teambrmodding.neotech.common.container.machines.processors.ContainerA
 import com.teambrmodding.neotech.common.tiles.MachineProcessor
 import com.teambrmodding.neotech.managers.{MetalManager, RecipeManager}
 import com.teambrmodding.neotech.registries.AlloyerRecipeHandler
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem

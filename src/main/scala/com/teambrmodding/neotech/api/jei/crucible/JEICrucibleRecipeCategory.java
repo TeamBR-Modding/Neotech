@@ -152,7 +152,7 @@ public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRec
         CrucibleRecipeHandler crucibleRecipeHandler = (CrucibleRecipeHandler) RecipeManager.getHandler("crucible").get();
         for(CrucibleRecipe recipe : crucibleRecipeHandler.recipes()) {
             java.util.List<ItemStack> inputList = OreDictionary.getOres(recipe.ore());
-            FluidStack output = recipe.getFluidFromString(recipe.output());
+            FluidStack output = recipe.getFluidStackFromString(recipe.output());
             if(output != null) {
                 if(!inputList.isEmpty()) {
                     recipes.add(new JEICrucibleRecipeWrapper(inputList, output));

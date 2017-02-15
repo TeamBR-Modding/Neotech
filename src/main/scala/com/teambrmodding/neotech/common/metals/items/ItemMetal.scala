@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.common.metals.items
 
-import com.teambrmodding.neotech.NeoTech
+import com.teambrmodding.neotech.Neotech
 import com.teambrmodding.neotech.lib.Reference
 import net.minecraft.item.{ItemStack, Item}
 
@@ -15,7 +15,7 @@ import net.minecraft.item.{ItemStack, Item}
   * @since 2/17/2016
   */
 class ItemMetal(name: String, color : Int, maxStackSize: Int) extends Item {
-    setCreativeTab(NeoTech.tabMetals)
+    setCreativeTab(Neotech.tabMetals)
     setMaxStackSize(maxStackSize)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 

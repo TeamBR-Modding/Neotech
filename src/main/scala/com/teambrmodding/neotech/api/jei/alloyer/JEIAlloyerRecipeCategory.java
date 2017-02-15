@@ -75,6 +75,7 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
      * Used to display the title
      * @return The translated title
      */
+
     @Override
     public String getTitle() {
         return ClientUtils.translate("tile.neotech:alloyer.name");
@@ -158,9 +159,9 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
         ArrayList<JEIAlloyerRecipeWrapper> recipes = new ArrayList<>();
         AlloyerRecipeHandler alloyerRecipeHandler = (AlloyerRecipeHandler) RecipeManager.getHandler("alloyer").get();
         for(AlloyerRecipe recipe : alloyerRecipeHandler.recipes()) {
-            FluidStack fluidInputOne = recipe.getFluidFromString(recipe.fluidOne());
-            FluidStack fluidInputTwo = recipe.getFluidFromString(recipe.fluidTwo());
-            FluidStack fluidOutput   = recipe.getFluidFromString(recipe.fluidOut());
+            FluidStack fluidInputOne = recipe.getFluidStackFromString(recipe.fluidOne());
+            FluidStack fluidInputTwo = recipe.getFluidStackFromString(recipe.fluidTwo());
+            FluidStack fluidOutput   = recipe.getFluidStackFromString(recipe.fluidOut());
             if(fluidInputOne != null && fluidInputTwo != null && fluidOutput != null)
                 recipes.add(new JEIAlloyerRecipeWrapper(fluidInputOne, fluidInputTwo, fluidOutput));
             else

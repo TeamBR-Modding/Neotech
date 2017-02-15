@@ -6,7 +6,6 @@ import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.operators.ContainerTreeFarm
 import com.teambrmodding.neotech.common.tiles.machines.operators.TileTreeFarm
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentColoredZone, GuiComponentPowerBarGradient}
 import net.minecraft.entity.player.EntityPlayer

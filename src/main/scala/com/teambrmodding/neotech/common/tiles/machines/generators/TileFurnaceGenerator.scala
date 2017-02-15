@@ -7,7 +7,6 @@ import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.generators.ContainerFurnaceGenerator
 import com.teambrmodding.neotech.common.tiles.MachineGenerator
 import com.teambrmodding.neotech.managers.FluidManager
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.common.tiles.traits.FluidHandler
 import com.teambr.bookshelf.util.InventoryUtils

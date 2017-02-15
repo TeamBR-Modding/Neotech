@@ -1,13 +1,14 @@
 package com.teambrmodding.neotech.common.blocks
 
-import com.teambrmodding.neotech.NeoTech
+import com.teambrmodding.neotech.Neotech
 import com.teambrmodding.neotech.lib.Reference
 import net.minecraft.block.BlockContainer
 import net.minecraft.block.material.Material
 import net.minecraft.block.state.IBlockState
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.math.{BlockPos, AxisAlignedBB}
+import net.minecraft.util.ResourceLocation
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
 import net.minecraft.world.{IBlockAccess, World}
 
 /**
@@ -27,6 +28,7 @@ class BaseBlock(material: Material, name: String, tileEntity: Class[_ <: TileEnt
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
     setCreativeTab(getCreativeTab)
     setHardness(getHardness)
+    setRegistryName(new ResourceLocation(Reference.MOD_ID, name))
 
     /**
       * Used to change the hardness of a block, but will default to 2.0F if not overwritten
@@ -40,7 +42,7 @@ class BaseBlock(material: Material, name: String, tileEntity: Class[_ <: TileEnt
       *
       * @return Null if none, defaults to the main NeoTech Tab
       */
-    def getCreativeTab: CreativeTabs = NeoTech.tabNeoTech
+    def getCreativeTab: CreativeTabs = Neotech.tabNeoTech
 
     override def createNewTileEntity(world: World, meta: Int): TileEntity = {
         if (tileEntity != null) tileEntity.newInstance() else null

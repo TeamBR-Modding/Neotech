@@ -154,7 +154,7 @@ public class JEISolidifierRecipeCategory implements IRecipeCategory<JEISolidifie
         SolidifierRecipeHandler centrifugeRecipeHandler = (SolidifierRecipeHandler) RecipeManager.getHandler("solidifier").get();
         for(SolidifierRecipe recipe : centrifugeRecipeHandler.recipes()) {
             int mode;
-            int amount = recipe.getFluidFromString(recipe.input()).amount;
+            int amount = recipe.getFluidStackFromString(recipe.input()).amount;
             switch (amount) {
                 case 1296 :
                     mode = 0;
@@ -169,7 +169,7 @@ public class JEISolidifierRecipeCategory implements IRecipeCategory<JEISolidifie
                     mode = -1;
 
             }
-            recipes.add(new JEISolidifierRecipeWrapper(recipe.getFluidFromString(recipe.input()), recipe.getItemStackFromString(recipe.output()), mode));
+            recipes.add(new JEISolidifierRecipeWrapper(recipe.getFluidStackFromString(recipe.input()), recipe.getItemStackFromString(recipe.output()), mode));
         }
         return recipes;
     }

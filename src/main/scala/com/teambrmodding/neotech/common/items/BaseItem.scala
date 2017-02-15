@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.common.items
 
-import com.teambrmodding.neotech.NeoTech
+import com.teambrmodding.neotech.Neotech
 import com.teambrmodding.neotech.lib.Reference
 import net.minecraft.item.Item
 
@@ -16,7 +16,7 @@ import net.minecraft.item.Item
  */
 class BaseItem(name: String, maxStackSize: Int) extends Item {
 
-    setCreativeTab(NeoTech.tabNeoTech)
+    setCreativeTab(Neotech.tabNeoTech)
     setMaxStackSize(maxStackSize)
     setUnlocalizedName(Reference.MOD_ID + ":" + name)
 

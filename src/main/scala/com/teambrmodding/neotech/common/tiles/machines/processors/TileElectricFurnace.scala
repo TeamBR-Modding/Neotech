@@ -6,7 +6,6 @@ import com.teambrmodding.neotech.client.gui.machines.processors.GuiElectricFurna
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerElectricFurnace
 import com.teambrmodding.neotech.common.tiles.MachineProcessor
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.{GuiColor, GuiTextFormat}
 import com.teambr.bookshelf.util.InventoryUtils
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem

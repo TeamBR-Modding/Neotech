@@ -8,7 +8,6 @@ import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.generators.ContainerFurnaceGenerator
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileFurnaceGenerator
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display._
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem
@@ -41,7 +40,7 @@ class GuiFurnaceGenerator(player: EntityPlayer, tileEntity: TileFurnaceGenerator
 
             override def getDynamicToolTip(x: Int, y: Int): ArrayBuffer[String] = {
                 ArrayBuffer(NumberFormat.getNumberInstance(Locale.forLanguageTag(Minecraft.getMinecraft.gameSettings.language))
-                        .format(tileEntity.burnTime / tileEntity.getMultiplierByCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)) + " ticks left.")
+                        .format(tileEntity.burnTime / tileEntity.getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY)) + " ticks left.")
             }
         }
 

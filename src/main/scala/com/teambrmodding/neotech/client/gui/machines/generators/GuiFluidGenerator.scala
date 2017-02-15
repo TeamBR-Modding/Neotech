@@ -8,7 +8,6 @@ import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine
 import com.teambrmodding.neotech.collections.EnumInputOutputMode
 import com.teambrmodding.neotech.common.container.machines.generators.ContainerFluidGenerator
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileFluidGenerator
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.GuiColor
 import com.teambr.bookshelf.client.gui.component.display._
 import net.minecraft.client.Minecraft

@@ -4,7 +4,6 @@ import java.awt.Color
 
 import com.teambrmodding.neotech.common.container.storage.ContainerRFStorage
 import com.teambrmodding.neotech.common.tiles.storage.TileRFStorage
-import com.teambrmodding.neotech.utils.ClientUtils
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentPowerBarGradient, GuiComponentText}
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
 import net.minecraft.client.renderer.GlStateManager

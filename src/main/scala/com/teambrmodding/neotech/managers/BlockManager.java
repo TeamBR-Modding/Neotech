@@ -128,7 +128,16 @@ public class BlockManager {
     /**
      * Short hand to register a block
      */
+    public static <T extends Block> T registerBlock(T block, String oreDict) {
+        ItemBlock itemBlock = new ItemBlock(block);
+        itemBlock.setRegistryName(block.getRegistryName());
+        return registerBlock(block, itemBlock, null, oreDict);    }
+
+    /**
+     * Short hand to register a block
+     */
     public static <T extends Block> T registerBlock(T block) {
-        return registerBlock(block, null);
-    }
+        ItemBlock itemBlock = new ItemBlock(block);
+        itemBlock.setRegistryName(block.getRegistryName());
+        return registerBlock(block, itemBlock, null, null);    }
 }
