@@ -20,7 +20,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -215,13 +214,13 @@ public class MetalManager {
 
         BlockMetalOre oreBlock = null;
         if(hasOre)
-            oreBlock = BlockManager.registerBlock(new BlockMetalOre(oreName, color, miningLevel), oreName);
+            oreBlock = BlockManager.registerBlock(new BlockMetalOre(oreName, miningLevel), oreName);
 
         String blockName = "block" + Character.toUpperCase(metalName.charAt(0)) + metalName.substring(1);
 
         BlockMetalOre solidBlock = null;
         if(hasSolidBlock)
-            solidBlock = BlockManager.registerBlock(new BlockMetalOre(blockName, color, 1),
+            solidBlock = BlockManager.registerBlock(new BlockMetalOre(blockName, 1),
                     blockName);
 
         //--------------------------------------------------------------------------------------------------------------
