@@ -8,6 +8,7 @@ import com.teambrmodding.neotech.managers.MetalManager;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.oredict.OreDictionary;
+import scala.tools.cmd.gen.AnyVals;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -60,7 +65,7 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
      */
     @Override
     public String getBaseFolderLocation() {
-        return Neotech.configFolderLocation();
+        return Neotech.configFolderLocation;
     }
 
     /**
@@ -98,26 +103,52 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-                if(args.length < 2)
-                    sender.addChatMessage(new TextComponentString(ClientUtils.translate("commands.addCrucibleRecipe.usage")));
-                else {
-                    String inputStack = null;
-                    if(args[0].split(":").length > 0) {
-                        inputStack = args[0];
-                        if(getItemStackFromString(inputStack) != null && getFluidStackFromString(args[1]) != null) {
-                            addRecipe(new CrucibleRecipe(inputStack,  args[1]));
-                            sender.addChatMessage(new TextComponentString(inputStack + " -> " + args[1] + " Added Successfully"));
-                            saveToFile();
-                        } else
-                            sender.addChatMessage(new TextComponentString(inputStack + " -> " + args[1] + " failed"));
-                    } else {
-                        if(!OreDictionary.getOres(args[0]).isEmpty()) {
-                            addRecipe(new CrucibleRecipe(args[0], args[1]));
-                            sender.addChatMessage(new TextComponentString(inputStack + " -> " + args[1] + " Added Successfully"));
-                            saveToFile();
-                        } else
-                            sender.addChatMessage(new TextComponentString(inputStack + " -> " + args[1] + " failed"));
+                if(args.length != 3 || (args.length == 2 && !args[0].equalsIgnoreCase("hands")))
+                    sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                else if(args.length == 2 && args[0].equalsIgnoreCase("hands")) {
+                    // Must be a player using the command as we need their hands
+                    if(sender.getCommandSenderEntity() instanceof EntityPlayer) {
+                        EntityPlayer player = (EntityPlayer) sender.getCommandSenderEntity(); // Get the player
+
+                        // Make sure both hands have a stack
+                        if(player.getHeldItemMainhand() != null && player.getHeldItemOffhand() != null) {
+                            ItemStack mainHandStack = player.getHeldItemMainhand();
+                            ItemStack offHandStack  = player.getHeldItemOffhand();
+
+                            // Offhand must hold a fluid handler
+                            if(mainHandStack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+                                IFluidHandler fluidHandler = mainHandStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+
+                                // Cycle the tanks (usually one) to find a tank with a fluid
+                                for(IFluidTankProperties tankInfo : fluidHandler.getTankProperties()) {
+                                    FluidStack stackInTank = tankInfo.getContents();
+
+                                    // Is a valid FluidStack
+                                    if(stackInTank != null && stackInTank.getFluid() != null) {
+                                        addRecipe(new CrucibleRecipeHandler.CrucibleRecipe(getItemStackString(offHandStack), getFluidStackString(stackInTank)));
+                                        sender.addChatMessage(new TextComponentString(getItemStackString(offHandStack) +
+                                                " -> " + getFluidStackString(stackInTank) + " Added Successfully!"));
+                                        saveToFile();
+                                        return;
+                                    }
+                                }
+                            }
+                        }
                     }
+
+                    // Conditions for hands usage not met
+                    sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                } else {
+                    String itemStackInput  = args[0];
+                    String fluidStackOutput = args[1];
+
+                    if(getItemStackFromString(itemStackInput) != null && getFluidStackFromString(fluidStackOutput) != null) {
+                        addRecipe(new CrucibleRecipe(itemStackInput, fluidStackOutput));
+                        sender.addChatMessage(new TextComponentString(itemStackInput +
+                                " -> " + fluidStackOutput + " Added Successfully!"));
+                        saveToFile();
+                    } else
+                        sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
                 }
             }
         };
@@ -161,19 +192,19 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
         addRecipe(new CrucibleRecipe("ingotIron",
                 getFluidStackString(new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.INGOT_MB))));
         addRecipe(new CrucibleRecipe("oreIron",
-                        getFluidStackString(new FluidStack(FluidRegistry.getFluid("dirtyiron"), MetalManager.ORE_MB))));
+                getFluidStackString(new FluidStack(FluidRegistry.getFluid("dirtyiron"), MetalManager.ORE_MB))));
         addRecipe(new CrucibleRecipe("blockIron",
-                        getFluidStackString(new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.BLOCK_MB))));
+                getFluidStackString(new FluidStack(FluidRegistry.getFluid("iron"), MetalManager.BLOCK_MB))));
 
         // Gold
         addRecipe(new CrucibleRecipe("nuggetGold",
-                        getFluidStackString(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.NUGGET_MB))));
+                getFluidStackString(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.NUGGET_MB))));
         addRecipe(new CrucibleRecipe("ingotGold",
-                        getFluidStackString(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.INGOT_MB))));
+                getFluidStackString(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.INGOT_MB))));
         addRecipe(new CrucibleRecipe("oreGold",
-                        getFluidStackString(new FluidStack(FluidRegistry.getFluid("dirtygold"), MetalManager.ORE_MB))));
+                getFluidStackString(new FluidStack(FluidRegistry.getFluid("dirtygold"), MetalManager.ORE_MB))));
         addRecipe(new CrucibleRecipe("blockGold",
-                        getFluidStackString(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.BLOCK_MB))));
+                getFluidStackString(new FluidStack(FluidRegistry.getFluid("gold"), MetalManager.BLOCK_MB))));
 
         // Carbon
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.COAL, 1, 1)),
@@ -185,19 +216,19 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
 
         // Obsidian
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Blocks.OBSIDIAN)),
-                        getFluidStackString(new FluidStack(FluidRegistry.getFluid("obsidian"), 288))));
+                getFluidStackString(new FluidStack(FluidRegistry.getFluid("obsidian"), 288))));
 
         // Ice/Snowball to Water
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.SNOWBALL)),
-                        getFluidStackString(new FluidStack(FluidRegistry.WATER, 144))));
+                getFluidStackString(new FluidStack(FluidRegistry.WATER, 144))));
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Blocks.ICE)),
-                        getFluidStackString(new FluidStack(FluidRegistry.WATER, 1296))));
+                getFluidStackString(new FluidStack(FluidRegistry.WATER, 1296))));
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Blocks.PACKED_ICE)),
-                        getFluidStackString(new FluidStack(FluidRegistry.WATER, 1296))));
+                getFluidStackString(new FluidStack(FluidRegistry.WATER, 1296))));
 
         // Stones to lava
         addRecipe(new CrucibleRecipe("cobblestone",
-                        getFluidStackString(new FluidStack(FluidRegistry.LAVA, 20))));
+                getFluidStackString(new FluidStack(FluidRegistry.LAVA, 20))));
         addRecipe(new CrucibleRecipe("stone",
                 getFluidStackString(new FluidStack(FluidRegistry.LAVA, 40))));
 

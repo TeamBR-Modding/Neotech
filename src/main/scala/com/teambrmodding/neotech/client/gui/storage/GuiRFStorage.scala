@@ -2,7 +2,7 @@ package com.teambrmodding.neotech.client.gui.storage
 
 import java.awt.Color
 
-import com.teambrmodding.neotech.common.container.storage.ContainerRFStorage
+import com.teambrmodding.neotech.common.container.storage.ContainerEnergyStorage
 import com.teambrmodding.neotech.common.tiles.storage.TileRFStorage
 import com.teambr.bookshelf.client.gui.component.display.{GuiComponentPowerBarGradient, GuiComponentText}
 import com.teambr.bookshelf.client.gui.{GuiBase, GuiColor}
@@ -22,8 +22,8 @@ import scala.collection.mutable.ArrayBuffer
  * @author Dyonovan
  * @since August 15, 2015
  */
-class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage, title: String) extends
-    GuiBase[ContainerRFStorage](new ContainerRFStorage(player.inventory, tileEntity), 175, 165, title) {
+class GuiRFStorage(player: EntityPlayer, tileEntity: TileRFStorage) extends
+    GuiBase[ContainerEnergyStorage](new ContainerEnergyStorage(player.inventory, tileEntity), 175, 165, title) {
 
     override def addComponents(): Unit = {
         if (tileEntity != null) {

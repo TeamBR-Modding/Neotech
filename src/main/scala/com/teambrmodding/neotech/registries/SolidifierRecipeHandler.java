@@ -64,7 +64,7 @@ public class SolidifierRecipeHandler extends
      */
     @Override
     public String getBaseFolderLocation() {
-        return Neotech.configFolderLocation();
+        return Neotech.configFolderLocation;
     }
 
     /**

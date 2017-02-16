@@ -15,15 +15,26 @@ import net.minecraftforge.fml.relauncher.Side;
  * @since August 15, 2015
  */
 public class PacketDispatcher {
+    // Our network wrapper
     public static SimpleNetworkWrapper net;
-    private static int nextPacketId = 0;
 
+    /**
+     * Registers all packets
+     */
     public static void initPackets() {
-        net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID().toUpperCase());
+        net = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID.toUpperCase());
 
-        registerMessage(OpenContainerGui.class, OpenContainerGui.class);
+        registerMessage(OpenContainerGuiPacket.class, OpenContainerGuiPacket.class);
     }
 
+    // Local hold for next packet id
+    private static int nextPacketId = 0;
+
+    /**
+     * Registers a message to the network registry
+     * @param packet The packet class
+     * @param message The return packet class
+     */
     @SuppressWarnings("unchecked")
     private static void registerMessage(Class packet, Class message) {
         net.registerMessage(packet, message, nextPacketId, Side.CLIENT);

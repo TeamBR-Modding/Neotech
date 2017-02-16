@@ -284,26 +284,26 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      *
      * @param id Id, probably not needed but could be used for multiple guis
      * @param player The player that is opening the gui
-     * @param world The world
+     * @param worldObj The worldObj
      * @param x X Pos
      * @param y Y Pos
      * @param z Z Pos
      * @return The container to open
      */
-    public abstract Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z);
+    public abstract Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z);
 
     /**
      * Return the gui for this tile
      *
      * @param id Id, probably not needed but could be used for multiple guis
      * @param player The player that is opening the gui
-     * @param world The world
+     * @param worldObj The worldObj
      * @param x X Pos
      * @param y Y Pos
      * @param z Z Pos
      * @return The gui to open
      */
-    public abstract Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z);
+    public abstract Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z);
 
     /*******************************************************************************************************************
      * TileEntity Methods                                                                                              *
@@ -400,7 +400,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
 
         // Abstract Machine
         compound.setInteger(REDSTONE_NBT, redstone);
-        if(updateClient && world != null) {
+        if(updateClient && worldObj != null) {
             compound.setBoolean(UPDATE_ENERGY_NBT, true);
             updateClient = false;
         }
@@ -445,7 +445,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
             sideModes.put(side, EnumInputOutputMode.getModeFromInt(compound.getInteger(SIDE_MODE_NBT + side.ordinal())));
 
         // Abstract Machine
-        if(compound.hasKey(UPDATE_ENERGY_NBT) && world != null)
+        if(compound.hasKey(UPDATE_ENERGY_NBT) && worldObj != null)
             changeEnergy(compound.getInteger("Energy"));
         redstone = compound.getInteger(REDSTONE_NBT);
     }
@@ -792,7 +792,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     public IFluidTankProperties[] getTankProperties() {
         IFluidTankProperties[] properties = new IFluidTankProperties[tanks.length];
         for(int x = 0; x < tanks.length; x++) {
-            FluidTank tank = tanks[x];
+            final FluidTank tank = tanks[x];
             properties[x] = new IFluidTankProperties() {
                 @Nullable
                 @Override

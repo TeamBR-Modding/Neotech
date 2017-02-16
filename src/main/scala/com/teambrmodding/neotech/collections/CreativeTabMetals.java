@@ -27,7 +27,7 @@ import java.util.List;
 public class CreativeTabMetals extends CreativeTabs {
 
     public CreativeTabMetals() {
-        super("tabNeoTechMetals");
+        super("tabNeotechMetals");
     }
 
     /*******************************************************************************************************************

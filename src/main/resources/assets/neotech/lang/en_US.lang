@@ -1,8 +1,8 @@
 PARSE_ESCAPES
 
 # Creative Tabs
-itemGroup.tabNeoTech=NeoTech
-itemGroup.tabNeoTechMetals=NeoTech: Metals
+itemGroup.tabNeotech=NeoTech
+itemGroup.tabNeotechMetals=NeoTech: Metals
 
 #######################
 # Blocks
@@ -154,9 +154,9 @@ tile.neotech:basicRFStorage.name=Basic RF Storage
 tile.neotech:advancedRFStorage.name=Advanced RF Storage
 tile.neotech:eliteRFStorage.name=Elite RF Storage
 tile.neotech:creativeRFStorage.name=Creative RF Storage
-tile.neotech:ironTank.name=Basic Fluid Tank
-tile.neotech:goldTank.name=Advanced Fluid Tank
-tile.neotech:diamondTank.name=Elite Fluid Tank
+tile.neotech:basicTank.name=Basic Fluid Tank
+tile.neotech:advancedTank.name=Advanced Fluid Tank
+tile.neotech:eliteTank.name=Elite Fluid Tank
 tile.neotech:creativeTank.name=Creative Fluid Tank
 tile.neotech:voidTank.name=Void Tank
 
@@ -237,6 +237,8 @@ neotech.text.redstoneFlux=Redstone Flux
 
 neotech.text.rfDiff=Energy Change
 
+neotech.text.energyStored=Energy Stored
+
 neotech.text.processMode=Solidify Mode
 neotech.text.blockMode=Block Mode
 neotech.text.ingotMode=Ingot Mode
@@ -256,7 +258,7 @@ neotech.text.modName=Neotech
 #######################
 # Commands
 #######################
-commands.addCrucibleRecipe.usage=§cUsage: input<ItemStack (format : MODID:ITEMID:META:STACK_SIZE or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)>
+commands.addCrucibleRecipe.usage=§cUsage: input<ItemStack (format : MODID:ITEMID:META:STACK_SIZE or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)> OR "hands"<Left hand input, right output>
 commands.addSolidifierRecipe.usage=Usage: mode<BLOCK|INGOT|NUGGET> input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MOD:ITEM:DAMAGE:STACK or ORE_DICT_TAG)> OR "hands"<Left hand input, right output>  mode<BLOCK|INGOT|NUGGET>
 commands.addFluidFuelValue.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output<BurnTime (format : INTEGER), BurnRate (format : INTEGER)>
 commands.addAlloyRecipe.usage=§cUsage: input1<FluidStack (format : FLUID:AMOUNT)> input2<FluidStack (format : FLUID:AMOUNT)> output<FluidStack (format : FLUID:AMOUNT)>

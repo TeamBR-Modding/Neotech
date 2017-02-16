@@ -60,7 +60,7 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
      */
     @Override
     public String getBaseFolderLocation() {
-        return Neotech.configFolderLocation();
+        return Neotech.configFolderLocation;
     }
 
     /**

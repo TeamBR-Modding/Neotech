@@ -1,7 +1,7 @@
 package com.teambrmodding.neotech.client.ingameconfig;
 
 import com.teambrmodding.neotech.lib.Reference;
-import com.teambrmodding.neotech.registries.ConfigRegistry;
+import com.teambrmodding.neotech.registries.ConfigManager;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.config.DummyConfigElement;
@@ -38,6 +38,6 @@ public class GuiConfigNeotech extends GuiConfig {
 
     private static IConfigElement categoryElement(String category, String name, String tooltip_key) {
         return new DummyConfigElement.DummyCategoryElement(name, tooltip_key,
-                new ConfigElement(ConfigRegistry.config().getCategory(category.toLowerCase())).getChildElements());
+                new ConfigElement(ConfigManager.config().getCategory(category.toLowerCase())).getChildElements());
     }
 }

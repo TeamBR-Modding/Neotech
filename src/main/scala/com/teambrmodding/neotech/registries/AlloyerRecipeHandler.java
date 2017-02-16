@@ -54,7 +54,7 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipeHan
      */
     @Override
     public String getBaseFolderLocation() {
-        return Neotech.configFolderLocation();
+        return Neotech.configFolderLocation;
     }
 
     /**

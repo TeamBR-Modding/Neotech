@@ -57,7 +57,7 @@ public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRec
      */
     @Override
     public String getBaseFolderLocation() {
-        return Neotech.configFolderLocation();
+        return Neotech.configFolderLocation;
     }
 
     /**

@@ -59,9 +59,9 @@ public class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.advancedRFStorage, "advancedRFStorage", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.eliteRFStorage, "eliteRFStorage", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.creativeRFStorage, "creativeRFStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.ironTank, "ironTank", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.goldTank, "goldTank", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.diamondTank, "diamondTank", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.basicTank, "basicTank", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.advancedTank, "advancedTank", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.eliteTank, "eliteTank", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.creativeTank, "creativeTank", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.voidTank, "voidTank", "normal");
 

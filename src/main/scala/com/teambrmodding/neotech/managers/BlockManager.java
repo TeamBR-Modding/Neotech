@@ -2,8 +2,11 @@ package com.teambrmodding.neotech.managers;
 
 import com.teambrmodding.neotech.common.blocks.machines.BlockMachine;
 import com.teambrmodding.neotech.common.blocks.machines.BlockSolarPanel;
-import com.teambrmodding.neotech.common.blocks.storage.BlockRFStorage;
-import com.teambrmodding.neotech.common.blocks.storage.BlockTank;
+import com.teambrmodding.neotech.common.blocks.machines.BlockTreeFarm;
+import com.teambrmodding.neotech.common.blocks.storage.BlockEnergyStorage;
+import com.teambrmodding.neotech.common.blocks.storage.BlockFluidStorage;
+import com.teambrmodding.neotech.common.blocks.storage.ItemBlockEnergyStorage;
+import com.teambrmodding.neotech.common.blocks.storage.ItemBlockFluidStorage;
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileFluidGenerator;
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileFurnaceGenerator;
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileSolarPanel;
@@ -41,20 +44,20 @@ public class BlockManager {
     public static BlockMachine electricCentrifuge = new BlockMachine("centrifuge", TileCentrifuge.class);
 
     // Operators
-    public static BlockMachine treeFarm = new BlockMachine("treeFarm", TileTreeFarm.class);
+    public static BlockMachine treeFarm = new BlockTreeFarm("treeFarm");
 
     // RF Storage
-    public static BlockRFStorage basicRFStorage = new BlockRFStorage("basicRFStorage", 1);
-    public static BlockRFStorage advancedRFStorage = new BlockRFStorage("advancedRFStorage", 2);
-    public static BlockRFStorage eliteRFStorage = new BlockRFStorage("eliteRFStorage", 3);
-    public static BlockRFStorage creativeRFStorage = new BlockRFStorage("creativeRFStorage", 4);
+    public static BlockEnergyStorage basicRFStorage = new BlockEnergyStorage("basicRFStorage", 1);
+    public static BlockEnergyStorage advancedRFStorage = new BlockEnergyStorage("advancedRFStorage", 2);
+    public static BlockEnergyStorage eliteRFStorage = new BlockEnergyStorage("eliteRFStorage", 3);
+    public static BlockEnergyStorage creativeRFStorage = new BlockEnergyStorage("creativeRFStorage", 4);
 
     // Tanks
-    public static BlockTank ironTank = new BlockTank("ironTank", 1);
-    public static BlockTank goldTank = new BlockTank("goldTank", 2);
-    public static BlockTank diamondTank = new BlockTank("diamondTank", 3);
-    public static BlockTank creativeTank = new BlockTank("creativeTank", 4);
-    public static BlockTank voidTank = new BlockTank("voidTank", 5);
+    public static BlockFluidStorage basicTank = new BlockFluidStorage("basicTank", TileBasicTank.class);
+    public static BlockFluidStorage advancedTank = new BlockFluidStorage("advancedTank", TileAdvancedTank.class);
+    public static BlockFluidStorage eliteTank = new BlockFluidStorage("eliteTank", TileEliteTank.class);
+    public static BlockFluidStorage creativeTank = new BlockFluidStorage("creativeTank", TileCreativeTank.class);
+    public static BlockFluidStorage voidTank = new BlockFluidStorage("voidTank", TileVoidTank.class);
 
     // Solar Panels
     public static BlockSolarPanel solarPanelT1 = new BlockSolarPanel("solarPanelT1", 1);
@@ -76,17 +79,17 @@ public class BlockManager {
         registerBlock(treeFarm, TileTreeFarm.class);
 
         // RF Storage
-        registerBlock(basicRFStorage, TileRFStorage.class);
-        registerBlock(advancedRFStorage, TileRFStorage.class);
-        registerBlock(eliteRFStorage, TileRFStorage.class);
-        registerBlock(creativeRFStorage, TileRFStorage.class);
+        registerBlock(basicRFStorage, new ItemBlockEnergyStorage(basicRFStorage), TileRFStorage.class, null);
+        registerBlock(advancedRFStorage, new ItemBlockEnergyStorage(advancedRFStorage), TileRFStorage.class, null);
+        registerBlock(eliteRFStorage, new ItemBlockEnergyStorage(eliteRFStorage), TileRFStorage.class, null);
+        registerBlock(creativeRFStorage, new ItemBlockEnergyStorage(creativeRFStorage), TileRFStorage.class, null);
 
         // Tanks
-        registerBlock(ironTank, TileBasicTank.class);
-        registerBlock(goldTank, TileAdvancedTank.class);
-        registerBlock(diamondTank, TileEliteTank.class);
-        registerBlock(creativeTank, TileCreativeTank.class);
-        registerBlock(voidTank, TileVoidTank.class);
+        registerBlock(basicTank, new ItemBlockFluidStorage(basicTank), TileBasicTank.class, null);
+        registerBlock(advancedTank, new ItemBlockFluidStorage(advancedTank), TileAdvancedTank.class, null);
+        registerBlock(eliteTank, new ItemBlockFluidStorage(eliteTank), TileEliteTank.class, null);
+        registerBlock(creativeTank, new ItemBlockFluidStorage(creativeTank), TileCreativeTank.class, null);
+        registerBlock(voidTank, new ItemBlockFluidStorage(voidTank), TileVoidTank.class, null);
 
         // Solar Panels
         registerBlock(solarPanelT1, TileSolarPanel.class);

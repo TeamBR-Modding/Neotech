@@ -3,6 +3,7 @@ package com.teambrmodding.neotech.registries;
 import com.google.gson.reflect.TypeToken;
 import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.bookshelf.util.ClientUtils;
+import com.teambrmodding.neotech.Neotech;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -53,7 +54,7 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
      */
     @Override
     public String getBaseFolderLocation() {
-        return null;
+        return Neotech.configFolderLocation;
     }
 
     /**

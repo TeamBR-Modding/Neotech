@@ -3,11 +3,11 @@ package com.teambrmodding.neotech.common.blocks.machines;
 import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.common.IOpensGui;
 import com.teambr.bookshelf.common.blocks.IToolable;
+import com.teambr.bookshelf.util.PlayerUtils;
 import com.teambr.bookshelf.util.WorldUtils;
 import com.teambrmodding.neotech.common.blocks.BaseBlock;
 import com.teambrmodding.neotech.common.tiles.AbstractMachine;
 import com.teambrmodding.neotech.managers.ItemManager;
-import com.teambrmodding.neotech.utils.PlayerUtils;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -44,6 +44,7 @@ import java.util.Random;
  * @author Paul Davis - pauljoda
  * @since 2/11/2017
  */
+@SuppressWarnings("deprecation")
 public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
     // Instance of the property for rotation
     public static PropertyDirection FOUR_WAY =
@@ -73,7 +74,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
      */
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        int playerFacingDirection = placer == null ? 0 : MathHelper.floor((placer.rotationYaw / 90.F) + 0.5F) & 3;
+        int playerFacingDirection = placer == null ? 0 : MathHelper.floor_float((placer.rotationYaw / 90.F) + 0.5F) & 3;
         EnumFacing facing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
         worldIn.setBlockState(pos, getDefaultState().withProperty(FOUR_WAY, facing));
     }
@@ -161,16 +162,8 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
     }
 
     /**
-     * Block container changes this, we still want a normal model
-     * @return The model type
-     */
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
-
-    /**
      * The following enable transparent textures to be rendered on top of the model
+     * Is listed deprecated in favor of logic in block state, but our state calls this*
      */
     @Override
     public boolean isOpaqueCube(IBlockState state) {
@@ -243,15 +236,13 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
     /**
      * We want to get the actual state, passes info to the model not present in meta
      *
-     * This is listed deprecated but vanilla still uses it for fences. When this is gone, do what they are doing
-     * to get this info at that point
+     * Is listed deprecated in favor of logic in block state, but our state calls this
      *
      * @param state The incoming state
      * @param worldIn The world
      * @param pos The position
      * @return A state that represents the actual state, not just what was stored
      */
-    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof AbstractMachine) {

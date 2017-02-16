@@ -24,8 +24,12 @@ public class CapabilityLoadManager {
 
     @CapabilityInject(IUpgradeItem.class)
     public static Capability<IUpgradeItem> UPGRADE_ITEM_CAPABILITY = null;
-    public static ResourceLocation UPGRADE_ITEM_KEY = new ResourceLocation(Reference.MOD_ID(), "capability/upgradeItem");
 
+    public static ResourceLocation UPGRADE_ITEM_KEY = new ResourceLocation(Reference.MOD_ID, "capability/upgradeItem");
+
+    /**
+     * Registers all our capabilities
+     */
     public static void registerCapabilities() {
         MinecraftForge.EVENT_BUS.register(new CapabilityLoadManager());
 
@@ -35,8 +39,9 @@ public class CapabilityLoadManager {
 
     @SubscribeEvent
     public void onItemLoaded(AttachCapabilitiesEvent.Item event) {
-        if(event.getItem() instanceof IUpgradeItem) {
-            event.addCapability(UPGRADE_ITEM_KEY, new IUpgradeItem.UpgradeItemDefaultImp((IUpgradeItem) event.getItem()));
+        if(event.getItemStack().getItem() instanceof IUpgradeItem) {
+            event.addCapability(UPGRADE_ITEM_KEY,
+                    new IUpgradeItem.UpgradeItemDefaultImp((IUpgradeItem) event.getItemStack().getItem()));
         }
     }
 }
