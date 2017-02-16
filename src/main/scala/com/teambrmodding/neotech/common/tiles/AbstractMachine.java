@@ -196,12 +196,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     public abstract int getRedstoneOutput();
 
     /**
-     * Used to define the base energy storage size
-     * @return Starting energy size
-     */
-    public abstract int getBaseEnergySize();
-
-    /**
      * Used to actually do the processes needed. For processors this should be cooking items and generators should
      * generate RF. This is called every tick allowed, provided redstone mode requirements are met
      */
@@ -510,7 +504,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      * @return How much energy should be available
      */
     public int getSupposedEnergy() {
-        return getBaseEnergySize() * (getModifierForCategory(PSU) *
+        return getDefaultEnergyStorageSize() * (getModifierForCategory(PSU) *
                 (getModifierForCategory(PSU) == 1 ? 1 : 0));
     }
 
@@ -1071,6 +1065,15 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
 
             return ItemHandlerHelper.copyStackWithSize(existing, toExtract);
         }
+    }
+
+    @Override
+    public void setStackInSlot(int slot, ItemStack stack) {
+        validateSlotIndex(slot);
+        if (ItemStack.areItemStacksEqual(this.inventoryContents.get(slot), stack))
+            return;
+        this.inventoryContents.set(slot, stack);
+        onInventoryChanged(slot);
     }
 
     /*******************************************************************************************************************
