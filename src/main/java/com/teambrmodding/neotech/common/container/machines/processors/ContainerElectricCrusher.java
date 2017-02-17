@@ -37,7 +37,7 @@ public class ContainerElectricCrusher extends ContainerAbstractMachine {
                 return false;
             }
         });
-        addSlotToContainer(new SlotItemHandler(inventory, 2, 140, 35) {
+        addSlotToContainer(new SlotItemHandler(inventory, 2, 139, 35) {
             /**
              * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
              */

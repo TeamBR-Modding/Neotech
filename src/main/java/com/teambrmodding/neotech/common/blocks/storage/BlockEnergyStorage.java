@@ -3,7 +3,7 @@ package com.teambrmodding.neotech.common.blocks.storage;
 import com.teambr.bookshelf.common.IOpensGui;
 import com.teambr.bookshelf.common.blocks.IToolable;
 import com.teambr.bookshelf.util.WorldUtils;
-import com.teambrmodding.neotech.client.gui.storage.GuiRFStorage;
+import com.teambrmodding.neotech.client.gui.storage.GuiEnergyStorage;
 import com.teambrmodding.neotech.common.blocks.BaseBlock;
 import com.teambrmodding.neotech.common.container.storage.ContainerEnergyStorage;
 import com.teambrmodding.neotech.common.tiles.storage.TileEnergyStorage;
@@ -114,7 +114,7 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
      */
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        return new GuiRFStorage(player, (TileEnergyStorage) world.getTileEntity(new BlockPos(x, y, z)));
+        return new GuiEnergyStorage(player, (TileEnergyStorage) world.getTileEntity(new BlockPos(x, y, z)));
     }
 
     /*******************************************************************************************************************
