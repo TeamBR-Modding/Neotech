@@ -233,6 +233,8 @@ neotech.text.both=Both
 
 neotech.text.information=Information
 
+neotech.text.empty=Empty
+
 neotech.text.redstoneFlux=Redstone Flux
 
 neotech.text.rfDiff=Energy Change

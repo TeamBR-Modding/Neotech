@@ -24,7 +24,7 @@ public class ContainerAbstractMachine extends BaseContainer {
     protected AbstractMachine abstractMachine;
 
     // List of upgrade slots
-    protected List<SlotItemHandler> upgradeSlots;
+    public List<SlotItemHandler> upgradeSlots;
 
     /**
      * Creates the object

@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.collections;
 
-import com.teambrmodding.neotech.utils.ClientUtils;
+import com.teambr.bookshelf.util.ClientUtils;
 
 import java.awt.*;
 
