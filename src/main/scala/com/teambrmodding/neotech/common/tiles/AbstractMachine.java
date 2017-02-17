@@ -454,27 +454,49 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            switch (facing) {
-                case UP :
-                    return (T) handlerTop;
-                case DOWN :
-                    return (T) handlerDown;
-                case NORTH :
-                    return (T) handlerNorth;
-                case SOUTH :
-                    return (T) handlerSouth;
-                case EAST :
-                    return (T) handlerEast;
-                case WEST :
-                    return (T) handlerWest;
-                default :
-            }
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getItemHandlerCapability(facing) != null) {
+            return (T) getItemHandlerCapability(facing);
         }
-        if(isFluidHandler() && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return (T) this;
+        if(isFluidHandler() && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY &&
+                getFluidHandlerCapability(facing) != null) {
+            return (T) getFluidHandlerCapability(facing);
         }
         return super.getCapability(capability, facing);
+    }
+
+    /**
+     * Used to expose the item handler capability, in child classes, manage input and output based on this
+     * @param dir The direction
+     * @return The item handler
+     */
+    @Nullable
+    protected IItemHandler  getItemHandlerCapability(EnumFacing dir) {
+        switch (dir) {
+            case UP :
+                return handlerTop;
+            case DOWN :
+                return handlerDown;
+            case NORTH :
+                return handlerNorth;
+            case SOUTH :
+                return handlerSouth;
+            case EAST :
+                return handlerEast;
+            case WEST :
+                return handlerWest;
+            default :
+                return this;
+        }
+    }
+
+    /**
+     * Used to get the fluid handler for exposing
+     * @param dir The direction
+     * @return The fluid handler
+     */
+    @Nullable
+    protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
+        return this;
     }
 
     /*******************************************************************************************************************

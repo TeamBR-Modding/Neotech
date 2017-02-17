@@ -6,7 +6,7 @@ import com.teambr.bookshelf.util.WorldUtils;
 import com.teambrmodding.neotech.client.gui.storage.GuiRFStorage;
 import com.teambrmodding.neotech.common.blocks.BaseBlock;
 import com.teambrmodding.neotech.common.container.storage.ContainerEnergyStorage;
-import com.teambrmodding.neotech.common.tiles.storage.TileRFStorage;
+import com.teambrmodding.neotech.common.tiles.storage.TileEnergyStorage;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,7 +33,7 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
      * Creates the storage block
      */
     public BlockEnergyStorage(String name, int tier) {
-        super(Material.IRON, name, TileRFStorage.class);
+        super(Material.IRON, name, TileEnergyStorage.class);
     }
 
     /**
@@ -49,7 +49,7 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileRFStorage(tier);
+        return new TileEnergyStorage(tier);
     }
 
     /*******************************************************************************************************************
@@ -98,7 +98,7 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
      */
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        return new ContainerEnergyStorage(player.inventory, (TileRFStorage) world.getTileEntity(new BlockPos(x, y, z)));
+        return new ContainerEnergyStorage(player.inventory, (TileEnergyStorage) world.getTileEntity(new BlockPos(x, y, z)));
     }
 
     /**
@@ -114,7 +114,7 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
      */
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        return new GuiRFStorage(player, (TileRFStorage) world.getTileEntity(new BlockPos(x, y, z)));
+        return new GuiRFStorage(player, (TileEnergyStorage) world.getTileEntity(new BlockPos(x, y, z)));
     }
 
     /*******************************************************************************************************************

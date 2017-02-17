@@ -1,7 +1,7 @@
 package com.teambrmodding.neotech.common.tiles.storage.tanks;
 
 import com.teambr.bookshelf.common.tiles.FluidHandler;
-import com.teambrmodding.neotech.utils.TimeUtils;
+import com.teambr.bookshelf.util.TimeUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
@@ -97,15 +97,15 @@ public class TileBasicTank extends FluidHandler {
         int light = getBrightness();
         if(lastLightLevel != light) {
             lastLightLevel = light;
-            world.setLightFor(EnumSkyBlock.BLOCK, pos, light);
+            worldObj.setLightFor(EnumSkyBlock.BLOCK, pos, light);
         }
     }
 
     @Override
     protected void onServerTick() {
         if(TimeUtils.onSecond(5) && tanks[TANK].getFluid() != null) {
-            if(world.getTileEntity(pos.offset(EnumFacing.DOWN)) != null) {
-                TileEntity tile = world.getTileEntity(pos.offset(EnumFacing.DOWN));
+            if(worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) != null) {
+                TileEntity tile = worldObj.getTileEntity(pos.offset(EnumFacing.DOWN));
                 if(tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP)) {
                     IFluidHandler tank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
                     for(IFluidTankProperties tankInfo : tank.getTankProperties()) {

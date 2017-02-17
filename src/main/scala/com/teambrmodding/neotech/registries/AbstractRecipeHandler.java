@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -164,6 +165,20 @@ public abstract class AbstractRecipeHandler<R extends AbstractRecipe<I, O>, I, O
         }
 
         return false;
+    }
+
+    /**
+     * Gets the recipe object for the given input
+     * @param input The input
+     * @return The recipe that matches
+     */
+    @Nullable
+    public R getRecipe(I input) {
+        for(R recipe : recipes) {
+            if(recipe.isValidInput(input))
+                return recipe;
+        }
+        return null;
     }
 
     /*******************************************************************************************************************

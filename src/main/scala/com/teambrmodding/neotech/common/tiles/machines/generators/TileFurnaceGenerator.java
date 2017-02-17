@@ -4,17 +4,17 @@ import com.teambr.bookshelf.client.gui.GuiColor;
 import com.teambr.bookshelf.client.gui.GuiTextFormat;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambr.bookshelf.util.InventoryUtils;
-import com.teambrmodding.neotech.client.gui.machines.generators.GuiFluidGenerator;
+import com.teambrmodding.neotech.client.gui.machines.generators.GuiFurnaceGenerator;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
-import com.teambrmodding.neotech.common.container.machines.generators.ContainerFluidGenerator;
+import com.teambrmodding.neotech.common.container.machines.generators.ContainerFurnaceGenerator;
 import com.teambrmodding.neotech.common.tiles.MachineGenerator;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
-import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.FluidFuelRecipeHandler;
+import com.teambrmodding.neotech.managers.FluidManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
@@ -38,22 +39,20 @@ import java.util.List;
  * @author Paul Davis - pauljoda
  * @since 2/16/2017
  */
-public class TileFluidGenerator extends MachineGenerator {
+public class TileFurnaceGenerator extends MachineGenerator {
     // Class variables
-    public static final int BASE_ENERGY_TICK = 175;
+    public static final int BASE_ENERGY_TICK = 100;
     public static final int INPUT_SLOT       = 0;
-    public static final int OUTPUT_SLOT      = 1;
 
-    public static final int TANK = 0;
+    public static final int TANK             = 0;
 
-    protected int currentObjectBurnRate;
 
     /**
      * The initial size of the inventory
      */
     @Override
     public int getInitialSize() {
-        return 2;
+        return 1;
     }
 
     /**
@@ -62,6 +61,8 @@ public class TileFluidGenerator extends MachineGenerator {
     @Override
     public void addValidModes() {
         validModes.add(EnumInputOutputMode.INPUT_ALL);
+        validModes.add(EnumInputOutputMode.INPUT_PRIMARY);
+        validModes.add(EnumInputOutputMode.INPUT_SECONDARY);
     }
 
     /**
@@ -97,8 +98,10 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     public int getEnergyProduced() {
-        return currentObjectBurnRate * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
-                ((getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 12);
+        int oxygenModifier = tanks[TANK].getFluid() != null && tanks[TANK].getFluid().getFluid() == FluidManager.oxygen ?
+                5 : 1;
+        return (BASE_ENERGY_TICK * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
+                ((getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 12)) * oxygenModifier;
     }
 
     /**
@@ -107,6 +110,8 @@ public class TileFluidGenerator extends MachineGenerator {
     @Override
     public void generate() {
         energyStorage.receivePower(getEnergyProduced(), true);
+        if(tanks[TANK].getFluid() != null)
+            tanks[TANK].drain(getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY), true);
     }
 
     /**
@@ -117,53 +122,25 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     public boolean manageBurnTime() {
-        if(tanks == null || tanks.length <= 0 || tanks[TANK] == null)
-            return false;
-
-        // Handle Items
-        if(getStackInSlot(INPUT_SLOT) != null) {
-            ItemStack stackToDrain = getStackInSlot(INPUT_SLOT);
-            if(stackToDrain.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                IFluidHandler fluidHandler = stackToDrain.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-                FluidStack drained = FluidUtil.tryFluidTransfer(this, fluidHandler,
-                        tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), false);
-
-                // Attempt to drain
-                if(drained != null) {
-                    FluidUtil.tryFluidTransfer(this, fluidHandler,
-                            tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), true);
-                }
-
-                // If there is no fluid in container, move to output
-                if(FluidUtil.getFluidContained(stackToDrain) == null) {
-                    if(getStackInSlot(OUTPUT_SLOT) == null) {
-                        setStackInSlot(OUTPUT_SLOT, stackToDrain);
-                        setStackInSlot(INPUT_SLOT, null);
-                    } else if(InventoryUtils.canStacksMerge(stackToDrain, getStackInSlot(OUTPUT_SLOT))) {
-                        InventoryUtils.tryMergeStacks(stackToDrain, getStackInSlot(OUTPUT_SLOT));
-                        if(getStackInSlot(INPUT_SLOT) == null)
-                            setStackInSlot(INPUT_SLOT, null);
-                    }
-                }
-            }
-        }
-
-        // Do burnTime
         if(energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored() && burnTime <= 1) {
-            FluidStack fluidDrained = tanks[TANK].drain(getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) * 10, true);
-            if(fluidDrained == null || fluidDrained.getFluid() == null || fluidDrained.amount <= 0)
-                return false;
+            if(getStackInSlot(INPUT_SLOT) != null) {
+                burnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(INPUT_SLOT));
 
-            burnTime =
-                    ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getOutput(fluidDrained).getLeft();
-            currentObjectBurnRate =
-                    ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getOutput(fluidDrained).getRight();
+                if(burnTime > 0) {
+                    if(getStackInSlot(INPUT_SLOT).getItem().getContainerItem(getStackInSlot(INPUT_SLOT)) == null)
+                        getStackInSlot(INPUT_SLOT).stackSize -= 1;
+                    else
+                        setStackInSlot(INPUT_SLOT, getStackInSlot(INPUT_SLOT).getItem().getContainerItem(getStackInSlot(INPUT_SLOT)));
 
-            if(burnTime > 0) {
-                currentObjectBurnTime = burnTime;
-                return true;
+                    if(getStackInSlot(INPUT_SLOT).stackSize <= 0)
+                        setStackInSlot(INPUT_SLOT, null);
+
+                    currentObjectBurnTime = burnTime;
+                    return true;
+                }
             }
         }
+
         burnTime -= getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
         return burnTime > 0;
     }
@@ -187,7 +164,14 @@ public class TileFluidGenerator extends MachineGenerator {
                     if (drained != null) {
                         FluidUtil.tryFluidTransfer(this, otherTank,
                                 tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), false);
+                        return;
                     }
+                } else if(worldObj.getTileEntity(pos.offset(dir)) != null &&
+                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite())) {
+                    IItemHandler otherInv = worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite());
+                    if(InventoryUtils.moveItemInto(otherInv, -1, this, INPUT_SLOT, 64,
+                            dir, true, true, false))
+                        return;
                 }
             }
         }
@@ -210,8 +194,8 @@ public class TileFluidGenerator extends MachineGenerator {
     @Nullable
     @Override
     protected IItemHandler getItemHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true)
-                ? super.getItemHandlerCapability(dir) : null;
+        return canInputFromSide(dir, true) ?
+                super.getItemHandlerCapability(dir) : null;
     }
 
     /**
@@ -223,20 +207,72 @@ public class TileFluidGenerator extends MachineGenerator {
     @Nullable
     @Override
     protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true) ? super.getFluidHandlerCapability(dir) : null;
+        return canInputFromSide(dir, false) ?
+                super.getFluidHandlerCapability(dir) : null;
     }
 
+    /*******************************************************************************************************************
+     * Inventory Methods                                                                                               *
+     *******************************************************************************************************************/
+
+    /**
+     * Used to get what slots are allowed to be input
+     *
+     * @param mode
+     * @return The slots to input from
+     */
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
-        compound.setInteger("BurnRate", currentObjectBurnRate);
-        return compound;
+    public int[] getInputSlots(EnumInputOutputMode mode) {
+        return new int[] { INPUT_SLOT };
     }
 
+    /**
+     * Used to get what slots are allowed to be output
+     *
+     * @param mode
+     * @return The slots to output from
+     */
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        currentObjectBurnRate = compound.getInteger("BurnRate");
+    public int[] getOutputSlots(EnumInputOutputMode mode) {
+        return new int[] { INPUT_SLOT };
+    }
+
+    /**
+     * Can insert the item into the inventory
+     *
+     * @param slot        The slot
+     * @param itemStackIn The stack to insert
+     * @param dir         The dir
+     * @return True if can insert
+     */
+    @Override
+    public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing dir) {
+        return !isDisabled(dir) && isItemValidForSlot(slot, itemStackIn);
+    }
+
+    /**
+     * Can this extract the item
+     *
+     * @param slot  The slot
+     * @param stack The stack
+     * @param dir   The dir
+     * @return True if can extract
+     */
+    @Override
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing dir) {
+        return !isDisabled(dir);
+    }
+
+    /**
+     * Used to define if an item is valid for a slot
+     *
+     * @param index The slot id
+     * @param stack The stack to check
+     * @return True if you can put this there
+     */
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        return TileEntityFurnace.getItemBurnTime(stack) > 0 && FluidUtil.getFluidHandler(stack) == null;
     }
 
     /*******************************************************************************************************************
@@ -273,7 +309,7 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     protected int[] getInputTanks() {
-        return new int[] {TANK};
+        return new int[] { TANK };
     }
 
     /**
@@ -285,7 +321,7 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     protected int[] getOutputTanks() {
-        return new int[] {TANK};
+        return new int[] { TANK };
     }
 
     /**
@@ -297,75 +333,7 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     protected boolean canFill(Fluid fluid) {
-        return super.canFill(fluid) &&
-                RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS).isValidInput(fluid);
-    }
-
-    /*******************************************************************************************************************
-     * Inventory Methods                                                                                               *
-     *******************************************************************************************************************/
-
-    /**
-     * Used to get what slots are allowed to be input
-     *
-     * @param mode
-     * @return The slots to input from
-     */
-    @Override
-    public int[] getInputSlots(EnumInputOutputMode mode) {
-        return new int[] { INPUT_SLOT };
-    }
-
-    /**
-     * Used to get what slots are allowed to be output
-     *
-     * @param mode
-     * @return The slots to output from
-     */
-    @Override
-    public int[] getOutputSlots(EnumInputOutputMode mode) {
-        return new int[] { OUTPUT_SLOT };
-    }
-
-    /**
-     * Used to define if an item is valid for a slot
-     *
-     * @param index The slot id
-     * @param stack The stack to check
-     * @return True if you can put this there
-     */
-    @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return index == INPUT_SLOT &&
-                stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null) &&
-                FluidUtil.getFluidContained(stack) != null &&
-                RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS).isValidInput(FluidUtil.getFluidContained(stack));
-    }
-
-    /**
-     * Can insert the item into the inventory
-     *
-     * @param slot        The slot
-     * @param itemStackIn The stack to insert
-     * @param dir         The dir
-     * @return True if can insert
-     */
-    @Override
-    public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing dir) {
-        return !isDisabled(dir) && canInputFromSide(dir, true) && isItemValidForSlot(INPUT_SLOT, itemStackIn);
-    }
-
-    /**
-     * Can this extract the item
-     *
-     * @param slot  The slot
-     * @param stack The stack
-     * @param dir   The dir
-     * @return True if can extract
-     */
-    @Override
-    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing dir) {
-        return !isDisabled(dir) && canOutputFromSide(dir, true) && slot == OUTPUT_SLOT;
+        return fluid == FluidManager.oxygen && super.canFill(fluid);
     }
 
     /*******************************************************************************************************************
@@ -385,7 +353,7 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
-        return new ContainerFluidGenerator(player.inventory, this);
+        return new ContainerFurnaceGenerator(player.inventory, this);
     }
 
     /**
@@ -401,7 +369,7 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
-        return new GuiFluidGenerator(player, this);
+        return new GuiFurnaceGenerator(player, this);
     }
 
     /**
@@ -411,13 +379,13 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     public String getDescription() {
-        return  "" +
+        return         "" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.stats") + ":\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.generating") + ":\n" +
                 GuiColor.WHITE + "  " + getEnergyProduced() + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.operations") + ":\n" +
                 GuiColor.WHITE + "  " + getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) + "\n\n" +
-                GuiColor.WHITE + ClientUtils.translate("neotech.fluidGenerator.desc") + "\n\n" +
+                GuiColor.WHITE + ClientUtils.translate("neotech.furnaceGenerator.desc") + "\n\n" +
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.upgrade") + ":\n" + GuiTextFormat.RESET +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processors") + ":\n" +
                 GuiColor.WHITE + ClientUtils.translate("neotech.furnaceGenerator.processorUpgrade.desc") + "\n\n" +
@@ -444,16 +412,15 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     public int getRedstoneOutput() {
-        return (energyStorage.getEnergyStored() * 16) / energyStorage.getMaxStored();
+        return (energyStorage.getEnergyStored() * 16) / energyStorage.getMaxEnergyStored();
     }
 
     /**
      * Used to get what particles to spawn. This will be called when the tile is active
-     *
-     * @param xPos
-     * @param yPos
-     * @param zPos
      */
     @Override
-    public void spawnActiveParticles(double xPos, double yPos, double zPos) {}
+    public void spawnActiveParticles(double x, double y, double z) {
+        worldObj.spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0, 0, 0);
+        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
+    }
 }

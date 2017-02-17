@@ -130,6 +130,18 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipeHan
         saveToFile();
     }
 
+    /**
+     * Used to test if a single stack is valid
+     * @param input The input
+     * @return Is valid
+     */
+    public boolean isValidSingle(FluidStack input) {
+        for(AlloyerRecipe recipe : recipes)
+            if(recipe.isValidSingleInput(input))
+                return true;
+        return false;
+    }
+
     public class AlloyerRecipe extends AbstractRecipe<Pair<FluidStack, FluidStack>, FluidStack> {
         // Variables
         public String fluidStackOne, fluidStackTwo, fluidStackOutput;

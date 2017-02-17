@@ -83,7 +83,7 @@ public abstract class MachineProcessor<I, O> extends AbstractMachine {
      * Used to actually do the processes needed. For processors this should be cooking items and generators should
      * generate RF. This is called every tick allowed, provided redstone mode requirements are met
      */
-    private int failCoolDown = 0;
+    protected int failCoolDown = 0;
     @Override
     protected void doWork() {
         failCoolDown -= 1;
@@ -180,6 +180,16 @@ public abstract class MachineProcessor<I, O> extends AbstractMachine {
     @Override
     protected boolean isReceiver() {
         return true;
+    }
+
+    /**
+     * Used to define the default size of this energy bank
+     *
+     * @return The default size of the energy bank
+     */
+    @Override
+    protected int getDefaultEnergyStorageSize() {
+        return 10000;
     }
 
     /*******************************************************************************************************************

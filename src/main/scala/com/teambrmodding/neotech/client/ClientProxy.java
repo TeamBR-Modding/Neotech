@@ -190,75 +190,60 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(AbstractMachine.class, new TileMachineIORenderer());
 
         // Register Fluid Colors
-        for(String metalString : MetalManager.metalRegistry().keySet()) {
-            if(MetalManager.metalRegistry().get(metalString).fluidBlock().isDefined()) {
-                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
-                    @Override
-                    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
-                        if(state.getBlock() instanceof BlockFluidMetal) {
-                            BlockFluidMetal metal = (BlockFluidMetal) state.getBlock();
-                            return metal.getBlockColor();
-                        }
-                        return 0xFFFFFF;
+        for(String metalString : MetalManager.metalRegistry.keySet()) {
+            if(MetalManager.metalRegistry.get(metalString).getFluidBlock() != null) {
+                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
+                    if(state.getBlock() instanceof BlockFluidMetal) {
+                        BlockFluidMetal metal = (BlockFluidMetal) state.getBlock();
+                        return metal.getBlockColor();
                     }
-                }, MetalManager.metalRegistry().get(metalString).fluidBlock().get());
+                    return 0xFFFFFF;
+                }, MetalManager.metalRegistry.get(metalString).getFluidBlock());
             }
         }
 
         // Gas Colors
-        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
-            @Override
-            public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
-                if(state.getBlock() instanceof FluidBlockGas) {
-                    FluidBlockGas gas = (FluidBlockGas) state.getBlock();
-                    return gas.getBlockColor();
-                }
-                return 0xFFFFFF;
+        Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
+            if(state.getBlock() instanceof FluidBlockGas) {
+                FluidBlockGas gas = (FluidBlockGas) state.getBlock();
+                return gas.getBlockColor();
             }
-        }, FluidManager.blockOxygen(), FluidManager.blockHydrogen());
+            return 0xFFFFFF;
+        }, FluidManager.blockOxygen, FluidManager.blockHydrogen);
 
         // Metal Items
-        for(String metal : MetalManager.metalRegistry().keySet()) {
+        for(String metal : MetalManager.metalRegistry.keySet()) {
             // Dusts
-            if(MetalManager.metalRegistry().get(metal).dust().isDefined()) {
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-                    @Override
-                    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-                        if(stack.getItem() instanceof ItemMetal) {
-                            ItemMetal itemMetal = (ItemMetal) stack.getItem();
-                            return itemMetal.getColorFromItemStack(stack);
-                        }
-                        return 0xFFFFFF;
+            if(MetalManager.metalRegistry.get(metal).getDust() != null) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+                    if(stack.getItem() instanceof ItemMetal) {
+                        ItemMetal itemMetal = (ItemMetal) stack.getItem();
+                        return itemMetal.getColorFromItemStack(stack);
                     }
-                }, MetalManager.metalRegistry().get(metal).dust().get());
+                    return 0xFFFFFF;
+                }, MetalManager.metalRegistry.get(metal).getDust());
             }
 
             // Ingots
-            if(MetalManager.metalRegistry().get(metal).ingot().isDefined()) {
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-                    @Override
-                    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-                        if(stack.getItem() instanceof ItemMetal) {
-                            ItemMetal itemMetal = (ItemMetal) stack.getItem();
-                            return itemMetal.getColorFromItemStack(stack);
-                        }
-                        return 0xFFFFFF;
+            if(MetalManager.metalRegistry.get(metal).getIngot() != null) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+                    if(stack.getItem() instanceof ItemMetal) {
+                        ItemMetal itemMetal = (ItemMetal) stack.getItem();
+                        return itemMetal.getColorFromItemStack(stack);
                     }
-                }, MetalManager.metalRegistry().get(metal).ingot().get());
+                    return 0xFFFFFF;
+                }, MetalManager.metalRegistry.get(metal).getIngot());
             }
 
             // Nuggets
-            if(MetalManager.metalRegistry().get(metal).nugget().isDefined()) {
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-                    @Override
-                    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-                        if(stack.getItem() instanceof ItemMetal) {
-                            ItemMetal itemMetal = (ItemMetal) stack.getItem();
-                            return itemMetal.getColorFromItemStack(stack);
-                        }
-                        return 0xFFFFFF;
+            if(MetalManager.metalRegistry.get(metal).getNugget() != null) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> {
+                    if(stack.getItem() instanceof ItemMetal) {
+                        ItemMetal itemMetal = (ItemMetal) stack.getItem();
+                        return itemMetal.getColorFromItemStack(stack);
                     }
-                }, MetalManager.metalRegistry().get(metal).nugget().get());
+                    return 0xFFFFFF;
+                }, MetalManager.metalRegistry.get(metal).getNugget());
             }
         }
     }

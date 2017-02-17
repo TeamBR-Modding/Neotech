@@ -12,7 +12,7 @@ import com.teambrmodding.neotech.common.tiles.machines.generators.TileFurnaceGen
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileSolarPanel;
 import com.teambrmodding.neotech.common.tiles.machines.operators.TileTreeFarm;
 import com.teambrmodding.neotech.common.tiles.machines.processors.*;
-import com.teambrmodding.neotech.common.tiles.storage.TileRFStorage;
+import com.teambrmodding.neotech.common.tiles.storage.TileEnergyStorage;
 import com.teambrmodding.neotech.common.tiles.storage.tanks.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -79,10 +79,10 @@ public class BlockManager {
         registerBlock(treeFarm, TileTreeFarm.class);
 
         // RF Storage
-        registerBlock(basicRFStorage, new ItemBlockEnergyStorage(basicRFStorage), TileRFStorage.class, null);
-        registerBlock(advancedRFStorage, new ItemBlockEnergyStorage(advancedRFStorage), TileRFStorage.class, null);
-        registerBlock(eliteRFStorage, new ItemBlockEnergyStorage(eliteRFStorage), TileRFStorage.class, null);
-        registerBlock(creativeRFStorage, new ItemBlockEnergyStorage(creativeRFStorage), TileRFStorage.class, null);
+        registerBlock(basicRFStorage, new ItemBlockEnergyStorage(basicRFStorage), TileEnergyStorage.class, null);
+        registerBlock(advancedRFStorage, new ItemBlockEnergyStorage(advancedRFStorage), TileEnergyStorage.class, null);
+        registerBlock(eliteRFStorage, new ItemBlockEnergyStorage(eliteRFStorage), TileEnergyStorage.class, null);
+        registerBlock(creativeRFStorage, new ItemBlockEnergyStorage(creativeRFStorage), TileEnergyStorage.class, null);
 
         // Tanks
         registerBlock(basicTank, new ItemBlockFluidStorage(basicTank), TileBasicTank.class, null);
