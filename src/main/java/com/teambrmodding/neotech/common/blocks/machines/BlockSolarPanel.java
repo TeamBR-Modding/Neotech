@@ -112,6 +112,16 @@ public class BlockSolarPanel extends BlockMachine {
     }
 
     /**
+     * Convert the given metadata into a BlockState for this Block
+     *
+     * @param meta
+     */
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState();
+    }
+
+    /**
      * Creates the block state with our properties
      * @return The block state
      */

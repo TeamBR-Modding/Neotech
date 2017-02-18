@@ -226,6 +226,16 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
     }
 
     /**
+     * Convert the given metadata into a BlockState for this Block
+     *
+     * @param meta
+     */
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(FOUR_WAY, EnumFacing.getFront(meta));
+    }
+
+    /**
      * Creates the block state with our properties
      * @return The block state
      */

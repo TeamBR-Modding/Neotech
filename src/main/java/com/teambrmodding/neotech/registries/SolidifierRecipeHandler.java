@@ -226,6 +226,8 @@ public class SolidifierRecipeHandler extends
         // Obsidian
         addRecipe(new SolidifierRecipe(SolidifierMode.BLOCK_MODE, "obsidian:288",
                 getItemStackString(new ItemStack(Blocks.OBSIDIAN, 1))));
+
+        saveToFile();
     }
 
     /**
