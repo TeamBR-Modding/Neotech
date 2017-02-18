@@ -213,7 +213,8 @@ public class TileFluidGenerator extends MachineGenerator {
     @Nullable
     @Override
     protected IItemHandler getItemHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true)
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true)
                 ? super.getItemHandlerCapability(dir) : null;
     }
 
@@ -226,7 +227,8 @@ public class TileFluidGenerator extends MachineGenerator {
     @Nullable
     @Override
     protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true) ? super.getFluidHandlerCapability(dir) : null;
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true) ? super.getFluidHandlerCapability(dir) : null;
     }
 
     @Override

@@ -234,7 +234,8 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
     @Nullable
     @Override
     protected IItemHandler getItemHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true) ?
                 super.getItemHandlerCapability(dir) : null;
     }
 
@@ -247,7 +248,8 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
     @Nullable
     @Override
     protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
-        return canOutputFromSide(dir, true) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canOutputFromSide(dir, true) ?
                 super.getFluidHandlerCapability(dir) : null;
     }
 

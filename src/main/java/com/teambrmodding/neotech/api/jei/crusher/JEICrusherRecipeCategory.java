@@ -142,7 +142,7 @@ public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecip
         ArrayList<JEICrusherRecipeWrapper> recipes = new ArrayList<>();
         CrusherRecipeHandler crusherRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER);
         for(CrusherRecipeHandler.CrusherRecipe recipe : crusherRecipeHandler.recipes) {
-            ItemStack input = AbstractRecipe.getItemStackFromString(recipe.inputItemStack);
+            ItemStack input = AbstractRecipe.getItemStackFromStringForDisplay(recipe.inputItemStack);
             ItemStack output = AbstractRecipe.getItemStackFromString(recipe.outputItemStack);
             ItemStack outputTwo  = AbstractRecipe.getItemStackFromString(recipe.outputSecondary);
             String chance = String.valueOf(recipe.secondaryOutputPercentChance);

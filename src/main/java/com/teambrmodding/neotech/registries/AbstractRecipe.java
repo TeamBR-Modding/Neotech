@@ -59,7 +59,8 @@ public abstract class AbstractRecipe<I, O> {
      */
     public static String getItemStackString(@Nonnull ItemStack itemStack) {
         if(OreDictionary.getOreIDs(itemStack).length > 0) { // Do we have an ore dict tag for this?
-            return OreDictionary.getOreName(OreDictionary.getOreIDs(itemStack)[0]) + ":" + itemStack.stackSize + ":" + itemStack.getItemDamage(); // Return the ore dict tag, always preferred
+            return OreDictionary.getOreName(OreDictionary.getOreIDs(itemStack)[0]) +
+                    ":" + itemStack.stackSize; // Return the ore dict tag, always preferred
         }
         return itemStack.getItem().getRegistryName().toString() + ":" + itemStack.getItemDamage() + ":" + itemStack.stackSize;
     }
@@ -76,7 +77,7 @@ public abstract class AbstractRecipe<I, O> {
             return null;
 
         String[] name = itemString.split(":");
-        int damage = 0;
+        int damage = -1;
         int stackSize = 1;
         switch (name.length) {
             case 4: // Stack size defined
@@ -93,9 +94,54 @@ public abstract class AbstractRecipe<I, O> {
                     if(ArrayUtils.contains(OreDictionary.getOreIDs(oreStack), OreDictionary.getOreID(name[0])))
                         return new ItemStack(oreStack.getItem(), Integer.parseInt(name[1]), damage == -1 ? oreStack.getItemDamage() : damage);
                 }
-
                 // No ore dict found, lookup item
-                return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage);
+                return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage == -1 ? 0 : damage);
+            case 1: // Not a defined item already, search OreDict
+                List<ItemStack> itemOreTag = OreDictionary.getOres(name[0], false);
+                // The strong ID must match something
+                for(ItemStack oreStack : itemOreTag) {
+                    if(ArrayUtils.contains(OreDictionary.getOreIDs(oreStack), OreDictionary.getOreID(name[0])))
+                        return new ItemStack(oreStack.getItem(), 1, damage == -1 ?
+                                oreStack.getItemDamage() == OreDictionary.WILDCARD_VALUE ? 0 : oreStack.getItemDamage() : damage);
+                }
+            default :
+                LogHelper.logger.error("[Neotech] Unable to get stack from string: " + itemString);
+                return null;
+        }
+    }
+
+    /**
+     * Used to get a stack from a string
+     *
+     * This is used as we don't ever want to actually give out a OreDictionary.WILD_CARD valued stack, but need it
+     * for displaying in JEI etc...
+     *
+     * @param itemString The item string in format MODID:ITEMID:DAMAGE:STACK_SIZE
+     * @return The stack for the string
+     */
+    @Nullable
+    public static ItemStack getItemStackFromStringForDisplay(String itemString) {
+        if(itemString == null || itemString.isEmpty())
+            return null;
+
+        String[] name = itemString.split(":");
+        int damage = -1;
+        int stackSize = 1;
+        switch (name.length) {
+            case 4: // Stack size defined
+                stackSize = Integer.valueOf(name[3]);
+            case 3:
+                damage = Integer.valueOf(name[2]); // Damage Defined
+            case 2: // Create the stack
+                List<ItemStack> ores = OreDictionary.getOres(name[0], false);
+
+                // The strong ID must match something
+                for(ItemStack oreStack : ores) {
+                    if(ArrayUtils.contains(OreDictionary.getOreIDs(oreStack), OreDictionary.getOreID(name[0])))
+                        return new ItemStack(oreStack.getItem(), Integer.parseInt(name[1]), damage == -1 ? oreStack.getItemDamage() : damage);
+                }
+                // No ore dict found, lookup item
+                return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage == -1 ? 0 : damage);
             case 1: // Not a defined item already, search OreDict
                 List<ItemStack> itemOreTag = OreDictionary.getOres(name[0], false);
                 // The strong ID must match something

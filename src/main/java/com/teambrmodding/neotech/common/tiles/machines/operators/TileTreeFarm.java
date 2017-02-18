@@ -408,7 +408,8 @@ public class TileTreeFarm extends AbstractMachine {
     @Nullable
     @Override
     protected IItemHandler getItemHandlerCapability(EnumFacing dir) {
-        return !isDisabled(dir) && (canInputFromSide(dir, true) || canInputFromSide(dir, false)) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                (canInputFromSide(dir, true) || canInputFromSide(dir, false)) ?
                 super.getItemHandlerCapability(dir) : null;
     }
 

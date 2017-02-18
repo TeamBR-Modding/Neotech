@@ -330,8 +330,8 @@ public class SolidifierRecipeHandler extends
         public boolean isValidInput(Pair<SolidifierMode, FluidStack> input) {
             return input.getLeft() == requiredMode &&
                     !(input == null || input.getRight().getFluid() == null) &&
-                    getFluidStackFromString(outputItemStack).getFluid().getName().equalsIgnoreCase(input.getRight().getFluid().getName()) &&
-                    input.getRight().amount >= getFluidStackFromString(outputItemStack).amount;
+                    getFluidStackFromString(inputFluidStack).getFluid().getName().equalsIgnoreCase(input.getRight().getFluid().getName()) &&
+                    input.getRight().amount >= getFluidStackFromString(inputFluidStack).amount;
         }
     }
 }

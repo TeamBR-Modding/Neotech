@@ -126,7 +126,7 @@ public class JEISolidifierRecipeCategory implements IRecipeCategory<JEISolidifie
 
         // Init components
         fluidStackGroup.init(0, true, 37, 9, 49, 62, 2000, false, null);
-        itemStackGroup.init(0, false, 130, 32);
+        itemStackGroup.init(0, false, 129, 31);
 
         // Fill layout
         recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));

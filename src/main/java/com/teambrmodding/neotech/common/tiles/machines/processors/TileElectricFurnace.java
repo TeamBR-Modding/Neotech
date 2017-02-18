@@ -15,7 +15,9 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,6 +204,20 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
             if(canOutputFromSide(dir, true))
                 InventoryUtils.moveItemInto(this, OUTPUT_SLOT, worldObj.getTileEntity(pos.offset(dir)), -1,
                         64, dir.getOpposite(), true, false, true);
+    }
+
+    /**
+     * Used to expose the item handler capability, in child classes, manage input and output based on this
+     *
+     * @param dir The direction
+     * @return The item handler
+     */
+    @Nullable
+    @Override
+    protected IItemHandler getItemHandlerCapability(EnumFacing dir) {
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true) || canOutputFromSide(dir, true) ?
+                super.getItemHandlerCapability(dir) : null;
     }
 
     /*******************************************************************************************************************

@@ -116,7 +116,7 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
         addRecipe(new CrusherRecipe("oreCoal",
                 getItemStackString(new ItemStack(Items.COAL, 3)), getItemStackString(new ItemStack(Items.DIAMOND, 1)),
                 1));
-        addRecipe(new CrusherRecipe("minecraft:wool:" + OreDictionary.WILDCARD_VALUE + "1",
+        addRecipe(new CrusherRecipe("minecraft:wool:" + OreDictionary.WILDCARD_VALUE + ":1",
                 getItemStackString(new ItemStack(Items.STRING, 4)), "", 0));
         addRecipe(new CrusherRecipe("blockGlass", "sand:1", "", 0));
         addRecipe(new CrusherRecipe("gravel",
@@ -141,7 +141,7 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
                 List<ItemStack> dustList = OreDictionary.getOres(entry.replaceFirst("ingot", "dust"));
                 if(!dustList.isEmpty() && !doesRecipeExist(entry.replaceFirst("ingot", "dust"))) {
                     addRecipe(new CrusherRecipe(entry,
-                            getItemStackString(new ItemStack(dustList.get(0).getItem(), 2, dustList.get(0).getItemDamage())),
+                            getItemStackString(new ItemStack(dustList.get(0).getItem(), 2)) + ":" + dustList.get(0).getItemDamage(),
                             "", 0));
                 }
             }

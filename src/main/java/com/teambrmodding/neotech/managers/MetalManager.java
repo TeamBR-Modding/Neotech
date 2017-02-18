@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -175,7 +176,7 @@ public class MetalManager {
                 true, true, true);
 
         // Steel
-        registerMetal(STEEL, 2, 0xFFcd9520, 0xFFcd9520,
+        registerMetal(STEEL, 2, 0x080406, 0x080406,
                 true, false, true,
                 false, true,
                 true, true, true);

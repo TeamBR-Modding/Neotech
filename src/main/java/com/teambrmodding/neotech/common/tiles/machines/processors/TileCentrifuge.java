@@ -306,7 +306,8 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
     @Nullable
     @Override
     protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true) || canOutputFromSide(dir, true) || canOutputFromSide(dir, false) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true) || canOutputFromSide(dir, true) || canOutputFromSide(dir, false) ?
                 super.getFluidHandlerCapability(dir) : null;
     }
 

@@ -11,6 +11,7 @@ import com.teambrmodding.neotech.common.tiles.MachineProcessor;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.managers.RecipeManager;
+import com.teambrmodding.neotech.registries.AbstractRecipe;
 import com.teambrmodding.neotech.registries.SolidifierRecipeHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -51,7 +52,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     public static final int UPDATE_MODE_NBT = 4;
 
     // The current mode for the machine
-    public SolidifierRecipeHandler.SolidifierMode currentMode;
+    public SolidifierRecipeHandler.SolidifierMode currentMode = SolidifierRecipeHandler.SolidifierMode.BLOCK_MODE;
 
     /**
      * The initial size of the inventory
@@ -127,17 +128,21 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     public boolean canProcess() {
         if(energyStorage.getEnergyStored() > getEnergyCostPerTick() && tanks[TANK].getFluid() != null) {
             if(getStackInSlot(OUTPUT_SLOT) == null) {
-                if(tanks[TANK].getFluidAmount() >= currentMode.getRequiredAmount())
+                SolidifierRecipeHandler.SolidifierRecipe recipe =
+                        ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)).getRecipe(Pair.of(currentMode, tanks[TANK].getFluid()));
+                if(recipe != null && tanks[TANK].getFluidAmount() >= AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount)
                     return true;
             } else {
-                ItemStack output =
-                        ((SolidifierRecipeHandler) RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER))
-                                .getOutput(Pair.of(currentMode, tanks[TANK].getFluid()));
-                if(output != null && tanks[TANK].getFluidAmount() >= currentMode.getRequiredAmount()) {
-                    ItemStack ourStack = getStackInSlot(OUTPUT_SLOT);
-                    if(output.getItem() == ourStack.getItem() && output.getItemDamage() == ourStack.getItemDamage() &&
-                            ourStack.stackSize + output.stackSize <= ourStack.getMaxStackSize())
-                        return true;
+                SolidifierRecipeHandler.SolidifierRecipe recipe =
+                        ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)).getRecipe(Pair.of(currentMode, tanks[TANK].getFluid()));
+                if(recipe != null) {
+                    ItemStack output = AbstractRecipe.getItemStackFromString(recipe.outputItemStack);
+                    if (tanks[TANK].getFluidAmount() >= AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount) {
+                        ItemStack ourStack = getStackInSlot(OUTPUT_SLOT);
+                        if (output.getItem() == ourStack.getItem() && output.getItemDamage() == ourStack.getItemDamage() &&
+                                ourStack.stackSize + output.stackSize <= ourStack.getMaxStackSize())
+                            return true;
+                    }
                 }
                 return false;
             }
@@ -162,16 +167,16 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
         for(int x = 0; x < getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY); x++) {
             if(canProcess()) {
                 if(tanks[TANK].getFluid() != null) {
-                    FluidStack drainedStack = drain(currentMode.getRequiredAmount(), false);
-                    ItemStack output =
-                            ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER))
-                                    .getOutput(Pair.of(currentMode, tanks[TANK].getFluid()));
-                    if(drainedStack != null && drainedStack.amount == currentMode.getRequiredAmount() &&
+                    SolidifierRecipeHandler.SolidifierRecipe recipe =
+                            ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)).getRecipe(Pair.of(currentMode, tanks[TANK].getFluid()));
+                    ItemStack output = AbstractRecipe.getItemStackFromString(recipe.outputItemStack);
+                    FluidStack drainedStack = drain(AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount, false);
+                    if(drainedStack != null && drainedStack.amount == AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount &&
                             output != null && (getStackInSlot(OUTPUT_SLOT) == null ||
                             getStackInSlot(OUTPUT_SLOT).stackSize + output.stackSize
                                     <= getStackInSlot(OUTPUT_SLOT).getMaxStackSize())) {
                         // Drain
-                        drain(currentMode.getRequiredAmount(), true);
+                        drain(AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount, true);
                         if(getStackInSlot(OUTPUT_SLOT) != null)
                             getStackInSlot(OUTPUT_SLOT).stackSize += output.stackSize;
                         else
@@ -277,7 +282,8 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     @Nullable
     @Override
     protected IItemHandler getItemHandlerCapability(EnumFacing dir) {
-        return canOutputFromSide(dir, true) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canOutputFromSide(dir, true) ?
                 super.getItemHandlerCapability(dir) : null;
     }
 
@@ -290,7 +296,8 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     @Nullable
     @Override
     protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true) ?
                 super.getFluidHandlerCapability(dir) : null;
     }
 

@@ -5,6 +5,7 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
+import com.teambrmodding.neotech.registries.AbstractRecipe;
 import com.teambrmodding.neotech.registries.CrucibleRecipeHandler;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
@@ -119,7 +120,7 @@ public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRec
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
 
         // Init components
-        itemStackGroup.init(0, true, 53, 32);
+        itemStackGroup.init(0, true, 52, 31);
         fluidStackGroup.init(0, false, 109, 9, 49, 62, 2000, false, null);
 
         // Fill layout
@@ -140,12 +141,12 @@ public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRec
         CrucibleRecipeHandler crucibleRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CRUCIBLE);
         for(CrucibleRecipeHandler.CrucibleRecipe recipe : crucibleRecipeHandler.recipes) {
             java.util.List<ItemStack> inputList = OreDictionary.getOres(recipe.inputItemStack);
-            FluidStack output = recipe.getFluidStackFromString(recipe.outputFluidStack);
+            FluidStack output = AbstractRecipe.getFluidStackFromString(recipe.outputFluidStack);
             if(output != null) {
                 if(!inputList.isEmpty()) {
                     recipes.add(new JEICrucibleRecipeWrapper(inputList, output));
                 } else {
-                    ItemStack input = recipe.getItemStackFromString(recipe.inputItemStack);
+                    ItemStack input = AbstractRecipe.getItemStackFromString(recipe.inputItemStack);
                     if(input != null) {
                         recipes.add(new JEICrucibleRecipeWrapper(Collections.singletonList(input), output));
                     } else LogHelper.logger.error("[NeoTech] Crucible json is corrupt! Please delete and recreate!");

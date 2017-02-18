@@ -241,7 +241,8 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
     @Nullable
     @Override
     protected IItemHandler getItemHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true) || canOutputFromSide(dir, true) | canOutputFromSide(dir, false) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true) || canOutputFromSide(dir, true) | canOutputFromSide(dir, false) ?
                 super.getItemHandlerCapability(dir) : null;
     }
 

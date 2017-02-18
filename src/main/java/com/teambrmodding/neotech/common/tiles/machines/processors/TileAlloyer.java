@@ -318,7 +318,8 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
     @Nullable
     @Override
     protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true) || canInputFromSide(dir, false) || canOutputFromSide(dir, true) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true) || canInputFromSide(dir, false) || canOutputFromSide(dir, true) ?
                 super.getFluidHandlerCapability(dir) : null;
     }
 

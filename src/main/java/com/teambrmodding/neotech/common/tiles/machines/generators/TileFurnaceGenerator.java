@@ -194,7 +194,8 @@ public class TileFurnaceGenerator extends MachineGenerator {
     @Nullable
     @Override
     protected IItemHandler getItemHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, true) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, true) ?
                 super.getItemHandlerCapability(dir) : null;
     }
 
@@ -207,7 +208,8 @@ public class TileFurnaceGenerator extends MachineGenerator {
     @Nullable
     @Override
     protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
-        return canInputFromSide(dir, false) ?
+        return getModeForSide(dir) == EnumInputOutputMode.DEFAULT ||
+                canInputFromSide(dir, false) ?
                 super.getFluidHandlerCapability(dir) : null;
     }
 
