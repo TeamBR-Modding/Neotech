@@ -121,7 +121,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
 
         @Override
         protected boolean isItemValidForSlot(int index, ItemStack stack) {
-            return !hasUpgradeAlready(stack) && stack.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null);
+            return !hasUpgradeAlready(stack);
         }
 
         @Override
@@ -1189,15 +1189,19 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
                         case CPU :
                             if(upgradeItem.getCategory() == CPU)
                                 return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                            break;
                         case HDD :
                             if(upgradeItem.getCategory() == HDD)
                                 return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                            break;
                         case MEMORY :
                             if(upgradeItem.getCategory() == MEMORY)
                                 return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                            break;
                         case PSU :
                             if(upgradeItem.getCategory() == PSU)
                                 return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                            break;
                         case MISC:
                             break;
                         default :
