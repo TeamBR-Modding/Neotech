@@ -12,6 +12,7 @@ import com.teambrmodding.neotech.common.container.machines.ContainerAbstractMach
 import com.teambrmodding.neotech.common.tiles.AbstractMachine;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.ItemManager;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -196,12 +197,15 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
 
                 // Side Selector
                 selectorTabComponents.add(new GuiComponentSideSelector(this, 15, 20, 40,
-                        machine.getWorld().getBlockState(machine.getPos()), machine, true, true) {
+                        machine.getWorld().getBlockState(machine.getPos())
+                                .getActualState(machine.getWorld(), machine.getPos()), machine, true, true) {
                     @Override
                     protected void onSideToggled(EnumFacing side, int modifier) {
                         machine.setVariable(AbstractMachine.IO_FIELD_ID, side.ordinal());
                         machine.sendValueToServer(AbstractMachine.IO_FIELD_ID, side.ordinal());
-                        setBlockState(machine.getWorld().getBlockState(machine.getPos()));
+                        IBlockState realState = machine.getWorld().getBlockState(machine.getPos())
+                                .getActualState(machine.getWorld(), machine.getPos());
+                        setBlockState(realState);
                     }
 
                     @Nullable
