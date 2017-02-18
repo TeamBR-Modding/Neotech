@@ -33,6 +33,8 @@ public class BaseBlock extends BlockContainer {
         setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
         setUnlocalizedName(Reference.MOD_ID + ":" + name);
 
+        setHardness(getHardness());
+
         if(getCreativeTab() != null)
             setCreativeTab(getCreativeTab());
     }
