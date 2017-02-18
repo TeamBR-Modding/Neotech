@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -236,7 +237,7 @@ public abstract class AbstractRecipeHandler<R extends AbstractRecipe<I, O>, I, O
      * @return A string version of the stack in format MODID:ITEMID:DAMAGE:STACK_SIZE
      */
     public static String getItemStackString(@Nonnull ItemStack itemStack) {
-        return itemStack.getItem().getRegistryName().toString() + ":" + itemStack.getItemDamage() + itemStack.stackSize;
+        return itemStack.getItem().getRegistryName().toString() + ":" + itemStack.getItemDamage() + ":" + itemStack.stackSize;
     }
 
     /**
@@ -254,13 +255,22 @@ public abstract class AbstractRecipeHandler<R extends AbstractRecipe<I, O>, I, O
         int damage = 0;
         int stackSize = 1;
         switch (name.length) {
-            case 4:
+            case 4: // Stack size defined
                 stackSize = Integer.valueOf(name[3]);
             case 3:
-                damage = Integer.valueOf(name[2]);
-            case 2:
-                return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage);
-            case 1:
+                damage = Integer.valueOf(name[2]); // Damage Defined
+            case 2: // Create the stack
+                List<ItemStack> ores = OreDictionary.getOres(name[0], false);
+                if(!ores.isEmpty())
+                    return new ItemStack(ores.get(0).getItem(), Integer.parseInt(name[1]),
+                            ores.get(0).getItemDamage() != OreDictionary.WILDCARD_VALUE ? ores.get(0).getItemDamage() : 0);
+                else
+                    return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage);
+            case 1: // Not a defined item already, search OreDict
+                List<ItemStack> itemOreTag = OreDictionary.getOres(name[0], false);
+                if(!itemOreTag.isEmpty())
+                    return new ItemStack(itemOreTag.get(0).getItem(), stackSize,
+                            itemOreTag.get(0).getItemDamage() != OreDictionary.WILDCARD_VALUE ? itemOreTag.get(0).getItemDamage() : 0);
             default :
                 LogHelper.logger.error("[Neotech] Unable to get stack from string: " + itemString);
                 return null;

@@ -102,7 +102,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      *******************************************************************************************************************/
 
     // NBT Tags
-    protected static final String SIZE_FLUID_NBT_TAG = "Size";
+    protected static final String SIZE_FLUID_NBT_TAG = "SizeFluids";
     protected static final String TANK_ID_NBT_TAG = "TankID";
     protected static final String TANKS_NBT_TAG   = "Tanks";
 
@@ -141,6 +141,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      * Main constructor, load things needed here
      */
     public AbstractMachine() {
+        super();
         // Input Output
         setupValidModes();
         resetIO();
@@ -148,15 +149,15 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
         // FluidHandler
         setupTanks();
 
+        // Inventory Setup
+        inventoryContents.setSize(getInitialSize());
+
         // Upgradeable
         // Add callback for our upgrade inventory
-        upgradeInventory.addCallback(new IInventoryCallback() {
-            @Override
-            public void onInventoryChanged(IItemHandler inventory, int slotNumber) {
-                if(inventory.getStackInSlot(slotNumber) == null)
-                    resetValues();
-                upgradeInventoryChanged(slotNumber);
-            }
+        upgradeInventory.addCallback((inventory, slotNumber) -> {
+            if(inventory.getStackInSlot(slotNumber) == null)
+                resetValues();
+            upgradeInventoryChanged(slotNumber);
         });
     }
 
@@ -352,15 +353,30 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        upgradeInventory.writeToNBT(compound, "upgrade");
+        // Upgrade Inventory
+        String inventoryName = "upgrade";
 
-        // Inventory
-        String inventoryName = "";
+        // Set the size
+        compound.setInteger("Size:" + inventoryName, upgradeInventory.inventoryContents.size());
+
+        // Write the inventory
+        NBTTagList tagList = new NBTTagList();
+        for(int i = 0; i < upgradeInventory.inventoryContents.size(); i++) {
+            if(upgradeInventory.inventoryContents.get(i) != null) {
+                NBTTagCompound stackTag = new NBTTagCompound();
+                stackTag.setByte("Slot:" + inventoryName, (byte) i);
+                upgradeInventory.inventoryContents.get(i).writeToNBT(stackTag);
+                tagList.appendTag(stackTag);
+            }
+        }
+        compound.setTag("Items:" + inventoryName, tagList);
+
+        inventoryName = "inventory";
         // Set the size
         compound.setInteger(SIZE_INVENTORY_NBT_TAG + inventoryName, inventoryContents.size());
 
         // Write the inventory
-        NBTTagList tagList = new NBTTagList();
+        tagList = new NBTTagList();
         for(int i = 0; i < inventoryContents.size(); i++) {
             if(inventoryContents.get(i) != null) {
                 NBTTagCompound stackTag = new NBTTagCompound();
@@ -405,15 +421,32 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        upgradeInventory.readFromNBT(compound, "upgrade");
 
-        // Inventory
-        String inventoryName = "";
+        // Upgrade Inventory
+        String inventoryName = "upgrade";
         // Read Items
         NBTTagList tagList = compound.getTagList(ITEMS_NBT_TAG + inventoryName, 10);
+        upgradeInventory.inventoryContents = new Stack<>();
+        if(compound.hasKey(SIZE_INVENTORY_NBT_TAG + inventoryName))
+            upgradeInventory.inventoryContents.setSize(compound.getInteger(SIZE_INVENTORY_NBT_TAG + inventoryName));
+        else
+            upgradeInventory.inventoryContents.setSize(6);
+        for(int i = 0; i < tagList.tagCount(); i++) {
+            NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
+            int slot = stackTag.getByte(SLOT_INVENTORY_NBT_TAG + inventoryName);
+            if(slot >= 0 && slot < upgradeInventory.inventoryContents.size())
+                upgradeInventory.inventoryContents.set(slot, ItemStack.loadItemStackFromNBT(stackTag));
+        }
+
+        // Inventory
+        inventoryName = "inventory";
+        // Read Items
+        tagList = compound.getTagList(ITEMS_NBT_TAG + inventoryName, 10);
         inventoryContents = new Stack<>();
         if(compound.hasKey(SIZE_INVENTORY_NBT_TAG + inventoryName))
             inventoryContents.setSize(compound.getInteger(SIZE_INVENTORY_NBT_TAG + inventoryName));
+        else
+            inventoryContents.setSize(getInitialSize());
         for(int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
             int slot = stackTag.getByte(SLOT_INVENTORY_NBT_TAG + inventoryName);
@@ -526,8 +559,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      * @return How much energy should be available
      */
     public int getSupposedEnergy() {
-        return getDefaultEnergyStorageSize() * (getModifierForCategory(PSU) *
-                (getModifierForCategory(PSU) == 1 ? 1 : 0));
+        return getDefaultEnergyStorageSize() * (getModifierForCategory(PSU));
     }
 
     /**
@@ -642,10 +674,12 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
             return false;
 
         if(isPrimary)
-            return sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
+            return sideModes.get(dir) == EnumInputOutputMode.DEFAULT ||
+                    sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
                     sideModes.get(dir) == EnumInputOutputMode.OUTPUT_PRIMARY;
         else
-            return sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
+            return sideModes.get(dir) == EnumInputOutputMode.DEFAULT ||
+                    sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
                     sideModes.get(dir) == EnumInputOutputMode.OUTPUT_SECONDARY;
     }
 
@@ -660,10 +694,12 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
             return false;
 
         if(isPrimary)
-            return sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
+            return sideModes.get(dir) == EnumInputOutputMode.DEFAULT ||
+                    sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
                     sideModes.get(dir) == EnumInputOutputMode.INPUT_PRIMARY;
         else
-            return sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
+            return sideModes.get(dir) == EnumInputOutputMode.DEFAULT ||
+                    sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
                     sideModes.get(dir) == EnumInputOutputMode.INPUT_SECONDARY;
     }
 

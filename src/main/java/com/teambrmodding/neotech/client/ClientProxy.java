@@ -1,9 +1,9 @@
 package com.teambrmodding.neotech.client;
 
-import com.teambr.bookshelf.common.CommonProxy;
 import com.teambrmodding.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefinition;
 import com.teambrmodding.neotech.client.renderers.tiles.TileMachineIORenderer;
 import com.teambrmodding.neotech.client.renderers.tiles.TileTankFluidRenderer;
+import com.teambrmodding.neotech.common.CommonProxy;
 import com.teambrmodding.neotech.common.fluids.FluidBlockGas;
 import com.teambrmodding.neotech.common.metals.blocks.BlockFluidMetal;
 import com.teambrmodding.neotech.common.metals.items.ItemMetal;
@@ -14,20 +14,10 @@ import com.teambrmodding.neotech.managers.BlockManager;
 import com.teambrmodding.neotech.managers.FluidManager;
 import com.teambrmodding.neotech.managers.ItemManager;
 import com.teambrmodding.neotech.managers.MetalManager;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
-import javax.annotation.Nullable;
 
 /**
  * This file was created for NeoTech
@@ -42,7 +32,7 @@ import javax.annotation.Nullable;
 public class ClientProxy extends CommonProxy {
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit() {
         ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricFurnace", "facing=north,isactive=false");
         ItemRenderManager.registerBlockModel(BlockManager.electricCrusher, "electricCrusher", "facing=north,isactive=false");
         ItemRenderManager.registerBlockModel(BlockManager.furnaceGenerator, "furnaceGenerator", "facing=north,isactive=false");
@@ -182,7 +172,8 @@ public class ClientProxy extends CommonProxy {
      *
      * Now that the items and such are loaded, use this chance to use them
      */
-    public static void init() {
+    @Override
+    public void init() {
         ItemRenderManager.registerItemRenderer();
 
         // Tile Renders
@@ -249,5 +240,5 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {}
+    public void postInit() {}
 }

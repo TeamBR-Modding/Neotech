@@ -1,5 +1,6 @@
 package com.teambrmodding.neotech.common.metals.blocks;
 
+import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -30,6 +31,7 @@ public class BlockMetalOre extends Block {
         setUnlocalizedName(getRegistryName().toString());
         setHardness(3.0F);
         setHarvestLevel("pickaxe", miningLevel);
+        setCreativeTab(Neotech.tabMetals);
     }
 
     /**

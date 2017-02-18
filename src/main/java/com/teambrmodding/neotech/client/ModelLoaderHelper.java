@@ -20,6 +20,6 @@ public class ModelLoaderHelper {
 
     public static void registerItem(Item item, String name, String variants) {
         ModelLoader.registerItemVariants(item,
-                new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID(), name), variants));
+                new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, name), variants));
     }
 }

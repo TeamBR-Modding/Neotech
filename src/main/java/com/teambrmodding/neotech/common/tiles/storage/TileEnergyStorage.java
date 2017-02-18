@@ -55,6 +55,8 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
     // The current tier
     protected int tier;
 
+    public TileEnergyStorage() {}
+
     /**
      * Second constructor for tiers
      * @param tier The tier
@@ -62,6 +64,7 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
     public TileEnergyStorage(int tier) {
         super();
         this.tier = tier;
+        inventoryContents.setSize(2);
     }
 
     /*******************************************************************************************************************
@@ -70,6 +73,9 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
     @Override
     protected void onServerTick() {
         super.onServerTick();
+
+        if(inventoryContents.size() != 2)
+            inventoryContents.setSize(2);
 
         for (EnumFacing dir : EnumFacing.values()) {
             if(worldObj.getTileEntity(pos.offset(dir)) != null &&
@@ -136,6 +142,8 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
         inventoryContents = new Stack<>();
         if(compound.hasKey(SIZE_INVENTORY_NBT_TAG + inventoryName))
             inventoryContents.setSize(compound.getInteger(SIZE_INVENTORY_NBT_TAG + inventoryName));
+        else
+            inventoryContents.setSize(2);
         for(int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
             int slot = stackTag.getByte(SLOT_INVENTORY_NBT_TAG + inventoryName);

@@ -1,7 +1,5 @@
 package com.teambrmodding.neotech.common.tiles;
 
-import com.teambr.bookshelf.common.container.SidedInventoryWrapper;
-import com.teambr.bookshelf.common.tiles.InventorySided;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -25,7 +23,7 @@ public class AbstractMachineSidedWrapper implements IItemHandlerModifiable {
         this.side = side;
     }
 
-    public static int getSlot(InventorySided inv, int slot, EnumFacing side) {
+    public static int getSlot(AbstractMachine inv, int slot, EnumFacing side) {
         int[] slots = inv.getSlotsForFace(side);
         if (slot < slots.length)
             return slots[slot];

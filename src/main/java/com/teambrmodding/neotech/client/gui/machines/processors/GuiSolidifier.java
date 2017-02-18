@@ -1,6 +1,7 @@
 package com.teambrmodding.neotech.client.gui.machines.processors;
 
 import com.teambr.bookshelf.client.gui.GuiColor;
+import com.teambr.bookshelf.client.gui.component.control.GuiComponentItemStackButton;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentColoredZone;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentFluidTank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentTextureAnimated;
@@ -8,9 +9,7 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerSolidifier;
-import com.teambrmodding.neotech.common.tiles.AbstractMachine;
 import com.teambrmodding.neotech.common.tiles.MachineProcessor;
-import com.teambrmodding.neotech.common.tiles.machines.processors.TileCrucible;
 import com.teambrmodding.neotech.common.tiles.machines.processors.TileSolidifier;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.entity.player.EntityPlayer;
@@ -158,6 +157,17 @@ public class GuiSolidifier extends GuiAbstractMachine<ContainerSolidifier> {
                     if(color.getAlpha() != 0)
                         color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 80);
                     return color;
+                }
+            });
+
+            // Item Stack Button
+            components.add(new GuiComponentItemStackButton(this, 96, 54, 224, 111, 22, 22,
+                    solidifier.currentMode.getDisplayStack()) {
+                @Override
+                protected void doAction() {
+                    solidifier.currentMode = solidifier.currentMode.getNextMode();
+                    solidifier.sendValueToClient(TileSolidifier.UPDATE_MODE_NBT, solidifier.currentMode.ordinal());
+                    setDisplayStack(solidifier.currentMode.getDisplayStack());
                 }
             });
         }

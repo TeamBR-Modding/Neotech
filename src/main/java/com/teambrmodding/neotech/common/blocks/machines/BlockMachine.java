@@ -57,7 +57,6 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
      */
     public BlockMachine(String name, Class<? extends TileEntity> tileEntity) {
         super(Material.IRON, name, tileEntity);
-        setDefaultState(getDefaultState().withProperty(FOUR_WAY, EnumFacing.NORTH).withProperty(PROPERTY_ACTIVE, false));
     }
 
     /*******************************************************************************************************************
@@ -100,8 +99,10 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
             }
 
             // Open a GUI
-            if(!playerIn.isSneaking())
+            if(!playerIn.isSneaking()) {
                 playerIn.openGui(Bookshelf.INSTANCE, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                return true;
+            }
         }
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
@@ -192,7 +193,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
     @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if(worldIn.getBlockState(pos).getValue(PROPERTY_ACTIVE)) {
+        if(getActualState(stateIn, worldIn, pos).getValue(PROPERTY_ACTIVE)) {
             EnumFacing facing = stateIn.getValue(FOUR_WAY);
             double d0 = pos.getX() + 0.5;
             double d1 = pos.getY() + rand.nextDouble() * 6.0 / 16.0;
@@ -271,7 +272,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
         if(world.getTileEntity(new BlockPos(x, y, z)) instanceof AbstractMachine) {
             AbstractMachine abstractMachine = (AbstractMachine) world.getTileEntity(new BlockPos(x, y, z));
             if(!PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench))
-                abstractMachine.getServerGuiElement(id, player, world, x, y, z);
+                return abstractMachine.getServerGuiElement(id, player, world, x, y, z);
         }
         return null;
     }
@@ -291,7 +292,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
         if(world.getTileEntity(new BlockPos(x, y, z)) instanceof AbstractMachine) {
             AbstractMachine abstractMachine = (AbstractMachine) world.getTileEntity(new BlockPos(x, y, z));
             if(!PlayerUtils.isPlayerHoldingEither(player, ItemManager.wrench))
-                abstractMachine.getClientGuiElement(id, player, world, x, y, z);
+                return abstractMachine.getClientGuiElement(id, player, world, x, y, z);
         }
         return null;
     }

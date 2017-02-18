@@ -1,19 +1,12 @@
 package com.teambrmodding.neotech.api.jei.crusher;
 
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentArrowJEI;
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentPowerBarJEI;
-import com.teambr.bookshelf.api.jei.drawables.SlotDrawable;
 import com.teambr.bookshelf.client.gui.GuiColor;
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
 import com.teambrmodding.neotech.registries.CrusherRecipeHandler;
-import com.teambrmodding.neotech.registries.CrusherRecipes;
-import com.teambrmodding.neotech.utils.ClientUtils;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiItemStackGroup;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ITooltipCallback;
+import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
@@ -21,9 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This file was created for NeoTech
@@ -38,23 +29,23 @@ import java.util.List;
 public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecipeWrapper> {
 
     // Variables
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID(), "textures/gui/jei/jei.png");
-    private GuiComponentArrowJEI progressArrow  = new GuiComponentArrowJEI(59, 21, NeotechJEIPlugin.jeiHelpers);
-    private GuiComponentPowerBarJEI powerBar    = new GuiComponentPowerBarJEI(3, 0, 18, 60, new Color(255, 0, 0), NeotechJEIPlugin.jeiHelpers);
-    private SlotDrawable slotInput              = new SlotDrawable(31,  20, false);
-    private SlotDrawable slotOutput             = new SlotDrawable(96,  20, true);
-    private SlotDrawable slotOutputTwo          = new SlotDrawable(125, 20, true);
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricCrusher.png");
+    private IDrawableAnimated progressArrow;
+    private IDrawableAnimated powerBar;
 
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
      *******************************************************************************************************************/
 
     /**
-     * Constructor, we want to add the colors to our powerBar here
+     * Constructor
      */
     public JEICrusherRecipeCategory() {
-        powerBar.addColor(new Color(255, 150, 0));
-        powerBar.addColor(new Color(255, 255, 0));
+        IDrawableStatic progressArrowDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 170, 0, 23, 17);
+        progressArrow = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(progressArrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
+
+        IDrawableStatic powerBarDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 170, 17, 16, 62);
+        powerBar = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(powerBarDrawable, 300, IDrawableAnimated.StartDirection.TOP, true);
     }
 
     /*******************************************************************************************************************
@@ -85,7 +76,7 @@ public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecip
      */
     @Override
     public IDrawable getBackground() {
-        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 60);
+        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 80);
     }
 
     /**
@@ -103,14 +94,9 @@ public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecip
      */
     @Override
     public void drawExtras(Minecraft minecraft) {
-        // Draw Slots
-        slotInput.draw(minecraft);
-        slotOutput.draw(minecraft);
-        slotOutputTwo.draw(minecraft);
-
         // Draw Animations
-        progressArrow.draw(minecraft);
-        powerBar.draw(minecraft, 0, 0);
+        progressArrow.draw(minecraft, 76, 31);
+        powerBar.draw(minecraft, 13, 9);
     }
 
     @Override
@@ -127,20 +113,17 @@ public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecip
     public void setRecipe(IRecipeLayout recipeLayout, final JEICrusherRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
 
-        itemStackGroup.init(0, true,  31,  20);
-        itemStackGroup.init(1, false, 96,  20);
-        itemStackGroup.init(2, false, 125, 20);
+        itemStackGroup.init(0, true,  56,  32);
+        itemStackGroup.init(1, false, 114,  32);
+        itemStackGroup.init(2, false, 136, 32);
 
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
         recipeLayout.getItemStacks().set(1, ingredients.getOutputs(ItemStack.class).get(0));
         if(ingredients.getOutputs(ItemStack.class).size() > 1) {
             recipeLayout.getItemStacks().set(2, ingredients.getOutputs(ItemStack.class).get(1));
-            recipeLayout.getItemStacks().addTooltipCallback(new ITooltipCallback<ItemStack>() {
-                @Override
-                public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
-                    if(slotIndex == 2) {
-                        tooltip.add("" + GuiColor.RED + ClientUtils.translate("jei.text.requiresExpansion"));
-                    }
+            recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+                if(slotIndex == 2) {
+                    tooltip.add("" + GuiColor.RED + ClientUtils.translate("jei.text.requiresExpansion"));
                 }
             });
         }
@@ -156,13 +139,12 @@ public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecip
      */
     public static java.util.List<JEICrusherRecipeWrapper> buildRecipeList() {
         ArrayList<JEICrusherRecipeWrapper> recipes = new ArrayList<>();
-        CrusherRecipeHandler crusherRecipeHandler = (CrusherRecipeHandler) RecipeManager.getHandler("crusher").get();
-        for(CrusherRecipes recipe : crusherRecipeHandler.recipes()) {
-            ItemStack input = recipe.getItemStackFromString(recipe.input());
-            ItemStack output = recipe.getItemStackFromString(recipe.output());
-            output.stackSize = recipe.qty();
-            ItemStack outputTwo  = recipe.getItemStackFromString(recipe.outputSecondary());
-            String chance = String.valueOf(recipe.percentChance());
+        CrusherRecipeHandler crusherRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER);
+        for(CrusherRecipeHandler.CrusherRecipe recipe : crusherRecipeHandler.recipes) {
+            ItemStack input = recipe.getItemStackFromString(recipe.inputItemStack);
+            ItemStack output = recipe.getItemStackFromString(recipe.outputItemStack);
+            ItemStack outputTwo  = recipe.getItemStackFromString(recipe.outputSecondary);
+            String chance = String.valueOf(recipe.secondaryOutputPercentChance);
             recipes.add(new JEICrusherRecipeWrapper(input, output, outputTwo, chance));
         }
         return recipes;

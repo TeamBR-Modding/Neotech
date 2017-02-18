@@ -1,18 +1,12 @@
 package com.teambrmodding.neotech.api.jei.centrifuge;
 
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentArrowJEI;
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentBox;
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentPowerBarJEI;
 import com.teambr.bookshelf.helper.LogHelper;
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.CentrifugeRecipe;
 import com.teambrmodding.neotech.registries.CentrifugeRecipeHandler;
-import com.teambrmodding.neotech.utils.ClientUtils;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiFluidStackGroup;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
@@ -20,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -36,25 +29,23 @@ import java.util.ArrayList;
 public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifugeRecipeWrapper> {
 
     // Display
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID(), "textures/gui/jei/jei.png");
-    private GuiComponentArrowJEI progressArrow  = new GuiComponentArrowJEI(94, 17, NeotechJEIPlugin.jeiHelpers);
-    private GuiComponentPowerBarJEI powerBar    = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0), NeotechJEIPlugin.jeiHelpers);
-
-    // Tanks
-    private GuiComponentBox tankInput     = new GuiComponentBox(38, 0, 50, 60);
-    private GuiComponentBox tankOutputOne = new GuiComponentBox(125, 0, 18, 60);
-    private GuiComponentBox tankOutputTwo = new GuiComponentBox(147, 0, 18, 60);
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png");
+    private IDrawableAnimated progressArrow;
+    private IDrawableAnimated powerBar;
 
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
      *******************************************************************************************************************/
 
     /**
-     * Constructor, we want to add the colors to our powerBar here
+     * Constructor
      */
     public JEICentrifugeRecipeCategory() {
-        powerBar.addColor(new Color(255, 150, 0));
-        powerBar.addColor(new Color(255, 255, 0));
+        IDrawableStatic progressArrowDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 170, 0, 23, 17);
+        progressArrow = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(progressArrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
+
+        IDrawableStatic powerBarDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 170, 17, 16, 62);
+        powerBar = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(powerBarDrawable, 300, IDrawableAnimated.StartDirection.TOP, true);
     }
 
     /*******************************************************************************************************************
@@ -85,7 +76,7 @@ public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifug
      */
     @Override
     public IDrawable getBackground() {
-        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 60);
+        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 80);
     }
 
     /**
@@ -103,14 +94,9 @@ public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifug
      */
     @Override
     public void drawExtras(Minecraft minecraft) {
-        // Draw Tank Backgrounds
-        tankInput.draw(minecraft);
-        tankOutputOne.draw(minecraft);
-        tankOutputTwo.draw(minecraft);
-
         // Draw Animations
-        progressArrow.draw(minecraft);
-        powerBar.draw(minecraft, 0, 0);
+        progressArrow.draw(minecraft, 92, 31);
+        powerBar.draw(minecraft, 13, 8);
     }
 
     @Override
@@ -134,9 +120,9 @@ public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifug
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
 
         // Load the fluids
-        fluidStackGroup.init(0, true,  39,  0, 48, 59, 2000, false, null);
-        fluidStackGroup.init(1, false, 126, 0, 16, 59, 2000, false, null);
-        fluidStackGroup.init(2, false, 148, 0, 16, 59, 2000, false, null);
+        fluidStackGroup.init(0, true,  37,  8, 49, 62, 2000, false, null);
+        fluidStackGroup.init(1, false, 121, 8, 16, 62, 2000, false, null);
+        fluidStackGroup.init(2, false, 142, 8, 16, 62, 2000, false, null);
 
         // Set into layout
         recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));
@@ -154,15 +140,15 @@ public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifug
      */
     public static java.util.List<JEICentrifugeRecipeWrapper> buildRecipeList() {
         ArrayList<JEICentrifugeRecipeWrapper> recipes = new ArrayList<>();
-        CentrifugeRecipeHandler centrifugeRecipeHandler = (CentrifugeRecipeHandler) RecipeManager.getHandler("centrifuge").get();
-        for(CentrifugeRecipe recipe : centrifugeRecipeHandler.recipes()) {
-            FluidStack fluidInput = recipe.getFluidStackFromString(recipe.fluidIn());
-            FluidStack fluidOutputOne = recipe.getFluidStackFromString(recipe.fluidOne());
-            FluidStack fluidOutputTwo   = recipe.getFluidStackFromString(recipe.fluidTwo());
+        CentrifugeRecipeHandler centrifugeRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CENTRIFUGE);
+        for(CentrifugeRecipeHandler.CentrifugeRecipe recipe : centrifugeRecipeHandler.recipes) {
+            FluidStack fluidInput = recipe.getFluidStackFromString(recipe.fluidStackInput);
+            FluidStack fluidOutputOne = recipe.getFluidStackFromString(recipe.fluidStackOutputOne);
+            FluidStack fluidOutputTwo   = recipe.getFluidStackFromString(recipe.fluidStackOutputTwo);
             if(fluidInput != null && fluidOutputOne != null && fluidOutputTwo != null)
                 recipes.add(new JEICentrifugeRecipeWrapper(fluidInput, fluidOutputOne, fluidOutputTwo));
             else
-                LogHelper.severe("[Neotech] Centrifuge Recipe json is corrupt! Please delete and run again.");
+                LogHelper.logger.error("[Neotech] Centrifuge Recipe json is corrupt! Please delete and run again.");
         }
 
         return recipes;

@@ -8,6 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 /**
  * This file was created for NeoTech
@@ -41,6 +45,17 @@ public class BlockTreeFarm extends BlockMachine {
      */
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {}
+
+    /**
+     * Called to display particles
+     * @param stateIn The state
+     * @param worldIn The world
+     * @param pos The pos
+     * @param rand An instance or Random
+     */
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {}
 
     /*******************************************************************************************************************
      * BlockState Methods                                                                                              *

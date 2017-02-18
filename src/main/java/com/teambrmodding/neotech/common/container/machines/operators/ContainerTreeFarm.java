@@ -33,7 +33,7 @@ public class ContainerTreeFarm extends ContainerAbstractMachine {
         super(playerInventory, inventory);
 
         // Add Tool Slots
-        addSlotToContainer(new SlotItemHandler(inventory, inventory.AXE_SLOT(), 62, 20){
+        addSlotToContainer(new SlotItemHandler(inventory, TileTreeFarm.AXE_SLOT, 62, 20){
             /**
              * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
              */
@@ -48,7 +48,7 @@ public class ContainerTreeFarm extends ContainerAbstractMachine {
                 return "neotech:items/axe_ghost";
             }
         });
-        addSlotToContainer(new SlotItemHandler(inventory, inventory.SHEARS_SLOT(), 89, 20) {
+        addSlotToContainer(new SlotItemHandler(inventory, TileTreeFarm.SHEARS_SLOT, 89, 20) {
             /**
              * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
              */

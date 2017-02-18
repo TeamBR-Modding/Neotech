@@ -72,8 +72,8 @@ if (build == null || build == '') {
 group= "com.dyonovan.neotech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "NeoTech"
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 minecraft {
 

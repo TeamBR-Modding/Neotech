@@ -1,12 +1,10 @@
 package com.teambrmodding.neotech.api.jei.fluidGenerator;
 
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentBox;
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.FluidFuelRecipe;
 import com.teambrmodding.neotech.registries.FluidFuelRecipeHandler;
-import com.teambrmodding.neotech.utils.ClientUtils;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiFluidStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -19,8 +17,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  * This file was created for NeoTech
@@ -35,8 +32,7 @@ import java.util.*;
 public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGeneratorRecipeWrapper> {
 
     // Display
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID(), "textures/gui/jei/jei.png");
-    private GuiComponentBox tank = new GuiComponentBox(14, 0, 18, 30);
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/fluidFuel.png");
 
     /*******************************************************************************************************************
      * IRecipeCategory                                                                                                 *
@@ -66,7 +62,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
      */
     @Override
     public IDrawable getBackground() {
-        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 30);
+        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 80);
     }
 
     /**
@@ -83,9 +79,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
      * The main draw call, display generic stuff here
      */
     @Override
-    public void drawExtras(Minecraft minecraft) {
-        tank.draw(minecraft);
-    }
+    public void drawExtras(Minecraft minecraft) { }
 
     @Override
     public void drawAnimations(Minecraft minecraft) {
@@ -108,7 +102,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
 
         // Load
-        fluidStackGroup.init(0, true, 15, 0, 16, 29, 2000, false, null);
+        fluidStackGroup.init(0, true, 13, 9, 16, 62, 2000, false, null);
 
         // Set to layout
         recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));
@@ -124,10 +118,10 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
      */
     public static java.util.List<JEIFluidGeneratorRecipeWrapper> buildRecipeList() {
         ArrayList<JEIFluidGeneratorRecipeWrapper> recipes = new ArrayList<>();
-        FluidFuelRecipeHandler fluidFuelRecipeHandler = (FluidFuelRecipeHandler) RecipeManager.getHandler("fluidfuels").get();
-        for(FluidFuelRecipe recipe : fluidFuelRecipeHandler.recipes()) {
-            Fluid fluid = FluidRegistry.getFluid(recipe.fluid());
-            recipes.add(new JEIFluidGeneratorRecipeWrapper(new FluidStack(fluid, 100), recipe.burnTime()));
+        FluidFuelRecipeHandler fluidFuelRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS);
+        for(FluidFuelRecipeHandler.FluidFuelRecipe recipe : fluidFuelRecipeHandler.recipes) {
+            FluidStack fluid = recipe.getFluidStackFromString(recipe.fluidStackInput);
+            recipes.add(new JEIFluidGeneratorRecipeWrapper(fluid, recipe.burnTime, recipe.burnRate));
         }
         return recipes;
     }

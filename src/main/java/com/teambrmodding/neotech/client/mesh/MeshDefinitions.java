@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.client.mesh;
 
-import com.teambr.bookshelf.lib.Reference;
+import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
@@ -28,7 +28,7 @@ public class MeshDefinitions {
 
         @Override
         public ModelResourceLocation getModelLocation(ItemStack stack) {
-            return new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID + ":items" + modelName), variants);
+            return new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID + ":items/" + modelName), variants);
         }
     }
 }

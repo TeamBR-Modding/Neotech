@@ -70,7 +70,7 @@ public abstract class AbstractRecipe<I, O> {
      * @return The stack for the string
      */
     @Nullable
-    public ItemStack getItemStackFromString(String itemString) {
+    public static ItemStack getItemStackFromString(String itemString) {
         if(itemString == null || itemString.isEmpty())
             return null;
 
@@ -83,11 +83,17 @@ public abstract class AbstractRecipe<I, O> {
             case 3:
                 damage = Integer.valueOf(name[2]); // Damage Defined
             case 2: // Create the stack
-                return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage);
-            case 1: // Not a defined item already, search OreDict
                 List<ItemStack> ores = OreDictionary.getOres(name[0], false);
                 if(!ores.isEmpty())
-                    return new ItemStack(ores.get(0).getItem(), stackSize, ores.get(0).getItemDamage());
+                    return new ItemStack(ores.get(0).getItem(), Integer.parseInt(name[1]),
+                            ores.get(0).getItemDamage() != OreDictionary.WILDCARD_VALUE ? ores.get(0).getItemDamage() : 0);
+                else
+                    return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage);
+            case 1: // Not a defined item already, search OreDict
+                List<ItemStack> itemOreTag = OreDictionary.getOres(name[0], false);
+                if(!itemOreTag.isEmpty())
+                    return new ItemStack(itemOreTag.get(0).getItem(), stackSize,
+                            itemOreTag.get(0).getItemDamage() != OreDictionary.WILDCARD_VALUE ? itemOreTag.get(0).getItemDamage() : 0);
             default :
                 LogHelper.logger.error("[Neotech] Unable to get stack from string: " + itemString);
                 return null;

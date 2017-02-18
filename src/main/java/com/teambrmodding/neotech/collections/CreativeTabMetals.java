@@ -66,11 +66,11 @@ public class CreativeTabMetals extends CreativeTabs {
 
         UniversalBucket universalBucket = ForgeModContainer.getInstance().universalBucket;
         if(universalBucket != null) {
-            for (String metalString : MetalManager.metalRegistry().keySet()) {
-                MetalManager.Metal metal = MetalManager.metalRegistry().get(metalString);
-                if(metal.fluid().isDefined()) {
+            for (String metalString : MetalManager.metalRegistry.keySet()) {
+                MetalManager.Metal metal = MetalManager.metalRegistry.get(metalString);
+                if(metal.getFluid() != null) {
                     ItemStack stack = new ItemStack(universalBucket);
-                    universalBucket.fill(stack, new FluidStack(metal.fluid().get(), 1000), true);
+                    universalBucket.fill(stack, new FluidStack(metal.getFluid(), 1000), true);
                     list.add(stack);
                 }
             }

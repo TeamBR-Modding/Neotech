@@ -1,7 +1,7 @@
 package com.teambrmodding.neotech.client.ingameconfig;
 
 import com.teambrmodding.neotech.lib.Reference;
-import com.teambrmodding.neotech.registries.ConfigManager;
+import com.teambrmodding.neotech.managers.ConfigManager;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.config.DummyConfigElement;
@@ -24,20 +24,20 @@ import java.util.List;
 public class GuiConfigNeotech extends GuiConfig {
 
     public GuiConfigNeotech(GuiScreen parent) {
-        super(parent, getConfigElements(), Reference.MOD_ID(), false, false, "NeoTech Config Options");
+        super(parent, getConfigElements(), Reference.MOD_ID, false, false, "NeoTech Config Options");
     }
 
     private static List<IConfigElement> getConfigElements() {
         List<IConfigElement> list = new ArrayList<>();
 
-        list.add(categoryElement(Reference.CONFIG_CLIENT(), "Client Side Config", "neotech.guiconfig.client"));
-        list.add(categoryElement(Reference.CONFIG_WORLD(), "World", "neotech.guiconfig.world"));
+        list.add(categoryElement(Reference.CONFIG_CLIENT, "Client Side Config", "neotech.guiconfig.client"));
+        list.add(categoryElement(Reference.CONFIG_WORLD, "World", "neotech.guiconfig.world"));
 
         return list;
     }
 
     private static IConfigElement categoryElement(String category, String name, String tooltip_key) {
         return new DummyConfigElement.DummyCategoryElement(name, tooltip_key,
-                new ConfigElement(ConfigManager.config().getCategory(category.toLowerCase())).getChildElements());
+                new ConfigElement(ConfigManager.config.getCategory(category.toLowerCase())).getChildElements());
     }
 }

@@ -77,6 +77,10 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
         this.player = player;
 
         lastInventory.copyFrom(machine.upgradeInventory);
+
+        addLeftTabs(leftTabs);
+        addRightTabs(rightTabs);
+
         addComponents();
     }
 
@@ -91,7 +95,8 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
      */
     @Override
     protected void addRightTabs(GuiTabCollection tabs) {
-        addRightTabsLocal(tabs, true);
+        if(machine != null)
+            addRightTabsLocal(tabs, true);
     }
 
     /**
@@ -121,7 +126,7 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
                         int slotX = xStart + (row * 18);
                         int slotY = yStart + (column * 18);
                         motherBoardTab.addChild(new GuiComponentTabSlotHolder(this, slotX, slotY,
-                                inventory.upgradeSlots.get(slotID), 170 + slotX, 2 + slotY,
+                                inventory.upgradeSlots.get(slotID), 171 + slotX, 2 + slotY,
                                 201 + (row * 18), 27 + (column * 18), motherBoardTab));
                         slotID++;
                     }
@@ -159,7 +164,7 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
 
                 // Left Toggle
                 redstoneTabComponents.add(new GuiComponentButton(this, 10, 20, 227, 65,
-                        14, 22, null) {
+                        14, 21, null) {
                     @Override
                     protected void doAction() {
                         machine.moveRedstoneMode(-1);
@@ -169,7 +174,7 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
 
                 // Right Toggle
                 redstoneTabComponents.add(new GuiComponentButton(this, 76, 20, 242, 65,
-                        14, 22, null) {
+                        14, 21, null) {
                     @Override
                     protected void doAction() {
                         machine.moveRedstoneMode(1);
@@ -218,12 +223,14 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
      */
     @Override
     protected void addLeftTabs(GuiTabCollection tabs) {
-        List<BaseComponent> infoTabComponents = new ArrayList<>();
-        infoTabComponents.add(new GuiComponentText(this, 10, 7,
-                GuiColor.YELLOW + ClientUtils.translate("neotech.text.information"), Color.DARK_GRAY));
-        infoTabComponents.add(new GuiComponentLongText(this, 10, 20, 100, 65,
-                224, 0, machine.getDescription(), 50));
-        tabs.addReverseTab(infoTabComponents, 120, 100, 200, 0, new ItemStack(machine.getBlockType()));
+        if(machine != null) {
+            List<BaseComponent> infoTabComponents = new ArrayList<>();
+            infoTabComponents.add(new GuiComponentText(this, 10, 7,
+                    GuiColor.YELLOW + ClientUtils.translate("neotech.text.information"), Color.DARK_GRAY));
+            infoTabComponents.add(new GuiComponentLongText(this, 10, 20, 100, 65,
+                    224, 0, machine.getDescription(), 50));
+            tabs.addReverseTab(infoTabComponents, 120, 100, 200, 0, new ItemStack(machine.getBlockType()));
+        }
     }
 
     /**

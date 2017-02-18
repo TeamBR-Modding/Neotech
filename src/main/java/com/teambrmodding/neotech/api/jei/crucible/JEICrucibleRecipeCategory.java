@@ -1,20 +1,12 @@
 package com.teambrmodding.neotech.api.jei.crucible;
 
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentArrowJEI;
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentBox;
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentPowerBarJEI;
-import com.teambr.bookshelf.api.jei.drawables.SlotDrawable;
 import com.teambr.bookshelf.helper.LogHelper;
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.CrucibleRecipe;
 import com.teambrmodding.neotech.registries.CrucibleRecipeHandler;
-import com.teambrmodding.neotech.utils.ClientUtils;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiFluidStackGroup;
-import mezz.jei.api.gui.IGuiItemStackGroup;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
@@ -24,7 +16,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -41,19 +32,20 @@ import java.util.Collections;
 public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRecipeWrapper> {
 
     // Variables
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID(), "textures/gui/jei/jei.png");
-    private SlotDrawable inputSlot              = new SlotDrawable(56, 17, false);
-    private GuiComponentArrowJEI progressArrow  = new GuiComponentArrowJEI(81, 17, NeotechJEIPlugin.jeiHelpers);
-    private GuiComponentPowerBarJEI powerBar    = new GuiComponentPowerBarJEI(14, 0, 18, 60, new Color(255, 0, 0), NeotechJEIPlugin.jeiHelpers);
-    private GuiComponentBox tank                = new GuiComponentBox(115, 0, 50, 60);
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricCrucible.png");
+    private IDrawableAnimated progressArrow;
+    private IDrawableAnimated powerBar;
 
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
      *******************************************************************************************************************/
 
     public JEICrucibleRecipeCategory() {
-        powerBar.addColor(new Color(255, 150, 0));
-        powerBar.addColor(new Color(255, 255, 0));
+        IDrawableStatic progressArrowDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 170, 0, 23, 17);
+        progressArrow = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(progressArrowDrawable, 200, IDrawableAnimated.StartDirection.LEFT, false);
+
+        IDrawableStatic powerBarDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 170, 17, 16, 62);
+        powerBar = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(powerBarDrawable, 300, IDrawableAnimated.StartDirection.TOP, true);
     }
 
     /*******************************************************************************************************************
@@ -84,7 +76,7 @@ public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRec
      */
     @Override
     public IDrawable getBackground() {
-        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 60);
+        return NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 0, 0, 170, 80);
     }
 
     /**
@@ -100,13 +92,9 @@ public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRec
 
     @Override
     public void drawExtras(Minecraft minecraft) {
-        // Draw Backgrounds
-        inputSlot.draw(minecraft);
-        tank.draw(minecraft);
-
         // Draw Animations
-        progressArrow.draw(minecraft);
-        powerBar.draw(minecraft, 0, 0);
+        progressArrow.draw(minecraft, 76, 31);
+        powerBar.draw(minecraft, 13, 9);
     }
 
     @Override
@@ -131,8 +119,8 @@ public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRec
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
 
         // Init components
-        itemStackGroup.init(0, true, 56, 17);
-        fluidStackGroup.init(0, false, 116, 0, 48, 59, 2000, false, null);
+        itemStackGroup.init(0, true, 53, 32);
+        fluidStackGroup.init(0, false, 109, 9, 49, 62, 2000, false, null);
 
         // Fill layout
         recipeLayout.getItemStacks().set(0,  ingredients.getInputs(ItemStack.class).get(0));
@@ -149,20 +137,20 @@ public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRec
      */
     public static java.util.List<JEICrucibleRecipeWrapper> buildRecipeList() {
         ArrayList<JEICrucibleRecipeWrapper> recipes = new ArrayList<>();
-        CrucibleRecipeHandler crucibleRecipeHandler = (CrucibleRecipeHandler) RecipeManager.getHandler("crucible").get();
-        for(CrucibleRecipe recipe : crucibleRecipeHandler.recipes()) {
-            java.util.List<ItemStack> inputList = OreDictionary.getOres(recipe.ore());
-            FluidStack output = recipe.getFluidStackFromString(recipe.output());
+        CrucibleRecipeHandler crucibleRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CRUCIBLE);
+        for(CrucibleRecipeHandler.CrucibleRecipe recipe : crucibleRecipeHandler.recipes) {
+            java.util.List<ItemStack> inputList = OreDictionary.getOres(recipe.inputItemStack);
+            FluidStack output = recipe.getFluidStackFromString(recipe.outputFluidStack);
             if(output != null) {
                 if(!inputList.isEmpty()) {
                     recipes.add(new JEICrucibleRecipeWrapper(inputList, output));
                 } else {
-                    ItemStack input = recipe.getItemStackFromString(recipe.input());
+                    ItemStack input = recipe.getItemStackFromString(recipe.inputItemStack);
                     if(input != null) {
                         recipes.add(new JEICrucibleRecipeWrapper(Collections.singletonList(input), output));
-                    } else LogHelper.severe("[NeoTech] Crucible json is corrupt! Please delete and recreate!");
+                    } else LogHelper.logger.error("[NeoTech] Crucible json is corrupt! Please delete and recreate!");
                 }
-            } else LogHelper.severe("[NeoTech] Crucible json is corrupt! Please delete and recreate!");
+            } else LogHelper.logger.error("[NeoTech] Crucible json is corrupt! Please delete and recreate!");
         }
         return recipes;
     }

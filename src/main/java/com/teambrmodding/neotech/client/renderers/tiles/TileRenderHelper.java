@@ -10,6 +10,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -106,7 +109,14 @@ public abstract class TileRenderHelper<T extends TileEntity> extends TileEntityS
         int sizeY = 16;
         VertexBuffer tes = Tessellator.getInstance().getBuffer();
 
-        tes.begin(GL11.GL_QUADS, RenderUtils.POSITION_TEX_NORMALF());
+        VertexFormat POSITION_TEX_NORMALF = new VertexFormat();
+        VertexFormatElement NORMAL_3F =
+                new VertexFormatElement(0, VertexFormatElement.EnumType.FLOAT, VertexFormatElement.EnumUsage.NORMAL, 3);
+        POSITION_TEX_NORMALF.addElement(DefaultVertexFormats.POSITION_3F);
+        POSITION_TEX_NORMALF.addElement(DefaultVertexFormats.TEX_2F);
+        POSITION_TEX_NORMALF.addElement(NORMAL_3F);
+
+        tes.begin(GL11.GL_QUADS, POSITION_TEX_NORMALF);
         tes.pos(posX, posY + sizeY, 0).tex(minU, maxV).normal(0, -1, 0).endVertex();
         tes.pos(posX + sizeX, posY + sizeY, 0).tex(maxU, maxV).normal(0, -1, 0).endVertex();
         tes.pos(posX + sizeX, posY, 0).tex(maxU, minV).normal(0, -1, 0).endVertex();

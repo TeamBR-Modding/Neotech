@@ -39,7 +39,7 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
      * Main constructor for Guis
      */
     public GuiFurnaceGenerator(EntityPlayer player, TileFurnaceGenerator generator) {
-        super(new ContainerFurnaceGenerator(player.inventory, generator), 175, 165, "neotech.fluidgenerator.title",
+        super(new ContainerFurnaceGenerator(player.inventory, generator), 175, 165, "neotech.furnacegenerator.title",
                 new ResourceLocation(Reference.MOD_ID, "textures/gui/generatorFurnace.png"), generator, player);
         this.generator = generator;
         addComponents();
@@ -65,7 +65,7 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
                     16, 62, GuiComponentTextureAnimated.ANIMATION_DIRECTION.UP) {
                 @Override
                 protected int getCurrentProgress(int scale) {
-                    return machine.getEnergyStored() * scale / machine.getMaxEnergyStored();
+                    return (machine.getEnergyStored() * scale) / machine.getMaxEnergyStored();
                 }
 
                 /**
@@ -146,10 +146,6 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
                         } else if(generator.getModeForSide(dir) == EnumInputOutputMode.INPUT_SECONDARY)
                             color = EnumInputOutputMode.INPUT_SECONDARY.getHighlightColor();
                     }
-
-                    // Color was assigned
-                    if(color.getAlpha() != 0)
-                        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 80);
                     return color;
                 }
             });
@@ -174,9 +170,6 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
                             color = EnumInputOutputMode.INPUT_PRIMARY.getHighlightColor();
                     }
 
-                    // Color was assigned
-                    if(color.getAlpha() != 0)
-                        color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 80);
                     return color;
                 }
             });

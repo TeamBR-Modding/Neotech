@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -154,10 +155,12 @@ public class TileFluidGenerator extends MachineGenerator {
             if(fluidDrained == null || fluidDrained.getFluid() == null || fluidDrained.amount <= 0)
                 return false;
 
-            burnTime =
-                    ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getOutput(fluidDrained).getLeft();
-            currentObjectBurnRate =
-                    ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getOutput(fluidDrained).getRight();
+            Pair<Integer, Integer> output = ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getOutput(fluidDrained);
+            if(output == null)
+                return false;
+
+            burnTime = output.getLeft();
+            currentObjectBurnRate = output.getRight();
 
             if(burnTime > 0) {
                 currentObjectBurnTime = burnTime;
@@ -298,7 +301,7 @@ public class TileFluidGenerator extends MachineGenerator {
     @Override
     protected boolean canFill(Fluid fluid) {
         return super.canFill(fluid) &&
-                RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS).isValidInput(fluid);
+                RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS).isValidInput(new FluidStack(fluid, 1000));
     }
 
     /*******************************************************************************************************************

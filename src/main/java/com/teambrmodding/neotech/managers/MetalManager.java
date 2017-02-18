@@ -14,6 +14,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -174,7 +175,7 @@ public class MetalManager {
                 true, true, true);
 
         // Steel
-        registerMetal(BRONZE, 2, 0xFFcd9520, 0xFFcd9520,
+        registerMetal(STEEL, 2, 0xFFcd9520, 0xFFcd9520,
                 true, false, true,
                 false, true,
                 true, true, true);
@@ -266,16 +267,16 @@ public class MetalManager {
 
         // Nugget - Ingot
         if(metal.getIngot() != null && metal.getNugget() != null) {
-            GameRegistry.addShapedRecipe(new ItemStack(metal.getNugget(), 9), metal.getIngot());
+            GameRegistry.addShapelessRecipe(new ItemStack(metal.getNugget(), 9), metal.getIngot());
             GameRegistry.addRecipe(new ItemStack(metal.getIngot(), 1),
                     "III",
                     "III",
-                    "III", 'I',metal.getNugget());
+                    "III", 'I', metal.getNugget());
         }
 
         // Ingot - Block
         if (metal.getIngot() != null && metal.getSolidBlock() != null) {
-            GameRegistry.addShapedRecipe(new ItemStack(metal.getIngot(), 9), metal.getSolidBlock());
+            GameRegistry.addShapelessRecipe(new ItemStack(metal.getIngot(), 9), metal.getSolidBlock());
             GameRegistry.addRecipe(new ItemStack(metal.getSolidBlock(), 1),
                     "III",
                     "III",

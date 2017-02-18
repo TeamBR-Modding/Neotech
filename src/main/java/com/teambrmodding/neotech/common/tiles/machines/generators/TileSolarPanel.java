@@ -25,6 +25,10 @@ public class TileSolarPanel extends MachineGenerator {
     public static int BASE_ENERGY_PRODUCED = 16;
     protected int tier;
 
+    public TileSolarPanel() {
+
+    }
+
     public TileSolarPanel(int tier) {
         this.tier = tier;
         initEnergy();

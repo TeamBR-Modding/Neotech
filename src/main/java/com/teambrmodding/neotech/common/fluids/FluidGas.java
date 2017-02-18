@@ -24,8 +24,9 @@ public class FluidGas extends Fluid {
      * @param still     Still Texture
      * @param flowing   Flowing Texture
      */
-    public FluidGas(String fluidName, ResourceLocation still, ResourceLocation flowing) {
+    public FluidGas(int color, String fluidName, ResourceLocation still, ResourceLocation flowing) {
         super(fluidName, still, flowing);
+        this.color = color;
     }
 
     /*******************************************************************************************************************

@@ -81,35 +81,35 @@ public class NeotechJEIPlugin implements IModPlugin {
         registry.addRecipes(JEIFluidGeneratorCategory.buildRecipeList());
 
         // Furnace
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricFurnace()), VanillaRecipeCategoryUid.SMELTING);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricFurnace), VanillaRecipeCategoryUid.SMELTING);
         registry.addRecipeClickArea(GuiElectricFurnace.class, 81, 35, 23, 17, VanillaRecipeCategoryUid.SMELTING);
 
         // Furnace Generator
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.furnaceGenerator()), VanillaRecipeCategoryUid.FUEL);
-        registry.addRecipeClickArea(GuiFurnaceGenerator.class, 78, 55, 14, 14, VanillaRecipeCategoryUid.FUEL);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.furnaceGenerator), VanillaRecipeCategoryUid.FUEL);
+        registry.addRecipeClickArea(GuiFurnaceGenerator.class, 78, 27, 14, 14, VanillaRecipeCategoryUid.FUEL);
 
         // Fluid Generator
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.fluidGenerator()), FLUID_GEN_UUID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.fluidGenerator), FLUID_GEN_UUID);
         registry.addRecipeClickArea(GuiFluidGenerator.class, 78, 55, 14, 14, FLUID_GEN_UUID);
 
         // Crusher
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCrusher()), CRUSHER_UUID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCrusher), CRUSHER_UUID);
         registry.addRecipeClickArea(GuiElectricCrusher.class, 64, 34, 23, 17, CRUSHER_UUID);
 
         // Solidifier
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricSolidifier()), SOLIDIFIER_UUID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricSolidifier), SOLIDIFIER_UUID);
         registry.addRecipeClickArea(GuiSolidifier.class, 97, 35, 23, 17, SOLIDIFIER_UUID);
 
         // Crucible
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCrucible()), CRUCIBLE_UUID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCrucible), CRUCIBLE_UUID);
         registry.addRecipeClickArea(GuiCrucible.class, 81, 35, 23, 17, CRUCIBLE_UUID);
 
         // Alloyer
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricAlloyer()), ALLOYER_UUID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricAlloyer), ALLOYER_UUID);
         registry.addRecipeClickArea(GuiAlloyer.class, 81, 35, 23, 17, ALLOYER_UUID);
 
         // Centrifuge
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCentrifuge()), CENTRIFUGE_UUID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCentrifuge), CENTRIFUGE_UUID);
         registry.addRecipeClickArea(GuiCentrifuge.class, 94, 35, 23, 17, CENTRIFUGE_UUID);
 
         // Move JEI item pane around tabs

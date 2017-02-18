@@ -67,7 +67,7 @@ public class BaseBlock extends BlockContainer {
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         if(tileClass != null)
             try {
-                tileClass.newInstance();
+                return tileClass.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }

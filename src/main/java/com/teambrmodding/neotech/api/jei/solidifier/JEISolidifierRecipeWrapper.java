@@ -1,12 +1,14 @@
 package com.teambrmodding.neotech.api.jei.solidifier;
 
-import com.teambr.bookshelf.api.jei.drawables.GuiComponentItemStackButtonJEI;
-import com.teambrmodding.neotech.common.tiles.machines.processors.TileSolidifier;
+import com.teambr.bookshelf.helper.GuiHelper;
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.managers.MetalManager;
-import com.teambrmodding.neotech.utils.ClientUtils;
+import com.teambrmodding.neotech.registries.SolidifierRecipeHandler;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -31,9 +33,7 @@ public class JEISolidifierRecipeWrapper extends BlankRecipeWrapper {
     // Variables
     private FluidStack input;
     private ItemStack output;
-    private int mode;
-
-    private GuiComponentItemStackButtonJEI modeButton;
+    private SolidifierRecipeHandler.SolidifierMode currentMode;
 
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
@@ -45,22 +45,10 @@ public class JEISolidifierRecipeWrapper extends BlankRecipeWrapper {
      * @param out
      * @param solidifyMode
      */
-    public JEISolidifierRecipeWrapper(FluidStack in, ItemStack out, int solidifyMode) {
+    public JEISolidifierRecipeWrapper(FluidStack in, ItemStack out, SolidifierRecipeHandler.SolidifierMode solidifyMode) {
         input = in;
         output = out;
-        mode = solidifyMode;
-
-        ItemStack displayStack = new ItemStack(Blocks.IRON_BLOCK);
-        switch (mode) {
-            case 1 :
-                displayStack = new ItemStack(Items.IRON_INGOT);
-                break;
-            case 2 :
-                displayStack = new ItemStack(MetalManager.getMetal("iron").get().nugget().get());
-                break;
-            default:
-        }
-        modeButton = new GuiComponentItemStackButtonJEI(97, 37, displayStack);
+        currentMode = solidifyMode;
     }
 
     /*******************************************************************************************************************
@@ -97,7 +85,13 @@ public class JEISolidifierRecipeWrapper extends BlankRecipeWrapper {
      */
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        modeButton.draw(minecraft);
+        GlStateManager.pushMatrix();
+        RenderHelper.enableGUIStandardItemLighting();
+
+        Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(currentMode.getDisplayStack(), 95, 52);
+
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.popMatrix();
     }
 
     /**
@@ -107,21 +101,7 @@ public class JEISolidifierRecipeWrapper extends BlankRecipeWrapper {
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
         if(mouseX > 97 && mouseX < 117 && mouseY > 37 && mouseY < 57) {
-            String tipString;
-            switch (mode) {
-                case 0 :
-                    tipString = ClientUtils.translate("neotech.text.blockMode");
-                    break;
-                case 1 :
-                    tipString = ClientUtils.translate("neotech.text.ingotMode");
-                    break;
-                case 2 :
-                    tipString = ClientUtils.translate("neotech.text.nuggetMode");
-                    break;
-                default :
-                    tipString = ClientUtils.translate("neotech.text.blockMode");
-            }
-            return Collections.singletonList(tipString);
+            return Collections.singletonList(currentMode.getDisplayName());
         }
         return super.getTooltipStrings(mouseX, mouseY);
     }

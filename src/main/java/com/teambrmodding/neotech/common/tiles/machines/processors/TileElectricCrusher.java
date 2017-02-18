@@ -83,6 +83,7 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
         list.add(IUpgradeItem.TRANSFORMER);
         list.add(IUpgradeItem.REDSTONE_CIRCUIT);
         list.add(IUpgradeItem.NETWORK_CARD);
+        list.add(IUpgradeItem.EXPANSION_CARD);
         return list;
     }
 
@@ -143,7 +144,7 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
      */
     @Override
     protected void completeCook() {
-        for(int x = 0; x < getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU); x++) {
+        for(int x = 0; x < getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY); x++) {
             if(canProcess()) {
                 ItemStack input = getStackInSlot(INPUT_SLOT).copy();
                 ItemStack recipeResult = getOutput(input);

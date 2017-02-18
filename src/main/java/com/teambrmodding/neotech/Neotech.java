@@ -2,7 +2,6 @@ package com.teambrmodding.neotech;
 
 import com.teambrmodding.neotech.collections.CreativeTabMetals;
 import com.teambrmodding.neotech.common.CommonProxy;
-import com.teambrmodding.neotech.events.EventManager;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.*;
 import com.teambrmodding.neotech.network.PacketDispatcher;
@@ -39,6 +38,11 @@ import java.io.File;
         guiFactory     = "com.teambrmodding.neotech.client.ingameconfig.GuiFactoryNeotech")
 public class Neotech {
 
+    // Enable the bucket on creation
+    static {
+        FluidRegistry.enableUniversalBucket();
+    }
+
     @Mod.Instance
     public static Neotech INSTANCE;
 
@@ -63,8 +67,6 @@ public class Neotech {
 
     @Mod.EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
-        FluidRegistry.enableUniversalBucket();
-
         CapabilityLoadManager.registerCapabilities();
         configFolderLocation = event.getModConfigurationDirectory().getAbsolutePath() + File.separator + "Neotech";
 
@@ -84,7 +86,6 @@ public class Neotech {
     public static void init(FMLInitializationEvent event) {
         RecipeManager.init();
         PacketDispatcher.initPackets();
-        EventManager.init();
         proxy.init();
     }
 

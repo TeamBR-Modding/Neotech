@@ -25,7 +25,7 @@ public class JEIFluidGeneratorRecipeWrapper extends BlankRecipeWrapper {
 
     // Variables
     private FluidStack fluid;
-    private int burnTime;
+    private int burnTime, burnRate;
 
     private IDrawableAnimated flame;
 
@@ -33,9 +33,10 @@ public class JEIFluidGeneratorRecipeWrapper extends BlankRecipeWrapper {
      * Constructor                                                                                                     *
      *******************************************************************************************************************/
 
-    public JEIFluidGeneratorRecipeWrapper(FluidStack input, int time) {
+    public JEIFluidGeneratorRecipeWrapper(FluidStack input, int time, int burnRate) {
         fluid = input;
         burnTime = time;
+        this.burnRate = burnRate;
 
         ResourceLocation furnaceBackgroundLocation = new ResourceLocation("minecraft", "textures/gui/container/furnace.png");
         IDrawableStatic flameDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(furnaceBackgroundLocation, 176, 0, 14, 14);
@@ -75,5 +76,6 @@ public class JEIFluidGeneratorRecipeWrapper extends BlankRecipeWrapper {
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         flame.draw(minecraft, 40, 10);
         minecraft.fontRendererObj.drawString(String.valueOf(burnTime) + " ticks", 58, 17, Color.gray.getRGB());
+        minecraft.fontRendererObj.drawString(String.valueOf(burnRate) + " rf/t", 58, 32, Color.gray.getRGB());
     }
 }
