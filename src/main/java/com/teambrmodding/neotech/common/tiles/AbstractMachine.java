@@ -1062,7 +1062,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
         if (stack == null || stack.stackSize == 0 || !isItemValidForSlot(slot, stack))
-            return null;
+            return stack;
 
         validateSlotIndex(slot);
 
@@ -1092,7 +1092,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
             onInventoryChanged(slot);
         }
 
-        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.stackSize - limit) : null;    }
+        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.stackSize - limit) : null;
+    }
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {

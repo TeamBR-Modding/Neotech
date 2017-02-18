@@ -232,6 +232,8 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
+        if(meta == EnumFacing.DOWN.getIndex() || meta == EnumFacing.UP.getIndex())
+            return getDefaultState();
         return getDefaultState().withProperty(FOUR_WAY, EnumFacing.getFront(meta));
     }
 
