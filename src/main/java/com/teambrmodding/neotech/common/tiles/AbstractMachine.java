@@ -340,7 +340,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
 
         // We want to try automatic IO if we are able to
         if(shouldHandleIO() && timeTicker <= 0 && hasUpgradeByID(IUpgradeItem.NETWORK_CARD)) {
-            timeTicker = 20;
+            timeTicker = 20 - getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU);
             tryInput();
             tryOutput();
         }
@@ -479,7 +479,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return !isDisabled(facing) &&
+        return (!isDisabled(facing) || getModeForSide(facing) == EnumInputOutputMode.DEFAULT) &&
                 (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
                         (!isFluidHandler() || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) ||
                         super.hasCapability(capability, facing));
@@ -674,12 +674,10 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
             return false;
 
         if(isPrimary)
-            return sideModes.get(dir) == EnumInputOutputMode.DEFAULT ||
-                    sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
+            return sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
                     sideModes.get(dir) == EnumInputOutputMode.OUTPUT_PRIMARY;
         else
-            return sideModes.get(dir) == EnumInputOutputMode.DEFAULT ||
-                    sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
+            return sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.OUTPUT_ALL ||
                     sideModes.get(dir) == EnumInputOutputMode.OUTPUT_SECONDARY;
     }
 
@@ -694,12 +692,10 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
             return false;
 
         if(isPrimary)
-            return sideModes.get(dir) == EnumInputOutputMode.DEFAULT ||
-                    sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
+            return sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
                     sideModes.get(dir) == EnumInputOutputMode.INPUT_PRIMARY;
         else
-            return sideModes.get(dir) == EnumInputOutputMode.DEFAULT ||
-                    sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
+            return sideModes.get(dir) == EnumInputOutputMode.ALL_MODES || sideModes.get(dir) == EnumInputOutputMode.INPUT_ALL ||
                     sideModes.get(dir) == EnumInputOutputMode.INPUT_SECONDARY;
     }
 

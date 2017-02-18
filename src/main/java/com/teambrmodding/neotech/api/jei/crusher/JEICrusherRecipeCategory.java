@@ -5,6 +5,7 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
+import com.teambrmodding.neotech.registries.AbstractRecipe;
 import com.teambrmodding.neotech.registries.CrusherRecipeHandler;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
@@ -113,9 +114,9 @@ public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecip
     public void setRecipe(IRecipeLayout recipeLayout, final JEICrusherRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
 
-        itemStackGroup.init(0, true,  56,  32);
-        itemStackGroup.init(1, false, 114,  32);
-        itemStackGroup.init(2, false, 136, 32);
+        itemStackGroup.init(0, true,  52,  31);
+        itemStackGroup.init(1, false, 113,  31);
+        itemStackGroup.init(2, false, 135, 31);
 
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
         recipeLayout.getItemStacks().set(1, ingredients.getOutputs(ItemStack.class).get(0));
@@ -141,9 +142,9 @@ public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecip
         ArrayList<JEICrusherRecipeWrapper> recipes = new ArrayList<>();
         CrusherRecipeHandler crusherRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER);
         for(CrusherRecipeHandler.CrusherRecipe recipe : crusherRecipeHandler.recipes) {
-            ItemStack input = recipe.getItemStackFromString(recipe.inputItemStack);
-            ItemStack output = recipe.getItemStackFromString(recipe.outputItemStack);
-            ItemStack outputTwo  = recipe.getItemStackFromString(recipe.outputSecondary);
+            ItemStack input = AbstractRecipe.getItemStackFromString(recipe.inputItemStack);
+            ItemStack output = AbstractRecipe.getItemStackFromString(recipe.outputItemStack);
+            ItemStack outputTwo  = AbstractRecipe.getItemStackFromString(recipe.outputSecondary);
             String chance = String.valueOf(recipe.secondaryOutputPercentChance);
             recipes.add(new JEICrusherRecipeWrapper(input, output, outputTwo, chance));
         }

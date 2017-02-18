@@ -243,15 +243,7 @@ public abstract class MachineProcessor<I, O> extends AbstractMachine {
      */
     @Override
     public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing dir) {
-        if(isDisabled(dir))
-            return false;
-        if(isItemValidForSlot(slot, itemStackIn)) {
-            if(getStackInSlot(0) == null)
-                return true;
-            else if(getStackInSlot(0).isItemEqual(itemStackIn))
-                return true;
-        }
-        return false;
+        return !isDisabled(dir) && slot == 0 && getOutputForStack(itemStackIn) != null;
     }
 
     /**

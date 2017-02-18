@@ -187,7 +187,8 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
      */
     @Override
     public ItemStack getOutput(ItemStack input) {
-        return ((CrusherRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER)).getOutput(input).getLeft().getLeft();
+        return RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER).isValidInput(input) ?
+                ((CrusherRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER)).getOutput(input).getLeft().getLeft() : null;
     }
 
     /**

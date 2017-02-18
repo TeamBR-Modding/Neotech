@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,9 +57,9 @@ public abstract class AbstractRecipe<I, O> {
      * @param itemStack The stack to translate
      * @return A string version of the stack in format MODID:ITEMID:DAMAGE:STACK_SIZE or ORE_DICT_TAG
      */
-    public String getItemStackString(@Nonnull ItemStack itemStack) {
+    public static String getItemStackString(@Nonnull ItemStack itemStack) {
         if(OreDictionary.getOreIDs(itemStack).length > 0) { // Do we have an ore dict tag for this?
-            return OreDictionary.getOreName(OreDictionary.getOreIDs(itemStack)[0]); // Return the ore dict tag, always preferred
+            return OreDictionary.getOreName(OreDictionary.getOreIDs(itemStack)[0]) + ":" + itemStack.stackSize + ":" + itemStack.getItemDamage(); // Return the ore dict tag, always preferred
         }
         return itemStack.getItem().getRegistryName().toString() + ":" + itemStack.getItemDamage() + ":" + itemStack.stackSize;
     }
@@ -82,18 +83,26 @@ public abstract class AbstractRecipe<I, O> {
                 stackSize = Integer.valueOf(name[3]);
             case 3:
                 damage = Integer.valueOf(name[2]); // Damage Defined
+                if(damage == OreDictionary.WILDCARD_VALUE || damage > 256) // Impossible, catches wild card when not caught
+                    damage = -1;
             case 2: // Create the stack
                 List<ItemStack> ores = OreDictionary.getOres(name[0], false);
-                if(!ores.isEmpty())
-                    return new ItemStack(ores.get(0).getItem(), Integer.parseInt(name[1]),
-                            ores.get(0).getItemDamage() != OreDictionary.WILDCARD_VALUE ? ores.get(0).getItemDamage() : 0);
-                else
-                    return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage);
+
+                // The strong ID must match something
+                for(ItemStack oreStack : ores) {
+                    if(ArrayUtils.contains(OreDictionary.getOreIDs(oreStack), OreDictionary.getOreID(name[0])))
+                        return new ItemStack(oreStack.getItem(), Integer.parseInt(name[1]), damage == -1 ? oreStack.getItemDamage() : damage);
+                }
+
+                // No ore dict found, lookup item
+                return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage);
             case 1: // Not a defined item already, search OreDict
                 List<ItemStack> itemOreTag = OreDictionary.getOres(name[0], false);
-                if(!itemOreTag.isEmpty())
-                    return new ItemStack(itemOreTag.get(0).getItem(), stackSize,
-                            itemOreTag.get(0).getItemDamage() != OreDictionary.WILDCARD_VALUE ? itemOreTag.get(0).getItemDamage() : 0);
+                // The strong ID must match something
+                for(ItemStack oreStack : itemOreTag) {
+                    if(ArrayUtils.contains(OreDictionary.getOreIDs(oreStack), OreDictionary.getOreID(name[0])))
+                        return new ItemStack(oreStack.getItem(), 1, damage == -1 ? oreStack.getItemDamage() : damage);
+                }
             default :
                 LogHelper.logger.error("[Neotech] Unable to get stack from string: " + itemString);
                 return null;
@@ -140,7 +149,7 @@ public abstract class AbstractRecipe<I, O> {
      * @param fluidStack The stack
      * @return The string in form FLUID:AMOUNT
      */
-    public String getFluidStackString(FluidStack fluidStack) {
+    public static String getFluidStackString(FluidStack fluidStack) {
         return FluidRegistry.getFluidName(fluidStack) + ":" + fluidStack.amount;
     }
 
@@ -151,7 +160,7 @@ public abstract class AbstractRecipe<I, O> {
      * @return The FluidStack for the string
      */
     @Nullable
-    public FluidStack getFluidStackFromString(String fluidString) {
+    public static FluidStack getFluidStackFromString(String fluidString) {
         String[] fluidStringSplit = fluidString.split(":");
         if(fluidStringSplit.length != 2)
             return null;

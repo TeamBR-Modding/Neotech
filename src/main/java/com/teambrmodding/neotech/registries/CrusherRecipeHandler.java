@@ -89,24 +89,24 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
         addRecipe(new CrusherRecipe("oreLapis",
                 "gemLapis:8", "gemLapis:2",
                 20));
-        addRecipe(new CrusherRecipe(getStringToSave(new ItemStack(Items.BLAZE_ROD)),
-                getStringToSave(new ItemStack(Items.BLAZE_POWDER, 4)), getStringToSave(new ItemStack(Items.BLAZE_POWDER, 2)),
+        addRecipe(new CrusherRecipe(getItemStackString(new ItemStack(Items.BLAZE_ROD)),
+                getItemStackString(new ItemStack(Items.BLAZE_POWDER, 4)), getItemStackString(new ItemStack(Items.BLAZE_POWDER, 2)),
                 15));
         addRecipe(new CrusherRecipe("cobblestone",
                 "sand:2", "gravel:1",
                 10));
         addRecipe(new CrusherRecipe("sand", "gravel:2", "", 0));
         addRecipe(new CrusherRecipe("bone",
-                getStringToSave(new ItemStack(Items.DYE, 8, EnumDyeColor.WHITE.getDyeDamage())),
-                getStringToSave(new ItemStack(Items.DYE, 2, EnumDyeColor.WHITE.getDyeDamage())),
+                getItemStackString(new ItemStack(Items.DYE, 8, EnumDyeColor.WHITE.getDyeDamage())),
+                getItemStackString(new ItemStack(Items.DYE, 2, EnumDyeColor.WHITE.getDyeDamage())),
                 10));
         addRecipe(new CrusherRecipe("oreQuartz", "gemQuartz:4", "gemQuartz:2",
                 50));
-        addRecipe(new CrusherRecipe(getStringToSave(new ItemStack(Blocks.CLAY)),
-                getStringToSave(new ItemStack(Items.CLAY_BALL, 4)), getStringToSave(new ItemStack(Items.CLAY_BALL, 2)),
+        addRecipe(new CrusherRecipe(getItemStackString(new ItemStack(Blocks.CLAY)),
+                getItemStackString(new ItemStack(Items.CLAY_BALL, 4)), getItemStackString(new ItemStack(Items.CLAY_BALL, 2)),
                 25));
-        addRecipe(new CrusherRecipe(getStringToSave(new ItemStack(Blocks.HARDENED_CLAY)),
-                getStringToSave(new ItemStack(Items.BRICK, 4)), "", 0));
+        addRecipe(new CrusherRecipe(getItemStackString(new ItemStack(Blocks.HARDENED_CLAY)),
+                getItemStackString(new ItemStack(Items.BRICK, 4)), "", 0));
         addRecipe(new CrusherRecipe("oreDiamond", "gemDiamond:2", "gemDiamond:1",
                 10));
         addRecipe(new CrusherRecipe("oreEmerald", "gemEmerald:2", "gemEmerald:1",
@@ -114,13 +114,13 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
         addRecipe(new CrusherRecipe("glowstone", "dustGlowstone:4", "dustGlowstone:2",
                 15));
         addRecipe(new CrusherRecipe("oreCoal",
-                getStringToSave(new ItemStack(Items.COAL, 3)), getStringToSave(new ItemStack(Items.DIAMOND, 1)),
+                getItemStackString(new ItemStack(Items.COAL, 3)), getItemStackString(new ItemStack(Items.DIAMOND, 1)),
                 1));
         addRecipe(new CrusherRecipe("minecraft:wool:" + OreDictionary.WILDCARD_VALUE + "1",
-                getStringToSave(new ItemStack(Items.STRING, 4)), "", 0));
+                getItemStackString(new ItemStack(Items.STRING, 4)), "", 0));
         addRecipe(new CrusherRecipe("blockGlass", "sand:1", "", 0));
         addRecipe(new CrusherRecipe("gravel",
-                getStringToSave(new ItemStack(Items.FLINT, 3)), getStringToSave(new ItemStack(Items.FLINT, 1)),
+                getItemStackString(new ItemStack(Items.FLINT, 3)), getItemStackString(new ItemStack(Items.FLINT, 1)),
                 20));
 
         // Adjust to Ore Dictionary
@@ -154,12 +154,12 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
                 if(shapelessRecipe.recipeItems.size() == 1 &&
                         Block.getBlockFromItem(shapelessRecipe.recipeItems.get(0).getItem()) != null &&
                         Block.getBlockFromItem(shapelessRecipe.recipeItems.get(0).getItem()) instanceof BlockFlower) {
-                    String inputString = getStringToSave(shapelessRecipe.recipeItems.get(0));
+                    String inputString = getItemStackString(shapelessRecipe.recipeItems.get(0));
                     if(!doesRecipeExist(inputString))
                         addRecipe(new CrusherRecipe(inputString,
-                                getStringToSave(new ItemStack(shapelessRecipe.getRecipeOutput().getItem(),
-                                        shapelessRecipe.getRecipeOutput().stackSize * 2,
-                                        shapelessRecipe.getRecipeOutput().getItemDamage())),
+                                "dye:" +
+                                        String.valueOf(shapelessRecipe.getRecipeOutput().stackSize * 2) + ":" +
+                                        String.valueOf(shapelessRecipe.getRecipeOutput().getItemDamage()),
                                 "", 0));
                 }
             }
@@ -167,21 +167,7 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
 
         saveToFile();
     }
-
-    /**
-     * Get the oreDict tag for an item
-     *
-     * @param itemStack The stack to try
-     * @return The string for this stack or OreDict name
-     */
-    private String getStringToSave(ItemStack itemStack) {
-        int[] registeredOres = OreDictionary.getOreIDs(itemStack);
-        if(registeredOres.length > 0)
-            return OreDictionary.getOreName(registeredOres[0]) + ":" + itemStack.stackSize;
-        else
-            return getItemStackString(itemStack);
-    }
-
+    
     /**
      * Does this already exist in our registry
      */

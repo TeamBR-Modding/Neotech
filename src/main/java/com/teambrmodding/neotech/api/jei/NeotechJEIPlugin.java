@@ -94,7 +94,7 @@ public class NeotechJEIPlugin implements IModPlugin {
 
         // Crusher
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCrusher), CRUSHER_UUID);
-        registry.addRecipeClickArea(GuiElectricCrusher.class, 64, 34, 23, 17, CRUSHER_UUID);
+        registry.addRecipeClickArea(GuiElectricCrusher.class, 79, 34, 24, 17, CRUSHER_UUID);
 
         // Solidifier
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricSolidifier), SOLIDIFIER_UUID);
