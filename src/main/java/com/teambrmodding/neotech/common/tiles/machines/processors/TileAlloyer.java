@@ -10,6 +10,7 @@ import com.teambrmodding.neotech.common.tiles.MachineProcessor;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.managers.RecipeManager;
+import com.teambrmodding.neotech.registries.AbstractRecipe;
 import com.teambrmodding.neotech.registries.AlloyerRecipeHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -123,10 +124,10 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
             return tanks[INPUT_TANK_1].getFluid() != null && tanks[INPUT_TANK_2].getFluid() != null && // Has inputs
                     RecipeManager.getHandler(RecipeManager.RecipeType.ALLOYER)
                             .isValidInput(Pair.of(tanks[INPUT_TANK_1].getFluid(), tanks[INPUT_TANK_2].getFluid())) && // Is Recipe
-                    tanks[OUTPUT_TANK].getFluid() == null || // Has nothing in output
+                    (tanks[OUTPUT_TANK].getFluid() == null || // Has nothing in output
                     ((AlloyerRecipeHandler) RecipeManager.getHandler(RecipeManager.RecipeType.ALLOYER))
                             .getOutput(Pair.of(tanks[INPUT_TANK_1].getFluid(), tanks[INPUT_TANK_2].getFluid())).amount +
-                            tanks[OUTPUT_TANK].getFluidAmount() <= tanks[OUTPUT_TANK].getCapacity(); // Can fill output
+                            tanks[OUTPUT_TANK].getFluidAmount() <= tanks[OUTPUT_TANK].getCapacity()); // Can fill output
         }
         failCoolDown = 40;
         return false;
@@ -149,28 +150,28 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
             if(canProcess()) {
                 AlloyerRecipeHandler.AlloyerRecipe recipe =
                         ((AlloyerRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.ALLOYER))
-                                .getRecipe(Pair.of(tanks[INPUT_TANK_1].getFluid(), tanks[INPUT_TANK_1].getFluid()));
+                                .getRecipe(Pair.of(tanks[INPUT_TANK_1].getFluid(), tanks[INPUT_TANK_2].getFluid()));
                 if(recipe != null) {
                     // Drain the inputs
                     FluidStack drainInputOne;
                     FluidStack drainOutputTwo;
 
                     // Find Recipe Fluid Stack One
-                    if(tanks[INPUT_TANK_1].getFluid().getFluid() == recipe.getFluidStackFromString(recipe.fluidStackOne).getFluid())
-                        drainInputOne = tanks[INPUT_TANK_1].drain(recipe.getFluidStackFromString(recipe.fluidStackOne).amount, false);
+                    if(tanks[INPUT_TANK_1].getFluid().getFluid() == AbstractRecipe.getFluidStackFromString(recipe.fluidStackOne).getFluid())
+                        drainInputOne = tanks[INPUT_TANK_1].drain(AbstractRecipe.getFluidStackFromString(recipe.fluidStackOne).amount, false);
                     else
-                        drainInputOne = tanks[INPUT_TANK_1].drain(recipe.getFluidStackFromString(recipe.fluidStackTwo).amount, false);
+                        drainInputOne = tanks[INPUT_TANK_1].drain(AbstractRecipe.getFluidStackFromString(recipe.fluidStackTwo).amount, false);
 
                     // Find Recipe Fluid Stack Two
-                    if(tanks[INPUT_TANK_2].getFluid().getFluid() == recipe.getFluidStackFromString(recipe.fluidStackTwo).getFluid())
-                        drainOutputTwo = tanks[INPUT_TANK_2].drain(recipe.getFluidStackFromString(recipe.fluidStackTwo).amount, false);
+                    if(tanks[INPUT_TANK_2].getFluid().getFluid() == AbstractRecipe.getFluidStackFromString(recipe.fluidStackTwo).getFluid())
+                        drainOutputTwo = tanks[INPUT_TANK_2].drain(AbstractRecipe.getFluidStackFromString(recipe.fluidStackTwo).amount, false);
                     else
-                        drainOutputTwo = tanks[INPUT_TANK_2].drain(recipe.getFluidStackFromString(recipe.fluidStackOne).amount, false);
+                        drainOutputTwo = tanks[INPUT_TANK_2].drain(AbstractRecipe.getFluidStackFromString(recipe.fluidStackOne).amount, false);
 
                     if(drainInputOne != null && drainOutputTwo != null && drainInputOne.amount > 0 && drainOutputTwo.amount > 0) {
                         tanks[INPUT_TANK_1].drain(drainInputOne, true);
                         tanks[INPUT_TANK_2].drain(drainOutputTwo, true);
-                        tanks[OUTPUT_TANK].fill(recipe.getFluidStackFromString(recipe.fluidStackOutput), true);
+                        tanks[OUTPUT_TANK].fill(AbstractRecipe.getFluidStackFromString(recipe.fluidStackOutput), true);
                     }
                 }
             }

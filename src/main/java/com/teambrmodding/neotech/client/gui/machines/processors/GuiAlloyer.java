@@ -147,11 +147,11 @@ public class GuiAlloyer extends GuiAbstractMachine<ContainerAlloyer> {
                 @Override
                 public List<String> getDynamicToolTip(int mouseX, int mouseY) {
                     List<String> toolTip = new ArrayList<>();
-                    toolTip.add(alloyer.tanks[TileAlloyer.INPUT_TANK_1].getFluid() != null ?
-                            GuiColor.ORANGE + alloyer.tanks[TileFluidGenerator.TANK].getFluid().getLocalizedName() :
+                    toolTip.add(alloyer.tanks[TileAlloyer.INPUT_TANK_2].getFluid() != null ?
+                            GuiColor.ORANGE + alloyer.tanks[TileAlloyer.INPUT_TANK_2].getFluid().getLocalizedName() :
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
-                    toolTip.add(ClientUtils.formatNumber(alloyer.tanks[TileFluidGenerator.TANK].getFluidAmount()) + " / " +
-                            ClientUtils.formatNumber(alloyer.tanks[TileFluidGenerator.TANK].getCapacity()) + " mb");
+                    toolTip.add(ClientUtils.formatNumber(alloyer.tanks[TileAlloyer.INPUT_TANK_2].getFluidAmount()) + " / " +
+                            ClientUtils.formatNumber(alloyer.tanks[TileAlloyer.INPUT_TANK_2].getCapacity()) + " mb");
                     return toolTip;
                 }
             });
@@ -198,11 +198,11 @@ public class GuiAlloyer extends GuiAbstractMachine<ContainerAlloyer> {
                 @Override
                 public List<String> getDynamicToolTip(int mouseX, int mouseY) {
                     List<String> toolTip = new ArrayList<>();
-                    toolTip.add(alloyer.tanks[TileAlloyer.INPUT_TANK_1].getFluid() != null ?
-                            GuiColor.ORANGE + alloyer.tanks[TileFluidGenerator.TANK].getFluid().getLocalizedName() :
+                    toolTip.add(alloyer.tanks[TileAlloyer.OUTPUT_TANK].getFluid() != null ?
+                            GuiColor.ORANGE + alloyer.tanks[TileAlloyer.OUTPUT_TANK].getFluid().getLocalizedName() :
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
-                    toolTip.add(ClientUtils.formatNumber(alloyer.tanks[TileFluidGenerator.TANK].getFluidAmount()) + " / " +
-                            ClientUtils.formatNumber(alloyer.tanks[TileFluidGenerator.TANK].getCapacity()) + " mb");
+                    toolTip.add(ClientUtils.formatNumber(alloyer.tanks[TileAlloyer.OUTPUT_TANK].getFluidAmount()) + " / " +
+                            ClientUtils.formatNumber(alloyer.tanks[TileAlloyer.OUTPUT_TANK].getCapacity()) + " mb");
                     return toolTip;
                 }
             });

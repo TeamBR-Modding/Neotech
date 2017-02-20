@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifugeRecipeWrapper> {
 
     // Display
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/jei.png");
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricCentrifuge.png");
     private IDrawableAnimated progressArrow;
     private IDrawableAnimated powerBar;
 

@@ -670,6 +670,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      * @return True if you can move
      */
     public boolean canOutputFromSide(EnumFacing dir, boolean isPrimary) {
+        if(dir == null)
+            return true;
         if(isDisabled(dir))
             return false;
 
@@ -688,6 +690,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      * @return True if you can move
      */
     public boolean canInputFromSide(EnumFacing dir, boolean isPrimary) {
+        if(dir == null)
+            return true;
         if(isDisabled(dir))
             return false;
 
