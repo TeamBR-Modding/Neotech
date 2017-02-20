@@ -165,8 +165,8 @@ public class GuiSolidifier extends GuiAbstractMachine<ContainerSolidifier> {
                     solidifier.currentMode.getDisplayStack()) {
                 @Override
                 protected void doAction() {
-                    solidifier.currentMode = solidifier.currentMode.getNextMode();
-                    solidifier.sendValueToClient(TileSolidifier.UPDATE_MODE_NBT, solidifier.currentMode.ordinal());
+                    solidifier.toggleMode();
+                    solidifier.sendValueToServer(TileSolidifier.UPDATE_MODE_NBT, 0);
                     setDisplayStack(solidifier.currentMode.getDisplayStack());
                 }
             });

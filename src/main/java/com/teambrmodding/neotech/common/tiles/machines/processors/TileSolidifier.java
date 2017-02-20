@@ -310,7 +310,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     @Override
     public void setVariable(int id, double value) {
         if(id == UPDATE_MODE_NBT)
-            currentMode = SolidifierRecipeHandler.SolidifierMode.values()[(int) value];
+            toggleMode();
         super.setVariable(id, value);
     }
 
@@ -408,7 +408,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
         return fluid != null &&
                 ((tanks[TANK].getFluid() == null &&
                         RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)
-                                .isValidInput(Pair.of(currentMode, new FluidStack(fluid, 1000)))) ||
+                                .isValidInput(Pair.of(currentMode, new FluidStack(fluid, currentMode.getRequiredAmount())))) ||
                         (tanks[TANK].getFluid() != null && fluid == tanks[TANK].getFluid().getFluid()));
     }
 
