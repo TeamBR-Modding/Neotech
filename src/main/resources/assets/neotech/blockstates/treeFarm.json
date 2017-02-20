@@ -8,5 +8,5 @@
         "model": "neotech:machine",
         "uvlock": true
     },
-    "variants" : { "isactive" : { "true" : {}, "false" : {} } }
+  "variants" : { "normal" : { "model": "neotech:machine" } }
 }

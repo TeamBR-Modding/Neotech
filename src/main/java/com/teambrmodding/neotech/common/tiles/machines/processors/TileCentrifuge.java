@@ -10,6 +10,7 @@ import com.teambrmodding.neotech.common.tiles.MachineProcessor;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.managers.RecipeManager;
+import com.teambrmodding.neotech.registries.AbstractRecipe;
 import com.teambrmodding.neotech.registries.CentrifugeRecipeHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -169,14 +170,15 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
                 CentrifugeRecipeHandler.CentrifugeRecipe recipe =
                         ((CentrifugeRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.CENTRIFUGE)).getRecipe(tanks[INPUT_TANK].getFluid());
                 if(recipe != null) {
-                    FluidStack drainedStack = tanks[INPUT_TANK].drain(recipe.getFluidStackFromString(recipe.fluidStackInput).amount, false);
+                    FluidStack drainedStack = tanks[INPUT_TANK].drain(AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput).amount, false);
                     if(drainedStack != null && drainedStack.amount > 0) {
                         tanks[INPUT_TANK].drain(drainedStack.amount, true);
 
-                        FluidStack fluidOutputOne = recipe.getFluidStackFromString(recipe.fluidStackOutputOne);
-                        FluidStack fluidOutputTwo = recipe.getFluidStackFromString(recipe.fluidStackOutputTwo);
+                        FluidStack fluidOutputOne = AbstractRecipe.getFluidStackFromString(recipe.fluidStackOutputOne);
+                        FluidStack fluidOutputTwo = AbstractRecipe.getFluidStackFromString(recipe.fluidStackOutputTwo);
 
-                        if(fluidOutputOne.getFluid().getName().equalsIgnoreCase(tanks[OUTPUT_TANK_1].getFluid().getFluid().getName())) {
+                        if(tanks[OUTPUT_TANK_1].getFluid() == null ||
+                                fluidOutputOne.getFluid().getName().equalsIgnoreCase(tanks[OUTPUT_TANK_1].getFluid().getFluid().getName())) {
                             tanks[OUTPUT_TANK_1].fill(fluidOutputOne, true);
                             tanks[OUTPUT_TANK_2].fill(fluidOutputTwo, true);
                         } else {

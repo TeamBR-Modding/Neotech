@@ -176,13 +176,13 @@ public class TileTreeFarm extends AbstractMachine {
                 BlockPos lookingPosition = treeStack.pop();
                 if(worldObj.getBlockState(lookingPosition).getBlock().isWood(worldObj, lookingPosition) ||
                         worldObj.getBlockState(lookingPosition).getBlock() instanceof BlockLeaves) {
-                    Iterable<BlockPos> blockAround = BlockPos.getAllInBox(lookingPosition.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH),
-                            lookingPosition.offset(EnumFacing.UP).offset(EnumFacing.NORTH));
+                    Iterable<BlockPos> blockAround = BlockPos.getAllInBox(lookingPosition.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST),
+                            lookingPosition.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
                     for(BlockPos attachedPos : blockAround) {
                         if (!cache.contains(attachedPos) &&
                                 attachedPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000 &&
                                 (worldObj.getBlockState(attachedPos).getBlock().isWood(worldObj, attachedPos) ||
-                                    worldObj.getBlockState(attachedPos).getBlock() instanceof BlockLeaves)) {
+                                        worldObj.getBlockState(attachedPos).getBlock() instanceof BlockLeaves)) {
                             treeStack.push(attachedPos);
                             cache.add(attachedPos);
                         }
@@ -230,34 +230,35 @@ public class TileTreeFarm extends AbstractMachine {
      * @return True if able to chop
      */
     protected boolean chopBlock(BlockPos blockPosition, int slot) {
-        if(getStackInSlot(slot) != null) {
-            List<ItemStack> drops;
-            if(slot == AXE_SLOT) {
-                drops =
-                        worldObj.getBlockState(blockPosition).getBlock().getDrops(worldObj, blockPosition,
-                                worldObj.getBlockState(blockPosition),
-                                EnchantmentHelper.getEnchantmentLevel(
-                                        Enchantment.getEnchantmentByLocation("fortune"),
-                                        getStackInSlot(slot)));
-            } else // We have shears in the slot
-                drops = Collections.singletonList(new ItemStack(worldObj.getBlockState(blockPosition).getBlock(), 1,
-                        worldObj.getBlockState(blockPosition).getBlock().damageDropped(worldObj.getBlockState(blockPosition))));
+        List<ItemStack> drops = new ArrayList<>();
+        if(getStackInSlot(slot) != null && slot == AXE_SLOT) {
+            drops =
+                    worldObj.getBlockState(blockPosition).getBlock().getDrops(worldObj, blockPosition,
+                            worldObj.getBlockState(blockPosition),
+                            EnchantmentHelper.getEnchantmentLevel(
+                                    Enchantment.getEnchantmentByLocation("fortune"),
+                                    getStackInSlot(slot)));
 
-            boolean blockAddedToInv = slot != SHEARS_SLOT; // We don't care for leaves, always break
-            for(ItemStack drop : drops) {
-                if(addHarvestToInventory(drop))
-                    blockAddedToInv = true;
-            }
+        } else if(getStackInSlot(slot) != null) // We have shears in the slot
+            drops = Collections.singletonList(new ItemStack(worldObj.getBlockState(blockPosition).getBlock(), 1,
+                    worldObj.getBlockState(blockPosition).getBlock().damageDropped(worldObj.getBlockState(blockPosition))));
 
-            if(blockAddedToInv) {
-                worldObj.setBlockToAir(blockPosition);
-                if(getStackInSlot(slot).attemptDamageItem(1, worldObj.rand))
-                    setStackInSlot(slot, null);
-                energyStorage.providePower(costToOperate(), true);
-                sendValueToClient(UPDATE_ENERGY_ID, energyStorage.getEnergyStored());
-                return true;
-            }
+        boolean blockAddedToInv = slot == SHEARS_SLOT; // We don't care for leaves, always break
+        for(ItemStack drop : drops) {
+            if(addHarvestToInventory(drop))
+                blockAddedToInv = true;
         }
+
+        if(blockAddedToInv) {
+            worldObj.setBlockToAir(blockPosition);
+            if(getStackInSlot(slot) != null &&
+                    getStackInSlot(slot).attemptDamageItem(1, worldObj.rand))
+                setStackInSlot(slot, null);
+            energyStorage.providePower(costToOperate(), true);
+            sendValueToClient(UPDATE_ENERGY_ID, energyStorage.getEnergyStored());
+            return true;
+        }
+
         return false;
     }
 
@@ -287,12 +288,12 @@ public class TileTreeFarm extends AbstractMachine {
                     BlockPos blockPos = new BlockPos(x, pos.getY(), z);
                     if(worldObj.isAirBlock(blockPos) && worldObj.getBlockState(blockPos.down()) != null &&
                             (worldObj.getBlockState(blockPos.down()).getBlock() == Blocks.DIRT ||
-                            worldObj.getBlockState(blockPos.down()).getBlock() == Blocks.GRASS)) {
-                            IBlockState blockState = getNextSaplingAndReduce();
-                            if(blockState != null)
-                                worldObj.setBlockState(blockPos, blockState);
-                            else
-                                return;
+                                    worldObj.getBlockState(blockPos.down()).getBlock() == Blocks.GRASS)) {
+                        IBlockState blockState = getNextSaplingAndReduce();
+                        if(blockState != null)
+                            worldObj.setBlockState(blockPos, blockState);
+                        else
+                            return;
                     }
                 }
             }

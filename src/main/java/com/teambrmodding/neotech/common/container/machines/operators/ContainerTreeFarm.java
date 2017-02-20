@@ -65,7 +65,9 @@ public class ContainerTreeFarm extends ContainerAbstractMachine {
         });
 
         // Add Inventory Slots
-        addInventoryGrid(62, 40, 6, 3);
+        addInventoryLine(62, 40, 3, 6);
+        addInventoryLine(62, 58, 9, 6);
+
 
         // Add sapling slots
         addInventoryLine(116, 20, 15, 3);
