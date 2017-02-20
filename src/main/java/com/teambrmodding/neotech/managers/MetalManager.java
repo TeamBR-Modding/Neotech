@@ -176,7 +176,7 @@ public class MetalManager {
                 true, true, true);
 
         // Steel
-        registerMetal(STEEL, 2, 0x080406, 0x080406,
+        registerMetal(STEEL, 2, 0x646464, 0x646464,
                 true, false, true,
                 false, true,
                 true, true, true);
