@@ -1,7 +1,7 @@
 package com.teambrmodding.neotech.managers;
 
-import com.teambrmodding.neotech.common.fluids.FluidBlockGas;
-import com.teambrmodding.neotech.common.fluids.FluidGas;
+import com.teambrmodding.neotech.common.fluids.BaseFluid;
+import com.teambrmodding.neotech.common.fluids.BaseFluidBlock;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
@@ -20,21 +20,30 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class FluidManager {
 
     // Gasses
-    public static FluidGas hydrogen;
-    public static FluidBlockGas blockHydrogen;
+    // Hydrogen
+    public static BaseFluid hydrogen;
+    public static BaseFluidBlock blockHydrogen;
 
-    public static FluidGas oxygen;
-    public static FluidBlockGas blockOxygen;
+    // Oxygen
+    public static BaseFluid oxygen;
+    public static BaseFluidBlock blockOxygen;
+
+    // Fluids
+    public static BaseFluid ghastTear;
+    public static BaseFluidBlock blockGhastTear;
 
     /**
      * Loads the fluids
      */
     public static void preInit() {
-        hydrogen = createFluidGas(0xFF0044BB, "hydrogen");
-        blockHydrogen = registerFluidBlock(hydrogen, new FluidBlockGas(hydrogen));
+        hydrogen = createFluidGas(0xFF0044BB, true, "hydrogen");
+        blockHydrogen = registerFluidBlock(hydrogen, new BaseFluidBlock(hydrogen));
 
-        oxygen = createFluidGas(0xFFDDDDDD, "oxygen");
-        blockOxygen = registerFluidBlock(oxygen, new FluidBlockGas(oxygen));
+        oxygen = createFluidGas(0xFFDDDDDD, true, "oxygen");
+        blockOxygen = registerFluidBlock(oxygen, new BaseFluidBlock(oxygen));
+
+        ghastTear = createFluidGas(0xa9bebe, false, "ghastTear");
+        blockGhastTear = registerFluidBlock(ghastTear, new BaseFluidBlock(ghastTear));
     }
 
     /*******************************************************************************************************************
@@ -47,16 +56,16 @@ public class FluidManager {
      * @param name  The name
      * @return The registered object
      */
-    public static FluidGas createFluidGas(int color, String name) {
+    public static BaseFluid createFluidGas(int color, boolean isGas, String name) {
         ResourceLocation stillIcon   = new ResourceLocation(Reference.MOD_ID, "blocks/metal_still");
         ResourceLocation flowingIcon = new ResourceLocation(Reference.MOD_ID, "blocks/metal_flow");
 
-        FluidGas fluidGas = new FluidGas(color, name, stillIcon, flowingIcon);
-        FluidRegistry.registerFluid(fluidGas);
-        if(!FluidRegistry.getBucketFluids().contains(fluidGas))
-            FluidRegistry.addBucketForFluid(fluidGas);
+        BaseFluid fluid = new BaseFluid(color, isGas, name, stillIcon, flowingIcon);
+        FluidRegistry.registerFluid(fluid);
+        if(!FluidRegistry.getBucketFluids().contains(fluid))
+            FluidRegistry.addBucketForFluid(fluid);
 
-        return fluidGas;
+        return fluid;
     }
 
     /**
@@ -65,7 +74,7 @@ public class FluidManager {
      * @param block The block
      * @return The registered block
      */
-    public static FluidBlockGas registerFluidBlock(Fluid fluid, FluidBlockGas block) {
+    public static BaseFluidBlock registerFluidBlock(Fluid fluid, BaseFluidBlock block) {
         if(fluid != null) {
             fluid.setBlock(block);
             BlockManager.registerBlock(block);

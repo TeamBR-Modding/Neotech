@@ -4,7 +4,7 @@ import com.teambrmodding.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefin
 import com.teambrmodding.neotech.client.renderers.tiles.TileMachineIORenderer;
 import com.teambrmodding.neotech.client.renderers.tiles.TileTankFluidRenderer;
 import com.teambrmodding.neotech.common.CommonProxy;
-import com.teambrmodding.neotech.common.fluids.FluidBlockGas;
+import com.teambrmodding.neotech.common.fluids.BaseFluidBlock;
 import com.teambrmodding.neotech.common.metals.blocks.BlockFluidMetal;
 import com.teambrmodding.neotech.common.metals.items.ItemMetal;
 import com.teambrmodding.neotech.common.tiles.AbstractMachine;
@@ -195,8 +195,8 @@ public class ClientProxy extends CommonProxy {
 
         // Gas Colors
         Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
-            if(state.getBlock() instanceof FluidBlockGas) {
-                FluidBlockGas gas = (FluidBlockGas) state.getBlock();
+            if(state.getBlock() instanceof BaseFluidBlock) {
+                BaseFluidBlock gas = (BaseFluidBlock) state.getBlock();
                 return gas.getBlockColor();
             }
             return 0xFFFFFF;

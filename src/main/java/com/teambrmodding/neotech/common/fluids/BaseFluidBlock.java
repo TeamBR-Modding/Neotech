@@ -5,8 +5,6 @@ import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.IFluidBlock;
 
 /**
  * This file was created for NeoTech
@@ -18,14 +16,14 @@ import net.minecraftforge.fluids.IFluidBlock;
  * @author Paul Davis - pauljoda
  * @since 2/15/2017
  */
-public class FluidBlockGas extends BlockFluidClassic{
-    private FluidGas fluid;
+public class BaseFluidBlock extends BlockFluidClassic {
+    private BaseFluid fluid;
 
     /**
      * Creates the fluid block
      * @param fluid The associated fluid
      */
-    public FluidBlockGas(FluidGas fluid) {
+    public BaseFluidBlock(BaseFluid fluid) {
         super(fluid, Material.WATER);
         setRegistryName(new ResourceLocation(Reference.MOD_ID, fluid.getName()));
         setUnlocalizedName(getRegistryName().toString());

@@ -15,7 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
  * @author Paul Davis - pauljoda
  * @since 2/15/2017
  */
-public class FluidGas extends Fluid {
+public class BaseFluid extends Fluid {
     private int color;
 
     /**
@@ -24,9 +24,10 @@ public class FluidGas extends Fluid {
      * @param still     Still Texture
      * @param flowing   Flowing Texture
      */
-    public FluidGas(int color, String fluidName, ResourceLocation still, ResourceLocation flowing) {
+    public BaseFluid(int color, boolean isGas, String fluidName, ResourceLocation still, ResourceLocation flowing) {
         super(fluidName, still, flowing);
         this.color = color;
+        setGaseous(isGas);
     }
 
     /*******************************************************************************************************************

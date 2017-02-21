@@ -156,8 +156,10 @@ public class TileFluidGenerator extends MachineGenerator {
             FluidStack fluidDrained = tanks[TANK].drain(100, false);
 
             FluidFuelRecipeHandler.FluidFuelRecipe recipe = ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getRecipe(fluidDrained);
+            if(recipe == null)
+                return false;
             Pair<Integer, Integer> output = recipe.getOutput(AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput));
-            if(recipe == null || output == null)
+            if(output == null)
                 return false;
 
             fluidDrained = tanks[TANK].drain(AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput).amount, false);

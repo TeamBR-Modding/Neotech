@@ -65,6 +65,9 @@ fluid.hydrogen.name=Hydrogen
 # Oxygen
 fluid.oxygen.name=Oxygen
 
+# Ghast Tear
+fluid.ghastTear.name=Liquid Ghast Tears
+
 #######################
 # Items
 #######################
