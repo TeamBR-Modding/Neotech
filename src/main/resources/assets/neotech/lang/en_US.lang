@@ -263,7 +263,7 @@ neotech.text.modName=Neotech
 #######################
 commands.addCrucibleRecipe.usage=§cUsage: input<ItemStack (format : MODID:ITEMID:META:STACK_SIZE or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)> OR "hands"<Left hand input, right output>
 commands.addSolidifierRecipe.usage=Usage: mode<BLOCK|INGOT|NUGGET> input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MOD:ITEM:DAMAGE:STACK or ORE_DICT_TAG)> OR "hands"<Left hand input, right output>  mode<BLOCK|INGOT|NUGGET>
-commands.addFluidFuelValue.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output<BurnTime (format : INTEGER), BurnRate (format : INTEGER)>
+commands.addFluidFuelValues.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output<BurnTime (format : INTEGER), BurnRate (format : INTEGER)>
 commands.addAlloyRecipe.usage=§cUsage: input1<FluidStack (format : FLUID:AMOUNT)> input2<FluidStack (format : FLUID:AMOUNT)> output<FluidStack (format : FLUID:AMOUNT)>
 commands.addCentrifugeRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output1<FluidStack (format : FLUID:AMOUNT)> output2<FluidStack (format : FLUID:AMOUNT)>
 commands.addCrusherRecipe.usage=§cUsage: <input> <output> <outputAmount> <secondaryOutput(Optional)> <secondaryOuputChance(Optional)>

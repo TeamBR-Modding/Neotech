@@ -88,7 +88,7 @@ public class JEISolidifierRecipeWrapper extends BlankRecipeWrapper {
         GlStateManager.pushMatrix();
         RenderHelper.enableGUIStandardItemLighting();
 
-        Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(currentMode.getDisplayStack(), 95, 52);
+        Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(currentMode.getDisplayStack(), 96, 53);
 
         RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
@@ -100,7 +100,7 @@ public class JEISolidifierRecipeWrapper extends BlankRecipeWrapper {
     @Nullable
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        if(mouseX > 97 && mouseX < 117 && mouseY > 37 && mouseY < 57) {
+        if(mouseX > 96 && mouseX < 117 && mouseY > 53 && mouseY < 62) {
             return Collections.singletonList(currentMode.getDisplayName());
         }
         return super.getTooltipStrings(mouseX, mouseY);

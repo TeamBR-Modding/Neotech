@@ -10,6 +10,7 @@ import com.teambrmodding.neotech.common.container.machines.generators.ContainerF
 import com.teambrmodding.neotech.common.tiles.MachineGenerator;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.RecipeManager;
+import com.teambrmodding.neotech.registries.AbstractRecipe;
 import com.teambrmodding.neotech.registries.FluidFuelRecipeHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -153,12 +154,17 @@ public class TileFluidGenerator extends MachineGenerator {
         // Do burnTime
         if(energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored() && burnTime <= 1) {
             FluidStack fluidDrained = tanks[TANK].drain(100, false);
+
+            FluidFuelRecipeHandler.FluidFuelRecipe recipe = ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getRecipe(fluidDrained);
+            Pair<Integer, Integer> output = recipe.getOutput(AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput));
+            if(recipe == null || output == null)
+                return false;
+
+            fluidDrained = tanks[TANK].drain(AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput).amount, false);
+
             if(fluidDrained == null || fluidDrained.getFluid() == null || fluidDrained.amount <= 0)
                 return false;
 
-            Pair<Integer, Integer> output = ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getOutput(fluidDrained);
-            if(output == null)
-                return false;
             else
                 drain(fluidDrained.amount, true);
 

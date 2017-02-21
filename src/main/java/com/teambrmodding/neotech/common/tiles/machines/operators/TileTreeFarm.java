@@ -310,6 +310,7 @@ public class TileTreeFarm extends AbstractMachine {
      * Gets the block state to place and reduces the stack
      * @return The state to put
      */
+    @SuppressWarnings("deprecation")
     @Nullable
     protected IBlockState getNextSaplingAndReduce() {
         for(int x = SAPLING_SLOTS_START; x < SAPLING_SLOTS_END; x++) {

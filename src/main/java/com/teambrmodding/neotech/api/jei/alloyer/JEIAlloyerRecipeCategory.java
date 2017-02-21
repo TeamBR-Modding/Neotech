@@ -98,7 +98,7 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
     @Override
     public void drawExtras(Minecraft minecraft) {
         // Draw Animations
-        progressArrow.draw(minecraft, 78, 31);
+        progressArrow.draw(minecraft, 78, 32);
         powerBar.draw(minecraft, 12, 9);
     }
 

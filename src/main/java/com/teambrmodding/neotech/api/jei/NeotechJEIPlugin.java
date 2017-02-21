@@ -86,11 +86,11 @@ public class NeotechJEIPlugin implements IModPlugin {
 
         // Furnace Generator
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.furnaceGenerator), VanillaRecipeCategoryUid.FUEL);
-        registry.addRecipeClickArea(GuiFurnaceGenerator.class, 78, 27, 14, 14, VanillaRecipeCategoryUid.FUEL);
+        registry.addRecipeClickArea(GuiFurnaceGenerator.class, 78, 35, 14, 14, VanillaRecipeCategoryUid.FUEL);
 
         // Fluid Generator
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.fluidGenerator), FLUID_GEN_UUID);
-        registry.addRecipeClickArea(GuiFluidGenerator.class, 78, 27, 14, 14, FLUID_GEN_UUID);
+        registry.addRecipeClickArea(GuiFluidGenerator.class, 78, 35, 14, 14, FLUID_GEN_UUID);
 
         // Crusher
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCrusher), CRUSHER_UUID);
