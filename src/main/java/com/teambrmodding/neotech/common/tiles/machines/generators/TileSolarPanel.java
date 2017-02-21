@@ -52,7 +52,6 @@ public class TileSolarPanel extends MachineGenerator {
                 energyStorage.setMaxInsert(BASE_ENERGY_CHANGE);
         }
         energyStorage.setMaxStored(maxStored());
-        markForUpdate(6);
     }
 
     /**

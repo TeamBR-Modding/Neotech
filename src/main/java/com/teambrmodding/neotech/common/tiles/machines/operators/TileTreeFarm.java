@@ -48,20 +48,14 @@ public class TileTreeFarm extends AbstractMachine {
     protected final int SAPLING_SLOTS_END   =  getInitialSize();
 
     protected boolean isBuildingCache;
-    Queue<BlockPos> cache = new PriorityQueue<>(new Comparator<BlockPos>() {
-        @Override
-        public int compare(BlockPos o1, BlockPos o2) {
-            return Double.compare(o1.distanceSq(pos.getX(), pos.getY(), pos.getZ()),
-                    o2.distanceSq(pos.getX(), pos.getY(), pos.getZ()));
-        }
-    });
+    Queue<BlockPos> cache = new PriorityQueue<>(Comparator.comparingDouble(o -> o.distanceSq(pos.getX(), pos.getY(), pos.getZ())));
 
     /**
      * Used to get how far this farm can chop
      * @return How many blocks to move from center
      */
     protected int getChoppingRange() {
-        return 4 * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
+        return 4 * (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) * 4 / 16);
     }
 
     /**
@@ -69,7 +63,7 @@ public class TileTreeFarm extends AbstractMachine {
      * @return Energy cost
      */
     protected int costToOperate() {
-        return 200* getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
+        return 200 * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
     }
 
     /**
@@ -231,17 +225,18 @@ public class TileTreeFarm extends AbstractMachine {
      */
     protected boolean chopBlock(BlockPos blockPosition, int slot) {
         List<ItemStack> drops = new ArrayList<>();
-        if(getStackInSlot(slot) != null && slot == AXE_SLOT) {
+        if(getStackInSlot(slot) != null && slot == SHEARS_SLOT) { // Shears give block
+            drops = Collections.singletonList(new ItemStack(worldObj.getBlockState(blockPosition).getBlock(), 1,
+                    worldObj.getBlockState(blockPosition).getBlock().damageDropped(worldObj.getBlockState(blockPosition))));
+
+        } else if((slot != AXE_SLOT) || (getStackInSlot(slot) != null && slot == AXE_SLOT))// Break block, get drops
             drops =
                     worldObj.getBlockState(blockPosition).getBlock().getDrops(worldObj, blockPosition,
                             worldObj.getBlockState(blockPosition),
+                            getStackInSlot(slot) != null ?
                             EnchantmentHelper.getEnchantmentLevel(
                                     Enchantment.getEnchantmentByLocation("fortune"),
-                                    getStackInSlot(slot)));
-
-        } else if(getStackInSlot(slot) != null) // We have shears in the slot
-            drops = Collections.singletonList(new ItemStack(worldObj.getBlockState(blockPosition).getBlock(), 1,
-                    worldObj.getBlockState(blockPosition).getBlock().damageDropped(worldObj.getBlockState(blockPosition))));
+                                    getStackInSlot(slot)) : 0);
 
         boolean blockAddedToInv = slot == SHEARS_SLOT; // We don't care for leaves, always break
         for(ItemStack drop : drops) {
@@ -336,7 +331,7 @@ public class TileTreeFarm extends AbstractMachine {
      * @return
      */
     protected boolean addHarvestToInventory(ItemStack stack) {
-        boolean sapling = stack.getItem() instanceof IGrowable;
+        boolean sapling = Block.getBlockFromItem(stack.getItem()) instanceof IGrowable;
         if(sapling) {
             for(int x = SAPLING_SLOTS_START; x < SAPLING_SLOTS_END; x++) {
                 if(getStackInSlot(x) == null) {
@@ -602,7 +597,7 @@ public class TileTreeFarm extends AbstractMachine {
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.energyUsage") + ":\n" +
                 GuiColor.WHITE + "  " + costToOperate() + " RF/chop\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.rangeTree") + ":\n" +
-                GuiColor.WHITE + "  " + (getChoppingRange() + 1) + "x"  + (getChoppingRange() + 1) + " blocks\n" +
+                GuiColor.WHITE + "  " + (getChoppingRange() * 2 - 1) + "x"  + (getChoppingRange() * 2 - 1) + " blocks\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.chopCount") + ":\n" +
                 GuiColor.WHITE + "  " + getChopCount() + "  \n\n" +
                 GuiColor.WHITE + ClientUtils.translate("neotech.treeFarm.desc") + "\n\n" +

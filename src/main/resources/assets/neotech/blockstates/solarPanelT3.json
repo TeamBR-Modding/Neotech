@@ -6,7 +6,5 @@
     },
     "model" : "neotech:solarPanel"
   },
-  "variants": {
-    "isactive": { "true" : {}, "false" : {}}
-  }
+  "variants" : { "normal" : { "model": "neotech:solarPanel" } }
 }

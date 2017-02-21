@@ -42,9 +42,9 @@ public class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.electricAlloyer, "alloyer", "facing=north,isactive=false");
         ItemRenderManager.registerBlockModel(BlockManager.electricCentrifuge, "centrifuge", "facing=north,isactive=false");
         ItemRenderManager.registerBlockModel(BlockManager.treeFarm, "treeFarm", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT1, "solarPanelT1", "isactive=false");
-        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT2, "solarPanelT2", "isactive=false");
-        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT3, "solarPanelT3", "isactive=false");
+        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT1, "solarPanelT1", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT2, "solarPanelT2", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT3, "solarPanelT3", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.basicRFStorage, "basicRFStorage", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.advancedRFStorage, "advancedRFStorage", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.eliteRFStorage, "eliteRFStorage", "normal");

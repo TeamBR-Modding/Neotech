@@ -49,6 +49,15 @@ public class BlockSolarPanel extends BlockMachine {
     }
 
     /*******************************************************************************************************************
+     * BlockContainer                                                                                                  *
+     *******************************************************************************************************************/
+
+    @Override
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
+        return new TileSolarPanel(tier);
+    }
+
+    /*******************************************************************************************************************
      * Block Methods                                                                                                   *
      *******************************************************************************************************************/
 
@@ -74,7 +83,7 @@ public class BlockSolarPanel extends BlockMachine {
      */
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.0, 0.0, 0.0, 1.0, 0.25, 0.0);
+        return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.40F, 1.0F);
     }
 
     /**
