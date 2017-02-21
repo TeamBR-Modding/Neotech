@@ -90,7 +90,7 @@ public class NeotechJEIPlugin implements IModPlugin {
 
         // Fluid Generator
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.fluidGenerator), FLUID_GEN_UUID);
-        registry.addRecipeClickArea(GuiFluidGenerator.class, 78, 55, 14, 14, FLUID_GEN_UUID);
+        registry.addRecipeClickArea(GuiFluidGenerator.class, 78, 27, 14, 14, FLUID_GEN_UUID);
 
         // Crusher
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockManager.electricCrusher), CRUSHER_UUID);

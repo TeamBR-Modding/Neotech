@@ -3,6 +3,7 @@ package com.teambrmodding.neotech.common.container.machines.operators;
 import com.teambrmodding.neotech.common.container.machines.ContainerAbstractMachine;
 import com.teambrmodding.neotech.common.tiles.AbstractMachine;
 import com.teambrmodding.neotech.common.tiles.machines.operators.TileTreeFarm;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
@@ -45,6 +46,7 @@ public class ContainerTreeFarm extends ContainerAbstractMachine {
             @Nullable
             @Override
             public String getSlotTexture() {
+                GlStateManager.enableBlend();
                 return "neotech:items/axe_ghost";
             }
         });
@@ -60,6 +62,7 @@ public class ContainerTreeFarm extends ContainerAbstractMachine {
             @Nullable
             @Override
             public String getSlotTexture() {
+                GlStateManager.enableBlend();
                 return "neotech:items/shears_ghost";
             }
         });
