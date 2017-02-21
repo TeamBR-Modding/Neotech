@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
+import com.teambrmodding.neotech.managers.MetalManager;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -124,8 +125,11 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipeHan
         // Steel
         addRecipe(new AlloyerRecipe("iron:144", "carbon:144", "steel:144"));
 
-        // Bronx
+        // Bronze
         addRecipe(new AlloyerRecipe("copper:432", "tin:144", "bronze:576"));
+
+        addRecipe(new AlloyerRecipe("ghasttear:" + MetalManager.INGOT_MB, "iron:" + MetalManager.INGOT_MB,
+                "tormented:" + MetalManager.INGOT_MB));
 
         saveToFile();
     }

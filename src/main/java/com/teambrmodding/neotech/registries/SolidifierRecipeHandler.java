@@ -227,6 +227,10 @@ public class SolidifierRecipeHandler extends
         addRecipe(new SolidifierRecipe(SolidifierMode.BLOCK_MODE, "obsidian:288",
                 getItemStackString(new ItemStack(Blocks.OBSIDIAN, 1))));
 
+        // Ghast Tear
+        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "ghasttear:" + MetalManager.INGOT_MB,
+                getItemStackString(new ItemStack(Items.GHAST_TEAR))));
+
         saveToFile();
     }
 

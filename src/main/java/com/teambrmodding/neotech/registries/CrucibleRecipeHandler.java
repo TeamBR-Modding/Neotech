@@ -218,6 +218,10 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Blocks.OBSIDIAN)),
                 getFluidStackString(new FluidStack(FluidRegistry.getFluid("obsidian"), 288))));
 
+        // Ghast Tear
+        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.GHAST_TEAR)),
+                getFluidStackString(new FluidStack(FluidRegistry.getFluid("ghasttear"), MetalManager.INGOT_MB))));
+
         // Ice/Snowball to Water
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.SNOWBALL)),
                 getFluidStackString(new FluidStack(FluidRegistry.WATER, 144))));

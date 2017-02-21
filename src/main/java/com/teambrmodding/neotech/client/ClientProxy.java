@@ -193,7 +193,7 @@ public class ClientProxy extends CommonProxy {
             }
         }
 
-        // Gas Colors
+        // Fluid Colors
         Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler((state, worldIn, pos, tintIndex) -> {
             if(state.getBlock() instanceof BaseFluidBlock) {
                 BaseFluidBlock gas = (BaseFluidBlock) state.getBlock();
@@ -201,6 +201,7 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, FluidManager.blockOxygen, FluidManager.blockHydrogen);
+
 
         // Metal Items
         for(String metal : MetalManager.metalRegistry.keySet()) {

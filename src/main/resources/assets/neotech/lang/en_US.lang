@@ -19,6 +19,7 @@ tile.neotech:blockLead.name=Block of Lead
 tile.neotech:blockBronze.name=Block of Bronze
 tile.neotech:blockSteel.name=Block of Steel
 tile.neotech:blockSilver.name=Block of Silver
+tile.neotech:blockTormented.name=Tormented Block
 
 #######################
 # Fluids
@@ -66,7 +67,10 @@ fluid.hydrogen.name=Hydrogen
 fluid.oxygen.name=Oxygen
 
 # Ghast Tear
-fluid.ghastTear.name=Liquid Ghast Tears
+fluid.ghasttear.name=Liquid Ghast Tears
+
+# Tormented
+fluid.tormented.name=Tormented Fluid
 
 #######################
 # Items
@@ -94,6 +98,11 @@ item.neotech:nuggetSteel.name=Steel Nugget
 item.neotech:dustSilver.name=Silver Dust
 item.neotech:ingotSilver.name=Silver Ingot
 item.neotech:nuggetSilver.name=Silver Nugget
+
+# Alloys
+item.neotech:nuggetTormented.name=Tormented Nugget
+item.neotech:dustTormented.name=Tormented Dust
+item.neotech:ingotTormented.name=Tormented Ingot
 
 # Upgrades
 item.neotech:CPU_1.name=Single Core Processor

@@ -63,6 +63,10 @@ public class MetalManager {
     public static final String STEEL        = "steel";
     public static final String CARBON       = "carbon";
     public static final String OBSIDIAN     = "obsidian";
+    public static final String GHAST_TEAR   = "ghasttear";
+
+    // Alloys
+    public static final String TORMMENTED  = "tormented";
 
     // A list of metals that Tinker's Construct adds, we want to play nice if possible
     private static final List<String> tinkersMetals = Arrays.asList("brass", "copper", "tin", "bronze", "zinc", "lead",
@@ -190,6 +194,17 @@ public class MetalManager {
         registerMetal(CARBON, 1, 0xFF202020, 0xFF202020,
                 true, true, true,
                 false, false, false, false, false);
+
+        // Ghast Tear
+        registerMetal(GHAST_TEAR, 1, 0xa9bebe, 0xa9bebe,
+                true, true, true,
+                false, false, false, false, false);
+
+
+        // Tormented
+        registerMetal(TORMMENTED, 1, 0x774747, 0xa774747,
+                true, false, true,
+                false, true, true, true, true);
     }
 
     public static Metal registerMetal(String metalName, int miningLevel, int color, int fluidColor,

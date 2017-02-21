@@ -28,10 +28,6 @@ public class FluidManager {
     public static BaseFluid oxygen;
     public static BaseFluidBlock blockOxygen;
 
-    // Fluids
-    public static BaseFluid ghastTear;
-    public static BaseFluidBlock blockGhastTear;
-
     /**
      * Loads the fluids
      */
@@ -41,9 +37,6 @@ public class FluidManager {
 
         oxygen = createFluidGas(0xFFDDDDDD, true, "oxygen");
         blockOxygen = registerFluidBlock(oxygen, new BaseFluidBlock(oxygen));
-
-        ghastTear = createFluidGas(0xa9bebe, false, "ghastTear");
-        blockGhastTear = registerFluidBlock(ghastTear, new BaseFluidBlock(ghastTear));
     }
 
     /*******************************************************************************************************************
