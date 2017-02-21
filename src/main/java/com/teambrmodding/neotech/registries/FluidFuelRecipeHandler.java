@@ -161,8 +161,7 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
         @Override
         public boolean isValidInput(FluidStack input) {
             return input != null && input.getFluid() != null &&
-                    input.getFluid().getName().equalsIgnoreCase(getFluidStackFromString(fluidStackInput).getFluid().getName()) &&
-                    input.amount >= getFluidStackFromString(fluidStackInput).amount;
+                    input.getFluid().getName().equalsIgnoreCase(getFluidStackFromString(fluidStackInput).getFluid().getName());
         }
     }
 }

@@ -133,6 +133,7 @@ public class TileFluidGenerator extends MachineGenerator {
                 if(drained != null) {
                     FluidUtil.tryFluidTransfer(this, fluidHandler,
                             tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), true);
+                    markForUpdate(6);
                 }
 
                 // If there is no fluid in container, move to output
@@ -142,7 +143,7 @@ public class TileFluidGenerator extends MachineGenerator {
                         setStackInSlot(INPUT_SLOT, null);
                     } else if(InventoryUtils.canStacksMerge(stackToDrain, getStackInSlot(OUTPUT_SLOT))) {
                         InventoryUtils.tryMergeStacks(stackToDrain, getStackInSlot(OUTPUT_SLOT));
-                        if(getStackInSlot(INPUT_SLOT) == null)
+                        if(getStackInSlot(INPUT_SLOT).stackSize <= 0)
                             setStackInSlot(INPUT_SLOT, null);
                     }
                 }
@@ -151,16 +152,19 @@ public class TileFluidGenerator extends MachineGenerator {
 
         // Do burnTime
         if(energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored() && burnTime <= 1) {
-            FluidStack fluidDrained = tanks[TANK].drain(getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) * 10, true);
+            FluidStack fluidDrained = tanks[TANK].drain(100, false);
             if(fluidDrained == null || fluidDrained.getFluid() == null || fluidDrained.amount <= 0)
                 return false;
 
             Pair<Integer, Integer> output = ((FluidFuelRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS)).getOutput(fluidDrained);
             if(output == null)
                 return false;
+            else
+                drain(fluidDrained.amount, true);
 
-            burnTime = output.getLeft();
-            currentObjectBurnRate = output.getRight();
+
+            burnTime = output.getLeft() / getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
+            currentObjectBurnRate = output.getRight() * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU);
 
             if(burnTime > 0) {
                 currentObjectBurnTime = burnTime;
