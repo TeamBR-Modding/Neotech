@@ -33,6 +33,9 @@ public class GuiEnergyStorage extends GuiBase<ContainerEnergyStorage> {
     public GuiEnergyStorage(EntityPlayer player, TileEnergyStorage energyStorage) {
         super(new ContainerEnergyStorage(player.inventory, energyStorage), 175, 165,
                 energyStorage.getBlockType().getLocalizedName(), new ResourceLocation(Reference.MOD_ID, "textures/gui/energyStorage.png"));
+        this.energyStorage = energyStorage;
+
+        addComponents();
     }
 
     /**

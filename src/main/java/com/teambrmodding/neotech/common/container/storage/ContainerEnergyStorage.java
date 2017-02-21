@@ -1,6 +1,7 @@
 package com.teambrmodding.neotech.common.container.storage;
 
 import com.teambr.bookshelf.common.container.BaseContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -32,6 +33,7 @@ public class ContainerEnergyStorage extends BaseContainer {
             @Nullable
             @Override
             public String getSlotTexture() {
+                GlStateManager.enableBlend();
                 return "neotech:gui/in";
             }
         });
@@ -39,6 +41,7 @@ public class ContainerEnergyStorage extends BaseContainer {
             @Nullable
             @Override
             public String getSlotTexture() {
+                GlStateManager.enableBlend();
                 return "neotech:gui/out";
             }
         });

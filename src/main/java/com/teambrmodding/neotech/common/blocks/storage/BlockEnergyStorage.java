@@ -1,5 +1,6 @@
 package com.teambrmodding.neotech.common.blocks.storage;
 
+import com.teambr.bookshelf.Bookshelf;
 import com.teambr.bookshelf.common.IOpensGui;
 import com.teambr.bookshelf.common.blocks.IToolable;
 import com.teambr.bookshelf.util.WorldUtils;
@@ -13,8 +14,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 /**
  * This file was created for NeoTech
@@ -34,6 +39,8 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
      */
     public BlockEnergyStorage(String name, int tier) {
         super(Material.IRON, name, TileEnergyStorage.class);
+
+        this.tier = tier;
     }
 
     /**
@@ -70,11 +77,32 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
     }
 
     /**
+     * Called when the block is clicked on
+     * @return True to prevent future logic
+     */
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state,
+                                    EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side,
+                                    float hitX, float hitY, float hitZ) {
+        // Make sure our machine is reachable
+        if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEnergyStorage) {
+            // Open a GUI
+            if(!playerIn.isSneaking()) {
+                playerIn.openGui(Bookshelf.INSTANCE, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                return true;
+            }
+        }
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+    }
+
+    /**
      * Called by ItemBlocks after a block is set in the world, to allow post-place logic
      */
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if(stack.hasTagCompound() && !worldIn.isRemote) {
+            if(!stack.getTagCompound().hasKey("Tier"))
+                stack.getTagCompound().setInteger("Tier", tier);
             worldIn.getTileEntity(pos).readFromNBT(stack.getTagCompound());
             worldIn.getTileEntity(pos).setPos(pos);
             worldIn.setBlockState(pos, state, 3);
