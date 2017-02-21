@@ -1,11 +1,21 @@
 package com.teambrmodding.neotech.common.blocks.storage;
 
+import com.teambr.bookshelf.client.gui.GuiColor;
+import com.teambr.bookshelf.common.tiles.FluidHandler;
+import com.teambr.bookshelf.util.ClientUtils;
+import com.teambrmodding.neotech.common.tiles.storage.tanks.TileBasicTank;
 import com.teambrmodding.neotech.managers.BlockManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+
+import java.util.List;
 
 /**
  * This file was created for NeoTech
@@ -51,5 +61,30 @@ public class ItemBlockFluidStorage extends ItemBlock {
             capacity *= 8;
 
         return new FluidHandlerItemStack(stack, capacity);
+    }
+
+    /*******************************************************************************************************************
+     * Item                                                                                                            *
+     *******************************************************************************************************************/
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        if(stack.hasTagCompound() && stack.getTagCompound().hasKey("Tanks")) {
+            NBTTagList tagList = stack.getTagCompound().getTagList("Tanks", 10);
+            FluidTank[] tanks = new FluidTank[1];
+            tanks[0] = new FluidTank(10000000);
+            for(int x = 0; x < tagList.tagCount(); x++) {
+                NBTTagCompound tankCompound = tagList.getCompoundTagAt(x);
+                byte position = tankCompound.getByte("TankID");
+                if(position < tanks.length)
+                    tanks[position].readFromNBT(tankCompound);
+            }
+
+            FluidStack currentStored = tanks[0].getFluid();
+            if(currentStored == null)
+                return;
+            tooltip.add(GuiColor.ORANGE + ClientUtils.translate("neotech.text.fluidStored"));
+            tooltip.add("  " + currentStored.getLocalizedName() + ": " + ClientUtils.formatNumber(currentStored.amount) + " mb");
+        }
     }
 }

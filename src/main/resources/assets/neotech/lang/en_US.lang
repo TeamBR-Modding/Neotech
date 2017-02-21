@@ -240,6 +240,7 @@ neotech.text.redstoneFlux=Redstone Flux
 neotech.text.rfDiff=Energy Change
 
 neotech.text.energyStored=Energy Stored
+neotech.text.fluidStored=Energy Stored
 
 neotech.text.processMode=Solidify Mode
 neotech.text.blockMode=Block Mode

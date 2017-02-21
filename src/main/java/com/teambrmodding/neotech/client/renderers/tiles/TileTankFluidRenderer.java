@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -38,11 +39,12 @@ public class TileTankFluidRenderer extends TileEntitySpecialRenderer<TileBasicTa
             if(!(te instanceof TileVoidTank)) {
                 TextureAtlasSprite fluidIcon = Minecraft.getMinecraft().getTextureMapBlocks()
                         .getAtlasSprite(te.tanks[TileBasicTank.TANK].getFluid().getFluid().getStill().toString());
-                RenderUtils.setColor(Color.decode(String.valueOf(te.tanks[TileBasicTank.TANK].getFluid().getFluid().getColor())));
+                if(te.tanks[TileBasicTank.TANK].getFluid().getFluid() != FluidRegistry.WATER)
+                    RenderUtils.setColor(Color.decode(String.valueOf(te.tanks[TileBasicTank.TANK].getFluid().getFluid().getColor())));
                 if(te.tanks[TileBasicTank.TANK].getFluid().getFluid().isGaseous())
                     GlStateManager.translate(0, 1 - (te.getFluidLevelScaled() / 16) - 0.1, 0);
                 RenderUtils.renderCubeWithTexture(2.01 / 16.0, 1.01 / 16.0, 2.01 / 16.0,
-                        13.99 / 16.0, 13.99 / 16.0, 13.99 / 16.0,
+                        13.99 / 16.0, te.getFluidLevelScaled(), 13.99 / 16.0,
                         fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());
             } else {
                 TextureAtlasSprite voidIcon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("minecraft:blocks/portal");

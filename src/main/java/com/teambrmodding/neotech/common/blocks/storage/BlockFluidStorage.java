@@ -83,12 +83,13 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
             }
 
             // We want to display in chat the current levels
-            if(fluidStorage.tanks[TileBasicTank.TANK].getFluid() != null) {
+            if(worldIn.isRemote && fluidStorage.tanks[TileBasicTank.TANK].getFluid() != null) {
                 FluidStack fluidStack = fluidStorage.tanks[TileBasicTank.TANK].getFluid();
                 if(fluidStack.getFluid() != null) {
-                    playerIn.addChatMessage(new TextComponentString(fluidStack.getLocalizedName() + ": " +
+                    String display = fluidStack.getLocalizedName() + ": " +
                             ClientUtils.formatNumber(fluidStorage.tanks[TileBasicTank.TANK].getFluidAmount()) + " / " +
-                            ClientUtils.formatNumber(fluidStorage.tanks[TileBasicTank.TANK].getCapacity())));
+                            ClientUtils.formatNumber(fluidStorage.tanks[TileBasicTank.TANK].getCapacity());
+                    playerIn.addChatMessage(new TextComponentString(display));
                 }
             }
         }
@@ -147,6 +148,14 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
      */
     @Override
     public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    /**
+     * Used to determine ambient occlusion and culling when rebuilding chunks for render
+     */
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 

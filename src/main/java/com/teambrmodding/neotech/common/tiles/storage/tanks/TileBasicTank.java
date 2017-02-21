@@ -83,7 +83,7 @@ public class TileBasicTank extends FluidHandler {
      * @return
      */
     public float getFluidLevelScaled() {
-        return Math.max(14.99F, (14 * tanks[TANK].getFluidAmount() / tanks[TANK].getCapacity()) + 1.31F + offset);
+        return Math.min(14.99F, ((tanks[TANK].getFluidAmount() * 14) / tanks[TANK].getCapacity()) + 1.31F + offset) / 16F;
     }
 
     @Override
