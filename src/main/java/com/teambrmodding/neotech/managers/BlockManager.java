@@ -34,8 +34,8 @@ import javax.annotation.Nullable;
  */
 public class BlockManager {
     // Machines
+    public static BlockMachine electricCrusher ;//   = new BlockMachine("electricCrusher", TileElectricCrusher.class);
     public static BlockMachine electricFurnace    = new BlockMachine("electricFurnace", TileElectricFurnace.class);
-    public static BlockMachine electricCrusher    = new BlockMachine("electricCrusher", TileElectricCrusher.class);
     public static BlockMachine furnaceGenerator   = new BlockMachine("furnaceGenerator", TileFurnaceGenerator.class);
     public static BlockMachine fluidGenerator     = new BlockMachine("fluidGenerator", TileFluidGenerator.class);
     public static BlockMachine electricCrucible   = new BlockMachine("electricCrucible", TileCrucible.class);
@@ -65,6 +65,8 @@ public class BlockManager {
     public static BlockSolarPanel solarPanelT3 = new BlockSolarPanel("solarPanelT3", 3);
 
     public static void preInit() {
+        electricCrusher = new BlockMachine("electricCrusher", TileElectricCrusher.class);
+
         // Machines
         registerBlock(electricFurnace, TileElectricFurnace.class);
         registerBlock(electricCrusher, TileElectricCrusher.class);

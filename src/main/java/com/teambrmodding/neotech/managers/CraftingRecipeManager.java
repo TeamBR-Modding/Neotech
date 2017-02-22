@@ -45,7 +45,7 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricCrucible),
                 "SRS",
                 "BCB",
-                "SRS", 'C', Items.CAULDRON, 'S', "ingotCopper", 'B', Blocks.field_189877_df, 'R', "dustRedstone"));
+                "SRS", 'C', Items.CAULDRON, 'S', "ingotCopper", 'B', Blocks.MAGMA, 'R', "dustRedstone"));
 
         //Electric Alloyer
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.electricAlloyer),
