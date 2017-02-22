@@ -81,6 +81,7 @@ minecraft {
     replace "@VERSION@", "${config.mod_version}"
 
     runDir = "eclipse"
+    useDepAts = true
 
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
