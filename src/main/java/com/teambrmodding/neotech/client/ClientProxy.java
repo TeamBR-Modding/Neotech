@@ -1,5 +1,7 @@
 package com.teambrmodding.neotech.client;
 
+import com.teambr.bookshelf.common.tiles.FluidHandler;
+import com.teambrmodding.neotech.client.mesh.MeshDefinitions;
 import com.teambrmodding.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefinition;
 import com.teambrmodding.neotech.client.renderers.tiles.TileMachineIORenderer;
 import com.teambrmodding.neotech.client.renderers.tiles.TileTankFluidRenderer;
@@ -10,14 +12,28 @@ import com.teambrmodding.neotech.common.metals.items.ItemMetal;
 import com.teambrmodding.neotech.common.tiles.AbstractMachine;
 import com.teambrmodding.neotech.common.tiles.storage.tanks.TileBasicTank;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
+import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.BlockManager;
 import com.teambrmodding.neotech.managers.FluidManager;
 import com.teambrmodding.neotech.managers.ItemManager;
 import com.teambrmodding.neotech.managers.MetalManager;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
+
+import javax.annotation.Nullable;
 
 /**
  * This file was created for NeoTech
@@ -56,6 +72,27 @@ public class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.voidTank, "voidTank", "normal");
 
         MetalManager.registerModels();
+
+        // Fluids
+        for(BaseFluidBlock fluid : FluidManager.registeredBlocks) {
+            final Item item = Item.getItemFromBlock(fluid);
+            assert item != null;
+
+            // ModelBakery.registerItemVariants(item);
+
+            ModelResourceLocation modelResourceLocation =
+                    new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
+                            fluid.getFluid().getName()), "inventory");
+            ModelLoader.setCustomMeshDefinition(item, new MeshDefinitions.ModelLocationWrapper(modelResourceLocation));
+            ModelLoader.setCustomModelResourceLocation(item, 0, modelResourceLocation);
+            ModelLoader.setCustomStateMapper(fluid, new StateMapperBase() {
+                @Override
+                protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                    return new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
+                            fluid.getFluid().getName()), "fluid");
+                }
+            });
+        }
 
         // Upgrades
 
@@ -201,6 +238,9 @@ public class ClientProxy extends CommonProxy {
             }
             return 0xFFFFFF;
         }, FluidManager.blockOxygen, FluidManager.blockHydrogen);
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) ->
+                ((BaseFluidBlock)Block.getBlockFromItem(stack.getItem())).getBlockColor(),
+                Item.getItemFromBlock(FluidManager.blockHydrogen), Item.getItemFromBlock(FluidManager.blockOxygen));
 
 
         // Metal Items
@@ -236,6 +276,13 @@ public class ClientProxy extends CommonProxy {
                     }
                     return 0xFFFFFF;
                 }, MetalManager.metalRegistry.get(metal).getNugget());
+            }
+
+            // Fluid Block
+            if(MetalManager.metalRegistry.get(metal).getFluidBlock() != null) {
+                Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) ->
+                                ((BlockFluidMetal) Block.getBlockFromItem(stack.getItem())).getBlockColor(),
+                        Item.getItemFromBlock(MetalManager.metalRegistry.get(metal).getFluidBlock()));
             }
         }
     }

@@ -31,4 +31,17 @@ public class MeshDefinitions {
             return new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID + ":items/" + modelName), variants);
         }
     }
+
+    public static class ModelLocationWrapper implements ItemMeshDefinition {
+        private ModelResourceLocation location;
+
+        public ModelLocationWrapper(ModelResourceLocation location) {
+            this.location = location;
+        }
+
+        @Override
+        public ModelResourceLocation getModelLocation(ItemStack stack) {
+            return location;
+        }
+    }
 }

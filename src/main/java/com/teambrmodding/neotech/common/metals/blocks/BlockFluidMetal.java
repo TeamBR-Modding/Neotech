@@ -1,6 +1,7 @@
 package com.teambrmodding.neotech.common.metals.blocks;
 
 import com.teambr.bookshelf.util.ClientUtils;
+import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.EnumFacing;
@@ -28,7 +29,9 @@ public class BlockFluidMetal extends BlockFluidClassic {
      */
     public BlockFluidMetal(Fluid fluid) {
         super(fluid, Material.LAVA);
-        setRegistryName(new ResourceLocation(Reference.MOD_ID, fluid.getName()));
+        setRegistryName(new ResourceLocation(Reference.MOD_ID, "fluid." + fluid.getName()));
+        setUnlocalizedName(Reference.MOD_ID + ":" + fluid.getUnlocalizedName());
+        setCreativeTab(Neotech.tabMetals);
     }
 
     /**
@@ -42,14 +45,6 @@ public class BlockFluidMetal extends BlockFluidClassic {
     /*******************************************************************************************************************
      * Fluid                                                                                                           *
      *******************************************************************************************************************/
-
-    /**
-     * Gets the localized name of this block. Used for the statistics page.
-     */
-    @Override
-    public String getLocalizedName() {
-        return ClientUtils.translate("fluid." + fluidName + ".name");
-    }
 
     /**
      * Chance that fire will spread and consume this block.

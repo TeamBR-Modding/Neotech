@@ -92,8 +92,10 @@ public abstract class AbstractRecipe<I, O> {
                 // The strong ID must match something
                 for(ItemStack oreStack : ores) {
                     if(ArrayUtils.contains(OreDictionary.getOreIDs(oreStack), OreDictionary.getOreID(name[0])))
-                        return new ItemStack(oreStack.getItem(), Integer.parseInt(name[1]), damage == -1 ? oreStack.getItemDamage() : damage);
+                        return new ItemStack(oreStack.getItem(), Integer.parseInt(name[1]), damage == -1 && oreStack.getItemDamage() != OreDictionary.WILDCARD_VALUE
+                                ? oreStack.getItemDamage() : damage);
                 }
+
                 // No ore dict found, lookup item
                 return new ItemStack(Item.REGISTRY.getObject(new ResourceLocation(name[0], name[1])), stackSize, damage == -1 ? 0 : damage);
             case 1: // Not a defined item already, search OreDict

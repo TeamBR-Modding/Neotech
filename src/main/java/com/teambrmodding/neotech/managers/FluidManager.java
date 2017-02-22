@@ -7,6 +7,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This file was created for NeoTech
  * <p>
@@ -18,6 +21,8 @@ import net.minecraftforge.fluids.FluidRegistry;
  * @since 2/15/2017
  */
 public class FluidManager {
+
+    public static List<BaseFluidBlock> registeredBlocks = new ArrayList<>();
 
     // Gasses
     // Hydrogen
@@ -34,9 +39,11 @@ public class FluidManager {
     public static void preInit() {
         hydrogen = createFluidGas(0xFF0044BB, true, "hydrogen");
         blockHydrogen = registerFluidBlock(hydrogen, new BaseFluidBlock(hydrogen));
+        registeredBlocks.add(blockHydrogen);
 
         oxygen = createFluidGas(0xFFDDDDDD, true, "oxygen");
         blockOxygen = registerFluidBlock(oxygen, new BaseFluidBlock(oxygen));
+        registeredBlocks.add(blockOxygen);
     }
 
     /*******************************************************************************************************************

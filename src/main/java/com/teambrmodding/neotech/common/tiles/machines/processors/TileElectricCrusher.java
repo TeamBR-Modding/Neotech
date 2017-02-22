@@ -10,6 +10,7 @@ import com.teambrmodding.neotech.common.container.machines.processors.ContainerE
 import com.teambrmodding.neotech.common.tiles.MachineProcessor;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.RecipeManager;
+import com.teambrmodding.neotech.registries.AbstractRecipe;
 import com.teambrmodding.neotech.registries.CrusherRecipeHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -163,7 +164,7 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
                             ((CrusherRecipeHandler) RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER)).getRecipe(input);
                     if(recipe != null && recipe.outputSecondary != null && recipe.secondaryOutputPercentChance > 0) {
                         if(recipe.secondaryOutputPercentChance > worldObj.rand.nextInt(100)) {
-                            ItemStack extraStack = recipe.getItemStackFromString(recipe.outputSecondary);
+                            ItemStack extraStack = AbstractRecipe.getItemStackFromString(recipe.outputSecondary);
                             if(extraStack != null) {
                                 if(getStackInSlot(OUTPUT_SLOT_2) == null)
                                     setStackInSlot(OUTPUT_SLOT_2, extraStack);

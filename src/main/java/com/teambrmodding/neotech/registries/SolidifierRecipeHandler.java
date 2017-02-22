@@ -228,8 +228,16 @@ public class SolidifierRecipeHandler extends
                 getItemStackString(new ItemStack(Blocks.OBSIDIAN, 1))));
 
         // Ghast Tear
-        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "ghasttear:" + MetalManager.INGOT_MB,
+        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "ghasttear:" + MetalManager.NUGGET_MB,
                 getItemStackString(new ItemStack(Items.GHAST_TEAR))));
+
+        // Chorus
+        addRecipe(new SolidifierRecipe(SolidifierMode.BLOCK_MODE, "chorus:" + MetalManager.NUGGET_MB,
+                getItemStackString(new ItemStack(Items.CHORUS_FRUIT_POPPED))));
+
+        // Wither
+        addRecipe(new SolidifierRecipe(SolidifierMode.NUGGET_MODE, "wither:" + MetalManager.NUGGET_MB,
+                getItemStackString(new ItemStack(Items.NETHER_STAR))));
 
         saveToFile();
     }

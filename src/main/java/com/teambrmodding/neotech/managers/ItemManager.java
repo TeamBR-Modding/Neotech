@@ -31,10 +31,10 @@ public class ItemManager {
     public static UpgradeItem processorQuadCore   = new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE, CPU, 1, 8, false);
     public static UpgradeItem processorOctCore    = new UpgradeItem(IUpgradeItem.CPU_OCT_CORE, CPU, 1, 16, false);
 
-    public static UpgradeItem memoryDDR1 = new UpgradeItem(IUpgradeItem.MEMORY_DDR1, MEMORY, 1, 2, false);
-    public static UpgradeItem memoryDDR2 = new UpgradeItem(IUpgradeItem.MEMORY_DDR2, MEMORY, 1, 4, false);
-    public static UpgradeItem memoryDDR3 = new UpgradeItem(IUpgradeItem.MEMORY_DDR3, MEMORY, 1, 8, false);
-    public static UpgradeItem memoryDDR4 = new UpgradeItem(IUpgradeItem.MEMORY_DDR4, MEMORY, 1, 16, false);
+    public static UpgradeItem memoryDDR1 = new UpgradeItem(IUpgradeItem.MEMORY_DDR1, MEMORY, 2, 2, true);
+    public static UpgradeItem memoryDDR2 = new UpgradeItem(IUpgradeItem.MEMORY_DDR2, MEMORY, 2, 4, true);
+    public static UpgradeItem memoryDDR3 = new UpgradeItem(IUpgradeItem.MEMORY_DDR3, MEMORY, 2, 6, true);
+    public static UpgradeItem memoryDDR4 = new UpgradeItem(IUpgradeItem.MEMORY_DDR4, MEMORY, 2, 8, true);
 
     public static UpgradeItem hardDrive64G  = new UpgradeItem(IUpgradeItem.HDD_64G, HDD, 1, 2, false);
     public static UpgradeItem hardDrive256G = new UpgradeItem(IUpgradeItem.HDD_256G, HDD, 1, 4, false);

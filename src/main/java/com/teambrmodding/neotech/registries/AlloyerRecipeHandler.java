@@ -128,8 +128,17 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipeHan
         // Bronze
         addRecipe(new AlloyerRecipe("copper:432", "tin:144", "bronze:576"));
 
+        // Tormented
         addRecipe(new AlloyerRecipe("ghasttear:" + MetalManager.INGOT_MB, "iron:" + MetalManager.INGOT_MB,
                 "tormented:" + MetalManager.INGOT_MB));
+
+        // Outlandish
+        addRecipe(new AlloyerRecipe("chorus:" + MetalManager.INGOT_MB, "tormented:" + MetalManager.INGOT_MB,
+                "outlandish:" + MetalManager.INGOT_MB));
+
+        // Neodymium
+        addRecipe(new AlloyerRecipe("wither:" + MetalManager.INGOT_MB, "outlandish:" + MetalManager.INGOT_MB,
+                "neodymium:" + MetalManager.INGOT_MB));
 
         saveToFile();
     }

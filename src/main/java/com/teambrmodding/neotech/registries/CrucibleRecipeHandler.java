@@ -220,7 +220,15 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
 
         // Ghast Tear
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.GHAST_TEAR)),
-                getFluidStackString(new FluidStack(FluidRegistry.getFluid("ghasttear"), MetalManager.INGOT_MB))));
+                "ghasttear:" + MetalManager.NUGGET_MB));
+
+        // Chorus
+        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.CHORUS_FRUIT_POPPED)),
+                "chorus:" + MetalManager.NUGGET_MB));
+
+        // Wither
+        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.NETHER_STAR)),
+                "wither:" + MetalManager.NUGGET_MB));
 
         // Ice/Snowball to Water
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.SNOWBALL)),

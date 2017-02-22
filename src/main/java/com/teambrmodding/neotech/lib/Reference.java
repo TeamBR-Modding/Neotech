@@ -11,7 +11,7 @@ package com.teambrmodding.neotech.lib;
  * @since 2/15/2017
  */
 public class Reference {
-    public static final String MOD_NAME     = "NeoTech";
+    public static final String MOD_NAME     = "Neotech";
     public static final String MOD_ID       = "neotech";
     public static final String VERSION      = "5.0.0";
     public static final String DEPENDENCIES = "after:tconstruct;required-after:Forge;after:JEI;required-after:bookshelfapi;after:IC2;after:Tesla";

@@ -25,8 +25,9 @@ public class BaseFluidBlock extends BlockFluidClassic {
      */
     public BaseFluidBlock(BaseFluid fluid) {
         super(fluid, Material.WATER);
-        setRegistryName(new ResourceLocation(Reference.MOD_ID, fluid.getName()));
-        setUnlocalizedName(getRegistryName().toString());
+        this.fluid = fluid;
+        setRegistryName(new ResourceLocation(Reference.MOD_ID, "fluid." + fluid.getName()));
+        setUnlocalizedName(Reference.MOD_ID + ":" + fluid.getUnlocalizedName());
     }
 
     /**
@@ -35,17 +36,5 @@ public class BaseFluidBlock extends BlockFluidClassic {
      */
     public int getBlockColor() {
         return fluid.getColor();
-    }
-
-    /*******************************************************************************************************************
-     * Block                                                                                                           *
-     *******************************************************************************************************************/
-
-    /**
-     * Gets the localized name of this block. Used for the statistics page.
-     */
-    @Override
-    public String getLocalizedName() {
-        return ClientUtils.translate("fluid." + fluid.getName() + ".name");
     }
 }

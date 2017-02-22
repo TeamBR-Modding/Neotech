@@ -42,15 +42,5 @@ public class BaseFluid extends Fluid {
     public int getColor() {
         return color;
     }
-
-    /**
-     * Returns the localized name of this fluid.
-     *
-     * @param stack The stack
-     */
-    @Override
-    public String getLocalizedName(FluidStack stack) {
-        return ClientUtils.translate("fluid." + getName() + ".name");
-    }
 }
 

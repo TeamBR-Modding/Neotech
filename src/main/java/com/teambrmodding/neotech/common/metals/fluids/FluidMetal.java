@@ -29,7 +29,6 @@ public class FluidMetal extends Fluid {
     public FluidMetal(int color, String fluidName, ResourceLocation still, ResourceLocation flowing) {
         super(fluidName, still, flowing);
         this.color = color;
-        setUnlocalizedName(Reference.MOD_ID + "." + fluidName);
         setLuminosity(10);
         setDensity(3000);
         setViscosity(6000);
@@ -39,14 +38,6 @@ public class FluidMetal extends Fluid {
     /*******************************************************************************************************************
      * Fluid                                                                                                           *
      *******************************************************************************************************************/
-
-    /**
-     * Returns the localized name of this fluid.
-     */
-    @Override
-    public String getLocalizedName(FluidStack stack) {
-        return ClientUtils.translate("fluid." + getName() + ".name");
-    }
 
     @Override
     public int getColor() {

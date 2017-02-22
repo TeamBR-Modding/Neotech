@@ -7,20 +7,24 @@ import com.teambrmodding.neotech.common.metals.blocks.BlockFluidMetal;
 import com.teambrmodding.neotech.common.metals.blocks.BlockMetalOre;
 import com.teambrmodding.neotech.common.metals.fluids.FluidMetal;
 import com.teambrmodding.neotech.common.metals.items.ItemMetal;
+import com.teambrmodding.neotech.lib.Reference;
 import gnu.trove.map.hash.THashMap;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,9 +68,13 @@ public class MetalManager {
     public static final String CARBON       = "carbon";
     public static final String OBSIDIAN     = "obsidian";
     public static final String GHAST_TEAR   = "ghasttear";
+    public static final String CHORUS       = "chorus";
+    public static final String WITHER       = "wither";
 
     // Alloys
-    public static final String TORMMENTED  = "tormented";
+    public static final String TORMENTED  = "tormented";
+    public static final String OUTLANDISH = "outlandish";
+    public static final String NEODYMIUM  = "neodymium";
 
     // A list of metals that Tinker's Construct adds, we want to play nice if possible
     private static final List<String> tinkersMetals = Arrays.asList("brass", "copper", "tin", "bronze", "zinc", "lead",
@@ -108,6 +116,27 @@ public class MetalManager {
                 ModelLoader.setCustomMeshDefinition(metal.getNugget(),
                         new MeshDefinitions.SimpleItemMeshDefinition("metalItem", "type=nugget"));
                 ModelLoaderHelper.registerItem(metal.getNugget(), "items/metalItem", "type=nugget");
+            }
+
+            // Fluid
+            if(metal.getFluidBlock() != null) {
+                final Item item = Item.getItemFromBlock(metal.getFluidBlock());
+                assert item != null;
+
+               // ModelBakery.registerItemVariants(item);
+
+                ModelResourceLocation modelResourceLocation =
+                        new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
+                                metal.getFluidBlock().getFluid().getName()), "inventory");
+                ModelLoader.setCustomMeshDefinition(item, new MeshDefinitions.ModelLocationWrapper(modelResourceLocation));
+                ModelLoader.setCustomModelResourceLocation(item, 0, modelResourceLocation);
+                ModelLoader.setCustomStateMapper(metal.getFluidBlock(), new StateMapperBase() {
+                    @Override
+                    protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                        return new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
+                                metal.getFluidBlock().getFluid().getName()), "fluid");
+                    }
+                });
             }
         }
     }
@@ -200,17 +229,37 @@ public class MetalManager {
                 true, true, true,
                 false, false, false, false, false);
 
+        // Chorus
+        registerMetal(CHORUS, 1, 0xFF9b6f9b, 0xFF9b6f9b,
+                true, true, true,
+                false, false, false, false, false);
+
+        // Wither
+        registerMetal(WITHER, 1, 0xFFfdffa8, 0xFFfdffa8,
+                true, true, true,
+                false, false, false, false, false);
+
 
         // Tormented
-        registerMetal(TORMMENTED, 1, 0xFF774747, 0xFF774747,
+        registerMetal(TORMENTED, 1, 0xFF774747, 0xFF774747,
                 true, false, true,
+                false, true, true, true, true);
+
+        // Outlandish
+        registerMetal(OUTLANDISH, 1, 0xFF613e8f, 0xFF613e8f,
+                true, true, true,
+                false, true, true, true, true);
+
+        // Neodymium
+        registerMetal(NEODYMIUM, 1, 0xFF801f1f, 0xFF801f1f,
+                true, true, true,
                 false, true, true, true, true);
     }
 
     public static Metal registerMetal(String metalName, int miningLevel, int color, int fluidColor,
-                                        boolean hasFluid, boolean isDirtyFluid, boolean hasFluidBlock,
-                                        boolean hasOre, boolean hasSolidBlock,
-                                        boolean hasIngot, boolean hasDust, boolean hasNugget) {
+                                      boolean hasFluid, boolean isDirtyFluid, boolean hasFluidBlock,
+                                      boolean hasOre, boolean hasSolidBlock,
+                                      boolean hasIngot, boolean hasDust, boolean hasNugget) {
         //--------------------------------------------------------------------------------------------------------------
         // Fluid                                                                                                       -
         //--------------------------------------------------------------------------------------------------------------

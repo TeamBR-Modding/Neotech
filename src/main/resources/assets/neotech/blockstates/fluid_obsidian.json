@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "fluid": {
+      "model": "forge:fluid",
+      "custom": {"fluid": "obsidian"}
+    },
+    "inventory": {
+      "model": "neotech:item",
+      "transform": "forge:default-item",
+      "textures": {
+        "layer0": "neotech:blocks/metal_still"
+      }
+    }
+  }
+}
