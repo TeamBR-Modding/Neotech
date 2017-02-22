@@ -13,7 +13,7 @@ package com.teambrmodding.neotech.lib;
 public class Reference {
     public static final String MOD_NAME     = "Neotech";
     public static final String MOD_ID       = "neotech";
-    public static final String VERSION      = "5.0.0";
+    public static final String VERSION      = "@VERSION@";
     public static final String DEPENDENCIES = "after:tconstruct;required-after:Forge;after:JEI;required-after:bookshelfapi;after:IC2;after:Tesla";
     public static final String UPDATE_JSON  = "https://raw.githubusercontent.com/TeamBR-Modding/NeoTech/1.9/update.json";
 
