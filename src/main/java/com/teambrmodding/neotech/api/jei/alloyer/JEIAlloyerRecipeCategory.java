@@ -5,7 +5,8 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AlloyerRecipe;
 import com.teambrmodding.neotech.registries.AlloyerRecipeHandler;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
@@ -146,7 +147,7 @@ public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecip
     public static List<JEIAlloyerRecipeWrapper> buildRecipeList() {
         ArrayList<JEIAlloyerRecipeWrapper> recipes = new ArrayList<>();
         AlloyerRecipeHandler alloyerRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.ALLOYER);
-        for(AlloyerRecipeHandler.AlloyerRecipe recipe : alloyerRecipeHandler.recipes) {
+        for(AlloyerRecipe recipe : alloyerRecipeHandler.recipes) {
             FluidStack fluidInputOne = AbstractRecipe.getFluidStackFromString(recipe.fluidStackOne);
             FluidStack fluidInputTwo = AbstractRecipe.getFluidStackFromString(recipe.fluidStackTwo);
             FluidStack fluidOutput   = AbstractRecipe.getFluidStackFromString(recipe.fluidStackOutput);

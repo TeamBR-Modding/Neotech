@@ -10,8 +10,9 @@ import com.teambrmodding.neotech.common.container.machines.processors.ContainerE
 import com.teambrmodding.neotech.common.tiles.MachineProcessor;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
 import com.teambrmodding.neotech.registries.CrusherRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.CrusherRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -160,7 +161,7 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
                     getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize;
 
                 if(hasUpgradeByID(IUpgradeItem.EXPANSION_CARD)) {
-                    CrusherRecipeHandler.CrusherRecipe recipe =
+                    CrusherRecipe recipe =
                             ((CrusherRecipeHandler) RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER)).getRecipe(input);
                     if(recipe != null && recipe.outputSecondary != null && recipe.secondaryOutputPercentChance > 0) {
                         if(recipe.secondaryOutputPercentChance > worldObj.rand.nextInt(100)) {

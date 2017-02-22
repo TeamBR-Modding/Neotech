@@ -10,8 +10,9 @@ import com.teambrmodding.neotech.common.tiles.MachineProcessor;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
 import com.teambrmodding.neotech.registries.CentrifugeRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.CentrifugeRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -167,7 +168,7 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
     protected void completeCook() {
         for (int x = 0; x < getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY); x++) {
             if(canProcess()) {
-                CentrifugeRecipeHandler.CentrifugeRecipe recipe =
+                CentrifugeRecipe recipe =
                         ((CentrifugeRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.CENTRIFUGE)).getRecipe(tanks[INPUT_TANK].getFluid());
                 if(recipe != null) {
                     FluidStack drainedStack = tanks[INPUT_TANK].drain(AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput).amount, false);

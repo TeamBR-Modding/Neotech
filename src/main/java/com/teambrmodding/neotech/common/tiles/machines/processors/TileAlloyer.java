@@ -10,7 +10,8 @@ import com.teambrmodding.neotech.common.tiles.MachineProcessor;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AlloyerRecipe;
 import com.teambrmodding.neotech.registries.AlloyerRecipeHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -148,7 +149,7 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
     protected void completeCook() {
         for(int x = 0; x < getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY); x++) {
             if(canProcess()) {
-                AlloyerRecipeHandler.AlloyerRecipe recipe =
+                AlloyerRecipe recipe =
                         ((AlloyerRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.ALLOYER))
                                 .getRecipe(Pair.of(tanks[INPUT_TANK_1].getFluid(), tanks[INPUT_TANK_2].getFluid()));
                 if(recipe != null) {

@@ -4,8 +4,9 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
 import com.teambrmodding.neotech.registries.FluidFuelRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.FluidFuelRecipe;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
@@ -13,13 +14,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.ItemFluidContainer;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -166,7 +163,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
     public static java.util.List<JEIFluidGeneratorRecipeWrapper> buildRecipeList() {
         ArrayList<JEIFluidGeneratorRecipeWrapper> recipes = new ArrayList<>();
         FluidFuelRecipeHandler fluidFuelRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS);
-        for(FluidFuelRecipeHandler.FluidFuelRecipe recipe : fluidFuelRecipeHandler.recipes) {
+        for(FluidFuelRecipe recipe : fluidFuelRecipeHandler.recipes) {
             FluidStack fluid = AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput);
             recipes.add(new JEIFluidGeneratorRecipeWrapper(fluid, recipe.burnTime, recipe.burnRate));
         }

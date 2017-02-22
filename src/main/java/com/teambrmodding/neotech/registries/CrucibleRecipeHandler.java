@@ -5,6 +5,7 @@ import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.managers.MetalManager;
+import com.teambrmodding.neotech.registries.recipes.CrucibleRecipe;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -19,12 +20,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.oredict.OreDictionary;
-import scala.tools.cmd.gen.AnyVals;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This file was created for NeoTech
@@ -36,7 +33,7 @@ import java.util.Arrays;
  * @author Paul Davis - pauljoda
  * @since 2/14/2017
  */
-public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeHandler.CrucibleRecipe, ItemStack, FluidStack> {
+public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe, ItemStack, FluidStack> {
 
     /**
      * Used to get the base name of the files
@@ -75,7 +72,8 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
      */
     @Override
     public TypeToken<ArrayList<CrucibleRecipe>> getTypeToken() {
-        return new TypeToken<ArrayList<CrucibleRecipe>>() {};
+        return new TypeToken<ArrayList<CrucibleRecipe>>() {
+        };
     }
 
     /**
@@ -103,29 +101,29 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-                if(args.length != 3 || (args.length == 2 && !args[0].equalsIgnoreCase("hands")))
+                if (args.length != 3 || (args.length == 2 && !args[0].equalsIgnoreCase("hands")))
                     sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
-                else if(args.length == 2 && args[0].equalsIgnoreCase("hands")) {
+                else if (args.length == 2 && args[0].equalsIgnoreCase("hands")) {
                     // Must be a player using the command as we need their hands
-                    if(sender.getCommandSenderEntity() instanceof EntityPlayer) {
+                    if (sender.getCommandSenderEntity() instanceof EntityPlayer) {
                         EntityPlayer player = (EntityPlayer) sender.getCommandSenderEntity(); // Get the player
 
                         // Make sure both hands have a stack
-                        if(player.getHeldItemMainhand() != null && player.getHeldItemOffhand() != null) {
+                        if (player.getHeldItemMainhand() != null && player.getHeldItemOffhand() != null) {
                             ItemStack mainHandStack = player.getHeldItemMainhand();
-                            ItemStack offHandStack  = player.getHeldItemOffhand();
+                            ItemStack offHandStack = player.getHeldItemOffhand();
 
                             // Offhand must hold a fluid handler
-                            if(mainHandStack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+                            if (mainHandStack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
                                 IFluidHandler fluidHandler = mainHandStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 
                                 // Cycle the tanks (usually one) to find a tank with a fluid
-                                for(IFluidTankProperties tankInfo : fluidHandler.getTankProperties()) {
+                                for (IFluidTankProperties tankInfo : fluidHandler.getTankProperties()) {
                                     FluidStack stackInTank = tankInfo.getContents();
 
                                     // Is a valid FluidStack
-                                    if(stackInTank != null && stackInTank.getFluid() != null) {
-                                        addRecipe(new CrucibleRecipeHandler.CrucibleRecipe(getItemStackString(offHandStack), getFluidStackString(stackInTank)));
+                                    if (stackInTank != null && stackInTank.getFluid() != null) {
+                                        addRecipe(new CrucibleRecipe(getItemStackString(offHandStack), getFluidStackString(stackInTank)));
                                         sender.addChatMessage(new TextComponentString(getItemStackString(offHandStack) +
                                                 " -> " + getFluidStackString(stackInTank) + " Added Successfully!"));
                                         saveToFile();
@@ -139,10 +137,10 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
                     // Conditions for hands usage not met
                     sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
                 } else {
-                    String itemStackInput  = args[0];
+                    String itemStackInput = args[0];
                     String fluidStackOutput = args[1];
 
-                    if(getItemStackFromString(itemStackInput) != null && getFluidStackFromString(fluidStackOutput) != null) {
+                    if (getItemStackFromString(itemStackInput) != null && getFluidStackFromString(fluidStackOutput) != null) {
                         addRecipe(new CrucibleRecipe(itemStackInput, fluidStackOutput));
                         sender.addChatMessage(new TextComponentString(itemStackInput +
                                 " -> " + fluidStackOutput + " Added Successfully!"));
@@ -164,7 +162,7 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
         // Metals
         for (Object key : MetalManager.metalRegistry.keySet()) {
             MetalManager.Metal metal = MetalManager.metalRegistry.get(key);
-            if(FluidRegistry.isFluidRegistered(metal.getOreDict())) {
+            if (FluidRegistry.isFluidRegistered(metal.getOreDict())) {
                 //Block - 1296mb
                 if (metal.getSolidBlock() != null)
                     addRecipe(new CrucibleRecipe(metal.getSolidBlock().getName(),
@@ -178,7 +176,7 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
                     addRecipe(new CrucibleRecipe(metal.getIngot().getName(),
                             getFluidStackString(new FluidStack(FluidRegistry.getFluid(metal.getOreDict()), MetalManager.INGOT_MB))));
                 //Dust - 76mb
-                if(metal.getDust() != null)
+                if (metal.getDust() != null)
                     addRecipe(new CrucibleRecipe(metal.getDust().getName(),
                             getFluidStackString(new FluidStack(FluidRegistry.getFluid(metal.getOreDict()), MetalManager.DUST_MB))));
                 //Nugget - 16mb
@@ -246,53 +244,5 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
 
         saveToFile();
     }
-
-    public static class CrucibleRecipe extends AbstractRecipe<ItemStack, FluidStack> {
-        // Variables
-        public String inputItemStack, outputFluidStack;
-
-        /**
-         * Crucible Recipe Object
-         * @param inputItemStack  The input itemstack, can but null if you provide a oreDict
-         *                        Format: MODID:ITEM:DAMAGE:STACK_SIZE ore ORE_DICT_TAG
-         * @param outputFluidStack The output FluidStack
-         */
-        public CrucibleRecipe(String inputItemStack, String outputFluidStack) {
-            this.inputItemStack = inputItemStack;
-            this.outputFluidStack = outputFluidStack;
-        }
-
-        /***************************************************************************************************************
-         * AbstractRecipe                                                                                              *
-         ***************************************************************************************************************/
-
-        /**
-         * Used to get the output of this recipe
-         *
-         * @param input The input object
-         * @return The output object
-         */
-        @Nullable
-        @Override
-        public FluidStack getOutput(ItemStack input) {
-            if(input == null) // Safety Check
-                return null;
-
-            if(isValidInput(input))
-                return getFluidStackFromString(outputFluidStack);
-
-            return null;
-        }
-
-        /**
-         * Is the input valid for an output
-         *
-         * @param input The input object
-         * @return True if there is an output
-         */
-        @Override
-        public boolean isValidInput(ItemStack input) {
-            return isItemStackValidForRecipeStack(inputItemStack, input);
-        }
-    }
 }
+

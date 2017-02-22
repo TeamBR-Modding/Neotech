@@ -1,8 +1,7 @@
 package com.teambrmodding.neotech.client;
 
-import com.teambr.bookshelf.common.tiles.FluidHandler;
-import com.teambrmodding.neotech.client.mesh.MeshDefinitions;
-import com.teambrmodding.neotech.client.mesh.MeshDefinitions.SimpleItemMeshDefinition;
+import com.teambrmodding.neotech.client.mesh.ModelLocationWrapper;
+import com.teambrmodding.neotech.client.mesh.SimpleItemMeshDefinition;
 import com.teambrmodding.neotech.client.renderers.tiles.TileMachineIORenderer;
 import com.teambrmodding.neotech.client.renderers.tiles.TileTankFluidRenderer;
 import com.teambrmodding.neotech.common.CommonProxy;
@@ -22,18 +21,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
-
-import javax.annotation.Nullable;
 
 /**
  * This file was created for NeoTech
@@ -83,7 +75,7 @@ public class ClientProxy extends CommonProxy {
             ModelResourceLocation modelResourceLocation =
                     new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
                             fluid.getFluid().getName()), "inventory");
-            ModelLoader.setCustomMeshDefinition(item, new MeshDefinitions.ModelLocationWrapper(modelResourceLocation));
+            ModelLoader.setCustomMeshDefinition(item, new ModelLocationWrapper(modelResourceLocation));
             ModelLoader.setCustomModelResourceLocation(item, 0, modelResourceLocation);
             ModelLoader.setCustomStateMapper(fluid, new StateMapperBase() {
                 @Override

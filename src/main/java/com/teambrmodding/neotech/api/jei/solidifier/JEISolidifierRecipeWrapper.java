@@ -2,6 +2,7 @@ package com.teambrmodding.neotech.api.jei.solidifier;
 
 import com.teambr.bookshelf.helper.GuiHelper;
 import com.teambr.bookshelf.util.ClientUtils;
+import com.teambrmodding.neotech.collections.SolidifierMode;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.registries.SolidifierRecipeHandler;
 import mezz.jei.api.ingredients.IIngredients;
@@ -33,7 +34,7 @@ public class JEISolidifierRecipeWrapper extends BlankRecipeWrapper {
     // Variables
     private FluidStack input;
     private ItemStack output;
-    private SolidifierRecipeHandler.SolidifierMode currentMode;
+    private SolidifierMode currentMode;
 
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
@@ -45,7 +46,7 @@ public class JEISolidifierRecipeWrapper extends BlankRecipeWrapper {
      * @param out
      * @param solidifyMode
      */
-    public JEISolidifierRecipeWrapper(FluidStack in, ItemStack out, SolidifierRecipeHandler.SolidifierMode solidifyMode) {
+    public JEISolidifierRecipeWrapper(FluidStack in, ItemStack out, SolidifierMode solidifyMode) {
         input = in;
         output = out;
         currentMode = solidifyMode;

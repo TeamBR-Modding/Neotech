@@ -5,8 +5,9 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
 import com.teambrmodding.neotech.registries.CrucibleRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.CrucibleRecipe;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
@@ -139,7 +140,7 @@ public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRec
     public static java.util.List<JEICrucibleRecipeWrapper> buildRecipeList() {
         ArrayList<JEICrucibleRecipeWrapper> recipes = new ArrayList<>();
         CrucibleRecipeHandler crucibleRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CRUCIBLE);
-        for(CrucibleRecipeHandler.CrucibleRecipe recipe : crucibleRecipeHandler.recipes) {
+        for(CrucibleRecipe recipe : crucibleRecipeHandler.recipes) {
             java.util.List<ItemStack> inputList = OreDictionary.getOres(recipe.inputItemStack);
             FluidStack output = AbstractRecipe.getFluidStackFromString(recipe.outputFluidStack);
             if(output != null) {

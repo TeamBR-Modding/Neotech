@@ -1,5 +1,6 @@
 package com.teambrmodding.neotech.world;
 
+import com.teambrmodding.neotech.collections.GeneratingOre;
 import com.teambrmodding.neotech.managers.ConfigManager;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +17,7 @@ import java.util.Random;
 
 /**
  * This file was created for NeoTech
- *
+ * <p>
  * NeoTech is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -41,6 +42,7 @@ public class OreGeneratorManager implements IWorldGenerator {
 
     /**
      * Registers an Ore to the generating list
+     *
      * @param ore The ore to register
      * @return The manager, to enable chaining
      */
@@ -51,6 +53,7 @@ public class OreGeneratorManager implements IWorldGenerator {
 
     /**
      * Disables a certain block from being generated
+     *
      * @param oreBlock The ore block to prevent
      * @return This
      */
@@ -61,6 +64,7 @@ public class OreGeneratorManager implements IWorldGenerator {
 
     /**
      * Generates the ore vein
+     *
      * @param ore    The ore to generate
      * @param world  The world
      * @param random An instance of random
@@ -85,50 +89,27 @@ public class OreGeneratorManager implements IWorldGenerator {
     /**
      * Generate some world
      *
-     * @param random the chunk specific {@link Random}.
-     * @param chunkX the chunk X coordinate of this chunk.
-     * @param chunkZ the chunk Z coordinate of this chunk.
-     * @param world : additionalData[0] The minecraft {@link World} we're generating for.
+     * @param random         the chunk specific {@link Random}.
+     * @param chunkX         the chunk X coordinate of this chunk.
+     * @param chunkZ         the chunk Z coordinate of this chunk.
+     * @param world          : additionalData[0] The minecraft {@link World} we're generating for.
      * @param chunkGenerator : additionalData[1] The {@link IChunkProvider} that is generating.
-     * @param chunkProvider : additionalData[2] {@link IChunkProvider} that is requesting the world generation.
-     *
+     * @param chunkProvider  : additionalData[2] {@link IChunkProvider} that is requesting the world generation.
      */
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 
-        for(Integer bannedDimension : ConfigManager.oreGenDimensionBlacklist)
-            if(bannedDimension == world.provider.getDimension())
+        for (Integer bannedDimension : ConfigManager.oreGenDimensionBlacklist)
+            if (bannedDimension == world.provider.getDimension())
                 return;
 
-        for(GeneratingOre ore : registeredOres)
-            if(!registeredOres.contains(ore.oreBlock))
+        for (GeneratingOre ore : registeredOres)
+            if (!registeredOres.contains(ore.oreBlock))
                 generateOre(ore, world, random, chunkX * 16, chunkZ * 16);
     }
-
-    /*******************************************************************************************************************
-     * Classes                                                                                                         *
-     *******************************************************************************************************************/
-
-    /**
-     * Object to hold information about ores to generate
-     */
-    public static class GeneratingOre {
-        public int minElevation, maxElevation, veinSize, veinsPerChunk;
-        public Block oreBlock;
-
-        /**
-         * An object to hold all info about a generating ore
-         * @param minElevation  The lower y level
-         * @param maxElevation  The highest y level
-         * @param veinSize      The vein size
-         * @param veinsPerChunk How many veins per chunk
-         */
-        public GeneratingOre(int minElevation, int maxElevation, int veinSize, int veinsPerChunk, Block oreBlock) {
-            this.minElevation = minElevation;
-            this.maxElevation = maxElevation;
-            this.veinSize = veinSize;
-            this.veinsPerChunk = veinsPerChunk;
-            this.oreBlock = oreBlock;
-        }
-    }
 }
+
+/*******************************************************************************************************************
+ * Classes                                                                                                         *
+ *******************************************************************************************************************/
+

@@ -1,4 +1,4 @@
-package com.teambrmodding.neotech.registries;
+package com.teambrmodding.neotech.registries.recipes;
 
 import com.teambr.bookshelf.helper.LogHelper;
 import net.minecraft.item.Item;

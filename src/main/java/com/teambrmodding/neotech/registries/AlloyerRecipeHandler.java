@@ -5,6 +5,7 @@ import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.managers.MetalManager;
+import com.teambrmodding.neotech.registries.recipes.AlloyerRecipe;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,7 +14,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @author Paul Davis - pauljoda
  * @since 2/14/2017
  */
-public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipeHandler.AlloyerRecipe, Pair<FluidStack, FluidStack>, FluidStack> {
+public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipe, Pair<FluidStack, FluidStack>, FluidStack> {
 
     /**
      * Used to get the base name of the files
@@ -65,7 +65,8 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipeHan
      */
     @Override
     public TypeToken<ArrayList<AlloyerRecipe>> getTypeToken() {
-        return new TypeToken<ArrayList<AlloyerRecipe>>() {};
+        return new TypeToken<ArrayList<AlloyerRecipe>>() {
+        };
     }
 
     /**
@@ -94,14 +95,14 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipeHan
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-                if(args.length < 3)
+                if (args.length < 3)
                     sender.addChatMessage(new TextComponentString(ClientUtils.translate("commands.addAlloyRecipe.usage")));
                 else {
-                    String input  = args[0];
+                    String input = args[0];
                     String input2 = args[1];
                     String output = args[2];
 
-                    if(getFluidStackFromString(input) != null && getFluidStackFromString(input2) != null && getFluidStackFromString(output) != null) {
+                    if (getFluidStackFromString(input) != null && getFluidStackFromString(input2) != null && getFluidStackFromString(output) != null) {
                         addRecipe(new AlloyerRecipe(input, input2, output));
                         sender.addChatMessage(new TextComponentString(input + " + " + input2 + " -> " + output + " Added successfully"));
                         saveToFile();
@@ -145,84 +146,15 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipeHan
 
     /**
      * Used to test if a single stack is valid
+     *
      * @param input The input
      * @return Is valid
      */
     public boolean isValidSingle(FluidStack input) {
-        for(AlloyerRecipe recipe : recipes)
-            if(recipe.isValidSingleInput(input))
+        for (AlloyerRecipe recipe : recipes)
+            if (recipe.isValidSingleInput(input))
                 return true;
         return false;
     }
-
-    public class AlloyerRecipe extends AbstractRecipe<Pair<FluidStack, FluidStack>, FluidStack> {
-        // Variables
-        public String fluidStackOne, fluidStackTwo, fluidStackOutput;
-
-        /**
-         * Creates A recipe object
-         *
-         * All fluids should be format FLUID:AMOUNT
-         *
-         * @param fluidOne The first fluid
-         * @param fluidTwo The second fluid
-         * @param fluidOutput The fluid output
-         */
-        public AlloyerRecipe(String fluidOne, String fluidTwo, String fluidOutput) {
-            this.fluidStackOne = fluidOne;
-            this.fluidStackTwo = fluidTwo;
-            this.fluidStackOutput = fluidOutput;
-        }
-
-        /**
-         * Used to check if a single fluid is valid for the recipes
-         *
-         * @param input FluidStack
-         * @return Boolean
-         */
-        public boolean isValidSingleInput(FluidStack input) {
-            return input != null &&
-                    (getFluidStackFromString(fluidStackOne).getFluid().getName().equalsIgnoreCase(input.getFluid().getName()) ||
-                            getFluidStackFromString(fluidStackTwo).getFluid().getName().equalsIgnoreCase(input.getFluid().getName())) &&
-                    (getFluidStackFromString(fluidStackOne).amount <= input.amount || getFluidStackFromString(fluidStackTwo).amount <= input.amount);
-        }
-
-        /***************************************************************************************************************
-         * AbstractRecipe                                                                                              *
-         ***************************************************************************************************************/
-
-        /**
-         * Used to get the output of this recipe
-         *
-         * @param input The input object
-         * @return The output object, can be null
-         */
-        @Nullable
-        @Override
-        public FluidStack getOutput(Pair<FluidStack, FluidStack> input) {
-            if(isValidInput(input))
-                return getFluidStackFromString(fluidStackOutput);
-            return null;
-        }
-
-        /**
-         * Is the input valid for an output
-         *
-         * @param input The input object
-         * @return True if there is an output
-         */
-        @Override
-        public boolean isValidInput(Pair<FluidStack, FluidStack> input) {
-            return !(input.getLeft() == null || input.getRight() == null ||
-                    input.getLeft().getFluid() == null || input.getRight().getFluid() == null) &&
-                    ((getFluidStackFromString(fluidStackOne).getFluid().getName().equalsIgnoreCase(input.getLeft().getFluid().getName()) &&
-                            getFluidStackFromString(fluidStackTwo).getFluid().getName().equalsIgnoreCase(input.getRight().getFluid().getName()) &&
-                            getFluidStackFromString(fluidStackOne).amount <= input.getLeft().amount &&
-                            getFluidStackFromString(fluidStackTwo).amount <= input.getRight().amount) ||
-                            (getFluidStackFromString(fluidStackTwo).getFluid().getName().equalsIgnoreCase(input.getLeft().getFluid().getName()) &&
-                                    getFluidStackFromString(fluidStackOne).getFluid().getName().equalsIgnoreCase(input.getRight().getFluid().getName()) &&
-                                    getFluidStackFromString(fluidStackTwo).amount <= input.getLeft().amount &&
-                                    getFluidStackFromString(fluidStackOne).amount <= input.getRight().amount));
-        }
-    }
 }
+

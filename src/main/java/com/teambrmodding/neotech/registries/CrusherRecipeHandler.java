@@ -3,6 +3,7 @@ package com.teambrmodding.neotech.registries;
 import com.google.gson.reflect.TypeToken;
 import com.teambr.bookshelf.helper.LogHelper;
 import com.teambrmodding.neotech.Neotech;
+import com.teambrmodding.neotech.registries.recipes.CrusherRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.command.CommandBase;
@@ -16,7 +17,6 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ import java.util.List;
  * @author Paul Davis - pauljoda
  * @since 2/14/2017
  */
-public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHandler.CrusherRecipe, ItemStack, Pair<Pair<ItemStack, ItemStack>, Integer>> {
+public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipe, ItemStack, Pair<Pair<ItemStack, ItemStack>, Integer>> {
 
     /**
      * Used to get the base name of the files
@@ -70,7 +70,8 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
      */
     @Override
     public TypeToken<ArrayList<CrusherRecipe>> getTypeToken() {
-        return new TypeToken<ArrayList<CrusherRecipe>>() {};
+        return new TypeToken<ArrayList<CrusherRecipe>>() {
+        };
     }
 
     @Override
@@ -126,20 +127,20 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
         // Adjust to Ore Dictionary
         String[] oreDictionary = OreDictionary.getOreNames();
 
-        for(String entry : oreDictionary) {
-            if(entry.startsWith("dust") && !doesRecipeExist(entry.replaceFirst("dust", "ore"))) {
+        for (String entry : oreDictionary) {
+            if (entry.startsWith("dust") && !doesRecipeExist(entry.replaceFirst("dust", "ore"))) {
                 List<ItemStack> oreList = OreDictionary.getOres(entry.replaceFirst("dust", "ore"));
-                if(!oreList.isEmpty()) {
+                if (!oreList.isEmpty()) {
                     // We want a single type output
                     List<ItemStack> dustList = OreDictionary.getOres(entry);
-                    if(!dustList.isEmpty())
+                    if (!dustList.isEmpty())
                         addRecipe(new CrusherRecipe(entry.replaceFirst("dust", "ore"),
                                 getItemStackString(new ItemStack(dustList.get(0).getItem(), 2, dustList.get(0).getItemDamage())),
                                 "", 0));
                 }
-            } else if(entry.startsWith("ingot")) {
+            } else if (entry.startsWith("ingot")) {
                 List<ItemStack> dustList = OreDictionary.getOres(entry.replaceFirst("ingot", "dust"));
-                if(!dustList.isEmpty() && !doesRecipeExist(entry.replaceFirst("ingot", "dust"))) {
+                if (!dustList.isEmpty() && !doesRecipeExist(entry.replaceFirst("ingot", "dust"))) {
                     addRecipe(new CrusherRecipe(entry,
                             getItemStackString(new ItemStack(dustList.get(0).getItem(), 2)) + ":" + dustList.get(0).getItemDamage(),
                             "", 0));
@@ -149,13 +150,13 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
 
         // Add Flower to Dyes
         for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
-            if(recipe instanceof ShapelessRecipes) {
+            if (recipe instanceof ShapelessRecipes) {
                 ShapelessRecipes shapelessRecipe = (ShapelessRecipes) recipe;
-                if(shapelessRecipe.recipeItems.size() == 1 &&
+                if (shapelessRecipe.recipeItems.size() == 1 &&
                         Block.getBlockFromItem(shapelessRecipe.recipeItems.get(0).getItem()) != null &&
                         Block.getBlockFromItem(shapelessRecipe.recipeItems.get(0).getItem()) instanceof BlockFlower) {
                     String inputString = getItemStackString(shapelessRecipe.recipeItems.get(0));
-                    if(!doesRecipeExist(inputString))
+                    if (!doesRecipeExist(inputString))
                         addRecipe(new CrusherRecipe(inputString,
                                 "dye:" +
                                         String.valueOf(shapelessRecipe.getRecipeOutput().stackSize * 2) + ":" +
@@ -167,63 +168,14 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipeHan
 
         saveToFile();
     }
-    
+
     /**
      * Does this already exist in our registry
      */
     private boolean doesRecipeExist(String stack) {
-        for(CrusherRecipe recipe : recipes)
-            if(stack.equalsIgnoreCase(recipe.inputItemStack))
+        for (CrusherRecipe recipe : recipes)
+            if (stack.equalsIgnoreCase(recipe.inputItemStack))
                 return true;
         return false;
-    }
-
-    public static class CrusherRecipe extends AbstractRecipe<ItemStack, Pair<Pair<ItemStack, ItemStack>, Integer>> {
-        public String inputItemStack, outputItemStack, outputSecondary;
-        public int secondaryOutputPercentChance;
-
-        /**
-         * Creates the recipe
-         */
-        public CrusherRecipe(String inputItemStack, String outputItemStack, String outputSecondary,
-                             int secondaryOutputPercentChance) {
-            this.inputItemStack = inputItemStack;
-            this.outputItemStack = outputItemStack;
-            this.outputSecondary = outputSecondary;
-            this.secondaryOutputPercentChance = secondaryOutputPercentChance;
-        }
-
-        /***************************************************************************************************************
-         * AbstractRecipe                                                                                              *
-         ***************************************************************************************************************/
-
-        /**
-         * Used to get the output of this recipe
-         *
-         * @param input The input object
-         * @return The output object
-         */
-        @Nullable
-        @Override
-        public Pair<Pair<ItemStack, ItemStack>, Integer> getOutput(ItemStack input) {
-            if(input == null) // Safety Check
-                return null;
-
-            if(isValidInput(input))
-                return Pair.of(Pair.of(getItemStackFromString(outputItemStack), getItemStackFromString(outputSecondary)), secondaryOutputPercentChance);
-
-            return null;
-        }
-
-        /**
-         * Is the input valid for an output
-         *
-         * @param input The input object
-         * @return True if there is an output
-         */
-        @Override
-        public boolean isValidInput(ItemStack input) {
-            return isItemStackValidForRecipeStack(inputItemStack, input);
-        }
     }
 }

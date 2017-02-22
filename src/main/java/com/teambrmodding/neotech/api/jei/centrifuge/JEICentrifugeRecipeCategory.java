@@ -6,6 +6,8 @@ import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
 import com.teambrmodding.neotech.registries.CentrifugeRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.CentrifugeRecipe;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
@@ -141,10 +143,10 @@ public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifug
     public static java.util.List<JEICentrifugeRecipeWrapper> buildRecipeList() {
         ArrayList<JEICentrifugeRecipeWrapper> recipes = new ArrayList<>();
         CentrifugeRecipeHandler centrifugeRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CENTRIFUGE);
-        for(CentrifugeRecipeHandler.CentrifugeRecipe recipe : centrifugeRecipeHandler.recipes) {
-            FluidStack fluidInput = recipe.getFluidStackFromString(recipe.fluidStackInput);
-            FluidStack fluidOutputOne = recipe.getFluidStackFromString(recipe.fluidStackOutputOne);
-            FluidStack fluidOutputTwo   = recipe.getFluidStackFromString(recipe.fluidStackOutputTwo);
+        for(CentrifugeRecipe recipe : centrifugeRecipeHandler.recipes) {
+            FluidStack fluidInput = AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput);
+            FluidStack fluidOutputOne = AbstractRecipe.getFluidStackFromString(recipe.fluidStackOutputOne);
+            FluidStack fluidOutputTwo   = AbstractRecipe.getFluidStackFromString(recipe.fluidStackOutputTwo);
             if(fluidInput != null && fluidOutputOne != null && fluidOutputTwo != null)
                 recipes.add(new JEICentrifugeRecipeWrapper(fluidInput, fluidOutputOne, fluidOutputTwo));
             else

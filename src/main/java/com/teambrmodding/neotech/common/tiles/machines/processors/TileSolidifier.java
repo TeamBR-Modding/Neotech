@@ -6,19 +6,20 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambr.bookshelf.util.InventoryUtils;
 import com.teambrmodding.neotech.client.gui.machines.processors.GuiSolidifier;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
+import com.teambrmodding.neotech.collections.SolidifierMode;
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerSolidifier;
 import com.teambrmodding.neotech.common.tiles.MachineProcessor;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
 import com.teambrmodding.neotech.registries.SolidifierRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.SolidifierRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -52,7 +53,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     public static final int UPDATE_MODE_NBT = 4;
 
     // The current mode for the machine
-    public SolidifierRecipeHandler.SolidifierMode currentMode = SolidifierRecipeHandler.SolidifierMode.BLOCK_MODE;
+    public SolidifierMode currentMode = SolidifierMode.BLOCK_MODE;
 
     /**
      * The initial size of the inventory
@@ -128,12 +129,11 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     public boolean canProcess() {
         if(energyStorage.getEnergyStored() > getEnergyCostPerTick() && tanks[TANK].getFluid() != null) {
             if(getStackInSlot(OUTPUT_SLOT) == null) {
-                SolidifierRecipeHandler.SolidifierRecipe recipe =
-                        ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)).getRecipe(Pair.of(currentMode, tanks[TANK].getFluid()));
+                SolidifierRecipe recipe = ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)).getRecipe(Pair.of(currentMode, tanks[TANK].getFluid()));
                 if(recipe != null && tanks[TANK].getFluidAmount() >= AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount)
                     return true;
             } else {
-                SolidifierRecipeHandler.SolidifierRecipe recipe =
+                SolidifierRecipe recipe =
                         ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)).getRecipe(Pair.of(currentMode, tanks[TANK].getFluid()));
                 if(recipe != null) {
                     ItemStack output = AbstractRecipe.getItemStackFromString(recipe.outputItemStack);
@@ -167,7 +167,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
         for(int x = 0; x < getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY); x++) {
             if(canProcess()) {
                 if(tanks[TANK].getFluid() != null) {
-                    SolidifierRecipeHandler.SolidifierRecipe recipe =
+                    SolidifierRecipe recipe =
                             ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)).getRecipe(Pair.of(currentMode, tanks[TANK].getFluid()));
                     ItemStack output = AbstractRecipe.getItemStackFromString(recipe.outputItemStack);
                     FluidStack drainedStack = drain(AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount, false);
@@ -270,7 +270,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        currentMode = SolidifierRecipeHandler.SolidifierMode.values()[compound.getInteger("ProcessMode")];
+        currentMode = SolidifierMode.values()[compound.getInteger("ProcessMode")];
     }
 
     /**

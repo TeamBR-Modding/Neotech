@@ -2,7 +2,8 @@ package com.teambrmodding.neotech.managers;
 
 import com.teambrmodding.neotech.client.ItemRenderManager;
 import com.teambrmodding.neotech.client.ModelLoaderHelper;
-import com.teambrmodding.neotech.client.mesh.MeshDefinitions;
+import com.teambrmodding.neotech.client.mesh.ModelLocationWrapper;
+import com.teambrmodding.neotech.client.mesh.SimpleItemMeshDefinition;
 import com.teambrmodding.neotech.common.metals.blocks.BlockFluidMetal;
 import com.teambrmodding.neotech.common.metals.blocks.BlockMetalOre;
 import com.teambrmodding.neotech.common.metals.fluids.FluidMetal;
@@ -10,7 +11,6 @@ import com.teambrmodding.neotech.common.metals.items.ItemMetal;
 import com.teambrmodding.neotech.lib.Reference;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
@@ -100,21 +100,21 @@ public class MetalManager {
             // Ingot
             if (metal.getIngot() != null) {
                 ModelLoader.setCustomMeshDefinition(metal.getIngot(),
-                        new MeshDefinitions.SimpleItemMeshDefinition("metalItem", "type=ingot"));
+                        new SimpleItemMeshDefinition("metalItem", "type=ingot"));
                 ModelLoaderHelper.registerItem(metal.getIngot(), "items/metalItem", "type=ingot");
             }
 
             // Dust
             if (metal.getDust() != null) {
                 ModelLoader.setCustomMeshDefinition(metal.getDust(),
-                        new MeshDefinitions.SimpleItemMeshDefinition("metalItem", "type=dust"));
+                        new SimpleItemMeshDefinition("metalItem", "type=dust"));
                 ModelLoaderHelper.registerItem(metal.getDust(), "items/metalItem", "type=dust");
             }
 
             // Nugget
             if (metal.getNugget() != null) {
                 ModelLoader.setCustomMeshDefinition(metal.getNugget(),
-                        new MeshDefinitions.SimpleItemMeshDefinition("metalItem", "type=nugget"));
+                        new SimpleItemMeshDefinition("metalItem", "type=nugget"));
                 ModelLoaderHelper.registerItem(metal.getNugget(), "items/metalItem", "type=nugget");
             }
 
@@ -128,7 +128,7 @@ public class MetalManager {
                 ModelResourceLocation modelResourceLocation =
                         new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
                                 metal.getFluidBlock().getFluid().getName()), "inventory");
-                ModelLoader.setCustomMeshDefinition(item, new MeshDefinitions.ModelLocationWrapper(modelResourceLocation));
+                ModelLoader.setCustomMeshDefinition(item, new ModelLocationWrapper(modelResourceLocation));
                 ModelLoader.setCustomModelResourceLocation(item, 0, modelResourceLocation);
                 ModelLoader.setCustomStateMapper(metal.getFluidBlock(), new StateMapperBase() {
                     @Override

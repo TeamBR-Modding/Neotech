@@ -5,6 +5,7 @@ import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.managers.MetalManager;
+import com.teambrmodding.neotech.registries.recipes.FluidFuelRecipe;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,7 +14,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * @author Paul Davis - pauljoda
  * @since 2/15/2017
  */
-public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecipeHandler.FluidFuelRecipe, FluidStack, Pair<Integer, Integer>> {
+public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecipe, FluidStack, Pair<Integer, Integer>> {
 
     /**
      * Used to get the base name of the files
@@ -65,7 +65,8 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
      */
     @Override
     public TypeToken<ArrayList<FluidFuelRecipe>> getTypeToken() {
-        return new TypeToken<ArrayList<FluidFuelRecipe>>() {};
+        return new TypeToken<ArrayList<FluidFuelRecipe>>() {
+        };
     }
 
     /**
@@ -93,9 +94,9 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-                if(args.length < 3)
+                if (args.length < 3)
                     sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
-                else if(getFluidStackFromString(args[0]) != null &&
+                else if (getFluidStackFromString(args[0]) != null &&
                         getFluidStackFromString(args[0]).getFluid() != null) {
                     addRecipe(new FluidFuelRecipe(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2])));
                     sender.addChatMessage(new TextComponentString(args[0] + " -> " + args[1] + " Added Successfully!"));
@@ -116,56 +117,5 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
         addRecipe(new FluidFuelRecipe("chorus:" + MetalManager.INGOT_MB, 500, 800));
         addRecipe(new FluidFuelRecipe("wither:" + MetalManager.INGOT_MB, 1000, 1000));
         saveToFile();
-    }
-
-    public static class FluidFuelRecipe extends AbstractRecipe<FluidStack, Pair<Integer, Integer>> {
-        public String fluidStackInput;
-        public int burnTime, burnRate;
-
-        /**
-         * Creates a recipe
-         * @param fluidStackInput The input
-         * @param burnTime        How many ticks it burns
-         * @param burnRate        How many RF/Tick to generate
-         */
-        public FluidFuelRecipe(String fluidStackInput, int burnTime, int burnRate) {
-            this.fluidStackInput = fluidStackInput;
-            this.burnTime = burnTime;
-            this.burnRate = burnRate;
-        }
-
-        /***************************************************************************************************************
-         * AbstractRecipe                                                                                              *
-         ***************************************************************************************************************/
-
-        /**
-         * Used to get the output of this recipe
-         *
-         * @param input The input object
-         * @return The output object, can be null
-         */
-        @Nullable
-        @Override
-        public Pair<Integer, Integer> getOutput(FluidStack input) {
-            if(input == null || input.getFluid() == null)
-                return null;
-
-            if(isValidInput(input))
-                return Pair.of(burnTime, burnRate);
-
-            return null;
-        }
-
-        /**
-         * Is the input valid for an output
-         *
-         * @param input The input object
-         * @return True if there is an output
-         */
-        @Override
-        public boolean isValidInput(FluidStack input) {
-            return input != null && input.getFluid() != null &&
-                    input.getFluid().getName().equalsIgnoreCase(getFluidStackFromString(fluidStackInput).getFluid().getName());
-        }
     }
 }

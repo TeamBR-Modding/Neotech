@@ -5,6 +5,8 @@ import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
 import com.teambrmodding.neotech.registries.SolidifierRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.SolidifierRecipe;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
@@ -144,10 +146,10 @@ public class JEISolidifierRecipeCategory implements IRecipeCategory<JEISolidifie
     public static java.util.List<JEISolidifierRecipeWrapper> buildRecipeList() {
         ArrayList<JEISolidifierRecipeWrapper> recipes = new ArrayList<>();
         SolidifierRecipeHandler centrifugeRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER);
-        for(SolidifierRecipeHandler.SolidifierRecipe recipe : centrifugeRecipeHandler.recipes) {
+        for(SolidifierRecipe recipe : centrifugeRecipeHandler.recipes) {
 
-            recipes.add(new JEISolidifierRecipeWrapper(recipe.getFluidStackFromString(recipe.inputFluidStack),
-                    recipe.getItemStackFromString(recipe.outputItemStack), recipe.requiredMode));
+            recipes.add(new JEISolidifierRecipeWrapper(AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack),
+                    AbstractRecipe.getItemStackFromString(recipe.outputItemStack), recipe.requiredMode));
         }
         return recipes;
     }

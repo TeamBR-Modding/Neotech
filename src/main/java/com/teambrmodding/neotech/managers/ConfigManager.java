@@ -1,6 +1,7 @@
 package com.teambrmodding.neotech.managers;
 
 import com.teambrmodding.neotech.Neotech;
+import com.teambrmodding.neotech.collections.GeneratingOre;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.world.OreGeneratorManager;
 import net.minecraft.client.Minecraft;
@@ -63,7 +64,7 @@ public class ConfigManager {
             OreGeneratorManager.INSTANCE.disableOre(MetalManager.getMetal(MetalManager.COPPER).getOreBlock());
         else
             OreGeneratorManager.INSTANCE.registerGeneratingOre(
-                    new OreGeneratorManager.GeneratingOre(copperMin, copperMax, copperSize, copperPerChunk,
+                    new GeneratingOre(copperMin, copperMax, copperSize, copperPerChunk,
                             MetalManager.getMetal(MetalManager.COPPER).getOreBlock()));
 
         genTin       = config.get(Reference.CONFIG_WORLD, "tinEnable", true, "Generate Tin").getBoolean();
@@ -75,7 +76,7 @@ public class ConfigManager {
             OreGeneratorManager.INSTANCE.disableOre(MetalManager.getMetal(MetalManager.TIN).getOreBlock());
         else
             OreGeneratorManager.INSTANCE.registerGeneratingOre(
-                    new OreGeneratorManager.GeneratingOre(tinMin, tinMax, tinSize, tinPerChunk,
+                    new GeneratingOre(tinMin, tinMax, tinSize, tinPerChunk,
                             MetalManager.getMetal(MetalManager.TIN).getOreBlock()));
 
         genLead       = config.get(Reference.CONFIG_WORLD, "leadEnable", true, "Generate Lead").getBoolean();
@@ -87,7 +88,7 @@ public class ConfigManager {
             OreGeneratorManager.INSTANCE.disableOre(MetalManager.getMetal(MetalManager.LEAD).getOreBlock());
         else
             OreGeneratorManager.INSTANCE.registerGeneratingOre(
-                    new OreGeneratorManager.GeneratingOre(leadMin, leadMax, leadSize, leadPerChunk,
+                    new GeneratingOre(leadMin, leadMax, leadSize, leadPerChunk,
                             MetalManager.getMetal(MetalManager.LEAD).getOreBlock()));
 
         genSilver       = config.get(Reference.CONFIG_WORLD, "silverEnable", true, "Generate Silver").getBoolean();
@@ -99,7 +100,7 @@ public class ConfigManager {
             OreGeneratorManager.INSTANCE.disableOre(MetalManager.getMetal(MetalManager.SILVER).getOreBlock());
         else
             OreGeneratorManager.INSTANCE.registerGeneratingOre(
-                    new OreGeneratorManager.GeneratingOre(silverMin, silverMax, silverSize, silverPerChunk,
+                    new GeneratingOre(silverMin, silverMax, silverSize, silverPerChunk,
                             MetalManager.getMetal(MetalManager.SILVER).getOreBlock()));
 
         versionCheck = config.get(Reference.CONFIG_CLIENT, "versionCheck", true, "Enable Version Check?").getBoolean();

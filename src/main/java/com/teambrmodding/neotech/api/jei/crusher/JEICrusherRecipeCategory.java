@@ -5,8 +5,9 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.AbstractRecipe;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
 import com.teambrmodding.neotech.registries.CrusherRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.CrusherRecipe;
 import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
@@ -141,7 +142,7 @@ public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecip
     public static java.util.List<JEICrusherRecipeWrapper> buildRecipeList() {
         ArrayList<JEICrusherRecipeWrapper> recipes = new ArrayList<>();
         CrusherRecipeHandler crusherRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER);
-        for(CrusherRecipeHandler.CrusherRecipe recipe : crusherRecipeHandler.recipes) {
+        for(CrusherRecipe recipe : crusherRecipeHandler.recipes) {
             ItemStack input = AbstractRecipe.getItemStackFromStringForDisplay(recipe.inputItemStack);
             ItemStack output = AbstractRecipe.getItemStackFromString(recipe.outputItemStack);
             ItemStack outputTwo  = AbstractRecipe.getItemStackFromString(recipe.outputSecondary);

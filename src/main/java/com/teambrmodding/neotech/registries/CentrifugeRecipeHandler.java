@@ -5,6 +5,7 @@ import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.managers.MetalManager;
+import com.teambrmodding.neotech.registries.recipes.CentrifugeRecipe;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -14,7 +15,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 /**
@@ -27,7 +27,7 @@ import java.util.ArrayList;
  * @author Paul Davis - pauljoda
  * @since 2/14/2017
  */
-public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRecipeHandler.CentrifugeRecipe, FluidStack, Pair<FluidStack, FluidStack>> {
+public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRecipe, FluidStack, Pair<FluidStack, FluidStack>> {
 
     /**
      * Used to get the base name of the files
@@ -67,7 +67,8 @@ public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRec
      */
     @Override
     public TypeToken<ArrayList<CentrifugeRecipe>> getTypeToken() {
-        return new TypeToken<ArrayList<CentrifugeRecipe>>() {};
+        return new TypeToken<ArrayList<CentrifugeRecipe>>() {
+        };
     }
 
     /**
@@ -95,14 +96,14 @@ public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRec
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-                if(args.length < 3)
+                if (args.length < 3)
                     sender.addChatMessage(new TextComponentString(ClientUtils.translate("commands.addCentrifugeRecipe.usage")));
                 else {
                     String input = args[0];
                     String outputOne = args[1];
                     String outputTwo = args[2];
 
-                    if(getFluidStackFromString(input) != null && getFluidStackFromString(outputOne) != null && getFluidStackFromString(outputTwo) != null) {
+                    if (getFluidStackFromString(input) != null && getFluidStackFromString(outputOne) != null && getFluidStackFromString(outputTwo) != null) {
                         addRecipe(new CentrifugeRecipe(input, outputOne, outputTwo));
                         sender.addChatMessage(new TextComponentString(input + " -> " + outputOne + " + " + outputTwo + " Added Successfully!"));
                         saveToFile();
@@ -136,61 +137,11 @@ public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRec
         for (Object o : MetalManager.metalRegistry.keySet()) {
             MetalManager.Metal metal = MetalManager.metalRegistry.get(o);
             String dirtyName = "dirty" + metal.getOreDict();
-            if(MetalManager.getMetal(dirtyName) != null && FluidRegistry.isFluidRegistered(dirtyName))
+            if (MetalManager.getMetal(dirtyName) != null && FluidRegistry.isFluidRegistered(dirtyName))
                 addRecipe(new CentrifugeRecipe(dirtyName + ":144", metal.getOreDict() + ":144", "lava:16"));
         }
 
         saveToFile();
     }
-
-    public static class CentrifugeRecipe extends AbstractRecipe<FluidStack, Pair<FluidStack, FluidStack>> {
-        // Variables
-        public String fluidStackInput, fluidStackOutputOne, fluidStackOutputTwo;
-
-        /**
-         * Creates a recipe object
-         *
-         * Paramater format FLUID:AMOUNT
-         *
-         * @param fluidStackInput The fluid input
-         * @param fluidStackOutputOne The first output
-         * @param fluidStackOutputTwo The second output
-         */
-        public CentrifugeRecipe(String fluidStackInput, String fluidStackOutputOne, String fluidStackOutputTwo) {
-            this.fluidStackInput = fluidStackInput;
-            this.fluidStackOutputOne = fluidStackOutputOne;
-            this.fluidStackOutputTwo = fluidStackOutputTwo;
-        }
-
-        /***************************************************************************************************************
-         * AbstractRecipe                                                                                              *
-         ***************************************************************************************************************/
-
-        /**
-         * Used to get the output of this recipe
-         *
-         * @param input The input object
-         * @return The output object
-         */
-        @Nullable
-        @Override
-        public Pair<FluidStack, FluidStack> getOutput(FluidStack input) {
-            if(isValidInput(input))
-                return Pair.of(getFluidStackFromString(fluidStackOutputOne), getFluidStackFromString(fluidStackOutputTwo));
-            return null;
-        }
-
-        /**
-         * Is the input valid for an output
-         *
-         * @param input The input object
-         * @return True if there is an output
-         */
-        @Override
-        public boolean isValidInput(FluidStack input) {
-            return !(input == null || input.getFluid() == null) &&
-                    getFluidStackFromString(fluidStackInput).getFluid().getName().equalsIgnoreCase(input.getFluid().getName()) &&
-                    input.amount >= getFluidStackFromString(fluidStackInput).amount;
-        }
-    }
 }
+
