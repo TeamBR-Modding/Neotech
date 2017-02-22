@@ -26,65 +26,65 @@ import static com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem.ENUM_UP
 public class ItemManager {
 
     // Upgrade System
-    public static UpgradeItem processorSingleCore = new UpgradeItem(IUpgradeItem.CPU_SINGLE_CORE, CPU, 1, 2, false);
-    public static UpgradeItem processorDualCore   = new UpgradeItem(IUpgradeItem.CPU_DUAL_CORE, CPU, 1, 4, false);
-    public static UpgradeItem processorQuadCore   = new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE, CPU, 1, 8, false);
-    public static UpgradeItem processorOctCore    = new UpgradeItem(IUpgradeItem.CPU_OCT_CORE, CPU, 1, 16, false);
+    public static UpgradeItem processorSingleCore;
+    public static UpgradeItem processorDualCore;
+    public static UpgradeItem processorQuadCore;
+    public static UpgradeItem processorOctCore;
 
-    public static UpgradeItem memoryDDR1 = new UpgradeItem(IUpgradeItem.MEMORY_DDR1, MEMORY, 2, 2, true);
-    public static UpgradeItem memoryDDR2 = new UpgradeItem(IUpgradeItem.MEMORY_DDR2, MEMORY, 2, 4, true);
-    public static UpgradeItem memoryDDR3 = new UpgradeItem(IUpgradeItem.MEMORY_DDR3, MEMORY, 2, 6, true);
-    public static UpgradeItem memoryDDR4 = new UpgradeItem(IUpgradeItem.MEMORY_DDR4, MEMORY, 2, 8, true);
+    public static UpgradeItem memoryDDR1;
+    public static UpgradeItem memoryDDR2;
+    public static UpgradeItem memoryDDR3;
+    public static UpgradeItem memoryDDR4;
 
-    public static UpgradeItem hardDrive64G  = new UpgradeItem(IUpgradeItem.HDD_64G, HDD, 1, 2, false);
-    public static UpgradeItem hardDrive256G = new UpgradeItem(IUpgradeItem.HDD_256G, HDD, 1, 4, false);
-    public static UpgradeItem hardDrive512G = new UpgradeItem(IUpgradeItem.HDD_512G, HDD, 1, 8, false);
-    public static UpgradeItem hardDrive1T   = new UpgradeItem(IUpgradeItem.HDD_1T, HDD, 1, 16, false);
+    public static UpgradeItem hardDrive64G;
+    public static UpgradeItem hardDrive256G;
+    public static UpgradeItem hardDrive512G;
+    public static UpgradeItem hardDrive1T;
 
-    public static UpgradeItem psu250W = new UpgradeItem(IUpgradeItem.PSU_250W, PSU, 1, 2, false);
-    public static UpgradeItem psu500W = new UpgradeItem(IUpgradeItem.PSU_500W, PSU, 1, 4, false);
-    public static UpgradeItem psu750W = new UpgradeItem(IUpgradeItem.PSU_750W, PSU, 1, 8, false);
-    public static UpgradeItem psu960W = new UpgradeItem(IUpgradeItem.PSU_960W, PSU, 1, 16, false);
+    public static UpgradeItem psu250W;
+    public static UpgradeItem psu500W;
+    public static UpgradeItem psu750W;
+    public static UpgradeItem psu960W;
 
-    public static UpgradeItem transformer = new UpgradeItem(IUpgradeItem.TRANSFORMER, MISC, 4, 1, true);
+    public static UpgradeItem transformer;
 
-    public static UpgradeItem expansion = new UpgradeItem(IUpgradeItem.EXPANSION_CARD, MISC, 1, 1, false);
-    public static UpgradeItem redstoneControl = new UpgradeItem(IUpgradeItem.REDSTONE_CIRCUIT, MISC, 1, 1, false);
-    public static UpgradeItem networkCard = new UpgradeItem(IUpgradeItem.NETWORK_CARD, MISC, 1, 1, false);
+    public static UpgradeItem expansion;
+    public static UpgradeItem redstoneControl;
+    public static UpgradeItem networkCard;
 
     // Utils
-    public static ItemWrench wrench = new ItemWrench();
+    public static ItemWrench wrench;
 
     public static void preInit() {
-        registerItem(processorSingleCore);
-        registerItem(processorDualCore);
-        registerItem(processorQuadCore);
-        registerItem(processorOctCore);
+        processorSingleCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_SINGLE_CORE, CPU, 1, 2, false));
+        processorDualCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_DUAL_CORE, CPU, 1, 4, false));
+        processorQuadCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE, CPU, 1, 8, false));
+        processorOctCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_OCT_CORE, CPU, 1, 16, false));
 
-        registerItem(memoryDDR1);
-        registerItem(memoryDDR2);
-        registerItem(memoryDDR3);
-        registerItem(memoryDDR4);
+        memoryDDR1 = registerItem(new UpgradeItem(IUpgradeItem.MEMORY_DDR1, MEMORY, 2, 2, true));
+        memoryDDR2 = registerItem(new UpgradeItem(IUpgradeItem.MEMORY_DDR2, MEMORY, 2, 4, true));
+        memoryDDR3 = registerItem(new UpgradeItem(IUpgradeItem.MEMORY_DDR3, MEMORY, 2, 6, true));
+        memoryDDR4 = registerItem(new UpgradeItem(IUpgradeItem.MEMORY_DDR4, MEMORY, 2, 8, true));
 
-        registerItem(hardDrive64G);
-        registerItem(hardDrive256G);
-        registerItem(hardDrive512G);
-        registerItem(hardDrive1T);
+        hardDrive64G = registerItem(new UpgradeItem(IUpgradeItem.HDD_64G, HDD, 1, 2, false));
+        hardDrive256G = registerItem(new UpgradeItem(IUpgradeItem.HDD_256G, HDD, 1, 4, false));
+        hardDrive512G = registerItem(new UpgradeItem(IUpgradeItem.HDD_512G, HDD, 1, 8, false));
+        hardDrive1T = registerItem(new UpgradeItem(IUpgradeItem.HDD_1T, HDD, 1, 16, false));
 
-        registerItem(psu250W);
-        registerItem(psu500W);
-        registerItem(psu750W);
-        registerItem(psu960W);
+        psu250W = registerItem(new UpgradeItem(IUpgradeItem.PSU_250W, PSU, 1, 2, false));
+        psu500W = registerItem(new UpgradeItem(IUpgradeItem.PSU_500W, PSU, 1, 4, false));
+        psu750W = registerItem(new UpgradeItem(IUpgradeItem.PSU_750W, PSU, 1, 8, false));
+        psu960W = registerItem(new UpgradeItem(IUpgradeItem.PSU_960W, PSU, 1, 16, false));
 
         // Check for IC2
         if(Loader.isModLoaded("IC2"))
-            registerItem(transformer);
+            transformer = registerItem(new UpgradeItem(IUpgradeItem.TRANSFORMER, MISC, 4, 1, true));
 
-        registerItem(expansion);
-        registerItem(redstoneControl);
-        registerItem(networkCard);
+        expansion = registerItem(new UpgradeItem(IUpgradeItem.EXPANSION_CARD, MISC, 1, 1, false));
+        redstoneControl = registerItem(new UpgradeItem(IUpgradeItem.REDSTONE_CIRCUIT, MISC, 1, 1, false));
+        networkCard = registerItem(new UpgradeItem(IUpgradeItem.NETWORK_CARD, MISC, 1, 1, false));
 
-        registerItem(wrench);
+        wrench = registerItem(new ItemWrench());
     }
 
     /**
