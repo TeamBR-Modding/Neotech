@@ -709,7 +709,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      * @return True if disabled
      */
     public boolean isDisabled(EnumFacing dir) {
-        return sideModes.get(dir) == EnumInputOutputMode.DISABLED;
+        return dir != null || sideModes.get(dir) == EnumInputOutputMode.DISABLED;
     }
 
     /**

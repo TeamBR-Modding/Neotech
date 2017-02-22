@@ -180,7 +180,7 @@ public class MetalManager {
                 true, true, true);
 
         // Steel
-        registerMetal(STEEL, 2, 0x646464, 0x646464,
+        registerMetal(STEEL, 2, 0xFF646464, 0xFF646464,
                 true, false, true,
                 false, true,
                 true, true, true);
@@ -196,13 +196,13 @@ public class MetalManager {
                 false, false, false, false, false);
 
         // Ghast Tear
-        registerMetal(GHAST_TEAR, 1, 0xa9bebe, 0xa9bebe,
+        registerMetal(GHAST_TEAR, 1, 0xFFa9bebe, 0xFFa9bebe,
                 true, true, true,
                 false, false, false, false, false);
 
 
         // Tormented
-        registerMetal(TORMMENTED, 1, 0x774747, 0xa774747,
+        registerMetal(TORMMENTED, 1, 0xFF774747, 0xFF774747,
                 true, false, true,
                 false, true, true, true, true);
     }

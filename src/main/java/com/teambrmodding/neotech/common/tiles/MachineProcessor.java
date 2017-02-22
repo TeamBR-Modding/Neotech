@@ -205,7 +205,7 @@ public abstract class MachineProcessor<I, O> extends AbstractMachine {
      */
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return index == 0 && getOutputForStack(stack) != null;
+        return index == 0 && canInsertItem(index, stack, null);
     }
 
     /**

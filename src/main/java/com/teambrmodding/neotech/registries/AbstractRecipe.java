@@ -168,6 +168,8 @@ public abstract class AbstractRecipe<I, O> {
             return false;
 
         boolean oreDict = false;
+
+        // Is the string in just ore dict
         if(OreDictionary.doesOreNameExist(recipeStack)) { // Is input ore dict tag
             int[] otherStackIDS = OreDictionary.getOreIDs(inputStack); // The list of ids for input
             if(otherStackIDS.length > 0) { // Input must have ore dict to match
@@ -181,7 +183,31 @@ public abstract class AbstractRecipe<I, O> {
             }
         }
 
-        return oreDict ||
+        // Is actual full stack string, look for tags and compare
+        if(getItemStackFromStringForDisplay(recipeStack).getItemDamage() == OreDictionary.WILDCARD_VALUE) // Convert back into wild card
+            convertedStack = getItemStackFromStringForDisplay(recipeStack);
+
+        if(!oreDict) {
+            int[] recipeStackIDs = OreDictionary.getOreIDs(convertedStack);
+            for (int ourOreID : recipeStackIDs) {
+                int[] otherStackIDS = OreDictionary.getOreIDs(inputStack); // The list of ids for input
+                if (otherStackIDS.length > 0) { // Input must have ore dict to match
+                    for (int oreID : otherStackIDS) { // Cycle Ore Dict ids
+                        if (ourOreID == oreID) { // Checks if there is a stack matching this
+                            oreDict = true; // Found a match
+                            break; // No need to continue
+                        }
+                    }
+                }
+            }
+        }
+
+        // Still not found, one last test, check damage values vs item
+        if(!oreDict && convertedStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || convertedStack.getItemDamage() == -1) {
+            oreDict = convertedStack.getItem() == inputStack.getItem(); // We just want item check, damage is wild card
+        }
+
+        return oreDict ||  // Signaled to check special conditions
                 convertedStack.isItemEqual(inputStack) && // Our item matches the input
                         convertedStack.stackSize <= inputStack.stackSize && // Input must be equal or larger
                         (convertedStack.getItemDamage() == -1 || convertedStack.getItemDamage() == inputStack.getItemDamage()) && // Our damage matches the input

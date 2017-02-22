@@ -285,6 +285,20 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
         return slot == OUTPUT_SLOT_1 || slot == OUTPUT_SLOT_2;
     }
 
+    /**
+     * Can insert the item into the inventory
+     *
+     * @param slot        The slot
+     * @param itemStackIn The stack to insert
+     * @param dir         The dir
+     * @return True if can insert
+     */
+    @Override
+    public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing dir) {
+        return !isDisabled(dir) && slot == 0 &&
+                RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER).isValidInput(itemStackIn);
+    }
+
     /*******************************************************************************************************************
      * Misc Methods                                                                                                    *
      *******************************************************************************************************************/
