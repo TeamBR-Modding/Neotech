@@ -37,7 +37,7 @@ import static com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem.ENUM_UP
 
 /**
  * This file was created for NeoTech
- * <p>
+ *
  * NeoTech is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/

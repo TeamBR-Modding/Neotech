@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 /**
  * This file was created for NeoTech
- * <p>
+ *
  * NeoTech is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -47,7 +47,7 @@ public class UpgradeItem extends BaseItem implements IUpgradeItem, ICapabilityPr
      * Can be retrieved from stack.getCapabilities()
      * The NBT can be null if this is not called from readNBT or if the item the stack is
      * changing FROM is different then this item, or the previous item had no capabilities.
-     * <p>
+     *
      * This is called BEFORE the stacks item is set so you can use stack.getItem() to see the OLD item.
      * Remember that getItem CAN return null.
      *
@@ -103,10 +103,10 @@ public class UpgradeItem extends BaseItem implements IUpgradeItem, ICapabilityPr
      * Determines if this object has support for the capability in question on the specific side.
      * The return value of this MIGHT change during runtime if this object gains or looses support
      * for a capability.
-     * <p>
+     *
      * Example:
      * A Pipe getting a cover placed on one side causing it loose the Inventory attachment function for that side.
-     * <p>
+     *
      * This is a light weight version of getCapability, intended for metadata uses.
      *
      * @param capability The capability to check

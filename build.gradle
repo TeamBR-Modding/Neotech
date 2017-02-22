@@ -43,7 +43,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 //apply plugin: 'scala'
 apply plugin: 'maven'
-//apply plugin: 'java'
+apply plugin: 'java'
 //apply plugin: 'idea'
 
 ext.configFile = file "gradle.properties"
@@ -67,8 +67,8 @@ if (build == null || build == '') {
     version = "${config.minecraft_version}-${config.mod_version}-B" + System.getenv("BUILD_NUMBER")
 }
 
-group= "com.dyonovan.neotech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "NeoTech"
+group= "com.teambrmodding.neotech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Neotech"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

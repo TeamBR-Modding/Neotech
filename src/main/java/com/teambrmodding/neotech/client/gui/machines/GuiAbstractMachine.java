@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * This file was created for NeoTech
- * <p>
+ *
  * NeoTech is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -239,7 +239,7 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
 
     /**
      * Called to draw the background
-     * <p>
+     *
      * Usually used to create the base on which to render things
      *
      * @param partialTicks partial ticks

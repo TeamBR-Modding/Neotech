@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * This file was created for NeoTech
- * <p>
+ *
  * NeoTech is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -369,9 +369,9 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
 
     /**
      * Used to output the redstone single from this structure
-     * <p>
+     *
      * Use a range from 0 - 16.
-     * <p>
+     *
      * 0 Usually means that there is nothing in the tile, so take that for lowest level. Like the generator has no energy while
      * 16 is usually the flip side of that. Output 16 when it is totally full and not less
      *
