@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.teambr.bookshelf.helper.LogHelper;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
+import com.teambrmodding.neotech.managers.MetalManager;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -109,8 +110,11 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
     @Override
     protected void generateDefaultRecipes() {
         LogHelper.logger.info("[Neotech] Generating Fluid Fuel Values...");
-        addRecipe(new FluidFuelRecipe("lava:100", 6400, 20));
+        addRecipe(new FluidFuelRecipe("lava:100", 640, 20));
         addRecipe(new FluidFuelRecipe("hydrogen:100", 200, 200));
+        addRecipe(new FluidFuelRecipe("ghasttear:" + MetalManager.INGOT_MB, 350, 286));
+        addRecipe(new FluidFuelRecipe("chorus:" + MetalManager.INGOT_MB, 500, 800));
+        addRecipe(new FluidFuelRecipe("wither:" + MetalManager.INGOT_MB, 1000, 1000));
         saveToFile();
     }
 

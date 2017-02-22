@@ -87,7 +87,7 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
             });
 
             // Currently Generating
-            components.add(new GuiComponentText(this, 64, 18, GuiColor.RED + "rf/t = " + generator.getEnergyProduced(), Color.DARK_GRAY) {
+            components.add(new GuiComponentText(this, 64, 18, GuiColor.RED + "RF/t = " + generator.getEnergyProduced(), Color.DARK_GRAY) {
                 /**
                  * Called after base render, is already translated to guiLeft and guiTop, just move offset
                  *
@@ -98,7 +98,7 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
                  */
                 @Override
                 public void renderOverlay(int guiLeft, int guiTop, int mouseX, int mouseY) {
-                    setLabel(GuiColor.RED + "rf/t = " +
+                    setLabel(GuiColor.RED + "RF/t = " +
                             ClientUtils.formatNumber(generator.getEnergyProduced()));
                     super.renderOverlay(guiLeft, guiTop, mouseX, mouseY);
                 }

@@ -4,20 +4,26 @@ import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.RecipeManager;
+import com.teambrmodding.neotech.registries.AbstractRecipe;
 import com.teambrmodding.neotech.registries.FluidFuelRecipeHandler;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiFluidStackGroup;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.*;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.ItemFluidContainer;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file was created for NeoTech
@@ -33,6 +39,24 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
 
     // Display
     private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/fluidFuel.png");
+    private IDrawableAnimated flame;
+    private IDrawableAnimated powerBar;
+
+    /*******************************************************************************************************************
+     * Constructor                                                                                                     *
+     *******************************************************************************************************************/
+
+    /**
+     * Constructor
+     */
+
+    public JEIFluidGeneratorCategory() {
+        IDrawableStatic progressArrowDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 170, 0, 14, 14);
+        flame = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(progressArrowDrawable, 200, IDrawableAnimated.StartDirection.TOP, true);
+
+        IDrawableStatic powerBarDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(backgroundResource, 170, 14, 16, 62);
+        powerBar = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(powerBarDrawable, 300, IDrawableAnimated.StartDirection.BOTTOM, false);
+    }
 
     /*******************************************************************************************************************
      * IRecipeCategory                                                                                                 *
@@ -79,7 +103,10 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
      * The main draw call, display generic stuff here
      */
     @Override
-    public void drawExtras(Minecraft minecraft) { }
+    public void drawExtras(Minecraft minecraft) {
+        flame.draw(minecraft, 77, 24);
+        powerBar.draw(minecraft, 13, 9);
+    }
 
     @Override
     public void drawAnimations(Minecraft minecraft) {
@@ -100,12 +127,32 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, JEIFluidGeneratorRecipeWrapper recipeWrapper, IIngredients ingredients) {
         IGuiFluidStackGroup fluidStackGroup = recipeLayout.getFluidStacks();
+        IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
 
         // Load
-        fluidStackGroup.init(0, true, 13, 9, 16, 62, 2000, false, null);
+        fluidStackGroup.init(0, true, 141, 9, 16, 62, 2000, false, null);
+        itemStackGroup.init(0, true, 119, 8);
+        itemStackGroup.init(1, false, 119, 54);
 
         // Set to layout
         recipeLayout.getFluidStacks().set(0, ingredients.getInputs(FluidStack.class).get(0));
+
+        List<ItemStack> filledStacks = new ArrayList<>();
+        List<ItemStack> emptyStacks = new ArrayList<>();
+        for(Item item : Item.REGISTRY) {
+            ItemStack stack = new ItemStack(item);
+            IFluidHandler provider = FluidUtil.getFluidHandler(stack);
+            if(provider != null) {
+                int amount = provider.fill(ingredients.getInputs(FluidStack.class).get(0).get(0), false);
+                if(amount > 0) {
+                    emptyStacks.add(stack.copy());
+                    provider.fill(ingredients.getInputs(FluidStack.class).get(0).get(0), true);
+                    filledStacks.add(stack);
+                }
+            }
+        }
+        recipeLayout.getItemStacks().set(0, filledStacks);
+        recipeLayout.getItemStacks().set(1, emptyStacks);
     }
 
     /*******************************************************************************************************************
@@ -120,7 +167,7 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
         ArrayList<JEIFluidGeneratorRecipeWrapper> recipes = new ArrayList<>();
         FluidFuelRecipeHandler fluidFuelRecipeHandler = RecipeManager.getHandler(RecipeManager.RecipeType.FLUID_FUELS);
         for(FluidFuelRecipeHandler.FluidFuelRecipe recipe : fluidFuelRecipeHandler.recipes) {
-            FluidStack fluid = recipe.getFluidStackFromString(recipe.fluidStackInput);
+            FluidStack fluid = AbstractRecipe.getFluidStackFromString(recipe.fluidStackInput);
             recipes.add(new JEIFluidGeneratorRecipeWrapper(fluid, recipe.burnTime, recipe.burnRate));
         }
         return recipes;

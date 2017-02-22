@@ -79,7 +79,7 @@ fluid.obsidian=Molten Obsidian
 tile.neotech:fluid.obsidian.name=Molten Obsidian
 
 # Hydrogen
-fluid.hydrogen.name=Hydrogen
+fluid.hydrogen=Hydrogen
 tile.neotech:fluid.hydrogen.name=Hydrogen
 
 # Oxygen

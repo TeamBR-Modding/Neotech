@@ -220,7 +220,7 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipeH
 
         // Ghast Tear
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.GHAST_TEAR)),
-                "ghasttear:" + MetalManager.NUGGET_MB));
+                "ghasttear:" + MetalManager.INGOT_MB));
 
         // Chorus
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.CHORUS_FRUIT_POPPED)),

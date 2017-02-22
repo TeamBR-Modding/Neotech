@@ -228,7 +228,7 @@ public class SolidifierRecipeHandler extends
                 getItemStackString(new ItemStack(Blocks.OBSIDIAN, 1))));
 
         // Ghast Tear
-        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "ghasttear:" + MetalManager.NUGGET_MB,
+        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "ghasttear:" + MetalManager.INGOT_MB,
                 getItemStackString(new ItemStack(Items.GHAST_TEAR))));
 
         // Chorus

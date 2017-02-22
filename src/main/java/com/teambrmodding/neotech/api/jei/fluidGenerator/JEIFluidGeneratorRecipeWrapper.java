@@ -1,5 +1,6 @@
 package com.teambrmodding.neotech.api.jei.fluidGenerator;
 
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -27,7 +28,6 @@ public class JEIFluidGeneratorRecipeWrapper extends BlankRecipeWrapper {
     private FluidStack fluid;
     private int burnTime, burnRate;
 
-    private IDrawableAnimated flame;
 
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
@@ -37,11 +37,7 @@ public class JEIFluidGeneratorRecipeWrapper extends BlankRecipeWrapper {
         fluid = input;
         burnTime = time;
         this.burnRate = burnRate;
-
-        ResourceLocation furnaceBackgroundLocation = new ResourceLocation("minecraft", "textures/gui/container/furnace.png");
-        IDrawableStatic flameDrawable = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createDrawable(furnaceBackgroundLocation, 176, 0, 14, 14);
-        this.flame = NeotechJEIPlugin.jeiHelpers.getGuiHelper().createAnimatedDrawable(flameDrawable, 100, IDrawableAnimated.StartDirection.TOP, true);
-    }
+ }
 
     /*******************************************************************************************************************
      * Helper Methods                                                                                                  *
@@ -74,8 +70,9 @@ public class JEIFluidGeneratorRecipeWrapper extends BlankRecipeWrapper {
      */
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        flame.draw(minecraft, 40, 10);
-        minecraft.fontRendererObj.drawString(String.valueOf(burnTime) + " ticks", 58, 17, Color.gray.getRGB());
-        minecraft.fontRendererObj.drawString(String.valueOf(burnRate) + " rf/t", 58, 32, Color.gray.getRGB());
+        minecraft.fontRendererObj.drawString(fluid.getLocalizedName(), 33, 0, Color.darkGray.getRGB());
+        minecraft.fontRendererObj.drawString(ClientUtils.formatNumber(burnRate) + " rf/t", 33, 46, Color.darkGray.getRGB());
+        minecraft.fontRendererObj.drawString(ClientUtils.formatNumber(burnTime) + " ticks", 33, 55, Color.darkGray.getRGB());
+        minecraft.fontRendererObj.drawString(ClientUtils.formatNumber(burnRate * burnTime) + " rf", 33, 64, Color.darkGray.getRGB());
     }
 }
