@@ -98,7 +98,7 @@ public class TileFurnaceGenerator extends MachineGenerator {
      */
     @Override
     public int getEnergyProduced() {
-        int oxygenModifier = tanks[TANK].getFluid() != null && tanks[TANK].getFluid().getFluid() == FluidManager.oxygen ?
+        int oxygenModifier = tanks[TANK].getFluid() != null && tanks[TANK].getFluid().getFluid().getName().equalsIgnoreCase(FluidManager.oxygen.getName()) ?
                 5 : 1;
         return (BASE_ENERGY_TICK * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
                 ((getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 12)) * oxygenModifier;
