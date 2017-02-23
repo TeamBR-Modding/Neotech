@@ -216,9 +216,9 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Blocks.OBSIDIAN)),
                 getFluidStackString(new FluidStack(FluidRegistry.getFluid("obsidian"), 288))));
 
-        // Ghast Tear
-        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.GHAST_TEAR)),
-                "ghasttear:" + MetalManager.INGOT_MB));
+        // Blaze
+        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.BLAZE_ROD)),
+                "blaze:" + MetalManager.NUGGET_MB));
 
         // Chorus
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.CHORUS_FRUIT_POPPED)),

@@ -67,7 +67,7 @@ public class MetalManager {
     public static final String STEEL        = "steel";
     public static final String CARBON       = "carbon";
     public static final String OBSIDIAN     = "obsidian";
-    public static final String GHAST_TEAR   = "ghasttear";
+    public static final String BLAZE        = "blaze";
     public static final String CHORUS       = "chorus";
     public static final String WITHER       = "wither";
 
@@ -224,8 +224,8 @@ public class MetalManager {
                 true, true, true,
                 false, false, false, false, false);
 
-        // Ghast Tear
-        registerMetal(GHAST_TEAR, 1, 0xFFa9bebe, 0xFFa9bebe,
+        // Blaze
+        registerMetal(BLAZE, 1, 0xFFbf5a00, 0xFFbf5a00,
                 true, true, true,
                 false, false, false, false, false);
 

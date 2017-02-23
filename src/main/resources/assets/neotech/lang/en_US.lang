@@ -86,9 +86,9 @@ tile.neotech:fluid.hydrogen.name=Hydrogen
 fluid.oxygen=Oxygen
 tile.neotech:fluid.oxygen.name=Oxygen
 
-# Ghast Tear
-fluid.ghasttear=Liquefied Ghast Tears
-tile.neotech:fluid.ghasttear.name=Liquefied Ghast Tears
+# Blaze
+fluid.blaze=Liquefied Blaze
+tile.neotech:fluid.blaze.name=Liquefied Blaze
 
 # Chorus
 fluid.chorus=Liquefied Chorus Fruit

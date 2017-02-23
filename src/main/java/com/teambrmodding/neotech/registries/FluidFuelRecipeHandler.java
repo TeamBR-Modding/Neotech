@@ -113,7 +113,7 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
         LogHelper.logger.info("[Neotech] Generating Fluid Fuel Values...");
         addRecipe(new FluidFuelRecipe("lava:100", 640, 20));
         addRecipe(new FluidFuelRecipe("hydrogen:100", 200, 200));
-        addRecipe(new FluidFuelRecipe("ghasttear:" + MetalManager.INGOT_MB, 350, 286));
+        addRecipe(new FluidFuelRecipe("blaze:" + MetalManager.INGOT_MB, 350, 286));
         addRecipe(new FluidFuelRecipe("chorus:" + MetalManager.INGOT_MB, 500, 800));
         addRecipe(new FluidFuelRecipe("wither:" + MetalManager.INGOT_MB, 1000, 1000));
         saveToFile();
