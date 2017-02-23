@@ -3,9 +3,9 @@ package com.teambrmodding.neotech.api.jei.alloyer;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraftforge.fluids.FluidStack;
-import scala.actors.threadpool.Arrays;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 /**
  * This file was created for NeoTech
@@ -63,7 +63,7 @@ public class JEIAlloyerRecipeWrapper extends BlankRecipeWrapper {
     @Override
     public void getIngredients(@Nonnull IIngredients ingredients) {
         // Add the inputs
-        ingredients.setInputs(FluidStack.class, Arrays.asList(new FluidStack[] {fluidInputOne, fluidInputTwo}));
+        ingredients.setInputs(FluidStack.class, Arrays.asList(fluidInputOne, fluidInputTwo));
 
         // Add the output
         ingredients.setOutput(FluidStack.class, fluidOutput);

@@ -3,7 +3,8 @@ package com.teambrmodding.neotech.api.jei.centrifuge;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraftforge.fluids.FluidStack;
-import scala.actors.threadpool.Arrays;
+
+import java.util.Arrays;
 
 /**
  * This file was created for NeoTech
@@ -64,6 +65,6 @@ public class JEICentrifugeRecipeWrapper extends BlankRecipeWrapper {
         ingredients.setInput(FluidStack.class, fluidInput);
 
         // Add outputs
-        ingredients.setOutputs(FluidStack.class, Arrays.asList(new FluidStack[] {fluidOutputOne, fluidOutputTwo}));
+        ingredients.setOutputs(FluidStack.class, Arrays.asList(fluidOutputOne, fluidOutputTwo));
     }
 }
