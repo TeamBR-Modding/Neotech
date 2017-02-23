@@ -1029,15 +1029,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     }
 
     /**
-     * Makes sure this slot is within our range
-     * @param slot Which slot
-     */
-    protected void validateSlotIndex(int slot) {
-        if (slot < 0 || slot >= inventoryContents.size())
-            throw new RuntimeException("Slot " + slot + " not in valid range - [0," + inventoryContents.size() + ")");
-    }
-
-    /**
      * Gets the stack limit of a stack
      * @param slot The slot
      * @param stack The stack
@@ -1055,7 +1046,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        validateSlotIndex(slot);
+        if (slot < 0 || slot >= inventoryContents.size())
+            return null;
         return inventoryContents.get(slot);
     }
 
@@ -1064,7 +1056,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
         if (stack == null || stack.stackSize == 0 || !isItemValidForSlot(slot, stack))
             return stack;
 
-        validateSlotIndex(slot);
+        if (slot < 0 || slot >= inventoryContents.size())
+            return stack;
 
         ItemStack existing = this.inventoryContents.get(slot);
 
@@ -1100,7 +1093,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
         if (amount == 0)
             return null;
 
-        validateSlotIndex(slot);
+        if (slot < 0 || slot >= inventoryContents.size())
+            return null;
 
         ItemStack existing = this.inventoryContents.get(slot);
 
@@ -1128,7 +1122,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
 
     @Override
     public void setStackInSlot(int slot, ItemStack stack) {
-        validateSlotIndex(slot);
+        if (slot < 0 || slot >= inventoryContents.size())
+            return;
         if (ItemStack.areItemStacksEqual(this.inventoryContents.get(slot), stack))
             return;
         this.inventoryContents.set(slot, stack);
