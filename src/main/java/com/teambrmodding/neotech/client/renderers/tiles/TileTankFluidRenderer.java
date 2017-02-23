@@ -42,7 +42,7 @@ public class TileTankFluidRenderer extends TileEntitySpecialRenderer<TileBasicTa
                 if(te.tanks[TileBasicTank.TANK].getFluid().getFluid() != FluidRegistry.WATER)
                     RenderUtils.setColor(Color.decode(String.valueOf(te.tanks[TileBasicTank.TANK].getFluid().getFluid().getColor())));
                 if(te.tanks[TileBasicTank.TANK].getFluid().getFluid().isGaseous())
-                    GlStateManager.translate(0, 1 - (te.getFluidLevelScaled() / 16) - 0.1, 0);
+                    GlStateManager.translate(0, 1 - (te.getFluidLevelScaled()) - 0.1, 0);
                 RenderUtils.renderCubeWithTexture(2.01 / 16.0, 1.01 / 16.0, 2.01 / 16.0,
                         13.99 / 16.0, te.getFluidLevelScaled(), 13.99 / 16.0,
                         fluidIcon.getMinU(), fluidIcon.getMinV(), fluidIcon.getMaxU(), fluidIcon.getMaxV());

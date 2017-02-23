@@ -335,7 +335,7 @@ public class TileFurnaceGenerator extends MachineGenerator {
      */
     @Override
     protected boolean canFill(Fluid fluid) {
-        return fluid == FluidManager.oxygen && super.canFill(fluid);
+        return fluid.getName().equalsIgnoreCase(FluidManager.oxygen.getName()) && super.canFill(fluid);
     }
 
     /*******************************************************************************************************************
