@@ -203,10 +203,15 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
             if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof AbstractMachine) {
                 AbstractMachine machine = (AbstractMachine) worldIn.getTileEntity(pos);
                 switch (facing) {
-                    case WEST:  machine.spawnActiveParticles(d0 - d3, d1, d2 + d4);
+                    case WEST:
+                        machine.spawnActiveParticles(d0 - d3, d1, d2 + d4);
+                        break;
                     case EAST:  machine.spawnActiveParticles(d0 + d3, d1, d2 + d4);
+                        break;
                     case NORTH: machine.spawnActiveParticles(d0 + d4, d1, d2 - d3);
+                        break;
                     case SOUTH: machine.spawnActiveParticles(d0 + d4, d1, d2 + d3);
+                        break;
                     default :
                 }
             }
