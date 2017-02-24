@@ -56,9 +56,9 @@ public class ItemManager {
     public static ItemWrench wrench;
 
     public static void preInit() {
-        processorSingleCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_SINGLE_CORE, CPU, 1, 2, false));
-        processorDualCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_DUAL_CORE, CPU, 1, 4, false));
-        processorQuadCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE, CPU, 1, 8, false));
+        processorSingleCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_SINGLE_CORE, CPU, 1, 4, false));
+        processorDualCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_DUAL_CORE, CPU, 1, 8, false));
+        processorQuadCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_QUAD_CORE, CPU, 1, 12, false));
         processorOctCore = registerItem(new UpgradeItem(IUpgradeItem.CPU_OCT_CORE, CPU, 1, 16, false));
 
         memoryDDR1 = registerItem(new UpgradeItem(IUpgradeItem.MEMORY_DDR1, MEMORY, 2, 2, true));
