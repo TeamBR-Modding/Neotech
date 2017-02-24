@@ -100,8 +100,8 @@ public class TileFurnaceGenerator extends MachineGenerator {
     public int getEnergyProduced() {
         int oxygenModifier = tanks[TANK].getFluid() != null && tanks[TANK].getFluid().getFluid().getName().equalsIgnoreCase(FluidManager.oxygen.getName()) ?
                 5 : 1;
-        return (BASE_ENERGY_TICK * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
-                ((getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 12)) * oxygenModifier;
+        return BASE_ENERGY_TICK * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
+                getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) * oxygenModifier;
     }
 
     /**
@@ -141,7 +141,8 @@ public class TileFurnaceGenerator extends MachineGenerator {
             }
         }
 
-        burnTime -= getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
+        burnTime -= (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) -
+                (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) / 2));
         return burnTime > 0;
     }
 

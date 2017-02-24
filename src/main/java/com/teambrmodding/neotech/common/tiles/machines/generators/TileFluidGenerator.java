@@ -100,8 +100,7 @@ public class TileFluidGenerator extends MachineGenerator {
      */
     @Override
     public int getEnergyProduced() {
-        return currentObjectBurnRate * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) +
-                ((getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1) * 12);
+        return currentObjectBurnRate * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
     }
 
     /**
@@ -172,7 +171,7 @@ public class TileFluidGenerator extends MachineGenerator {
                 drain(fluidDrained.amount, true);
 
 
-            burnTime = output.getLeft() / getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
+            burnTime = output.getLeft();
             currentObjectBurnRate = output.getRight() * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU);
 
             if(burnTime > 0) {
@@ -180,7 +179,8 @@ public class TileFluidGenerator extends MachineGenerator {
                 return true;
             }
         }
-        burnTime -= getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
+        burnTime -= (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) -
+                (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) / 2));
         return burnTime > 0;
     }
 
