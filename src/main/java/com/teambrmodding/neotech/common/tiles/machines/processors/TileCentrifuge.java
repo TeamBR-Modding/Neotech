@@ -388,7 +388,7 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
      */
     @Override
     protected int[] getOutputTanks() {
-        return new int[] { OUTPUT_TANK_1, OUTPUT_TANK_1 };
+        return new int[] { OUTPUT_TANK_1, OUTPUT_TANK_2 };
     }
 
     /**
