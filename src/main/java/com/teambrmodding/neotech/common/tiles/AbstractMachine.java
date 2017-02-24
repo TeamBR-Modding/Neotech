@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -45,7 +46,7 @@ import static com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem.ENUM_UP
  * @author Paul Davis - pauljoda
  * @since 2/11/2017
  */
-public abstract class AbstractMachine extends EnergyHandler implements IRedstoneAware, IItemHandlerModifiable, IFluidHandler {
+public abstract class AbstractMachine extends EnergyHandler implements IItemHandlerModifiable, IFluidHandler {
 
     /*******************************************************************************************************************
      * AbstractMachine Variables                                                                                       *
@@ -1437,5 +1438,32 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      */
     public void setRedstoneMode(int newMode) {
         redstone = newMode;
+    }
+
+    /**
+     * Checks if this block is recieving redstone
+     *
+     * @return True if has power
+     */
+    public boolean isPowered() {
+        return !(getWorld() == null || getPos() == null) &&
+                (isPoweringTo(getWorld(), getPos().offset(EnumFacing.UP), EnumFacing.DOWN) ||
+                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.DOWN), EnumFacing.UP) ||
+                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.NORTH), EnumFacing.SOUTH) ||
+                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.SOUTH), EnumFacing.NORTH) ||
+                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.EAST), EnumFacing.WEST) ||
+                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.WEST), EnumFacing.EAST));
+    }
+
+    /**
+     * Tests if the block is providing a redstone signal
+     *
+     * @param world The World
+     * @param blockPos The block position
+     * @param side Which side of the block
+     * @return True if is providing
+     */
+    public boolean isPoweringTo(World world, BlockPos blockPos, EnumFacing side) {
+        return getWorld() != null && world.getBlockState(blockPos).getWeakPower(world, blockPos, side) > 0;
     }
 }
