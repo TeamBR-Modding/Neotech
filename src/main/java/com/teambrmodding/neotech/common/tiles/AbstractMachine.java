@@ -1446,23 +1446,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * @return True if has power
      */
     public boolean isPowered() {
-        return isPoweringTo(worldObj, pos.offset(EnumFacing.UP), EnumFacing.DOWN) ||
-                        isPoweringTo(worldObj, pos.offset(EnumFacing.DOWN), EnumFacing.UP) ||
-                        isPoweringTo(worldObj, pos.offset(EnumFacing.NORTH), EnumFacing.SOUTH) ||
-                        isPoweringTo(worldObj, pos.offset(EnumFacing.SOUTH), EnumFacing.NORTH) ||
-                        isPoweringTo(worldObj, pos.offset(EnumFacing.EAST), EnumFacing.WEST) ||
-                        isPoweringTo(worldObj, pos.offset(EnumFacing.WEST), EnumFacing.EAST);
-    }
-
-    /**
-     * Tests if the block is providing a redstone signal
-     *
-     * @param world The World
-     * @param blockPos The block position
-     * @param side Which side of the block
-     * @return True if is providing
-     */
-    public boolean isPoweringTo(World world, BlockPos blockPos, EnumFacing side) {
-        return  world.getBlockState(blockPos).getBlock().getWeakPower(world.getBlockState(blockPos),world, blockPos, side) > 0;
+        return worldObj.isBlockIndirectlyGettingPowered(pos) > 0 || worldObj.isBlockPowered(pos);
     }
 }
