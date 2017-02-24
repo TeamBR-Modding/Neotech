@@ -101,9 +101,9 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-                if (args.length != 3 || (args.length == 2 && !args[0].equalsIgnoreCase("hands")))
+                if (args.length != 2 || (args.length == 1 && !args[0].equalsIgnoreCase("hands")))
                     sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
-                else if (args.length == 2 && args[0].equalsIgnoreCase("hands")) {
+                else if (args.length == 1 && args[0].equalsIgnoreCase("hands")) {
                     // Must be a player using the command as we need their hands
                     if (sender.getCommandSenderEntity() instanceof EntityPlayer) {
                         EntityPlayer player = (EntityPlayer) sender.getCommandSenderEntity(); // Get the player
