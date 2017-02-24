@@ -11,6 +11,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
@@ -97,7 +98,7 @@ public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRec
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length < 3)
-                    sender.addChatMessage(new TextComponentString(ClientUtils.translate("commands.addCentrifugeRecipe.usage")));
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addCentrifugeRecipe.usage")));
                 else {
                     String input = args[0];
                     String outputOne = args[1];

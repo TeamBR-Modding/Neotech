@@ -11,6 +11,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -96,7 +97,7 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipe, P
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length < 3)
-                    sender.addChatMessage(new TextComponentString(ClientUtils.translate("commands.addAlloyRecipe.usage")));
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addAlloyRecipe.usage")));
                 else {
                     String input = args[0];
                     String input2 = args[1];

@@ -2,7 +2,6 @@ package com.teambrmodding.neotech.registries;
 
 import com.google.gson.reflect.TypeToken;
 import com.teambr.bookshelf.helper.LogHelper;
-import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.collections.SolidifierMode;
 import com.teambrmodding.neotech.managers.MetalManager;
@@ -16,6 +15,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -105,7 +105,7 @@ public class SolidifierRecipeHandler extends
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length != 3 || (args.length == 2 && !args[0].equalsIgnoreCase("hands")))
-                    sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
                 else if (args.length == 2 && args[0].equalsIgnoreCase("hands")) { // Allow user to hold recipe
 
                     String mode = args[1];
@@ -118,7 +118,7 @@ public class SolidifierRecipeHandler extends
                         requiredMode = SolidifierMode.NUGGET_MODE;
                     else {
                         // Conditions for hands usage not met
-                        sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                        sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
                         return;
                     }
 
@@ -153,7 +153,7 @@ public class SolidifierRecipeHandler extends
                     }
 
                     // Conditions for hands usage not met
-                    sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
                 } else { // Not hands, has three args
                     String fluidStackInput = args[1];
                     String itemStackOutput = args[2];
@@ -168,7 +168,7 @@ public class SolidifierRecipeHandler extends
                         requiredMode = SolidifierMode.NUGGET_MODE;
                     else {
                         // Conditions for hands usage not met
-                        sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                        sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
                         return;
                     }
 
@@ -177,7 +177,7 @@ public class SolidifierRecipeHandler extends
                         sender.addChatMessage(new TextComponentString(fluidStackInput + " -> " + itemStackOutput + " Added Successfully!"));
                         saveToFile();
                     } else
-                        sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                        sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
                 }
             }
         };

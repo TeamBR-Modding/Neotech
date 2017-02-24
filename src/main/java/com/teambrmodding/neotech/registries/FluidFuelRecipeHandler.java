@@ -2,7 +2,6 @@ package com.teambrmodding.neotech.registries;
 
 import com.google.gson.reflect.TypeToken;
 import com.teambr.bookshelf.helper.LogHelper;
-import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.registries.recipes.FluidFuelRecipe;
@@ -11,6 +10,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -95,7 +95,7 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length < 3)
-                    sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
                 else if (getFluidStackFromString(args[0]) != null &&
                         getFluidStackFromString(args[0]).getFluid() != null) {
                     addRecipe(new FluidFuelRecipe(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2])));
@@ -103,7 +103,7 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
                     saveToFile();
                     return;
                 }
-                sender.addChatMessage(new TextComponentString(ClientUtils.translate(getCommandUsage(sender))));
+                sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
             }
         };
     }

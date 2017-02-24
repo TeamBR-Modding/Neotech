@@ -392,9 +392,8 @@ public class TileFurnaceGenerator extends MachineGenerator {
                 GuiColor.GREEN + GuiTextFormat.BOLD + GuiTextFormat.UNDERLINE + ClientUtils.translate("neotech.text.upgrade") + ":\n" + GuiTextFormat.RESET +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.processors") + ":\n" +
                 GuiColor.WHITE + ClientUtils.translate("neotech.furnaceGenerator.processorUpgrade.desc") + "\n\n" +
-                GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.hardDrives") + ":\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.memory") + ":\n" +
-                GuiColor.WHITE + ClientUtils.translate("neotech.electricFurnace.memoryUpgrade.desc") + "\n\n" +
+                GuiColor.WHITE + ClientUtils.translate("neotech.furnaceGenerator.memoryUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.psu") + ":\n" +
                 GuiColor.WHITE + ClientUtils.translate("neotech.electricFurnace.psuUpgrade.desc") + "\n\n" +
                 GuiColor.YELLOW + GuiTextFormat.BOLD + ClientUtils.translate("neotech.text.control") + ":\n" +

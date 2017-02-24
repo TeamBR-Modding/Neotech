@@ -296,7 +296,7 @@ neotech.text.redstoneFlux=Redstone Flux
 neotech.text.rfDiff=Energy Change
 
 neotech.text.energyStored=Energy Stored
-neotech.text.fluidStored=Energy Stored
+neotech.text.fluidStored=Fluid Stored
 
 neotech.text.processMode=Solidify Mode
 neotech.text.blockMode=Block Mode
@@ -354,6 +354,8 @@ neotech.centrifuge.desc=The Electric Centrifuge will separate a fluid into the t
 
 # Furnace Generator
 neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would
+neotech.furnaceGenerator.processorUpgrade.desc=Processors increase the generating time of the input, they will help to reduce the drawback of memory upgrades by up to half
+neotech.furnaceGenerator.memoryUpgrade.desc=Memory modules increase the amount of energy produced by allowing it to handle more operations per tick. It will also reduce the burn time of the input
 
 # Fluid Generator
 neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces Redstone Flux. By default, the Fluid Generator generates 175 RF/tick. You can add more liquid fuels via the config file
