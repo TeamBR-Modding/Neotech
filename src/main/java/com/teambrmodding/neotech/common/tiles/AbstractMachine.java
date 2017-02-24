@@ -1446,13 +1446,12 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * @return True if has power
      */
     public boolean isPowered() {
-        return !(getWorld() == null || getPos() == null) &&
-                (isPoweringTo(getWorld(), getPos().offset(EnumFacing.UP), EnumFacing.DOWN) ||
-                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.DOWN), EnumFacing.UP) ||
-                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.NORTH), EnumFacing.SOUTH) ||
-                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.SOUTH), EnumFacing.NORTH) ||
-                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.EAST), EnumFacing.WEST) ||
-                        isPoweringTo(getWorld(), getPos().offset(EnumFacing.WEST), EnumFacing.EAST));
+        return isPoweringTo(worldObj, pos.offset(EnumFacing.UP), EnumFacing.DOWN) ||
+                        isPoweringTo(worldObj, pos.offset(EnumFacing.DOWN), EnumFacing.UP) ||
+                        isPoweringTo(worldObj, pos.offset(EnumFacing.NORTH), EnumFacing.SOUTH) ||
+                        isPoweringTo(worldObj, pos.offset(EnumFacing.SOUTH), EnumFacing.NORTH) ||
+                        isPoweringTo(worldObj, pos.offset(EnumFacing.EAST), EnumFacing.WEST) ||
+                        isPoweringTo(worldObj, pos.offset(EnumFacing.WEST), EnumFacing.EAST);
     }
 
     /**
@@ -1464,6 +1463,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * @return True if is providing
      */
     public boolean isPoweringTo(World world, BlockPos blockPos, EnumFacing side) {
-        return getWorld() != null && world.getBlockState(blockPos).getBlock().getWeakPower(world.getBlockState(blockPos),world, blockPos, side) > 0;
+        return  world.getBlockState(blockPos).getBlock().getWeakPower(world.getBlockState(blockPos),world, blockPos, side) > 0;
     }
 }
