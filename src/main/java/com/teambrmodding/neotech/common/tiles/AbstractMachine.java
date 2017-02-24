@@ -1464,6 +1464,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * @return True if is providing
      */
     public boolean isPoweringTo(World world, BlockPos blockPos, EnumFacing side) {
-        return getWorld() != null && world.getBlockState(blockPos).getWeakPower(world, blockPos, side) > 0;
+        return getWorld() != null && world.getBlockState(blockPos).getBlock().getWeakPower(world.getBlockState(blockPos),world, blockPos, side) > 0;
     }
 }
