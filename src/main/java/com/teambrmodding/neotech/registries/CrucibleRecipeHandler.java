@@ -170,7 +170,7 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
                 //Ore - 432mb
                 if (metal.getOreBlock() != null)
                     addRecipe(new CrucibleRecipe(metal.getOreBlock().getName(),
-                            getFluidStackString(new FluidStack(FluidRegistry.getFluid(metal.getOreDict()), MetalManager.ORE_MB))));
+                            getFluidStackString(new FluidStack(FluidRegistry.getFluid("dirty" + metal.getOreDict()), MetalManager.ORE_MB))));
                 //Ingot - 144mb
                 if (metal.getIngot() != null)
                     addRecipe(new CrucibleRecipe(metal.getIngot().getName(),
