@@ -480,8 +480,9 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         return (!isDisabled(facing) || getModeForSide(facing) == EnumInputOutputMode.DEFAULT) &&
-                (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-                        (!isFluidHandler() || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) ||
+                ((capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getItemHandlerCapability(facing) != null) ||
+                        (isFluidHandler() && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY &&
+                                getFluidHandlerCapability(facing) != null) ||
                         super.hasCapability(capability, facing));
     }
 
