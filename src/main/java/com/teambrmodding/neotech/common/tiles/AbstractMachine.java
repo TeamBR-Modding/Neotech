@@ -546,6 +546,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IRedstone
      */
     public void changeEnergy(int initial) {
         energyStorage.setMaxStored(getSupposedEnergy());
+        energyStorage.setMaxInsert(getSupposedEnergy());
+        energyStorage.setMaxExtract(getSupposedEnergy());
         updateClient = true;
         energyStorage.setCurrentStored(initial);
         if(energyStorage.getCurrentStored() > energyStorage.getMaxEnergyStored())
