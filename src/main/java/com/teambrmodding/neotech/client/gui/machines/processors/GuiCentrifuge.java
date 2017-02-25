@@ -1,9 +1,11 @@
 package com.teambrmodding.neotech.client.gui.machines.processors;
 
 import com.teambr.bookshelf.client.gui.GuiColor;
+import com.teambr.bookshelf.client.gui.GuiTextFormat;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentColoredZone;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentFluidTank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentTextureAnimated;
+import com.teambr.bookshelf.network.PacketManager;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
@@ -102,7 +104,24 @@ public class GuiCentrifuge extends GuiAbstractMachine<ContainerCentrifuge> {
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
                     toolTip.add(ClientUtils.formatNumber(centrifuge.tanks[TileCentrifuge.INPUT_TANK].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(centrifuge.tanks[TileCentrifuge.INPUT_TANK].getCapacity()) + " mb");
+                    toolTip.add("");
+                    toolTip.add(GuiColor.GRAY + "" + GuiTextFormat.ITALICS + ClientUtils.translate("neotech.text.clearTank"));
                     return toolTip;
+                }
+
+                /**
+                 * Called when the mouse is pressed
+                 *
+                 * @param x      Mouse X Position
+                 * @param y      Mouse Y Position
+                 * @param button Mouse Button
+                 */
+                @Override
+                public void mouseDown(int x, int y, int button) {
+                    if(ClientUtils.isCtrlPressed() && ClientUtils.isShiftPressed()) {
+                        centrifuge.tanks[TileCentrifuge.INPUT_TANK].setFluid(null);
+                        PacketManager.updateTileWithClientInfo(centrifuge);
+                    }
                 }
             });
             components.add(new GuiComponentColoredZone(this, 39, 11, 51, 64, new Color(0, 0, 0, 0)){
@@ -150,7 +169,24 @@ public class GuiCentrifuge extends GuiAbstractMachine<ContainerCentrifuge> {
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
                     toolTip.add(ClientUtils.formatNumber(centrifuge.tanks[TileCentrifuge.OUTPUT_TANK_1].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(centrifuge.tanks[TileCentrifuge.OUTPUT_TANK_1].getCapacity()) + " mb");
+                    toolTip.add("");
+                    toolTip.add(GuiColor.GRAY + "" + GuiTextFormat.ITALICS + ClientUtils.translate("neotech.text.clearTank"));
                     return toolTip;
+                }
+
+                /**
+                 * Called when the mouse is pressed
+                 *
+                 * @param x      Mouse X Position
+                 * @param y      Mouse Y Position
+                 * @param button Mouse Button
+                 */
+                @Override
+                public void mouseDown(int x, int y, int button) {
+                    if(ClientUtils.isCtrlPressed() && ClientUtils.isShiftPressed()) {
+                        centrifuge.tanks[TileCentrifuge.OUTPUT_TANK_1].setFluid(null);
+                        PacketManager.updateTileWithClientInfo(centrifuge);
+                    }
                 }
             });
             components.add(new GuiComponentColoredZone(this, 123, 11, 18, 64, new Color(0, 0, 0, 0)){
@@ -201,7 +237,24 @@ public class GuiCentrifuge extends GuiAbstractMachine<ContainerCentrifuge> {
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
                     toolTip.add(ClientUtils.formatNumber(centrifuge.tanks[TileCentrifuge.OUTPUT_TANK_2].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(centrifuge.tanks[TileCentrifuge.OUTPUT_TANK_2].getCapacity()) + " mb");
+                    toolTip.add("");
+                    toolTip.add(GuiColor.GRAY + "" + GuiTextFormat.ITALICS + ClientUtils.translate("neotech.text.clearTank"));
                     return toolTip;
+                }
+
+                /**
+                 * Called when the mouse is pressed
+                 *
+                 * @param x      Mouse X Position
+                 * @param y      Mouse Y Position
+                 * @param button Mouse Button
+                 */
+                @Override
+                public void mouseDown(int x, int y, int button) {
+                    if(ClientUtils.isCtrlPressed() && ClientUtils.isShiftPressed()) {
+                        centrifuge.tanks[TileCentrifuge.OUTPUT_TANK_2].setFluid(null);
+                        PacketManager.updateTileWithClientInfo(centrifuge);
+                    }
                 }
             });
             components.add(new GuiComponentColoredZone(this, 144, 11, 18, 64, new Color(0, 0, 0, 0)){

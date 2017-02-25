@@ -1,15 +1,18 @@
 package com.teambrmodding.neotech.client.gui.machines.processors;
 
 import com.teambr.bookshelf.client.gui.GuiColor;
+import com.teambr.bookshelf.client.gui.GuiTextFormat;
 import com.teambr.bookshelf.client.gui.component.control.GuiComponentItemStackButton;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentColoredZone;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentFluidTank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentTextureAnimated;
+import com.teambr.bookshelf.network.PacketManager;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerSolidifier;
 import com.teambrmodding.neotech.common.tiles.MachineProcessor;
+import com.teambrmodding.neotech.common.tiles.machines.processors.TileCrucible;
 import com.teambrmodding.neotech.common.tiles.machines.processors.TileSolidifier;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.entity.player.EntityPlayer;
@@ -102,7 +105,24 @@ public class GuiSolidifier extends GuiAbstractMachine<ContainerSolidifier> {
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
                     toolTip.add(ClientUtils.formatNumber(solidifier.tanks[TileSolidifier.TANK].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(solidifier.tanks[TileSolidifier.TANK].getCapacity()) + " mb");
+                    toolTip.add("");
+                    toolTip.add(GuiColor.GRAY + "" + GuiTextFormat.ITALICS + ClientUtils.translate("neotech.text.clearTank"));
                     return toolTip;
+                }
+
+                /**
+                 * Called when the mouse is pressed
+                 *
+                 * @param x      Mouse X Position
+                 * @param y      Mouse Y Position
+                 * @param button Mouse Button
+                 */
+                @Override
+                public void mouseDown(int x, int y, int button) {
+                    if(ClientUtils.isCtrlPressed() && ClientUtils.isShiftPressed()) {
+                        solidifier.tanks[TileSolidifier.TANK].setFluid(null);
+                        PacketManager.updateTileWithClientInfo(solidifier);
+                    }
                 }
             });
             components.add(new GuiComponentColoredZone(this, 39, 11, 51, 63, new Color(0, 0, 0, 0)){

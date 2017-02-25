@@ -1,10 +1,12 @@
 package com.teambrmodding.neotech.client.gui.machines.generators;
 
 import com.teambr.bookshelf.client.gui.GuiColor;
+import com.teambr.bookshelf.client.gui.GuiTextFormat;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentColoredZone;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentFluidTank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentTextureAnimated;
+import com.teambr.bookshelf.network.PacketManager;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
@@ -123,7 +125,24 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
                     toolTip.add(ClientUtils.formatNumber(generator.tanks[TileFluidGenerator.TANK].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(generator.tanks[TileFluidGenerator.TANK].getCapacity()) + " mb");
+                    toolTip.add("");
+                    toolTip.add(GuiColor.GRAY + "" + GuiTextFormat.ITALICS + ClientUtils.translate("neotech.text.clearTank"));
                     return toolTip;
+                }
+
+                /**
+                 * Called when the mouse is pressed
+                 *
+                 * @param x      Mouse X Position
+                 * @param y      Mouse Y Position
+                 * @param button Mouse Button
+                 */
+                @Override
+                public void mouseDown(int x, int y, int button) {
+                    if(ClientUtils.isCtrlPressed() && ClientUtils.isShiftPressed()) {
+                        generator.tanks[TileFluidGenerator.TANK].setFluid(null);
+                        PacketManager.updateTileWithClientInfo(generator);
+                    }
                 }
             });
 

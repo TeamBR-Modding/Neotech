@@ -1,9 +1,11 @@
 package com.teambrmodding.neotech.client.gui.machines.processors;
 
 import com.teambr.bookshelf.client.gui.GuiColor;
+import com.teambr.bookshelf.client.gui.GuiTextFormat;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentColoredZone;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentFluidTank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentTextureAnimated;
+import com.teambr.bookshelf.network.PacketManager;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
@@ -101,7 +103,24 @@ public class GuiAlloyer extends GuiAbstractMachine<ContainerAlloyer> {
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
                     toolTip.add(ClientUtils.formatNumber(alloyer.tanks[TileFluidGenerator.TANK].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(alloyer.tanks[TileFluidGenerator.TANK].getCapacity()) + " mb");
+                    toolTip.add("");
+                    toolTip.add(GuiColor.GRAY + "" + GuiTextFormat.ITALICS + ClientUtils.translate("neotech.text.clearTank"));
                     return toolTip;
+                }
+
+                /**
+                 * Called when the mouse is pressed
+                 *
+                 * @param x      Mouse X Position
+                 * @param y      Mouse Y Position
+                 * @param button Mouse Button
+                 */
+                @Override
+                public void mouseDown(int x, int y, int button) {
+                    if(ClientUtils.isCtrlPressed() && ClientUtils.isShiftPressed()) {
+                        alloyer.tanks[TileAlloyer.INPUT_TANK_1].setFluid(null);
+                        PacketManager.updateTileWithClientInfo(alloyer);
+                    }
                 }
             });
             components.add(new GuiComponentColoredZone(this, 39, 11, 18, 64, new Color(0, 0, 0, 0)){
@@ -152,7 +171,24 @@ public class GuiAlloyer extends GuiAbstractMachine<ContainerAlloyer> {
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
                     toolTip.add(ClientUtils.formatNumber(alloyer.tanks[TileAlloyer.INPUT_TANK_2].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(alloyer.tanks[TileAlloyer.INPUT_TANK_2].getCapacity()) + " mb");
+                    toolTip.add("");
+                    toolTip.add(GuiColor.GRAY + "" + GuiTextFormat.ITALICS + ClientUtils.translate("neotech.text.clearTank"));
                     return toolTip;
+                }
+
+                /**
+                 * Called when the mouse is pressed
+                 *
+                 * @param x      Mouse X Position
+                 * @param y      Mouse Y Position
+                 * @param button Mouse Button
+                 */
+                @Override
+                public void mouseDown(int x, int y, int button) {
+                    if(ClientUtils.isCtrlPressed() && ClientUtils.isShiftPressed()) {
+                        alloyer.tanks[TileAlloyer.INPUT_TANK_2].setFluid(null);
+                        PacketManager.updateTileWithClientInfo(alloyer);
+                    }
                 }
             });
             components.add(new GuiComponentColoredZone(this, 60, 11, 18, 64, new Color(0, 0, 0, 0)){
@@ -203,7 +239,24 @@ public class GuiAlloyer extends GuiAbstractMachine<ContainerAlloyer> {
                             GuiColor.RED + ClientUtils.translate("neotech.text.empty"));
                     toolTip.add(ClientUtils.formatNumber(alloyer.tanks[TileAlloyer.OUTPUT_TANK].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(alloyer.tanks[TileAlloyer.OUTPUT_TANK].getCapacity()) + " mb");
+                    toolTip.add("");
+                    toolTip.add(GuiColor.GRAY + "" + GuiTextFormat.ITALICS + ClientUtils.translate("neotech.text.clearTank"));
                     return toolTip;
+                }
+
+                /**
+                 * Called when the mouse is pressed
+                 *
+                 * @param x      Mouse X Position
+                 * @param y      Mouse Y Position
+                 * @param button Mouse Button
+                 */
+                @Override
+                public void mouseDown(int x, int y, int button) {
+                    if(ClientUtils.isCtrlPressed() && ClientUtils.isShiftPressed()) {
+                        alloyer.tanks[TileAlloyer.INPUT_TANK_2].setFluid(null);
+                        PacketManager.updateTileWithClientInfo(alloyer);
+                    }
                 }
             });
             components.add(new GuiComponentColoredZone(this, 111, 11, 51, 64, new Color(0, 0, 0,0)){
