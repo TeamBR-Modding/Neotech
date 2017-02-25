@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import java.util.List;
@@ -69,7 +70,7 @@ public class ItemBlockFluidStorage extends ItemBlock {
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        if(stack.hasTagCompound() && stack.getTagCompound().hasKey("Tanks")) {
+        if(stack.hasTagCompound()) {
             NBTTagList tagList = stack.getTagCompound().getTagList("Tanks", 10);
             FluidTank[] tanks = new FluidTank[1];
             tanks[0] = new FluidTank(10000000);
@@ -81,8 +82,11 @@ public class ItemBlockFluidStorage extends ItemBlock {
             }
 
             FluidStack currentStored = tanks[0].getFluid();
-            if(currentStored == null)
-                return;
+            if(currentStored == null) { // Attempt cast to normal stuff
+                currentStored = FluidUtil.getFluidContained(stack);
+                if(currentStored == null)
+                    return;
+            }
             tooltip.add(GuiColor.ORANGE + ClientUtils.translate("neotech.text.fluidStored"));
             tooltip.add("  " + currentStored.getLocalizedName() + ": " + ClientUtils.formatNumber(currentStored.amount) + " mb");
         }
