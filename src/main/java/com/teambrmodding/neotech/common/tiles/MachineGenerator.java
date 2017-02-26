@@ -98,7 +98,7 @@ public abstract class MachineGenerator extends AbstractMachine {
      */
     @Override
     public boolean isActive() {
-        return burnTime > 0;
+        return burnTime > 0 && super.isActive();
     }
 
     @Override

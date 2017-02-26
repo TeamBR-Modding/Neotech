@@ -209,13 +209,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
     public abstract void reset();
 
     /**
-     * Used to check if this tile is active or not
-     *
-     * @return True if active state
-     */
-    public abstract boolean isActive();
-
-    /**
      * The initial size of the inventory
      */
     public abstract int getInitialSize();
@@ -532,6 +525,22 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
     @Nullable
     protected IFluidHandler getFluidHandlerCapability(EnumFacing dir) {
         return this;
+    }
+
+    /**
+     * Used to check if this tile is active or not
+     *
+     * @return True if active state
+     */
+    public boolean isActive() {
+        // If redstone mode is not matched, break our of update
+        if(hasUpgradeByID(IUpgradeItem.REDSTONE_CIRCUIT)) {
+            if(redstone == -1 && isPowered())
+                return false;
+            else if(redstone == 1 && !isPowered())
+                return false;
+        }
+        return true;
     }
 
     /*******************************************************************************************************************

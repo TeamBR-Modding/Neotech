@@ -131,7 +131,7 @@ public abstract class MachineProcessor<I, O> extends AbstractMachine {
      */
     @Override
     public boolean isActive() {
-        return cookTime > 0;
+        return cookTime > 0 && super.isActive();
     }
 
     @Override
