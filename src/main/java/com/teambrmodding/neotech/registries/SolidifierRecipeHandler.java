@@ -230,15 +230,15 @@ public class SolidifierRecipeHandler extends
                 getItemStackString(new ItemStack(Blocks.OBSIDIAN, 1))));
 
         // Blaze
-        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "blaze:" + MetalManager.NUGGET_MB,
+        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "blaze:" + MetalManager.INGOT_MB,
                 getItemStackString(new ItemStack(Items.BLAZE_ROD))));
 
         // Chorus
-        addRecipe(new SolidifierRecipe(SolidifierMode.BLOCK_MODE, "chorus:" + MetalManager.NUGGET_MB,
-                getItemStackString(new ItemStack(Items.CHORUS_FRUIT_POPPED))));
+        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "chorus:" + MetalManager.INGOT_MB,
+                getItemStackString(new ItemStack(Blocks.CHORUS_FLOWER))));
 
         // Wither
-        addRecipe(new SolidifierRecipe(SolidifierMode.NUGGET_MODE, "wither:" + MetalManager.NUGGET_MB,
+        addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "wither:" + MetalManager.INGOT_MB,
                 getItemStackString(new ItemStack(Items.NETHER_STAR))));
 
         saveToFile();

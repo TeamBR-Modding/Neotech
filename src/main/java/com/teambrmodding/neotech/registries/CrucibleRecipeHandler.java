@@ -218,15 +218,15 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
 
         // Blaze
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.BLAZE_ROD)),
-                "blaze:" + MetalManager.NUGGET_MB));
+                "blaze:" + MetalManager.INGOT_MB));
 
         // Chorus
-        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.CHORUS_FRUIT_POPPED)),
-                "chorus:" + MetalManager.NUGGET_MB));
+        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Blocks.CHORUS_FLOWER)),
+                "chorus:" + MetalManager.INGOT_MB));
 
         // Wither
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.NETHER_STAR)),
-                "wither:" + MetalManager.NUGGET_MB));
+                "wither:" + MetalManager.INGOT_MB));
 
         // Ice/Snowball to Water
         addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.SNOWBALL)),
