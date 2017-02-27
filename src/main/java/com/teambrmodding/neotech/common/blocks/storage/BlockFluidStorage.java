@@ -99,23 +99,42 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
     }
 
     /**
+     * Spawns this Block's drops into the World as EntityItems.
+     *
+     * @param worldIn
+     * @param pos
+     * @param state
+     * @param chance
+     * @param fortune
+     */
+    @Override
+    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
+        removedByPlayer(state, worldIn, pos, null, true);
+    }
+
+    /**
      * Called when the block is broken, allows us to drop items from inventory
      * @param worldIn The world
      * @param pos The pos
      * @param state The state
      */
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if(!worldIn.isRemote) {
+    public boolean removedByPlayer(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+        if(!worldIn.isRemote && worldIn.getTileEntity(pos) instanceof TileBasicTank) {
             TileBasicTank savableTile = (TileBasicTank) worldIn.getTileEntity(pos);
 
             ItemStack stack = FluidUtil.tryFillContainer(getStackDroppedByWrench(worldIn, pos),
                     savableTile, savableTile.tanks[TileBasicTank.TANK].getCapacity(), null, true);
 
+            if(stack == null)
+                stack = getStackDroppedByWrench(worldIn, pos);
+
             WorldUtils.dropStack(worldIn, stack, pos);
             worldIn.removeTileEntity(pos); // Cancel drop logic
             worldIn.setBlockToAir(pos);
+            return true;
         }
+        return false;
     }
 
     /**
@@ -206,7 +225,7 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
     public EnumActionResult onWrench(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
                                      EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(player.isSneaking()) {
-            breakBlock(world, pos, world.getBlockState(pos));
+            world.destroyBlock(pos, true);
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.PASS;

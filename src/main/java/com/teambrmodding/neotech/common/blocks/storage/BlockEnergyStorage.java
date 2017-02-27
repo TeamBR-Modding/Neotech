@@ -72,10 +72,12 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
      * @param state The state
      */
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public boolean removedByPlayer(IBlockState state, World worldIn, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         if(!worldIn.isRemote) {
             WorldUtils.breakBlockSavingNBT(worldIn, pos, this);
+            return true;
         }
+        return false;
     }
 
     /**
