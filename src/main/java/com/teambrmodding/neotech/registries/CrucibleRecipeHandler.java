@@ -221,7 +221,7 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
                 "blaze:" + MetalManager.INGOT_MB));
 
         // Chorus
-        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Blocks.CHORUS_FLOWER)),
+        addRecipe(new CrucibleRecipe(getItemStackString(new ItemStack(Items.CHORUS_FRUIT_POPPED)),
                 "chorus:" + MetalManager.INGOT_MB));
 
         // Wither

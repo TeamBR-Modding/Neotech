@@ -235,7 +235,7 @@ public class SolidifierRecipeHandler extends
 
         // Chorus
         addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "chorus:" + MetalManager.INGOT_MB,
-                getItemStackString(new ItemStack(Blocks.CHORUS_FLOWER))));
+                getItemStackString(new ItemStack(Items.CHORUS_FRUIT_POPPED))));
 
         // Wither
         addRecipe(new SolidifierRecipe(SolidifierMode.INGOT_MODE, "wither:" + MetalManager.INGOT_MB,
