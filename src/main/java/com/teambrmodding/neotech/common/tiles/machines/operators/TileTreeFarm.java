@@ -55,7 +55,7 @@ public class TileTreeFarm extends AbstractMachine {
      * @return How many blocks to move from center
      */
     protected int getChoppingRange() {
-        return 4 * (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) * 4 / 16);
+        return 4 * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
     }
 
     /**
@@ -287,8 +287,6 @@ public class TileTreeFarm extends AbstractMachine {
                         IBlockState blockState = getNextSaplingAndReduce();
                         if(blockState != null)
                             worldObj.setBlockState(blockPos, blockState);
-                        else
-                            return;
                     }
                 }
             }
