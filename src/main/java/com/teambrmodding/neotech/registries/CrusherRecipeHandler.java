@@ -142,7 +142,7 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipe, I
                 List<ItemStack> dustList = OreDictionary.getOres(entry.replaceFirst("ingot", "dust"));
                 if (!dustList.isEmpty() && !doesRecipeExist(entry.replaceFirst("ingot", "dust"))) {
                     addRecipe(new CrusherRecipe(entry,
-                            getItemStackString(new ItemStack(dustList.get(0).getItem(), 1)) + ":" + dustList.get(0).getItemDamage(),
+                            getItemStackString(new ItemStack(dustList.get(0).getItem(), 1,dustList.get(0).getItemDamage())),
                             "", 0));
                 }
             }
