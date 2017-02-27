@@ -71,22 +71,10 @@ public class ItemBlockFluidStorage extends ItemBlock {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         if(stack.hasTagCompound()) {
-            NBTTagList tagList = stack.getTagCompound().getTagList("Tanks", 10);
-            FluidTank[] tanks = new FluidTank[1];
-            tanks[0] = new FluidTank(10000000);
-            for(int x = 0; x < tagList.tagCount(); x++) {
-                NBTTagCompound tankCompound = tagList.getCompoundTagAt(x);
-                byte position = tankCompound.getByte("TankID");
-                if(position < tanks.length)
-                    tanks[position].readFromNBT(tankCompound);
-            }
+            FluidStack currentStored = FluidUtil.getFluidContained(stack);
+            if(currentStored == null)
+                return;
 
-            FluidStack currentStored = tanks[0].getFluid();
-            if(currentStored == null) { // Attempt cast to normal stuff
-                currentStored = FluidUtil.getFluidContained(stack);
-                if(currentStored == null)
-                    return;
-            }
             tooltip.add(GuiColor.ORANGE + ClientUtils.translate("neotech.text.fluidStored"));
             tooltip.add("  " + currentStored.getLocalizedName() + ": " + ClientUtils.formatNumber(currentStored.amount) + " mb");
         }

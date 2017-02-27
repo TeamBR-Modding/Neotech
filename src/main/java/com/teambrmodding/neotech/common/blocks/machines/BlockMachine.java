@@ -76,6 +76,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
         int playerFacingDirection = placer == null ? 0 : MathHelper.floor_float((placer.rotationYaw / 90.F) + 0.5F) & 3;
         EnumFacing facing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
         worldIn.setBlockState(pos, getDefaultState().withProperty(FOUR_WAY, facing));
+        WorldUtils.writeStackNBTToBlock(worldIn, pos, stack);
     }
 
     /**

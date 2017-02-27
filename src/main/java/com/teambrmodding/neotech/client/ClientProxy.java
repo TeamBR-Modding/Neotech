@@ -2,6 +2,7 @@ package com.teambrmodding.neotech.client;
 
 import com.teambrmodding.neotech.client.mesh.ModelLocationWrapper;
 import com.teambrmodding.neotech.client.mesh.SimpleItemMeshDefinition;
+import com.teambrmodding.neotech.client.models.ModelFactory;
 import com.teambrmodding.neotech.client.renderers.tiles.TileMachineIORenderer;
 import com.teambrmodding.neotech.client.renderers.tiles.TileTankFluidRenderer;
 import com.teambrmodding.neotech.common.CommonProxy;
@@ -24,6 +25,7 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 
@@ -41,6 +43,8 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void preInit() {
+        MinecraftForge.EVENT_BUS.register(ModelFactory.INSTANCE);
+
         ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricFurnace", "facing=north,isactive=false");
         ItemRenderManager.registerBlockModel(BlockManager.electricCrusher, "electricCrusher", "facing=north,isactive=false");
         ItemRenderManager.registerBlockModel(BlockManager.furnaceGenerator, "furnaceGenerator", "facing=north,isactive=false");
@@ -57,9 +61,9 @@ public class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.advancedRFStorage, "advancedRFStorage", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.eliteRFStorage, "eliteRFStorage", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.creativeRFStorage, "creativeRFStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.basicTank, "basicTank", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.advancedTank, "advancedTank", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.eliteTank, "eliteTank", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.basicTank, "basicTank", "inventory");
+        ItemRenderManager.registerBlockModel(BlockManager.advancedTank, "advancedTank", "inventory");
+        ItemRenderManager.registerBlockModel(BlockManager.eliteTank, "eliteTank", "inventory");
         ItemRenderManager.registerBlockModel(BlockManager.creativeTank, "creativeTank", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.voidTank, "voidTank", "normal");
 

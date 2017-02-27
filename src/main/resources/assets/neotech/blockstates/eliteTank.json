@@ -5,5 +5,5 @@
             "block" : "neotech:blocks/eliteRFStorage"
         }
     },
-    "variants" : { "normal" : { "model": "neotech:tank" } }
+  "variants" : { "normal" : { "model": "neotech:tank" }, "inventory" : { "model": "neotech:tank" } }
 }
