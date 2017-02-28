@@ -5,6 +5,7 @@ import com.teambr.bookshelf.util.TimeUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -59,7 +60,7 @@ public class TileBasicTank extends FluidHandler {
      * @return The tank capacity
      */
     protected int getCapacity() {
-        return 8000;
+        return Fluid.BUCKET_VOLUME * 16;
     }
 
     public float offset = 0.0F;
