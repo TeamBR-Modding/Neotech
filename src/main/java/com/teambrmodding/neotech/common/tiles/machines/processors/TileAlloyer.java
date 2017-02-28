@@ -226,7 +226,7 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
                                 otherTank.drain(tanks[INPUT_TANK_1].getFluid(), false) != null) {
                             int amount = fill(otherTank.drain(1000, false), false);
                             if(amount > 0) {
-                                fill(otherTank.drain(amount, true), true);
+                                tanks[INPUT_TANK_1].fill(otherTank.drain(amount, true), true);
                                 markForUpdate(6);
                             }
                         }
@@ -251,7 +251,7 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
                         if(tanks[INPUT_TANK_2].getFluid() != null && otherTank.drain(tanks[INPUT_TANK_2].getFluid(), false) != null) {
                             int amount = fill(otherTank.drain(1000, false), false);
                             if(amount > 0) {
-                                fill(otherTank.drain(amount, true), true);
+                                tanks[INPUT_TANK_2].fill(otherTank.drain(amount, true), true);
                                 markForUpdate(6);
                             }
                         }
@@ -413,12 +413,18 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
     protected boolean canFill(Fluid fluid) {
         if(fluid == null)
             return false;
-        if(tanks[INPUT_TANK_1].getFluid() == null || tanks[INPUT_TANK_2].getFluid() == null)
+        if(tanks[INPUT_TANK_1].getFluid() == null && tanks[INPUT_TANK_2].getFluid() == null)
             return ((AlloyerRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.ALLOYER)).isValidSingle(new FluidStack(fluid, 1000));
         else {
             if(tanks[INPUT_TANK_1].getFluid() != null && fluid == tanks[INPUT_TANK_1].getFluid().getFluid())
                 return true;
             else if(tanks[INPUT_TANK_2].getFluid() != null && fluid == tanks[INPUT_TANK_2].getFluid().getFluid())
+                return true;
+            else if(tanks[INPUT_TANK_1].getFluid() != null &&
+                    RecipeManager.getHandler(RecipeManager.RecipeType.ALLOYER).isValidInput(Pair.of(new FluidStack(fluid, 1000), tanks[INPUT_TANK_1].getFluid())))
+                return true;
+            else if(tanks[INPUT_TANK_2].getFluid() != null &&
+                    RecipeManager.getHandler(RecipeManager.RecipeType.ALLOYER).isValidInput(Pair.of(new FluidStack(fluid, 1000), tanks[INPUT_TANK_2].getFluid())))
                 return true;
         }
         return false;
