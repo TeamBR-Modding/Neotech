@@ -172,7 +172,7 @@ public class TileFluidGenerator extends MachineGenerator {
 
 
             burnTime = output.getLeft();
-            currentObjectBurnRate = output.getRight() * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU);
+            currentObjectBurnRate = output.getRight() + (output.getRight() * (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) / 8));
 
             if(burnTime > 0) {
                 currentObjectBurnTime = burnTime;
