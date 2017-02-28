@@ -189,8 +189,11 @@ public class ModelItemFluidStorage implements IBakedModel, IPerspectiveAwareMode
 
                 // Attempt to extract fluid
                 FluidStack currentStored = FluidUtil.getFluidContained(stack);
-                if(currentStored == null)
-                    return originalModel; // There is nothing stored, don't need extra rendering
+                if(currentStored == null) {
+                    model.fluidHeight = 0.0F;
+                    model.renderFluid = null;
+                    return model; // There is nothing stored, don't need extra rendering
+                }
 
                 model.fluidHeight = // Scale fluid to model height
                         (Math.min(14.99F,
