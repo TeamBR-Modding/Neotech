@@ -111,7 +111,7 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
      */
     @Override
     public int getCookTime() {
-        return 1000 - ((62 * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1));
+        return Math.max(500 - (((500 / 16) * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) - 1)), 5);
     }
 
     /**
