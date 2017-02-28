@@ -80,7 +80,9 @@ public class ModelItemFluidStorage implements IBakedModel, IPerspectiveAwareMode
 
     @Override
     public Pair<? extends IBakedModel, Matrix4f> handlePerspective(ItemCameraTransforms.TransformType cameraTransformType) {
-        return Pair.of(this, transforms.get(cameraTransformType).getMatrix());
+        return Pair.of(this,
+                transforms.get(cameraTransformType) != null ?
+                        transforms.get(cameraTransformType).getMatrix() : get(0, 0, 0, 0, 0, 0, 1.0f).getMatrix());
     }
 
     /*******************************************************************************************************************
