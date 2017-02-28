@@ -471,7 +471,7 @@ public class TileTreeFarm extends AbstractMachine {
      */
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, EnumFacing dir) {
-        return !isDisabled(dir) && canOutputFromSide(dir, true) &&
+        return !isDisabled(dir) && (canOutputFromSide(dir, true) || getModeForSide(dir) == EnumInputOutputMode.DEFAULT) &&
                 slot > SHEARS_SLOT && slot < getInitialSize() - 3;
     }
 
