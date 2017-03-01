@@ -179,7 +179,7 @@ public class TileFluidGenerator extends MachineGenerator {
                 return true;
             }
         }
-        burnTime -= (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) -
+        burnTime -= Math.max(1, getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY) -
                 (getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.CPU) / 2));
         return burnTime > 0;
     }
