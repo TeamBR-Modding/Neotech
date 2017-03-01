@@ -101,26 +101,4 @@ public class TileBasicTank extends FluidHandler {
             worldObj.setLightFor(EnumSkyBlock.BLOCK, pos, light);
         }
     }
-
-    @Override
-    protected void onServerTick() {
-        if(TimeUtils.onSecond(5) && tanks[TANK].getFluid() != null) {
-            if(worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) != null) {
-                TileEntity tile = worldObj.getTileEntity(pos.offset(EnumFacing.DOWN));
-                if(tile.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP)) {
-                    IFluidHandler tank = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
-                    for(IFluidTankProperties tankInfo : tank.getTankProperties()) {
-                        if(tankInfo.canFillFluidType(tanks[TANK].getFluid())) {
-                            int actualDrain = tank.fill(tanks[TANK].drain(1000, false), false);
-                            if(actualDrain > 0) {
-                                tank.fill(tanks[TANK].drain(actualDrain, true), true);
-                                markForUpdate(3);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
