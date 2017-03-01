@@ -224,7 +224,7 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
                         // Try and match our fluid
                         if(tanks[INPUT_TANK_1].getFluid() != null &&
                                 otherTank.drain(tanks[INPUT_TANK_1].getFluid(), false) != null) {
-                            int amount = fill(otherTank.drain(1000, false), false);
+                            int amount = tanks[INPUT_TANK_1].fill(otherTank.drain(1000, false), false);
                             if(amount > 0) {
                                 tanks[INPUT_TANK_1].fill(otherTank.drain(amount, true), true);
                                 markForUpdate(6);
@@ -249,7 +249,7 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
                     if(canInputFromSide(dir, false)) {
                         // Try and match existing
                         if(tanks[INPUT_TANK_2].getFluid() != null && otherTank.drain(tanks[INPUT_TANK_2].getFluid(), false) != null) {
-                            int amount = fill(otherTank.drain(1000, false), false);
+                            int amount = tanks[INPUT_TANK_2].fill(otherTank.drain(1000, false), false);
                             if(amount > 0) {
                                 tanks[INPUT_TANK_2].fill(otherTank.drain(amount, true), true);
                                 markForUpdate(6);
