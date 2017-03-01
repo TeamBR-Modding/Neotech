@@ -55,7 +55,7 @@ public class TileTreeFarm extends AbstractMachine {
      * @return How many blocks to move from center
      */
     protected int getChoppingRange() {
-        return 4 * getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
+        return 4 + getModifierForCategory(IUpgradeItem.ENUM_UPGRADE_CATEGORY.MEMORY);
     }
 
     /**
