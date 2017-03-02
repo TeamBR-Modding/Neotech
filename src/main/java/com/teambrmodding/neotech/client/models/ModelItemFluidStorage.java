@@ -6,11 +6,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,6 +24,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,28 +106,57 @@ public class ModelItemFluidStorage implements IBakedModel, IPerspectiveAwareMode
 
         // Render Fluid
         if(renderFluid != null) {
-            TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(renderFluid.getStill().toString());
-            // Top and Bottom
-            quadList.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, fluidHeight, 2.01F),
-                    new Vector3f(13.99F, fluidHeight, 13.99F), face, texture, EnumFacing.UP, modelRot,
-                    null, scale, true));
-            quadList.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 0.001F, 2.01F),
-                    new Vector3f(13.999F, 0.001F, 13.999F), face, texture, EnumFacing.DOWN, modelRot,
-                    null, scale, true));
+            UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(DefaultVertexFormats.ITEM);
 
-            // Sides
-            quadList.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 2.01F),
-                    new Vector3f(13.99F, fluidHeight, 2.01F), face, texture, EnumFacing.NORTH, modelRot,
-                    null, scale, true));
-            quadList.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 13.99F),
-                    new Vector3f(13.99F, fluidHeight, 13.99F), face, texture, EnumFacing.SOUTH, modelRot,
-                    null, scale, true));
-            quadList.add(faceBakery.makeBakedQuad(new Vector3f(2.01F, 2.01F, 2.01F),
-                    new Vector3f(2.01F, fluidHeight, 13.99F), face, texture, EnumFacing.WEST, modelRot,
-                    null, scale, true));
-            quadList.add(faceBakery.makeBakedQuad(new Vector3f(13.99F, 2.01F, 2.01F),
-                    new Vector3f(13.99F, fluidHeight, 13.99F), face, texture, EnumFacing.EAST, modelRot,
-                    null, scale, true));
+            TextureAtlasSprite texture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(renderFluid.getStill().toString());
+            int color = renderFluid.getColor();
+
+
+            if(!renderFluid.isGaseous()) {
+                // Top and Bottom
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, fluidHeight, 2.01F),
+                        new Vector3f(13.99F, fluidHeight, 13.99F), face, texture, EnumFacing.UP, modelRot,
+                        null, scale, true), color));
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 0.001F, 2.01F),
+                        new Vector3f(13.999F, 0.001F, 13.999F), face, texture, EnumFacing.DOWN, modelRot,
+                        null, scale, true), color));
+
+                // Sides
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 1.01F, 2.01F),
+                        new Vector3f(13.99F, fluidHeight, 2.01F), face, texture, EnumFacing.NORTH, modelRot,
+                        null, scale, true), color));
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 1.01F, 13.99F),
+                        new Vector3f(13.99F, fluidHeight, 13.99F), face, texture, EnumFacing.SOUTH, modelRot,
+                        null, scale, true), color));
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 1.01F, 2.01F),
+                        new Vector3f(2.01F, fluidHeight, 13.99F), face, texture, EnumFacing.WEST, modelRot,
+                        null, scale, true), color));
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(13.99F, 1.01F, 2.01F),
+                        new Vector3f(13.99F, fluidHeight, 13.99F), face, texture, EnumFacing.EAST, modelRot,
+                        null, scale, true), color));
+            } else {
+                // Top and Bottom
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 14.99F, 2.01F),
+                        new Vector3f(13.99F, 14.99F, 13.99F), face, texture, EnumFacing.UP, modelRot,
+                        null, scale, true), color));
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 14.99F - fluidHeight, 2.01F),
+                        new Vector3f(13.999F, 14.99F - fluidHeight, 13.999F), face, texture, EnumFacing.DOWN, modelRot,
+                        null, scale, true), color));
+
+                // Sides
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 14.99F, 2.01F),
+                        new Vector3f(13.99F, 14.99F - fluidHeight, 2.01F), face, texture, EnumFacing.SOUTH, modelRot,
+                        null, scale, true), color));
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 14.99F, 13.99F),
+                        new Vector3f(13.99F, 14.99F - fluidHeight, 13.99F), face, texture, EnumFacing.NORTH, modelRot,
+                        null, scale, true), color));
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(2.01F, 14.99F, 2.01F),
+                        new Vector3f(2.01F, 14.99F - fluidHeight, 13.99F), face, texture, EnumFacing.EAST, modelRot,
+                        null, scale, true), color));
+                quadList.add(applyColor(faceBakery.makeBakedQuad(new Vector3f(13.99F, 14.99F, 2.01F),
+                        new Vector3f(13.99F, 14.99F - fluidHeight, 13.99F), face, texture, EnumFacing.WEST, modelRot,
+                        null, scale, true), color));
+            }
         }
 
         return quadList;
@@ -211,5 +243,45 @@ public class ModelItemFluidStorage implements IBakedModel, IPerspectiveAwareMode
 
             return originalModel;
         }
+    }
+
+    /*******************************************************************************************************************
+     * Class Methods                                                                                                   *
+     *******************************************************************************************************************/
+
+    /**
+     * Applies a color to the baked quad, returning the new one
+     * @param quad  The quad to color
+     * @param color The color to color
+     * @return A new baked quad with the given color
+     */
+    public static BakedQuad applyColor(BakedQuad quad, int color) {
+        int[] vertexData = new int[quad.getVertexData().length];
+        color = fixColorForMC(color);
+        for(int i = 0; i < vertexData.length; i++) {
+            if(i == 3 || i == 10 || i == 17 || i == 24)
+                vertexData[i] = color;
+            else if(i == 3 || i == 13 || i == 20)
+                vertexData[i] = 0;
+            else
+                vertexData[i] = quad.getVertexData()[i];
+        }
+        return new BakedQuad(vertexData, quad.getTintIndex(), quad.getFace(), quad.getSprite(), true, DefaultVertexFormats.ITEM);
+    }
+
+    /**
+     * Change standard color into color MC wants for vertex data
+     * @param input The input
+     * @return The correct color to add to the vertex data
+     */
+    public static int fixColorForMC(int input) {
+        // ABGR, MC is reverse for some reason
+        Color outputColor = new Color(input);
+        int a = outputColor.getAlpha();
+        int r = outputColor.getRed();
+        int g = outputColor.getGreen();
+        int b = outputColor.getBlue();
+
+        return new Color(b, g, r, a).getRGB();
     }
 }
