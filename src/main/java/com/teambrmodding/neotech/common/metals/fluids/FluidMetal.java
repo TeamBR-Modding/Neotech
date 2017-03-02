@@ -1,10 +1,7 @@
 package com.teambrmodding.neotech.common.metals.fluids;
 
-import com.teambr.bookshelf.util.ClientUtils;
-import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 /**
  * This file was created for NeoTech

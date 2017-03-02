@@ -1,6 +1,5 @@
 package com.teambrmodding.neotech.common.tiles.storage;
 
-import akka.japi.pf.FI;
 import com.teambr.bookshelf.common.container.IInventoryCallback;
 import com.teambr.bookshelf.common.tiles.EnergyHandler;
 import com.teambr.bookshelf.util.EnergyUtils;

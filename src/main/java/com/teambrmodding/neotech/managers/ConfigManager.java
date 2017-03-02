@@ -4,7 +4,6 @@ import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.collections.GeneratingOre;
 import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.world.OreGeneratorManager;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;

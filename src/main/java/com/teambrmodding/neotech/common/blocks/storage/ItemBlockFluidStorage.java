@@ -2,18 +2,14 @@ package com.teambrmodding.neotech.common.blocks.storage;
 
 import com.teambr.bookshelf.client.gui.GuiColor;
 import com.teambr.bookshelf.common.ICraftingListener;
-import com.teambr.bookshelf.common.tiles.FluidHandler;
 import com.teambr.bookshelf.util.ClientUtils;
-import com.teambrmodding.neotech.common.tiles.storage.tanks.TileBasicTank;
 import com.teambrmodding.neotech.managers.BlockManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;

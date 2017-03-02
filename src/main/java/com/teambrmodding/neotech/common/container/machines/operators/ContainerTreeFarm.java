@@ -1,7 +1,6 @@
 package com.teambrmodding.neotech.common.container.machines.operators;
 
 import com.teambrmodding.neotech.common.container.machines.ContainerAbstractMachine;
-import com.teambrmodding.neotech.common.tiles.AbstractMachine;
 import com.teambrmodding.neotech.common.tiles.machines.operators.TileTreeFarm;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;

@@ -79,13 +79,13 @@ public class BlockManager {
         treeFarm = registerBlock(new BlockTreeFarm("treeFarm"), TileTreeFarm.class);
 
         // RF Storage
-        basicRFStorage = new BlockEnergyStorage("basicRFStorage", 1);
+        basicRFStorage = new BlockEnergyStorage("basicEnergyStorage", 1);
         registerBlock(basicRFStorage, new ItemBlockEnergyStorage(basicRFStorage), TileEnergyStorage.class, null);
-        advancedRFStorage = new BlockEnergyStorage("advancedRFStorage", 2);
+        advancedRFStorage = new BlockEnergyStorage("advancedEnergyStorage", 2);
         registerBlock(advancedRFStorage, new ItemBlockEnergyStorage(advancedRFStorage), TileEnergyStorage.class, null);
-        eliteRFStorage = new BlockEnergyStorage("eliteRFStorage", 3);
+        eliteRFStorage = new BlockEnergyStorage("eliteEnergyStorage", 3);
         registerBlock(eliteRFStorage, new ItemBlockEnergyStorage(eliteRFStorage), TileEnergyStorage.class, null);
-        creativeRFStorage = new BlockEnergyStorage("creativeRFStorage", 4);
+        creativeRFStorage = new BlockEnergyStorage("creativeEnergyStorage", 4);
         registerBlock(creativeRFStorage, new ItemBlockEnergyStorage(creativeRFStorage), TileEnergyStorage.class, null);
 
         // Tanks

@@ -10,8 +10,8 @@ import com.teambrmodding.neotech.common.container.machines.generators.ContainerF
 import com.teambrmodding.neotech.common.tiles.MachineGenerator;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.RecipeManager;
-import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
 import com.teambrmodding.neotech.registries.FluidFuelRecipeHandler;
+import com.teambrmodding.neotech.registries.recipes.AbstractRecipe;
 import com.teambrmodding.neotech.registries.recipes.FluidFuelRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

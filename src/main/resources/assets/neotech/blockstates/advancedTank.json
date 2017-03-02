@@ -2,7 +2,7 @@
     "forge_marker" : 1,
     "defaults": {
         "textures" : {
-            "block" : "neotech:blocks/advancedRFStorage"
+            "block" : "neotech:blocks/advancedEnergyStorage"
         }
     },
   "variants" : { "normal" : { "model": "neotech:tank" }, "inventory" : { "model": "neotech:tank" } }

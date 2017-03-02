@@ -8,16 +8,17 @@ import com.teambr.bookshelf.client.gui.component.display.GuiComponentText;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentTextureAnimated;
 import com.teambr.bookshelf.network.PacketManager;
 import com.teambr.bookshelf.util.ClientUtils;
+import com.teambr.bookshelf.util.EnergyUtils;
 import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
 import com.teambrmodding.neotech.common.container.machines.generators.ContainerFurnaceGenerator;
-import com.teambrmodding.neotech.common.tiles.AbstractMachine;
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileFluidGenerator;
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileFurnaceGenerator;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -81,15 +82,15 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
                 @Override
                 public List<String> getDynamicToolTip(int mouseX, int mouseY) {
                     List<String> toolTip = new ArrayList<>();
-                    toolTip.add(GuiColor.ORANGE + ClientUtils.translate("neotech.text.redstoneFlux"));
-                    toolTip.add(ClientUtils.formatNumber(generator.getEnergyStored()) + " / " +
-                            ClientUtils.formatNumber(generator.getMaxEnergyStored()));
+                    EnergyUtils.addToolTipInfo(machine.getCapability(CapabilityEnergy.ENERGY, null),
+                            toolTip, machine.energyStorage.getMaxInsert(), machine.energyStorage.getMaxExtract());
                     return toolTip;
                 }
             });
 
             // Currently Generating
-            components.add(new GuiComponentText(this, 64, 18, GuiColor.RED + "RF/t = " + generator.getEnergyProduced(), Color.DARK_GRAY) {
+            components.add(new GuiComponentText(this, 64, 18,
+                    GuiColor.ORANGE + ClientUtils.translate("bookshelfapi.energy.energyTick") + generator.getEnergyProduced(), Color.DARK_GRAY) {
                 /**
                  * Called after base render, is already translated to guiLeft and guiTop, just move offset
                  *
@@ -100,8 +101,10 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
                  */
                 @Override
                 public void renderOverlay(int guiLeft, int guiTop, int mouseX, int mouseY) {
-                    setLabel(GuiColor.RED + "RF/t = " +
-                            ClientUtils.formatNumber(generator.getEnergyProduced()));
+                    String string = GuiColor.RED + ClientUtils.translate("bookshelfapi.energy.energyTick") + " " +
+                            EnergyUtils.getEnergyDisplay(generator.getEnergyProduced());
+                    setXPos(xSize / 2 - (fontRendererObj.getStringWidth(string) / 2));
+                    setLabel(string);
                     super.renderOverlay(guiLeft, guiTop, mouseX, mouseY);
                 }
             });

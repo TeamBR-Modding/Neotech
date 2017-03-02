@@ -11,8 +11,6 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import java.sql.Ref;
-
 /**
  * This file was created for NeoTech
  *

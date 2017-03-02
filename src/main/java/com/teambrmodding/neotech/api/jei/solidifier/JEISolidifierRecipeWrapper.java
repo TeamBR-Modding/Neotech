@@ -1,17 +1,11 @@
 package com.teambrmodding.neotech.api.jei.solidifier;
 
-import com.teambr.bookshelf.helper.GuiHelper;
-import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.collections.SolidifierMode;
-import com.teambrmodding.neotech.managers.MetalManager;
-import com.teambrmodding.neotech.registries.SolidifierRecipeHandler;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 

@@ -1,6 +1,5 @@
 package com.teambrmodding.neotech.managers;
 
-import com.ibm.icu.lang.UProperty;
 import com.teambrmodding.neotech.common.items.ItemWrench;
 import com.teambrmodding.neotech.common.items.UpgradeItem;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;

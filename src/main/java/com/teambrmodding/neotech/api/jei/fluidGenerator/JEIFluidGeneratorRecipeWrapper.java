@@ -1,13 +1,10 @@
 package com.teambrmodding.neotech.api.jei.fluidGenerator;
 
 import com.teambr.bookshelf.util.ClientUtils;
-import com.teambrmodding.neotech.api.jei.NeotechJEIPlugin;
-import mezz.jei.api.gui.IDrawableAnimated;
-import mezz.jei.api.gui.IDrawableStatic;
+import com.teambr.bookshelf.util.EnergyUtils;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
@@ -71,8 +68,8 @@ public class JEIFluidGeneratorRecipeWrapper extends BlankRecipeWrapper {
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         minecraft.fontRendererObj.drawString(fluid.getLocalizedName(), 33, 0, Color.darkGray.getRGB());
-        minecraft.fontRendererObj.drawString(ClientUtils.formatNumber(burnRate) + " rf/t", 33, 46, Color.darkGray.getRGB());
+        minecraft.fontRendererObj.drawString(EnergyUtils.getEnergyDisplay(burnRate) + "/tick", 33, 46, Color.darkGray.getRGB());
         minecraft.fontRendererObj.drawString(ClientUtils.formatNumber(burnTime) + " ticks", 33, 55, Color.darkGray.getRGB());
-        minecraft.fontRendererObj.drawString(ClientUtils.formatNumber(burnRate * burnTime) + " rf", 33, 64, Color.darkGray.getRGB());
+        minecraft.fontRendererObj.drawString(EnergyUtils.getEnergyDisplay(burnRate * burnTime), 33, 64, Color.darkGray.getRGB());
     }
 }

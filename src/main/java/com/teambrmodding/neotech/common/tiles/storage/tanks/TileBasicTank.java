@@ -1,15 +1,9 @@
 package com.teambrmodding.neotech.common.tiles.storage.tanks;
 
 import com.teambr.bookshelf.common.tiles.FluidHandler;
-import com.teambr.bookshelf.util.TimeUtils;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 /**
  * This file was created for NeoTech

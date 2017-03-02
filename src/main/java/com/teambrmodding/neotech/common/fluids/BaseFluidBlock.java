@@ -1,6 +1,5 @@
 package com.teambrmodding.neotech.common.fluids;
 
-import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.ResourceLocation;

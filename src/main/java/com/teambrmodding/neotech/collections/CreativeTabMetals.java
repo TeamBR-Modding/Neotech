@@ -11,7 +11,6 @@ import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**

@@ -7,16 +7,16 @@ import com.teambr.bookshelf.client.gui.component.display.GuiComponentFluidTank;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentTextureAnimated;
 import com.teambr.bookshelf.network.PacketManager;
 import com.teambr.bookshelf.util.ClientUtils;
+import com.teambr.bookshelf.util.EnergyUtils;
 import com.teambrmodding.neotech.client.gui.machines.GuiAbstractMachine;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
 import com.teambrmodding.neotech.common.container.machines.processors.ContainerCrucible;
-import com.teambrmodding.neotech.common.tiles.AbstractMachine;
-import com.teambrmodding.neotech.common.tiles.machines.processors.TileCentrifuge;
 import com.teambrmodding.neotech.common.tiles.machines.processors.TileCrucible;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -78,9 +78,8 @@ public class GuiCrucible extends GuiAbstractMachine<ContainerCrucible> {
                 @Override
                 public List<String> getDynamicToolTip(int mouseX, int mouseY) {
                     List<String> toolTip = new ArrayList<>();
-                    toolTip.add(GuiColor.ORANGE + ClientUtils.translate("neotech.text.redstoneFlux"));
-                    toolTip.add(ClientUtils.formatNumber(crucible.getEnergyStored()) + " / " +
-                            ClientUtils.formatNumber(crucible.getMaxEnergyStored()));
+                    EnergyUtils.addToolTipInfo(machine.getCapability(CapabilityEnergy.ENERGY, null),
+                            toolTip, machine.energyStorage.getMaxInsert(), machine.energyStorage.getMaxExtract());
                     return toolTip;
                 }
             });

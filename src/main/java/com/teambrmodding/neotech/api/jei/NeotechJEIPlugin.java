@@ -11,7 +11,6 @@ import com.teambrmodding.neotech.api.jei.crusher.JEICrusherRecipeCategory;
 import com.teambrmodding.neotech.api.jei.crusher.JEICrusherRecipeHandler;
 import com.teambrmodding.neotech.api.jei.fluidGenerator.JEIFluidGeneratorCategory;
 import com.teambrmodding.neotech.api.jei.fluidGenerator.JEIFluidGeneratorHandler;
-import com.teambrmodding.neotech.api.jei.fluidGenerator.JEIFluidGeneratorRecipeWrapper;
 import com.teambrmodding.neotech.api.jei.solidifier.JEISolidifierRecipeCategory;
 import com.teambrmodding.neotech.api.jei.solidifier.JEISolidifierRecipeHandler;
 import com.teambrmodding.neotech.client.gui.machines.generators.GuiFluidGenerator;

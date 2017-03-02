@@ -1,14 +1,14 @@
 package com.teambrmodding.neotech.client.gui.storage;
 
 import com.teambr.bookshelf.client.gui.GuiBase;
-import com.teambr.bookshelf.client.gui.GuiColor;
 import com.teambr.bookshelf.client.gui.component.display.GuiComponentTextureAnimated;
-import com.teambr.bookshelf.util.ClientUtils;
+import com.teambr.bookshelf.util.EnergyUtils;
 import com.teambrmodding.neotech.common.container.storage.ContainerEnergyStorage;
 import com.teambrmodding.neotech.common.tiles.storage.TileEnergyStorage;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -63,9 +63,8 @@ public class GuiEnergyStorage extends GuiBase<ContainerEnergyStorage> {
                 @Override
                 public List<String> getDynamicToolTip(int mouseX, int mouseY) {
                     List<String> toolTip = new ArrayList<>();
-                    toolTip.add(GuiColor.ORANGE + ClientUtils.translate("neotech.text.redstoneFlux"));
-                    toolTip.add(ClientUtils.formatNumber(energyStorage.getEnergyStored()) + " / " +
-                            ClientUtils.formatNumber(energyStorage.getMaxEnergyStored()));
+                    EnergyUtils.addToolTipInfo(energyStorage.getCapability(CapabilityEnergy.ENERGY, null),
+                            toolTip, energyStorage.energyStorage.getMaxInsert(), energyStorage.energyStorage.getMaxExtract());
                     return toolTip;
                 }
             });

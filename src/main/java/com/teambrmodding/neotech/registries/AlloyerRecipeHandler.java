@@ -2,7 +2,6 @@ package com.teambrmodding.neotech.registries;
 
 import com.google.gson.reflect.TypeToken;
 import com.teambr.bookshelf.helper.LogHelper;
-import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.managers.MetalManager;
 import com.teambrmodding.neotech.registries.recipes.AlloyerRecipe;

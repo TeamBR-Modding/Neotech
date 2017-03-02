@@ -176,11 +176,6 @@ item.neotech:Network_Card.name=Network Card
 # Tools
 item.neotech:wrench.name=Wrench
 
-# Batteries
-item.neotech:basicRFBattery.name=Basic RF Battery
-item.neotech:advancedRFBattery.name=Advanced RF Battery
-item.neotech:eliteRFBattery.name=Elite RF Battery
-
 #######################
 # Tile Entities
 #######################
@@ -204,10 +199,10 @@ tile.neotech:solarPanelT3.name=Elite Solar Panel
 tile.neotech:treeFarm.name=Electric Logger
 
 # Storage
-tile.neotech:basicRFStorage.name=Basic RF Storage
-tile.neotech:advancedRFStorage.name=Advanced RF Storage
-tile.neotech:eliteRFStorage.name=Elite RF Storage
-tile.neotech:creativeRFStorage.name=Creative RF Storage
+tile.neotech:basicEnergyStorage.name=Basic Energy Storage
+tile.neotech:advancedEnergyStorage.name=Advanced Energy Storage
+tile.neotech:eliteEnergyStorage.name=Elite Energy Storage
+tile.neotech:creativeEnergyStorage.name=Creative Energy Storage
 tile.neotech:basicTank.name=Basic Fluid Tank
 tile.neotech:advancedTank.name=Advanced Fluid Tank
 tile.neotech:eliteTank.name=Elite Fluid Tank
@@ -245,12 +240,6 @@ neotech.furnacegenerator.title=Furnace Generator
 # Fluid Generator
 neotech.fluidgenerator.title=Fluid Generator
 
-# RF Storage
-neotech.rfstoragebasic.title=Basic RF Storage
-neotech.rfstorageadvanced.title=Advanced RF Storage
-neotech.rfstorageelite.title=Elite RF Storage
-neotech.rfstoragecreative.title=Creative RF Storage
-
 # Tree Farm
 neotech.treeFarm.title=Electric Logger
 
@@ -282,10 +271,6 @@ neotech.text.ioConfig=I/O Config
 neotech.text.information=Information
 
 neotech.text.empty=Empty
-
-neotech.text.redstoneFlux=Redstone Flux
-
-neotech.text.rfDiff=Energy Change
 
 neotech.text.energyStored=Energy Stored
 neotech.text.fluidStored=Fluid Stored
@@ -323,7 +308,7 @@ commands.addCrusherRecipe.usage=§cUsage: <input> <output> <outputAmount> <secon
 #######################
 
 # Electric Furnace
-neotech.electricFurnace.desc=The Electric Furnace is simply a furnace that runs on RF. It will smelt anything a vanilla furnace would.
+neotech.electricFurnace.desc=The Electric Furnace is simply a furnace that runs on energy. It will smelt anything a vanilla furnace would.
 neotech.electricFurnace.processorUpgrade.desc=Processors increase the speed of the machine, adding slight energy cost
 neotech.electricFurnace.memoryUpgrade.desc=Memory allows the machine to do multiple operations at once
 neotech.electricFurnace.controlUpgrade.desc=The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals.
@@ -347,15 +332,15 @@ neotech.alloyer.desc=The Electric Alloyer will take two input fluids and combine
 neotech.centrifuge.desc=The Electric Centrifuge will separate a fluid into the two components it is made of. Useful for separating the stone from molten metal.
 
 # Furnace Generator
-neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces Redstone Flux. It will burn anything that a vanilla furnace would
+neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces energy. It will burn anything that a vanilla furnace would
 neotech.furnaceGenerator.processorUpgrade.desc=Processors increase the generating time of the input, they will help to reduce the drawback of memory upgrades by up to half
 neotech.furnaceGenerator.memoryUpgrade.desc=Memory modules increase the amount of energy produced by allowing it to handle more operations per tick. It will also reduce the burn time of the input
 
 # Fluid Generator
-neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces Redstone Flux. By default, the Fluid Generator generates 175 RF/tick. You can add more liquid fuels via the config file
+neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces energy. By default, the Fluid Generator generates 175 Energy/tick. You can add more liquid fuels via the config file
 
 # Tree Farm
-neotech.treeFarm.desc=The Electric Logger is an automated tree farm. By default, the range is 3 blocks around the farm and a cost of 200 RF/block. The logger will chop trees that start on the same Y plane as the logger. Provide an axe to chop the wood, and you can optionally add shears to shear leaves. If you add shears, the leaves will not drop saplings. Saplings will be placed in the top right three slots. These are the ones that will be planted. Excess saplings will go to the main inventory. Automation and pipes will not pull from the sapling slots so you don't have to worry about those being emptied.
+neotech.treeFarm.desc=The Electric Logger is an automated tree farm. By default, the range is 3 blocks around the farm and a cost of 200 Energy/block. The logger will chop trees that start on the same Y plane as the logger. Provide an axe to chop the wood, and you can optionally add shears to shear leaves. If you add shears, the leaves will not drop saplings. Saplings will be placed in the top right three slots. These are the ones that will be planted. Excess saplings will go to the main inventory. Automation and pipes will not pull from the sapling slots so you don't have to worry about those being emptied.
 neotech.treeFarm.processorUpgrade.desc=Processors will increase the count of blocks broken.
 neotech.treeFarm.memoryUpgrade.desc=Increases the range of the farm
 

@@ -1,10 +1,8 @@
 package com.teambrmodding.neotech.common.container.machines.generators;
 
-import com.teambr.bookshelf.util.RenderUtils;
 import com.teambrmodding.neotech.common.container.machines.ContainerAbstractMachine;
 import com.teambrmodding.neotech.common.tiles.AbstractMachine;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraftforge.items.SlotItemHandler;
 

@@ -1,6 +1,5 @@
 package com.teambrmodding.neotech.common.metals.blocks;
 
-import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.Neotech;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.block.material.Material;
