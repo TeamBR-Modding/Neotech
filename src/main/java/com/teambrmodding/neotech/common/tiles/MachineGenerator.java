@@ -1,8 +1,10 @@
 package com.teambrmodding.neotech.common.tiles;
 
-import cofh.api.energy.IEnergyReceiver;
+import com.teambr.bookshelf.util.EnergyUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -58,17 +60,8 @@ public abstract class MachineGenerator extends AbstractMachine {
 
         // Transfer
         if(energyStorage.getEnergyStored() > 0) {
-            for(EnumFacing dir : EnumFacing.values()) {
-                if(worldObj.getTileEntity(pos.offset(dir)) instanceof IEnergyReceiver) {
-                    IEnergyReceiver energyReceiver = (IEnergyReceiver) worldObj.getTileEntity(pos.offset(dir));
-                    int energyDemand = energyReceiver.receiveEnergy(dir.getOpposite(), energyStorage.getEnergyStored(), true);
-                    if(energyDemand > 0) {
-                        int consumedEnergy = extractEnergy(energyDemand, false);
-                        energyReceiver.receiveEnergy(dir.getOpposite(), consumedEnergy, false);
-                        didWork = true;
-                    }
-                }
-            }
+            EnergyUtils.distributePowerToFaces(getCapability(CapabilityEnergy.ENERGY, null),
+                    worldObj, pos, energyStorage.getMaxExtract(), false);
         }
 
         // Generate

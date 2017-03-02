@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.common.tiles.machines.generators;
 
-import cofh.api.energy.IEnergyReceiver;
+import com.teambr.bookshelf.util.EnergyUtils;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
 import com.teambrmodding.neotech.common.tiles.MachineGenerator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 /**
  * This file was created for NeoTech
@@ -165,16 +166,8 @@ public class TileSolarPanel extends MachineGenerator {
     @Override
     public void tryOutput() {
         if(energyStorage.getEnergyStored() > 0) {
-            if (worldObj.getTileEntity(pos.offset(EnumFacing.DOWN)) instanceof IEnergyReceiver) {
-                IEnergyReceiver energyTile = (IEnergyReceiver) worldObj.getTileEntity(pos.offset(EnumFacing.DOWN));
-                int filledEnergy = energyTile.receiveEnergy(EnumFacing.UP,
-                        energyStorage.providePower(energyStorage.getMaxExtract(), false), true);
-                if(filledEnergy > 0) {
-                    energyTile.receiveEnergy(EnumFacing.UP,
-                            energyStorage.providePower(energyStorage.getMaxExtract(), false), true);
-                    sendValueToClient(UPDATE_ENERGY_ID, energyStorage.getCurrentStored());
-                }
-            }
+            EnergyUtils.distributePowerToFaces(this.getCapability(CapabilityEnergy.ENERGY, null),
+                    worldObj, pos, energyStorage.getMaxExtract(), false);
         }
     }
 
