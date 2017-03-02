@@ -2,7 +2,6 @@ package com.teambrmodding.neotech.common.tiles;
 
 import com.teambr.bookshelf.common.container.IInventoryCallback;
 import com.teambr.bookshelf.common.tiles.EnergyHandler;
-import com.teambr.bookshelf.common.tiles.IRedstoneAware;
 import com.teambr.bookshelf.common.tiles.InventoryHandler;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.collections.EnumInputOutputMode;
@@ -13,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -573,36 +571,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      */
     public int getSupposedEnergy() {
         return getDefaultEnergyStorageSize() * (getModifierForCategory(PSU));
-    }
-
-    /**
-     * Used to get how much power maxed by tier
-     * @param tier Tier
-     * @return Max output
-     */
-    @Override
-    protected int lookupMaxByTier(int tier) {
-        switch (getUpgradeCountByID(IUpgradeItem.TRANSFORMER) + 1) {
-            case 1 : return 32;
-            case 2 : return 128;
-            case 3 : return 512;
-            case 4 : return 2048;
-            case 5 : return 8192;
-            default : return 32;
-        }
-    }
-
-    /**
-     * Determine the tier of this energy source.
-     * 1 = LV, 2 = MV, 3 = MHV, 4 = HV, 5 = EV etc.
-     *
-     * @note Modifying the energy net from this method is disallowed.
-     * @return tier of this energy source
-     */
-    @Optional.Method(modid = "IC2")
-    @Override
-    public int getSourceTier() {
-        return getUpgradeCountByID(IUpgradeItem.TRANSFORMER) + 1;
     }
 
     /*******************************************************************************************************************

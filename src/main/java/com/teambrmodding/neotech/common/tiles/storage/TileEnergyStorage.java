@@ -1,14 +1,16 @@
 package com.teambrmodding.neotech.common.tiles.storage;
 
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyReceiver;
+import akka.japi.pf.FI;
 import com.teambr.bookshelf.common.container.IInventoryCallback;
 import com.teambr.bookshelf.common.tiles.EnergyHandler;
+import com.teambr.bookshelf.util.EnergyUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -77,31 +79,16 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
         if(inventoryContents.size() != 2)
             inventoryContents.setSize(2);
 
-        for (EnumFacing dir : EnumFacing.values()) {
-            if(worldObj.getTileEntity(pos.offset(dir)) != null &&
-                    worldObj.getTileEntity(pos.offset(dir)) instanceof IEnergyReceiver) {
-                IEnergyReceiver otherEnergy = (IEnergyReceiver) worldObj.getTileEntity(pos.offset(dir));
-                int demandedEnergy = otherEnergy.receiveEnergy(dir.getOpposite(), energyStorage.getEnergyStored(), true);
-                if(demandedEnergy > 0) {
-                    int actual = extractEnergy(dir.getOpposite(), demandedEnergy, false);
-                    otherEnergy.receiveEnergy(dir.getOpposite(), actual, false);
-                }
-            }
-        }
+        // Move out power
+        EnergyUtils.distributePowerToFaces(this, worldObj, pos, getMaxEnergyStored() / 6, false);
 
-        // Drain Item
-        if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).getItem() instanceof IEnergyContainerItem) {
-            IEnergyContainerItem energyItem = (IEnergyContainerItem) getStackInSlot(DRAIN_SLOT).getItem();
-            int drainAmount = receiveEnergy(energyItem.extractEnergy(getStackInSlot(DRAIN_SLOT), energyStorage.getMaxInsert(), true), true);
-            if(drainAmount > 0)
-                receiveEnergy(energyItem.extractEnergy(getStackInSlot(DRAIN_SLOT), drainAmount, false), false);
-        }
-
-        // Fill Item
-        if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).getItem() instanceof IEnergyContainerItem) {
-            IEnergyContainerItem energyItem = (IEnergyContainerItem) getStackInSlot(FILL_SLOT).getItem();
-            extractEnergy(energyItem.receiveEnergy(getStackInSlot(FILL_SLOT), Math.min(energyStorage.getMaxExtract(), tier == 4 ?
-                    energyStorage.getMaxEnergyStored() : energyStorage.getCurrentStored()), false), false);
+        // Transfer Energy In
+        if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).hasCapability(CapabilityEnergy.ENERGY, null)) {
+            IEnergyStorage drainingStack = getStackInSlot(DRAIN_SLOT).getCapability(CapabilityEnergy.ENERGY, null);
+            EnergyUtils.transferPower(drainingStack, this, getDefaultEnergyStorageSize() / 200, false);
+        } else if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).hasCapability(CapabilityEnergy.ENERGY, null)) {
+            IEnergyStorage fillStack = getStackInSlot(FILL_SLOT).getCapability(CapabilityEnergy.ENERGY, null);
+            EnergyUtils.transferPower(this, fillStack, getDefaultEnergyStorageSize() / 200, false);
         }
     }
 
@@ -191,7 +178,7 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
      */
     @Override
     protected int getDefaultEnergyStorageSize() {
-        return (int) (BASE_STORAGE * Math.pow(tier, tier));
+        return BASE_STORAGE * (tier * 8);
     }
 
     /**
@@ -338,7 +325,7 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
      */
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         return stack.getItem() != null &&
-                stack.getItem() instanceof IEnergyContainerItem;
+                stack.hasCapability(CapabilityEnergy.ENERGY, null);
     }
 
     @Override

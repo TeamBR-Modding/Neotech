@@ -199,12 +199,6 @@ public class CraftingRecipeManager {
                 "RTR",
                 "RRR", 'R', "ingotNeodymium", 'T', ItemManager.psu750W));
 
-        if(Loader.isModLoaded("IC2"))
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.transformer),
-                    "R  ",
-                    "RSR",
-                    "R  ", 'R', "blockCopper", 'S', "dustRedstone"));
-
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemManager.expansion), "ingotTormented", ItemManager.processorSingleCore));
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.redstoneControl), Items.REDSTONE, ItemManager.processorSingleCore);
         GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.networkCard), Items.ENDER_PEARL, ItemManager.processorSingleCore);

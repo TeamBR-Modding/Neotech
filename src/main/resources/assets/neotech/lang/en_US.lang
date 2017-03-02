@@ -169,8 +169,6 @@ item.neotech:PSU_500.name=500W Power Supply
 item.neotech:PSU_750.name=750W Power Supply
 item.neotech:PSU_960.name=960W Power Supply
 
-item.neotech:Transformer.name=IC2 Transformer
-
 item.neotech:Expansion_Card.name=Expansion Card
 item.neotech:Redstone_Circuit.name=Redstone Control
 item.neotech:Network_Card.name=Network Card
