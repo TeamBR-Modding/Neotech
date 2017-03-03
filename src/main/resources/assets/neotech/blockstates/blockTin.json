@@ -2,7 +2,7 @@
     "forge_marker" : 1,
     "defaults": {
         "textures": {
-            "all": "neotech:blocks/blockTin"
+            "all": "neotech:blocks/blocktin"
         }
     },
     "variants" : { "normal" : { "model": "neotech:block" } }

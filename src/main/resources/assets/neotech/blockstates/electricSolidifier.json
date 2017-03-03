@@ -18,7 +18,7 @@
         "isactive" : {
             "true" : {
                 "textures" : {
-                    "front" : "neotech:blocks/solidifierActive"
+                    "front" : "neotech:blocks/solidifieractive"
                 }
             },
             "false" :  {}

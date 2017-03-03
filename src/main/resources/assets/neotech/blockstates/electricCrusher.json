@@ -2,7 +2,7 @@
     "forge_marker" : 1,
     "defaults" : {
         "textures" : {
-            "front" : "neotech:blocks/electricCrusher_front"
+            "front" : "neotech:blocks/electriccrusher_front"
         },
         "model" : "neotech:machine",
         "uvlock" : true
@@ -17,7 +17,7 @@
         "isactive" : {
             "true" : {
                 "textures" : {
-                    "front" : "neotech:blocks/electricCrusherActive_front"
+                    "front" : "neotech:blocks/electriccrusheractive_front"
                 }
             },
             "false" :  {}

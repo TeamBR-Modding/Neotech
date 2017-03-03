@@ -2,7 +2,7 @@
   "forge_marker" : 1,
   "defaults": {
     "textures": {
-      "all": "neotech:blocks/blockOutlandish"
+      "all": "neotech:blocks/blockoutlandish"
     }
   },
   "variants" : { "normal" : { "model": "neotech:block" } }

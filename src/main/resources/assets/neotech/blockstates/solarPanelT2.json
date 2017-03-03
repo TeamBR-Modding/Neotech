@@ -4,7 +4,7 @@
     "textures" : {
       "rim": "minecraft:blocks/gold_block"
     },
-    "model" : "neotech:solarPanel"
+    "model" : "neotech:solarpanel"
   },
-  "variants" : { "normal" : { "model": "neotech:solarPanel" } }
+  "variants" : { "normal" : { "model": "neotech:solarpanel" } }
 }

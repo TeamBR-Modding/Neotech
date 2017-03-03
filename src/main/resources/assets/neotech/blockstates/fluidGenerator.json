@@ -2,7 +2,7 @@
   "forge_marker" : 1,
   "defaults" : {
     "textures" : {
-      "front" : "neotech:blocks/fluidGenerator_front"
+      "front" : "neotech:blocks/fluidgenerator_front"
     },
     "model" : "neotech:machine",
     "uvlock" : true
@@ -17,7 +17,7 @@
     "isactive" : {
       "true" : {
         "textures" : {
-          "front" : "neotech:blocks/fluidGeneratorActive_front"
+          "front" : "neotech:blocks/fluidgeneratoractive_front"
         }
       },
       "false" :  {}

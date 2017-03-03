@@ -2,7 +2,7 @@
 	"forge_marker" : 1,
 	"defaults": {
 		"textures": {
-			"all": "neotech:blocks/eliteEnergyStorage"
+			"all": "neotech:blocks/eliteenergystorage"
 		}
 	},
 	"variants" : { "normal" : { "model": "neotech:block" } }

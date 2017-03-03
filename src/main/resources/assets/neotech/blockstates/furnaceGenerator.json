@@ -2,7 +2,7 @@
     "forge_marker" : 1,
     "defaults" : {
         "textures" : {
-            "front" : "neotech:blocks/furnaceGenerator_front"
+            "front" : "neotech:blocks/furnacegenerator_front"
         },
         "model" : "neotech:machine",
         "uvlock" : true
@@ -17,7 +17,7 @@
         "isactive" : {
             "true" : {
                 "textures" : {
-                    "front" : "neotech:blocks/furnaceGeneratorActive_front"
+                    "front" : "neotech:blocks/furnacegeneratoractive_front"
                 }
             },
             "false" :  {}
