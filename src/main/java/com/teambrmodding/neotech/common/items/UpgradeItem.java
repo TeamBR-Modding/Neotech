@@ -92,7 +92,7 @@ public class UpgradeItem extends BaseItem implements IUpgradeItem, ICapabilityPr
      */
     @Override
     public int getMultiplier(ItemStack stack) {
-        return multiplier * (stackAware ? stack.stackSize : 1);
+        return multiplier * (stackAware ? stack.getCount() : 1);
     }
 
     /*******************************************************************************************************************

@@ -78,7 +78,7 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
     public CommandBase getCommand() {
         return new CommandBase() {
             @Override
-            public String getCommandName() {
+            public String getName() {
                 return "addFluidFuelValues";
             }
 
@@ -88,22 +88,22 @@ public class FluidFuelRecipeHandler extends AbstractRecipeHandler<FluidFuelRecip
             }
 
             @Override
-            public String getCommandUsage(ICommandSender sender) {
+            public String getUsage(ICommandSender sender) {
                 return "commands.addFluidFuelValues.usage";
             }
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length < 3)
-                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                    sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                 else if (getFluidStackFromString(args[0]) != null &&
                         getFluidStackFromString(args[0]).getFluid() != null) {
                     addRecipe(new FluidFuelRecipe(args[0], Integer.parseInt(args[1]), Integer.parseInt(args[2])));
-                    sender.addChatMessage(new TextComponentString(args[0] + " -> " + args[1] + " Added Successfully!"));
+                    sender.sendMessage(new TextComponentString(args[0] + " -> " + args[1] + " Added Successfully!"));
                     saveToFile();
                     return;
                 }
-                sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
             }
         };
     }

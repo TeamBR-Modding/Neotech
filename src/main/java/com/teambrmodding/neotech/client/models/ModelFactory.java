@@ -26,15 +26,15 @@ public class ModelFactory {
         // Tanks
 
         // Basic Tank Model
-        ModelResourceLocation basicTank = new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "basicTank"), "inventory");
+        ModelResourceLocation basicTank = new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "basictank"), "inventory");
         event.getModelRegistry().putObject(basicTank,
                 new ModelItemFluidStorage(event.getModelRegistry().getObject(basicTank)));
 
-        ModelResourceLocation advancedTank = new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "advancedTank"), "inventory");
+        ModelResourceLocation advancedTank = new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "advancedtank"), "inventory");
         event.getModelRegistry().putObject(advancedTank,
                 new ModelItemFluidStorage(event.getModelRegistry().getObject(advancedTank)));
 
-        ModelResourceLocation eliteTank = new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "eliteTank"), "inventory");
+        ModelResourceLocation eliteTank = new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "elitetank"), "inventory");
         event.getModelRegistry().putObject(eliteTank,
                 new ModelItemFluidStorage(event.getModelRegistry().getObject(eliteTank)));
     }

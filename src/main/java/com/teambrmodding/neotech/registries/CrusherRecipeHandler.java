@@ -159,7 +159,7 @@ public class CrusherRecipeHandler extends AbstractRecipeHandler<CrusherRecipe, I
                     if (!doesRecipeExist(inputString))
                         addRecipe(new CrusherRecipe(inputString,
                                 "dye:" +
-                                        String.valueOf(shapelessRecipe.getRecipeOutput().stackSize * 2) + ":" +
+                                        String.valueOf(shapelessRecipe.getRecipeOutput().getCount() * 2) + ":" +
                                         String.valueOf(shapelessRecipe.getRecipeOutput().getItemDamage()),
                                 "", 0));
                 }

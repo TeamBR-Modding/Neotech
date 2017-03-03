@@ -60,9 +60,9 @@ public abstract class AbstractRecipe<I, O> {
     public static String getItemStackString(@Nonnull ItemStack itemStack) {
         if(OreDictionary.getOreIDs(itemStack).length > 0) { // Do we have an ore dict tag for this?
             return OreDictionary.getOreName(OreDictionary.getOreIDs(itemStack)[0]) +
-                    ":" + itemStack.stackSize; // Return the ore dict tag, always preferred
+                    ":" + itemStack.getCount(); // Return the ore dict tag, always preferred
         }
-        return itemStack.getItem().getRegistryName().toString() + ":" + itemStack.getItemDamage() + ":" + itemStack.stackSize;
+        return itemStack.getItem().getRegistryName().toString() + ":" + itemStack.getItemDamage() + ":" + itemStack.getCount();
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class AbstractRecipe<I, O> {
     @Nullable
     public static ItemStack getItemStackFromString(String itemString) {
         if(itemString == null || itemString.isEmpty())
-            return null;
+            return ItemStack.EMPTY;
 
         String[] name = itemString.split(":");
         int damage = -1;
@@ -108,7 +108,7 @@ public abstract class AbstractRecipe<I, O> {
                 }
             default :
                 LogHelper.logger.error("[Neotech] Unable to get stack from string: " + itemString);
-                return null;
+                return ItemStack.EMPTY;
         }
     }
 
@@ -124,7 +124,7 @@ public abstract class AbstractRecipe<I, O> {
     @Nullable
     public static ItemStack getItemStackFromStringForDisplay(String itemString) {
         if(itemString == null || itemString.isEmpty())
-            return null;
+            return ItemStack.EMPTY;
 
         String[] name = itemString.split(":");
         int damage = -1;
@@ -153,7 +153,7 @@ public abstract class AbstractRecipe<I, O> {
                 }
             default :
                 LogHelper.logger.error("[Neotech] Unable to get stack from string: " + itemString);
-                return null;
+                return ItemStack.EMPTY;
         }
     }
 
@@ -166,7 +166,7 @@ public abstract class AbstractRecipe<I, O> {
     public boolean isItemStackValidForRecipeStack(String recipeStack, ItemStack inputStack) {
         ItemStack convertedStack = getItemStackFromString(recipeStack);
 
-        if(convertedStack == null)
+        if(convertedStack.isEmpty())
             return false;
 
         boolean oreDict = false;
@@ -211,7 +211,7 @@ public abstract class AbstractRecipe<I, O> {
 
         return oreDict ||  // Signaled to check special conditions
                 convertedStack.isItemEqual(inputStack) && // Our item matches the input
-                        convertedStack.stackSize <= inputStack.stackSize && // Input must be equal or larger
+                        convertedStack.getCount() <= inputStack.getCount() && // Input must be equal or larger
                         (convertedStack.getItemDamage() == -1 || convertedStack.getItemDamage() == inputStack.getItemDamage()) && // Our damage matches the input
                         ItemStack.areItemStackTagsEqual(convertedStack, inputStack); // Make sure tags are equal
 

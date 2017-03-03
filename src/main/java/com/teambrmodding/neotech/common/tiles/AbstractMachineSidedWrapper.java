@@ -65,7 +65,7 @@ public class AbstractMachineSidedWrapper implements IItemHandlerModifiable {
         int slot1 = getSlot(inv, slot, side);
 
         if (slot1 == -1)
-            return null;
+            return ItemStack.EMPTY;
 
         if (!inv.canInsertItem(slot1, stack, side))
             return stack;
@@ -81,12 +81,12 @@ public class AbstractMachineSidedWrapper implements IItemHandlerModifiable {
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         if (amount == 0)
-            return null;
+            return ItemStack.EMPTY;
 
         int slot1 = getSlot(inv, slot, side);
 
         if (slot1 == -1)
-            return null;
+            return ItemStack.EMPTY;
 
         ItemStack stackInSlot = inv.getStackInSlot(slot1);
 
@@ -94,18 +94,29 @@ public class AbstractMachineSidedWrapper implements IItemHandlerModifiable {
             return null;
 
         if (!inv.canExtractItem(slot1, stackInSlot, side))
-            return null;
+            return ItemStack.EMPTY;
 
         if (simulate) {
-            if (stackInSlot.stackSize < amount) {
+            if (stackInSlot.getCount() < amount) {
                 return stackInSlot.copy();
             } else {
                 ItemStack copy = stackInSlot.copy();
-                copy.stackSize = amount;
+                copy.setCount(amount);
                 return copy;
             }
         } else {
             return inv.extractItem(slot1, amount, simulate);
         }
+    }
+
+    /**
+     * Retrieves the maximum stack size allowed to exist in the given slot.
+     *
+     * @param slot Slot to query.
+     * @return The maximum stack size allowed in the slot.
+     */
+    @Override
+    public int getSlotLimit(int slot) {
+        return 64;
     }
 }

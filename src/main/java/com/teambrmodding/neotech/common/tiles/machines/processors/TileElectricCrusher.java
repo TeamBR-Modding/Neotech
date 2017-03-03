@@ -46,7 +46,7 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 3;
     }
 
@@ -118,14 +118,14 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
     @Override
     public boolean canProcess() {
         if(energyStorage.getEnergyStored() >= getEnergyCostPerTick()) {
-            if(getStackInSlot(INPUT_SLOT) == null || getOutput(getStackInSlot(INPUT_SLOT)) == null)
+            if(getStackInSlot(INPUT_SLOT).isEmpty() || getOutput(getStackInSlot(INPUT_SLOT)).isEmpty())
                 return false;
-            else if(getStackInSlot(OUTPUT_SLOT_1) == null)
+            else if(getStackInSlot(OUTPUT_SLOT_1).isEmpty())
                 return true;
             else if(!getStackInSlot(OUTPUT_SLOT_1).isItemEqual(getOutput(getStackInSlot(INPUT_SLOT))))
                 return false;
             else {
-                int minStackSize = getStackInSlot(OUTPUT_SLOT_1).stackSize + getOutput(getStackInSlot(INPUT_SLOT)).stackSize;
+                int minStackSize = getStackInSlot(OUTPUT_SLOT_1).getCount() + getOutput(getStackInSlot(INPUT_SLOT)).getCount();
                 return minStackSize <= 64 && minStackSize <= getOutput(getStackInSlot(INPUT_SLOT)).getMaxStackSize();
             }
         }
@@ -151,23 +151,23 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
                 ItemStack input = getStackInSlot(INPUT_SLOT).copy();
                 ItemStack recipeResult = getOutput(input);
 
-                getStackInSlot(INPUT_SLOT).stackSize -= 1;
-                if(getStackInSlot(INPUT_SLOT).stackSize <= 0)
-                    setStackInSlot(INPUT_SLOT, null);
+                getStackInSlot(INPUT_SLOT).setCount(getStackInSlot(INPUT_SLOT).getCount() - 1);
+                if(getStackInSlot(INPUT_SLOT).getCount() <= 0)
+                    setStackInSlot(INPUT_SLOT, ItemStack.EMPTY);
 
-                if(getStackInSlot(OUTPUT_SLOT_1) == null)
+                if(getStackInSlot(OUTPUT_SLOT_1).isEmpty())
                     setStackInSlot(OUTPUT_SLOT_1, recipeResult.copy());
                 else
-                    getStackInSlot(OUTPUT_SLOT_1).stackSize += recipeResult.stackSize;
+                    getStackInSlot(OUTPUT_SLOT_1).setCount(getStackInSlot(OUTPUT_SLOT_1).getCount() + recipeResult.getCount());
 
                 if(hasUpgradeByID(IUpgradeItem.EXPANSION_CARD)) {
                     CrusherRecipe recipe =
                             ((CrusherRecipeHandler) RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER)).getRecipe(input);
                     if(recipe != null && recipe.outputSecondary != null && recipe.secondaryOutputPercentChance > 0) {
-                        if(recipe.secondaryOutputPercentChance > worldObj.rand.nextInt(100)) {
+                        if(recipe.secondaryOutputPercentChance > world.rand.nextInt(100)) {
                             ItemStack extraStack = AbstractRecipe.getItemStackFromString(recipe.outputSecondary);
-                            if(extraStack != null) {
-                                if(getStackInSlot(OUTPUT_SLOT_2) == null)
+                            if(!extraStack.isEmpty()) {
+                                if(getStackInSlot(OUTPUT_SLOT_2).isEmpty())
                                     setStackInSlot(OUTPUT_SLOT_2, extraStack);
                                 else
                                     InventoryUtils.tryMergeStacks(extraStack, getStackInSlot(OUTPUT_SLOT_2));
@@ -190,7 +190,7 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
     @Override
     public ItemStack getOutput(ItemStack input) {
         return RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER).isValidInput(input) ?
-                ((CrusherRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER)).getOutput(input).getLeft().getLeft() : null;
+                ((CrusherRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.CRUSHER)).getOutput(input).getLeft().getLeft() : ItemStack.EMPTY;
     }
 
     /**
@@ -215,7 +215,7 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values())
             if(canInputFromSide(dir, true))
-                InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, INPUT_SLOT,
+                InventoryUtils.moveItemInto(world.getTileEntity(pos.offset(dir)), -1, this, INPUT_SLOT,
                         64, dir.getOpposite(), true, false, true);
     }
 
@@ -226,10 +226,10 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
     public void tryOutput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canOutputFromSide(dir, true))
-                InventoryUtils.moveItemInto(this, OUTPUT_SLOT_1, worldObj.getTileEntity(pos.offset(dir)), -1,
+                InventoryUtils.moveItemInto(this, OUTPUT_SLOT_1, world.getTileEntity(pos.offset(dir)), -1,
                         64, dir.getOpposite(), true, false, true);
             else if(canOutputFromSide(dir, false))
-                InventoryUtils.moveItemInto(this, OUTPUT_SLOT_2, worldObj.getTileEntity(pos.offset(dir)), -1,
+                InventoryUtils.moveItemInto(this, OUTPUT_SLOT_2, world.getTileEntity(pos.offset(dir)), -1,
                         64, dir.getOpposite(), true, false, true);
         }
     }
@@ -392,7 +392,7 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
      */
     @Override
     public void spawnActiveParticles(double xPos, double yPos, double zPos) {
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos + 0.4, zPos, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos + 0.4, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos + 0.4, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos + 0.4, zPos, 0, 0, 0);
     }
 }

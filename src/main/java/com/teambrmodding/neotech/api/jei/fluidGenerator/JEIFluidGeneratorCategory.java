@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -105,14 +106,20 @@ public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGenera
         powerBar.draw(minecraft, 13, 9);
     }
 
+    /**
+     * Get the tooltip for whatever's under the mouse.
+     * ItemStack and fluid tooltips are already handled by JEI, this is for anything else.
+     * <p>
+     * To add to ingredient tooltips, see {@link IGuiIngredientGroup#addTooltipCallback(ITooltipCallback)}
+     *
+     * @param mouseX the X position of the mouse, relative to the recipe.
+     * @param mouseY the Y position of the mouse, relative to the recipe.
+     * @return tooltip strings. If there is no tooltip at this position, return an empty list.
+     * @since JEI 4.2.5
+     */
     @Override
-    public void drawAnimations(Minecraft minecraft) {
-        // Deprecated, moved to drawExtras
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, JEIFluidGeneratorRecipeWrapper recipeWrapper) {
-        // Deprecated
+    public List<String> getTooltipStrings(int mouseX, int mouseY) {
+        return Collections.emptyList();
     }
 
     /**

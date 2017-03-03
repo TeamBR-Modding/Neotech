@@ -92,7 +92,7 @@ public class TileBasicTank extends FluidHandler {
         int light = getBrightness();
         if(lastLightLevel != light) {
             lastLightLevel = light;
-            worldObj.setLightFor(EnumSkyBlock.BLOCK, pos, light);
+            world.setLightFor(EnumSkyBlock.BLOCK, pos, light);
         }
     }
 }

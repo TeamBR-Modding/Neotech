@@ -44,8 +44,8 @@ public class TileTreeFarm extends AbstractMachine {
     public static final int AXE_SLOT    = 0;
     public static final int SHEARS_SLOT = 1;
 
-    protected final int SAPLING_SLOTS_START = getInitialSize() - 3;
-    protected final int SAPLING_SLOTS_END   =  getInitialSize();
+    protected final int SAPLING_SLOTS_START = getInventorySize() - 3;
+    protected final int SAPLING_SLOTS_END   =  getInventorySize();
 
     protected boolean isBuildingCache;
     Queue<BlockPos> cache = new PriorityQueue<>(Comparator.comparingDouble(o -> o.distanceSq(pos.getX(), pos.getY(), pos.getZ())));
@@ -78,7 +78,7 @@ public class TileTreeFarm extends AbstractMachine {
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 18;
     }
 
@@ -156,7 +156,7 @@ public class TileTreeFarm extends AbstractMachine {
         // Find the base of a tree
         Iterable<BlockPos> blocksWithin = BlockPos.getAllInBox(corner1, corner2);
         for(BlockPos blockPos : blocksWithin) {
-            if(worldObj.getBlockState(blockPos).getBlock().isWood(worldObj, blockPos)) {
+            if(world.getBlockState(blockPos).getBlock().isWood(world, blockPos)) {
                 logPosition = blockPos;
                 break;
             }
@@ -168,15 +168,15 @@ public class TileTreeFarm extends AbstractMachine {
             treeStack.push(logPosition);
             while(!treeStack.isEmpty()) {
                 BlockPos lookingPosition = treeStack.pop();
-                if(worldObj.getBlockState(lookingPosition).getBlock().isWood(worldObj, lookingPosition) ||
-                        worldObj.getBlockState(lookingPosition).getBlock() instanceof BlockLeaves) {
+                if(world.getBlockState(lookingPosition).getBlock().isWood(world, lookingPosition) ||
+                        world.getBlockState(lookingPosition).getBlock() instanceof BlockLeaves) {
                     Iterable<BlockPos> blockAround = BlockPos.getAllInBox(lookingPosition.offset(EnumFacing.DOWN).offset(EnumFacing.SOUTH).offset(EnumFacing.WEST),
                             lookingPosition.offset(EnumFacing.UP).offset(EnumFacing.NORTH).offset(EnumFacing.EAST));
                     for(BlockPos attachedPos : blockAround) {
                         if (!cache.contains(attachedPos) &&
                                 attachedPos.distanceSq(pos.getX(), pos.getY(), pos.getZ()) <= 1000 &&
-                                (worldObj.getBlockState(attachedPos).getBlock().isWood(worldObj, attachedPos) ||
-                                        worldObj.getBlockState(attachedPos).getBlock() instanceof BlockLeaves)) {
+                                (world.getBlockState(attachedPos).getBlock().isWood(world, attachedPos) ||
+                                        world.getBlockState(attachedPos).getBlock() instanceof BlockLeaves)) {
                             treeStack.push(attachedPos);
                             cache.add(attachedPos);
                         }
@@ -197,13 +197,13 @@ public class TileTreeFarm extends AbstractMachine {
                 break;
             else {
                 BlockPos logPosition = cache.peek();
-                if(worldObj.getBlockState(logPosition).getBlock() != null) {
-                    if(worldObj.getBlockState(logPosition).getBlock().isWood(worldObj, logPosition)) {
+                if(world.getBlockState(logPosition).getBlock() != null) {
+                    if(world.getBlockState(logPosition).getBlock().isWood(world, logPosition)) {
                         if(chopBlock(logPosition, AXE_SLOT))
                             cache.poll();
                         else
                             break;
-                    } else if(worldObj.getBlockState(logPosition).getBlock() instanceof BlockLeaves) {
+                    } else if(world.getBlockState(logPosition).getBlock() instanceof BlockLeaves) {
                         if(chopBlock(logPosition, SHEARS_SLOT))
                             cache.poll();
                         else
@@ -226,13 +226,13 @@ public class TileTreeFarm extends AbstractMachine {
     protected boolean chopBlock(BlockPos blockPosition, int slot) {
         List<ItemStack> drops = new ArrayList<>();
         if(getStackInSlot(slot) != null && slot == SHEARS_SLOT) { // Shears give block
-            drops = Collections.singletonList(new ItemStack(worldObj.getBlockState(blockPosition).getBlock(), 1,
-                    worldObj.getBlockState(blockPosition).getBlock().damageDropped(worldObj.getBlockState(blockPosition))));
+            drops = Collections.singletonList(new ItemStack(world.getBlockState(blockPosition).getBlock(), 1,
+                    world.getBlockState(blockPosition).getBlock().damageDropped(world.getBlockState(blockPosition))));
 
         } else if((slot != AXE_SLOT) || (getStackInSlot(slot) != null && slot == AXE_SLOT))// Break block, get drops
             drops =
-                    worldObj.getBlockState(blockPosition).getBlock().getDrops(worldObj, blockPosition,
-                            worldObj.getBlockState(blockPosition),
+                    world.getBlockState(blockPosition).getBlock().getDrops(world, blockPosition,
+                            world.getBlockState(blockPosition),
                             getStackInSlot(slot) != null ?
                             EnchantmentHelper.getEnchantmentLevel(
                                     Enchantment.getEnchantmentByLocation("fortune"),
@@ -245,9 +245,9 @@ public class TileTreeFarm extends AbstractMachine {
         }
 
         if(blockAddedToInv) {
-            worldObj.setBlockToAir(blockPosition);
+            world.setBlockToAir(blockPosition);
             if(getStackInSlot(slot) != null &&
-                    getStackInSlot(slot).attemptDamageItem(1, worldObj.rand))
+                    getStackInSlot(slot).attemptDamageItem(1, world.rand))
                 setStackInSlot(slot, null);
             energyStorage.providePower(costToOperate(), true);
             sendValueToClient(UPDATE_ENERGY_ID, energyStorage.getEnergyStored());
@@ -262,7 +262,7 @@ public class TileTreeFarm extends AbstractMachine {
      */
     protected void pullInSaplings() {
         List<EntityItem> itemsOnGround =
-                worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(
+                world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(
                         pos.getX() - getChoppingRange() - 4, pos.getY(), pos.getZ() - getChoppingRange() - 4,
                         pos.getX() + getChoppingRange() + 5, pos.getY() + 2, pos.getZ() + getChoppingRange() + 5));
 
@@ -281,12 +281,12 @@ public class TileTreeFarm extends AbstractMachine {
             for(int x = pos.getX() - getChoppingRange() + 1; x < pos.getX() + getChoppingRange(); x++) {
                 for(int z = pos.getZ() - getChoppingRange() + 1; z < pos.getZ() + getChoppingRange(); z++) {
                     BlockPos blockPos = new BlockPos(x, pos.getY(), z);
-                    if(worldObj.isAirBlock(blockPos) && worldObj.getBlockState(blockPos.down()) != null &&
-                            (worldObj.getBlockState(blockPos.down()).getBlock() == Blocks.DIRT ||
-                                    worldObj.getBlockState(blockPos.down()).getBlock() == Blocks.GRASS)) {
+                    if(world.isAirBlock(blockPos) && world.getBlockState(blockPos.down()) != null &&
+                            (world.getBlockState(blockPos.down()).getBlock() == Blocks.DIRT ||
+                                    world.getBlockState(blockPos.down()).getBlock() == Blocks.GRASS)) {
                         IBlockState blockState = getNextSaplingAndReduce();
                         if(blockState != null)
-                            worldObj.setBlockState(blockPos, blockState);
+                            world.setBlockState(blockPos, blockState);
                     }
                 }
             }
@@ -299,7 +299,7 @@ public class TileTreeFarm extends AbstractMachine {
      */
     protected boolean hasSaplings() {
         for(int x = SAPLING_SLOTS_START; x < SAPLING_SLOTS_END; x++)
-            if(getStackInSlot(x) != null)
+            if(!getStackInSlot(x).isEmpty())
                 return true;
         return false;
     }
@@ -312,12 +312,12 @@ public class TileTreeFarm extends AbstractMachine {
     @Nullable
     protected IBlockState getNextSaplingAndReduce() {
         for(int x = SAPLING_SLOTS_START; x < SAPLING_SLOTS_END; x++) {
-            if(getStackInSlot(x) != null) {
+            if(!getStackInSlot(x).isEmpty()) {
                 Block block = Block.getBlockFromItem(getStackInSlot(x).getItem());
                 int damage = getStackInSlot(x).getItemDamage();
-                getStackInSlot(x).stackSize -= 1;
-                if(getStackInSlot(x).stackSize <= 0)
-                    setStackInSlot(x, null);
+                getStackInSlot(x).setCount(getStackInSlot(x).getCount() - 1);
+                if(getStackInSlot(x).getCount() <= 0)
+                    setStackInSlot(x, ItemStack.EMPTY);
                 return block.getStateFromMeta(damage);
             }
         }
@@ -333,24 +333,24 @@ public class TileTreeFarm extends AbstractMachine {
         boolean sapling = Block.getBlockFromItem(stack.getItem()) instanceof IGrowable;
         if(sapling) {
             for(int x = SAPLING_SLOTS_START; x < SAPLING_SLOTS_END; x++) {
-                if(getStackInSlot(x) == null) {
+                if(getStackInSlot(x).isEmpty()) {
                     setStackInSlot(x, stack);
                     return true;
                 } else if(InventoryUtils.canStacksMerge(getStackInSlot(x), stack)) {
                     InventoryUtils.tryMergeStacks(stack, getStackInSlot(x));
-                    if(stack.stackSize <= 0)
+                    if(stack.getCount() <= 0)
                         return true;
                 }
             }
         }
 
         for (int x = 3; x < SAPLING_SLOTS_START; x++) {
-            if(getStackInSlot(x) == null) {
+            if(getStackInSlot(x).isEmpty()) {
                 setStackInSlot(x, stack);
                 return true;
             } else if(InventoryUtils.canStacksMerge(getStackInSlot(x), stack)) {
                 InventoryUtils.tryMergeStacks(stack, getStackInSlot(x));
-                if(stack.stackSize <= 0)
+                if(stack.getCount() <= 0)
                     return true;
             }
         }
@@ -364,10 +364,10 @@ public class TileTreeFarm extends AbstractMachine {
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canInputFromSide(dir, true))
-                InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, AXE_SLOT,
+                InventoryUtils.moveItemInto(world.getTileEntity(pos.offset(dir)), -1, this, AXE_SLOT,
                         64, dir.getOpposite(), true, true, false);
             if(canInputFromSide(dir, false))
-                InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, SHEARS_SLOT,
+                InventoryUtils.moveItemInto(world.getTileEntity(pos.offset(dir)), -1, this, SHEARS_SLOT,
                         64, dir.getOpposite(), true, true, false);
         }
     }
@@ -380,7 +380,7 @@ public class TileTreeFarm extends AbstractMachine {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canOutputFromSide(dir, true))
                 for(Integer x : getOutputSlots(getModeForSide(dir))) {
-                    InventoryUtils.moveItemInto(this, x, worldObj.getTileEntity(pos.offset(dir)), -1,
+                    InventoryUtils.moveItemInto(this, x, world.getTileEntity(pos.offset(dir)), -1,
                             64, dir.getOpposite(), true, false, true);
                 }
         }
@@ -441,7 +441,7 @@ public class TileTreeFarm extends AbstractMachine {
      */
     @Override
     public int[] getOutputSlots(EnumInputOutputMode mode) {
-        int[] returnArray =  new int[getInitialSize() - 5];
+        int[] returnArray =  new int[getInventorySize() - 5];
         for(int x = 0; x < returnArray.length; x++)
             returnArray[x] = x + 2;
         return returnArray;
@@ -455,7 +455,7 @@ public class TileTreeFarm extends AbstractMachine {
      */
     @Override
     public int[] getSlotsForFace(EnumFacing face) {
-        int[] returnArray =  new int[getInitialSize() - 5];
+        int[] returnArray =  new int[getInventorySize() - 5];
         for(int x = 0; x < returnArray.length; x++)
             returnArray[x] = x;
         return returnArray;
@@ -472,7 +472,7 @@ public class TileTreeFarm extends AbstractMachine {
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, EnumFacing dir) {
         return !isDisabled(dir) && (canOutputFromSide(dir, true) || getModeForSide(dir) == EnumInputOutputMode.DEFAULT) &&
-                slot > SHEARS_SLOT && slot < getInitialSize() - 3;
+                slot > SHEARS_SLOT && slot < getInventorySize() - 3;
     }
 
     /**
@@ -498,17 +498,17 @@ public class TileTreeFarm extends AbstractMachine {
      */
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        if(index >= getInitialSize() - 3) { // Check if sapling
-            return stack != null && stack.getItem() != null &&
+        if(index >= getInventorySize() - 3) { // Check if sapling
+            return !stack.isEmpty() && stack.getItem() != null &&
                     Block.getBlockFromItem(stack.getItem()) instanceof IGrowable;
         }
 
         // Can only be tool then
         switch (index) {
             case AXE_SLOT:
-                return stack != null && stack.getItem().getToolClasses(stack).contains("axe");
+                return !stack.isEmpty() && stack.getItem().getToolClasses(stack).contains("axe");
             case SHEARS_SLOT:
-                return stack != null && stack.getItem() instanceof ItemShears;
+                return !stack.isEmpty() && stack.getItem() instanceof ItemShears;
             default:
                 return false;
         }
@@ -557,14 +557,14 @@ public class TileTreeFarm extends AbstractMachine {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerTreeFarm(player.inventory, this);
     }
 
@@ -573,14 +573,14 @@ public class TileTreeFarm extends AbstractMachine {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiTreeFarm(player, this);
     }
 

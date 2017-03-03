@@ -53,19 +53,19 @@ public class ContainerElectricFurnace extends ContainerAbstractMachine {
              */
             @Override
             protected void onCrafting(ItemStack stack) {
-                stack.onCrafting(thePlayer.worldObj, thePlayer, stack.stackSize);
+                stack.onCrafting(thePlayer.world, thePlayer, stack.getCount());
 
-                if (!thePlayer.worldObj.isRemote) {
-                    int orbCount = stack.stackSize;
+                if (!thePlayer.world.isRemote) {
+                    int orbCount = stack.getCount();
                     float smeltRecipeExperience = FurnaceRecipes.instance().getSmeltingExperience(stack);
 
                     if (smeltRecipeExperience == 0.0F) {
                         orbCount = 0;
                     }
                     else if (smeltRecipeExperience < 1.0F) {
-                        int experienceTotal = MathHelper.floor_float((float)orbCount * smeltRecipeExperience);
+                        int experienceTotal = MathHelper.floor((float)orbCount * smeltRecipeExperience);
 
-                        if (experienceTotal < MathHelper.ceiling_float_int((float)orbCount * smeltRecipeExperience) &&
+                        if (experienceTotal < MathHelper.ceil((float)orbCount * smeltRecipeExperience) &&
                                 Math.random() < (double)((float)orbCount * smeltRecipeExperience - (float)experienceTotal)) {
                             ++experienceTotal;
                         }
@@ -76,8 +76,8 @@ public class ContainerElectricFurnace extends ContainerAbstractMachine {
                     while (orbCount > 0) {
                         int experienceLeft = EntityXPOrb.getXPSplit(orbCount);
                         orbCount -= experienceLeft;
-                        thePlayer.worldObj.spawnEntityInWorld(
-                                new EntityXPOrb(thePlayer.worldObj, thePlayer.posX, thePlayer.posY + 0.5D, thePlayer.posZ + 0.5D, experienceLeft));
+                        thePlayer.world.spawnEntity(
+                                new EntityXPOrb(thePlayer.world, thePlayer.posX, thePlayer.posY + 0.5D, thePlayer.posZ + 0.5D, experienceLeft));
                     }
                 }
 

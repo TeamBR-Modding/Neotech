@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 /**
@@ -88,7 +89,7 @@ public class SolidifierRecipeHandler extends
     public CommandBase getCommand() {
         return new CommandBase() {
             @Override
-            public String getCommandName() {
+            public String getName() {
                 return "addSolidifierRecipe";
             }
 
@@ -98,14 +99,14 @@ public class SolidifierRecipeHandler extends
             }
 
             @Override
-            public String getCommandUsage(ICommandSender sender) {
+            public String getUsage(ICommandSender sender) {
                 return "commands.addSolidifierRecipe.usage";
             }
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length != 3 || (args.length == 2 && !args[0].equalsIgnoreCase("hands")))
-                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                    sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                 else if (args.length == 2 && args[0].equalsIgnoreCase("hands")) { // Allow user to hold recipe
 
                     String mode = args[1];
@@ -118,7 +119,7 @@ public class SolidifierRecipeHandler extends
                         requiredMode = SolidifierMode.NUGGET_MODE;
                     else {
                         // Conditions for hands usage not met
-                        sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                        sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                         return;
                     }
 
@@ -142,7 +143,7 @@ public class SolidifierRecipeHandler extends
                                     // Is a valid FluidStack
                                     if (stackInTank != null && stackInTank.getFluid() != null) {
                                         addRecipe(new SolidifierRecipe(requiredMode, getItemStackString(mainHandStack), getFluidStackString(stackInTank)));
-                                        sender.addChatMessage(new TextComponentString(getItemStackString(mainHandStack) + " -> " +
+                                        sender.sendMessage(new TextComponentString(getItemStackString(mainHandStack) + " -> " +
                                                 getFluidStackString(stackInTank) + " Added Successfully!"));
                                         saveToFile();
                                         return;
@@ -153,7 +154,7 @@ public class SolidifierRecipeHandler extends
                     }
 
                     // Conditions for hands usage not met
-                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                    sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                 } else { // Not hands, has three args
                     String fluidStackInput = args[1];
                     String itemStackOutput = args[2];
@@ -168,16 +169,16 @@ public class SolidifierRecipeHandler extends
                         requiredMode = SolidifierMode.NUGGET_MODE;
                     else {
                         // Conditions for hands usage not met
-                        sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                        sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                         return;
                     }
 
                     if (getFluidStackFromString(fluidStackInput) != null && getItemStackFromString(itemStackOutput) != null) {
                         addRecipe(new SolidifierRecipe(requiredMode, fluidStackInput, itemStackOutput));
-                        sender.addChatMessage(new TextComponentString(fluidStackInput + " -> " + itemStackOutput + " Added Successfully!"));
+                        sender.sendMessage(new TextComponentString(fluidStackInput + " -> " + itemStackOutput + " Added Successfully!"));
                         saveToFile();
                     } else
-                        sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                        sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                 }
             }
         };
@@ -242,5 +243,26 @@ public class SolidifierRecipeHandler extends
                 getItemStackString(new ItemStack(Items.NETHER_STAR))));
 
         saveToFile();
+    }
+
+    /**
+     * Used to get the output for the handler
+     *
+     * @param input Input
+     * @return Output object
+     */
+    @Nullable
+    @Override
+    public ItemStack getOutput(Pair<SolidifierMode, FluidStack> input) {
+        if(input == null) // Safety Check
+            return ItemStack.EMPTY;
+
+        // Check for registered
+        for(SolidifierRecipe recipe : recipes) {
+            if(recipe.getOutput(input) != null)
+                return recipe.getOutput(input);
+        }
+
+        return ItemStack.EMPTY;
     }
 }

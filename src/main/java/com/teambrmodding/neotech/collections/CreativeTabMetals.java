@@ -4,10 +4,12 @@ import com.teambrmodding.neotech.managers.MetalManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,8 +40,8 @@ public class CreativeTabMetals extends CreativeTabs {
      * @return We are returning the forge bucket
      */
     @Override
-    public Item getTabIconItem() {
-        return ForgeModContainer.getInstance().universalBucket;
+    public ItemStack getTabIconItem() {
+        return new ItemStack(ForgeModContainer.getInstance().universalBucket);
     }
 
     /**
@@ -48,9 +50,9 @@ public class CreativeTabMetals extends CreativeTabs {
     @Override
     public ItemStack getIconItemStack() {
         ItemStack stack = new ItemStack(ForgeModContainer.getInstance().universalBucket);
-        if(FluidRegistry.isFluidRegistered("copper"))
-            ForgeModContainer.getInstance().universalBucket
-                    .fill(stack, new FluidStack(FluidRegistry.getFluid("copper"), 1000), true);
+        /*if(FluidRegistry.isFluidRegistered("copper"))
+            new ItemStack(ForgeModContainer.getInstance().universalBucket).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).
+                    fill(new FluidStack(FluidRegistry.getFluid("copper"), 1000), true);*/
         return stack;
     }
 
@@ -60,19 +62,20 @@ public class CreativeTabMetals extends CreativeTabs {
      */
     @SideOnly(Side.CLIENT)
     @Override
-    public void displayAllRelevantItems(List<ItemStack> list) {
+    public void displayAllRelevantItems(NonNullList<ItemStack> list) {
         super.displayAllRelevantItems(list);
 
-        UniversalBucket universalBucket = ForgeModContainer.getInstance().universalBucket;
+       /* UniversalBucket universalBucket = ForgeModContainer.getInstance().universalBucket;
         if(universalBucket != null) {
             for (String metalString : MetalManager.metalRegistry.keySet()) {
                 MetalManager.Metal metal = MetalManager.metalRegistry.get(metalString);
                 if(metal.getFluid() != null) {
                     ItemStack stack = new ItemStack(universalBucket);
-                    universalBucket.fill(stack, new FluidStack(metal.getFluid(), 1000), true);
+                    new ItemStack(ForgeModContainer.getInstance().universalBucket).getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+                            .fill(new FluidStack(metal.getFluid(), 1000), true);
                     list.add(stack);
                 }
             }
-        }
+        }*/
     }
 }

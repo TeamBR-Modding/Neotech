@@ -61,7 +61,7 @@ public abstract class MachineGenerator extends AbstractMachine {
         // Transfer
         if(energyStorage.getEnergyStored() > 0) {
             EnergyUtils.distributePowerToFaces(getCapability(CapabilityEnergy.ENERGY, null),
-                    worldObj, pos, energyStorage.getMaxExtract(), false);
+                    world, pos, energyStorage.getMaxExtract(), false);
         }
 
         // Generate

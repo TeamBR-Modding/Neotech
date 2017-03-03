@@ -22,11 +22,6 @@ public class JEICrucibleRecipeHandler implements IRecipeHandler<JEICrucibleRecip
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return NeotechJEIPlugin.CRUCIBLE_UUID;
-    }
-
-    @Override
     public String getRecipeCategoryUid(JEICrucibleRecipeWrapper recipe) {
         return NeotechJEIPlugin.CRUCIBLE_UUID;
     }

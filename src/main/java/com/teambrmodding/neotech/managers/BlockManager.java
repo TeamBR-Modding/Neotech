@@ -82,11 +82,11 @@ public class BlockManager {
         basicRFStorage = new BlockEnergyStorage("basicEnergyStorage", 1);
         registerBlock(basicRFStorage, new ItemBlockEnergyStorage(basicRFStorage), TileEnergyStorage.class, null);
         advancedRFStorage = new BlockEnergyStorage("advancedEnergyStorage", 2);
-        registerBlock(advancedRFStorage, new ItemBlockEnergyStorage(advancedRFStorage), TileEnergyStorage.class, null);
+        registerBlock(advancedRFStorage, new ItemBlockEnergyStorage(advancedRFStorage), null, null);
         eliteRFStorage = new BlockEnergyStorage("eliteEnergyStorage", 3);
-        registerBlock(eliteRFStorage, new ItemBlockEnergyStorage(eliteRFStorage), TileEnergyStorage.class, null);
+        registerBlock(eliteRFStorage, new ItemBlockEnergyStorage(eliteRFStorage), null, null);
         creativeRFStorage = new BlockEnergyStorage("creativeEnergyStorage", 4);
-        registerBlock(creativeRFStorage, new ItemBlockEnergyStorage(creativeRFStorage), TileEnergyStorage.class, null);
+        registerBlock(creativeRFStorage, new ItemBlockEnergyStorage(creativeRFStorage), null, null);
 
         // Tanks
         basicTank = new BlockFluidStorage("basicTank", TileBasicTank.class);
@@ -102,8 +102,8 @@ public class BlockManager {
 
         // Solar Panels
         solarPanelT1 = registerBlock(new BlockSolarPanel("solarPanelT1", 1), TileSolarPanel.class);
-        solarPanelT2 = registerBlock(new BlockSolarPanel("solarPanelT2", 2), TileSolarPanel.class);
-        solarPanelT3 = registerBlock(new BlockSolarPanel("solarPanelT3", 3), TileSolarPanel.class);
+        solarPanelT2 = registerBlock(new BlockSolarPanel("solarPanelT2", 2));
+        solarPanelT3 = registerBlock(new BlockSolarPanel("solarPanelT3", 3));
     }
 
     /**

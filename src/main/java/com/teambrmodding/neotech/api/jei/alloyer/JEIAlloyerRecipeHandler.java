@@ -22,11 +22,6 @@ public class JEIAlloyerRecipeHandler implements IRecipeHandler<JEIAlloyerRecipeW
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return NeotechJEIPlugin.ALLOYER_UUID;
-    }
-
-    @Override
     public String getRecipeCategoryUid(JEIAlloyerRecipeWrapper recipe) {
         return NeotechJEIPlugin.ALLOYER_UUID;
     }

@@ -22,11 +22,6 @@ public class JEIFluidGeneratorHandler implements IRecipeHandler<JEIFluidGenerato
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return NeotechJEIPlugin.FLUID_GEN_UUID;
-    }
-
-    @Override
     public String getRecipeCategoryUid(JEIFluidGeneratorRecipeWrapper recipe) {
         return NeotechJEIPlugin.FLUID_GEN_UUID;
     }

@@ -9,6 +9,7 @@ import com.teambrmodding.neotech.world.OreGeneratorManager;
 import net.minecraft.command.ServerCommandManager;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -57,8 +58,8 @@ public class Neotech {
     // Our main Creative Tab
     public static CreativeTabs tabNeotech = new CreativeTabs("tabNeotech") {
         @Override
-        public Item getTabIconItem() {
-            return Item.getItemFromBlock(BlockManager.eliteRFStorage);
+        public ItemStack getTabIconItem() {
+            return new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage));
         }
     };
 

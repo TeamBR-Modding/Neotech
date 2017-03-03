@@ -9,19 +9,19 @@ itemGroup.tabNeotechMetals=NeoTech: Metals
 #######################
 
 # Metals
-tile.neotech:oreCopper.name=Copper Ore
-tile.neotech:oreTin.name=Tin Ore
-tile.neotech:oreLead.name=Lead Ore
-tile.neotech:oreSilver.name=Silver Ore
-tile.neotech:blockCopper.name=Block of Copper
-tile.neotech:blockTin.name=Block of Tin
-tile.neotech:blockLead.name=Block of Lead
-tile.neotech:blockBronze.name=Block of Bronze
-tile.neotech:blockSteel.name=Block of Steel
-tile.neotech:blockSilver.name=Block of Silver
-tile.neotech:blockTormented.name=Tormented Block
-tile.neotech:blockOutlandish.name=Outlandish Block
-tile.neotech:blockNeodymium.name=Neodymium Block
+tile.neotech:orecopper.name=Copper Ore
+tile.neotech:oretin.name=Tin Ore
+tile.neotech:orelead.name=Lead Ore
+tile.neotech:oresilver.name=Silver Ore
+tile.neotech:blockcopper.name=Block of Copper
+tile.neotech:blocktin.name=Block of Tin
+tile.neotech:blocklead.name=Block of Lead
+tile.neotech:blockbronze.name=Block of Bronze
+tile.neotech:blocksteel.name=Block of Steel
+tile.neotech:blocksilver.name=Block of Silver
+tile.neotech:blocktormented.name=Tormented Block
+tile.neotech:blockoutlandish.name=Outlandish Block
+tile.neotech:blockneodymium.name=Neodymium Block
 
 #######################
 # Fluids
@@ -115,63 +115,63 @@ tile.neotech:fluid.neodymium.name=Molten Neodymium
 #######################
 
 # Metals
-item.neotech:dustIron.name=Iron Dust
-item.neotech:nuggetIron.name=Iron Nugget
-item.neotech:dustGold.name=Gold Dust
-item.neotech:dustCopper.name=Copper Dust
-item.neotech:ingotCopper.name=Copper Ingot
-item.neotech:nuggetCopper.name=Copper Nugget
-item.neotech:dustBronze.name=Bronze Dust
-item.neotech:ingotBronze.name=Bronze Ingot
-item.neotech:nuggetBronze.name=Bronze Nugget
-item.neotech:dustTin.name=Tin Dust
-item.neotech:ingotTin.name=Tin Ingot
-item.neotech:nuggetTin.name=Tin Nugget
-item.neotech:dustLead.name=Lead Dust
-item.neotech:ingotLead.name=Lead Ingot
-item.neotech:nuggetLead.name=Lead Nugget
-item.neotech:dustSteel.name=Steel Dust
-item.neotech:ingotSteel.name=Steel Ingot
-item.neotech:nuggetSteel.name=Steel Nugget
-item.neotech:dustSilver.name=Silver Dust
-item.neotech:ingotSilver.name=Silver Ingot
-item.neotech:nuggetSilver.name=Silver Nugget
+item.neotech:dustiron.name=Iron Dust
+item.neotech:nuggetiron.name=Iron Nugget
+item.neotech:dustgold.name=Gold Dust
+item.neotech:dustcopper.name=Copper Dust
+item.neotech:ingotcopper.name=Copper Ingot
+item.neotech:nuggetcopper.name=Copper Nugget
+item.neotech:dustbronze.name=Bronze Dust
+item.neotech:ingotbronze.name=Bronze Ingot
+item.neotech:nuggetbronze.name=Bronze Nugget
+item.neotech:dusttin.name=Tin Dust
+item.neotech:ingottin.name=Tin Ingot
+item.neotech:nuggettin.name=Tin Nugget
+item.neotech:dustlead.name=Lead Dust
+item.neotech:ingotlead.name=Lead Ingot
+item.neotech:nuggetlead.name=Lead Nugget
+item.neotech:duststeel.name=Steel Dust
+item.neotech:ingotsteel.name=Steel Ingot
+item.neotech:nuggetsteel.name=Steel Nugget
+item.neotech:dustsilver.name=Silver Dust
+item.neotech:ingotsilver.name=Silver Ingot
+item.neotech:nuggetsilver.name=Silver Nugget
 
 # Alloys
-item.neotech:nuggetTormented.name=Tormented Nugget
-item.neotech:dustTormented.name=Tormented Dust
-item.neotech:ingotTormented.name=Tormented Ingot
-item.neotech.nuggetOutlandish.name=Outlandish Nugget
-item.neotech:dustOutlandish.name=Outlandish Dust
-item.neotech:ingotOutlandish.name=Outlandish Ingot
-item.neotech:nuggetNeodymium.name=Neodymium Nugget
-item.neotech:dustNeodymium.name=Neodymium Dust
-item.neotech:ingotNeodymium.name=Neodymium Ingot
+item.neotech:nuggettormented.name=Tormented Nugget
+item.neotech:dusttormented.name=Tormented Dust
+item.neotech:ingottormented.name=Tormented Ingot
+item.neotech.nuggetoutlandish.name=Outlandish Nugget
+item.neotech:dustoutlandish.name=Outlandish Dust
+item.neotech:ingotoutlandish.name=Outlandish Ingot
+item.neotech:nuggetneodymium.name=Neodymium Nugget
+item.neotech:dustneodymium.name=Neodymium Dust
+item.neotech:ingotneodymium.name=Neodymium Ingot
 
 # Upgrades
-item.neotech:CPU_1.name=Single Core Processor
-item.neotech:CPU_2.name=Dual Core Processor
-item.neotech:CPU_3.name=Quad Core Processor
-item.neotech:CPU_4.name=Octa Core Processor
+item.neotech:cpu_1.name=Single Core Processor
+item.neotech:cpu_2.name=Dual Core Processor
+item.neotech:cpu_3.name=Quad Core Processor
+item.neotech:cpu_4.name=Octa Core Processor
 
-item.neotech:DDR1.name=DDR1 Memory Module
-item.neotech:DDR2.name=DDR2 Memory Module
-item.neotech:DDR3.name=DDR3 Memory Module
-item.neotech:DDR4.name=DDR4 Memory Module
+item.neotech:ddr1.name=DDR1 Memory Module
+item.neotech:ddr2.name=DDR2 Memory Module
+item.neotech:ddr3.name=DDR3 Memory Module
+item.neotech:ddr4.name=DDR4 Memory Module
 
-item.neotech:HDD_64.name=64G Hard Drive
-item.neotech:HDD_256.name=256G Hard Drive
-item.neotech:HDD_512.name=512G Hard Drive
-item.neotech:HDD_1T.name=1T Hard Drive
+item.neotech:hdd_64.name=64G Hard Drive
+item.neotech:hdd_256.name=256G Hard Drive
+item.neotech:hdd_512.name=512G Hard Drive
+item.neotech:hdd_1t.name=1T Hard Drive
 
-item.neotech:PSU_250.name=250W Power Supply
-item.neotech:PSU_500.name=500W Power Supply
-item.neotech:PSU_750.name=750W Power Supply
-item.neotech:PSU_960.name=960W Power Supply
+item.neotech:psu_250.name=250W Power Supply
+item.neotech:psu_500.name=500W Power Supply
+item.neotech:psu_750.name=750W Power Supply
+item.neotech:psu_960.name=960W Power Supply
 
-item.neotech:Expansion_Card.name=Expansion Card
-item.neotech:Redstone_Circuit.name=Redstone Control
-item.neotech:Network_Card.name=Network Card
+item.neotech:expansion_card.name=Expansion Card
+item.neotech:redstone_circuit.name=Redstone Control
+item.neotech:network_card.name=Network Card
 
 # Tools
 item.neotech:wrench.name=Wrench

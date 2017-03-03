@@ -215,11 +215,11 @@ public class ModelItemFluidStorage implements IBakedModel, IPerspectiveAwareMode
          */
         @Override
         public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
-            if(stack.hasTagCompound() && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null) &&
+            if(stack.hasTagCompound() && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) &&
                     originalModel instanceof ModelItemFluidStorage && stack.getItem() instanceof ItemBlockFluidStorage) {
                 // Grab the info needed
                 ModelItemFluidStorage model = (ModelItemFluidStorage) originalModel;
-                IFluidHandler tank          = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                IFluidHandler tank          = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 
                 // Attempt to extract fluid
                 FluidStack currentStored = FluidUtil.getFluidContained(stack);

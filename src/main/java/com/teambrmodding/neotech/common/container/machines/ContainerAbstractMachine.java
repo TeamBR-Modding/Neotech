@@ -67,6 +67,6 @@ public class ContainerAbstractMachine extends BaseContainer {
      */
     @Override
     public int getInventorySizeNotPlayer() {
-        return abstractMachine.getInitialSize() + abstractMachine.upgradeInventory.getSlots();
+        return abstractMachine.getInventorySize() + abstractMachine.upgradeInventory.getSlots();
     }
 }

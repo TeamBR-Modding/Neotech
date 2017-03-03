@@ -52,7 +52,7 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 0;
     }
 
@@ -227,10 +227,10 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canInputFromSide(dir, true)) {
-                if(worldObj.getTileEntity(pos.offset(dir)) != null &&
-                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
+                if(world.getTileEntity(pos.offset(dir)) != null &&
+                        world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
                     IFluidHandler otherTank =
-                            worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
+                            world.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
 
                     // Try match existing
                     if(tanks[INPUT_TANK].getFluid() != null && otherTank.drain(tanks[INPUT_TANK].getFluid(), false) != null) {
@@ -260,10 +260,10 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
     @Override
     public void tryOutput() {
         for(EnumFacing dir : EnumFacing.values()) {
-            if(worldObj.getTileEntity(pos.offset(dir)) != null &&
-                    worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
+            if(world.getTileEntity(pos.offset(dir)) != null &&
+                    world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
                 IFluidHandler otherTank =
-                        worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
+                        world.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
 
                 if(canOutputFromSide(dir, true)) {
                     if(tanks[OUTPUT_TANK_1].getFluid() != null && otherTank.fill(tanks[OUTPUT_TANK_1].getFluid(), false) > 0) {
@@ -418,14 +418,14 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerCentrifuge(player.inventory, this);
     }
 
@@ -434,14 +434,14 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiCentrifuge(player, this);
     }
 
@@ -494,8 +494,8 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
      */
     @Override
     public void spawnActiveParticles(double x, double y, double z) {
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
     }
 }

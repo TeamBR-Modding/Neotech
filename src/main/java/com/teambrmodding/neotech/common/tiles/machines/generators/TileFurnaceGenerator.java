@@ -51,7 +51,7 @@ public class TileFurnaceGenerator extends MachineGenerator {
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 1;
     }
 
@@ -123,17 +123,17 @@ public class TileFurnaceGenerator extends MachineGenerator {
     @Override
     public boolean manageBurnTime() {
         if(energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored() && burnTime <= 1) {
-            if(getStackInSlot(INPUT_SLOT) != null) {
+            if(!getStackInSlot(INPUT_SLOT).isEmpty()) {
                 burnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(INPUT_SLOT));
 
                 if(burnTime > 0) {
-                    if(getStackInSlot(INPUT_SLOT).getItem().getContainerItem(getStackInSlot(INPUT_SLOT)) == null)
-                        getStackInSlot(INPUT_SLOT).stackSize -= 1;
+                    if(getStackInSlot(INPUT_SLOT).getItem().getContainerItem(getStackInSlot(INPUT_SLOT)).isEmpty())
+                        getStackInSlot(INPUT_SLOT).shrink(1);
                     else
                         setStackInSlot(INPUT_SLOT, getStackInSlot(INPUT_SLOT).getItem().getContainerItem(getStackInSlot(INPUT_SLOT)));
 
-                    if(getStackInSlot(INPUT_SLOT).stackSize <= 0)
-                        setStackInSlot(INPUT_SLOT, null);
+                    if(getStackInSlot(INPUT_SLOT).getCount() <= 0)
+                        setStackInSlot(INPUT_SLOT, ItemStack.EMPTY);
 
                     currentObjectBurnTime = burnTime;
                     return true;
@@ -157,9 +157,9 @@ public class TileFurnaceGenerator extends MachineGenerator {
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if (canInputFromSide(dir, true)) {
-                if (worldObj.getTileEntity(pos.offset(dir)) != null &&
-                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
-                    IFluidHandler otherTank = worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
+                if (world.getTileEntity(pos.offset(dir)) != null &&
+                        world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
+                    IFluidHandler otherTank = world.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
                     FluidStack drained = FluidUtil.tryFluidTransfer(this, otherTank,
                             tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), false);
                     if (drained != null) {
@@ -167,9 +167,9 @@ public class TileFurnaceGenerator extends MachineGenerator {
                                 tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), false);
                         return;
                     }
-                } else if(worldObj.getTileEntity(pos.offset(dir)) != null &&
-                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite())) {
-                    IItemHandler otherInv = worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite());
+                } else if(world.getTileEntity(pos.offset(dir)) != null &&
+                        world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite())) {
+                    IItemHandler otherInv = world.getTileEntity(pos.offset(dir)).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.getOpposite());
                     if(InventoryUtils.moveItemInto(otherInv, -1, this, INPUT_SLOT, 64,
                             dir, true, true, false))
                         return;
@@ -348,14 +348,14 @@ public class TileFurnaceGenerator extends MachineGenerator {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerFurnaceGenerator(player.inventory, this);
     }
 
@@ -364,14 +364,14 @@ public class TileFurnaceGenerator extends MachineGenerator {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiFurnaceGenerator(player, this);
     }
 
@@ -422,7 +422,7 @@ public class TileFurnaceGenerator extends MachineGenerator {
      */
     @Override
     public void spawnActiveParticles(double x, double y, double z) {
-        worldObj.spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
     }
 }

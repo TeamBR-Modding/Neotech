@@ -22,11 +22,6 @@ public class JEISolidifierRecipeHandler implements IRecipeHandler<JEISolidifierR
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return NeotechJEIPlugin.SOLIDIFIER_UUID;
-    }
-
-    @Override
     public String getRecipeCategoryUid(JEISolidifierRecipeWrapper recipe) {
         return  NeotechJEIPlugin.SOLIDIFIER_UUID;
     }

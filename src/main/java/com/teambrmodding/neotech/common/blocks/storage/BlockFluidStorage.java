@@ -70,16 +70,15 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
      * @return True to prevent future logic
      */
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state,
-                                    EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side,
-                                    float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         // Make sure our storage is reachable
         if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileBasicTank) {
             TileBasicTank fluidStorage = (TileBasicTank) worldIn.getTileEntity(pos);
 
             // First interact with fluid handlers
             IFluidHandler fluidHandler = fluidStorage.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-            if(FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn)) {
+            if(FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), fluidHandler, playerIn).isSuccess()) {
                 return true;
             }
 
@@ -90,11 +89,11 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
                     String display = fluidStack.getLocalizedName() + ": " +
                             ClientUtils.formatNumber(fluidStorage.tanks[TileBasicTank.TANK].getFluidAmount()) + " / " +
                             ClientUtils.formatNumber(fluidStorage.tanks[TileBasicTank.TANK].getCapacity());
-                    playerIn.addChatMessage(new TextComponentString(display));
+                    playerIn.sendMessage(new TextComponentString(display));
                 }
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     /**
@@ -123,7 +122,7 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
             TileBasicTank savableTile = (TileBasicTank) worldIn.getTileEntity(pos);
 
             ItemStack stack = FluidUtil.tryFillContainer(getStackDroppedByWrench(worldIn, pos),
-                    savableTile, savableTile.tanks[TileBasicTank.TANK].getCapacity(), null, true);
+                    savableTile, savableTile.tanks[TileBasicTank.TANK].getCapacity(), null, true).getResult();
 
             if(stack == null)
                 stack = getStackDroppedByWrench(worldIn, pos);

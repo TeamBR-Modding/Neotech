@@ -80,7 +80,7 @@ public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRec
     public CommandBase getCommand() {
         return new CommandBase() {
             @Override
-            public String getCommandName() {
+            public String getName() {
                 return "addCentrifugeRecipe";
             }
 
@@ -90,14 +90,14 @@ public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRec
             }
 
             @Override
-            public String getCommandUsage(ICommandSender sender) {
+            public String getUsage(ICommandSender sender) {
                 return "commands.addCentrifugeRecipe.usage";
             }
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length < 3)
-                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addCentrifugeRecipe.usage")));
+                    sender.sendMessage(new TextComponentString(I18n.translateToLocal("commands.addCentrifugeRecipe.usage")));
                 else {
                     String input = args[0];
                     String outputOne = args[1];
@@ -105,10 +105,10 @@ public class CentrifugeRecipeHandler extends AbstractRecipeHandler<CentrifugeRec
 
                     if (getFluidStackFromString(input) != null && getFluidStackFromString(outputOne) != null && getFluidStackFromString(outputTwo) != null) {
                         addRecipe(new CentrifugeRecipe(input, outputOne, outputTwo));
-                        sender.addChatMessage(new TextComponentString(input + " -> " + outputOne + " + " + outputTwo + " Added Successfully!"));
+                        sender.sendMessage(new TextComponentString(input + " -> " + outputOne + " + " + outputTwo + " Added Successfully!"));
                         saveToFile();
                     } else
-                        sender.addChatMessage(new TextComponentString(input + " -> " + outputOne + " + " + outputTwo + " Failed To Add"));
+                        sender.sendMessage(new TextComponentString(input + " -> " + outputOne + " + " + outputTwo + " Failed To Add"));
                 }
             }
         };

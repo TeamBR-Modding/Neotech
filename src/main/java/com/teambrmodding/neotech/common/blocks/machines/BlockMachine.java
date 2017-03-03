@@ -75,7 +75,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
      */
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        int playerFacingDirection = placer == null ? 0 : MathHelper.floor_float((placer.rotationYaw / 90.F) + 0.5F) & 3;
+        int playerFacingDirection = placer == null ? 0 : MathHelper.floor((placer.rotationYaw / 90.F) + 0.5F) & 3;
         EnumFacing facing = EnumFacing.getHorizontal(playerFacingDirection).getOpposite();
         worldIn.setBlockState(pos, getDefaultState().withProperty(FOUR_WAY, facing));
         WorldUtils.writeStackNBTToBlock(worldIn, pos, stack);
@@ -86,9 +86,8 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
      * @return True to prevent future logic
      */
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state,
-                                    EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side,
-                                    float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         // Make sure our machine is reachable
         if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof AbstractMachine) {
             AbstractMachine machine = (AbstractMachine) worldIn.getTileEntity(pos);
@@ -96,7 +95,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
             // First interact with fluid handlers
             if(machine.isFluidHandler()) {
                 IFluidHandler fluidHandler = machine.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-                if(FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, playerIn)) {
+                if(FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), fluidHandler, playerIn).isSuccess()) {
                     return true;
                 }
             }
@@ -107,7 +106,7 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
                 return true;
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     /**

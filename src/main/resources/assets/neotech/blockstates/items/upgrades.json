@@ -98,12 +98,12 @@
       },
       "redstone_circuit": {
         "textures": {
-          "layer0": "neotech:items/redstoneControl"
+          "layer0": "neotech:items/redstonecontrol"
         }
       },
       "network_card": {
         "textures": {
-          "layer0": "neotech:items/networkCard"
+          "layer0": "neotech:items/networkcard"
         }
       }
     }

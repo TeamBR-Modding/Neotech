@@ -51,7 +51,7 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 0;
     }
 
@@ -215,9 +215,9 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(!isDisabled(dir)) {
-                if(worldObj.getTileEntity(pos.offset(dir)) != null &&
-                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
-                    IFluidHandler otherTank = worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
+                if(world.getTileEntity(pos.offset(dir)) != null &&
+                        world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
+                    IFluidHandler otherTank = world.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
 
                     // Attempt fill left tank
                     if(canInputFromSide(dir, true)) {
@@ -281,10 +281,10 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
     public void tryOutput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canOutputFromSide(dir, true)) {
-                if(worldObj.getTileEntity(pos.offset(dir)) != null &&
-                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
+                if(world.getTileEntity(pos.offset(dir)) != null &&
+                        world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
                     IFluidHandler otherTank =
-                            worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
+                            world.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
 
                     // If we have something, try move out
                     if(tanks[OUTPUT_TANK].getFluid() != null && otherTank.fill(tanks[OUTPUT_TANK].getFluid(), false) > 0) {
@@ -439,14 +439,14 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerAlloyer(player.inventory, this);
     }
 
@@ -455,14 +455,14 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiAlloyer(player, this);
     }
 
@@ -515,8 +515,8 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
      */
     @Override
     public void spawnActiveParticles(double x, double y, double z) {
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0, 0, 0);
     }
 }

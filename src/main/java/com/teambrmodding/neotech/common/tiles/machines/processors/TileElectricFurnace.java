@@ -42,7 +42,7 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 2;
     }
 
@@ -111,14 +111,14 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
     @Override
     public boolean canProcess() {
         if(energyStorage.getEnergyStored() >= getEnergyCostPerTick()) {
-            if(getStackInSlot(INPUT_SLOT) == null || getOutput(getStackInSlot(INPUT_SLOT)) == null)
+            if(getStackInSlot(INPUT_SLOT).isEmpty() || getOutput(getStackInSlot(INPUT_SLOT)).isEmpty())
                 return false;
-            else if(getStackInSlot(OUTPUT_SLOT) == null)
+            else if(getStackInSlot(OUTPUT_SLOT).isEmpty())
                 return true;
             else if(!getStackInSlot(OUTPUT_SLOT).isItemEqual(getOutput(getStackInSlot(INPUT_SLOT))))
                 return false;
             else {
-                int minStackSize = getStackInSlot(OUTPUT_SLOT).stackSize + getOutput(getStackInSlot(INPUT_SLOT)).stackSize;
+                int minStackSize = getStackInSlot(OUTPUT_SLOT).getCount() + getOutput(getStackInSlot(INPUT_SLOT)).getCount();
                 return minStackSize <= 64 && minStackSize <= getOutput(getStackInSlot(INPUT_SLOT)).getMaxStackSize();
             }
         }
@@ -143,14 +143,14 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
             if(canProcess()) {
                 ItemStack recipeResult = getOutput(getStackInSlot(INPUT_SLOT));
 
-                getStackInSlot(INPUT_SLOT).stackSize -= 1;
-                if(getStackInSlot(INPUT_SLOT).stackSize <= 0)
-                    setStackInSlot(INPUT_SLOT, null);
+                getStackInSlot(INPUT_SLOT).shrink(1);
+                if(getStackInSlot(INPUT_SLOT).getCount() <= 0)
+                    setStackInSlot(INPUT_SLOT, ItemStack.EMPTY);
 
-                if(getStackInSlot(OUTPUT_SLOT) == null)
+                if(getStackInSlot(OUTPUT_SLOT).isEmpty())
                     setStackInSlot(OUTPUT_SLOT, recipeResult.copy());
                 else
-                    getStackInSlot(OUTPUT_SLOT).stackSize += recipeResult.stackSize;
+                    getStackInSlot(OUTPUT_SLOT).grow(recipeResult.getCount());
             } else
                 break;
         }
@@ -191,7 +191,7 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values())
             if(canInputFromSide(dir, true))
-                InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, INPUT_SLOT,
+                InventoryUtils.moveItemInto(world.getTileEntity(pos.offset(dir)), -1, this, INPUT_SLOT,
                         64, dir.getOpposite(), true, true, false);
     }
 
@@ -202,7 +202,7 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
     public void tryOutput() {
         for(EnumFacing dir : EnumFacing.values())
             if(canOutputFromSide(dir, true))
-                InventoryUtils.moveItemInto(this, OUTPUT_SLOT, worldObj.getTileEntity(pos.offset(dir)), -1,
+                InventoryUtils.moveItemInto(this, OUTPUT_SLOT, world.getTileEntity(pos.offset(dir)), -1,
                         64, dir.getOpposite(), true, false, true);
     }
 
@@ -255,14 +255,14 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerElectricFurnace(player.inventory, this);
     }
 
@@ -271,14 +271,14 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiElectricFurnace(player, this);
     }
 
@@ -335,7 +335,7 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
      */
     @Override
     public void spawnActiveParticles(double xPos, double yPos, double zPos) {
-        worldObj.spawnParticle(EnumParticleTypes.REDSTONE,   xPos, yPos, zPos, 0.01, 0.49, 0.72);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.REDSTONE,   xPos, yPos, zPos, 0.01, 0.49, 0.72);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
     }
 }

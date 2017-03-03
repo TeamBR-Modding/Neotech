@@ -59,7 +59,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 1;
     }
 
@@ -140,7 +140,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
                     if (tanks[TANK].getFluidAmount() >= AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount) {
                         ItemStack ourStack = getStackInSlot(OUTPUT_SLOT);
                         if (output.getItem() == ourStack.getItem() && output.getItemDamage() == ourStack.getItemDamage() &&
-                                ourStack.stackSize + output.stackSize <= ourStack.getMaxStackSize())
+                                ourStack.getCount() + output.getCount() <= ourStack.getMaxStackSize())
                             return true;
                     }
                 }
@@ -173,12 +173,12 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
                     FluidStack drainedStack = drain(AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount, false);
                     if(drainedStack != null && drainedStack.amount == AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount &&
                             output != null && (getStackInSlot(OUTPUT_SLOT) == null ||
-                            getStackInSlot(OUTPUT_SLOT).stackSize + output.stackSize
+                            getStackInSlot(OUTPUT_SLOT).getCount() + output.getCount()
                                     <= getStackInSlot(OUTPUT_SLOT).getMaxStackSize())) {
                         // Drain
                         drain(AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount, true);
-                        if(getStackInSlot(OUTPUT_SLOT) != null)
-                            getStackInSlot(OUTPUT_SLOT).stackSize += output.stackSize;
+                        if(!getStackInSlot(OUTPUT_SLOT).isEmpty())
+                            getStackInSlot(OUTPUT_SLOT).grow(output.getCount());
                         else
                             setStackInSlot(OUTPUT_SLOT, output);
                     }
@@ -208,7 +208,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
      */
     @Override
     public ItemStack getOutputForStack(ItemStack input) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     /*******************************************************************************************************************
@@ -222,9 +222,9 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canInputFromSide(dir, true)) {
-                if(worldObj.getTileEntity(pos.offset(dir)) != null &&
-                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
-                    IFluidHandler otherTank = worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
+                if(world.getTileEntity(pos.offset(dir)) != null &&
+                        world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
+                    IFluidHandler otherTank = world.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
 
                     // Try and match us
                     if(tanks[TANK].getFluid() != null && otherTank.drain(tanks[TANK].getFluid(), false) != null) {
@@ -255,7 +255,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     public void tryOutput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canOutputFromSide(dir, true))
-                InventoryUtils.moveItemInto(this, OUTPUT_SLOT, worldObj.getTileEntity(pos.offset(dir)), -1,
+                InventoryUtils.moveItemInto(this, OUTPUT_SLOT, world.getTileEntity(pos.offset(dir)), -1,
                         64, dir.getOpposite(), true, false, true);
         }
     }
@@ -421,14 +421,14 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerSolidifier(player.inventory, this);
     }
 
@@ -437,14 +437,14 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiSolidifier(player, this);
     }
 
@@ -501,8 +501,8 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
      */
     @Override
     public void spawnActiveParticles(double xPos, double yPos, double zPos) {
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
     }
 }

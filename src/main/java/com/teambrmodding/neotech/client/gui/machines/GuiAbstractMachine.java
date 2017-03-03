@@ -42,7 +42,7 @@ public abstract class GuiAbstractMachine<C extends ContainerAbstractMachine> ext
     // This object holds an instance of the previous inventory, calls to check for changes
     protected InventoryHandler lastInventory = new InventoryHandler() {
         @Override
-        protected int getInitialSize() {
+        protected int getInventorySize() {
             return 6;
         }
 

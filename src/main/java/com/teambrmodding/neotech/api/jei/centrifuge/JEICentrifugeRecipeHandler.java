@@ -22,11 +22,6 @@ public class JEICentrifugeRecipeHandler implements IRecipeHandler<JEICentrifugeR
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return NeotechJEIPlugin.CENTRIFUGE_UUID;
-    }
-
-    @Override
     public String getRecipeCategoryUid(JEICentrifugeRecipeWrapper recipe) {
         return NeotechJEIPlugin.CENTRIFUGE_UUID;
     }

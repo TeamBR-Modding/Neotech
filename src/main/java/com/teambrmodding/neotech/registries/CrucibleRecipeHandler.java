@@ -85,7 +85,7 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
     public CommandBase getCommand() {
         return new CommandBase() {
             @Override
-            public String getCommandName() {
+            public String getName() {
                 return "addCrucibleRecipe";
             }
 
@@ -95,14 +95,14 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
             }
 
             @Override
-            public String getCommandUsage(ICommandSender sender) {
+            public String getUsage(ICommandSender sender) {
                 return "commands.addCrucibleRecipe.usage";
             }
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length != 2 || (args.length == 1 && !args[0].equalsIgnoreCase("hands")))
-                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                    sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                 else if (args.length == 1 && args[0].equalsIgnoreCase("hands")) {
                     // Must be a player using the command as we need their hands
                     if (sender.getCommandSenderEntity() instanceof EntityPlayer) {
@@ -124,7 +124,7 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
                                     // Is a valid FluidStack
                                     if (stackInTank != null && stackInTank.getFluid() != null) {
                                         addRecipe(new CrucibleRecipe(getItemStackString(offHandStack), getFluidStackString(stackInTank)));
-                                        sender.addChatMessage(new TextComponentString(getItemStackString(offHandStack) +
+                                        sender.sendMessage(new TextComponentString(getItemStackString(offHandStack) +
                                                 " -> " + getFluidStackString(stackInTank) + " Added Successfully!"));
                                         saveToFile();
                                         return;
@@ -135,18 +135,18 @@ public class CrucibleRecipeHandler extends AbstractRecipeHandler<CrucibleRecipe,
                     }
 
                     // Conditions for hands usage not met
-                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                    sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                 } else {
                     String itemStackInput = args[0];
                     String fluidStackOutput = args[1];
 
                     if (getItemStackFromString(itemStackInput) != null && getFluidStackFromString(fluidStackOutput) != null) {
                         addRecipe(new CrucibleRecipe(itemStackInput, fluidStackOutput));
-                        sender.addChatMessage(new TextComponentString(itemStackInput +
+                        sender.sendMessage(new TextComponentString(itemStackInput +
                                 " -> " + fluidStackOutput + " Added Successfully!"));
                         saveToFile();
                     } else
-                        sender.addChatMessage(new TextComponentString(I18n.translateToLocal(getCommandUsage(sender))));
+                        sender.sendMessage(new TextComponentString(I18n.translateToLocal(getUsage(sender))));
                 }
             }
         };

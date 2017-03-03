@@ -94,9 +94,8 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
      * @return True to prevent future logic
      */
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state,
-                                    EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side,
-                                    float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+                                    EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         // Make sure our machine is reachable
         if(worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof TileEnergyStorage) {
             // Open a GUI
@@ -105,7 +104,7 @@ public class BlockEnergyStorage extends BaseBlock implements IOpensGui, IToolabl
                 return true;
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
     /**

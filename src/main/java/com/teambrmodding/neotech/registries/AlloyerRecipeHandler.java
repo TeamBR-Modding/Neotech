@@ -79,7 +79,7 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipe, P
         return new CommandBase() {
 
             @Override
-            public String getCommandName() {
+            public String getName() {
                 return "addAlloyRecipe";
             }
 
@@ -89,14 +89,14 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipe, P
             }
 
             @Override
-            public String getCommandUsage(ICommandSender sender) {
+            public String getUsage(ICommandSender sender) {
                 return "commands.addAlloyRecipe";
             }
 
             @Override
             public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
                 if (args.length < 3)
-                    sender.addChatMessage(new TextComponentString(I18n.translateToLocal("commands.addAlloyRecipe.usage")));
+                    sender.sendMessage(new TextComponentString(I18n.translateToLocal("commands.addAlloyRecipe.usage")));
                 else {
                     String input = args[0];
                     String input2 = args[1];
@@ -104,10 +104,10 @@ public class AlloyerRecipeHandler extends AbstractRecipeHandler<AlloyerRecipe, P
 
                     if (getFluidStackFromString(input) != null && getFluidStackFromString(input2) != null && getFluidStackFromString(output) != null) {
                         addRecipe(new AlloyerRecipe(input, input2, output));
-                        sender.addChatMessage(new TextComponentString(input + " + " + input2 + " -> " + output + " Added successfully"));
+                        sender.sendMessage(new TextComponentString(input + " + " + input2 + " -> " + output + " Added successfully"));
                         saveToFile();
                     } else
-                        sender.addChatMessage(new TextComponentString(input + " + " + input2 + " -> " + output + " Failed Adding"));
+                        sender.sendMessage(new TextComponentString(input + " + " + input2 + " -> " + output + " Failed Adding"));
                 }
             }
         };

@@ -8,10 +8,12 @@ import com.teambrmodding.neotech.collections.EnumInputOutputMode;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.CapabilityLoadManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -25,11 +27,11 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Stack;
 
 import static com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem.ENUM_UPGRADE_CATEGORY.*;
 
@@ -78,14 +80,12 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      *******************************************************************************************************************/
 
     // A list to hold all callback objects
-    private List<IInventoryCallback> inventoryCallbacks = new ArrayList<>();
+    private List<IInventoryCallback> callBacks = new ArrayList<>();
     // List of Inventory contents
-    public Stack<ItemStack> inventoryContents = new Stack<>();
+    public NonNullList<ItemStack> inventoryContents = NonNullList.withSize(getInventorySize(), ItemStack.EMPTY);
 
     // NBT Tags
-    protected static final String SIZE_INVENTORY_NBT_TAG = "Size:";
-    protected static final String SLOT_INVENTORY_NBT_TAG = "Slot:";
-    protected static final String ITEMS_NBT_TAG          = "Items:";
+    protected static final String ITEMS_NBT_TAG          = "Inventory";
 
     // Side Handlers
     private IItemHandler handlerTop    = new AbstractMachineSidedWrapper(this, EnumFacing.UP);
@@ -113,7 +113,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
 
     public InventoryHandler upgradeInventory = new InventoryHandler() {
         @Override
-        protected int getInitialSize() {
+        protected int getInventorySize() {
             return 6;
         }
 
@@ -131,6 +131,9 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
         }
     };
 
+    // NBT Tags
+    public static final String UPGRADE_INVENTORY_NBT = "UpgradeInventory";
+
     /*******************************************************************************************************************
      * Constructor                                                                                                     *
      *******************************************************************************************************************/
@@ -146,9 +149,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
 
         // FluidHandler
         setupTanks();
-
-        // Inventory Setup
-        inventoryContents.setSize(getInitialSize());
 
         // Upgradeable
         // Add callback for our upgrade inventory
@@ -208,7 +208,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
     /**
      * The initial size of the inventory
      */
-    public abstract int getInitialSize();
+    public abstract int getInventorySize();
 
     /**
      * Used to define if an item is valid for a slot
@@ -344,39 +344,16 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        // Upgrade Inventory
-        String inventoryName = "upgrade";
 
-        // Set the size
-        compound.setInteger("Size:" + inventoryName, upgradeInventory.inventoryContents.size());
+        // Upgrades
+        NBTTagCompound upgradeTagCompound = new NBTTagCompound();
+        ItemStackHelper.saveAllItems(upgradeTagCompound, upgradeInventory.inventoryContents);
+        compound.setTag(UPGRADE_INVENTORY_NBT, upgradeTagCompound);
 
-        // Write the inventory
-        NBTTagList tagList = new NBTTagList();
-        for(int i = 0; i < upgradeInventory.inventoryContents.size(); i++) {
-            if(upgradeInventory.inventoryContents.get(i) != null) {
-                NBTTagCompound stackTag = new NBTTagCompound();
-                stackTag.setByte("Slot:" + inventoryName, (byte) i);
-                upgradeInventory.inventoryContents.get(i).writeToNBT(stackTag);
-                tagList.appendTag(stackTag);
-            }
-        }
-        compound.setTag("Items:" + inventoryName, tagList);
-
-        inventoryName = "inventory";
-        // Set the size
-        compound.setInteger(SIZE_INVENTORY_NBT_TAG + inventoryName, inventoryContents.size());
-
-        // Write the inventory
-        tagList = new NBTTagList();
-        for(int i = 0; i < inventoryContents.size(); i++) {
-            if(inventoryContents.get(i) != null) {
-                NBTTagCompound stackTag = new NBTTagCompound();
-                stackTag.setByte(SLOT_INVENTORY_NBT_TAG + inventoryName, (byte) i);
-                inventoryContents.get(i).writeToNBT(stackTag);
-                tagList.appendTag(stackTag);
-            }
-        }
-        compound.setTag(ITEMS_NBT_TAG + inventoryName, tagList);
+        // Inventory
+        NBTTagCompound inventory = new NBTTagCompound();
+        ItemStackHelper.saveAllItems(inventory, inventoryContents);
+        compound.setTag(ITEMS_NBT_TAG, inventory);
 
         // FluidHandler
         if(isFluidHandler()) {
@@ -401,7 +378,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
 
         // Abstract Machine
         compound.setInteger(REDSTONE_NBT, redstone);
-        if(updateClient && worldObj != null) {
+        if(updateClient && world != null) {
             compound.setBoolean(UPDATE_ENERGY_NBT, true);
             updateClient = false;
         }
@@ -413,37 +390,13 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
 
-        // Upgrade Inventory
-        String inventoryName = "upgrade";
-        // Read Items
-        NBTTagList tagList = compound.getTagList(ITEMS_NBT_TAG + inventoryName, 10);
-        upgradeInventory.inventoryContents = new Stack<>();
-        if(compound.hasKey(SIZE_INVENTORY_NBT_TAG + inventoryName))
-            upgradeInventory.inventoryContents.setSize(compound.getInteger(SIZE_INVENTORY_NBT_TAG + inventoryName));
-        else
-            upgradeInventory.inventoryContents.setSize(6);
-        for(int i = 0; i < tagList.tagCount(); i++) {
-            NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
-            int slot = stackTag.getByte(SLOT_INVENTORY_NBT_TAG + inventoryName);
-            if(slot >= 0 && slot < upgradeInventory.inventoryContents.size())
-                upgradeInventory.inventoryContents.set(slot, ItemStack.loadItemStackFromNBT(stackTag));
-        }
+        // Upgrades
+        NBTTagCompound upgradeTag = compound.getCompoundTag(UPGRADE_INVENTORY_NBT);
+        ItemStackHelper.loadAllItems(upgradeTag, upgradeInventory.inventoryContents);
 
         // Inventory
-        inventoryName = "inventory";
-        // Read Items
-        tagList = compound.getTagList(ITEMS_NBT_TAG + inventoryName, 10);
-        inventoryContents = new Stack<>();
-        if(compound.hasKey(SIZE_INVENTORY_NBT_TAG + inventoryName))
-            inventoryContents.setSize(compound.getInteger(SIZE_INVENTORY_NBT_TAG + inventoryName));
-        else
-            inventoryContents.setSize(getInitialSize());
-        for(int i = 0; i < tagList.tagCount(); i++) {
-            NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
-            int slot = stackTag.getByte(SLOT_INVENTORY_NBT_TAG + inventoryName);
-            if(slot >= 0 && slot < inventoryContents.size())
-                inventoryContents.set(slot, ItemStack.loadItemStackFromNBT(stackTag));
-        }
+        NBTTagCompound inventoryTag = compound.getCompoundTag(ITEMS_NBT_TAG);
+        ItemStackHelper.loadAllItems(inventoryTag, inventoryContents);
 
         // FluidHandler
         if(isFluidHandler()) {
@@ -463,7 +416,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
             sideModes.put(side, EnumInputOutputMode.getModeFromInt(compound.getInteger(SIDE_MODE_NBT + side.ordinal())));
 
         // Abstract Machine
-        if(compound.hasKey(UPDATE_ENERGY_NBT) && worldObj != null)
+        if(compound.hasKey(UPDATE_ENERGY_NBT) && world != null)
             changeEnergy(compound.getInteger("Energy"));
         redstone = compound.getInteger(REDSTONE_NBT);
     }
@@ -708,19 +661,19 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
     public String getDisplayIconForSide(EnumFacing dir) {
         switch (getModeForSide(dir)) {
             case INPUT_ALL:
-                return "neotech:blocks/inputFace";
+                return "neotech:blocks/inputface";
             case INPUT_PRIMARY:
-                return "neotech:blocks/inputFacePrimary";
+                return "neotech:blocks/inputfaceprimary";
             case INPUT_SECONDARY:
-                return "neotech:blocks/inputFaceSecondary";
+                return "neotech:blocks/inputfacesecondary";
             case OUTPUT_ALL:
-                return "neotech:blocks/outputFace";
+                return "neotech:blocks/outputface";
             case OUTPUT_PRIMARY:
-                return "neotech:blocks/outputFacePrimary";
+                return "neotech:blocks/outputfaceprimary";
             case OUTPUT_SECONDARY:
-                return "neotech:blocks/outputFaceSecondary";
+                return "neotech:blocks/outputfacesecondary";
             case ALL_MODES:
-                return "neotech:blocks/inputOutputFace";
+                return "neotech:blocks/inputoutputface";
             case DISABLED:
                 return "neotech:blocks/disabled";
             default : return null;
@@ -935,7 +888,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * @return This object, to enable chaining
      */
     public AbstractMachine addCallback(IInventoryCallback iInventoryCallback) {
-        inventoryCallbacks.add(iInventoryCallback);
+        callBacks.add(iInventoryCallback);
         return this;
     }
 
@@ -945,50 +898,9 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * @param slot The slot that changed
      */
     protected void onInventoryChanged(int slot) {
-        inventoryCallbacks.forEach((IInventoryCallback callback) -> {
+        callBacks.forEach((IInventoryCallback callback) -> {
             callback.onInventoryChanged(this, slot);
         });
-    }
-
-    /**
-     * Used to add just one stack into the end of the inventory
-     *
-     * @param stack The stack to push
-     */
-    public void addInventorySlot(ItemStack stack) {
-        inventoryContents.push(stack);
-    }
-
-    /**
-     * Used to push x amount of slots into the inventory
-     *
-     * @param count How many slots to add
-     */
-    public void addInventorySlots(int count) {
-        for(int i = 0; i < count; i++)
-            addInventorySlot(null);
-    }
-
-    /**
-     * Used to remove the last element of the stack
-     *
-     * @return The last stack, now popped
-     */
-    public ItemStack removeInventorySlot() {
-        return inventoryContents.pop();
-    }
-
-    /**
-     * Used to remove a specific amount of items
-     *
-     * @param count The count of slots to remove
-     * @return The array of the stacks that were there
-     */
-    public ItemStack[] removeInventorySlots(int count) {
-        ItemStack[] poppedStacks = new ItemStack[count];
-        for(int i = 0; i < count; i++)
-            poppedStacks[i] = removeInventorySlot();
-        return poppedStacks;
     }
 
     /**
@@ -1000,99 +912,163 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
         for(int i = 0; i < inventory.getSlots(); i++) {
             if(i < inventoryContents.size()) {
                 ItemStack stack = inventory.getStackInSlot(i);
-                if(stack != null)
+                if(!stack.isEmpty())
                     inventoryContents.set(i, stack.copy());
                 else
-                    inventoryContents.set(i, null);
+                    inventoryContents.set(i, ItemStack.EMPTY);
             }
         }
     }
 
     /**
-     * Gets the stack limit of a stack
-     * @param slot The slot
-     * @param stack The stack
-     * @return Max stack size
+     * Makes sure this slot is within our range
+     * @param slot Which slot
      */
-    protected int getStackLimit(int slot, ItemStack stack)
-    {
-        return stack.getMaxStackSize();
+    protected boolean isValidSlot(int slot) {
+        return slot > 0 || slot <= inventoryContents.size();
     }
 
+    /**
+     * Overrides the stack in the given slot. This method is used by the
+     * standard Forge helper methods and classes. It is not intended for
+     * general use by other mods, and the handler may throw an error if it
+     * is called unexpectedly.
+     *
+     * @param slot  Slot to modify
+     * @param stack ItemStack to set slot to (may be null)
+     * @throws RuntimeException if the handler is called in a way that the handler
+     * was not expecting.
+     **/
+    @Override
+    public void setStackInSlot(int slot, ItemStack stack) {
+        if(!isValidSlot(slot))
+            return;
+        if (ItemStack.areItemStacksEqual(this.inventoryContents.get(slot), stack))
+            return;
+        this.inventoryContents.set(slot, stack);
+        onInventoryChanged(slot);
+    }
+
+    /**
+     * Returns the number of slots available
+     *
+     * @return The number of slots available
+     **/
     @Override
     public int getSlots() {
         return inventoryContents.size();
     }
 
+    /**
+     * Returns the ItemStack in a given slot.
+     *
+     * The result's stack size may be greater than the itemstacks max size.
+     *
+     * If the result is null, then the slot is empty.
+     * If the result is not null but the stack size is zero, then it represents
+     * an empty slot that will only accept* a specific itemstack.
+     *
+     * <p/>
+     * IMPORTANT: This ItemStack MUST NOT be modified. This method is not for
+     * altering an inventories contents. Any implementers who are able to detect
+     * modification through this method should throw an exception.
+     * <p/>
+     * SERIOUSLY: DO NOT MODIFY THE RETURNED ITEMSTACK
+     *
+     * @param slot Slot to query
+     * @return ItemStack in given slot. May not be null.
+     **/
     @Override
+    @Nonnull
     public ItemStack getStackInSlot(int slot) {
-        if (slot < 0 || slot >= inventoryContents.size())
-            return null;
+        if(!isValidSlot(slot))
+            return ItemStack.EMPTY;
         return inventoryContents.get(slot);
     }
 
+    /**
+     * Inserts an ItemStack into the given slot and return the remainder.
+     * The ItemStack should not be modified in this function!
+     * Note: This behaviour is subtly different from IFluidHandlers.fill()
+     *
+     * @param slot     Slot to insert into.
+     * @param stack    ItemStack to insert.
+     * @param simulate If true, the insertion is only simulated
+     * @return The remaining ItemStack that was not inserted (if the entire stack is accepted, then return null).
+     *         May be the same as the input ItemStack if unchanged, otherwise a new ItemStack.
+     **/
+    @Nonnull
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if (stack == null || stack.stackSize == 0 || !isItemValidForSlot(slot, stack))
-            return stack;
+        if (stack.isEmpty() || !isItemValidForSlot(slot, stack))
+            return ItemStack.EMPTY;
 
-        if (slot < 0 || slot >= inventoryContents.size())
-            return stack;
+        if(!isValidSlot(slot))
+            return ItemStack.EMPTY;
 
         ItemStack existing = this.inventoryContents.get(slot);
 
-        int limit = getStackLimit(slot, stack);
+        int limit = getSlotLimit(slot);
 
-        if (existing != null) {
+        if (!existing.isEmpty()) {
             if (!ItemHandlerHelper.canItemStacksStack(stack, existing))
                 return stack;
 
-            limit -= existing.stackSize;
+            limit -= existing.getCount();
         }
 
         if (limit <= 0)
             return stack;
 
-        boolean reachedLimit = stack.stackSize > limit;
+        boolean reachedLimit = stack.getCount() > limit;
 
         if (!simulate) {
-            if (existing == null) {
+            if (existing.isEmpty()) {
                 this.inventoryContents.set(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
             }
             else {
-                existing.stackSize += reachedLimit ? limit : stack.stackSize;
+                existing.grow(reachedLimit ? limit : stack.getCount());
             }
             onInventoryChanged(slot);
         }
-
-        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.stackSize - limit) : null;
+        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
     }
 
+    /**
+     * Extracts an ItemStack from the given slot. The returned value must be null
+     * if nothing is extracted, otherwise it's stack size must not be greater than amount or the
+     * itemstacks getMaxStackSize().
+     *
+     * @param slot     Slot to extract from.
+     * @param amount   Amount to extract (may be greater than the current stacks max limit)
+     * @param simulate If true, the extraction is only simulated
+     * @return ItemStack extracted from the slot, must be null, if nothing can be extracted
+     **/
+    @Nonnull
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         if (amount == 0)
-            return null;
+            return ItemStack.EMPTY;
 
-        if (slot < 0 || slot >= inventoryContents.size())
-            return null;
-
+        if(!isValidSlot(slot))
+            return ItemStack.EMPTY;
         ItemStack existing = this.inventoryContents.get(slot);
 
-        if (existing == null)
-            return null;
+        if (existing.isEmpty())
+            return ItemStack.EMPTY;
 
         int toExtract = Math.min(amount, existing.getMaxStackSize());
 
-        if (existing.stackSize <= toExtract) {
+        if (existing.getCount() <= toExtract) {
             if (!simulate) {
-                this.inventoryContents.set(slot, null);
+                this.inventoryContents.set(slot, ItemStack.EMPTY);
                 onInventoryChanged(slot);
             }
             return existing;
         }
         else {
             if (!simulate) {
-                this.inventoryContents.set(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.stackSize - toExtract));
+                this.inventoryContents.set(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract));
                 onInventoryChanged(slot);
             }
 
@@ -1100,14 +1076,15 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
         }
     }
 
+    /**
+     * Retrieves the maximum stack size allowed to exist in the given slot.
+     *
+     * @param slot Slot to query.
+     * @return The maximum stack size allowed in the slot.
+     */
     @Override
-    public void setStackInSlot(int slot, ItemStack stack) {
-        if (slot < 0 || slot >= inventoryContents.size())
-            return;
-        if (ItemStack.areItemStacksEqual(this.inventoryContents.get(slot), stack))
-            return;
-        this.inventoryContents.set(slot, stack);
-        onInventoryChanged(slot);
+    public int getSlotLimit(int slot) {
+        return 64;
     }
 
     /*******************************************************************************************************************
@@ -1157,33 +1134,33 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
                 // Grab item in slot
                 ItemStack slottedItem = upgradeInventory.getStackInSlot(x);
                 // If we have an item here, and for type cast security it is valid
-                if(slottedItem != null && slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
+                if( slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
                     // Cast to our data object
                     IUpgradeItem slottedUpgrade = slottedItem.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null);
                     // Check for matching category, only on tiered objects, otherwise match by ID
                     switch (slottedUpgrade.getCategory()){
                         case CPU :
                             if(upgradeItem.getCategory() == CPU)
-                                return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                                return slottedItem.getCount() == slottedItem.getMaxStackSize();
                             break;
                         case HDD :
                             if(upgradeItem.getCategory() == HDD)
-                                return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                                return slottedItem.getCount() == slottedItem.getMaxStackSize();
                             break;
                         case MEMORY :
                             if(upgradeItem.getCategory() == MEMORY)
-                                return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                                return slottedItem.getCount() == slottedItem.getMaxStackSize();
                             break;
                         case PSU :
                             if(upgradeItem.getCategory() == PSU)
-                                return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                                return slottedItem.getCount() == slottedItem.getMaxStackSize();
                             break;
                         case MISC:
                             break;
                         default :
                         case NONE:
                             if(upgradeItem.getID().equalsIgnoreCase(slottedUpgrade.getID()))
-                                return slottedItem.stackSize == slottedItem.getMaxStackSize();
+                                return slottedItem.getCount() == slottedItem.getMaxStackSize();
                             break;
                     }
                 }
@@ -1203,12 +1180,12 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
             // Grab item in slot
             ItemStack slottedItem = upgradeInventory.getStackInSlot(x);
             // If we have an item here, and for type cast security it is valid
-            if (slottedItem != null && slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
+            if (slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
                 // Cast to our data object
                 IUpgradeItem slottedUpgrade = slottedItem.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null);
                 // If we find what we need, return the stack size
                 if(slottedUpgrade.getID().equalsIgnoreCase(id))
-                    return slottedItem.stackSize;
+                    return slottedItem.getCount();
             }
         }
         return 0;
@@ -1225,7 +1202,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
             // Grab item in slot
             ItemStack slottedItem = upgradeInventory.getStackInSlot(x);
             // If we have an item here, and for type cast security it is valid
-            if (slottedItem != null && slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
+            if (slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
                 // Cast to our data object
                 IUpgradeItem slottedUpgrade = slottedItem.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null);
                 // If we find what we need, return the stack size
@@ -1247,12 +1224,12 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
             // Grab item in slot
             ItemStack slottedItem = upgradeInventory.getStackInSlot(x);
             // If we have an item here, and for type cast security it is valid
-            if (slottedItem != null && slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
+            if (slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
                 // Cast to our data object
                 IUpgradeItem slottedUpgrade = slottedItem.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null);
                 // If we find what we need, return the stack size
                 if(slottedUpgrade.getCategory() == category)
-                    return slottedItem.stackSize;
+                    return slottedItem.getCount();
             }
         }
         return 0;
@@ -1269,7 +1246,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
             // Grab item in slot
             ItemStack slottedItem = upgradeInventory.getStackInSlot(x);
             // If we have an item here, and for type cast security it is valid
-            if (slottedItem != null && slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
+            if (slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
                 // Cast to our data object
                 IUpgradeItem slottedUpgrade = slottedItem.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null);
                 // If we find what we need, return the stack size
@@ -1291,7 +1268,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
             // Grab item in slot
             ItemStack slottedItem = upgradeInventory.getStackInSlot(x);
             // If we have an item here, and for type cast security it is valid
-            if (slottedItem != null && slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
+            if (slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
                 // Cast to our data object
                 IUpgradeItem slottedUpgrade = slottedItem.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null);
                 // If we find what we need, return the stack size
@@ -1313,7 +1290,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
             // Grab item in slot
             ItemStack slottedItem = upgradeInventory.getStackInSlot(x);
             // If we have an item here, and for type cast security it is valid
-            if (slottedItem != null && slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
+            if (slottedItem.hasCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null)) {
                 // Cast to our data object
                 IUpgradeItem slottedUpgrade = slottedItem.getCapability(CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY, null);
                 // If we find what we need, return the stack size
@@ -1422,6 +1399,6 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * @return True if has power
      */
     public boolean isPowered() {
-        return worldObj.isBlockIndirectlyGettingPowered(pos) > 0 || worldObj.isBlockPowered(pos);
+        return world.isBlockIndirectlyGettingPowered(pos) > 0 || world.isBlockPowered(pos);
     }
 }

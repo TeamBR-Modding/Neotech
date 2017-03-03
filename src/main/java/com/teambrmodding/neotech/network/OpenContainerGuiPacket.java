@@ -60,7 +60,7 @@ public class OpenContainerGuiPacket implements IMessage, IMessageHandler<OpenCon
     public IMessage onMessage(OpenContainerGuiPacket message, MessageContext ctx) {
         if(ctx.side.isServer())
             ctx.getServerHandler().playerEntity.openGui(Bookshelf.INSTANCE, message.id,
-                    ctx.getServerHandler().playerEntity.worldObj, message.blockPos.getX(), message.blockPos.getY(), message.blockPos.getZ());
+                    ctx.getServerHandler().playerEntity.world, message.blockPos.getX(), message.blockPos.getY(), message.blockPos.getZ());
         return null;
     }
 }

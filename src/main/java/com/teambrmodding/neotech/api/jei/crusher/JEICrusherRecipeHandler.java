@@ -22,11 +22,6 @@ public class JEICrusherRecipeHandler implements IRecipeHandler<JEICrusherRecipeW
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return NeotechJEIPlugin.CRUSHER_UUID;
-    }
-
-    @Override
     public String getRecipeCategoryUid(JEICrusherRecipeWrapper recipe) {
         return NeotechJEIPlugin.CRUSHER_UUID;
     }

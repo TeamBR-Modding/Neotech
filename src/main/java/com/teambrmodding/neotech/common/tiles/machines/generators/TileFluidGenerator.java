@@ -55,7 +55,7 @@ public class TileFluidGenerator extends MachineGenerator {
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 2;
     }
 
@@ -123,7 +123,7 @@ public class TileFluidGenerator extends MachineGenerator {
             return false;
 
         // Handle Items
-        if(getStackInSlot(INPUT_SLOT) != null) {
+        if(!getStackInSlot(INPUT_SLOT).isEmpty()) {
             ItemStack stackToDrain = getStackInSlot(INPUT_SLOT);
             if(stackToDrain.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
                 IFluidHandler fluidHandler = stackToDrain.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
@@ -139,13 +139,13 @@ public class TileFluidGenerator extends MachineGenerator {
 
                 // If there is no fluid in container, move to output
                 if(FluidUtil.getFluidContained(stackToDrain) == null) {
-                    if(getStackInSlot(OUTPUT_SLOT) == null) {
+                    if(getStackInSlot(OUTPUT_SLOT).isEmpty()) {
                         setStackInSlot(OUTPUT_SLOT, stackToDrain);
-                        setStackInSlot(INPUT_SLOT, null);
+                        setStackInSlot(INPUT_SLOT, ItemStack.EMPTY);
                     } else if(InventoryUtils.canStacksMerge(stackToDrain, getStackInSlot(OUTPUT_SLOT))) {
                         InventoryUtils.tryMergeStacks(stackToDrain, getStackInSlot(OUTPUT_SLOT));
-                        if(getStackInSlot(INPUT_SLOT).stackSize <= 0)
-                            setStackInSlot(INPUT_SLOT, null);
+                        if(getStackInSlot(INPUT_SLOT).getCount() <= 0)
+                            setStackInSlot(INPUT_SLOT, ItemStack.EMPTY);
                     }
                 }
             }
@@ -195,9 +195,9 @@ public class TileFluidGenerator extends MachineGenerator {
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if (canInputFromSide(dir, true)) {
-                if (worldObj.getTileEntity(pos.offset(dir)) != null &&
-                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
-                    IFluidHandler otherTank = worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
+                if (world.getTileEntity(pos.offset(dir)) != null &&
+                        world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
+                    IFluidHandler otherTank = world.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
                     FluidStack drained = FluidUtil.tryFluidTransfer(this, otherTank,
                             tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), false);
                     if (drained != null) {
@@ -395,14 +395,14 @@ public class TileFluidGenerator extends MachineGenerator {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerFluidGenerator(player.inventory, this);
     }
 
@@ -411,14 +411,14 @@ public class TileFluidGenerator extends MachineGenerator {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiFluidGenerator(player, this);
     }
 

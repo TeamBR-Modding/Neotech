@@ -3,10 +3,11 @@ package com.teambrmodding.neotech.common.tiles.storage;
 import com.teambr.bookshelf.common.container.IInventoryCallback;
 import com.teambr.bookshelf.common.tiles.EnergyHandler;
 import com.teambr.bookshelf.util.EnergyUtils;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -15,9 +16,9 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * This file was created for NeoTech
@@ -40,14 +41,12 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
      *******************************************************************************************************************/
 
     // A list to hold all callback objects
-    private List<IInventoryCallback> inventoryCallbacks = new ArrayList<>();
+    private List<IInventoryCallback> callBacks = new ArrayList<>();
     // List of Inventory contents
-    public Stack<ItemStack> inventoryContents = new Stack<>();
+    public NonNullList<ItemStack> inventoryContents = NonNullList.withSize(2, ItemStack.EMPTY);;
 
     // NBT Tags
-    protected static final String SIZE_INVENTORY_NBT_TAG = "Size:";
-    protected static final String SLOT_INVENTORY_NBT_TAG = "Slot:";
-    protected static final String ITEMS_NBT_TAG          = "Items:";
+    protected static final String SIZE_INVENTORY_NBT_TAG = "Inventory";
 
     /*******************************************************************************************************************
      * Energy Variables                                                                                                *
@@ -65,7 +64,6 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
     public TileEnergyStorage(int tier) {
         super();
         this.tier = tier;
-        inventoryContents.setSize(2);
     }
 
     /*******************************************************************************************************************
@@ -75,17 +73,14 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
     protected void onServerTick() {
         super.onServerTick();
 
-        if(inventoryContents.size() != 2)
-            inventoryContents.setSize(2);
-
         // Move out power
-        EnergyUtils.distributePowerToFaces(this, worldObj, pos, getMaxEnergyStored() / 6, false);
+        EnergyUtils.distributePowerToFaces(this, world, pos, getMaxEnergyStored() / 6, false);
 
         // Transfer Energy In
-        if(getStackInSlot(DRAIN_SLOT) != null && getStackInSlot(DRAIN_SLOT).hasCapability(CapabilityEnergy.ENERGY, null)) {
+        if(!getStackInSlot(DRAIN_SLOT).isEmpty() && getStackInSlot(DRAIN_SLOT).hasCapability(CapabilityEnergy.ENERGY, null)) {
             IEnergyStorage drainingStack = getStackInSlot(DRAIN_SLOT).getCapability(CapabilityEnergy.ENERGY, null);
             EnergyUtils.transferPower(drainingStack, this, getDefaultEnergyStorageSize() / 200, false);
-        } else if(getStackInSlot(FILL_SLOT) != null && getStackInSlot(FILL_SLOT).hasCapability(CapabilityEnergy.ENERGY, null)) {
+        } else if(!getStackInSlot(FILL_SLOT).isEmpty() && getStackInSlot(FILL_SLOT).hasCapability(CapabilityEnergy.ENERGY, null)) {
             IEnergyStorage fillStack = getStackInSlot(FILL_SLOT).getCapability(CapabilityEnergy.ENERGY, null);
             EnergyUtils.transferPower(this, fillStack, getDefaultEnergyStorageSize() / 200, false);
         }
@@ -94,49 +89,15 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-
-        // Inventory
-        String inventoryName = "";
-        // Set the size
-        compound.setInteger(SIZE_INVENTORY_NBT_TAG + inventoryName, inventoryContents.size());
-
-        // Write the inventory
-        NBTTagList tagList = new NBTTagList();
-        for(int i = 0; i < inventoryContents.size(); i++) {
-            if(inventoryContents.get(i) != null) {
-                NBTTagCompound stackTag = new NBTTagCompound();
-                stackTag.setByte(SLOT_INVENTORY_NBT_TAG + inventoryName, (byte) i);
-                inventoryContents.get(i).writeToNBT(stackTag);
-                tagList.appendTag(stackTag);
-            }
-        }
-        compound.setTag(ITEMS_NBT_TAG + inventoryName, tagList);
-
+        ItemStackHelper.saveAllItems(compound, inventoryContents);
         compound.setInteger("Tier", tier);
-
         return compound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-
-        // Inventory
-        String inventoryName = "";
-        // Read Items
-        NBTTagList tagList = compound.getTagList(ITEMS_NBT_TAG + inventoryName, 10);
-        inventoryContents = new Stack<>();
-        if(compound.hasKey(SIZE_INVENTORY_NBT_TAG + inventoryName))
-            inventoryContents.setSize(compound.getInteger(SIZE_INVENTORY_NBT_TAG + inventoryName));
-        else
-            inventoryContents.setSize(2);
-        for(int i = 0; i < tagList.tagCount(); i++) {
-            NBTTagCompound stackTag = tagList.getCompoundTagAt(i);
-            int slot = stackTag.getByte(SLOT_INVENTORY_NBT_TAG + inventoryName);
-            if(slot >= 0 && slot < inventoryContents.size())
-                inventoryContents.set(slot, ItemStack.loadItemStackFromNBT(stackTag));
-        }
-
+        ItemStackHelper.loadAllItems(compound, inventoryContents);
         tier = compound.getInteger("Tier");
     }
 
@@ -222,7 +183,7 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
      * @return This object, to enable chaining
      */
     public TileEnergyStorage addCallback(IInventoryCallback iInventoryCallback) {
-        inventoryCallbacks.add(iInventoryCallback);
+        callBacks.add(iInventoryCallback);
         return this;
     }
 
@@ -232,50 +193,9 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
      * @param slot The slot that changed
      */
     protected void onInventoryChanged(int slot) {
-        inventoryCallbacks.forEach((IInventoryCallback callback) -> {
+        callBacks.forEach((IInventoryCallback callback) -> {
             callback.onInventoryChanged(this, slot);
         });
-    }
-
-    /**
-     * Used to add just one stack into the end of the inventory
-     *
-     * @param stack The stack to push
-     */
-    public void addInventorySlot(ItemStack stack) {
-        inventoryContents.push(stack);
-    }
-
-    /**
-     * Used to push x amount of slots into the inventory
-     *
-     * @param count How many slots to add
-     */
-    public void addInventorySlots(int count) {
-        for(int i = 0; i < count; i++)
-            addInventorySlot(null);
-    }
-
-    /**
-     * Used to remove the last element of the stack
-     *
-     * @return The last stack, now popped
-     */
-    public ItemStack removeInventorySlot() {
-        return inventoryContents.pop();
-    }
-
-    /**
-     * Used to remove a specific amount of items
-     *
-     * @param count The count of slots to remove
-     * @return The array of the stacks that were there
-     */
-    public ItemStack[] removeInventorySlots(int count) {
-        ItemStack[] poppedStacks = new ItemStack[count];
-        for(int i = 0; i < count; i++)
-            poppedStacks[i] = removeInventorySlot();
-        return poppedStacks;
     }
 
     /**
@@ -287,10 +207,10 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
         for(int i = 0; i < inventory.getSlots(); i++) {
             if(i < inventoryContents.size()) {
                 ItemStack stack = inventory.getStackInSlot(i);
-                if(stack != null)
+                if(!stack.isEmpty())
                     inventoryContents.set(i, stack.copy());
                 else
-                    inventoryContents.set(i, null);
+                    inventoryContents.set(i, ItemStack.EMPTY);
             }
         }
     }
@@ -299,22 +219,9 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
      * Makes sure this slot is within our range
      * @param slot Which slot
      */
-    protected void validateSlotIndex(int slot) {
-        if (slot < 0 || slot >= inventoryContents.size())
-            throw new RuntimeException("Slot " + slot + " not in valid range - [0," + inventoryContents.size() + ")");
+    protected boolean isValidSlot(int slot) {
+        return slot > 0 || slot <= inventoryContents.size();
     }
-
-    /**
-     * Gets the stack limit of a stack
-     * @param slot The slot
-     * @param stack The stack
-     * @return Max stack size
-     */
-    protected int getStackLimit(int slot, ItemStack stack)
-    {
-        return stack.getMaxStackSize();
-    }
-
     /**
      * Used to define if an item is valid for a slot
      *
@@ -327,76 +234,148 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
                 stack.hasCapability(CapabilityEnergy.ENERGY, null);
     }
 
+    /**
+     * Overrides the stack in the given slot. This method is used by the
+     * standard Forge helper methods and classes. It is not intended for
+     * general use by other mods, and the handler may throw an error if it
+     * is called unexpectedly.
+     *
+     * @param slot  Slot to modify
+     * @param stack ItemStack to set slot to (may be null)
+     * @throws RuntimeException if the handler is called in a way that the handler
+     * was not expecting.
+     **/
+    @Override
+    public void setStackInSlot(int slot, ItemStack stack) {
+        if(!isValidSlot(slot))
+            return;
+        if (ItemStack.areItemStacksEqual(this.inventoryContents.get(slot), stack))
+            return;
+        this.inventoryContents.set(slot, stack);
+        onInventoryChanged(slot);
+    }
+
+    /**
+     * Returns the number of slots available
+     *
+     * @return The number of slots available
+     **/
     @Override
     public int getSlots() {
         return inventoryContents.size();
     }
 
+    /**
+     * Returns the ItemStack in a given slot.
+     *
+     * The result's stack size may be greater than the itemstacks max size.
+     *
+     * If the result is null, then the slot is empty.
+     * If the result is not null but the stack size is zero, then it represents
+     * an empty slot that will only accept* a specific itemstack.
+     *
+     * <p/>
+     * IMPORTANT: This ItemStack MUST NOT be modified. This method is not for
+     * altering an inventories contents. Any implementers who are able to detect
+     * modification through this method should throw an exception.
+     * <p/>
+     * SERIOUSLY: DO NOT MODIFY THE RETURNED ITEMSTACK
+     *
+     * @param slot Slot to query
+     * @return ItemStack in given slot. May not be null.
+     **/
     @Override
+    @Nonnull
     public ItemStack getStackInSlot(int slot) {
-        validateSlotIndex(slot);
+        if(!isValidSlot(slot))
+            return ItemStack.EMPTY;
         return inventoryContents.get(slot);
     }
 
+    /**
+     * Inserts an ItemStack into the given slot and return the remainder.
+     * The ItemStack should not be modified in this function!
+     * Note: This behaviour is subtly different from IFluidHandlers.fill()
+     *
+     * @param slot     Slot to insert into.
+     * @param stack    ItemStack to insert.
+     * @param simulate If true, the insertion is only simulated
+     * @return The remaining ItemStack that was not inserted (if the entire stack is accepted, then return null).
+     *         May be the same as the input ItemStack if unchanged, otherwise a new ItemStack.
+     **/
+    @Nonnull
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if (stack == null || stack.stackSize == 0 || !isItemValidForSlot(slot, stack))
-            return null;
+        if (stack == null || stack.getCount() == 0 || !isItemValidForSlot(slot, stack))
+            return ItemStack.EMPTY;
 
-        validateSlotIndex(slot);
+        if(!isValidSlot(slot))
+            return ItemStack.EMPTY;
 
         ItemStack existing = this.inventoryContents.get(slot);
 
-        int limit = getStackLimit(slot, stack);
+        int limit = getSlotLimit(slot);
 
-        if (existing != null) {
+        if (!existing.isEmpty()) {
             if (!ItemHandlerHelper.canItemStacksStack(stack, existing))
                 return stack;
 
-            limit -= existing.stackSize;
+            limit -= existing.getCount();
         }
 
         if (limit <= 0)
             return stack;
 
-        boolean reachedLimit = stack.stackSize > limit;
+        boolean reachedLimit = stack.getCount() > limit;
 
         if (!simulate) {
-            if (existing == null) {
+            if (existing.isEmpty()) {
                 this.inventoryContents.set(slot, reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack);
             }
             else {
-                existing.stackSize += reachedLimit ? limit : stack.stackSize;
+                existing.setCount(existing.getCount() + (reachedLimit ? limit : stack.getCount()));
             }
             onInventoryChanged(slot);
         }
 
-        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.stackSize - limit) : null;    }
+        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
+    }
 
+    /**
+     * Extracts an ItemStack from the given slot. The returned value must be null
+     * if nothing is extracted, otherwise it's stack size must not be greater than amount or the
+     * itemstacks getMaxStackSize().
+     *
+     * @param slot     Slot to extract from.
+     * @param amount   Amount to extract (may be greater than the current stacks max limit)
+     * @param simulate If true, the extraction is only simulated
+     * @return ItemStack extracted from the slot, must be null, if nothing can be extracted
+     **/
+    @Nonnull
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         if (amount == 0)
-            return null;
+            return ItemStack.EMPTY;
 
-        validateSlotIndex(slot);
-
+        if(!isValidSlot(slot))
+            return ItemStack.EMPTY;
         ItemStack existing = this.inventoryContents.get(slot);
 
-        if (existing == null)
-            return null;
+        if (existing.isEmpty())
+            return ItemStack.EMPTY;
 
         int toExtract = Math.min(amount, existing.getMaxStackSize());
 
-        if (existing.stackSize <= toExtract) {
+        if (existing.getCount() <= toExtract) {
             if (!simulate) {
-                this.inventoryContents.set(slot, null);
+                this.inventoryContents.set(slot, ItemStack.EMPTY);
                 onInventoryChanged(slot);
             }
             return existing;
         }
         else {
             if (!simulate) {
-                this.inventoryContents.set(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.stackSize - toExtract));
+                this.inventoryContents.set(slot, ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract));
                 onInventoryChanged(slot);
             }
 
@@ -404,12 +383,14 @@ public class TileEnergyStorage extends EnergyHandler implements IItemHandlerModi
         }
     }
 
+    /**
+     * Retrieves the maximum stack size allowed to exist in the given slot.
+     *
+     * @param slot Slot to query.
+     * @return The maximum stack size allowed in the slot.
+     */
     @Override
-    public void setStackInSlot(int slot, ItemStack stack) {
-        validateSlotIndex(slot);
-        if (ItemStack.areItemStacksEqual(this.inventoryContents.get(slot), stack))
-            return;
-        this.inventoryContents.set(slot, stack);
-        onInventoryChanged(slot);
+    public int getSlotLimit(int slot) {
+        return 64;
     }
 }

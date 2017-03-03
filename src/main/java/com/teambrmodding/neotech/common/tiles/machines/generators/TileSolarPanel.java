@@ -75,7 +75,7 @@ public class TileSolarPanel extends MachineGenerator {
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 0;
     }
 
@@ -105,8 +105,8 @@ public class TileSolarPanel extends MachineGenerator {
     @Override
     public int getEnergyProduced() {
         float lightModifier = 0;
-        if(worldObj.canSeeSky(pos) && worldObj.getSunBrightnessFactor(1.0F) > 0.7F)
-            lightModifier = worldObj.getSunBrightnessFactor(1.0F);
+        if(world.canSeeSky(pos) && world.getSunBrightnessFactor(1.0F) > 0.7F)
+            lightModifier = world.getSunBrightnessFactor(1.0F);
         switch (tier) {
             case 3:
                 return (int) ((BASE_ENERGY_PRODUCED * 8) * lightModifier);
@@ -134,7 +134,7 @@ public class TileSolarPanel extends MachineGenerator {
      */
     @Override
     public boolean manageBurnTime() {
-        return worldObj.canSeeSky(pos) && worldObj.getSunBrightnessFactor(1.0F) > 0.7F;
+        return world.canSeeSky(pos) && world.getSunBrightnessFactor(1.0F) > 0.7F;
     }
 
     /*******************************************************************************************************************
@@ -167,7 +167,7 @@ public class TileSolarPanel extends MachineGenerator {
     public void tryOutput() {
         if(energyStorage.getEnergyStored() > 0) {
             EnergyUtils.distributePowerToFaces(this.getCapability(CapabilityEnergy.ENERGY, null),
-                    worldObj, pos, energyStorage.getMaxExtract(), false);
+                    world, pos, energyStorage.getMaxExtract(), false);
         }
     }
 
@@ -263,14 +263,14 @@ public class TileSolarPanel extends MachineGenerator {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return null;
     }
 
@@ -279,14 +279,14 @@ public class TileSolarPanel extends MachineGenerator {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return null;
     }
 

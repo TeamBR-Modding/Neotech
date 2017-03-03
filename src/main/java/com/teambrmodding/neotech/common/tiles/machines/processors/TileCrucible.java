@@ -48,7 +48,7 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
      * The initial size of the inventory
      */
     @Override
-    public int getInitialSize() {
+    public int getInventorySize() {
         return 1;
     }
 
@@ -116,7 +116,7 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
      */
     @Override
     public boolean canProcess() {
-        if(energyStorage.getEnergyStored() >= getEnergyCostPerTick() && getStackInSlot(ITEM_INPUT_SLOT) != null &&
+        if(energyStorage.getEnergyStored() >= getEnergyCostPerTick() && !getStackInSlot(ITEM_INPUT_SLOT).isEmpty() &&
                 getOutput(getStackInSlot(ITEM_INPUT_SLOT)) != null) {
             FluidStack output = getOutput(getStackInSlot(ITEM_INPUT_SLOT));
             if(output != null && output.getFluid() != null) {
@@ -150,9 +150,9 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
                     int drainAmount = tanks[TANK].fill(recipeOutput, false);
                     if(drainAmount == recipeOutput.amount) {
                         tanks[TANK].fill(recipeOutput, true);
-                        getStackInSlot(ITEM_INPUT_SLOT).stackSize -= 1;
-                        if(getStackInSlot(ITEM_INPUT_SLOT).stackSize <= 0)
-                            setStackInSlot(ITEM_INPUT_SLOT, null);
+                        getStackInSlot(ITEM_INPUT_SLOT).shrink(1);;
+                        if(getStackInSlot(ITEM_INPUT_SLOT).getCount() <= 0)
+                            setStackInSlot(ITEM_INPUT_SLOT, ItemStack.EMPTY);
                     }
                 }
             } else
@@ -180,7 +180,7 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
      */
     @Override
     public ItemStack getOutputForStack(ItemStack input) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     /*******************************************************************************************************************
@@ -194,7 +194,7 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
     public void tryInput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canInputFromSide(dir, true)) {
-                InventoryUtils.moveItemInto(worldObj.getTileEntity(pos.offset(dir)), -1, this, ITEM_INPUT_SLOT,
+                InventoryUtils.moveItemInto(world.getTileEntity(pos.offset(dir)), -1, this, ITEM_INPUT_SLOT,
                         64, dir.getOpposite(), true, true, false);
             }
         }
@@ -207,10 +207,10 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
     public void tryOutput() {
         for(EnumFacing dir : EnumFacing.values()) {
             if(canOutputFromSide(dir, true)) {
-                if(worldObj.getTileEntity(pos.offset(dir)) != null &&
-                        worldObj.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
+                if(world.getTileEntity(pos.offset(dir)) != null &&
+                        world.getTileEntity(pos.offset(dir)).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite())) {
                     IFluidHandler otherTank =
-                            worldObj.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
+                            world.getTileEntity(pos.offset(dir)).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, dir.getOpposite());
 
                     // Move out
                     if(tanks[TANK].getFluid() != null && otherTank.fill(tanks[TANK].getFluid(), false) > 0) {
@@ -301,8 +301,8 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
      */
     @Override
     public boolean canInsertItem(int slot, ItemStack itemStackIn, EnumFacing dir) {
-        return slot == ITEM_INPUT_SLOT && (getStackInSlot(ITEM_INPUT_SLOT) == null ||
-                getStackInSlot(ITEM_INPUT_SLOT).getMaxStackSize() >= getStackInSlot(ITEM_INPUT_SLOT).stackSize + itemStackIn.stackSize);
+        return slot == ITEM_INPUT_SLOT && (getStackInSlot(ITEM_INPUT_SLOT).isEmpty() ||
+                getStackInSlot(ITEM_INPUT_SLOT).getMaxStackSize() >= getStackInSlot(ITEM_INPUT_SLOT).getCount() + itemStackIn.getCount());
     }
 
     /**
@@ -376,14 +376,14 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The container to open
      */
     @Override
-    public Object getServerGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new ContainerCrucible(player.inventory, this);
     }
 
@@ -392,14 +392,14 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
      *
      * @param id       Id, probably not needed but could be used for multiple guis
      * @param player   The player that is opening the gui
-     * @param worldObj The worldObj
+     * @param world The world
      * @param x        X Pos
      * @param y        Y Pos
      * @param z        Z Pos
      * @return The gui to open
      */
     @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World worldObj, int x, int y, int z) {
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         return new GuiCrucible(player, this);
     }
 
@@ -456,8 +456,8 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
      */
     @Override
     public void spawnActiveParticles(double xPos, double yPos, double zPos) {
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
-        worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
+        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xPos, yPos, zPos, 0, 0, 0);
     }
 }
