@@ -1,0 +1,10 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "textures" : {
+      "rim": "minecraft:blocks/iron_block"
+    },
+    "model" : "neotech:solarpanel"
+  },
+  "variants" : { "normal" : { "model": "neotech:solarpanel" } }
+}
