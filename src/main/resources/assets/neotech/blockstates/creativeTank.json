@@ -1,9 +1,0 @@
-{
-    "forge_marker" : 1,
-    "defaults": {
-        "textures" : {
-            "block" : "neotech:blocks/creativeenergystorage"
-        }
-    },
-    "variants" : { "normal" : { "model": "neotech:tank" } }
-}
