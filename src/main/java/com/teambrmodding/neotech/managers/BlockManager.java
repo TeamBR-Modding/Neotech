@@ -47,10 +47,10 @@ public class BlockManager {
     public static BlockMachine treeFarm;
 
     // RF Storage
-    public static BlockEnergyStorage basicRFStorage;
-    public static BlockEnergyStorage advancedRFStorage;
-    public static BlockEnergyStorage eliteRFStorage;
-    public static BlockEnergyStorage creativeRFStorage;
+    public static BlockEnergyStorage basicEnergyStorage;
+    public static BlockEnergyStorage advancedEnergyStorage;
+    public static BlockEnergyStorage eliteEnergyStorage;
+    public static BlockEnergyStorage creativeEnergyStorage;
 
     // Tanks
     public static BlockFluidStorage basicTank;
@@ -79,14 +79,14 @@ public class BlockManager {
         treeFarm = registerBlock(new BlockTreeFarm("treeFarm"), TileTreeFarm.class);
 
         // RF Storage
-        basicRFStorage = new BlockEnergyStorage("basicEnergyStorage", 1);
-        registerBlock(basicRFStorage, new ItemBlockEnergyStorage(basicRFStorage), TileEnergyStorage.class, null);
-        advancedRFStorage = new BlockEnergyStorage("advancedEnergyStorage", 2);
-        registerBlock(advancedRFStorage, new ItemBlockEnergyStorage(advancedRFStorage), null, null);
-        eliteRFStorage = new BlockEnergyStorage("eliteEnergyStorage", 3);
-        registerBlock(eliteRFStorage, new ItemBlockEnergyStorage(eliteRFStorage), null, null);
-        creativeRFStorage = new BlockEnergyStorage("creativeEnergyStorage", 4);
-        registerBlock(creativeRFStorage, new ItemBlockEnergyStorage(creativeRFStorage), null, null);
+        basicEnergyStorage = new BlockEnergyStorage("basicEnergyStorage", 1);
+        registerBlock(basicEnergyStorage, new ItemBlockEnergyStorage(basicEnergyStorage), TileEnergyStorage.class, null);
+        advancedEnergyStorage = new BlockEnergyStorage("advancedEnergyStorage", 2);
+        registerBlock(advancedEnergyStorage, new ItemBlockEnergyStorage(advancedEnergyStorage), null, null);
+        eliteEnergyStorage = new BlockEnergyStorage("eliteEnergyStorage", 3);
+        registerBlock(eliteEnergyStorage, new ItemBlockEnergyStorage(eliteEnergyStorage), null, null);
+        creativeEnergyStorage = new BlockEnergyStorage("creativeEnergyStorage", 4);
+        registerBlock(creativeEnergyStorage, new ItemBlockEnergyStorage(creativeEnergyStorage), null, null);
 
         // Tanks
         basicTank = new BlockFluidStorage("basicTank", TileBasicTank.class);

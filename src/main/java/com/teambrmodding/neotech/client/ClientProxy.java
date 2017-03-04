@@ -57,10 +57,10 @@ public class ClientProxy extends CommonProxy {
         ItemRenderManager.registerBlockModel(BlockManager.solarPanelT1, "solarPanelT1", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.solarPanelT2, "solarPanelT2", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.solarPanelT3, "solarPanelT3", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.basicRFStorage, "basicRFStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.advancedRFStorage, "advancedRFStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.eliteRFStorage, "eliteRFStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.creativeRFStorage, "creativeRFStorage", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.basicEnergyStorage, "basicEnergyStorage", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.advancedEnergyStorage, "advancedEnergyStorage", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.eliteEnergyStorage, "eliteEnergyStorage", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.creativeEnergyStorage, "creativeEnergyStorage", "normal");
         ItemRenderManager.registerBlockModel(BlockManager.basicTank, "basicTank", "inventory");
         ItemRenderManager.registerBlockModel(BlockManager.advancedTank, "advancedTank", "inventory");
         ItemRenderManager.registerBlockModel(BlockManager.eliteTank, "eliteTank", "inventory");
@@ -135,27 +135,6 @@ public class ClientProxy extends CommonProxy {
                 new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.MEMORY_DDR4.toLowerCase()));
         ModelLoaderHelper.registerItem(ItemManager.memoryDDR4, "items/upgrades", "type=" + IUpgradeItem.MEMORY_DDR4.toLowerCase());
 
-        // Hard Drive
-        // 64
-        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive64G,
-                new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_64G.toLowerCase()));
-        ModelLoaderHelper.registerItem(ItemManager.hardDrive64G, "items/upgrades", "type=" + IUpgradeItem.HDD_64G.toLowerCase());
-
-        // 254
-        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive256G,
-                new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_256G.toLowerCase()));
-        ModelLoaderHelper.registerItem(ItemManager.hardDrive256G, "items/upgrades", "type=" + IUpgradeItem.HDD_256G.toLowerCase());
-
-        // 512
-        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive512G,
-                new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_512G.toLowerCase()));
-        ModelLoaderHelper.registerItem(ItemManager.hardDrive512G, "items/upgrades", "type=" + IUpgradeItem.HDD_512G.toLowerCase());
-
-        // 1t
-        ModelLoader.setCustomMeshDefinition(ItemManager.hardDrive1T,
-                new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.HDD_1T.toLowerCase()));
-        ModelLoaderHelper.registerItem(ItemManager.hardDrive1T, "items/upgrades", "type=" + IUpgradeItem.HDD_1T.toLowerCase());
-
         // PSU
         // 250
         ModelLoader.setCustomMeshDefinition(ItemManager.psu250W,
@@ -176,13 +155,6 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.setCustomMeshDefinition(ItemManager.psu960W,
                 new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.PSU_960W.toLowerCase()));
         ModelLoaderHelper.registerItem(ItemManager.psu960W, "items/upgrades", "type=" + IUpgradeItem.PSU_960W.toLowerCase());
-
-        // Transformer
-        if (Loader.isModLoaded("IC2")) {
-            ModelLoader.setCustomMeshDefinition(ItemManager.transformer,
-                    new SimpleItemMeshDefinition("upgrades", "type=" + IUpgradeItem.TRANSFORMER.toLowerCase()));
-            ModelLoaderHelper.registerItem(ItemManager.transformer, "items/upgrades", "type=" + IUpgradeItem.TRANSFORMER.toLowerCase());
-        }
 
         // Expansion
         ModelLoader.setCustomMeshDefinition(ItemManager.expansion,

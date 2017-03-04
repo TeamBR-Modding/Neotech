@@ -16,15 +16,23 @@ import com.teambrmodding.neotech.api.jei.solidifier.JEISolidifierRecipeHandler;
 import com.teambrmodding.neotech.client.gui.machines.generators.GuiFluidGenerator;
 import com.teambrmodding.neotech.client.gui.machines.generators.GuiFurnaceGenerator;
 import com.teambrmodding.neotech.client.gui.machines.processors.*;
+import com.teambrmodding.neotech.common.blocks.machines.BlockMachine;
+import com.teambrmodding.neotech.common.items.UpgradeItem;
+import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.BlockManager;
 import mezz.jei.api.*;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file was created for NeoTech
@@ -113,6 +121,7 @@ public class NeotechJEIPlugin implements IModPlugin {
 
         // Move JEI item pane around tabs
         registry.addAdvancedGuiHandlers(new IAdvancedGuiHandler<GuiBase>() {
+            @Nonnull
             @Override
             public Class<GuiBase> getGuiContainerClass() {
                 return GuiBase.class;
@@ -120,16 +129,51 @@ public class NeotechJEIPlugin implements IModPlugin {
 
             @Nullable
             @Override
-            public java.util.List<Rectangle> getGuiExtraAreas(GuiBase guiContainer) {
+            public List<Rectangle> getGuiExtraAreas(@Nonnull GuiBase guiContainer) {
                 return guiContainer.getCoveredAreas();
             }
 
             @Nullable
             @Override
-            public Object getIngredientUnderMouse(GuiBase guiContainer, int mouseX, int mouseY) {
+            public Object getIngredientUnderMouse(@Nonnull GuiBase guiContainer, int mouseX, int mouseY) {
                 return null;
             }
         });
+
+        // Add descriptions for machines
+        for (Object block : Block.REGISTRY) {
+            if (block instanceof BlockMachine) {
+                BlockMachine machine = (BlockMachine) block;
+                registry.addDescription(new ItemStack(machine), "neotech." + machine.name + ".desc");
+            }
+        }
+
+        // Batteries
+        List<ItemStack> storageList = new ArrayList<>();
+        storageList.add(new ItemStack(BlockManager.basicEnergyStorage));
+        storageList.add(new ItemStack(BlockManager.advancedEnergyStorage));
+        storageList.add(new ItemStack(BlockManager.eliteEnergyStorage));
+        registry.addDescription(storageList,
+                "neotech.energyStorage.desc");
+
+        // Fluid Storage
+        List<ItemStack> fluidStorageList = new ArrayList<>();
+        fluidStorageList.add(new ItemStack(BlockManager.basicTank));
+        fluidStorageList.add(new ItemStack(BlockManager.advancedTank));
+        fluidStorageList.add(new ItemStack(BlockManager.eliteTank));
+        registry.addDescription(fluidStorageList, "neotech.fluidStorage.desc");
+
+        // Add descriptions for items
+        for(Object item : Item.REGISTRY) {
+            // Upgrades
+            if(item instanceof UpgradeItem) {
+                UpgradeItem upgradeItem = (UpgradeItem) item;
+                if(upgradeItem.getCategory() == IUpgradeItem.ENUM_UPGRADE_CATEGORY.MISC)
+                    registry.addDescription(new ItemStack(upgradeItem), "neotech." + upgradeItem.getID() + ".desc");
+                else
+                    registry.addDescription(new ItemStack(upgradeItem), "neotech." + upgradeItem.getCategory() + ".desc");
+            }
+        }
     }
 
     @Override

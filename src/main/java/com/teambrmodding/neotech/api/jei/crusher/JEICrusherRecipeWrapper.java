@@ -83,7 +83,7 @@ public class JEICrusherRecipeWrapper extends BlankRecipeWrapper {
      */
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        if(optionalSecondary != null) {
+        if(!optionalSecondary.isEmpty()) {
             minecraft.fontRendererObj.drawSplitString(secondaryChance + "%", 140, 55, 60, Color.gray.getRGB());
         }
     }

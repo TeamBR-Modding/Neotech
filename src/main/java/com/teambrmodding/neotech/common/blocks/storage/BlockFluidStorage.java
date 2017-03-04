@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -78,7 +79,9 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
 
             // First interact with fluid handlers
             IFluidHandler fluidHandler = fluidStorage.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-            if(FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), fluidHandler, playerIn).isSuccess()) {
+            FluidActionResult result = FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), fluidHandler, playerIn);
+            if(result.isSuccess()) {
+                playerIn.setHeldItem(hand, result.getResult());
                 return true;
             }
 
@@ -145,7 +148,7 @@ public class BlockFluidStorage extends BaseBlock implements IToolable {
             TileBasicTank tank = (TileBasicTank) worldIn.getTileEntity(pos);
 
             FluidUtil.tryFluidTransfer(tank,
-                    stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null), Integer.MAX_VALUE, true);
+                    stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null), Integer.MAX_VALUE, true);
 
             tank.markForUpdate(3);
         }

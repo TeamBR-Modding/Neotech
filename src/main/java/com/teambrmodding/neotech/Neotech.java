@@ -59,7 +59,7 @@ public class Neotech {
     public static CreativeTabs tabNeotech = new CreativeTabs("tabNeotech") {
         @Override
         public ItemStack getTabIconItem() {
-            return new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage));
+            return new ItemStack(Item.getItemFromBlock(BlockManager.eliteEnergyStorage));
         }
     };
 

@@ -1,6 +1,8 @@
 package com.teambrmodding.neotech.common.blocks.storage;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.teambr.bookshelf.client.gui.GuiColor;
+import com.teambr.bookshelf.common.IAdvancedToolTipProvider;
 import com.teambr.bookshelf.common.ICraftingListener;
 import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.managers.BlockManager;
@@ -15,6 +17,9 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +32,7 @@ import java.util.List;
  * @author Paul Davis - pauljoda
  * @since 2/15/2017
  */
-public class ItemBlockFluidStorage extends ItemBlock implements ICraftingListener {
+public class ItemBlockFluidStorage extends ItemBlock implements ICraftingListener, IAdvancedToolTipProvider {
     private BlockFluidStorage fluidStorage;
 
     /**
@@ -69,14 +74,44 @@ public class ItemBlockFluidStorage extends ItemBlock implements ICraftingListene
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        tooltip.add(GuiColor.ORANGE + ClientUtils.translate("neotech.text.fluidStored"));
         if(stack.hasTagCompound()) {
             FluidStack currentStored = FluidUtil.getFluidContained(stack);
             if(currentStored == null)
                 return;
 
-            tooltip.add(GuiColor.ORANGE + ClientUtils.translate("neotech.text.fluidStored"));
             tooltip.add("  " + currentStored.getLocalizedName() + ": " + ClientUtils.formatNumber(currentStored.amount) + " mb");
-        }
+        } else
+            tooltip.add("  " + ChatFormatting.RED + ClientUtils.translate("neotech.text.empty"));
+    }
+
+    /*******************************************************************************************************************
+     * IAdvancedToolTipProvider                                                                                        *
+     *******************************************************************************************************************/
+
+    /**
+     * Get the tool tip to present when shift is pressed
+     *
+     * @param stack The itemstack
+     * @return The list to display
+     */
+    @Nullable
+    @Override
+    public List<String> getAdvancedToolTip(@Nonnull ItemStack stack) {
+        List<String> toolTip = new ArrayList<>();
+
+        // Capacity
+        toolTip.add("");
+        toolTip.add(ChatFormatting.GOLD + ClientUtils.translate("neotech.text.capacity"));
+        toolTip.add("  " +  ChatFormatting.GRAY +
+                ClientUtils.formatNumber(stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)
+                        .getTankProperties()[0].getCapacity()) + "mb");
+
+        // Description
+        toolTip.add("");
+        toolTip.add(ChatFormatting.GRAY + ClientUtils.translate("neotech.fluidStorage.desc"));
+
+        return toolTip;
     }
 
     /*******************************************************************************************************************

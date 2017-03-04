@@ -35,17 +35,10 @@ public class ItemManager {
     public static UpgradeItem memoryDDR3;
     public static UpgradeItem memoryDDR4;
 
-    public static UpgradeItem hardDrive64G;
-    public static UpgradeItem hardDrive256G;
-    public static UpgradeItem hardDrive512G;
-    public static UpgradeItem hardDrive1T;
-
     public static UpgradeItem psu250W;
     public static UpgradeItem psu500W;
     public static UpgradeItem psu750W;
     public static UpgradeItem psu960W;
-
-    public static UpgradeItem transformer;
 
     public static UpgradeItem expansion;
     public static UpgradeItem redstoneControl;
@@ -65,19 +58,10 @@ public class ItemManager {
         memoryDDR3 = registerItem(new UpgradeItem(IUpgradeItem.MEMORY_DDR3, MEMORY, 2, 6, true));
         memoryDDR4 = registerItem(new UpgradeItem(IUpgradeItem.MEMORY_DDR4, MEMORY, 2, 8, true));
 
-        hardDrive64G = registerItem(new UpgradeItem(IUpgradeItem.HDD_64G, HDD, 1, 2, false));
-        hardDrive256G = registerItem(new UpgradeItem(IUpgradeItem.HDD_256G, HDD, 1, 4, false));
-        hardDrive512G = registerItem(new UpgradeItem(IUpgradeItem.HDD_512G, HDD, 1, 8, false));
-        hardDrive1T = registerItem(new UpgradeItem(IUpgradeItem.HDD_1T, HDD, 1, 16, false));
-
         psu250W = registerItem(new UpgradeItem(IUpgradeItem.PSU_250W, PSU, 1, 2, false));
         psu500W = registerItem(new UpgradeItem(IUpgradeItem.PSU_500W, PSU, 1, 4, false));
         psu750W = registerItem(new UpgradeItem(IUpgradeItem.PSU_750W, PSU, 1, 8, false));
         psu960W = registerItem(new UpgradeItem(IUpgradeItem.PSU_960W, PSU, 1, 16, false));
-
-        // Check for IC2
-        if(Loader.isModLoaded("IC2"))
-            transformer = registerItem(new UpgradeItem(IUpgradeItem.TRANSFORMER, MISC, 4, 1, true));
 
         expansion = registerItem(new UpgradeItem(IUpgradeItem.EXPANSION_CARD, MISC, 1, 1, false));
         redstoneControl = registerItem(new UpgradeItem(IUpgradeItem.REDSTONE_CIRCUIT, MISC, 1, 1, false));

@@ -1,5 +1,8 @@
 package com.teambrmodding.neotech.common.items;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
+import com.teambr.bookshelf.common.IAdvancedToolTipProvider;
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
 import com.teambrmodding.neotech.managers.CapabilityLoadManager;
 import net.minecraft.item.ItemStack;
@@ -8,7 +11,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This file was created for NeoTech
@@ -20,7 +26,7 @@ import javax.annotation.Nullable;
  * @author Paul Davis - pauljoda
  * @since 2/15/2017
  */
-public class UpgradeItem extends BaseItem implements IUpgradeItem, ICapabilityProvider {
+public class UpgradeItem extends BaseItem implements IUpgradeItem, ICapabilityProvider, IAdvancedToolTipProvider {
     private String id;
     private ENUM_UPGRADE_CATEGORY category;
     private int multiplier;
@@ -115,7 +121,7 @@ public class UpgradeItem extends BaseItem implements IUpgradeItem, ICapabilityPr
      * @return True if this object supports the capability.
      */
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY;
     }
     /**
@@ -129,9 +135,43 @@ public class UpgradeItem extends BaseItem implements IUpgradeItem, ICapabilityPr
      * @return True if this object supports the capability.
      */
     @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability != null && capability == CapabilityLoadManager.UPGRADE_ITEM_CAPABILITY)
             return (T) this;
         return null;
+    }
+
+    /*******************************************************************************************************************
+     * IAdvancedToolTipProvider                                                                                        *
+     *******************************************************************************************************************/
+
+    /**
+     * Get the tool tip to present when shift is pressed
+     *
+     * @param stack The itemstack
+     * @return The list to display
+     */
+    @Nullable
+    @Override
+    public List<String> getAdvancedToolTip(@Nonnull ItemStack stack) {
+        List<String> toolTip = new ArrayList<>();
+
+        toolTip.add("");
+
+        // Modifier
+        toolTip.add(ChatFormatting.GOLD + ClientUtils.translate("neotech.text.modifier") + ": " +
+                ChatFormatting.GRAY + getMultiplier(stack));
+
+        // Category
+        toolTip.add(ChatFormatting.GOLD + ClientUtils.translate("neotech.text.category") + ": " +
+                ChatFormatting.GRAY +  getCategory().toString());
+
+        // Desc
+        if(getCategory() == ENUM_UPGRADE_CATEGORY.MISC)
+            toolTip.add(ChatFormatting.GRAY + ClientUtils.translate("neotech." + getID() + ".desc"));
+        else
+            toolTip.add(ChatFormatting.GRAY + ClientUtils.translate("neotech." + getCategory() + ".desc"));
+
+        return toolTip;
     }
 }

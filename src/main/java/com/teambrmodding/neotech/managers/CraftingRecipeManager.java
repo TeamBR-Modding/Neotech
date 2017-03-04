@@ -91,18 +91,18 @@ public class CraftingRecipeManager {
                 "ACA", 'A', "ingotBronze", 'B', Items.IRON_AXE, 'C', Items.SHEARS, 'D', Blocks.REDSTONE_BLOCK));
 
         //RF Storage
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicRFStorage)),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicEnergyStorage)),
                 "ALA",
                 "DCD",
                 "ALA", 'A', "ingotIron", 'L', "ingotLead", 'C', "blockRedstone", 'D', "blockTin"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedRFStorage)),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.advancedEnergyStorage)),
                 "ALA",
                 "DCD",
-                "ALA", 'A', "ingotGold", 'L', "ingotLead", 'C', BlockManager.basicRFStorage, 'D', "blockTormented"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteRFStorage)),
+                "ALA", 'A', "ingotGold", 'L', "ingotLead", 'C', BlockManager.basicEnergyStorage, 'D', "blockTormented"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.eliteEnergyStorage)),
                 "ALA",
                 "DCD",
-                "ALA", 'A', "ingotSteel", 'L', "ingotLead", 'C', BlockManager.advancedRFStorage, 'D', "blockOutlandish"));
+                "ALA", 'A', "ingotSteel", 'L', "ingotLead", 'C', BlockManager.advancedEnergyStorage, 'D', "blockOutlandish"));
 
         //Tanks
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.basicTank),
@@ -183,7 +183,7 @@ public class CraftingRecipeManager {
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.psu250W),
                 "RRR",
                 "RSR",
-                "RRR", 'R', "blockRedstone", 'S', BlockManager.basicRFStorage));
+                "RRR", 'R', "blockRedstone", 'S', BlockManager.basicEnergyStorage));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemManager.psu500W),
                 "RRR",
                 "RTR",

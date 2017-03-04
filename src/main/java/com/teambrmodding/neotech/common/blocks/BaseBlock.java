@@ -23,10 +23,12 @@ import net.minecraft.world.World;
  */
 public class BaseBlock extends BlockContainer {
     private Class<? extends TileEntity> tileClass;
+    public String name;
 
     protected BaseBlock(Material materialIn, String name, Class<? extends TileEntity> tileEntityClass) {
         super(materialIn);
         this.tileClass = tileEntityClass;
+        this.name = name;
 
         setRegistryName(new ResourceLocation(Reference.MOD_ID, name));
         setUnlocalizedName(Reference.MOD_ID + ":" + name);
