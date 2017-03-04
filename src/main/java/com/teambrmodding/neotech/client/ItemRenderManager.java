@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 
 /**
@@ -32,9 +33,9 @@ public class ItemRenderManager {
      */
     public static void registerItem(Item item) {
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0,
-                new ModelResourceLocation(item.getRegistryName(), "inventory"));
+                new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toString().toLowerCase()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(item, 0,
-                new ModelResourceLocation(item.getRegistryName(), "inventory"));
+                new ModelResourceLocation(new ResourceLocation(item.getRegistryName().toString().toLowerCase()), "inventory"));
     }
 
     /**
@@ -53,6 +54,6 @@ public class ItemRenderManager {
      */
     public static void registerBlockModel(Block block, String name, String variants, int meta) {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
-                meta, new ModelResourceLocation(block.getRegistryName(), variants));
+                meta, new ModelResourceLocation(new ResourceLocation(block.getRegistryName().toString().toLowerCase()), variants));
     }
 }
