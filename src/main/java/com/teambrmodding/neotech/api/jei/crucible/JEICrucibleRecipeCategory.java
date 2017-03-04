@@ -35,7 +35,7 @@ import java.util.List;
 public class JEICrucibleRecipeCategory implements IRecipeCategory<JEICrucibleRecipeWrapper> {
 
     // Variables
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricCrucible.png");
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electriccrucible.png");
     private IDrawableAnimated progressArrow;
     private IDrawableAnimated powerBar;
 

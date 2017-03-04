@@ -42,7 +42,7 @@ public class GuiFluidGenerator extends GuiAbstractMachine<ContainerFluidGenerato
      */
     public GuiFluidGenerator(EntityPlayer player, TileFluidGenerator generator) {
         super(new ContainerFluidGenerator(player.inventory, generator), 175, 165, "neotech.fluidgenerator.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/generatorFluid.png"), generator, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/generatorfluid.png"), generator, player);
         this.generator = generator;
         addComponents();
     }

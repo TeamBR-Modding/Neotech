@@ -33,7 +33,7 @@ import java.util.List;
 public class JEICentrifugeRecipeCategory implements IRecipeCategory<JEICentrifugeRecipeWrapper> {
 
     // Display
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricCentrifuge.png");
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electriccentrifuge.png");
     private IDrawableAnimated progressArrow;
     private IDrawableAnimated powerBar;
 

@@ -33,7 +33,7 @@ import java.util.List;
 public class JEICrusherRecipeCategory implements IRecipeCategory<JEICrusherRecipeWrapper> {
 
     // Variables
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricCrusher.png");
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electriccrusher.png");
     private IDrawableAnimated progressArrow;
     private IDrawableAnimated powerBar;
 

@@ -38,7 +38,7 @@ public class GuiCentrifuge extends GuiAbstractMachine<ContainerCentrifuge> {
 
     public GuiCentrifuge(EntityPlayer player, TileCentrifuge centrifuge) {
         super(new ContainerCentrifuge(player.inventory, centrifuge), 175, 165, "neotech.centrifuge.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricCentrifuge.png"), centrifuge, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/electriccentrifuge.png"), centrifuge, player);
         this.centrifuge = centrifuge;
 
         addComponents();

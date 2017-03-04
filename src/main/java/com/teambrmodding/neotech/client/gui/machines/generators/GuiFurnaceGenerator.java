@@ -43,7 +43,7 @@ public class GuiFurnaceGenerator extends GuiAbstractMachine<ContainerFurnaceGene
      */
     public GuiFurnaceGenerator(EntityPlayer player, TileFurnaceGenerator generator) {
         super(new ContainerFurnaceGenerator(player.inventory, generator), 175, 165, "neotech.furnacegenerator.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/generatorFurnace.png"), generator, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/generatorfurnace.png"), generator, player);
         this.generator = generator;
         addComponents();
     }

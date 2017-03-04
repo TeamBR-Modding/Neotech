@@ -36,7 +36,7 @@ import java.util.List;
 public class JEIFluidGeneratorCategory implements IRecipeCategory<JEIFluidGeneratorRecipeWrapper> {
 
     // Display
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/fluidFuel.png");
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/fluidfuel.png");
     private IDrawableAnimated flame;
     private IDrawableAnimated powerBar;
 

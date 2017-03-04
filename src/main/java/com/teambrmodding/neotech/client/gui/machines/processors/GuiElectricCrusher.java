@@ -33,7 +33,7 @@ public class GuiElectricCrusher extends GuiAbstractMachine<ContainerElectricCrus
 
     public GuiElectricCrusher(EntityPlayer player, TileElectricCrusher crusher) {
         super(new ContainerElectricCrusher(player.inventory, crusher), 175, 165, "neotech.crusher.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricCrusher.png"), crusher, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/electriccrusher.png"), crusher, player);
         this.crusher = crusher;
 
         addComponents();

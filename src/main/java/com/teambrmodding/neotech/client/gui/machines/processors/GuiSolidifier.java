@@ -40,7 +40,7 @@ public class GuiSolidifier extends GuiAbstractMachine<ContainerSolidifier> {
 
     public GuiSolidifier(EntityPlayer player, TileSolidifier solidifier) {
         super(new ContainerSolidifier(player.inventory, solidifier), 175, 165, "neotech.electricSolidifier.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricSolidifier.png"), solidifier, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricsolidifier.png"), solidifier, player);
         this.solidifier = solidifier;
 
         addComponents();

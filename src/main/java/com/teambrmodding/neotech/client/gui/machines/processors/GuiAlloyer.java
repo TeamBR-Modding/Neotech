@@ -39,7 +39,7 @@ public class GuiAlloyer extends GuiAbstractMachine<ContainerAlloyer> {
 
     public GuiAlloyer(EntityPlayer player, TileAlloyer alloyer) {
         super(new ContainerAlloyer(player.inventory, alloyer), 175, 165, "neotech.alloyer.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricAlloyer.png"), alloyer, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricalloyer.png"), alloyer, player);
         this.alloyer = alloyer;
 
         addComponents();

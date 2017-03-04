@@ -79,14 +79,14 @@ public class ClientProxy extends CommonProxy {
 
             ModelResourceLocation modelResourceLocation =
                     new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
-                            fluid.getFluid().getName()), "inventory");
+                            fluid.getFluid().getName().toLowerCase()), "inventory");
             ModelLoader.setCustomMeshDefinition(item, new ModelLocationWrapper(modelResourceLocation));
             ModelLoader.setCustomModelResourceLocation(item, 0, modelResourceLocation);
             ModelLoader.setCustomStateMapper(fluid, new StateMapperBase() {
                 @Override
                 protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
                     return new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
-                            fluid.getFluid().getName()), "fluid");
+                            fluid.getFluid().getName().toLowerCase()), "fluid");
                 }
             });
         }

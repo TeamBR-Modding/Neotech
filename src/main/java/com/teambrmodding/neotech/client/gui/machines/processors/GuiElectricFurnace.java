@@ -33,7 +33,7 @@ public class GuiElectricFurnace extends GuiAbstractMachine<ContainerElectricFurn
 
     public GuiElectricFurnace(EntityPlayer player, AbstractMachine furnace) {
         super(new ContainerElectricFurnace(player.inventory, furnace), 175, 165, "neotech.furnace.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricFurnace.png"), furnace, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricfurnace.png"), furnace, player);
     }
 
     /**

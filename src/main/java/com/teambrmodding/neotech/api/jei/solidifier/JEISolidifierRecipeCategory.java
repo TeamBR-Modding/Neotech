@@ -33,7 +33,7 @@ import java.util.List;
 public class JEISolidifierRecipeCategory implements IRecipeCategory<JEISolidifierRecipeWrapper> {
 
     // Variables
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricSolidifier.png");
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricsolidifier.png");
     private IDrawableAnimated progressArrow;
     private IDrawableAnimated powerBar;
     private IDrawableStatic button;

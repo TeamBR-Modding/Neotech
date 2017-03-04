@@ -38,7 +38,7 @@ public class GuiCrucible extends GuiAbstractMachine<ContainerCrucible> {
 
     public GuiCrucible(EntityPlayer player, TileCrucible crucible) {
         super(new ContainerCrucible(player.inventory, crucible), 175, 165, "neotech.crucible.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/electricCrucible.png"), crucible, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/electriccrucible.png"), crucible, player);
         this.crucible = crucible;
 
         addComponents();

@@ -36,7 +36,7 @@ public class GuiTreeFarm extends GuiAbstractMachine<ContainerTreeFarm> {
      */
     public GuiTreeFarm(EntityPlayer player, AbstractMachine machine) {
         super(new ContainerTreeFarm(player.inventory, (TileTreeFarm) machine), 175, 165, "neotech.treeFarm.title",
-                new ResourceLocation(Reference.MOD_ID, "textures/gui/treeFarm.png"), machine, player);
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/treefarm.png"), machine, player);
     }
 
     /**

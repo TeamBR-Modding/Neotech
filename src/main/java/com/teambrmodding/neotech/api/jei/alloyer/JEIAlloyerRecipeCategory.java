@@ -33,7 +33,7 @@ import java.util.List;
 public class JEIAlloyerRecipeCategory implements IRecipeCategory<JEIAlloyerRecipeWrapper> {
 
     // Display
-    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricAlloyer.png");
+    private ResourceLocation backgroundResource = new ResourceLocation(Reference.MOD_ID, "textures/gui/jei/electricalloyer.png");
     private IDrawableAnimated progressArrow;
     private IDrawableAnimated powerBar;
 
