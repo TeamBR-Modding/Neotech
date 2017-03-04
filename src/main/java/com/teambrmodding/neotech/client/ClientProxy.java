@@ -45,27 +45,27 @@ public class ClientProxy extends CommonProxy {
     public void preInit() {
         MinecraftForge.EVENT_BUS.register(ModelFactory.INSTANCE);
 
-        ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricFurnace", "facing=north,isactive=false");
-        ItemRenderManager.registerBlockModel(BlockManager.electricCrusher, "electricCrusher", "facing=north,isactive=false");
-        ItemRenderManager.registerBlockModel(BlockManager.furnaceGenerator, "furnaceGenerator", "facing=north,isactive=false");
-        ItemRenderManager.registerBlockModel(BlockManager.fluidGenerator, "fluidGenerator", "facing=north,isactive=false");
-        ItemRenderManager.registerBlockModel(BlockManager.electricCrucible, "electricCrucible", "facing=north,isactive=false");
-        ItemRenderManager.registerBlockModel(BlockManager.electricSolidifier, "electricSolidifier", "facing=north,isactive=false");
+        ItemRenderManager.registerBlockModel(BlockManager.electricFurnace, "electricfurnace", "facing=north,isactive=false");
+        ItemRenderManager.registerBlockModel(BlockManager.electricCrusher, "electriccrusher", "facing=north,isactive=false");
+        ItemRenderManager.registerBlockModel(BlockManager.furnaceGenerator, "furnacegenerator", "facing=north,isactive=false");
+        ItemRenderManager.registerBlockModel(BlockManager.fluidGenerator, "fluidgenerator", "facing=north,isactive=false");
+        ItemRenderManager.registerBlockModel(BlockManager.electricCrucible, "electriccrucible", "facing=north,isactive=false");
+        ItemRenderManager.registerBlockModel(BlockManager.electricSolidifier, "electricsolidifier", "facing=north,isactive=false");
         ItemRenderManager.registerBlockModel(BlockManager.electricAlloyer, "alloyer", "facing=north,isactive=false");
         ItemRenderManager.registerBlockModel(BlockManager.electricCentrifuge, "centrifuge", "facing=north,isactive=false");
-        ItemRenderManager.registerBlockModel(BlockManager.treeFarm, "treeFarm", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT1, "solarPanelT1", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT2, "solarPanelT2", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT3, "solarPanelT3", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.basicEnergyStorage, "basicEnergyStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.advancedEnergyStorage, "advancedEnergyStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.eliteEnergyStorage, "eliteEnergyStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.creativeEnergyStorage, "creativeEnergyStorage", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.basicTank, "basicTank", "inventory");
-        ItemRenderManager.registerBlockModel(BlockManager.advancedTank, "advancedTank", "inventory");
-        ItemRenderManager.registerBlockModel(BlockManager.eliteTank, "eliteTank", "inventory");
-        ItemRenderManager.registerBlockModel(BlockManager.creativeTank, "creativeTank", "normal");
-        ItemRenderManager.registerBlockModel(BlockManager.voidTank, "voidTank", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.treeFarm, "treefarm", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT1, "solarpanelt1", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT2, "solarpanelt2", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.solarPanelT3, "solarpanelt3", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.basicEnergyStorage, "basicenergystorage", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.advancedEnergyStorage, "advancedenergystorage", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.eliteEnergyStorage, "eliteenergystorage", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.creativeEnergyStorage, "creativeenergystorage", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.basicTank, "basictank", "inventory");
+        ItemRenderManager.registerBlockModel(BlockManager.advancedTank, "advancedtank", "inventory");
+        ItemRenderManager.registerBlockModel(BlockManager.eliteTank, "elitetank", "inventory");
+        ItemRenderManager.registerBlockModel(BlockManager.creativeTank, "creativetank", "normal");
+        ItemRenderManager.registerBlockModel(BlockManager.voidTank, "voidtank", "normal");
 
         MetalManager.registerModels();
 

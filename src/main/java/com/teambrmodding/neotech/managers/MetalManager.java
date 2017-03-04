@@ -91,30 +91,30 @@ public class MetalManager {
 
             // Blocks
             if (metal.getSolidBlock() != null)
-                ItemRenderManager.registerBlockModel(metal.getSolidBlock(), metal.getSolidBlock().getName(), "normal");
+                ItemRenderManager.registerBlockModel(metal.getSolidBlock(), metal.getSolidBlock().getName().toLowerCase(), "normal");
 
             // Ore
             if (metal.getOreBlock() != null)
-                ItemRenderManager.registerBlockModel(metal.getOreBlock(), metal.getOreBlock().getName(), "normal");
+                ItemRenderManager.registerBlockModel(metal.getOreBlock(), metal.getOreBlock().getName().toLowerCase(), "normal");
 
             // Ingot
             if (metal.getIngot() != null) {
                 ModelLoader.setCustomMeshDefinition(metal.getIngot(),
-                        new SimpleItemMeshDefinition("metalItem", "type=ingot"));
+                        new SimpleItemMeshDefinition("metalitem", "type=ingot"));
                 ModelLoaderHelper.registerItem(metal.getIngot(), "items/metalItem", "type=ingot");
             }
 
             // Dust
             if (metal.getDust() != null) {
                 ModelLoader.setCustomMeshDefinition(metal.getDust(),
-                        new SimpleItemMeshDefinition("metalItem", "type=dust"));
+                        new SimpleItemMeshDefinition("metalitem", "type=dust"));
                 ModelLoaderHelper.registerItem(metal.getDust(), "items/metalItem", "type=dust");
             }
 
             // Nugget
             if (metal.getNugget() != null) {
                 ModelLoader.setCustomMeshDefinition(metal.getNugget(),
-                        new SimpleItemMeshDefinition("metalItem", "type=nugget"));
+                        new SimpleItemMeshDefinition("metalitem", "type=nugget"));
                 ModelLoaderHelper.registerItem(metal.getNugget(), "items/metalItem", "type=nugget");
             }
 
@@ -127,14 +127,14 @@ public class MetalManager {
 
                 ModelResourceLocation modelResourceLocation =
                         new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
-                                metal.getFluidBlock().getFluid().getName()), "inventory");
+                                metal.getFluidBlock().getFluid().getName().toLowerCase()), "inventory");
                 ModelLoader.setCustomMeshDefinition(item, new ModelLocationWrapper(modelResourceLocation));
                 ModelLoader.setCustomModelResourceLocation(item, 0, modelResourceLocation);
                 ModelLoader.setCustomStateMapper(metal.getFluidBlock(), new StateMapperBase() {
                     @Override
                     protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
                         return new ModelResourceLocation(new ResourceLocation(Reference.MOD_ID, "fluid_" +
-                                metal.getFluidBlock().getFluid().getName()), "fluid");
+                                metal.getFluidBlock().getFluid().getName().toLowerCase()), "fluid");
                     }
                 });
             }
