@@ -22,6 +22,8 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -111,10 +113,12 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * Upgradeable Variables                                                                                           *
      *******************************************************************************************************************/
 
+    public static final int UPGRADE_INVENTORY_SIZE = 6;
+
     public InventoryHandler upgradeInventory = new InventoryHandler() {
         @Override
         protected int getInventorySize() {
-            return 6;
+            return UPGRADE_INVENTORY_SIZE;
         }
 
         @Override
@@ -263,6 +267,8 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
      * Used to get the description to display on the tab
      * @return The long string with the description
      */
+    @Nullable
+    @SideOnly(Side.CLIENT)
     public abstract String getDescription();
 
     /**
@@ -422,7 +428,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return (!isDisabled(facing) || getModeForSide(facing) == EnumInputOutputMode.DEFAULT) &&
                 ((capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getItemHandlerCapability(facing) != null) ||
                         (isFluidHandler() && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY &&
@@ -431,7 +437,7 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && getItemHandlerCapability(facing) != null) {
             return (T) getItemHandlerCapability(facing);
         }

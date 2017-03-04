@@ -1,8 +1,11 @@
 package com.teambrmodding.neotech.common.blocks.machines;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import com.teambr.bookshelf.Bookshelf;
+import com.teambr.bookshelf.common.IAdvancedToolTipProvider;
 import com.teambr.bookshelf.common.IOpensGui;
 import com.teambr.bookshelf.common.blocks.IToolable;
+import com.teambr.bookshelf.util.ClientUtils;
 import com.teambr.bookshelf.util.PlayerUtils;
 import com.teambr.bookshelf.util.WorldUtils;
 import com.teambrmodding.neotech.common.blocks.BaseBlock;
@@ -13,23 +16,29 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,7 +56,7 @@ import java.util.Random;
  * @since 2/11/2017
  */
 @SuppressWarnings("deprecation")
-public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
+public class BlockMachine extends BaseBlock implements IOpensGui, IToolable, IAdvancedToolTipProvider {
     // Instance of the property for rotation
     public static PropertyDirection FOUR_WAY =
             PropertyDirection.create("facing", Arrays.asList(EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST));
@@ -95,7 +104,9 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
             // First interact with fluid handlers
             if(machine.isFluidHandler()) {
                 IFluidHandler fluidHandler = machine.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-                if(FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), fluidHandler, playerIn).isSuccess()) {
+                FluidActionResult result = FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), fluidHandler, playerIn);
+                if(result.isSuccess()) {
+                    playerIn.setHeldItem(hand, result.getResult());
                     return true;
                 }
             }
@@ -326,8 +337,63 @@ public class BlockMachine extends BaseBlock implements IOpensGui, IToolable {
      * @param pos The position of the block
      * @return The stack to drop in the world
      */
+    @Nonnull
     @Override
     public ItemStack getStackDroppedByWrench(World world, BlockPos pos) {
         return new ItemStack(this);
+    }
+
+    /*******************************************************************************************************************
+     * IAdvancedToolTipProvider                                                                                        *
+     *******************************************************************************************************************/
+
+    /**
+     * Get the tool tip to present when shift is pressed
+     *
+     * @param stack The itemstack
+     * @return The list to display
+     */
+    @Nullable
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<String> getAdvancedToolTip(@Nonnull ItemStack stack) {
+        // Tooltip returned
+        List<String> toolTip = new ArrayList<>();
+
+        // Must have a tag for upgrades
+        if(stack.hasTagCompound()) {
+            // Local holding for tag
+            NBTTagCompound compound = stack.getTagCompound();
+
+            // Add upgrade info
+            if(compound.hasKey(AbstractMachine.UPGRADE_INVENTORY_NBT)) {
+                // Add header
+                toolTip.add(ChatFormatting.GREEN + ClientUtils.translate("neotech.text.upgrades"));
+                // Create and read list from tag
+                NonNullList<ItemStack> upgradeInventory = NonNullList.withSize(AbstractMachine.UPGRADE_INVENTORY_SIZE, ItemStack.EMPTY);
+                ItemStackHelper.loadAllItems(compound.getCompoundTag(AbstractMachine.UPGRADE_INVENTORY_NBT), upgradeInventory);
+
+                // Loop inventory
+                for(ItemStack upgradeStack : upgradeInventory) {
+                    if(!upgradeStack.isEmpty()) {
+                        // Add info
+                        toolTip.add("  " + upgradeStack.getCount() + "x" + upgradeStack.getDisplayName());
+                    }
+                }
+
+                // If no upgrades added, say none
+                if(toolTip.size() == 1)
+                    toolTip.add(ChatFormatting.GRAY + ClientUtils.translate("neotech.text.none"));
+            }
+        }
+
+        // Wrench info
+        toolTip.add("");
+        toolTip.add(ChatFormatting.ITALIC + ClientUtils.translate("neotech.wrenchBreak.text"));
+
+        toolTip.add("");
+        toolTip.add(ChatFormatting.GRAY + ClientUtils.translate("neotech." + this.name + ".desc"));
+
+        return toolTip;
     }
 }
