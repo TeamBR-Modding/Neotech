@@ -191,7 +191,6 @@ public class TileCentrifuge extends MachineProcessor<FluidStack, Pair<FluidStack
             } else
                 break;
         }
-        markForUpdate(6);
     }
 
     /**

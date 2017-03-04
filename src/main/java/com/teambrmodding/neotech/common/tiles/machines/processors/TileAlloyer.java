@@ -179,7 +179,6 @@ public class TileAlloyer extends MachineProcessor<Pair<FluidStack, FluidStack>, 
             else
                 break;
         }
-        markForUpdate(6);
     }
 
     /**

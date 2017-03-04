@@ -19,6 +19,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @since 2/16/2017
  */
 public abstract class MachineGenerator extends AbstractMachine {
+    public static final int BURN_TIME    = 40;
+    public static final int CURRENT_BURN = 41;
+
     protected int burnTime, currentObjectBurnTime = 0;
     protected boolean didWork = false;
 
@@ -66,13 +69,14 @@ public abstract class MachineGenerator extends AbstractMachine {
 
         // Generate
         if(manageBurnTime()) {
+            sendValueToClient(CURRENT_BURN, currentObjectBurnTime);
             generate();
             didWork = true;
         } else
             reset();
 
         if(didWork)
-            markForUpdate(6);
+            sendValueToClient(BURN_TIME, burnTime);
     }
 
     /**
@@ -181,5 +185,29 @@ public abstract class MachineGenerator extends AbstractMachine {
                 System.arraycopy(outputSlots, 0, combinedInOut, inputSlots.length, outputSlots.length);
                 return combinedInOut;
         }
+    }
+
+    /*******************************************************************************************************************
+     * Syncable                                                                                                        *
+     *******************************************************************************************************************/
+
+    /**
+     * Used to set the variable for this tile, the Syncable will use this when you send a value to the server
+     *
+     * @param id    The ID of the variable to send
+     * @param value The new value to set to (you can use this however you want, eg using the ordinal of EnumFacing)
+     */
+    @Override
+    public void setVariable(int id, double value) {
+        switch (id) {
+            case BURN_TIME:
+                this.burnTime = (int) value;
+                return;
+            case CURRENT_BURN:
+                this.currentObjectBurnTime = (int) value;
+                return;
+            default:
+        }
+        super.setVariable(id, value);
     }
 }

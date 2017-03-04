@@ -154,7 +154,6 @@ public class TileElectricFurnace extends MachineProcessor<ItemStack, ItemStack> 
             } else
                 break;
         }
-        markForUpdate(6);
     }
 
     /**

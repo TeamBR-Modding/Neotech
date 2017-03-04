@@ -186,7 +186,6 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
             } else
                 break;
         }
-        markForUpdate(6);
     }
 
     /**

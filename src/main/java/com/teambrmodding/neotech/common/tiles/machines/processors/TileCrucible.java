@@ -158,7 +158,6 @@ public class TileCrucible extends MachineProcessor<ItemStack, FluidStack> {
             } else
                 break;
         }
-        markForUpdate(6);
     }
 
     /**

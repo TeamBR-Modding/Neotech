@@ -178,7 +178,6 @@ public class TileElectricCrusher extends MachineProcessor<ItemStack, ItemStack> 
             } else
                 break;
         }
-        markForUpdate(6);
     }
 
     /**

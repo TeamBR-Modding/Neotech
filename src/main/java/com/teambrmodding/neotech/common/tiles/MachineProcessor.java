@@ -21,6 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @since 2/16/2017
  */
 public abstract class MachineProcessor<I, O> extends AbstractMachine {
+    public static final int COOK_TIME = 30;
+
     protected int cookTime = 0;
     protected boolean didWork = false;
 
@@ -96,6 +98,7 @@ public abstract class MachineProcessor<I, O> extends AbstractMachine {
             if(cookTime >= getCookTime()) {
                 completeCook();
                 reset();
+                markForUpdate(6);
             }
 
             // For the moments where we complete and result
@@ -108,12 +111,12 @@ public abstract class MachineProcessor<I, O> extends AbstractMachine {
             boolean update = cookTime > 0;
             if(update) {
                 cookTime -= 1;
-                markForUpdate(6);
+                sendValueToClient(COOK_TIME, cookTime);
             }
         }
 
         if(didWork)
-            markForUpdate(6);
+            sendValueToClient(COOK_TIME, cookTime);
     }
 
     /**
@@ -257,5 +260,24 @@ public abstract class MachineProcessor<I, O> extends AbstractMachine {
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, EnumFacing dir) {
         return slot == 1 && !isDisabled(dir);
+    }
+
+    /*******************************************************************************************************************
+     * Syncable                                                                                                        *
+     *******************************************************************************************************************/
+
+    /**
+     * Used to set the variable for this tile, the Syncable will use this when you send a value to the server
+     *
+     * @param id    The ID of the variable to send
+     * @param value The new value to set to (you can use this however you want, eg using the ordinal of EnumFacing)
+     */
+    @Override
+    public void setVariable(int id, double value) {
+        if(id == COOK_TIME) {
+            this.cookTime = (int) value;
+            return;
+        }
+        super.setVariable(id, value);
     }
 }
