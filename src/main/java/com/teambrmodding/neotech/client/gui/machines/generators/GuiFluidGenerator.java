@@ -101,8 +101,7 @@ public class GuiFluidGenerator extends GuiAbstractMachine<ContainerFluidGenerato
                  */
                 @Override
                 public void renderOverlay(int guiLeft, int guiTop, int mouseX, int mouseY) {
-                    setLabel(GuiColor.RED + ClientUtils.translate("bookshelfapi.energy.energyTick") +
-                            EnergyUtils.getEnergyDisplay(generator.getEnergyProduced()));
+                    setLabel(GuiColor.RED + EnergyUtils.getEnergyDisplay(generator.getEnergyProduced()) + "/tick");
                     super.renderOverlay(guiLeft, guiTop, mouseX, mouseY);
                 }
             });

@@ -124,6 +124,7 @@ public class TileSolarPanel extends MachineGenerator {
     @Override
     public void generate() {
         energyStorage.receivePower(getEnergyProduced(), true);
+        burnTime  = manageBurnTime() ? 1 : 0;
     }
 
     /**

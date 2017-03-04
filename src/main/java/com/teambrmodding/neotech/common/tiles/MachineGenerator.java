@@ -4,7 +4,6 @@ import com.teambr.bookshelf.util.EnergyUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,6 +56,7 @@ public abstract class MachineGenerator extends AbstractMachine {
      * Used to actually do the processes needed. For processors this should be cooking items and generators should
      * generate RF. This is called every tick allowed, provided redstone mode requirements are met
      */
+    private boolean needsUpdate = true;
     @Override
     protected void doWork() {
         didWork = burnTime == 1;
@@ -72,11 +72,18 @@ public abstract class MachineGenerator extends AbstractMachine {
             sendValueToClient(CURRENT_BURN, currentObjectBurnTime);
             generate();
             didWork = true;
+            needsUpdate = true; // We are processing, so we need to make sure to mark updated needed when done
         } else
             reset();
 
         if(didWork)
             sendValueToClient(BURN_TIME, burnTime);
+
+        // Update renderer
+        if(burnTime == 0 && needsUpdate) {
+            markForUpdate(3);
+            needsUpdate = false; // Only called on first idle tick
+        }
     }
 
     /**

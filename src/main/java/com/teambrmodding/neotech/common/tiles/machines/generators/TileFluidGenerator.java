@@ -18,10 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -123,31 +120,24 @@ public class TileFluidGenerator extends MachineGenerator {
             return false;
 
         // Handle Items
-        if(!getStackInSlot(INPUT_SLOT).isEmpty()) {
-            ItemStack stackToDrain = getStackInSlot(INPUT_SLOT);
-            if(stackToDrain.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-                IFluidHandler fluidHandler = stackToDrain.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-                FluidStack drained = FluidUtil.tryFluidTransfer(this, fluidHandler,
-                        tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), false);
+        ItemStack stackToDrain = getStackInSlot(INPUT_SLOT);
+        if(stackToDrain.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+            FluidActionResult result = FluidUtil.tryEmptyContainer(stackToDrain, this,
+                    tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), null, true);
 
-                // Attempt to drain
-                if(drained != null) {
-                    FluidUtil.tryFluidTransfer(this, fluidHandler,
-                            tanks[TANK].getCapacity() - tanks[TANK].getFluidAmount(), true);
-                    markForUpdate(6);
-                }
-
-                // If there is no fluid in container, move to output
-                if(FluidUtil.getFluidContained(stackToDrain) == null) {
-                    if(getStackInSlot(OUTPUT_SLOT).isEmpty()) {
-                        setStackInSlot(OUTPUT_SLOT, stackToDrain);
+            if(result.isSuccess() && FluidUtil.getFluidContained(result.getResult()) == null) {
+                if(getStackInSlot(OUTPUT_SLOT).isEmpty()) {
+                    setStackInSlot(OUTPUT_SLOT, result.getResult());
+                    setStackInSlot(INPUT_SLOT, ItemStack.EMPTY);
+                } else if(InventoryUtils.canStacksMerge(result.getResult(), getStackInSlot(OUTPUT_SLOT))) {
+                    InventoryUtils.tryMergeStacks(result.getResult(), getStackInSlot(OUTPUT_SLOT));
+                    if(getStackInSlot(INPUT_SLOT).getCount() <= 0)
                         setStackInSlot(INPUT_SLOT, ItemStack.EMPTY);
-                    } else if(InventoryUtils.canStacksMerge(stackToDrain, getStackInSlot(OUTPUT_SLOT))) {
-                        InventoryUtils.tryMergeStacks(stackToDrain, getStackInSlot(OUTPUT_SLOT));
-                        if(getStackInSlot(INPUT_SLOT).getCount() <= 0)
-                            setStackInSlot(INPUT_SLOT, ItemStack.EMPTY);
-                    }
                 }
+                markForUpdate(6);
+            } else if(result.isSuccess()) {
+                setStackInSlot(INPUT_SLOT, result.getResult());
+                markForUpdate(6);
             }
         }
 
