@@ -90,7 +90,13 @@ public class CraftingRecipeManager {
                 "BDB",
                 "ACA", 'A', "ingotBronze", 'B', Items.IRON_AXE, 'C', Items.SHEARS, 'D', Blocks.REDSTONE_BLOCK));
 
-        //RF Storage
+        // Inventory Charger
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockManager.inventoryCharger),
+                "III",
+                "IBC",
+                "III", 'I', "ingotIron", 'B', BlockManager.basicEnergyStorage, 'C', "ingotCopper"));
+
+        //Energy Storage
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Item.getItemFromBlock(BlockManager.basicEnergyStorage)),
                 "ALA",
                 "DCD",

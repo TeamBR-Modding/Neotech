@@ -197,6 +197,7 @@ tile.neotech:solarPanelT3.name=Elite Solar Panel
 
 # Operators
 tile.neotech:treeFarm.name=Electric Logger
+tile.neotech:inventorycharger.name=Inventory Charger
 
 # Storage
 tile.neotech:basicEnergyStorage.name=Basic Energy Storage
@@ -371,6 +372,9 @@ neotech.energyStorage.desc=Stores energy. Shift right click with the item to tog
 
 # Fluid Storage
 neotech.fluidStorage.desc=Stores fluid. When in item form, you can interact with fluid containing blocks, like a big bucket
+
+# Inventory Charger
+neotech.inventoryCharger.desc=Charges items in inventories it faces. Provide with power and give a redstone signal to disable
 
 #######################
 # JEI

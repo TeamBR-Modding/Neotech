@@ -16,6 +16,7 @@ import com.teambrmodding.neotech.api.jei.solidifier.JEISolidifierRecipeHandler;
 import com.teambrmodding.neotech.client.gui.machines.generators.GuiFluidGenerator;
 import com.teambrmodding.neotech.client.gui.machines.generators.GuiFurnaceGenerator;
 import com.teambrmodding.neotech.client.gui.machines.processors.*;
+import com.teambrmodding.neotech.common.blocks.machines.BlockInventoryCharger;
 import com.teambrmodding.neotech.common.blocks.machines.BlockMachine;
 import com.teambrmodding.neotech.common.items.UpgradeItem;
 import com.teambrmodding.neotech.common.tiles.traits.IUpgradeItem;
@@ -145,7 +146,8 @@ public class NeotechJEIPlugin implements IModPlugin {
             if (block instanceof BlockMachine) {
                 BlockMachine machine = (BlockMachine) block;
                 registry.addDescription(new ItemStack(machine), "neotech." + machine.name + ".desc");
-            }
+            } else if(block instanceof BlockInventoryCharger)
+                registry.addDescription(new ItemStack(BlockManager.inventoryCharger), "neotech.inventoryCharger.desc");
         }
 
         // Batteries

@@ -1,5 +1,6 @@
 package com.teambrmodding.neotech.managers;
 
+import com.teambrmodding.neotech.common.blocks.machines.BlockInventoryCharger;
 import com.teambrmodding.neotech.common.blocks.machines.BlockMachine;
 import com.teambrmodding.neotech.common.blocks.machines.BlockSolarPanel;
 import com.teambrmodding.neotech.common.blocks.machines.BlockTreeFarm;
@@ -10,6 +11,7 @@ import com.teambrmodding.neotech.common.blocks.storage.ItemBlockFluidStorage;
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileFluidGenerator;
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileFurnaceGenerator;
 import com.teambrmodding.neotech.common.tiles.machines.generators.TileSolarPanel;
+import com.teambrmodding.neotech.common.tiles.machines.operators.TileInventoryCharger;
 import com.teambrmodding.neotech.common.tiles.machines.operators.TileTreeFarm;
 import com.teambrmodding.neotech.common.tiles.machines.processors.*;
 import com.teambrmodding.neotech.common.tiles.storage.TileEnergyStorage;
@@ -34,76 +36,69 @@ import javax.annotation.Nullable;
  */
 public class BlockManager {
     // Machines
-    public static BlockMachine electricFurnace;
-    public static BlockMachine electricCrusher;
-    public static BlockMachine furnaceGenerator;
-    public static BlockMachine fluidGenerator;
-    public static BlockMachine electricCrucible;
-    public static BlockMachine electricSolidifier;
-    public static BlockMachine electricAlloyer;
-    public static BlockMachine electricCentrifuge;
+    public static BlockMachine electricFurnace    = new BlockMachine("electricFurnace", TileElectricFurnace.class);
+    public static BlockMachine electricCrusher    = new BlockMachine("electricCrusher", TileElectricCrusher.class);
+    public static BlockMachine furnaceGenerator   = new BlockMachine("furnaceGenerator", TileFurnaceGenerator.class);
+    public static BlockMachine fluidGenerator     = new BlockMachine("fluidGenerator", TileFluidGenerator.class);
+    public static BlockMachine electricCrucible   = new BlockMachine("electricCrucible", TileCrucible.class);
+    public static BlockMachine electricSolidifier = new BlockMachine("electricSolidifier", TileSolidifier.class);
+    public static BlockMachine electricAlloyer    = new BlockMachine("alloyer", TileAlloyer.class);
+    public static BlockMachine electricCentrifuge = new BlockMachine("centrifuge", TileCentrifuge.class);
 
     // Operators
-    public static BlockMachine treeFarm;
+    public static BlockMachine treeFarm                  = new BlockTreeFarm("treeFarm");
+    public static BlockInventoryCharger inventoryCharger = new BlockInventoryCharger();
 
     // RF Storage
-    public static BlockEnergyStorage basicEnergyStorage;
-    public static BlockEnergyStorage advancedEnergyStorage;
-    public static BlockEnergyStorage eliteEnergyStorage;
-    public static BlockEnergyStorage creativeEnergyStorage;
+    public static BlockEnergyStorage basicEnergyStorage    = new BlockEnergyStorage("basicEnergyStorage", 1);
+    public static BlockEnergyStorage advancedEnergyStorage = new BlockEnergyStorage("advancedEnergyStorage", 2);
+    public static BlockEnergyStorage eliteEnergyStorage    = new BlockEnergyStorage("eliteEnergyStorage", 3);
+    public static BlockEnergyStorage creativeEnergyStorage = new BlockEnergyStorage("creativeEnergyStorage", 4);
 
     // Tanks
-    public static BlockFluidStorage basicTank;
-    public static BlockFluidStorage advancedTank;
-    public static BlockFluidStorage eliteTank;
-    public static BlockFluidStorage creativeTank;
-    public static BlockFluidStorage voidTank;
+    public static BlockFluidStorage basicTank    = new BlockFluidStorage("basicTank", TileBasicTank.class);
+    public static BlockFluidStorage advancedTank = new BlockFluidStorage("advancedTank", TileAdvancedTank.class);
+    public static BlockFluidStorage eliteTank    = new BlockFluidStorage("eliteTank", TileEliteTank.class);
+    public static BlockFluidStorage creativeTank = new BlockFluidStorage("creativeTank", TileCreativeTank.class);
+    public static BlockFluidStorage voidTank     = new BlockFluidStorage("voidTank", TileVoidTank.class);
 
     // Solar Panels
-    public static BlockSolarPanel solarPanelT1;
-    public static BlockSolarPanel solarPanelT2;
-    public static BlockSolarPanel solarPanelT3;
+    public static BlockSolarPanel solarPanelT1 = new BlockSolarPanel("solarPanelT1", 1);
+    public static BlockSolarPanel solarPanelT2 = new BlockSolarPanel("solarPanelT2", 2);
+    public static BlockSolarPanel solarPanelT3 = new BlockSolarPanel("solarPanelT3", 3);
 
     public static void preInit() {
         // Machines
-        electricFurnace = registerBlock(new BlockMachine("electricFurnace", TileElectricFurnace.class), TileElectricFurnace.class);
-        electricCrusher = registerBlock(new BlockMachine("electricCrusher", TileElectricCrusher.class), TileElectricCrusher.class);
-        furnaceGenerator = registerBlock(new BlockMachine("furnaceGenerator", TileFurnaceGenerator.class), TileFurnaceGenerator.class);
-        fluidGenerator = registerBlock( new BlockMachine("fluidGenerator", TileFluidGenerator.class), TileFluidGenerator.class);
-        electricCrucible = registerBlock(new BlockMachine("electricCrucible", TileCrucible.class), TileCrucible.class);
-        electricSolidifier = registerBlock(new BlockMachine("electricSolidifier", TileSolidifier.class), TileSolidifier.class);
-        electricAlloyer = registerBlock(new BlockMachine("alloyer", TileAlloyer.class), TileAlloyer.class);
-        electricCentrifuge = registerBlock(new BlockMachine("centrifuge", TileCentrifuge.class), TileCentrifuge.class);
+        registerBlock(electricFurnace, TileElectricFurnace.class);
+        registerBlock(electricCrusher, TileElectricCrusher.class);
+        registerBlock(furnaceGenerator, TileFurnaceGenerator.class);
+        registerBlock(fluidGenerator, TileFluidGenerator.class);
+        registerBlock(electricCrucible, TileCrucible.class);
+        registerBlock(electricSolidifier, TileSolidifier.class);
+        registerBlock(electricAlloyer, TileAlloyer.class);
+        registerBlock(electricCentrifuge, TileCentrifuge.class);
 
         // Operators
-        treeFarm = registerBlock(new BlockTreeFarm("treeFarm"), TileTreeFarm.class);
+        registerBlock(treeFarm, TileTreeFarm.class);
+        registerBlock(inventoryCharger, TileInventoryCharger.class);
 
         // RF Storage
-        basicEnergyStorage = new BlockEnergyStorage("basicEnergyStorage", 1);
         registerBlock(basicEnergyStorage, new ItemBlockEnergyStorage(basicEnergyStorage), TileEnergyStorage.class, null);
-        advancedEnergyStorage = new BlockEnergyStorage("advancedEnergyStorage", 2);
         registerBlock(advancedEnergyStorage, new ItemBlockEnergyStorage(advancedEnergyStorage), null, null);
-        eliteEnergyStorage = new BlockEnergyStorage("eliteEnergyStorage", 3);
         registerBlock(eliteEnergyStorage, new ItemBlockEnergyStorage(eliteEnergyStorage), null, null);
-        creativeEnergyStorage = new BlockEnergyStorage("creativeEnergyStorage", 4);
         registerBlock(creativeEnergyStorage, new ItemBlockEnergyStorage(creativeEnergyStorage), null, null);
 
         // Tanks
-        basicTank = new BlockFluidStorage("basicTank", TileBasicTank.class);
         registerBlock(basicTank, new ItemBlockFluidStorage(basicTank), TileBasicTank.class, null);
-        advancedTank = new BlockFluidStorage("advancedTank", TileAdvancedTank.class);
         registerBlock(advancedTank, new ItemBlockFluidStorage(advancedTank), TileAdvancedTank.class, null);
-        eliteTank = new BlockFluidStorage("eliteTank", TileEliteTank.class);
         registerBlock(eliteTank, new ItemBlockFluidStorage(eliteTank), TileEliteTank.class, null);
-        creativeTank = new BlockFluidStorage("creativeTank", TileCreativeTank.class);
         registerBlock(creativeTank, new ItemBlockFluidStorage(creativeTank), TileCreativeTank.class, null);
-        voidTank = new BlockFluidStorage("voidTank", TileVoidTank.class);
         registerBlock(voidTank, new ItemBlockFluidStorage(voidTank), TileVoidTank.class, null);
 
         // Solar Panels
-        solarPanelT1 = registerBlock(new BlockSolarPanel("solarPanelT1", 1), TileSolarPanel.class);
-        solarPanelT2 = registerBlock(new BlockSolarPanel("solarPanelT2", 2));
-        solarPanelT3 = registerBlock(new BlockSolarPanel("solarPanelT3", 3));
+        registerBlock(solarPanelT1, TileSolarPanel.class);
+        registerBlock(solarPanelT2);
+        registerBlock(solarPanelT3);
     }
 
     /**
