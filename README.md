@@ -1,6 +1,6 @@
 NeoTech <a href='https://minecraft.curseforge.com/projects/neotech'> <img src='http://cf.way2muchnoise.eu/full_neotech_downloads.svg'><img src='http://cf.way2muchnoise.eu/versions/neotech_latest.svg'></a>
 ===============
-Tech mod for Forge/Minecraft 1.8
+Tech mod for Forge/Minecraft 1.11.2
 
 License
 ===============
