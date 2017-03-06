@@ -1,6 +1,5 @@
-NeoTech <a href='http://teambrmodding.com:8080/job/NeoTech/'><img src='http://teambrmodding.com:8080/buildStatus/icon?job=NeoTech'></a>
-<a href='https://minecraft.curseforge.com/projects/neotech'><img src='http://cf.way2muchnoise.eu/full_neotech_downloads.svg'></a>
-<a href='https://minecraft.curseforge.com/projects/neotech'><img src='http://cf.way2muchnoise.eu/versions/neotech_latest.svg'></a>
+NeoTech 
+<a href='https://minecraft.curseforge.com/projects/neotech'> <img src='http://cf.way2muchnoise.eu/full_neotech_downloads.svg'><img src='http://cf.way2muchnoise.eu/versions/neotech_latest.svg'></a>
 ===============
 Tech mod for Forge/Minecraft 1.8
 
