@@ -50,8 +50,8 @@ configFile.withReader {
     project.ext.config = new ConfigSlurper().parse prop
 }
 
-String build = System.getenv("BUILD_NUMBER")
-
+//String build = System.getenv("BUILD_NUMBER")
+String build = System.getenv("build.vcs.number")
 if (build == null || build == '') {
     version = "${config.minecraft_version}-${config.mod_version}"
 } else {
