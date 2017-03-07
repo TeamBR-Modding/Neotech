@@ -51,12 +51,17 @@ configFile.withReader {
 }
 
 //String build = System.getenv("BUILD_NUMBER")
-String build = "${project.ext['build.vcs.number.NeoTech_HttpsGithubComTeamBRModdingNeoTechGitRefsHeadsMaster']}"
+String build = ""
+if (project.hasProperty("teamcity")) {
+    build = "${project.ext['build.vcs.number.NeoTech_HttpsGithubComTeamBRModdingNeoTechGitRefsHeadsMaster']}"
+}
+
 if (build == null || build == '') {
     version = "${config.minecraft_version}-${config.mod_version}"
 } else {
     version = "${config.minecraft_version}-${config.mod_version}-" + build.substring(0,7)
 }
+
 
 group= "com.teambrmodding.neotech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Neotech"
@@ -118,7 +123,8 @@ dependencies {
     deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
     compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
     deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
-    compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: "1.11.2-5+", classifier: "dev", changing: true
+    compile "com.teambr.bookshelf:Bookshelf-API:latest.release:dev"
+    //compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: latest.integration, classifier: "dev", changing: true
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
