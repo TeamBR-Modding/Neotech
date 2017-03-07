@@ -51,11 +51,11 @@ configFile.withReader {
 }
 
 //String build = System.getenv("BUILD_NUMBER")
-String build = System.getenv("build.vcs.number.NeoTech_HttpsGithubComTeamBRModdingNeoTechGitRefsHeadsMaster")
+String build = "${project.ext['build.vcs.number.NeoTech_HttpsGithubComTeamBRModdingNeoTechGitRefsHeadsMaster']}"
 if (build == null || build == '') {
     version = "${config.minecraft_version}-${config.mod_version}"
 } else {
-    version = "${config.minecraft_version}-${config.mod_version}-B" + System.getenv("BUILD_NUMBER")
+    version = "${config.minecraft_version}-${config.mod_version}-B${project.ext['build.vcs.number.NeoTech_HttpsGithubComTeamBRModdingNeoTechGitRefsHeadsMaster']}"
 }
 
 group= "com.teambrmodding.neotech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
