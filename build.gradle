@@ -51,7 +51,7 @@ configFile.withReader {
 }
 
 //String build = System.getenv("BUILD_NUMBER")
-String build = System.getenv("build.vcs.number")
+String build = System.getenv("build.vcs.number.NeoTech_HttpsGithubComTeamBRModdingNeoTechGitRefsHeadsMaster")
 if (build == null || build == '') {
     version = "${config.minecraft_version}-${config.mod_version}"
 } else {
