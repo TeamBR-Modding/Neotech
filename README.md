@@ -1,4 +1,4 @@
-NeoTech <a href='http://teambrmodding.com:8111/viewType.html?buildTypeId=NeoTech_Build'><img src="http://teamcity:8111/app/rest/builds/buildType:(id:NeoTech_Build)/statusIcon"/></a><a href='https://minecraft.curseforge.com/projects/neotech'><img src='http://cf.way2muchnoise.eu/full_neotech_downloads.svg'><img src='http://cf.way2muchnoise.eu/versions/neotech_latest.svg'></a>
+NeoTech <a href='http://teambrmodding.com:8111/viewType.html?buildTypeId=NeoTech_Build'><img src="http://teambrmodding.com:8111/app/rest/builds/buildType:(id:NeoTech_Build)/statusIcon"/></a><a href='https://minecraft.curseforge.com/projects/neotech'><img src='http://cf.way2muchnoise.eu/full_neotech_downloads.svg'><img src='http://cf.way2muchnoise.eu/versions/neotech_latest.svg'></a>
 ===============
 Tech mod for Forge/Minecraft 1.11.2
 
