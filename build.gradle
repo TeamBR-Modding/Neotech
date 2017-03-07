@@ -55,7 +55,7 @@ String build = "${project.ext['build.vcs.number.NeoTech_HttpsGithubComTeamBRModd
 if (build == null || build == '') {
     version = "${config.minecraft_version}-${config.mod_version}"
 } else {
-    version = "${config.minecraft_version}-${config.mod_version}-B${project.ext['build.vcs.number.NeoTech_HttpsGithubComTeamBRModdingNeoTechGitRefsHeadsMaster']}"
+    version = "${config.minecraft_version}-${config.mod_version}-" + build.substring(0,7)
 }
 
 group= "com.teambrmodding.neotech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
