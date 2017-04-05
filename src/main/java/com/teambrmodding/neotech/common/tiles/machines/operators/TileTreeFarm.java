@@ -225,15 +225,21 @@ public class TileTreeFarm extends AbstractMachine {
      */
     protected boolean chopBlock(BlockPos blockPosition, int slot) {
         List<ItemStack> drops = new ArrayList<>();
-        if(getStackInSlot(slot) != null && slot == SHEARS_SLOT) { // Shears give block
-            drops = Collections.singletonList(new ItemStack(world.getBlockState(blockPosition).getBlock(), 1,
+        if(slot == SHEARS_SLOT) { // Shears give block
+            if (!getStackInSlot(slot).isEmpty()) drops = Collections.singletonList(new ItemStack(world.getBlockState(blockPosition).getBlock(), 1,
                     world.getBlockState(blockPosition).getBlock().damageDropped(world.getBlockState(blockPosition))));
-
-        } else if((slot != AXE_SLOT) || (getStackInSlot(slot) != null && slot == AXE_SLOT))// Break block, get drops
+            else drops =
+                    world.getBlockState(blockPosition).getBlock().getDrops(world, blockPosition,
+                            world.getBlockState(blockPosition),
+                            !getStackInSlot(slot).isEmpty() ?
+                                    EnchantmentHelper.getEnchantmentLevel(
+                                            Enchantment.getEnchantmentByLocation("fortune"),
+                                            getStackInSlot(slot)) : 0);
+        } else if(!getStackInSlot(slot).isEmpty() && slot == AXE_SLOT)// Break block, get drops
             drops =
                     world.getBlockState(blockPosition).getBlock().getDrops(world, blockPosition,
                             world.getBlockState(blockPosition),
-                            getStackInSlot(slot) != null ?
+                            !getStackInSlot(slot).isEmpty() ?
                             EnchantmentHelper.getEnchantmentLevel(
                                     Enchantment.getEnchantmentByLocation("fortune"),
                                     getStackInSlot(slot)) : 0);
@@ -246,7 +252,7 @@ public class TileTreeFarm extends AbstractMachine {
 
         if(blockAddedToInv) {
             world.setBlockToAir(blockPosition);
-            if(getStackInSlot(slot) != null &&
+            if(!getStackInSlot(slot).isEmpty() &&
                     getStackInSlot(slot).attemptDamageItem(1, world.rand))
                 setStackInSlot(slot, null);
             energyStorage.providePower(costToOperate(), true);
