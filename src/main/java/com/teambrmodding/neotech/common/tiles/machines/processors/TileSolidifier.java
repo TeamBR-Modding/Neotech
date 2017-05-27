@@ -128,7 +128,7 @@ public class TileSolidifier extends MachineProcessor<FluidStack, ItemStack> {
     @Override
     public boolean canProcess() {
         if(energyStorage.getEnergyStored() > getEnergyCostPerTick() && tanks[TANK].getFluid() != null) {
-            if(getStackInSlot(OUTPUT_SLOT) == null) {
+            if(getStackInSlot(OUTPUT_SLOT).isEmpty()) {
                 SolidifierRecipe recipe = ((SolidifierRecipeHandler)RecipeManager.getHandler(RecipeManager.RecipeType.SOLIDIFIER)).getRecipe(Pair.of(currentMode, tanks[TANK].getFluid()));
                 if(recipe != null && tanks[TANK].getFluidAmount() >= AbstractRecipe.getFluidStackFromString(recipe.inputFluidStack).amount)
                     return true;
