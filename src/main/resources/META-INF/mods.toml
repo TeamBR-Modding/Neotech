@@ -15,8 +15,8 @@ issueTrackerURL="https://github.com/TeamBR-Modding/NeoTech/issues"
     '''
 [[dependencies.neotech]]
     modId="nucleus"
-    mandatory=true #mandatory
-    versionRange="[1.14.4-5.0-B,)" #mandatory
+    mandatory=true
+    versionRange="[1.14.4,)"
     ordering="BEFORE"
     side="BOTH"
 
