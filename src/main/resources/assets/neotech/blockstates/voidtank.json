@@ -1,9 +1,0 @@
-{
-    "forge_marker" : 1,
-    "defaults": {
-        "textures" : {
-            "block" : "blocks/obsidian"
-        }
-    },
-    "variants" : { "normal" : { "model": "neotech:tank" } }
-}
