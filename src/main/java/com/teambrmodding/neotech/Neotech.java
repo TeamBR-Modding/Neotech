@@ -1,6 +1,11 @@
 package com.teambrmodding.neotech;
 
+import com.teambrmodding.neotech.client.ClientProxy;
+import com.teambrmodding.neotech.common.CommonProxy;
 import com.teambrmodding.neotech.lib.Reference;
+import com.teambrmodding.neotech.managers.ScreenManager;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -18,13 +23,15 @@ import org.apache.logging.log4j.Logger;
  * @since ${DATE}
  */
 @Mod(Reference.MOD_ID)
-public class Neotech
-{
+public class Neotech {
+
+    public static CommonProxy common = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public Neotech() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> ScreenManager::registerScreens);
     }
 }

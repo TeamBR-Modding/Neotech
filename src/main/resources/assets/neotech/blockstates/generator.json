@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "neotech:block/generator" }
+  }
+}
