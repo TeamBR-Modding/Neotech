@@ -2,7 +2,7 @@ package com.teambrmodding.neotech.client.screen;
 
 import com.teambr.nucleus.client.gui.GuiBase;
 import com.teambrmodding.neotech.common.container.GeneratorContainer;
-import com.teambrmodding.neotech.common.tileentity.GeneratorTile;
+import com.teambrmodding.neotech.common.tileentity.generators.GeneratorTile;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -23,8 +23,8 @@ public class GeneratorScreen extends GuiBase<GeneratorContainer> {
     protected GeneratorTile generator;
 
     public GeneratorScreen(GeneratorContainer inventory, PlayerInventory playerInventory, ITextComponent title) {
-        super(inventory, playerInventory, title, 176, 166,
-                new ResourceLocation(Reference.MOD_NAME, "textures/gui/generator.png"));
+        super(inventory, playerInventory, title, 175, 165,
+                new ResourceLocation(Reference.MOD_ID, "textures/gui/generator.png"));
         addComponents();
     }
 

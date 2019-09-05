@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.managers;
 
-import com.teambrmodding.neotech.common.tileentity.GeneratorTile;
+import com.teambrmodding.neotech.common.tileentity.generators.GeneratorTile;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;

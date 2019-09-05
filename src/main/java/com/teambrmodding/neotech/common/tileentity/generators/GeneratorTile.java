@@ -1,6 +1,8 @@
-package com.teambrmodding.neotech.common.tileentity;
+package com.teambrmodding.neotech.common.tileentity.generators;
 
 import com.teambr.nucleus.common.tiles.InventorySided;
+import com.teambrmodding.neotech.common.container.GeneratorContainer;
+import com.teambrmodding.neotech.lib.Reference;
 import com.teambrmodding.neotech.managers.TileEntityManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -9,6 +11,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 import javax.annotation.Nullable;
 
@@ -23,6 +26,11 @@ import javax.annotation.Nullable;
  * @since 9/3/2019
  */
 public class GeneratorTile extends InventorySided implements INamedContainerProvider {
+
+    public static final int BASE_ENERGY_TICK = 100;
+    public static final int INPUT_SLOT       = 0;
+
+    public static final int TANK             = 0;
 
     public GeneratorTile() {
         super(TileEntityManager.generator);
@@ -40,7 +48,7 @@ public class GeneratorTile extends InventorySided implements INamedContainerProv
 
     @Override
     protected int getInventorySize() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -65,12 +73,12 @@ public class GeneratorTile extends InventorySided implements INamedContainerProv
 
     @Override
     public ITextComponent getDisplayName() {
-        return null;
+        return new StringTextComponent(Reference.MOD_ID + ".generator");
     }
 
     @Nullable
     @Override
-    public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-        return null;
+    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity playerEntity) {
+        return new GeneratorContainer(windowID, playerInventory, this);
     }
 }

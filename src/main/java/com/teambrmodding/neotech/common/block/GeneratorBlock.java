@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.common.block;
 
-import com.teambrmodding.neotech.common.tileentity.GeneratorTile;
+import com.teambrmodding.neotech.common.tileentity.generators.GeneratorTile;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;

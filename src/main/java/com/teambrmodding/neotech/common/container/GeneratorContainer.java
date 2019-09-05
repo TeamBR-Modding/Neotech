@@ -1,7 +1,7 @@
 package com.teambrmodding.neotech.common.container;
 
 import com.teambr.nucleus.common.container.BaseContainer;
-import com.teambrmodding.neotech.common.tileentity.GeneratorTile;
+import com.teambrmodding.neotech.common.tileentity.generators.GeneratorTile;
 import com.teambrmodding.neotech.managers.ContainerManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerInventory;
@@ -37,15 +37,14 @@ public class GeneratorContainer extends BaseContainer {
     public GeneratorContainer(int id, IInventory playerInventory, IItemHandler inventory) {
         super(ContainerManager.generator, id, playerInventory, inventory);
 
-        addInventoryLine(62, 19, 0, 3);
-        addSlot(new SlotItemHandler(inventory, 3, 80, 38) {
+        //addInventoryLine(62, 19, 0, 3);
+        addSlot(new SlotItemHandler(inventory, 0, 80, 58) {
             @Override
             public boolean isItemValid(@Nonnull ItemStack stack) {
                 return false;
             }
         });
         this.tile = (GeneratorTile) inventory;
-        addInventoryLine(62, 57, 4, 3);
         addPlayerInventorySlots(8, 84);
     }
 
