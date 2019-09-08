@@ -1,0 +1,27 @@
+{
+    "textures" : {
+        "particle" : "#neotech:blocks/metal_ore",
+        "base" : "neotech:blocks/metal_ore"
+    },
+    "elements" : [
+        {
+            "from" : [ -0.001, -0.001, -0.001 ],
+            "to" : [ 16.001, 16.001, 16.001 ],
+            "faces" : {
+                "down"  : {"texture" : "#base"},
+                "up"    : {"texture" : "#base"},
+                "north" : {"texture" : "#base"},
+                "south" : {"texture" : "#base"},
+                "east"  : {"texture" : "#base"},
+                "west"  : {"texture" : "#base"}
+            }
+        }
+    ],
+    "display": {
+        "thirdperson": {
+            "rotation": [ 10, -45, 170 ],
+            "translation": [ 0, 1.5, -2.75 ],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        }
+    }
+}

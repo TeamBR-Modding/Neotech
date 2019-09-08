@@ -1,0 +1,23 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "particle": "#all",
+    "down": "#all",
+    "up": "#all",
+    "north": "#all",
+    "east": "#all",
+    "south": "#all",
+    "west": "#all",
+
+    "fluidmetalStill" : "neotech:blocks/metal_still",
+    "fluidmetalFlow" : "neotech:blocks/metal_flow",
+    "metalIngot" : "neotech:items/metal_ingot",
+
+
+    "axe": "neotech:items/axe_ghost",
+    "shears" : "neotech:items/shears_ghost",
+
+    "in" : "neotech:gui/in",
+    "out" : "neotech:gui/out"
+  }
+}

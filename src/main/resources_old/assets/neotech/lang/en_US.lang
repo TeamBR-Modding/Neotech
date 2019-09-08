@@ -1,0 +1,384 @@
+PARSE_ESCAPES
+
+# Creative Tabs
+itemGroup.tabNeotech=NeoTech
+itemGroup.tabNeotechMetals=NeoTech: Metals
+
+#######################
+# Blocks
+#######################
+
+# Metals
+tile.neotech:orecopper.name=Copper Ore
+tile.neotech:oretin.name=Tin Ore
+tile.neotech:orelead.name=Lead Ore
+tile.neotech:oresilver.name=Silver Ore
+tile.neotech:blockcopper.name=Block of Copper
+tile.neotech:blocktin.name=Block of Tin
+tile.neotech:blocklead.name=Block of Lead
+tile.neotech:blockbronze.name=Block of Bronze
+tile.neotech:blocksteel.name=Block of Steel
+tile.neotech:blocksilver.name=Block of Silver
+tile.neotech:blocktormented.name=Tormented Block
+tile.neotech:blockoutlandish.name=Outlandish Block
+tile.neotech:blockneodymium.name=Neodymium Block
+
+#######################
+# Fluids
+#######################
+# Copper
+fluid.copper=Molten Copper
+tile.neotech:fluid.copper.name=Molten Copper
+fluid.dirtycopper=Dirty Molten Copper
+tile.neotech:fluid.dirtycopper.name=Dirty Molten Copper
+
+# Tin
+fluid.tin=Molten Tin
+tile.neotech:fluid.tin.name=Molten Tin
+fluid.dirtytin=Dirty Molten Tin
+tile.neotech:fluid.dirtytin.name=Dirty Molten Tin
+
+# Lead
+fluid.lead=Molten Lead
+tile.neotech:fluid.lead.name=Molten Lead
+fluid.dirtylead=Dirty Molten Lead
+tile.neotech:fluid.dirtylead.name=Dirty Molten Lead
+
+# Bronze
+fluid.bronze=Molten Bronze
+tile.neotech:fluid.bronze.name=Molten Bronze
+
+# Steel
+fluid.steel=Molten Steel
+tile.neotech:fluid.steel.name=Molten Steel
+
+# Silver
+fluid.silver=Molten Silver
+tile.neotech:fluid.silver.name=Molten Silver
+fluid.dirtysilver=Dirty Molten Silver
+tile.neotech:fluid.dirtysilver.name=Dirty Molten Silver
+
+# Gold
+fluid.gold=Molten Gold
+tile.neotech:fluid.gold.name=Molten Gold
+fluid.dirtygold=Dirty Molten Gold
+tile.neotech:fluid.dirtygold.name=Dirty Molten Gold
+
+# Iron
+fluid.iron=Molten Iron
+tile.neotech:fluid.iron.name=Molten Iron
+fluid.dirtyiron=Dirty Molten Iron
+tile.neotech:fluid.dirtyiron.name=Dirty Molten Iron
+
+# Carbon
+fluid.carbon=Liquid Carbon
+tile.neotech:fluid.carbon.name=Liquid Carbon
+
+# Obsidian
+fluid.obsidian=Molten Obsidian
+tile.neotech:fluid.obsidian.name=Molten Obsidian
+
+# Hydrogen
+fluid.hydrogen=Hydrogen
+tile.neotech:fluid.hydrogen.name=Hydrogen
+
+# Oxygen
+fluid.oxygen=Oxygen
+tile.neotech:fluid.oxygen.name=Oxygen
+
+# Blaze
+fluid.blaze=Liquefied Blaze
+tile.neotech:fluid.blaze.name=Liquefied Blaze
+
+# Chorus
+fluid.chorus=Liquefied Chorus Fruit
+tile.neotech:fluid.chorus.name=Liquefied Chorus Fruit
+
+# Wither
+fluid.wither=Liquefied Nether Star
+tile.neotech:fluid.wither.name=Liquefied Nether Star
+
+# Tormented
+fluid.tormented=Tormented Fluid
+tile.neotech:fluid.tormented.name=Tormented Fluid
+
+# Outlandish
+fluid.outlandish=Outlandish Fluid
+tile.neotech:fluid.outlandish.name=Outlandish Fluid
+
+# Neodymium
+fluid.neodymium=Molten Neodymium
+tile.neotech:fluid.neodymium.name=Molten Neodymium
+
+#######################
+# Items
+#######################
+
+# Metals
+item.neotech:dustiron.name=Iron Dust
+item.neotech:nuggetiron.name=Iron Nugget
+item.neotech:dustgold.name=Gold Dust
+item.neotech:dustcopper.name=Copper Dust
+item.neotech:ingotcopper.name=Copper Ingot
+item.neotech:nuggetcopper.name=Copper Nugget
+item.neotech:dustbronze.name=Bronze Dust
+item.neotech:ingotbronze.name=Bronze Ingot
+item.neotech:nuggetbronze.name=Bronze Nugget
+item.neotech:dusttin.name=Tin Dust
+item.neotech:ingottin.name=Tin Ingot
+item.neotech:nuggettin.name=Tin Nugget
+item.neotech:dustlead.name=Lead Dust
+item.neotech:ingotlead.name=Lead Ingot
+item.neotech:nuggetlead.name=Lead Nugget
+item.neotech:duststeel.name=Steel Dust
+item.neotech:ingotsteel.name=Steel Ingot
+item.neotech:nuggetsteel.name=Steel Nugget
+item.neotech:dustsilver.name=Silver Dust
+item.neotech:ingotsilver.name=Silver Ingot
+item.neotech:nuggetsilver.name=Silver Nugget
+
+# Alloys
+item.neotech:nuggettormented.name=Tormented Nugget
+item.neotech:dusttormented.name=Tormented Dust
+item.neotech:ingottormented.name=Tormented Ingot
+item.neotech.nuggetoutlandish.name=Outlandish Nugget
+item.neotech:dustoutlandish.name=Outlandish Dust
+item.neotech:ingotoutlandish.name=Outlandish Ingot
+item.neotech:nuggetneodymium.name=Neodymium Nugget
+item.neotech:dustneodymium.name=Neodymium Dust
+item.neotech:ingotneodymium.name=Neodymium Ingot
+
+# Upgrades
+item.neotech:cpu_1.name=Single Core Processor
+item.neotech:cpu_2.name=Dual Core Processor
+item.neotech:cpu_3.name=Quad Core Processor
+item.neotech:cpu_4.name=Octa Core Processor
+
+item.neotech:ddr1.name=DDR1 Memory Module
+item.neotech:ddr2.name=DDR2 Memory Module
+item.neotech:ddr3.name=DDR3 Memory Module
+item.neotech:ddr4.name=DDR4 Memory Module
+
+item.neotech:hdd_64.name=64G Hard Drive
+item.neotech:hdd_256.name=256G Hard Drive
+item.neotech:hdd_512.name=512G Hard Drive
+item.neotech:hdd_1t.name=1T Hard Drive
+
+item.neotech:psu_250.name=250W Power Supply
+item.neotech:psu_500.name=500W Power Supply
+item.neotech:psu_750.name=750W Power Supply
+item.neotech:psu_960.name=960W Power Supply
+
+item.neotech:expansion_card.name=Expansion Card
+item.neotech:redstone_circuit.name=Redstone Control
+item.neotech:network_card.name=Network Card
+
+# Tools
+item.neotech:wrench.name=Wrench
+
+#######################
+# Tile Entities
+#######################
+
+# Processors
+tile.neotech:electricFurnace.name=Electric Furnace
+tile.neotech:electricCrusher.name=Electric Crusher
+tile.neotech:electricCrucible.name=Electric Crucible
+tile.neotech:electricSolidifier.name=Electric Solidifier
+tile.neotech:alloyer.name=Electric Alloyer
+tile.neotech:centrifuge.name=Electric Centrifuge
+
+# Generators
+tile.neotech:furnaceGenerator.name=Furnace Generator
+tile.neotech:fluidGenerator.name=Fluid Generator
+tile.neotech:solarPanelT1.name=Basic Solar Panel
+tile.neotech:solarPanelT2.name=Advanced Solar Panel
+tile.neotech:solarPanelT3.name=Elite Solar Panel
+
+# Operators
+tile.neotech:treeFarm.name=Electric Logger
+tile.neotech:inventorycharger.name=Inventory Charger
+tile.neotech:wirelessCharger.name=Area Energizer
+
+# Storage
+tile.neotech:basicEnergyStorage.name=Basic Energy Storage
+tile.neotech:advancedEnergyStorage.name=Advanced Energy Storage
+tile.neotech:eliteEnergyStorage.name=Elite Energy Storage
+tile.neotech:creativeEnergyStorage.name=Creative Energy Storage
+tile.neotech:basicTank.name=Basic Fluid Tank
+tile.neotech:advancedTank.name=Advanced Fluid Tank
+tile.neotech:eliteTank.name=Elite Fluid Tank
+tile.neotech:creativeTank.name=Creative Fluid Tank
+tile.neotech:voidTank.name=Void Tank
+
+#######################
+# GUI
+#######################
+
+# Furnace
+neotech.furnace.title=Electric Furnace
+
+# Crusher
+neotech.crusher.title=Electric Crusher
+
+# Thermal Binder
+neotech.thermalbinder.title=Thermal Binder
+
+# Crucible
+neotech.crucible.title=Electric Crucible
+
+# Solidifier
+neotech.electricSolidifier.title=Electric Solidifier
+
+# Alloyer
+neotech.alloyer.title=Electric Alloyer
+
+# Centrifuge
+neotech.centrifuge.title=Electric Centrifuge
+
+# Furnace Generator
+neotech.furnacegenerator.title=Furnace Generator
+
+# Fluid Generator
+neotech.fluidgenerator.title=Fluid Generator
+
+# Tree Farm
+neotech.treeFarm.title=Electric Logger
+
+#######################
+# Common Text
+#######################
+neotech.text.error=Error
+
+neotech.text.in=In
+neotech.text.out=Out
+neotech.text.upgrade=Upgrades
+neotech.text.upgrades=Upgrades
+neotech.text.none=None
+neotech.text.start=Start
+
+neotech.text.processors=Processors
+neotech.CPU.desc=Increases speed/efficiency of machines
+neotech.text.memory=Memory
+neotech.MEMORY.desc=Allows the machine to handle concurrent operations. Will increase cost as well
+neotech.text.psu=Power Supply
+neotech.PSU.desc=Increases the energy capacity of a machine
+neotech.text.control=Redstone Control
+neotech.Redstone_Circuit.desc=Allows the machine to be disabled/enabled by redstone signals
+neotech.text.network=Network Card
+neotech.Network_Card.desc=Allows automatic input and output to be configured on a machine
+neotech.text.expansion=Expansion
+neotech.Expansion_Card.desc=Used by some machines, allows for extra functions
+
+neotech.text.category=Category
+neotech.text.modifier=Modifier
+
+neotech.text.capacity=Capacity
+
+neotech.wrenchBreak.text=Shift click on this block with a wrench to pick up, saving all stored objects for when placed again
+
+neotech.text.redstoneMode=Redstone Mode
+neotech.text.low=Low
+neotech.text.high=High
+neotech.text.disabled=Disabled
+
+neotech.text.ioConfig=I/O Config
+
+neotech.text.information=Information
+
+neotech.text.empty=Empty
+
+neotech.text.energyStored=Energy Stored
+neotech.text.fluidStored=Fluid Stored
+
+neotech.text.chargingStatus=Inventory Charging:
+neotech.text.enabled=Enabled
+
+neotech.text.clearTank=Click and hold CTRL and SHIFT to clear
+
+neotech.text.processMode=Solidify Mode
+neotech.text.blockMode=Block Mode
+neotech.text.ingotMode=Ingot Mode
+neotech.text.nuggetMode=Nugget Mode
+
+neotech.text.stats=Current Stats
+neotech.text.energyUsage=Energy Usage
+neotech.text.processTime=Process Time
+neotech.text.generating=Energy Generating
+neotech.text.operations=Operations
+
+neotech.text.rangeTree=Range
+neotech.text.chopCount=Chop Count
+
+neotech.text.modName=Neotech
+
+#######################
+# Commands
+#######################
+commands.addCrucibleRecipe.usage=§cUsage: input<ItemStack (format : MODID:ITEMID:META:STACK_SIZE or oreDictTag)> output<FluidStack (format : FLUID:AMOUNT)> OR "hands"<Left hand input, right output>
+commands.addSolidifierRecipe.usage=Usage: mode<BLOCK|INGOT|NUGGET> input<FluidStack (format : FLUID:AMOUNT)> output<ItemStack (format : MOD:ITEM:DAMAGE:STACK or ORE_DICT_TAG)> OR "hands"<Left hand input, right output>  mode<BLOCK|INGOT|NUGGET>
+commands.addFluidFuelValues.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output<BurnTime (format : INTEGER), BurnRate (format : INTEGER)>
+commands.addAlloyRecipe.usage=§cUsage: input1<FluidStack (format : FLUID:AMOUNT)> input2<FluidStack (format : FLUID:AMOUNT)> output<FluidStack (format : FLUID:AMOUNT)>
+commands.addCentrifugeRecipe.usage=§cUsage: input<FluidStack (format : FLUID:AMOUNT)> output1<FluidStack (format : FLUID:AMOUNT)> output2<FluidStack (format : FLUID:AMOUNT)>
+commands.addCrusherRecipe.usage=§cUsage: <input> <output> <outputAmount> <secondaryOutput(Optional)> <secondaryOuputChance(Optional)>
+
+#######################
+# Descriptions
+#######################
+
+# Electric Furnace
+neotech.electricFurnace.desc=The Electric Furnace is simply a furnace that runs on energy. It will smelt anything a vanilla furnace would.
+neotech.electricFurnace.processorUpgrade.desc=Processors increase the speed of the machine, adding slight energy cost
+neotech.electricFurnace.memoryUpgrade.desc=Memory allows the machine to do multiple operations at once
+neotech.electricFurnace.controlUpgrade.desc=The control upgrade gives you access to Redstone controls. High means you need a redstone signal, Low means you need no redstone signal, and Disabled ignores redstone signals.
+neotech.electricFurnace.networkUpgrade.desc=The expansion upgrade allows you to configure the automatic input and output of the machine.
+neotech.electricFurnace.psuUpgrade.desc=The power supply allows the machine to store more energy
+
+# Electric Crusher
+neotech.electricCrusher.desc=The Electric Crusher smashes items put into it. If you put an ore block into the input, you can get two ore dust as an output. It can also crush things like cobblestone into sand. As more ores and mods are added, the crusher will adapt by adding recipes based on ore dict and other factors.
+neotech.electricCrusher.expansionUpgrade.desc=The expansion upgrade will enable the crusher to have a possible secondary output, it also allows you to configure the automatic input and output of the machine.
+
+# Electric Crucible
+neotech.electricCrucible.desc=The Electric Crucible allows you to melt down metals into their molten form. Simply put a metal (block, ingot, etc) into the input slot and it will begin to melt the item. By default, the operation takes 1000 ticks. The Electric Crucible can also melt stone into lava and ice into water.
+
+# Solidifier
+neotech.electricSolidifier.desc=The Electric Solidifier will take a fluid input and try to solidify it into the selected item. Solidifier modes will attempt to cool the fluid to the shape selected.
+
+# Alloyer
+neotech.alloyer.desc=The Electric Alloyer will take two input fluids and combine them into an output fluid.
+
+# Centrifuge
+neotech.centrifuge.desc=The Electric Centrifuge will separate a fluid into the two components it is made of. Useful for separating the stone from molten metal.
+
+# Furnace Generator
+neotech.furnaceGenerator.desc=The Furnace Generator burns solid fuel inserted into the input slot and produces energy. It will burn anything that a vanilla furnace would
+neotech.furnaceGenerator.processorUpgrade.desc=Processors increase the generating time of the input, they will help to reduce the drawback of memory upgrades by up to half
+neotech.furnaceGenerator.memoryUpgrade.desc=Memory modules increase the amount of energy produced by allowing it to handle more operations per tick. It will also reduce the burn time of the input
+
+# Fluid Generator
+neotech.fluidGenerator.desc=The Fluid Generator burns liquid fuel and produces energy. By default, the Fluid Generator generates 175 Energy/tick. You can add more liquid fuels via the config file
+
+# Tree Farm
+neotech.treeFarm.desc=The Electric Logger is an automated tree farm. By default, the range is 3 blocks around the farm and a cost of 200 Energy/block. The logger will chop trees that start on the same Y plane as the logger. Provide an axe to chop the wood, and you can optionally add shears to shear leaves. If you add shears, the leaves will not drop saplings. Saplings will be placed in the top right three slots. These are the ones that will be planted. Excess saplings will go to the main inventory. Automation and pipes will not pull from the sapling slots so you don't have to worry about those being emptied.
+neotech.treeFarm.processorUpgrade.desc=Processors will increase the count of blocks broken.
+neotech.treeFarm.memoryUpgrade.desc=Increases the range of the farm
+
+# Solar Panels
+neotech.solarPanelT1.desc=Must see the sky to generate energy. Energy produced is based on how bright the sun is. Base energy produced is 16 energy/tick.
+neotech.solarPanelT2.desc=Must see the sky to generate energy. Energy produced is based on how bright the sun is. Base energy produced is 64 energy/tick.
+neotech.solarPanelT3.desc=Must see the sky to generate energy. Energy produced is based on how bright the sun is. Base energy produced is 128 energy/tick.
+
+# Energy Storage
+neotech.energyStorage.desc=Stores energy. Shift right click with the item to toggle charging other energy using devices in your inventory. When the block is broken, it will keep its charge
+
+# Fluid Storage
+neotech.fluidStorage.desc=Stores fluid. When in item form, you can interact with fluid containing blocks, like a big bucket
+
+# Inventory Charger
+neotech.inventoryCharger.desc=Charges items in inventories it faces. Provide with power and give a redstone signal to disable
+
+#######################
+# JEI
+#######################
+
+jei.text.requiresExpansion=Requires Expansion Upgrade

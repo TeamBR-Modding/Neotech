@@ -1,0 +1,11 @@
+{
+  "forge_marker" : 1,
+  "defaults": {
+    "textures": {
+      "top": "neotech:blocks/advancedenergystorage",
+      "side": "neotech:blocks/wirelesscharger",
+      "bottom": "neotech:blocks/advancedenergystorage"
+    }
+  },
+  "variants" : { "normal" : { "model": "cube_bottom_top" } }
+}

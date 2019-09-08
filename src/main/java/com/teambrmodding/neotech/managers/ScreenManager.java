@@ -1,6 +1,5 @@
 package com.teambrmodding.neotech.managers;
 
-import com.teambrmodding.neotech.client.screen.GeneratorScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -17,7 +16,5 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ScreenManager {
 
     @OnlyIn(Dist.CLIENT)
-    public static void registerScreens() {
-        net.minecraft.client.gui.ScreenManager.registerFactory(ContainerManager.generator, GeneratorScreen::new);
-    }
+    public static void registerScreens() { }
 }

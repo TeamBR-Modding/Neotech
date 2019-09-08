@@ -1,6 +1,6 @@
 package com.teambrmodding.neotech.managers;
 
-import com.teambrmodding.neotech.common.block.GeneratorBlock;
+import com.teambrmodding.neotech.common.block.MachineBlock;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraftforge.event.RegistryEvent;
@@ -22,11 +22,11 @@ import net.minecraftforge.registries.ObjectHolder;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BlockManager {
 
-    @ObjectHolder("generator")
-    public static Block generator;
+    @ObjectHolder("machine")
+    public static Block machine;
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(new GeneratorBlock());
+        event.getRegistry().register(new MachineBlock());
     }
 }

@@ -3,6 +3,7 @@ package com.teambrmodding.neotech.common.block;
 import com.teambr.nucleus.common.IAdvancedToolTipProvider;
 import com.teambr.nucleus.util.ClientUtils;
 import com.teambr.nucleus.util.WorldUtils;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.item.ItemStack;
@@ -40,9 +41,9 @@ public class BaseBlock extends ContainerBlock implements IAdvancedToolTipProvide
         setRegistryName(name);
     }
 
-    /**
-     * Block Methods
-     */
+    /*******************************************************************************************************************
+     * Block Methods                                                                                                   *
+     *******************************************************************************************************************/
 
     /**
      * Called when the block is broken, allows us to drop items from inventory
@@ -64,8 +65,16 @@ public class BaseBlock extends ContainerBlock implements IAdvancedToolTipProvide
     }
 
     /**
-     * ContainerBlock
+     * Things with containers default to not use the normal models, kinda dumb so lets put it back to normal
      */
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+
+    /*******************************************************************************************************************
+     * ContainerBlock                                                                                                  *
+     *******************************************************************************************************************/
 
     @Nullable
     @Override
@@ -80,9 +89,9 @@ public class BaseBlock extends ContainerBlock implements IAdvancedToolTipProvide
         return null;
     }
 
-    /**
-     * IAdvancedToolTipProvided
-     */
+    /*******************************************************************************************************************
+     * IAdvancedToolTipProvided                                                                                        *
+     *******************************************************************************************************************/
 
     /**
      * Get the tool tip to present when shift is pressed
@@ -95,5 +104,4 @@ public class BaseBlock extends ContainerBlock implements IAdvancedToolTipProvide
     public List<String> getAdvancedToolTip(@Nonnull ItemStack stack) {
         return Collections.singletonList(ClientUtils.translate(this.registryName + ".desc"));
     }
-
 }

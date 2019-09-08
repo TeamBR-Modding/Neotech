@@ -29,7 +29,7 @@ archivesBaseName = 'Neotech'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190719-1.14.3'
+    mappings channel: 'snapshot', version: '20190903-1.14.3'
 
     runs {
         client {
@@ -42,7 +42,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                neotech {
                     source sourceSets.main
                 }
             }
@@ -58,7 +58,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                examplemod {
+                neotech {
                     source sourceSets.main
                 }
             }
@@ -73,10 +73,10 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'neotech', '--all', '--output', file('src/generated/resources/')
 
             mods {
-                examplemod {
+                neotech {
                     source sourceSets.main
                 }
             }

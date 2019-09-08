@@ -1,9 +1,7 @@
 package com.teambrmodding.neotech.managers;
 
-import com.teambrmodding.neotech.common.container.GeneratorContainer;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,11 +21,8 @@ import net.minecraftforge.registries.ObjectHolder;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ContainerManager {
 
-    @ObjectHolder("generator")
-    public static ContainerType<GeneratorContainer> generator;
-
     @SubscribeEvent
     public static void registerContainerTypes(RegistryEvent.Register<ContainerType<?>> event) {
-        event.getRegistry().register(IForgeContainerType.create(GeneratorContainer::new).setRegistryName("generator"));
+
     }
 }

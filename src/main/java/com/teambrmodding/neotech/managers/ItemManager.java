@@ -23,21 +23,20 @@ import net.minecraftforge.registries.ObjectHolder;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ItemManager {
 
+    // CreativeTab
     public static ItemGroup itemGroupNeotech;
 
-    /*
-        BlockItems
-     */
+    /*******************************************************************************************************************
+     * BlockItems                                                                                                      *
+     *******************************************************************************************************************/
 
-    @ObjectHolder("generator")
-    public static Item generator;
+    @ObjectHolder("machine")
+    public static Item machine;
 
-    /*
-        Register
-     */
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
+        // CreativeTab
         itemGroupNeotech = new ItemGroup(Reference.MOD_ID) {
             @Override
             public ItemStack createIcon() {
@@ -45,9 +44,19 @@ public class ItemManager {
             }
         };
 
-        // Register Block Items
-        registerBlockItemForBlock(event.getRegistry(), BlockManager.generator);
+        // BlockItems
+        registerBlockItemForBlock(event.getRegistry(), BlockManager.machine);
     }
+
+    /*******************************************************************************************************************
+     * Helpers                                                                                                         *
+     *******************************************************************************************************************/
+
+    /**
+     * Registers the BlockItem variant for this block
+     * @param registry The item registry
+     * @param block The block to create
+     */
 
     @SuppressWarnings("ConstantConditions")
     public static void registerBlockItemForBlock(IForgeRegistry<Item> registry, Block block) {

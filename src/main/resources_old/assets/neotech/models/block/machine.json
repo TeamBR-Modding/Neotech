@@ -1,0 +1,17 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "neotech:blocks/machine_side",
+        "front": "neotech:blocks/machine_side",
+        "side": "neotech:blocks/machine_side",
+
+        "input" : "neotech:blocks/inputFace",
+        "output" : "neotech:blocks/outputFace",
+        "inputOutputFace" : "neotech:blocks/inputOutputFace",
+        "disable" : "neotech:blocks/disabled",
+        "in1" : "neotech:blocks/inputFacePrimary",
+        "in2" : "neotech:blocks/inputFaceSecondary",
+        "out1" : "neotech:blocks/outputFacePrimary",
+        "out2" : "neotech:blocks/outputFaceSecondary"
+    }
+}
