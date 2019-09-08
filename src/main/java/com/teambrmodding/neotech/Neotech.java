@@ -3,8 +3,10 @@ package com.teambrmodding.neotech;
 import com.teambrmodding.neotech.client.ClientProxy;
 import com.teambrmodding.neotech.common.CommonProxy;
 import com.teambrmodding.neotech.lib.Reference;
+import com.teambrmodding.neotech.managers.LootManager;
 import com.teambrmodding.neotech.managers.ScreenManager;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -33,5 +35,7 @@ public class Neotech {
 
     private void setup(final FMLCommonSetupEvent event) {
         DistExecutor.runWhenOn(Dist.CLIENT, () -> ScreenManager::registerScreens);
+
+        MinecraftForge.EVENT_BUS.register(new LootManager());
     }
 }

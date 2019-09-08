@@ -1,0 +1,20 @@
+{
+  "_comment": "Creative Tab",
+  "itemGroup.neotech": "Neotech",
+
+  "_comment": "#######################",
+  "_comment": "Items",
+  "_comment": "#######################",
+
+  "item.neotech.disk_os": "Operating System",
+
+  "_comment": "#######################",
+  "_comment": "Blocks",
+  "_comment": "#######################",
+
+  "_comment": "#######################",
+  "_comment": "Descriptions",
+  "_comment": "#######################",
+
+  "neotech.disk_os.desc": "Main Operating System. Only found in dungeon chests"
+}

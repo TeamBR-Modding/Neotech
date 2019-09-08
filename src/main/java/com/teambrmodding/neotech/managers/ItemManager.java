@@ -1,5 +1,6 @@
 package com.teambrmodding.neotech.managers;
 
+import com.teambrmodding.neotech.common.item.DiskBase;
 import com.teambrmodding.neotech.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.item.*;
@@ -33,6 +34,14 @@ public class ItemManager {
     @ObjectHolder("machine")
     public static Item machine;
 
+    /*******************************************************************************************************************
+     * Items                                                                                                           *
+     *******************************************************************************************************************/
+
+    @ObjectHolder("disk_os")
+    public static Item disk_os;
+
+
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
@@ -46,6 +55,9 @@ public class ItemManager {
 
         // BlockItems
         registerBlockItemForBlock(event.getRegistry(), BlockManager.machine);
+
+        // Items
+        event.getRegistry().register(new DiskBase("disk_os"));
     }
 
     /*******************************************************************************************************************
