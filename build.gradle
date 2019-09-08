@@ -1,117 +1,103 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.139', changing: true
     }
 }
-
-
-plugins {
-    id 'com.matthewprenger.cursegradle' version '1.0.7'
-    //id "net.minecraftforge.gradle.forge" version "2.0.2"
-}
-
-repositories {
-    maven {
-        name 'BR Repo'
-        url "http://www.teambrmodding.com/maven2/"
-    }
-    maven { // The repo from which to get waila
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
-    maven { //JEI
-        name 'DVS1 Maven FS'
-        url "http://dvs1.progwml6.com/files/maven"
-    }
-}
-
-
-apply plugin: 'net.minecraftforge.gradle.forge'
-
-apply plugin: 'maven'
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'maven-publish'
 
 ext.configFile = file "gradle.properties"
 
-String APIToken = ''
-if (file('APIToken').exists()) {
-    APIToken = new File('APIToken').text
-}
-
-configFile.withReader {
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
-}
-
-//String build = System.getenv("BUILD_NUMBER")
 String build = ""
 if (project.hasProperty("teamcity")) {
-    build = "${project.ext['build.vcs.number.NeoTech_HttpsGithubComTeamBRModdingNeoTechGitRefsHeadsMaster']}"
+    build = "B" + project.ext["build.number"]
 }
-
 if (build == null || build == '') {
-    version = "${config.minecraft_version}-${config.mod_version}"
+    version = "${project.minecraft_version}-${project.mod_version}"
 } else {
-    version = "${config.minecraft_version}-${config.mod_version}-" + build.substring(0,7)
+    version = "${project.minecraft_version}-${project.mod_version}-" + build
 }
 
+group = 'com.teambrmodding.neotech'
+archivesBaseName = 'Neotech'
 
-group= "com.teambrmodding.neotech" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Neotech"
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
+    mappings channel: 'snapshot', version: '20190719-1.14.3'
 
-    version = config.minecraft_version + "-" + config.forge_version
+    runs {
+        client {
+            workingDirectory project.file('run')
 
-    replaceIn "Reference.java"
-    replace "@VERSION@", "${config.mod_version}"
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-    runDir = "eclipse"
-    useDepAts = true
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
 
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    //mappings = "snapshot_20141130"
-    mappings = "${config.MAPPINGS}"
-    makeObfSourceJar = false
-}
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
 
-configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+        server {
+            workingDirectory project.file('run')
 
-processResources
-{
-    exclude '**/Thumbs.db'
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
 
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
     }
+}
 
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+repositories {
+    // Nucleus
+    maven {
+        url "http://www.dyonovan.com/maven2/"
+    }
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
     }
 }
 
@@ -119,12 +105,23 @@ configurations {
     deployerJars
 }
 
-dependencies {
-    deployerJars "org.apache.maven.wagon:wagon-ftp:2.2"
-    compile "mcp.mobius.waila:Waila:${config.WAILA_version}:dev"
-    deobfCompile "mezz.jei:jei_${config.minecraft_version}:${config.JEI_version}"
-    compile "com.teambr.bookshelf:Bookshelf-API:latest.release:dev"
-    //compile group: "com.teambr.bookshelf", name: "Bookshelf-API", version: latest.integration, classifier: "dev", changing: true
+processResources {
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'META-INF/mods.toml'
+
+        // replace version and mcversion
+        expand 'version': project.version
+    }
+
+    // copy everything else, thats not the mods.toml
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'META-INF/mods.toml', '**/psd/**'
+    }
+}
+
+configurations.all {
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
 }
 
 task devJar(type: Jar, dependsOn: 'classes') {
@@ -135,83 +132,49 @@ task devJar(type: Jar, dependsOn: 'classes') {
     classifier = 'dev'
 }
 
-task sourceJarScala(type: Jar, dependsOn: "classes") {
+task deobfJar(type: Jar) {
+    classifier = "deobf"
+    from sourceSets.main.output
+}
+
+task javadocJar(type: Zip, dependsOn: javadoc) {
+    from 'build/docs/javadoc'
+    classifier = 'javadoc'
+}
+
+task sourceJarJava(type: Jar, dependsOn: "classes") {
     from sourceSets.main.allSource
     classifier = 'sources'
 }
 
 artifacts {
     archives devJar
-    archives sourceJarScala
+    archives sourceJarJava
+    archives javadocJar
+    archives deobfJar
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            configuration = configurations.deployerJars
-            //repository(url: System.properties['URL']) {
-            repository(url: System.properties['URL']) {
-                authentication(userName: System.properties['HTTPUSERNAME'], password: System.properties['HTTPPASSWORD'])
-            }
-
-            pom {
-                groupId = project.group
-                version = project.version
-                artifactId = project.archivesBaseName
-
-                pom.project {
-                    name project.archivesBaseName
-                    packaging 'jar'
-                    description 'NeoTech'
-                    url 'https://github.com/TeamBR-Modding/NeoTech'
-                    scm {
-                        url 'https://github.com/TeamBR-Modding/NeoTech'
-                        connection 'scm:git:git@github.com/TeamBR-Modding/NeoTech.git'
-                        developerConnection 'scm:git:git@github.com/TeamBR-Modding/NeoTech.git'
-                    }
-                    issueManagement {
-                        system 'github'
-                        url 'https://github.com/TeamBR-Modding/NeoTech/issues'
-                    }
-                    licenses {
-                        license {
-                            name 'Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License'
-                            url 'http://creativecommons.org/licenses/by-nc-sa/4.0/'
-                            distribution 'repo'
-                        }
-                    }
-                    developers {
-                        developer {
-                            id 'Dyonovan'
-                            name 'Dyonovan'
-                            roles {
-                                role 'developer'
-                            }
-                        }
-                        developer {
-                            id 'pauljoda'
-                            name 'pauljoda'
-                            roles {
-                                role 'developer'
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+configurations {
+    deployerJars
 }
 
-/*curseforge {
-    apiKey = APIToken
-    project {
-        id = '228643'
-        changelog = 'Changelog: https://github.com/TeamBR-Modding/NeoTech/wiki/Changelog'
-        releaseType = 'beta'
-        addGameVersion '1.10.2'
-        addArtifact devJar
-        relations {
-            requiredLibrary 'bookshelf-api-library'
-        }
-    }
-}*/
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:' + project.minecraft_version + "-" + project.forge_version
+    compile group: "com.teambr.nucleus",
+            name: "Nucleus",
+            version: "+",
+            classifier: "dev"
+
+    // compile against the JEI API but do not include it at runtime
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${JEI_version}:api")
+    // at runtime, use the full JEI jar
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${JEI_version}")
+}

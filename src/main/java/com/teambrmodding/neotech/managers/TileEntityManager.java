@@ -1,8 +1,8 @@
 package com.teambrmodding.neotech.managers;
 
-import com.teambrmodding.neotech.common.block.GeneratorBlock;
+import com.teambrmodding.neotech.common.tileentity.generators.GeneratorTile;
 import com.teambrmodding.neotech.lib.Reference;
-import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,13 +20,15 @@ import net.minecraftforge.registries.ObjectHolder;
  */
 @ObjectHolder(Reference.MOD_ID)
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BlockManager {
+public class TileEntityManager {
 
     @ObjectHolder("generator")
-    public static Block generator;
+    public static TileEntityType<GeneratorTile> generator;
 
     @SubscribeEvent
-    public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(new GeneratorBlock());
+    public static void registerTileEntityTypes(RegistryEvent.Register<TileEntityType<?>> event) {
+        event.getRegistry()
+                .register(TileEntityType.Builder.create(GeneratorTile::new, BlockManager.generator)
+                .build(null).setRegistryName("generator"));
     }
 }

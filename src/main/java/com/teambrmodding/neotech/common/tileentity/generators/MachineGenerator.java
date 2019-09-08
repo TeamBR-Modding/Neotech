@@ -1,6 +1,4 @@
-package com.teambrmodding.neotech.client;
-
-import com.teambrmodding.neotech.common.CommonProxy;
+package com.teambrmodding.neotech.common.tileentity.generators;
 
 /**
  * This file was created for AssistedProgression
@@ -10,12 +8,7 @@ import com.teambrmodding.neotech.common.CommonProxy;
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
  * @author James Rogers - Dyonovan
- * @since 9/3/2019
+ * @since 9/4/2019
  */
-public class ClientProxy extends CommonProxy {
-
-    @Override
-    public void init() {
-
-    }
+public class MachineGenerator {
 }

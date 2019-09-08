@@ -1,20 +1,21 @@
 package com.teambrmodding.neotech.collections;
 
-import com.teambr.bookshelf.util.ClientUtils;
+import com.teambr.nucleus.util.ClientUtils;
 
 import java.awt.*;
 
 /**
- * This file was created for NeoTech
- * <p/>
- * NeoTech is licensed under the
+ * This file was created for AssistedProgression
+ * <p>
+ * AssistedProgression is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
- * @author Paul Davis "pauljoda"
- * @since 3/15/2016
+ * @author James Rogers - Dyonovan
+ * @since 9/4/2019
  */
 public enum EnumInputOutputMode {
+
     DEFAULT          ("iomode.default", 0, 255, 255, 255, 15),         // Allows for pipes, but no automatic
     INPUT_ALL        ("iomode.inputAll", 1, 0, 102, 255, 150),         // Sets for all input locations
     INPUT_PRIMARY    ("iomode.inputPrimary", 2, 3, 214, 212, 150),     // Only first input

@@ -1,0 +1,22 @@
+
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/TeamBR-Modding/NeoTech/issues"
+
+[[mods]]
+    modId="neotech"
+    namespace="neotech"
+    version="${version}"
+    displayName="Neotech"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/neotech"
+    authors="pauljoda, Dyonovan"
+    description='''
+    A new take on a tech mod
+    '''
+[[dependencies.neotech]]
+    modId="nucleus"
+    mandatory=true
+    versionRange="[1.14.4,)"
+    ordering="BEFORE"
+    side="BOTH"
+
