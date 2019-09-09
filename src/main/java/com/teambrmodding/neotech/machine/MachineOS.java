@@ -1,8 +1,12 @@
 package com.teambrmodding.neotech.machine;
 
+import com.mojang.datafixers.util.Pair;
 import com.teambr.nucleus.helper.LogHelper;
+import com.teambrmodding.neotech.common.tileentity.MachineTile;
 import com.teambrmodding.neotech.machine.program.AbstractProgram;
+import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -50,9 +54,27 @@ public class MachineOS {
     /**
      * This is the map of syncing data, the integer is passed from the parent tile, finds the name of the program that
      * uses this
-     *
      */
     private Map<Integer, String> programSyncMap = new HashMap<>();
+
+    /**
+     * A map of slots to program specific slots
+     *
+     * The left side is for the overall slot handled from tile
+     * The right side is a pair or the program that uses this slot and the slot specific to that program
+     */
+    private Map<Integer, Pair<String, Integer>> inventoryMap = new HashMap<>();
+
+    // The reference to the machine itself
+    public MachineTile hardware;
+
+    /**
+     * Creates a operating system and attaches the the passed machine
+     * @param machine The machine to attach
+     */
+    public MachineOS(MachineTile machine) {
+        this.hardware = machine;
+    }
 
     /*******************************************************************************************************************
      * Operating System                                                                                                *
@@ -109,6 +131,28 @@ public class MachineOS {
      */
     public Collection<AbstractProgram> getInstalledPrograms() {
         return installedPrograms.values();
+    }
+
+    /*******************************************************************************************************************
+     * Item Distribution                                                                                               *
+     *******************************************************************************************************************/
+
+    /**
+     * Distribute items from the input directory
+     */
+    public void distributeToPrograms() {
+        for(int i : hardware.getInputSlots()) {
+            ItemStack inputStack = hardware.getStackInSlot(i);
+            // Attempt to distribute to the programs
+            if(!inputStack.isEmpty()) {
+                for(AbstractProgram program : installedPrograms.values()) {
+                    if(program.isItemConsumer())
+                        program.consumeItem(inputStack);
+                    if(inputStack.isEmpty()) // The stack has been fully consumed, stop operation
+                        return;
+                }
+            }
+        }
     }
 
     /*******************************************************************************************************************

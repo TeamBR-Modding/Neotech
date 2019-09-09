@@ -1,7 +1,13 @@
 package com.teambrmodding.neotech.machine.program;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,9 +77,87 @@ public abstract class AbstractProgram {
      */
     public abstract void mapVariables(Map<Integer, String> programSyncMap);
 
+    /**
+     * Gets the itemstack to display for this program
+     * @return The stack to display
+     */
+    public abstract ItemStack getDisplayStack();
+
     /*******************************************************************************************************************
      * Program                                                                                                         *
      *******************************************************************************************************************/
+
+
+
+    /**
+     * Can this program consume fluids
+     * @return True if can accept fluids
+     */
+    public boolean isFluidConsumer() {
+        return false;
+    }
+
+    /**
+     * Can this program provide fluids
+     * @return True if can provide fluids for output
+     */
+    public boolean isFluidProvider() {
+        return false;
+    }
+
+    /**
+     * Does this program consume power
+     * @return True if can consume energy
+     */
+    public boolean isEnergyConsumer() {
+        return false;
+    }
+
+    /**
+     * Does this program provide power
+     * @return True to provide power
+     */
+    public boolean isEnergyProvider() {
+        return false;
+    }
+
+
+
+
+
+    /**
+     * Consume the provided fluid
+     * @param fluid The input stack
+     * @return The consumed stack, EMPTY if fully consumed
+     */
+    public FluidStack consumeFluid(FluidStack fluid) {
+        return fluid;
+    }
+
+    /**
+     * Provide the fluids for this program
+     * @return Accessible output fluids
+     */
+    public List<FluidStack> provideFluid() {
+        return new ArrayList<>();
+    }
+
+    /**
+     * Consume the energy provided
+     * @param energy The input energy
+     * @return Energy left, 0 if fully consumed
+     */
+    public int consumeEnergy(int energy) {
+        return energy;
+    }
+
+    /**
+     * Provide energy
+     * @return Energy to provide, the full capacity to output, not currently stored
+     */
+    public int provideEnergy() {
+        return 0;
+    }
 
     /**
      * Used to create and read data from compound
@@ -92,5 +176,42 @@ public abstract class AbstractProgram {
      */
     public String getIdentifier() {
         return identifier;
+    }
+
+    /*******************************************************************************************************************
+     * ItemHandling                                                                                                    *
+     *******************************************************************************************************************/
+
+    /**
+     * Does this program consume items
+     * @return True if can accept items
+     */
+    public boolean isItemConsumer() {
+        return false;
+    }
+
+    /**
+     * Does this program provide items
+     * @return True if can output items
+     */
+    public boolean isItemProvider() {
+        return false;
+    }
+
+    /**
+     * Consumes the given itemstack
+     * @param stack The input stack
+     * @return The stack after operations, EMPTY if fully consumed
+     */
+    public ItemStack consumeItem(ItemStack stack) {
+        return stack;
+    }
+
+    /**
+     * Provide the list of outputs accessible
+     * @return A list of stacks this program provides
+     */
+    public List<ItemStack> provideItem() {
+        return new ArrayList<>();
     }
 }

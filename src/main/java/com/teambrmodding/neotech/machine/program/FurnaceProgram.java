@@ -2,6 +2,7 @@ package com.teambrmodding.neotech.machine.program;
 
 import com.teambr.nucleus.helper.LogHelper;
 import com.teambrmodding.neotech.machine.MachineOS;
+import net.minecraft.block.Blocks;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -108,5 +109,14 @@ public class FurnaceProgram extends AbstractProgram {
     @Override
     public void mapVariables(Map<Integer, String> programSyncMap) {
         programSyncMap.put(PROGRESS_SYNC_VARIABLE, getIdentifier());
+    }
+
+    /**
+     * Gets the itemstack to display for this program
+     * @return The stack to display
+     */
+    @Override
+    public ItemStack getDisplayStack() {
+        return new ItemStack(Blocks.FURNACE);
     }
 }
