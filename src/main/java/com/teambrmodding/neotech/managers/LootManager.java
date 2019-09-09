@@ -8,11 +8,10 @@ import net.minecraft.world.storage.loot.TableLootEntry;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ObjectHolder;
 
 /**
  * This file was created for AssistedProgression
- * <p>
+ *
  * AssistedProgression is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
@@ -25,8 +24,15 @@ public class LootManager {
 
     @SubscribeEvent
     public void lootLoad(LootTableLoadEvent event) {
-        if (event.getName().toString().equals("minecraft:chests/simple_dungeon")) {
-            event.getTable().addPool(getInjectPool("simple_dungeon"));
+        String lootName = event.getName().toString();
+        switch (lootName) {
+            case "minecraft:chests/abandoned_mineshaft":
+            case "minecraft:chests/desert_pyramid":
+            case "minecraft:chests/jungle_temple":
+            case "minecraft:chests/simple_dungeon":
+            case "minecraft:chests/spawn_bonus_chest":
+            case "minecraft:chests/stronghold_corridor":
+                event.getTable().addPool(getInjectPool("simple_dungeon"));
         }
     }
 

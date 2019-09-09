@@ -6,7 +6,11 @@
       {
         "type": "item",
         "name": "neotech:disk_os",
-        "weight": 100
+        "weight": 60
+      },
+      {
+        "type": "empty",
+        "weight": 40
       }
     ]
   }
