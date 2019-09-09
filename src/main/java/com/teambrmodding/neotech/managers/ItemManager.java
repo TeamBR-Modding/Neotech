@@ -41,6 +41,9 @@ public class ItemManager {
     @ObjectHolder("disk_os")
     public static Item disk_os;
 
+    @ObjectHolder("disk_blank")
+    public static Item disk_blank;
+
 
 
     @SubscribeEvent
@@ -58,6 +61,7 @@ public class ItemManager {
 
         // Items
         event.getRegistry().register(new DiskBase("disk_os"));
+        event.getRegistry().register(new DiskBase("disk_blank"));
     }
 
     /*******************************************************************************************************************

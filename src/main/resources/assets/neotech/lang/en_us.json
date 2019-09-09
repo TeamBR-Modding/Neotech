@@ -7,6 +7,7 @@
   "_comment": "#######################",
 
   "item.neotech.disk_os": "Operating System",
+  "item.neotech.disk_blank": "Blank Disk",
 
   "_comment": "#######################",
   "_comment": "Blocks",
@@ -16,5 +17,6 @@
   "_comment": "Descriptions",
   "_comment": "#######################",
 
-  "neotech.disk_os.desc": "Main Operating System. Only found in loot chests"
+  "neotech.disk_os.desc": "Main Operating System. Only found in loot chests",
+  "neotech.disk_blank.desc": "Blank Disk. Needs a program"
 }
