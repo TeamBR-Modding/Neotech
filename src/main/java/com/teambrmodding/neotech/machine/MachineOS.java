@@ -141,18 +141,7 @@ public class MachineOS {
      * Distribute items from the input directory
      */
     public void distributeToPrograms() {
-        for(int i : hardware.getInputSlots()) {
-            ItemStack inputStack = hardware.getStackInSlot(i);
-            // Attempt to distribute to the programs
-            if(!inputStack.isEmpty()) {
-                for(AbstractProgram program : installedPrograms.values()) {
-                    if(program.isItemConsumer())
-                        program.consumeItem(inputStack);
-                    if(inputStack.isEmpty()) // The stack has been fully consumed, stop operation
-                        return;
-                }
-            }
-        }
+
     }
 
     /*******************************************************************************************************************
