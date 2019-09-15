@@ -1,9 +1,9 @@
 package com.teambrmodding.neotech.common;
 
 /**
- * This file was created for AssistedProgression
+ * This file was created for Neotech
  * <p>
- * AssistedProgression is licensed under the
+ * Neotech is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *

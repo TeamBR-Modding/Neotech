@@ -11,9 +11,9 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 
 /**
- * This file was created for AssistedProgression
+ * This file was created for Neotech
  * <p>
- * AssistedProgression is licensed under the
+ * Neotech is licensed under the
  * Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License:
  * http://creativecommons.org/licenses/by-nc-sa/4.0/
  *
@@ -31,8 +31,6 @@ public class ItemManager {
      * BlockItems                                                                                                      *
      *******************************************************************************************************************/
 
-    @ObjectHolder("machine")
-    public static Item machine;
 
     /*******************************************************************************************************************
      * Items                                                                                                           *
@@ -57,7 +55,6 @@ public class ItemManager {
         };
 
         // BlockItems
-        registerBlockItemForBlock(event.getRegistry(), BlockManager.machine);
 
         // Items
         event.getRegistry().register(new DiskBase("disk_os"));
