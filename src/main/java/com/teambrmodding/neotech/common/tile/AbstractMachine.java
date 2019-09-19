@@ -1119,6 +1119,30 @@ public abstract class AbstractMachine extends EnergyHandler implements IItemHand
         return 64;
     }
 
+    /**
+     * <p>
+     * This function re-implements the vanilla function {}.
+     * It should be used instead of simulated insertions in cases where the contents and state of the inventory are
+     * irrelevant, mainly for the purpose of automation and logic (for instance, testing if a minecart can wait
+     * to deposit its items into a full inventory, or if the items in the minecart can never be placed into the
+     * inventory and should move on).
+     * </p>
+     * <ul>
+     * <li>isItemValid is false when insertion of the item is never valid.</li>
+     * <li>When isItemValid is true, no assumptions can be made and insertion must be simulated case-by-case.</li>
+     * <li>The actual items in the inventory, its fullness, or any other state are <strong>not</strong> considered by isItemValid.</li>
+     * </ul>
+     *
+     * @param slot  Slot to query for validity
+     * @param stack Stack to test with for validity
+     * @return true if the slot can insert the ItemStack, not considering the current state of the inventory.
+     * false if the slot can never insert the ItemStack in any situation.
+     */
+    @Override
+    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+        return true;
+    }
+
     /*******************************************************************************************************************
      * Upgradable Methods                                                                                              *
      *******************************************************************************************************************/
